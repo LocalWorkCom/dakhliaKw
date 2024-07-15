@@ -1,0 +1,74 @@
+.all-nav{
+    background-color: #FFFFFF;
+}
+.navbar-nav , .navbar {
+ margin-inline: 80px;
+ background-color: #FFFFFF;
+}
+.navbar-nav li h6{
+    font-family: Almarai;
+font-size: 17px;
+font-weight: 700;
+padding-top: 10px;
+color: #1C1B1B;
+}
+.navbar-nav li h6:hover , .btn-1:hover , .btn-2:hover , .second-section .bell i:hover{
+cursor: pointer;
+}
+li img{
+    width: 30px;
+     height: 30px; 
+     margin-left: 15px;
+}
+.first-section img{
+    height: 150px;
+    width: 150px;
+}
+.first-section h2 {
+    font-family: Almarai;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 147.64px;
+    text-align: center;
+    margin-right: 27px;
+    color: #274373;
+}
+.second-section .btn-1{
+    font-family: Almarai;
+font-size: 20px;
+font-weight: 700;
+line-height: 22.32px;
+width: 167px;
+height: 44px;
+padding: 0px 20px 0px 0px;
+border: none;
+text-align: right;
+color: #FFFFFF;
+background-color: #B3261E;
+}
+.second-section .btn-2{
+    font-family: Almarai;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 22.32px;
+    text-align: right;
+    width: 186px;
+    height: 44px;
+    padding: 0px 20px 0px 0px;
+    gap: 10px;
+    background-color: #FFFFFF;
+    border: 1px solid #032F70;
+    color: #032F70;
+}
+.second-section .bell i{
+font-size: 25px;
+color: #032F70;
+margin-top: 10px;
+}
+li:hover{
+    color:#274373
+}
+body{
+    background: #f5f6fa;
+}
+/* test */
