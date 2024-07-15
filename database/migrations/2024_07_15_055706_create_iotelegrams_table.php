@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departements', function (Blueprint $table) {
+        Schema::create('iotelegrams', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('manger_id')->unsigned()->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('assistance_id')->unsigned()->references('id')->on('users')->onDelete('cascade');
+            $table->enum('type',['in','out']);
+            $table->foreignId('from_departement')->unsigned()->references('id')->on('departements')->onDelete('cascade');
+            $table->foreignId('from_user')->unsigned()->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('recieve_user_id')->unsigned()->references('id')->on('users')->onDelete('cascade');
+            $table->date('reciept_date')->nullable();
+            $table->integer('files_num')->nullable()->default(1);
             $table->boolean('active')->nullable()->default(1);
 
             $table->foreignId('created_by')->unsigned()->references('id')->on('users')->onDelete('cascade');
@@ -23,7 +26,6 @@ return new class extends Migration
 
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departements');
+        Schema::dropIfExists('iotelegrams');
     }
 };

@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departements', function (Blueprint $table) {
+        Schema::create('iofiles', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('manger_id')->unsigned()->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('assistance_id')->unsigned()->references('id')->on('users')->onDelete('cascade');
-            $table->boolean('active')->nullable()->default(1);
+            $table->foreignId('iotelegram_id')->unsigned()->references('id')->on('iotelegrams')->onDelete('cascade');
+            $table->string('real_name');
+            $table->string('file_name');
 
             $table->foreignId('created_by')->unsigned()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('updated_by')->unsigned()->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departements');
+        Schema::dropIfExists('iofiles');
     }
 };

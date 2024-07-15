@@ -11,20 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departements', function (Blueprint $table) {
+        Schema::create('outgoings', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('manger_id')->unsigned()->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('assistance_id')->unsigned()->references('id')->on('users')->onDelete('cascade');
-            $table->boolean('active')->nullable()->default(1);
-
+            $table->date('date')->nullable();
+            $table->integer('file_num')->nullable();
+            $table->string('name')->nullable();
+            $table->text('note')->nullable();
+            $table->foreignId('departement_id')->unsigned()->references('id')->on('departements')->onDelete('cascade');
+            $table->foreignId('user_id')->unsigned()->nullable()->references('id')->on('departements')->onDelete('cascade');
             $table->foreignId('created_by')->unsigned()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('updated_by')->unsigned()->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
-            $table->softDeletes();
-
-        });
+            $table->softDeletes();        });
     }
 
     /**
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departements');
+        Schema::dropIfExists('outgpings');
     }
 };
