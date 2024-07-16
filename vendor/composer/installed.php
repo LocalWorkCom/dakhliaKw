@@ -2,12 +2,8 @@
     'root' => array(
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-<<<<<<< HEAD
         'reference' => 'd56b964a0679d3919a9e8aa2c4b156c315e35b81',
-=======
-        'reference' => '881dbacdfc9d14f54507c4bcc6057250a55868ab',
 
->>>>>>> f101d0368b0ad190286d067d171adebbb0484f3c
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -483,6 +479,15 @@
             'install_path' => __DIR__ . '/../league/flysystem-local',
             'aliases' => array(),
             'reference' => '13f22ea8be526ea58c2ddff9e158ef7c296e4f40',
+            'dev_requirement' => false,
+        ),
+        'league/fractal' => array(
+            'pretty_version' => '0.20.1',
+            'version' => '0.20.1.0',
+            'reference' => '8b9d39b67624db9195c06f9c1ffd0355151eaf62',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../league/fractal',
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
         'league/mime-type-detection' => array(
@@ -1018,10 +1023,6 @@
             'pretty_version' => 'v6.4.8',
             'version' => '6.4.8.0',
             'reference' => '4b61b02fe15db48e3687ce1c45ea385d1780fe08',
-<<<<<<< HEAD
-=======
-
->>>>>>> f101d0368b0ad190286d067d171adebbb0484f3c
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/css-selector',
             'aliases' => array(),
@@ -1050,10 +1051,6 @@
             'pretty_version' => 'v6.4.8',
             'version' => '6.4.8.0',
             'reference' => '8d7507f02b06e06815e56bb39aa0128e3806208b',
-<<<<<<< HEAD
-=======
-
->>>>>>> f101d0368b0ad190286d067d171adebbb0484f3c
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/event-dispatcher',
             'aliases' => array(),
@@ -1232,10 +1229,6 @@
             'pretty_version' => 'v6.4.9',
             'version' => '6.4.9.0',
             'reference' => '76792dbd99690a5ebef8050d9206c60c59e681d7',
-<<<<<<< HEAD
-=======
-
->>>>>>> f101d0368b0ad190286d067d171adebbb0484f3c
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/string',
             'aliases' => array(),
@@ -1337,6 +1330,60 @@
             'install_path' => __DIR__ . '/../webmozart/assert',
             'aliases' => array(),
             'reference' => '11cb2199493b2f8a3b53e7f19068fc6aac760991',
+            'dev_requirement' => false,
+        ),
+        'yajra/laravel-datatables' => array(
+            'pretty_version' => 'v10.0.0',
+            'version' => '10.0.0.0',
+            'reference' => '5a65f1b611a53a07530915619869ec87dcb823ad',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../yajra/laravel-datatables',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'yajra/laravel-datatables-buttons' => array(
+            'pretty_version' => 'v10.0.9',
+            'version' => '10.0.9.0',
+            'reference' => 'dc93c0ec8bae12005d7e591beebbe053f0abda7f',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../yajra/laravel-datatables-buttons',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'yajra/laravel-datatables-editor' => array(
+            'pretty_version' => 'v1.25.4',
+            'version' => '1.25.4.0',
+            'reference' => '23962356700d6b31f49bb119665b13e87303e13f',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../yajra/laravel-datatables-editor',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'yajra/laravel-datatables-fractal' => array(
+            'pretty_version' => 'v10.0.0',
+            'version' => '10.0.0.0',
+            'reference' => '765198d1f2b3f0a7c0c00f08ee41ba11be4ab1e2',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../yajra/laravel-datatables-fractal',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'yajra/laravel-datatables-html' => array(
+            'pretty_version' => 'v10.12.0',
+            'version' => '10.12.0.0',
+            'reference' => '1c0fc1ff2026457ff29ab1a6a3433a44d59b251d',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../yajra/laravel-datatables-html',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'yajra/laravel-datatables-oracle' => array(
+            'pretty_version' => 'v10.11.4',
+            'version' => '10.11.4.0',
+            'reference' => 'a11dc9cf5ec7f7dc68ad0d5959c5e7aec0af29a5',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../yajra/laravel-datatables-oracle',
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
     ),

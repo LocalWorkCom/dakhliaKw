@@ -14,6 +14,7 @@ return array(
     '25072dd6e2470089de65ae7bf11d3109' => $vendorDir . '/symfony/polyfill-php72/bootstrap.php',
     'f598d06aa772fa33d905e87be6398fb1' => $vendorDir . '/symfony/polyfill-intl-idn/bootstrap.php',
     '662a729f963d39afe703c9d9b7ab4a8c' => $vendorDir . '/symfony/polyfill-php83/bootstrap.php',
+    '0b47d6d4a00ca9112ba3953b49e7c9a4' => $vendorDir . '/yajra/laravel-datatables-oracle/src/helper.php',
     '320cde22f66dd4f5d3fd621d3e88b98f' => $vendorDir . '/symfony/polyfill-ctype/bootstrap.php',
     '09f6b20656683369174dd6fa83b7e5fb' => $vendorDir . '/symfony/polyfill-uuid/bootstrap.php',
     '667aeda72477189d0494fecd327c3641' => $vendorDir . '/symfony/var-dumper/Resources/functions/dump.php',
