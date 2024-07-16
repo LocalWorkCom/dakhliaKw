@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+// Route::middleware('auth')->group(function () {
+//     Route::get('/dashboard', function () {
+//         // Matches /admin/dashboard URL
+//     });
+
+// });
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/login', function () {
+    return view('login');
+});
+
+//  Auth
+Route::post('/create', [UserController::class, 'store'])->name('u');
+Route::post('/login', [UserController::class, 'login'])->name('login');
