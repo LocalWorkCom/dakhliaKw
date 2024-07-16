@@ -20,3 +20,4 @@ class StoreDepartmentRequest extends FormRequest
         ];
     }
 }
+

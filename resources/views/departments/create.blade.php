@@ -24,6 +24,7 @@
             @error('manager')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
+            
         </div>
         <div class="form-group">
             <label for="manger_assistance">Manager Assistant</label>
