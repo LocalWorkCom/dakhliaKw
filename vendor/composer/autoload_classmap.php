@@ -21,7 +21,6 @@ return array(
     'App\\Http\\Controllers\\PermissionController' => $baseDir . '/app/Http/Controllers/PermissionController.php',
     'App\\Http\\Controllers\\RuleController' => $baseDir . '/app/Http/Controllers/RuleController.php',
     'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
-    'App\\Http\\Controllers\\dashboard\\IoTelegramController' => $baseDir . '/app/Http/Controllers/dashboard/IoTelegramController.php',
     'App\\Http\\Controllers\\dashboard\\outgoingController' => $baseDir . '/app/Http/Controllers/dashboard/outgoingController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
