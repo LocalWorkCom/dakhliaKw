@@ -16,6 +16,7 @@ class departements extends Model
         'description'
     ];
 
+    
     // Relationships
     public function manager()
     {

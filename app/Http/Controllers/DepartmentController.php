@@ -34,6 +34,7 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+        
         $request->validate([
             'name' => 'required',
             'manger' => 'required',
