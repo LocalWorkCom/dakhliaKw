@@ -24,6 +24,7 @@ return array(
     'App\\Http\\Middleware\\TrustProxies' => $baseDir . '/app/Http/Middleware/TrustProxies.php',
     'App\\Http\\Middleware\\ValidateSignature' => $baseDir . '/app/Http/Middleware/ValidateSignature.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
+    'App\\Http\\Requests\\StoreDepartmentRequest' => $baseDir . '/app/Http/Requests/StoreDepartmentRequest.php',
     'App\\Http\\Requests\\StorePermissionRequest' => $baseDir . '/app/Http/Requests/StorePermissionRequest.php',
     'App\\Http\\Requests\\StoreRuleRequest' => $baseDir . '/app/Http/Requests/StoreRuleRequest.php',
     'App\\Http\\Requests\\UpdatePermissionRequest' => $baseDir . '/app/Http/Requests/UpdatePermissionRequest.php',
