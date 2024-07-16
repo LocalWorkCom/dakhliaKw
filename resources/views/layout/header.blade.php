@@ -94,6 +94,13 @@
         </div>
 
 
+        <form action="{{ route('u')}}" method="post">
+            @csrf
+            <button type="submit">تسجيل مستخدم</button>
+        </form>
+        {{-- <a href=""> </a> --}}
+
+
 
         <hr>
         <div class="navbar navbar-expand-md  mb-4" role="navigation">
@@ -141,7 +148,12 @@
         <hr>
     </div>
     <main>
- @yield('content')
+
+        {{-- enter extend --}}
+        @yield('content')
+
+
+
     </main>
 
 
@@ -156,4 +168,3 @@
 </body>
 
 </html>
-
