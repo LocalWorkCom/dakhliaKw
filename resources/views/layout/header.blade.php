@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>header</title>
+    <title>
+        @yield('title')
+    </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Bootstrap-->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -20,7 +21,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/styles/main.css') }}">
 </head>
 
-<body>
+<body lang="ar" dir="rtl">
 
 
 
@@ -94,7 +95,7 @@
         </div>
 
 
-        <form action="{{ route('u')}}" method="post">
+        <form action="{{ route('u') }}" method="post">
             @csrf
             <button type="submit">تسجيل مستخدم</button>
         </form>
@@ -113,8 +114,11 @@
                 <ul class="navbar-nav">
 
                     <li style="margin-right: 10px;width: 260px;">
-                        <img src="{{ asset('frontend/images/import.svg') }}" alt="logo" style="">
-                        <h6>الوارد</h6>
+                        <a href="{{ route('iotelegrams.list') }}">
+
+                            <img src="{{ asset('frontend/images/import.svg') }}" alt="logo" style="">
+                            <h6>الوارد</h6>
+                        </a>
                     </li>
                     <li style="margin-right: 10px;width: 260px;">
                         <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo" style="">
@@ -147,22 +151,17 @@
         </div>
         <hr>
     </div>
-    <main>
 
-        {{-- enter extend --}}
+
+
+    <main class="py-4" style="text-align: right;">
         @yield('content')
-
-
-
     </main>
+    @stack('scripts')
 
 
 
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-zEYs/p5zCUo7LHibzS2KkETvP3L3PaZGvZLme7w+FVZ+Uk2x/E7l3niFf5XFk6ew" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
 
 </body>
