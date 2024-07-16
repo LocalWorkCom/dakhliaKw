@@ -141,7 +141,7 @@
         <hr>
     </div>
     <main>
-
+ @yield('content')
     </main>
 
 
