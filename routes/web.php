@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +34,7 @@ Route::get('/login', function () {
 //  Auth
 Route::post('/create', [UserController::class, 'store'])->name('u');
 Route::post('/login', [UserController::class, 'login'])->name('login');
+// Route::resource('departments', DepartmentController::class);
+Route::post('departments_store', [DepartmentController::class, 'store']);
+Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
+Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
