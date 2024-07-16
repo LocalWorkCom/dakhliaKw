@@ -1,10 +1,10 @@
 /node_modules
-/public/build
-/public/hot
-/public/images
-/public/uploads
-/public/storage
-/public/index.php
+# /public/build
+# /public/hot
+# /public/images
+# /public/uploads
+# /public/storage
+# /public/index.php
 /storage/*.key
 /vendor
 /images

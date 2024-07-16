@@ -82,7 +82,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ar',
 
     /*
     |--------------------------------------------------------------------------
@@ -95,7 +95,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'ar',
 
     /*
     |--------------------------------------------------------------------------
@@ -215,6 +215,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ])->toArray(),
 
 ];
