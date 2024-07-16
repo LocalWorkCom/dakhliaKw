@@ -16,6 +16,11 @@ class departements extends Model
         'description'
     ];
 
+    public function outgoings()
+    {
+        return $this->hasMany(outgoings::class);
+
+    }
     // Relationships
     public function manager()
     {
@@ -35,5 +40,6 @@ class departements extends Model
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
+
     }
 }

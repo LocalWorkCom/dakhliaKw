@@ -4,6 +4,7 @@ use App\Http\Controllers\dashboard\IoTelegramController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\outgoingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,15 @@ Route::put('departments_update/{department}', [DepartmentController::class, 'upd
 Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
 
 
+//Start Export routes
+Route::resource('Export', outgoingController::class);
+Route::get('/Export/All', [outgoingController::class, 'outgoingAll'])->name('Export.view.all');
+Route::get('/Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files');
+Route::get('/Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
+
+
+
+//End outgoing routes
 Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->name('postman.ajax');
 Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
 Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('iotelegrams.list');
