@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Models\departements;
+use App\Models\User;
 
+use App\Http\Requests\StoreDepartmentRequest;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
@@ -12,9 +14,9 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $departments = departements::all();
-        // return view('departments.index', compact('departments'));
-        return response()->json($departments);
+        $departments = departements::with(['manager', 'managerAssistant'])->paginate(10);
+        return view('departments.index', compact('departments'));
+        // return response()->json($departments);
     }
 
     /**
@@ -22,7 +24,8 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        // return view('departments.create');
+        $users = User::all();
+         return view('departments.create', compact('users'));
     }
 
     /**
@@ -30,15 +33,15 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'name' => 'required',
-            'manager_director' => 'required',
-            'ass_manager_director' => 'required',
+            'manger' => 'required',
+            'manger_assistance' => 'required',
         ]);
-
-        $department = departements::create($request->all());
-        // return redirect()->route('departments.index')->with('success', 'Department created successfully.');
-        return response()->json($department, 201);
+         departements::create($request->all());
+        return redirect()->route('departments.index')->with('success', 'Department created successfully.');
+        // return response()->json($department, 201);
     }
 
     /**
@@ -46,16 +49,17 @@ class DepartmentController extends Controller
      */
     public function show(departements $department)
     {
-        // return view('departments.show', compact('department'));
-        return response()->json($department);
+        return view('departments.show', compact('department'));
+        // return response()->json($department);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(departements $department)
     {
-        //
+        $users = User::all();
+        return view('departments.edit', compact('department', 'users'));
     }
 
     /**
@@ -65,13 +69,13 @@ class DepartmentController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'manager_director' => 'required',
-            'ass_manager_director' => 'required',
+            'manger' => 'required',
+            'manger_assistance' => 'required',
         ]);
 
         $department->update($request->all());
-        // return redirect()->route('departments.index')->with('success', 'Department updated successfully.');
-        return response()->json($department);
+        return redirect()->route('departments.index')->with('success', 'Department updated successfully.');
+        // return response()->json($department);
     }
 
     /**
@@ -80,7 +84,7 @@ class DepartmentController extends Controller
     public function destroy(departements $department)
     {
         $department->delete();
-        // return redirect()->route('departments.index')->with('success', 'Department deleted successfully.');
-        return response()->json(null, 204);
+        return redirect()->route('departments.index')->with('success', 'Department deleted successfully.');
+        // return response()->json(null, 204);
     }
 }
