@@ -3,8 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'da9fb8fca82a95d25c95aa55930708ec8a8f26cd',
-
+        'reference' => '27a3b9c6e622b8a072aff0f1737baa8fe5ae705e',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -383,8 +382,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'da9fb8fca82a95d25c95aa55930708ec8a8f26cd',
-
+            'reference' => '27a3b9c6e622b8a072aff0f1737baa8fe5ae705e',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1324,15 +1322,6 @@
             'reference' => '11cb2199493b2f8a3b53e7f19068fc6aac760991',
             'type' => 'library',
             'install_path' => __DIR__ . '/../webmozart/assert',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'yajra/laravel-datatables-oracle' => array(
-            'pretty_version' => 'v10.3.1',
-            'version' => '10.3.1.0',
-            'reference' => 'dc699abd8f297ece464f3e3889cc6d4f07a82549',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../yajra/laravel-datatables-oracle',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
