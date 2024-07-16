@@ -21,6 +21,7 @@ class departements extends Model
         return $this->hasMany(outgoings::class);
 
     }
+
     // Relationships
     public function manager()
     {

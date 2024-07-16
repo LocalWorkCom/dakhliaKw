@@ -24,6 +24,7 @@
                     </option>
                 @endforeach
             </select>
+            
             @error('manger')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
