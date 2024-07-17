@@ -33,8 +33,8 @@
                     <div class="mb-3">
                         <label for="from_departement">الجهة المرسلة:</label>
 
-                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                            id="extern-department-dev" style="display: none" data-bs-target="#extern-department">
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                            data-bs-target="#extern-department">
                             <i class="fa fa-plus"></i>
                         </button>
                         <select id="from_departement" name="from_departement" class="form-control" required>
@@ -171,7 +171,6 @@
     </div>
 
     @push('scripts')
-
         <script>
             $(document).ready(function() {
                 $("#addRepresentativeForm").on("submit", function(e) {
