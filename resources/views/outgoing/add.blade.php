@@ -3,7 +3,7 @@
 @push('style')
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" /> 
 
 @endpush
 
@@ -21,8 +21,8 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-block">
-                    <form >
-
+                    <form action="{{ route('Export.store') }}" method="POST">
+                        @csrf
                         <div class="form-row">
                           <div class="form-group col-md-6">
                             <label for="name">العنوان</label>
@@ -35,12 +35,12 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="select-person-to">person_to </label>
                             <select id="select-person-to" name="person_to" class="form-control">
-                                <option > اختر من القائمه</option>
+                                <option disabled> اختر من القائمه</option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}">
                                         {{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})
@@ -51,6 +51,7 @@
                         <div class="form-group">
                             <label for="select-created_by">created_by </label>
                             <select id="select-created_by" name="created_by" class="form-control">
+                                <option disabled> اختر من القائمه</option>
                                 @foreach ($users as $user )
                                 <option value="{{ $user->id }}" >{{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})</option>
                                 @endforeach
@@ -58,7 +59,8 @@
                         </div>
                         <div class="form-group">
                             <label for="select-updated_by">updated_by </label>
-                            <select id="select-updated_by" name="updated_by" class="form-control">
+                            <select id="select-updated_by" name="updated_by" class="form-control" >
+                                <option disabled selected> اختر من القائمه</option>
                                 @foreach ($users as $user )
                                 <option value="{{ $user->id }}" >{{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})</option>
                                 @endforeach
@@ -77,12 +79,31 @@
                                     <div class="invalid-feedback">Example invalid custom file feedback</div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                
-                                    <label for="exampleFormControlFile1"> حمل الملف </label>
-                                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
-                               
+                                    <label for="active">الاداره الخارجيه</label>
+                                    <select id="active" name="department" >
+                                        <option value="1" >اختر الاداره</option>
+                                        @foreach ($departments as $department )
+                                        <option value="{{ $department->id }}" >{{ $department->name }} </option>
+                                        @endforeach
+                                  
+                                    </select>
+                                    <div class="invalid-feedback">Example invalid custom file feedback</div>
                                 </div>
                                
+                               
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6" >
+                                
+                                <label for="exampleFormControlFile1"> حمل الملف </label>
+                                <input type="file" name="file[]" class="form-control-file" id="file1">
+
+                            </div>
+                            <div class="form-group col-md-6" id="fileInputs">
+                                
+                                <button type="button" id="addFileInput" class="btn btn-primary">Add Another File</button>
+
+                            </div>
                         </div>
                         <div class="form-row">
                              <!-- Button trigger modal -->
@@ -138,13 +159,33 @@
 @endsection
 
 @push('scripts')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> --}}
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
+{{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> --}}
+ {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> --}}
+ {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+{{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
 
-    <script>
+    <script> 
+     $(document).ready(function() {
+            let fileInputCount = 1;
+            const maxFileInputs = 9;
+
+            $('#addFileInput').click(function() {
+                if (fileInputCount < maxFileInputs) {
+                    fileInputCount++;
+                    const newFileInput = `
+                        <div class="form-group">
+                            <label for="file${fileInputCount}">File ${fileInputCount}</label>
+                            <input type="file" name="files[]" id="file${fileInputCount}" class="form-control-file">
+                        </div>`;
+                    $('#fileInputs').append(newFileInput);
+                } else {
+                    alert('You can only add up to 10 files.');
+                }
+            });
+        });
          $(document).ready(function () {
             $('#select-person-to').selectize({
                 sortField: 'text',
