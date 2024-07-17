@@ -7,169 +7,182 @@
     <title>
         @yield('title')
     </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js">
+    <script type="application/javascript" src="{{ asset('frontend/js/bootstrap.min.js')}}"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Bootstrap-->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-
+    <link href="{{ asset('frontend/styles/bootstrap.min.css')}}" rel="stylesheet" id="bootstrap-css">
+   
+   
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @stack('style')
-    <link rel="stylesheet" href="{{ asset('frontend/styles/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
 </head>
 
-<body lang="ar" dir="rtl">
+<body lang="ar" >
 
 
 
-    <!-- <nav class="navbar navbar-expand-lg" style="background-color:#FFFFFF;">
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav" style="display: flex; align-items: center;">
-            <li style="margin-right: 10px;">
-              <img src="{{ asset('frontend/images/home.jpg') }}" alt="logo" style="width: 24px; height: 24px;">
-              <h6>الرئيسية</h6>
-            </li>
-            <li style="margin-right: 10px;">
-              <img src="{{ asset('frontend/images/users.webp') }}" alt="logo" style="width: 24px; height: 24px;">
-              <h6>المستخدمين</h6>
-            </li>
-            <li style="margin-right: 10px;">
-              <img src="{{ asset('frontend/images/management.png') }}" alt="logo" style="width: 24px; height: 24px;">
-              <h6>الادارات</h6>
-            </li>
-            <li style="margin-right: 10px;">
-              <img src="{{ asset('frontend/images/cats.png') }}" alt="logo" style="width: 24px; height: 24px;">
-              <h6>التعيينات</h6>
-            </li>
-            <li style="margin-right: 10px;">
-              <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo" style="width: 24px; height: 24px;">
-              <h6>الموظفين</h6>
-            </li>
-            <li style="margin-right: 10px;">
-              <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo" style="width: 24px; height: 24px;">
-              <h6>الصادر</h6>
-            </li>
-            <li style="margin-right: 10px;">
-              <img src="{{ asset('frontend/images/import.svg') }}" alt="logo" style="width: 24px; height: 24px;">
-              <h6>الوارد</h6>
-            </li>
-            <!--
-            <li style="margin-right: 10px;">
-              <img src="" alt="logo" style="width: 24px; height: 24px;">
-              <h6>المزيد</h6>
-            </li>
-            -->
-    <!-- </ul>
-      
-        </div>
-      </nav> -->
-
+  
     <div class="all-nav">
-        <div class="upper-navbar">
-            <div class="row ">
-
-                <div class="second-section d-flex mx-3 mt-5 col-md-9 col-sm-6">
-                    {{-- <button class="btn-1 mx-2">تسجيل خروج
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    </button> --}}
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn-1 mx-2">تسجيل خروج
-                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                        </button>
-                    </form>
-                    <button class="btn-2 mx-2">اسم المستخدم
-                        <i class="fa-solid fa-user"></i>
+        <div class="upper-navbar d-flex">
+        <div class="second-section d-flex mx-4 col-md-9 col-sm-6">
+       
+              <div class="dropdown">
+                
+                    <button class="btn btn-2  mt-3" onclick="toggleDropdown()"> 
+                      <i class="fa-solid fa-angle-down mx-2"></i>
+                        اسم المستخدم
+                      <i class="fa-solid fa-user mx-2"></i>
                     </button>
-                    <a class="bell mx-5">
-                        <i class=" fa-regular fa-bell"></i>
-                    </a>
+                    <div id="dropdownMenu" class="dropdown-menu">
+                      <a href="#">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
+                    
+                    </div>
+              </div>
+              <button class="btn2 btn-2 mx-5"  style="    border-inline: 1px solid rgb(41, 41, 41); height: 100%;" onclick="toggleDropdown2()"> 
+                  <a class="bell mx-5" >
+                      <i class=" fa-regular fa-bell" ></i>
+                  </a>
+              </button>
+                <div id="dropdownMenu2" class="dropdown-menu2">
+                    <p>notification notification notification notification </p><hr>
+                    <p>notification notification notification notification </p><hr>
+                    <p>notification notification notification notification </p><hr>
+                    <p>notification notification notification notification </p><hr>
+                    <p>notification notification notification notification </p><hr>
+                
                 </div>
-                <div class="first-section d-flex">
-                    <h2>شئون القوة</h2>
-                    <img src="{{ asset('frontend/images/logooo.png') }}" alt="">
-                </div>
-            </div>
-        </div>
-
-
-        <form action="{{ route('create')}}" method="post">
-
-            @csrf
-            <button type="submit">تسجيل مستخدم</button>
-        </form>
-        {{-- <a href=""> </a> --}}
-
-
-        <hr>
-        <div class="navbar navbar-expand-md  mb-4" role="navigation">
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav">
-
-                    <li style="margin-right: 10px;width: 260px;">
+              <div class="input-group">
+                  <button type="button" class="btn  mt-4" data-mdb-ripple-init>
+                    <i class="fas fa-search"></i>
+                  </button>
+                  <div class="form-outline  mt-4" >
+                    <input type="search" id="" class="form-control" placeholder="بحث"/>
+                  </div>
+                  <select name="#" id="#" class=" mt-4">
+                    <option value="#"> المستخدميين </option>
+                    <option value="#"> الادارات </option>
+                    <option value="#"> التعيينات </option>
+                    <option value="#"> الموظفين </option>
+                    <option value="#"> الصادر </option>
+                    <option value="#"> الوارد </option>
+                  </select>
+              </div>
+              </div>
+              
+              <div class="first-section d-flex mt-1 " >
+                  <h2>  الرقابة والتفتيش</h2>
+                  <img  class="mt-2" src="{{ asset('frontend/images/logo.svg')}}" alt="">
+              </div>
+      </div>
+       
+            <div class="navbar navbar-expand-md mb-4 w-100" role="navigation">
+    
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarCollapse">
+                  <ul class="navbar-nav ml-auto"> 
+          
+                      <li class="nav-item">
                         <a href="{{ route('iotelegrams.list') }}">
-
-                            <img src="{{ asset('frontend/images/import.svg') }}" alt="logo" style="">
-                            <h6>الوارد</h6>
+                          <img src="{{ asset('frontend/images/exports.svg')}}" alt="logo">
+                          <h6>الوارد</h6>
                         </a>
-                    </li>
-                    <li style="margin-right: 10px;width: 260px;">
-                        <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo" style="">
-                        <h6>الصادر</h6>
-                    </li>
-                    <li style="margin-right: 10px;width: 260px;">
-                        <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo" style="">
-                        <h6>الموظفين</h6>
-                    </li>
-                    <li style="margin-right: 10px;width: 260px;">
-                        <img src="{{ asset('frontend/images/cats.png') }}" alt="logo" style="">
-                        <h6>التعيينات</h6>
-                    </li>
-                    <li style="margin-right: 10px; width: 260px;">
-                        <img src="{{ asset('frontend/images/management.png') }}" alt="logo" style="">
-                        <h6>الادارات</h6>
-                    </li>
-                    <li style="margin-right: 10px; width: 260px;">
-                        <img src="{{ asset('frontend/images/users.webp') }}" alt="logo" style="">
-                        <h6>المستخدمين</h6>
-                    </li>
-                    <li style="margin-right: 10px; width: 260px;">
-                        <img src="{{ asset('frontend/images/home.jpg') }}" alt="logo" style="">
-                        <h6>الرئيسية</h6>
-                    </li>
-
-                </ul>
-
-            </div>
-        </div>
-        <hr>
-
-
-        @yield('content')
+                      </li>
+                      <li class="nav-item">
+                          <img src="{{ asset('frontend/images/imports.svg')}}" alt="logo">
+                          <h6>الصادر</h6>
+                      </li>
+                      <li class="nav-item">
+                          <img src="{{ asset('frontend/images/employees.svg')}}" alt="logo">
+                          <h6>الموظفين</h6>
+                      </li>
+                      <li class="nav-item">
+                          <img src="{{ asset('frontend/images/managements.svg')}}" alt="logo">
+                          <h6>التعيينات</h6>
+                      </li>
+                      <li class="nav-item">
+                          <img src="{{ asset('frontend/images/managements.svg')}}" alt="logo">
+                          <h6>الادارات</h6>
+                      </li>
+                      <li class="nav-item">
+                          <img src="{{ asset('frontend/images/users.svg')}}" alt="logo">
+                          <h6>المستخدمين</h6>
+                      </li>
+                      <li class="nav-item">
+                          <img src="{{ asset('frontend/images/home.svg')}}" alt="logo">
+                          <h6>الرئيسية</h6>
+                      </li>
+          
+                  </ul>
+          
+              </div>
+          </div>
+          
+       
     </div>
+       
 
+
+    <main class="py-4" style="text-align: right;">
+        @yield('content')
     </main>
     @stack('scripts')
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
-    </script>
-
+   {{--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+    </script> --}}
+  
+    <script>
+        function toggleDropdown() {
+          var dropdownMenu = document.getElementById("dropdownMenu");
+          if (dropdownMenu.style.display === "block") {
+            dropdownMenu.style.display = "none";
+          } else {
+            dropdownMenu.style.display = "block";
+          }
+        }
+        
+        window.onclick = function(event) {
+          if (!event.target.matches('.btn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-menu");
+            for (var i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.style.display === "block") {
+                openDropdown.style.display = "none";
+              }
+            }
+          }
+        }
+        function toggleDropdown2() {
+          var dropdownMenu = document.getElementById("dropdownMenu2");
+          if (dropdownMenu.style.display === "block") {
+            dropdownMenu.style.display = "none";
+          } else {
+            dropdownMenu.style.display = "block";
+          }
+        }
+        
+        window.onclick = function(event) {
+          if (!event.target.matches('.btn2')) {
+            var dropdowns = document.getElementsByClassName("dropdown-menu2");
+            for (var i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.style.display === "block") {
+                openDropdown.style.display = "none";
+              }
+            }
+          }
+        }
+        </script>
 </body>
 
 </html>
