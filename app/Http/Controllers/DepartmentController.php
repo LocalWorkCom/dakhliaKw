@@ -51,10 +51,10 @@ class DepartmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(departements $department)
+    public function show($id)
     {
+        $department = departements::with(['manager', 'managerAssistant'])->findOrFail($id);
         return view('departments.show', compact('department'));
-        // return response()->json($department);
     }
 
     /**

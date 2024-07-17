@@ -11,7 +11,7 @@
       <div class="container col-3 mt-3 p-0">
           <div class="header-side d-flex">
               <p>المهام</p>
-              <img src="../images/tasks.svg" alt="">
+              <img src="{{ asset('frontend/images/tasks.svg')}}" alt="">
           </div> <br>
           <div class="progress blue mt-5">
               <span class="progress-left">
@@ -42,7 +42,7 @@
                       <p>25212</p>
                   </div>
                   <div class="icon m-5" style="background-color: #0D992C;">
-                      <img src="../images/management-card.svg" alt="">
+                      <img src="{{ asset('frontend/images/management-card.svg')}}" alt="">
                   </div>
               </div>
               <div class=" card1 col-5 d-flex mx-5">
@@ -52,7 +52,7 @@
                   </div>
 
                   <div class="icon m-5" style="background-color: #E49500;">
-                      <img src="../images/employees-card.svg" alt="">
+                      <img src="{{ asset('frontend/images/employees-card.svg')}}" alt="">
                   </div>
               </div>
 
@@ -65,7 +65,7 @@
                   </div>
 
                   <div class="icon m-5" style="background-color: #A900E4;">
-                      <img src="../images/imports-card.svg" alt="">
+                      <img src="{{ asset('frontend/images/imports-card.svg')}}" alt="">
                   </div>
               </div>
               <div class="card4 col-5 d-flex mx-4 mb-5">
@@ -75,7 +75,7 @@
                   </div>
 
                   <div class="icon m-5" style="background-color: #005BE4;">
-                      <img src="../images/exports-card.svg" alt="">
+                      <img src="{{ asset('frontend/images/exports-card.svg')}}" alt="">
                   </div>
               </div>
           </div>
