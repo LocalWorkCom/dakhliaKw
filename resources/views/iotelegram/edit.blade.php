@@ -22,18 +22,25 @@
                     </div>
                     <div class="row" style="justify-content: space-evenly;">
                         <div class="mb-3">
-                            <input type="checkbox" id="intern" name="type"
+                            <input type="radio" id="intern" name="type"
                                 @if ('intern' == $iotelegram->type) checked @endif>
-                            <label for="checkbox">داخلي</label>
+                            <label for="radio">داخلي</label>
                         </div>
                         <div class="mb-3">
-                            <input type="checkbox" id="extern" name="type"
+                            <input type="radio" id="extern" name="type"
                                 @if ('extern' == $iotelegram->type) checked @endif>
-                            <label for="checkbox">خارجي</label>
+                            <label for="radio">خارجي</label>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="department_id">الجهة المرسلة:</label>
+                        <div id="extern-department-dev" style="display: none">
+
+                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                data-bs-target="#extern-department">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
                         <select id="department_id" name="department_id" class="form-control">
                             <option value="">اختر الجهة</option>
                             @foreach ($departments as $item)
@@ -44,10 +51,14 @@
                     </div>
 
                     <div class="mb-3">
-                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
-                            <i class="fa fa-plus"></i>
-                        </button>
+
+                        <div id="extern-department-dev" style="display: none">
+
+                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                data-bs-target="#extern-department">
+                                <i class="fa fa-plus"></i> اضافة جديد
+                            </button>
+                        </div>
                         <label for="representive_id">اسم المندوب الجهة المرسلة :</label>
                         <select id="representive_id" name="representive_id" class="form-control">
                             <option value="">اختر المندوب</option>
@@ -87,20 +98,20 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="representative" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">إضافة مندوب</h5>
+                    <h5 class="modal-title" id="representativeLabel">إضافة مندوب</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addRepresentativeForm" action="{{ route('user.ajax') }}" method="POST">
+                    <form id="addRepresentativeForm" action="{{ route('postman.ajax') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">
-                            <label for="department_id">الادارة:</label>
-                            <select id="department_id" name="department_id" class="form-control">
+                            <label for="modal-department_id">الادارة:</label>
+                            <select id="modal-department_id" name="modal-department_id" class="form-control">
                                 <option value="">اختر الادارة</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -132,21 +143,54 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="extern-departmentLabel">إضافة جهة جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addRepresentativeForm" action="{{ route('department.ajax') }}" method="POST">
+                        @csrf
 
+                        <div class="mb-3">
+                            <label for="name">الاسم:</label>
+                            <input type="text" id="name" name="name" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="desc">الوصف:</label>
+                            <input type="text" id="desc" name="desc" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone">الهاتف</label>
+                            <input type="text" id="phone" name="phone" class="form-control">
+                        </div>
+
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="button" class="btn btn-primary" id="saveExternalDepartment">حفظ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     @push('scripts')
         <script>
             $(document).ready(function() {
                 var value = $('input[name=type]').val();
-                    if (value == 'intern') {
+                if (value == 'intern') {
 
-                        $('#department_id').show();
-                        $('#extern-department-dev').hide();
+                    $('#department_id').show();
+                    $('#extern-department-dev').hide();
 
-                    } else {
-                        $('#department_id').hide();
-                        $('#extern-department-dev').show();
+                } else {
+                    $('#department_id').hide();
+                    $('#extern-department-dev').show();
 
-                    }
+                }
                 $('#saveRepresentative').click(function(e) {
                     e.preventDefault();
 
@@ -195,7 +239,7 @@
                         }
                     });
                 });
-                
+
 
                 $('input[name=type]').click(function() {
                     var value = $(this).val();

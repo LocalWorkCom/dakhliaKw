@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>home</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js">
+    <script type="application/javascript" src="../js/bootstrap.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
@@ -13,10 +13,10 @@
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Bootstrap-->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="../styles/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
-<link rel="stylesheet" href="/styles/index.css">
+<link rel="stylesheet" href="../styles/index.css">
 </head>
 <body>
 
@@ -24,57 +24,55 @@
 <div class="all-nav">
     <div class="upper-navbar d-flex">
     <div class="second-section d-flex mx-4 col-md-9 col-sm-6">
-    <!-- <button class="btn-2 mx-2">تسجيل خروج
-        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-    </button> -->
-    <div class="dropdown">
-      
-      <button class="btn btn-2  mt-3" onclick="toggleDropdown()"> 
-         <i class="fa-solid fa-angle-down mx-2"></i>
-          اسم المستخدم
-        <i class="fa-solid fa-user mx-2"></i>
-      </button>
-      <div id="dropdownMenu" class="dropdown-menu">
-        <a href="#">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
-      
-      </div>
-    </div>
-    <button class="btn2 btn-2 mx-5"  style="    border-inline: 1px solid rgb(41, 41, 41); height: 100%;" onclick="toggleDropdown2()"> 
-    <a class="bell mx-5" >
-        <i class=" fa-regular fa-bell" ></i>
-    </a>
-  </button>
-  <div id="dropdownMenu2" class="dropdown-menu2">
-   <p>notification notification notification notification </p><hr>
-   <p>notification notification notification notification </p><hr>
-   <p>notification notification notification notification </p><hr>
-   <p>notification notification notification notification </p><hr>
-   <p>notification notification notification notification </p><hr>
-  
+   
+          <div class="dropdown">
+            
+                <button class="btn btn-2  mt-3" onclick="toggleDropdown()"> 
+                  <i class="fa-solid fa-angle-down mx-2"></i>
+                    اسم المستخدم
+                  <i class="fa-solid fa-user mx-2"></i>
+                </button>
+                <div id="dropdownMenu" class="dropdown-menu">
+                  <a href="#">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
+                
+                </div>
+          </div>
+          <button class="btn2 btn-2 mx-5"  style="    border-inline: 1px solid rgb(41, 41, 41); height: 100%;" onclick="toggleDropdown2()"> 
+              <a class="bell mx-5" >
+                  <i class=" fa-regular fa-bell" ></i>
+              </a>
+          </button>
+            <div id="dropdownMenu2" class="dropdown-menu2">
+                <p>notification notification notification notification </p><hr>
+                <p>notification notification notification notification </p><hr>
+                <p>notification notification notification notification </p><hr>
+                <p>notification notification notification notification </p><hr>
+                <p>notification notification notification notification </p><hr>
+            
+            </div>
+          <div class="input-group">
+              <button type="button" class="btn  mt-4" data-mdb-ripple-init>
+                <i class="fas fa-search"></i>
+              </button>
+              <div class="form-outline  mt-4" >
+                <input type="search" id="" class="form-control" placeholder="بحث"/>
+              </div>
+              <select name="#" id="#" class=" mt-4">
+                <option value="#"> المستخدميين </option>
+                <option value="#"> الادارات </option>
+                <option value="#"> التعيينات </option>
+                <option value="#"> الموظفين </option>
+                <option value="#"> الصادر </option>
+                <option value="#"> الوارد </option>
+              </select>
+          </div>
+          </div>
+          
+          <div class="first-section d-flex mt-1 " >
+              <h2>  الرقابة والتفتيش</h2>
+              <img  class="mt-2" src="../images/logo.svg" alt="">
+          </div>
   </div>
-    <div class="input-group">
-      <button type="button" class="btn  mt-4" data-mdb-ripple-init>
-        <i class="fas fa-search"></i>
-      </button>
-      <div class="form-outline  mt-4" >
-        <input type="search" id="" class="form-control" placeholder="بحث"/>
-      </div>
-      <select name="#" id="#" class=" mt-4">
-        <option value="#"> المستخدميين </option>
-        <option value="#"> الادارات </option>
-        <option value="#"> التعيينات </option>
-        <option value="#"> الموظفين </option>
-        <option value="#"> الصادر </option>
-        <option value="#"> الوارد </option>
-      </select>
-    </div>
-    </div>
-    
-    <div class="first-section d-flex mt-1 " >
-        <h2>  الرقابة والتفتيش</h2>
-        <img  class="mt-2" src="/images/logo.svg" alt="">
-    </div>
-        </div>
    
         <div class="navbar navbar-expand-md mb-4 w-100" role="navigation">
 
@@ -85,31 +83,31 @@
               <ul class="navbar-nav ml-auto"> 
       
                   <li class="nav-item">
-                      <img src="/images/exports.svg" alt="logo">
+                      <img src="../images/exports.svg" alt="logo">
                       <h6>الوارد</h6>
                   </li>
                   <li class="nav-item">
-                      <img src="/images/imports.svg" alt="logo">
+                      <img src="../images/imports.svg" alt="logo">
                       <h6>الصادر</h6>
                   </li>
                   <li class="nav-item">
-                      <img src="/images/employees.svg" alt="logo">
+                      <img src="../images/employees.svg" alt="logo">
                       <h6>الموظفين</h6>
                   </li>
                   <li class="nav-item">
-                      <img src="/images/managements.svg" alt="logo">
+                      <img src="../images/managements.svg" alt="logo">
                       <h6>التعيينات</h6>
                   </li>
                   <li class="nav-item">
-                      <img src="/images/managements.svg" alt="logo">
+                      <img src="../images/managements.svg" alt="logo">
                       <h6>الادارات</h6>
                   </li>
                   <li class="nav-item">
-                      <img src="/images/users.svg" alt="logo">
+                      <img src="../images/users.svg" alt="logo">
                       <h6>المستخدمين</h6>
                   </li>
                   <li class="nav-item">
-                      <img src="/images/home.svg" alt="logo">
+                      <img src="../images/home.svg" alt="logo">
                       <h6>الرئيسية</h6>
                   </li>
       
@@ -131,7 +129,7 @@
     <div class="container col-3 mt-3 p-0">
      <div class="header-side d-flex">
       <p>المهام</p>
-      <img src="/images/tasks.svg" alt="">
+      <img src="../images/tasks.svg" alt="">
      </div> <br>
      <div class="progress blue mt-5">
       <span class="progress-left">
@@ -162,7 +160,7 @@
                  <p>25212</p>
              </div>
              <div class="icon m-5" style="background-color: #0D992C;">
-                <img src="/images/management-card.svg" alt="">
+                <img src="../images/management-card.svg" alt="">
                         </div>
          </div>
           <div class=" card1 col-5 d-flex mx-5">
@@ -172,7 +170,7 @@
          </div>
           
          <div class="icon m-5" style="background-color: #E49500;">
-            <img  src="/images/employees-card.svg" alt="">
+            <img  src="../images/employees-card.svg" alt="">
             </div>
              </div>
             
@@ -185,7 +183,7 @@
              </div>
              
              <div class="icon m-5" style="background-color: #A900E4;">
-                <img src="/images/imports-card.svg" alt="">
+                <img src="../images/imports-card.svg" alt="">
                     </div>
          </div>
          <div class="card4 col-5 d-flex mx-4 mb-5">
@@ -195,7 +193,7 @@
              </div>
              
              <div class="icon m-5" style="background-color: #005BE4;">
-                <img src="/images/exports-card.svg" alt="">
+                <img src="../images/exports-card.svg" alt="">
                     </div>
          </div>
        </div>

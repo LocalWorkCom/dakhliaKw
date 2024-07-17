@@ -27,15 +27,27 @@ use App\Http\Controllers\outgoingController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('/login', function () {
     return view('login');
 });
 
-//  Auth
-Route::post('/create', [UserController::class, 'store'])->name('u');
+//  Auth verfication_code
+Route::post('/create', [UserController::class, 'store'])->name('create');
 Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::any('/logout', [UserController::class, 'logout'])->name('logout');
+Route::post('/verfication_code', [UserController::class, 'verfication_code'])->name('verfication_code');
+Route::post('/resend_code', [UserController::class, 'resend_code'])->name('resend_code');
+
+Route::get('/forget-password', function () {
+    return view('forgetpassword');
+})->name('forget_password');
+
+Route::any('/forget_password2', [UserController::class, 'forget_password2'])->name('forget_password2');
+
+Route::any('/reset_password', [UserController::class, 'reset_password'])->name('reset_password');
+
 // Route::resource('departments', DepartmentController::class);
 Route::post('departments_store', [DepartmentController::class, 'store']);
 Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
@@ -50,7 +62,8 @@ Route::get('/Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->n
 
 
 
-//End outgoing routes
+//End Export routes
+
 Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->name('postman.ajax');
 Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
 Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('iotelegrams.list');
@@ -62,6 +75,7 @@ Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name(
 Route::get('iotelegram/files/{id}', [IoTelegramController::class, 'files'])->name('iotelegram.files');
 
 // Department routes
+Route::get('iotelegram/files/view/{id}', [IoTelegramController::class, 'Viewfiles'])->name('iotelegram.files.view');
 Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
 
 Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create');
