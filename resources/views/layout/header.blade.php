@@ -123,8 +123,10 @@
                         <h6 class="nav-link">المستخدمين</h6>
                     </li>
                     <li class="nav-item" onclick="makeActive(this)">
-                        <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
-                        <h6 class="nav-link">الرئيسية</h6>
+                        <a href="{{ route('welcome') }}">
+                            <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
+                            <h6 class="nav-link">الرئيسية</h6>
+                        </a>
                     </li>
 
                 </ul>

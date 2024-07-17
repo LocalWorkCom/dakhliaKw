@@ -6,27 +6,64 @@
  background-color: #FFFFFF;
  
 }
-.navbar-nav li h6{
+.navbar-nav li h6 {
     font-family: Almarai;
-font-size: 17px;
-font-weight: 700;
-padding-top: 10px;
-color: #1C1B1B;
+    font-size: 21px;
+    font-weight: 700;
+    padding-top: 6px;
+    color: #1C1B1B;
 }
-.navbar-nav li h6:hover , .btn-1:hover , .btn-2:hover , .second-section .bell i:hover{
+.navbar-nav li h6:hover , .btn-1:hover , .btn-2:hover , .nav-item , .second-section .bell i:hover{
 cursor: pointer;
 }
 
-.nav-item:hover{
-    text-decoration: underline;
-    text-decoration-color: #032F70; 
-    text-decoration-thickness: 5px; 
+.nav-item {
+    position: relative; 
+    text-decoration: none;
+    color: inherit; 
+    transition: color 0.3s ease; 
 }
-.nav-link.active-page {
-    text-decoration: underline; 
-    text-decoration-color: #032F70; 
-    text-decoration-thickness: 5px;
+
+.nav-item::before,
+.nav-item::after {
+    content: ''; 
+    position: absolute;
+    left: 0;
+    width: 20%; 
+    height: 3px; 
+    background-color: transparent;
+    transition: background-color 0.3s ease;
 }
+
+.nav-item::before {
+    bottom: 0; 
+}
+
+.nav-item::after {
+    bottom: 0; 
+    transform: scaleX(0); 
+    transform-origin: center bottom; 
+}
+
+.nav-item:hover::before,
+.nav-item:hover::after,
+.nav-item.active-page::before,
+.nav-item.active-page::after {
+    background-color: #032F70; 
+}
+
+.nav-item:hover::before,
+.nav-item.active-page::before {
+    height: 5px; 
+    margin-top: 150px !important; 
+}
+
+.nav-item:hover::after,
+.nav-item.active-page::after {
+    height: 5px; /* Adjust thickness of underline */
+    transform: scaleX(1); /* Scale to full width on hover/active */
+}
+
 
 
 li img{
@@ -36,7 +73,7 @@ li img{
 }
 
 li {
-    width: 280px;
+    width: 300px;
     /* margin-inline: 30px; */
 }
 
@@ -53,15 +90,14 @@ li {
     margin-right: 27px;
     color: #FFFFFF;
 }
-.second-section .btn-2{
+.second-section .btn-2 {
     font-family: Almarai;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     line-height: 22.32px;
     text-align: right;
-    width: 250px;
+    width: 200px;
     height: 44px;
-    padding: 0px 20px 0px 0px;
     gap: 10px;
     background-color: transparent;
     border: none;
@@ -80,7 +116,7 @@ li {
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
     top: 60px;
-    left: 20px;
+    left: 0px;
     height: 55px;
     width: 220px !important;
     text-align: center;
@@ -98,9 +134,9 @@ li {
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
     top: 65px;
-    left: 308px;
+    left: 242px;
     height: 235px;
-    width: 200px !important;
+    width: 214px !important;
     text-align: center;
     border-radius: 5px;
     padding: 7px;
@@ -108,10 +144,10 @@ li {
 }
 
 .second-section .bell i{
-font-size: 25px;
+font-size: 24px;
 color: #FFFFFF;
-margin-top: 10px;
 }
+
 .second-section input{
     width: 500px;
     height: 44px;
@@ -473,3 +509,23 @@ color: #FFFFFF;
     height: 75px;
 }
 
+/* ******************login style ****************/
+.img-login-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.img-login-logo img{
+    width: 250px;
+    height: 250px;
+    
+}
+.login-input{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; 
+}
+.login-label {
+    text-align: right; /* Ensure label text is aligned to the right */
+    margin-bottom: 5px; /* Space between label and input */
+}

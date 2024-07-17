@@ -5,8 +5,8 @@
     .container-responsive {
         display: none;
     }
-.bell {
-        margin-right: 44px;
+    .bell {
+        margin-right: 0px;
         font-size: 25px;
     }
     .second-section input {
