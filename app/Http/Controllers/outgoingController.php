@@ -62,7 +62,7 @@ class outgoingController extends Controller
     // }
     public function store(Request $request)
     {
-        //dd($request->all());
+        
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
@@ -71,7 +71,7 @@ class outgoingController extends Controller
             'person_to' => 'nullable|exists:users,id',
             'active' => 'required|boolean',
             'department_id' => 'nullable|exists:external_departements,id',
-            'file.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
 
         // // Define custom messages
@@ -84,13 +84,13 @@ class outgoingController extends Controller
             'active.required' => 'The active field is required.',
             'active.boolean' => 'The active field must be true or false.',
             'department_id.exists' => 'The selected department does not exist.',
-            'file.*.file' => 'Each file must be a valid file.',
-            'file.*.mimes' => 'Each file must be a file of type: jpg, jpeg, png, pdf',
+            'files.*.file' => 'Each file must be a valid file.',
+            'files.*.mimes' => 'Each file must be a file of type: jpg, jpeg, png, pdf',
         ];
 
         // // Validate the request
         $request->validate($rules, $messages);
-        
+        //dd( $request->validate($rules, $messages));
         $export = new outgoings();
         $export->name = $request->nameex;
         $export->num = $request->num;
@@ -119,7 +119,7 @@ class outgoingController extends Controller
             }
         }
       
-        return redirect()->back()->with('success','تم الأضافه بنجاح');
+        return redirect()->route('Export.view.all')->with('status', 'تم الاضافه بنجاح');
     }
 
     /**
@@ -130,7 +130,9 @@ class outgoingController extends Controller
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
         $is_file = outgoing_files::where('outgoing_id', $id)->exists();
-        return view('outgoing.show', compact('data','users','is_file'));
+        $departments=ExternalDepartment::all();
+
+        return view('outgoing.show', compact('data','users','is_file','departments'));
     }
 
     /**
@@ -141,7 +143,8 @@ class outgoingController extends Controller
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
         $is_file = outgoing_files::where('outgoing_id', $id)->exists();
-        return view('outgoing.edit', compact('data','users','is_file'));
+        $departments=ExternalDepartment::all();
+        return view('outgoing.edit', compact('data','users','is_file','departments'));
     }
 
     /**
