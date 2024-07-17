@@ -31,13 +31,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="department_id">الجهة المرسلة:</label>
-                        <div id="extern-department-dev" style="display: none">
 
-                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                data-bs-target="#extern-department">
-                                <i class="fa fa-plus"></i> اضافة جديد
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                            id="extern-department-dev" style="display: none" data-bs-target="#extern-department">
+                            <i class="fa fa-plus"></i>
+                        </button>
                         <select id="department_id" name="department_id" class="form-control">
                             <option value="">اختر الجهة</option>
                             @foreach ($departments as $item)
@@ -47,11 +45,11 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="representive">اسم المندوب الجهة المرسلة :</label>
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
                             data-bs-target="#representative">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <label for="representive">اسم المندوب الجهة المرسلة :</label>
                         <select id="representive" name="representive" class="form-control">
                             <option value="">اختر المندوب</option>
                             @foreach ($representives as $item)
@@ -170,7 +168,8 @@
     </div>
 
     @push('scripts')
-    
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
         <script>
             $(document).ready(function() {
                 $('#saveRepresentative').click(function(e) {
@@ -233,7 +232,7 @@
 
                         } else {
 
-                            $('#department_id').hide();
+                            // $('#department_id').hide();
                             $('#extern-department-dev').show();
                         }
 
