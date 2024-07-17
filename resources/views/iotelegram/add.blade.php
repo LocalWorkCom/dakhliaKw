@@ -8,6 +8,7 @@
         <div class="mb-3">
             <a href="{{ route('iotelegrams.list') }}" class="btn btn-primary mt-3">رجوع</a>
         </div>
+        @include('inc.flash')
 
         <div class="card">
             <div class="card-header">الواردات</div>
@@ -17,15 +18,15 @@
 
                     <div class="mb-3">
                         <label for="date">التاريخ:</label>
-                        <input type="date" id="date" name="date" class="form-control">
+                        <input type="date" id="date" name="date" class="form-control" required>
                     </div>
                     <div class="row" style="justify-content: space-evenly;">
                         <div class="mb-3">
-                            <input type="radio" id="intern" name="type" checked value="in">
+                            <input type="radio" id="intern" name="type" checked value="in" required>
                             <label for="radio">داخلي</label>
                         </div>
                         <div class="mb-3">
-                            <input type="radio" id="extern" name="type" value="out">
+                            <input type="radio" id="extern" name="type" value="out" required>
                             <label for="radio">خارجي</label>
                         </div>
                     </div>
@@ -36,7 +37,7 @@
                             id="extern-department-dev" style="display: none" data-bs-target="#extern-department">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <select id="from_departement" name="from_departement" class="form-control">
+                        <select id="from_departement" name="from_departement" class="form-control" required>
                             <option value="">اختر الجهة</option>
                             @foreach ($departments as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -50,7 +51,7 @@
                             data-bs-target="#representative">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <select id="representive_id" name="representive_id" class="form-control">
+                        <select id="representive_id" name="representive_id" class="form-control" required>
                             <option value="">اختر المندوب</option>
                             @foreach ($representives as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -60,7 +61,7 @@
 
                     <div class="mb-3">
                         <label for="recieved_by">الموظف المستلم:</label>
-                        <select id="recieved_by" name="recieved_by" class="form-control">
+                        <select id="recieved_by" name="recieved_by" class="form-control" required>
                             <option value="">اختر الموظف</option>
                             @foreach ($recieves as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -71,7 +72,7 @@
                     <div class="mb-3">
                         <label for="files_num"> عدد الكتب:</label>
                         <br>
-                        <select id="files_num" name="files_num" class="form-control">
+                        <select id="files_num" name="files_num" class="form-control" required>
                             <option value="">اختر العدد</option>
 
                             @for ($i = 1; $i <= 10; $i++)
@@ -80,7 +81,7 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">التالي</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
                 </form>
             </div>
         </div>
@@ -100,7 +101,7 @@
 
                         <div class="mb-3">
                             <label for="modal_from_departement">الادارة:</label>
-                            <select id="modal_from_departement" name="modal_from_departement" class="form-control">
+                            <select id="modal_from_departement" name="modal_from_departement" class="form-control" required>
                                 <option value="">اختر الادارة</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -113,15 +114,15 @@
                         </div>
                         <div class="mb-3">
                             <label for="national_id">رقم الهوية:</label>
-                            <input type="text" id="national_id" name="national_id" class="form-control">
+                            <input type="text" id="national_id" name="national_id" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="phone1">رقم الهاتف الاول:</label>
-                            <input type="text" id="phone1" name="phone1" class="form-control">
+                            <input type="text" id="phone1" name="phone1" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="phone2">رقم الهاتف الثاني:</label>
-                            <input type="text" id="phone2" name="phone2" class="form-control">
+                            <input type="text" id="phone2" name="phone2" class="form-control" required>
                         </div>
                         <!-- Save button -->
                         <div class="text-end">
@@ -148,15 +149,15 @@
 
                         <div class="mb-3">
                             <label for="name">الاسم:</label>
-                            <input type="text" id="name" name="name" class="form-control">
+                            <input type="text" id="name" name="name" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="desc">الوصف:</label>
-                            <input type="text" id="desc" name="desc" class="form-control">
+                            <input type="text" id="desc" name="desc" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="phone">الهاتف</label>
-                            <input type="text" id="phone" name="phone" class="form-control">
+                            <input type="text" id="phone" name="phone" class="form-control" required>
                         </div>
 
                         <!-- Save button -->
@@ -170,7 +171,6 @@
     </div>
 
     @push('scripts')
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
         <script>
             $(document).ready(function() {
@@ -206,7 +206,7 @@
                                         selectOptions
                                     ); // Assuming you have a select element with id 'from_departement'
 
-                          
+
                                 },
                                 error: function(xhr, status, error) {
                                     // Handle error response

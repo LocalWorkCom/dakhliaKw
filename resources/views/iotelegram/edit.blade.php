@@ -23,42 +23,46 @@
                     <div class="row" style="justify-content: space-evenly;">
                         <div class="mb-3">
                             <input type="radio" id="intern" name="type"
-                                @if ('intern' == $iotelegram->type) checked @endif>
+                                @if ('in' == $iotelegram->type) checked @endif>
                             <label for="radio">داخلي</label>
                         </div>
                         <div class="mb-3">
                             <input type="radio" id="extern" name="type"
-                                @if ('extern' == $iotelegram->type) checked @endif>
+                                @if ('out' == $iotelegram->type) checked @endif>
                             <label for="radio">خارجي</label>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="department_id">الجهة المرسلة:</label>
-                        <div id="extern-department-dev" style="display: none">
+                        <label for="from_departement">الجهة المرسلة:</label>
 
-                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                data-bs-target="#extern-department">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <select id="department_id" name="department_id" class="form-control">
+
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                            data-bs-target="#extern-department" id="extern-department-dev" style="display: none">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <select id="from_departement" name="from_departement" class="form-control">
                             <option value="">اختر الجهة</option>
-                            @foreach ($departments as $item)
-                                <option value="{{ $item->id }}" @if ($item->id == $iotelegram->department_id) selected @endif>
-                                    {{ $item->name }}</option>
-                            @endforeach
+                            @if ($iotelegram->type == 'in')
+                                @foreach ($departments as $item)
+                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->from_departement) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            @else
+                                @foreach ($external_departments as $item)
+                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->from_departement) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
 
                     <div class="mb-3">
 
-                        <div id="extern-department-dev" style="display: none">
 
-                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                data-bs-target="#extern-department">
-                                <i class="fa fa-plus"></i> اضافة جديد
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                            data-bs-target="#representative">
+                            <i class="fa fa-plus"></i>
+                        </button>
                         <label for="representive_id">اسم المندوب الجهة المرسلة :</label>
                         <select id="representive_id" name="representive_id" class="form-control">
                             <option value="">اختر المندوب</option>
@@ -181,33 +185,56 @@
         <script>
             $(document).ready(function() {
                 var value = $('input[name=type]').val();
-                if (value == 'intern') {
-
-                    $('#department_id').show();
+                if (value == 'in') {
+                    $('#from_departement').show();
                     $('#extern-department-dev').hide();
 
+
                 } else {
-                    $('#department_id').hide();
+
                     $('#extern-department-dev').show();
-
                 }
-                $('#saveRepresentative').click(function(e) {
+                $("#addRepresentativeForm").on("submit", function(e) {
                     e.preventDefault();
 
                     // Serialize the form data
-                    var formData = $('#addRepresentativeForm').serialize();
+                    var formData = $(this).serialize(); // Changed to $(this)
 
                     // Submit AJAX request
                     $.ajax({
-                        url: $('#addRepresentativeForm').attr('action'),
+                        url: $(this).attr('action'), // Changed to $(this)
                         type: 'POST',
                         data: formData,
                         success: function(response) {
                             // Handle success response
                             console.log(response);
+                            $.ajax({
 
+                                url: "{{ route('postman.get') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر المندوب</option>';
+                                    response.forEach(function(postman) {
+                                        selectOptions += '<option value="' +
+                                            postman.id +
+                                            '">' + postman.name +
+                                            '</option>';
+                                    });
+                                    $('#representive_id').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle error response
+                                    console.error(xhr.responseText);
+                                }
+                            });
                             // Optionally, you can close the modal after successful save
-                            $('#exampleModal').modal('hide');
+                            $('#representative').modal('hide'); // Changed modal ID
                         },
                         error: function(xhr, status, error) {
                             // Handle error response
@@ -215,23 +242,50 @@
                         }
                     });
                 });
-                $('#saveExternalDepartment').click(function(e) {
+                $("#saveExternalDepartment").on("submit", function(e) {
+
                     e.preventDefault();
 
                     // Serialize the form data
-                    var formData = $('#saveExternalDepartment').serialize();
+                    var formData = $(this).serialize(); // Changed to $(this)
 
                     // Submit AJAX request
                     $.ajax({
-                        url: $('#saveExternalDepartment').attr('action'),
+                        url: $(this).attr('action'), // Changed to $(this)
                         type: 'POST',
                         data: formData,
                         success: function(response) {
                             // Handle success response
                             console.log(response);
+                            $('#from_departement').empty();
+                            $.ajax({
 
+                                url: "{{ route('external.departments') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر الادارة</option>';
+                                    response.forEach(function(department) {
+                                        selectOptions += '<option value="' +
+                                            department.id +
+                                            '">' + department.name +
+                                            '</option>';
+                                    });
+                                    $('#from_departement').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+                                    // Optionally, you can close the modal after successful save
+                                    $('#exampleModal').modal('hide');
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle error response
+                                    console.error(xhr.responseText);
+                                }
+                            });
                             // Optionally, you can close the modal after successful save
-                            $('#exampleModal').modal('hide');
+                            $('#extern-department').modal('hide'); // Changed modal ID
                         },
                         error: function(xhr, status, error) {
                             // Handle error response
@@ -240,17 +294,45 @@
                     });
                 });
 
-
+                // Additional event handler for radio button click
                 $('input[name=type]').click(function() {
-                    var value = $(this).val();
-                    if (value == 'intern') {
+                    if ($(this).is(':checked')) {
+                        var value = $(this).val();
+                        console.log(value);
+                        if (value == 'in') {
+                            $('#from_departement').show();
+                            $('#extern-department-dev').hide();
 
-                        $('#department_id').show();
-                        $('#extern-department-dev').hide();
 
-                    } else {
-                        $('#department_id').hide();
-                        $('#extern-department-dev').show();
+                        } else {
+
+                            $('#extern-department-dev').show();
+                            $('#from_departement').empty();
+                            $.ajax({
+
+                                url: "{{ route('external.departments') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر الادارة</option>';
+                                    response.forEach(function(department) {
+                                        selectOptions += '<option value="' + department.id +
+                                            '">' + department.name + '</option>';
+                                    });
+                                    $('#from_departement').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+                                    // Optionally, you can close the modal after successful save
+                                    $('#exampleModal').modal('hide');
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle error response
+                                    console.error(xhr.responseText);
+                                }
+                            });
+                        }
 
                     }
                 });
