@@ -33,8 +33,8 @@
                     <div class="mb-3">
                         <label for="from_departement">الجهة المرسلة:</label>
 
-                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none" id="extern-department-dev"
-                            data-bs-target="#extern-department">
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                            id="extern-department-dev" data-bs-target="#extern-department">
                             <i class="fa fa-plus"></i>
                         </button>
                         <select id="from_departement" name="from_departement" class="form-control" required>
@@ -80,6 +80,16 @@
                             @endfor
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="files">الملفات:</label>
+                        <div id="fileInputs">
+                            <div class="file-input mb-3">
+                                <input type="file" name="files[]" class="form-control-file" required>
+                                <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
+                    </div>
 
                     <button type="submit" class="btn btn-primary">حفظ</button>
                 </form>
@@ -101,7 +111,8 @@
 
                         <div class="mb-3">
                             <label for="modal_from_departement">الادارة:</label>
-                            <select id="modal_from_departement" name="modal_from_departement" class="form-control" required>
+                            <select id="modal_from_departement" name="modal_from_departement" class="form-control"
+                                required>
                                 <option value="">اختر الادارة</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -173,6 +184,8 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
+                checkFileCount();
+
                 $("#addRepresentativeForm").on("submit", function(e) {
                     e.preventDefault();
 
@@ -221,57 +234,6 @@
                         }
                     });
                 });
-                $("#saveExternalDepartment").on("submit", function(e) {
-
-                    e.preventDefault();
-
-                    // Serialize the form data
-                    var formData = $(this).serialize(); // Changed to $(this)
-
-                    // Submit AJAX request
-                    $.ajax({
-                        url: $(this).attr('action'), // Changed to $(this)
-                        type: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            // Handle success response
-                            console.log(response);
-                            $('#from_departement').empty();
-                            $.ajax({
-
-                                url: "{{ route('external.departments') }}",
-                                type: 'get',
-                                success: function(response) {
-                                    // Handle success response
-                                    var selectOptions =
-                                        '<option value="">اختر الادارة</option>';
-                                    response.forEach(function(department) {
-                                        selectOptions += '<option value="' +
-                                            department.id +
-                                            '">' + department.name +
-                                            '</option>';
-                                    });
-                                    $('#from_departement').html(
-                                        selectOptions
-                                    ); // Assuming you have a select element with id 'from_departement'
-
-                                    // Optionally, you can close the modal after successful save
-                                    $('#exampleModal').modal('hide');
-                                },
-                                error: function(xhr, status, error) {
-                                    // Handle error response
-                                    console.error(xhr.responseText);
-                                }
-                            });
-                            // Optionally, you can close the modal after successful save
-                            $('#extern-department').modal('hide'); // Changed modal ID
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error response
-                            console.error(xhr.responseText);
-                        }
-                    });
-                });
 
                 // Additional event handler for radio button click
                 $('input[name=type]').click(function() {
@@ -279,15 +241,38 @@
                         var value = $(this).val();
                         console.log(value);
                         if (value == 'in') {
-                            $('#from_departement').show();
                             $('#extern-department-dev').hide();
+                            $('#from_departement').show();
+                            $('#from_departement').empty();
+                            $.ajax({
 
+                                url: "{{ route('internal.departments') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    console.log(response);
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر الادارة</option>';
+                                    response.forEach(function(department) {
+                                        selectOptions += '<option value="' + department.id +
+                                            '">' + department.name + '</option>';
+                                    });
+                                    $('#from_departement').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle error response
+                                    console.error(xhr.responseText);
+                                }
+                            });
 
                         } else {
                             $('#extern-department-dev').show();
                             $('#from_departement').empty();
                             $.ajax({
-                                
+
                                 url: "{{ route('external.departments') }}",
                                 type: 'get',
                                 success: function(response) {
@@ -315,6 +300,35 @@
 
                     }
                 });
+                $('#addFile').click(function() {
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount < 10) {
+                        var newInput = '<div class="file-input mb-3">' +
+                            '<input type="file" name="files[]" class="form-control-file" required>' +
+                            '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
+                            '</div>';
+                        $('#fileInputs').append(newInput);
+                        checkFileCount(); // Update button states
+                    } else {
+                        alert('لا يمكنك إضافة المزيد من الملفات.');
+                    }
+                });
+
+                // Remove file input
+                $(document).on('click', '.remove-file', function() {
+                    $(this).parent('.file-input').remove();
+                    checkFileCount(); // Update button states
+
+                });
+
+                function checkFileCount() {
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount > 1) {
+                        $('.remove-file').prop('disabled', false);
+                    } else {
+                        $('.remove-file').prop('disabled', true);
+                    }
+                }
             });
         </script>
     @endpush

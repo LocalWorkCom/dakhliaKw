@@ -68,6 +68,7 @@ Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->na
 Route::get('postmans', [IoTelegramController::class, 'getPostmanAjax'])->name('postman.get');
 Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
 Route::get('external/departments', [IoTelegramController::class, 'getExternalDepartments'])->name('external.departments');
+Route::get('internal/departments', [IoTelegramController::class, 'getDepartments'])->name('internal.departments');
 Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('iotelegrams.list');
 Route::get('iotelegram/add', [IoTelegramController::class, 'create'])->name('iotelegrams.add');
 Route::post('iotelegram/store', [IoTelegramController::class, 'store'])->name('iotelegram.store');
