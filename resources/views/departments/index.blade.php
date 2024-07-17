@@ -1,48 +1,34 @@
-@extends('welcome')
+
+
+@extends('layout.header')
+
+@push('style')
+{{-- <script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"></script> --}}
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+@endpush
 
 @section('content')
-<div class="container">
-    <h1>Departments</h1>
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+<section style="direction: rtl;">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">الرئيسيه</a></li>
+        <li class="breadcrumb-item active"><a href="{{ route('departments.index') }}">الادارات</a></li>
+    </ol>
+    
+    <div class="container-fluid" style="text-align: center">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-block">
+                    {{ $dataTable->table() }}
+                </div>
+            </div>
         </div>
-    @endif
-    <a href="{{ route('departments.create') }}" class="btn btn-primary mb-3">Create Department</a>
-    @if($departments->count())
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name (Arabic)</th>
-                    <th>Manager</th>
-                    <th>Manager Assistant</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($departments as $department)
-                    <tr>
-                        <td>{{ $department->id }}</td>
-                        <td>{{ $department->name }}</td>
-                        <td>{{ $department->manager ? $department->manager->id : 'N/A' }}</td>
-                        <td>{{ $department->managerAssistant ? $department->managerAssistant->id : 'N/A' }}</td>
-                        <td>
-                            <a href="{{ route('departments.edit', $department->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('departments.destroy', $department->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                            
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        {{ $departments->links() }}
-    @else
-        <p>No departments found.</p>
-    @endif
-</div>
+    </div>
+
+   
+</section>
 @endsection
+
+@push('javascripts')
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+{{ $dataTable->scripts() }}
+@endpush
