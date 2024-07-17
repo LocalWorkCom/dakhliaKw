@@ -34,6 +34,7 @@ class UserController extends Controller
             'password' => 'required|string',
         ]);
         $military_number = $request->military_number;
+        $password = $request->password;
 
         // Check if the military number exists in the database
         $user = User::where('military_number', $request->military_number)->first();
@@ -59,10 +60,9 @@ class UserController extends Controller
             $result = json_decode($response, true);
 
             $sent = $result['sent'];
+            // $firstlogin = 0 ;
             if ($sent === 'true') {
-
-                // dd("true");
-                return  view('verfication_code', compact('code', 'military_number'));
+                return  view('verfication_code', compact('code', 'military_number','password'));
             } else {
 
                 return back()->with('error', 'login again plz.');
@@ -93,19 +93,21 @@ class UserController extends Controller
         }
         $code = $request->code;
         $military_number = $request->military_number;
-
+        $password = $request->password;
         // Check if the provided verification code matches the expected code
         if ($request->code === $request->verfication_code) {
             // Find the user by military number (assuming military_number is used for identification)
             $user = User::where('military_number', $request->military_number)->first();
             // Save the activation code to the user's record (if needed)
             $user->code = $request->code;
+            $user->password = Hash::make($request->password);
             $user->save();
-            if($user->remember_token == null)
+            
+            $firstlogin = 0;
+            if($user->token == null)
             {
-                // $user->remember_token = "login";
-                
-                return view('resetpassword', compact('military_number'));
+                $firstlogin = 1;
+                return view('resetpassword', compact('military_number','firstlogin'));
             }
             else
             {
@@ -116,7 +118,10 @@ class UserController extends Controller
             
         } else {
             // If verification code does not match, return back with error message and input values
-            return  view('verfication_code', compact('code', 'military_number'))->with('error', 'code wrong.');
+            return  view('verfication_code')->withErrors('code wrong.')
+                    ->with('code', $code)
+                    ->with('military_number',$military_number)
+                    ->with('password',$password);
         }
     }
     public function resend_code(Request $request)
@@ -131,10 +136,11 @@ class UserController extends Controller
         $result = json_decode($response, true);
         // $code = $request->code;
         $military_number = $request->military_number;
+        $password = $request->password;
         $sent = $result['sent'];
         if ($sent === 'true') {
             // dd("true");
-            return  view('verfication_code', compact('code', 'military_number'));
+            return  view('verfication_code', compact('code', 'military_number','password'));
         } else {
 
             return back()->with('error', 'login again plz.');
@@ -155,89 +161,77 @@ class UserController extends Controller
         // return redirect()->route('forget_password');
 
         $military_number = $request->military_number;
-
+        $firstlogin = 0;
         //     // Check if the military number exists in the database
         $user = User::where('military_number', $request->military_number)->first();
         // dd($user);
         if (!$user) {
             return back()->with('error', 'The provided military number does not match our records.');
         } else {
-            return view('resetpassword', compact('military_number'));
+            return view('resetpassword', compact('military_number','firstlogin'));
         }
     }
 
     public function reset_password(Request $request)
     {
-
-        // dd($request);
-        $military_number = $request->military_number;
-         // Validate incoming request data
-         $validatedData = Validator::make($request->all(), [
-            'military_number' => 'required|string',
-            'password' => 'required|string',
-            'password_confirm' => 'same:password',
-
-        ]);
-        // Check if validation fails
-        if ($validatedData->fails()) {
-            // Alert('Fail', __('site.wrong'));
-            // return view('resetpassword', compact('military_number'));
-            return view('resetpassword')
-            ->withErrors($validatedData)
-            ->with('military_number', $request->military_number);
-
-            // return back();
-        }
-        $user = User::where('military_number', $request->military_number)->first();
-
-        $firstlogin = ($user->active == 0);
-
-        if (Hash::check($request->password, $user->password)) {
-            // dd("sss");
-            return view('resetpassword')
-                ->withErrors('The new password cannot be the same as the current password.')
-                ->with('military_number', $request->military_number);
-        }
-
-        if ($firstlogin) {
-            $token = Str::random(32); // Generate a random token
-            $newPassword = bcrypt($token); // Hash the token to set as the new password
-            $user->password = $newPassword;
-            $user->save();
-        }
-        
-        // dd($user->password == $request->password);
-
-        
-        // Check if validation fails
-        //  if ($validatedData->fails()) {
-        //     return back()
-        //         ->withErrors($validatedData)
-        //         ->withInput();
-        // }      
-        // dd($military_number);
-        // Check if the military number exists in the database
-        
-        if ($user) {
-            $set = '123456789';
-            $code = substr(str_shuffle($set), 0, 4);
-            $msg = trans('message.please verified your account') . "\n" . trans('message.code activation') . "\n" . $code;
-            $user = User::where('military_number', $request->military_number)->first();
-            // Send activation code via WhatsApp (assuming this is your preferred method)
-            $response = send_sms_code($msg, $user->phone, $user->country_code);
-            $result = json_decode($response, true);
-            // $code = $request->code;
+       
             $military_number = $request->military_number;
-            $sent = $result['sent'];
-            if ($sent === 'true') {
-                // dd("true");
-                return  view('verfication_code', compact('code', 'military_number'));
-            } else {
+            $validatedData = Validator::make($request->all(), [
+                'military_number' => 'required|string',
+                'password' => 'required|string',
+                'password_confirm' => 'same:password',
 
-                return back()->with('error', 'login again plz.');
+            ]);
+            if ($validatedData->fails()) {
+                // Alert('Fail', __('site.wrong'));
+                // return view('resetpassword', compact('military_number'));
+                return view('resetpassword')
+                ->withErrors($validatedData)
+                ->with('military_number', $request->military_number)
+                ->with('firstlogin',$request->firstlogin);
+
+                // return back();
             }
-        } else {
-            return back()->with('error', 'The provided military number does not match our records.');
+            $user = User::where('military_number', $request->military_number)->first(); 
+
+            if (Hash::check($request->password, $user->password)) {
+                return view('resetpassword')
+                    ->withErrors('The new password cannot be the same as the current password.')
+                    ->with('military_number', $request->military_number)
+                    ->with('firstlogin',$request->firstlogin);
+            } 
+            if($request->firstlogin == 1)
+            {
+                // $user = User::where('military_number', $request->military_number)->first();
+                $user->token = "logined";
+                $user->password = Hash::make($request->password);
+                $user->save();
+                return redirect()->route('welcome');
+            }
+            else{  
+                
+            if ($user) {
+                $set = '123456789';
+                $code = substr(str_shuffle($set), 0, 4);
+                $msg = trans('message.please verified your account') . "\n" . trans('message.code activation') . "\n" . $code;
+                $user = User::where('military_number', $request->military_number)->first();
+                // Send activation code via WhatsApp (assuming this is your preferred method)
+                $response = send_sms_code($msg, $user->phone, $user->country_code);
+                $result = json_decode($response, true);
+                // $code = $request->code;
+                $military_number = $request->military_number;
+                $password = $request->password;
+                $sent = $result['sent'];
+                if ($sent === 'true') {
+                    // dd("true");
+                    return  view('verfication_code', compact('code', 'military_number' ,'password'));
+                } else {
+
+                    return back()->with('error', 'login again plz.');
+                }
+            } else {
+                return back()->with('error', 'The provided military number does not match our records.');
+            }
         }
     }
 

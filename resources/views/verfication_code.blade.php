@@ -8,12 +8,23 @@
             <form action="{{ route('verfication_code') }}" method="post">
                 @csrf
                 @if(session('error'))
-                    <div class="alert">
-                        {{ session('error') }}
-                    </div>
-                @endif
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
                 <input type="hidden" name="code" value="{{$code}}">
                 <input type="hidden" name="military_number" value="{{$military_number}}">
+                <input type="hidden" name="password" value="{{$password}}">
+
                 <label for="username" class="login-label"> ادخل الكود</label> <br>
                 <input type="text" name="verfication_code" id="username" class="login-input"><br>
                
@@ -34,6 +45,7 @@
             <form action="{{ route('resend_code') }}" method="POST">
                 @csrf
                 <input type="hidden" name="military_number" value="{{ $military_number }}">
+                <input type="hidden" name="password" value="{{$password}}">
                 <button class="btn2" type="submit">إعادة الإرسال</button>
             </form>
         </div>
