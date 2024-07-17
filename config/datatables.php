@@ -14,6 +14,7 @@ return [
         /*
          * Multi-term search will explode search keyword using spaces resulting into multiple term search.
          */
+        'multi_term'       => true,
         'multi_term' => true,
 
         /*
@@ -26,6 +27,7 @@ return [
          * Wild card will add "%" in between every characters of the keyword.
          * SQL: column LIKE "%k%e%y%w%o%r%d%"
          */
+        'use_wildcards'    => false,
         'use_wildcards' => false,
 
         /*
@@ -49,6 +51,7 @@ return [
         'query' => Yajra\DataTables\QueryDataTable::class,
         'collection' => Yajra\DataTables\CollectionDataTable::class,
         'resource' => Yajra\DataTables\ApiResourceDataTable::class,
+        
     ],
 
     /*
