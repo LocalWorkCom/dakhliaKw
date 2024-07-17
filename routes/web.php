@@ -36,7 +36,7 @@ Route::get('/login', function () {
 //  Auth verfication_code
 Route::post('/create', [UserController::class, 'store'])->name('create');
 Route::post('/login', [UserController::class, 'login'])->name('login');
-Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+Route::any('/logout', [UserController::class, 'logout'])->name('logout');
 Route::post('/verfication_code', [UserController::class, 'verfication_code'])->name('verfication_code');
 Route::post('/resend_code', [UserController::class, 'resend_code'])->name('resend_code');
 
