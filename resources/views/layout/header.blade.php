@@ -15,6 +15,8 @@
   <!-- Bootstrap-->
   <link href="{{ asset('frontend/styles/bootstrap.min.css') }}" rel="stylesheet" id="bootstrap-css">
 
+  <link src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+  </link>
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   @stack('style')
@@ -143,9 +145,8 @@
             <p>جميع الحقوق محفوظه </p>
         </div>
     </footer>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-zEYs/p5zCUo7LHibzS2KkETvP3L3PaZGvZLme7w+FVZ+Uk2x/E7l3niFf5XFk6ew" crossorigin="anonymous">
-    </script> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
     <script>
         function toggleDropdown() {
             var dropdownMenu = document.getElementById("dropdownMenu");
