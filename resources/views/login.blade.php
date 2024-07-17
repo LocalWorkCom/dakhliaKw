@@ -6,12 +6,22 @@
         <div class="col-5 col-md-5">
             <form action="{{ route('login') }}" method="post">
                 @csrf
-                @if(session('error'))
-                    <div class="alert">
-                        {{ session('error') }}
-                    </div>
-                @endif
-                <label for="username" class="login-label">اسم المستخدم</label> <br>
+                @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+                <label for="username" class="login-label"> رقم العسكري</label> <br>
                 <input type="text" name="military_number" id="username" class="login-input"><br>
                 <label for="password" class="login-label">كلمة المرور</label><br>
                 <div class="password-container">
