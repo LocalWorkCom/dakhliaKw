@@ -2,6 +2,7 @@
     'root' => array(
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
+        'reference' => '52c54a0909dc23346e02531d353f7303220ac42e',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -418,6 +419,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
+            'reference' => '52c54a0909dc23346e02531d353f7303220ac42e',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1064,6 +1066,7 @@
         'symfony/css-selector' => array(
             'pretty_version' => 'v6.4.8',
             'version' => '6.4.8.0',
+            'reference' => '4b61b02fe15db48e3687ce1c45ea385d1780fe08',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/css-selector',
             'aliases' => array(),
@@ -1091,6 +1094,7 @@
         'symfony/event-dispatcher' => array(
             'pretty_version' => 'v6.4.8',
             'version' => '6.4.8.0',
+            'reference' => '8d7507f02b06e06815e56bb39aa0128e3806208b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/event-dispatcher',
             'aliases' => array(),
@@ -1268,6 +1272,7 @@
         'symfony/string' => array(
             'pretty_version' => 'v6.4.9',
             'version' => '6.4.9.0',
+            'reference' => '76792dbd99690a5ebef8050d9206c60c59e681d7',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/string',
             'aliases' => array(),
@@ -1319,6 +1324,7 @@
         'symfony/yaml' => array(
             'pretty_version' => 'v6.4.8',
             'version' => '6.4.8.0',
+            'reference' => '52903de178d542850f6f341ba92995d3d63e60c9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/yaml',
             'aliases' => array(),
