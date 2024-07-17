@@ -2,6 +2,8 @@
     'root' => array(
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
+        'reference' => '0dfa9e4b004be6a88c68b0fdba6ef4069cb2d493',
+
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -418,6 +420,8 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
+            'reference' => '0dfa9e4b004be6a88c68b0fdba6ef4069cb2d493',
+
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1062,6 +1066,9 @@
             'dev_requirement' => false,
         ),
         'symfony/css-selector' => array(
+            'pretty_version' => 'v7.1.1',
+            'version' => '7.1.1.0',
+            'reference' => '1c7cee86c6f812896af54434f8ce29c8d94f9ff4',
             'pretty_version' => 'v6.4.8',
             'version' => '6.4.8.0',
             'type' => 'library',
@@ -1089,6 +1096,9 @@
             'dev_requirement' => false,
         ),
         'symfony/event-dispatcher' => array(
+            'pretty_version' => 'v7.1.1',
+            'version' => '7.1.1.0',
+            'reference' => '9fa7f7a21beb22a39a8f3f28618b29e50d7a55a7',
             'pretty_version' => 'v6.4.8',
             'version' => '6.4.8.0',
             'type' => 'library',
@@ -1266,6 +1276,9 @@
             'dev_requirement' => false,
         ),
         'symfony/string' => array(
+            'pretty_version' => 'v7.1.2',
+            'version' => '7.1.2.0',
+            'reference' => '14221089ac66cf82e3cf3d1c1da65de305587ff8',
             'pretty_version' => 'v6.4.9',
             'version' => '6.4.9.0',
             'type' => 'library',
@@ -1317,6 +1330,9 @@
             'dev_requirement' => false,
         ),
         'symfony/yaml' => array(
+            'pretty_version' => 'v7.1.1',
+            'version' => '7.1.1.0',
+            'reference' => 'fa34c77015aa6720469db7003567b9f772492bf2',
             'pretty_version' => 'v6.4.8',
             'version' => '6.4.8.0',
             'type' => 'library',
