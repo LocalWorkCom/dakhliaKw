@@ -9027,7 +9027,7 @@
                     "dev-master": "10.0-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
@@ -9103,7 +9103,7 @@
                     ]
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "Yajra\\DataTables\\": "src/"
@@ -9175,7 +9175,7 @@
                     ]
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "Yajra\\DataTables\\": "src/"
@@ -9256,7 +9256,7 @@
                     ]
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "Yajra\\DataTables\\": "src/"
@@ -9321,7 +9321,7 @@
                     ]
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "Yajra\\DataTables\\": "src/"

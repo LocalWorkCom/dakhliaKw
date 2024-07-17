@@ -36,7 +36,7 @@ class outgoingController extends Controller
     {
        
         $users=User::all();
-        return view('outgoing.show', compact('users'));
+        return view('outgoing.add', compact('users'));
     }
 
     /**

@@ -170,6 +170,7 @@
     </div>
 
     @push('scripts')
+    
         <script>
             $(document).ready(function() {
                 $('#saveRepresentative').click(function(e) {
