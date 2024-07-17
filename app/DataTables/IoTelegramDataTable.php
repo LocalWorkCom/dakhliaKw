@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\io_files;
 use App\Models\iotelegrams;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
@@ -23,6 +24,17 @@ class IoTelegramDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', 'iotelegrams.action')
+            ->addColumn('action', function ($row) {
+                $is_file = io_files::where('iotelegram_id', $row->id)->exists();
+                $uploadButton = $is_file
+                    ? '<a href="' . route('iotelegram.files', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-upload"></i></a>'
+                    : '<a href="' . route('iotelegram.files.view', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-file"></i></a>';
+
+                return '
+                    <a href="' . route('iotelegram.show', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                    <a href="' . route('iotelegram.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+                    ' . $uploadButton . '';
+            })
             ->setRowId('id');
     }
 
@@ -53,19 +65,7 @@ class IoTelegramDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
-            ])->parameters([
-                'initComplete' => 'function () {
-                            this.api().columns().every(function () {
-                                var column = this;
-                                var input = document.createElement("input");
-                                $(input).appendTo($(column.header()).empty())
-                                    .on("keyup change clear", function () {
-                                        if (column.search() !== this.value) {
-                                            column.search(this.value).draw();
-                                        }
-                                    });
-                            });
-                        }',
+
             ]);
     }
 
@@ -75,13 +75,13 @@ class IoTelegramDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('الرقم'),
-            Column::make('الجهة المرسلة'),
-            Column::make('التاريخ'),
-            Column::make('المستلم'),
-            Column::make('الموضوع'),
-            Column::make('الملاحظات'),
-            Column::computed('الخيارات')
+            Column::make('id')->title('الرقم'),
+            Column::make('from_departement')->title('الجهة المرسلة'),
+            Column::make('date')->title('التاريخ'),
+            Column::make('representive_id')->title('المستلم'),
+            // Column::make('')->title('الموضوع'),
+            // Column::make('')->title('الملاحظات'),
+            Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
                 ->searchable(false)
