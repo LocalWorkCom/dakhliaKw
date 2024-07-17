@@ -22,14 +22,14 @@
                     </div>
                     <div class="row" style="justify-content: space-evenly;">
                         <div class="mb-3">
-                            <input type="checkbox" id="intern" name="type"
+                            <input type="radio" id="intern" name="type"
                                 @if ('intern' == $iotelegram->type) checked @endif>
-                            <label for="checkbox">داخلي</label>
+                            <label for="radio">داخلي</label>
                         </div>
                         <div class="mb-3">
-                            <input type="checkbox" id="extern" name="type"
+                            <input type="radio" id="extern" name="type"
                                 @if ('extern' == $iotelegram->type) checked @endif>
-                            <label for="checkbox">خارجي</label>
+                            <label for="radio">خارجي</label>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -95,7 +95,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addRepresentativeForm" action="{{ route('user.ajax') }}" method="POST">
+                    <form id="addRepresentativeForm" action="{{ route('postman.ajax') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">
@@ -134,6 +134,7 @@
     </div>
 
     @push('scripts')
+    
         <script>
             $(document).ready(function() {
                 var value = $('input[name=type]').val();
