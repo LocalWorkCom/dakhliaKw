@@ -22,12 +22,12 @@
                     </div>
                     <div class="row" style="justify-content: space-evenly;">
                         <div class="mb-3">
-                            <input type="radio" id="intern" name="type"
+                            <input type="radio" id="intern" name="type" value="in"
                                 @if ('in' == $iotelegram->type) checked @endif>
                             <label for="radio">داخلي</label>
                         </div>
                         <div class="mb-3">
-                            <input type="radio" id="extern" name="type"
+                            <input type="radio" id="extern" name="type" value="out"
                                 @if ('out' == $iotelegram->type) checked @endif>
                             <label for="radio">خارجي</label>
                         </div>
@@ -185,6 +185,7 @@
         <script>
             $(document).ready(function() {
                 var value = $('input[name=type]').val();
+                console.log(value);
                 if (value == 'in') {
                     $('#from_departement').show();
                     $('#extern-department-dev').hide();
