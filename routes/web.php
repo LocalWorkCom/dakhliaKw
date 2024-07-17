@@ -36,7 +36,7 @@ Route::get('/login', function () {
 //  Auth verfication_code
 Route::post('/create', [UserController::class, 'store'])->name('create');
 Route::post('/login', [UserController::class, 'login'])->name('login');
-Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+Route::any('/logout', [UserController::class, 'logout'])->name('logout');
 Route::post('/verfication_code', [UserController::class, 'verfication_code'])->name('verfication_code');
 Route::post('/resend_code', [UserController::class, 'resend_code'])->name('resend_code');
 
@@ -73,6 +73,7 @@ Route::get('iotelegram/edit/{id}', [IoTelegramController::class, 'edit'])->name(
 Route::get('iotelegram/update', [IoTelegramController::class, 'update'])->name('iotelegram.update');
 Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name('iotelegram.show');
 Route::get('iotelegram/files/{id}', [IoTelegramController::class, 'files'])->name('iotelegram.files');
+Route::get('iotelegram/files/view/{id}', [IoTelegramController::class, 'Viewfiles'])->name('iotelegram.files.view');
 Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
 
 Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create');
