@@ -16,18 +16,27 @@ color: #1C1B1B;
 .navbar-nav li h6:hover , .btn-1:hover , .btn-2:hover , .second-section .bell i:hover{
 cursor: pointer;
 }
+
 .nav-item:hover{
     text-decoration: underline;
     text-decoration-color: #032F70; 
-    text-decoration-thickness: 5px
+    text-decoration-thickness: 5px; 
 }
+.nav-link.active-page {
+    text-decoration: underline; 
+    text-decoration-color: #032F70; 
+    text-decoration-thickness: 5px;
+}
+
+
 li img{
     width: 30px;
      height: 30px; 
      margin-left: 15px;
 }
-li{
-    width: 250px;
+
+li {
+    width: 280px;
     /* margin-inline: 30px; */
 }
 
@@ -333,7 +342,7 @@ color: #999595;
     right: 0;
 }
 .progress .progress-right .progress-bar{
-    left: -100%;
+    left: -102%;
     border-top-left-radius: 80px;
     border-bottom-left-radius: 80px;
     border-right: 0;
@@ -455,3 +464,12 @@ background-color: #B3261E;
 border: none;
 color: #FFFFFF;
   }
+  .navbar-toggler {
+    background-color: #ffffff;
+    color: #032F70; 
+    box-shadow: #032F70;
+  }
+  .header-side {
+    height: 75px;
+}
+
