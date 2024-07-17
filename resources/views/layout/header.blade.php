@@ -7,7 +7,8 @@
     <title>
         @yield('title')
     </title>
-    <script type="application/javascript" src="{{ asset('frontend/js/bootstrap.min.js')}}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
@@ -21,7 +22,6 @@
     <link src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
     </link>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
 </head>
@@ -140,6 +140,10 @@
     <main>
         @yield('content')
     </main>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
     @stack('scripts')
 
     <br> <br> <br> <br>
@@ -148,8 +152,7 @@
             <p>جميع الحقوق محفوظه </p>
         </div>
     </footer>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+    
     <script>
         function toggleDropdown() {
             var dropdownMenu = document.getElementById("dropdownMenu");

@@ -2700,7 +2700,7 @@
                     "dev-master": "0.20.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "League\\Fractal\\": "src"
