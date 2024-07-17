@@ -15,8 +15,9 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Bootstrap-->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/main.css') }}">
 </head>
 
@@ -158,13 +159,7 @@
 
 
 
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-zEYs/p5zCUo7LHibzS2KkETvP3L3PaZGvZLme7w+FVZ+Uk2x/E7l3niFf5XFk6ew" crossorigin="anonymous">
-    </script>
-
+@stack('javascripts')
 </body>
 
 </html>

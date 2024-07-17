@@ -14,4 +14,8 @@ class departements extends Model
         'manager_director',
         'ass_manager_director',
     ];
+    public function outgoings()
+    {
+        return $this->hasMany(outgoings::class);
+    }
 }
