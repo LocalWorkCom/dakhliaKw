@@ -97,4 +97,23 @@ class outgoingController extends Controller
     {
         //
     }
+    /**
+     * Test Upload
+     */
+    /* public function testUpload(Request $request)
+    {
+       // dd($request);
+       $outgoingFile=new outgoing_files();
+       $outgoingFile->outgoing_id=1;
+       $outgoingFile->active=1;
+       $outgoingFile->created_by=1;
+       $outgoingFile->updated_by=1;
+       $outgoingFile->created_at=now();
+       $outgoingFile->save();
+       $response = UploadFiles('files/test','file_name','file_name',$outgoingFile,$request->file);
+       echo 'hiii';
+
+
+       
+    } */
 }

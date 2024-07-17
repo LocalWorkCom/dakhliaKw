@@ -128,4 +128,13 @@ if (!function_exists('send_sms_code')) {
     } 
     }
 
+    if (!function_exists('downloadFile')) {
+
+        function downloadFile($filename)
+        {
+        
+           
+        }
+    }
+
 ?>

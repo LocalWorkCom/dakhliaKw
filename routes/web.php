@@ -59,6 +59,7 @@ Route::resource('Export', outgoingController::class);
 Route::get('/Export/All', [outgoingController::class, 'outgoingAll'])->name('Export.view.all');
 Route::get('/Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files');
 Route::get('/Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
+//Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('testUpload');
 
 
 
