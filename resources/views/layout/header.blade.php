@@ -78,9 +78,15 @@
             <div class="row ">
 
                 <div class="second-section d-flex mx-3 mt-5 col-md-9 col-sm-6">
-                    <button class="btn-1 mx-2">تسجيل خروج
+                    {{-- <button class="btn-1 mx-2">تسجيل خروج
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    </button>
+                    </button> --}}
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn-1 mx-2">تسجيل خروج
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        </button>
+                    </form>
                     <button class="btn-2 mx-2">اسم المستخدم
                         <i class="fa-solid fa-user"></i>
                     </button>
@@ -96,7 +102,8 @@
         </div>
 
 
-        <form action="{{ route('u') }}" method="post">
+        <form action="{{ route('create')}}" method="post">
+
             @csrf
             <button type="submit">تسجيل مستخدم</button>
         </form>
@@ -152,11 +159,6 @@
         </div>
         <hr>
     </div>
-
-
-
-    <main class="py-4" style="text-align: right;">
-        @yield('content')
     </main>
     @stack('scripts')
 
