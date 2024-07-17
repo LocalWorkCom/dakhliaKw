@@ -39,5 +39,9 @@ class outgoings extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+    public function departments()
+    {
+        return $this->belongsTo(departements::class);
+    }
     
 }
