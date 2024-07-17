@@ -29,10 +29,24 @@ class UserController extends Controller
     }
     public function login(Request $request)
     {
-        $request->validate([
-            'military_number' => 'required|string',
+        $messages = [
+            'military_number.required' => 'رقم العسكري مطلوب.',
+            'password.required' => 'كلمة المرور مطلوبة.',
+        ];
+            $military_number = $request->military_number;
+            
+            $validatedData = Validator::make($request->all(), [
+                'military_number' => 'required|string',
             'password' => 'required|string',
-        ]);
+
+          ], $messages);
+
+          if ($validatedData->fails()) {
+            return back()
+                ->withErrors($validatedData)
+                ->withInput();
+            }
+
         $military_number = $request->military_number;
         $password = $request->password;
 
@@ -40,7 +54,7 @@ class UserController extends Controller
         $user = User::where('military_number', $request->military_number)->first();
 
         if (!$user) {
-            return back()->with('error', 'The provided military number does not match our records.');
+            return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
         }
 
         // Attempt to authenticate the user with provided credentials
@@ -53,7 +67,8 @@ class UserController extends Controller
             $code = substr(str_shuffle($set), 0, 4);
 
             // Prepare activation message
-            $msg = trans('message.please verified your account') . "\n" . trans('message.code activation') . "\n" . $code;
+            // $msg = trans('يرجى التحقق من حسابك') . "\n" . trans('تفعيل الكود') . "\n" . $code;
+            $msg  = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
 
             // Send activation code via WhatsApp (assuming this is your preferred method)
             $response = send_sms_code($msg, $user->phone, $user->country_code);
@@ -65,7 +80,7 @@ class UserController extends Controller
                 return  view('verfication_code', compact('code', 'military_number','password'));
             } else {
 
-                return back()->with('error', 'login again plz.');
+                return back()->with('error', 'سجل الدخول مرة أخرى ');
             }
 
             // Redirect to welcome view after successful login
@@ -73,23 +88,27 @@ class UserController extends Controller
         }
 
         // Authentication failed
-        return back()->with('error', 'The provided password does not match our records.');
+        return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
     }
-
 
     public function verfication_code(Request $request)
     {
+        $messages = [
+            'verfication_code.required' => 'كود التفعيل مطلوب.',
+        ];
         // Validate incoming request data
         $validatedData = Validator::make($request->all(), [
             'verfication_code' => 'required', // Ensure verfication_code field is required
 
-        ]);
-
+        ], $messages);
+       
         // Check if validation fails
         if ($validatedData->fails()) {
-            return back()
-                ->withErrors($validatedData)
-                ->withInput();
+            return view('verfication_code')->withErrors($validatedData)
+                    ->with('code', $request->code)
+                    ->with('military_number',$request->military_number)
+                    ->with('password',$request->password)
+                    ;
         }
         $code = $request->code;
         $military_number = $request->military_number;
@@ -118,7 +137,7 @@ class UserController extends Controller
             
         } else {
             // If verification code does not match, return back with error message and input values
-            return  view('verfication_code')->withErrors('code wrong.')
+            return  view('verfication_code')->withErrors('الكود خاطئ.')
                     ->with('code', $code)
                     ->with('military_number',$military_number)
                     ->with('password',$password);
@@ -129,7 +148,8 @@ class UserController extends Controller
         // dd($request);
         $set = '123456789';
         $code = substr(str_shuffle($set), 0, 4);
-        $msg = trans('message.please verified your account') . "\n" . trans('message.code activation') . "\n" . $code;
+        // $msg = trans('message.please verified your account') . "\n" . trans('message.code activation') . "\n" . $code;
+        $msg  = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
         $user = User::where('military_number', $request->military_number)->first();
         // Send activation code via WhatsApp (assuming this is your preferred method)
         $response = send_sms_code($msg, $user->phone, $user->country_code);
@@ -143,21 +163,31 @@ class UserController extends Controller
             return  view('verfication_code', compact('code', 'military_number','password'));
         } else {
 
-            return back()->with('error', 'login again plz.');
+            return back()->with('error', 'سجل الدخول مرة أخرى');
         }
     }
     public function forget_password2(Request $request)
     {
         // dd($request);
-        $request->validate([
+
+        $messages = [
+            'military_number.required' => 'رقم العسكري مطلوب.',
+        ];
+        // Validate incoming request data
+        $validatedData = Validator::make($request->all(), [
             'military_number' => 'required|string',
-        ]);
-         // Check if validation fails
-        //  if ($validatedData->fails()) {
-        //     return back()
-        //         ->withErrors($validatedData)
-        //         ->withInput();
-        // }
+
+        ], $messages);
+
+        // $request->validate([
+        //     'military_number' => 'required|string',
+        // ]);
+        //  Check if validation fails
+         if ($validatedData->fails()) {
+            return back()
+                ->withErrors($validatedData)
+                ->withInput();
+        }
         // return redirect()->route('forget_password');
 
         $military_number = $request->military_number;
@@ -166,7 +196,7 @@ class UserController extends Controller
         $user = User::where('military_number', $request->military_number)->first();
         // dd($user);
         if (!$user) {
-            return back()->with('error', 'The provided military number does not match our records.');
+            return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
         } else {
             return view('resetpassword', compact('military_number','firstlogin'));
         }
@@ -175,13 +205,20 @@ class UserController extends Controller
     public function reset_password(Request $request)
     {
        
+        $messages = [
+            'military_number.required' => 'رقم العسكري مطلوب.',
+            'password.required' => 'كلمة المرور مطلوبة.',
+            'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
+        ];
+
             $military_number = $request->military_number;
+            
             $validatedData = Validator::make($request->all(), [
                 'military_number' => 'required|string',
                 'password' => 'required|string',
                 'password_confirm' => 'same:password',
 
-            ]);
+          ], $messages);
             if ($validatedData->fails()) {
                 // Alert('Fail', __('site.wrong'));
                 // return view('resetpassword', compact('military_number'));
@@ -196,7 +233,7 @@ class UserController extends Controller
 
             if (Hash::check($request->password, $user->password)) {
                 return view('resetpassword')
-                    ->withErrors('The new password cannot be the same as the current password.')
+                    ->withErrors('لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية')
                     ->with('military_number', $request->military_number)
                     ->with('firstlogin',$request->firstlogin);
             } 
@@ -213,7 +250,8 @@ class UserController extends Controller
             if ($user) {
                 $set = '123456789';
                 $code = substr(str_shuffle($set), 0, 4);
-                $msg = trans('message.please verified your account') . "\n" . trans('message.code activation') . "\n" . $code;
+                $msg  = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+                // $msg = trans('message.please verified your account') . "\n" . trans('message.code activation') . "\n" . $code;
                 $user = User::where('military_number', $request->military_number)->first();
                 // Send activation code via WhatsApp (assuming this is your preferred method)
                 $response = send_sms_code($msg, $user->phone, $user->country_code);
@@ -227,10 +265,10 @@ class UserController extends Controller
                     return  view('verfication_code', compact('code', 'military_number' ,'password'));
                 } else {
 
-                    return back()->with('error', 'login again plz.');
+                    return back()->with('error', 'سجل الدخول مرة أخرى');
                 }
             } else {
-                return back()->with('error', 'The provided military number does not match our records.');
+                return back()->with('error','الرقم العسكري المقدم لا يتطابق مع سجلاتنا');
             }
         }
     }
