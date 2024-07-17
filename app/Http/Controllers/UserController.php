@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
@@ -10,9 +11,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
+
+
 use Illuminate\Support\Facades\Validator;
-
-
 use Illuminate\Console\View\Components\Alert;
 use App\helper; // Adjust this namespace as per your helper file location
 
@@ -164,6 +165,7 @@ class UserController extends Controller
             return view('resetpassword', compact('military_number'));
         }
     }
+
     public function reset_password(Request $request)
     {
 
@@ -176,7 +178,6 @@ class UserController extends Controller
             'password_confirm' => 'same:password',
 
         ]);
-
         // Check if validation fails
         if ($validatedData->fails()) {
             // Alert('Fail', __('site.wrong'));
@@ -189,6 +190,7 @@ class UserController extends Controller
         }
         $user = User::where('military_number', $request->military_number)->first();
 
+        $firstlogin = ($user->active == 0);
 
         if (Hash::check($request->password, $user->password)) {
             // dd("sss");
@@ -197,17 +199,22 @@ class UserController extends Controller
                 ->with('military_number', $request->military_number);
         }
 
-        dd($user->password == $request->password);
+        if ($firstlogin) {
+            $token = Str::random(32); // Generate a random token
+            $newPassword = bcrypt($token); // Hash the token to set as the new password
+            $user->password = $newPassword;
+            $user->save();
+        }
+        
+        // dd($user->password == $request->password);
 
         
- // Check if validation fails
-//  if ($validatedData->fails()) {
-//     return back()
-//         ->withErrors($validatedData)
-//         ->withInput();
-// }
-        
-
+        // Check if validation fails
+        //  if ($validatedData->fails()) {
+        //     return back()
+        //         ->withErrors($validatedData)
+        //         ->withInput();
+        // }      
         // dd($military_number);
         // Check if the military number exists in the database
         

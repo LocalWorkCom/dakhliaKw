@@ -110,7 +110,6 @@
         {{-- <a href=""> </a> --}}
 
 
-
         <hr>
         <div class="navbar navbar-expand-md  mb-4" role="navigation">
 
@@ -158,7 +157,11 @@
             </div>
         </div>
         <hr>
+
+
+        @yield('content')
     </div>
+
     </main>
     @stack('scripts')
 
