@@ -1,64 +1,41 @@
 @extends('layout.header')
 @section('content')
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-</head>
-<style>
-    .password-container {
-        position: relative;
-        display: inline-block;
-    }
 
-    .login-input {
-        padding-right: 30px; /* Space for the eye icon */
-    }
 
-    .eye-icon {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        cursor: pointer;
-    }
-
-    .alert {
-        color: red;
-        font-weight: bold;
-        margin-top: 10px;
-    }
-</style>
 <section>
     <div class="row col-12 d-flex justify-content-between">
         <div class="col-5 col-md-5">
-            <form action="{{ route('login') }}" method="post">
+            <form action="{{ route('verfication_code') }}" method="post">
                 @csrf
                 @if(session('error'))
                     <div class="alert">
                         {{ session('error') }}
                     </div>
                 @endif
-                <label for="username" class="login-label">اسم المستخدم</label> <br>
-                <input type="text" name="military_number" id="username" class="login-input"><br>
-                <label for="password" class="login-label">كلمة المرور</label><br>
-                <div class="password-container">
-                    <input type="password" name="password" id="password" class="login-input"> 
-                    <span class="eye-icon" id="togglePassword">
-                        <i class="fa fa-eye"></i>
-                    </span>
-                </div>
+                <input type="hidden" name="code" value="{{$code}}">
+                <input type="hidden" name="military_number" value="{{$military_number}}">
+                <label for="username" class="login-label"> ادخل الكود</label> <br>
+                <input type="text" name="verfication_code" id="username" class="login-input"><br>
+               
                 <br>
                 <div class="btns d-flex justify-content-between ">
-                    <button class="btn1" type="submit">تسجيل دخول</button>  
+                    <button class="btn1" type="submit">تاكيد </button>  
                     &nbsp; &nbsp; &nbsp;
                     {{-- <button class="btn2"><i class="fa-solid fa-right-from-bracket"></i>  &nbsp; تسجيل خروج</button> --}}
                 </div>
-                <button class="btn2" type="button" onclick="location.href='{{ route('forget_password') }}'">
-                    نسيت الباسورد
-                </button>
-                
-                
+
+                {{-- <div class="btns d-flex justify-content-between ">
+                    <button class="btn2" type="button" onclick="location.href='{{ route('resend_code') }}'" name="military_number" value="{{$military_number}}"> اعاده الارسال</button>  
+                    &nbsp; &nbsp; &nbsp;
+                    <button class="btn2"><i class="fa-solid fa-right-from-bracket"></i>  &nbsp; تسجيل خروج</button>
+                </div> --}}
             </form>
 
+            <form action="{{ route('resend_code') }}" method="POST">
+                @csrf
+                <input type="hidden" name="military_number" value="{{ $military_number }}">
+                <button class="btn2" type="submit">إعادة الإرسال</button>
+            </form>
         </div>
         <div class="col-7 col-md-6">
             <img src="assets/images/home.png" alt="background" class="background">
