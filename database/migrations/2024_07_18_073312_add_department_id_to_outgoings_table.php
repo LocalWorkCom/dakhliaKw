@@ -12,11 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('outgoings', function (Blueprint $table) {
-            $table->unsignedBigInteger('department_id')->nullable()->after('updated_by'); 
-            
-            // Set up the foreign key constraint
-            $table->foreign('department_id')->references('id')->on('external_departments')->onDelete('cascade');
-        
+            $table->foreignId('department_id')->nullable()->references('id')->on('external_departements')->onDelete('cascade');
+
         });
     }
 
