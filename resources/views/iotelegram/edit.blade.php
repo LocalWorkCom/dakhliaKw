@@ -58,13 +58,11 @@
 
                     <div class="mb-3">
 
-                        <div id="extern-department-dev" style="display: none">
 
-                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                data-bs-target="#extern-department">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                            data-bs-target="#representative">
+                            <i class="fa fa-plus"></i>
+                        </button>
                         <label for="representive_id">اسم المندوب الجهة المرسلة :</label>
                         <select id="representive_id" name="representive_id" class="form-control">
                             <option value="">اختر المندوب</option>
