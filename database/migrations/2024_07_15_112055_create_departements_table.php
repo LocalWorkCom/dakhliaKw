@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('departements', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description');
+
             $table->foreignId('manger')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('manger_assistance')->nullable( )->references('id')->on('users')->onDelete('cascade');
             
@@ -23,6 +25,7 @@ return new class extends Migration
             $table->softDeletes();
 
         });
+        
     }
 
     /**
