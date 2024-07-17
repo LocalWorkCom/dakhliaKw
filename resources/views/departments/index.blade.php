@@ -11,7 +11,7 @@
 <section style="direction: rtl;">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#">الرئيسيه</a></li>
-        <li class="breadcrumb-item active">الادارات</li>
+        <li class="breadcrumb-item active"><a href="{{ route('departments.index') }}">الادارات</a></li>
     </ol>
     
     <div class="container-fluid" style="text-align: center">
