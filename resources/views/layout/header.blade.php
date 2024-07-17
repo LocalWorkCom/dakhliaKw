@@ -7,7 +7,8 @@
     <title>
         @yield('title')
     </title>
-    <script type="application/javascript" src="{{ asset('frontend/js/bootstrap.min.js')}}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
@@ -21,7 +22,6 @@
     <link src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
     </link>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
 </head>
@@ -71,7 +71,7 @@
                     </div>
                     <select name="#" id="#" class=" mt-4">
                         <option value="#"> المستخدميين </option>
-                        <option value="{{ route('departments.index') }}"> الادارات </option>
+                        <option value="#"> الادارات </option>
                         <option value="#"> التعيينات </option>
                         <option value="#"> الموظفين </option>
                         <option value="{{ route('Export.index') }}"> الصادر </option>
@@ -116,10 +116,8 @@
                         <h6>التعيينات</h6>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('departments.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>الادارات</h6>
-                        </a>
                     </li>
                     <li class="nav-item">
                         <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
@@ -150,6 +148,8 @@
             <p>جميع الحقوق محفوظه </p>
         </div>
     </footer>
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
     <script>
