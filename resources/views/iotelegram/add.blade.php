@@ -21,22 +21,22 @@
                     </div>
                     <div class="row" style="justify-content: space-evenly;">
                         <div class="mb-3">
-                            <input type="radio" id="intern" name="type" checked value="intern">
+                            <input type="radio" id="intern" name="type" checked value="in">
                             <label for="radio">داخلي</label>
                         </div>
                         <div class="mb-3">
-                            <input type="radio" id="extern" name="type" value="extern">
+                            <input type="radio" id="extern" name="type" value="out">
                             <label for="radio">خارجي</label>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="department_id">الجهة المرسلة:</label>
+                        <label for="from_departement">الجهة المرسلة:</label>
 
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
                             id="extern-department-dev" style="display: none" data-bs-target="#extern-department">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <select id="department_id" name="department_id" class="form-control">
+                        <select id="from_departement" name="from_departement" class="form-control">
                             <option value="">اختر الجهة</option>
                             @foreach ($departments as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -45,12 +45,12 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="representive">اسم المندوب الجهة المرسلة :</label>
+                        <label for="representive_id">اسم المندوب الجهة المرسلة :</label>
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
                             data-bs-target="#representative">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <select id="representive" name="representive" class="form-control">
+                        <select id="representive_id" name="representive_id" class="form-control">
                             <option value="">اختر المندوب</option>
                             @foreach ($representives as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -72,6 +72,8 @@
                         <label for="files_num"> عدد الكتب:</label>
                         <br>
                         <select id="files_num" name="files_num" class="form-control">
+                            <option value="">اختر العدد</option>
+
                             @for ($i = 1; $i <= 10; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
                             @endfor
@@ -97,8 +99,8 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label for="modal-department_id">الادارة:</label>
-                            <select id="modal-department_id" name="modal-department_id" class="form-control">
+                            <label for="modal_from_departement">الادارة:</label>
+                            <select id="modal_from_departement" name="modal_from_departement" class="form-control">
                                 <option value="">اختر الادارة</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -123,7 +125,7 @@
                         </div>
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="button" class="btn btn-primary" id="saveRepresentative">حفظ</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                         </div>
                     </form>
                 </div>
@@ -141,7 +143,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addRepresentativeForm" action="{{ route('department.ajax') }}" method="POST">
+                    <form id="saveExternalDepartment" action="{{ route('department.ajax') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">
@@ -159,7 +161,7 @@
 
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="button" class="btn btn-primary" id="saveExternalDepartment">حفظ</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                         </div>
                     </form>
                 </div>
@@ -172,23 +174,47 @@
 
         <script>
             $(document).ready(function() {
-                $('#saveRepresentative').click(function(e) {
+                $("#addRepresentativeForm").on("submit", function(e) {
                     e.preventDefault();
 
                     // Serialize the form data
-                    var formData = $('#addRepresentativeForm').serialize();
+                    var formData = $(this).serialize(); // Changed to $(this)
 
                     // Submit AJAX request
                     $.ajax({
-                        url: $('#addRepresentativeForm').attr('action'),
+                        url: $(this).attr('action'), // Changed to $(this)
                         type: 'POST',
                         data: formData,
                         success: function(response) {
                             // Handle success response
                             console.log(response);
+                            $.ajax({
 
+                                url: "{{ route('postman.get') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر المندوب</option>';
+                                    response.forEach(function(postman) {
+                                        selectOptions += '<option value="' +
+                                            postman.id +
+                                            '">' + postman.name +
+                                            '</option>';
+                                    });
+                                    $('#representive_id').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+                          
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle error response
+                                    console.error(xhr.responseText);
+                                }
+                            });
                             // Optionally, you can close the modal after successful save
-                            $('#extern-departmen').modal('hide');
+                            $('#representative').modal('hide'); // Changed modal ID
                         },
                         error: function(xhr, status, error) {
                             // Handle error response
@@ -196,23 +222,50 @@
                         }
                     });
                 });
-                $('#saveExternalDepartment').click(function(e) {
+                $("#saveExternalDepartment").on("submit", function(e) {
+
                     e.preventDefault();
 
                     // Serialize the form data
-                    var formData = $('#saveExternalDepartment').serialize();
+                    var formData = $(this).serialize(); // Changed to $(this)
 
                     // Submit AJAX request
                     $.ajax({
-                        url: $('#saveExternalDepartment').attr('action'),
+                        url: $(this).attr('action'), // Changed to $(this)
                         type: 'POST',
                         data: formData,
                         success: function(response) {
                             // Handle success response
                             console.log(response);
+                            $('#from_departement').empty();
+                            $.ajax({
 
+                                url: "{{ route('external.departments') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر الادارة</option>';
+                                    response.forEach(function(department) {
+                                        selectOptions += '<option value="' +
+                                            department.id +
+                                            '">' + department.name +
+                                            '</option>';
+                                    });
+                                    $('#from_departement').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+                                    // Optionally, you can close the modal after successful save
+                                    $('#exampleModal').modal('hide');
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle error response
+                                    console.error(xhr.responseText);
+                                }
+                            });
                             // Optionally, you can close the modal after successful save
-                            $('#exampleModal').modal('hide');
+                            $('#extern-department').modal('hide'); // Changed modal ID
                         },
                         error: function(xhr, status, error) {
                             // Handle error response
@@ -221,19 +274,44 @@
                     });
                 });
 
+                // Additional event handler for radio button click
                 $('input[name=type]').click(function() {
                     if ($(this).is(':checked')) {
                         var value = $(this).val();
                         console.log(value);
-                        if (value == 'intern') {
-                            $('#department_id').show();
+                        if (value == 'in') {
+                            $('#from_departement').show();
                             $('#extern-department-dev').hide();
 
 
                         } else {
 
-                            // $('#department_id').hide();
                             $('#extern-department-dev').show();
+                            $('#from_departement').empty();
+                            $.ajax({
+
+                                url: "{{ route('external.departments') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر الادارة</option>';
+                                    response.forEach(function(department) {
+                                        selectOptions += '<option value="' + department.id +
+                                            '">' + department.name + '</option>';
+                                    });
+                                    $('#from_departement').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+                                    // Optionally, you can close the modal after successful save
+                                    $('#exampleModal').modal('hide');
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle error response
+                                    console.error(xhr.responseText);
+                                }
+                            });
                         }
 
                     }
