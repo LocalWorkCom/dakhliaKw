@@ -74,9 +74,12 @@ Route::get('iotelegram/update', [IoTelegramController::class, 'update'])->name('
 Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name('iotelegram.show');
 Route::get('iotelegram/files/{id}', [IoTelegramController::class, 'files'])->name('iotelegram.files');
 Route::get('iotelegram/files/view/{id}', [IoTelegramController::class, 'Viewfiles'])->name('iotelegram.files.view');
+
+// Department routes
 Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
 
 Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create');
+Route::get('/departments/show/{department}', [DepartmentController::class, 'show'])->name('departments.show');
 Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
 Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
 Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');

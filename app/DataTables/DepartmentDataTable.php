@@ -23,6 +23,17 @@ class DepartmentDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', 'department.action')
+            ->addColumn('action', function ($row) {
+                return '
+                    <a href="' . route('departments.show', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                    <a href="' . route('departments.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+                    <form action="' . route('departments.destroy', $row->id) . '" method="POST" style="display:inline;">
+                        ' . csrf_field() . '
+                        ' . method_field('DELETE') . '
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                ';
+            })
             ->setRowId('id');
     }
 
@@ -31,7 +42,7 @@ class DepartmentDataTable extends DataTable
      */
     public function query(departements $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->with(['createdBy', 'managerAssistant', 'manager', 'updatedBy']);
     }
 
     /**
@@ -40,7 +51,7 @@ class DepartmentDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('department-table')
+                    ->setTableId('departments-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -62,14 +73,15 @@ class DepartmentDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('ت'),
-            Column::make('الاسم'),
-            Column::make('المدير'),
-            Column::make('مساعد المدير'),
-            Column::computed('الخيارات')
+            Column::make('id')->title('ت'),
+            Column::make('name')->title('الاسم'),
+            Column::make('manger')->title('المدير'),
+            Column::make('manger_assistance')->title('مساعد المدير'),
+            Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
                   ->width(60)
+                  ->title('الخيارات')
                   ->addClass('text-center'),
             
         ];
