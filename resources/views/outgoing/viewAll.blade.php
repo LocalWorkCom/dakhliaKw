@@ -2,31 +2,27 @@
 
 @push('style')
 {{-- <script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"></script> --}}
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
-@endpush
+ @endpush
 
 @section('content')
-<section style="direction: rtl;">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">الرئيسيه</a></li>
-        <li class="breadcrumb-item active">الصادرات</li>
-    </ol>
-    
-    <div class="container-fluid" style="text-align: center">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-block">
-                    {{ $dataTable->table() }}
-                </div>
+<div class="container">
+    <div class="mb-3">
+        <a href="{{ route('Export.create') }}" class="btn btn-primary mt-3">إضافة جديد</a>
+    </div>
+    <div class="card">
+        <div class="card-header">الواردات</div>
+
+        <div class="card-body">
+            <div class="mb-3">
+                {{-- <input type="text" id="global_search" class="form-control" placeholder="بحث ..."> --}}
             </div>
+            {!! $dataTable->table(['class' => 'table table-bordered table-hover dataTable']) !!}
         </div>
     </div>
-
-   
-</section>
+</div>
 @endsection
 
-@push('javascripts')
+@push('scripts')
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 {{ $dataTable->scripts() }}
 @endpush

@@ -62,7 +62,8 @@ Route::get('/Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->n
 
 
 
-//End outgoing routes
+//End Export routes
+
 Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->name('postman.ajax');
 Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
 Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('iotelegrams.list');

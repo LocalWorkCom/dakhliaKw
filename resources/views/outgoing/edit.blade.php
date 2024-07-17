@@ -1,9 +1,9 @@
 @extends('layout.header')
 
 @push('style')
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+{{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" /> --}}
 
 @endpush
 
@@ -84,10 +84,29 @@
                                
                         </div>
                         <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <label for="active">الحاله</label>
+                            <select id="active" name="active" >
+                              @foreach ($users as $user )
+                              <option value="{{ $user->id }}" @if($user->id == $data->updated_by) selected @endif>{{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})</option>
+                              @endforeach
+                          
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            @unless ($is_file)
+                            <label for="exampleFormControlFile1"> حمل الملف </label>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                          @endunless
+                        </div>
                              <!-- Button trigger modal -->
-                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                             <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                data-bs-target="#extern-department">
+                                <i class="fa fa-plus"></i> أضافه أداره خارجيه
+                            </button>
+                             {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                                 أضافه أداره خارجيه
-                               </button>
+                               </button> --}}
                         </div>
                             <button class="btn btn-primary" type="submit">تعديل </button>
                     </form>
@@ -99,47 +118,49 @@
 
   
   <!-- Modal -->
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle"> </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group col-md-12">
-                <label for="newdepart">اسم الجهه الجديده </label>
-               <input type="text" name="nameDepart" id="newdepart">
+  <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="extern-departmentLabel">إضافة جهة جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addRepresentativeForm" action="{{ route('department.ajax') }}" method="POST">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="name">الاسم:</label>
+                            <input type="text" id="name" name="name" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="desc">الوصف:</label>
+                            <input type="text" id="desc" name="desc" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone">الهاتف</label>
+                            <input type="text" id="phone" name="phone" class="form-control">
+                        </div>
+
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="button" class="btn btn-primary" id="saveExternalDepartment">حفظ</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="name">العنوان</label>
-                  <input type="text" class="form-control" name="name" value="{{ $data->name }}" id="name" placeholder="العنوان">
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="exportnum">رقم الصادر</label>
-                  <input type="text" class="form-control"  name="num" id="exportnum" value="{{ $data->num }}">
-                </div>
-              </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-          <button type="button" class="btn btn-primary">أضف </button>
-        </div>
-      </div>
     </div>
-  </div>
 </section>
 @endsection
 
-@push('javascripts')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+@push('scripts')
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> --}}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script> --}} --}}
 
     <script>
          $(document).ready(function () {
