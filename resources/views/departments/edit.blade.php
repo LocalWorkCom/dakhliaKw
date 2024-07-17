@@ -7,7 +7,7 @@
         @csrf
         @method('PUT')
         <div class="form-group">
-            <label for="name">Name (English)</label>
+            <label for="name">Name </label>
             <input type="text" name="name" class="form-control" value="{{ old('name', $department->name) }}">
             @error('name')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -40,6 +40,13 @@
                 @endforeach
             </select>
             @error('manger_assistance')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label for="description">Description </label>
+            <input type="text" name="description" class="form-control"  value="{{ old('name', $department->description) }}">
+            @error('description')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
