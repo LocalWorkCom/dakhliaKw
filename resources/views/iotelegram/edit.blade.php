@@ -35,9 +35,8 @@
                     <div class="mb-3">
                         <label for="from_departement">الجهة المرسلة:</label>
 
-
-                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                            data-bs-target="#extern-department" id="extern-department-dev" style="display: none">
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                            id="extern-department-dev" data-bs-target="#extern-department">
                             <i class="fa fa-plus"></i>
                         </button>
                         <select id="from_departement" name="from_departement" class="form-control">
@@ -60,7 +59,7 @@
 
 
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                            data-bs-target="#representative">
+                            data-bs-target="#representative" id="representative-dev">
                             <i class="fa fa-plus"></i>
                         </button>
                         <label for="representive_id">اسم المندوب الجهة المرسلة :</label>
@@ -140,7 +139,7 @@
                         </div>
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="button" class="btn btn-primary" id="saveRepresentative">حفظ</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                         </div>
                     </form>
                 </div>
@@ -156,7 +155,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addRepresentativeForm" action="{{ route('department.ajax') }}" method="POST">
+                    <form id="saveExternalDepartment" action="{{ route('department.ajax') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">
@@ -174,7 +173,7 @@
 
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="button" class="btn btn-primary" id="saveExternalDepartment">حفظ</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                         </div>
                     </form>
                 </div>
@@ -184,8 +183,7 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
-                var value = $('input[name=type]').val();
-                console.log(value);
+                var value = $('input[name="type"]:checked').val();
                 if (value == 'in') {
                     $('#from_departement').show();
                     $('#extern-department-dev').hide();
@@ -243,58 +241,7 @@
                         }
                     });
                 });
-                $("#saveExternalDepartment").on("submit", function(e) {
-
-                    e.preventDefault();
-
-                    // Serialize the form data
-                    var formData = $(this).serialize(); // Changed to $(this)
-
-                    // Submit AJAX request
-                    $.ajax({
-                        url: $(this).attr('action'), // Changed to $(this)
-                        type: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            // Handle success response
-                            console.log(response);
-                            $('#from_departement').empty();
-                            $.ajax({
-
-                                url: "{{ route('external.departments') }}",
-                                type: 'get',
-                                success: function(response) {
-                                    // Handle success response
-                                    var selectOptions =
-                                        '<option value="">اختر الادارة</option>';
-                                    response.forEach(function(department) {
-                                        selectOptions += '<option value="' +
-                                            department.id +
-                                            '">' + department.name +
-                                            '</option>';
-                                    });
-                                    $('#from_departement').html(
-                                        selectOptions
-                                    ); // Assuming you have a select element with id 'from_departement'
-
-                                    // Optionally, you can close the modal after successful save
-                                    $('#exampleModal').modal('hide');
-                                },
-                                error: function(xhr, status, error) {
-                                    // Handle error response
-                                    console.error(xhr.responseText);
-                                }
-                            });
-                            // Optionally, you can close the modal after successful save
-                            $('#extern-department').modal('hide'); // Changed modal ID
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error response
-                            console.error(xhr.responseText);
-                        }
-                    });
-                });
-
+             
                 // Additional event handler for radio button click
                 $('input[name=type]').click(function() {
                     if ($(this).is(':checked')) {
