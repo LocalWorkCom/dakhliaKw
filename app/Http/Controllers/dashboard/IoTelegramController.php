@@ -40,7 +40,7 @@ class IoTelegramController extends Controller
     public function store(Request $request)
     {
 
-        //
+        //dd($request->all());
         $iotelegram = new iotelegrams();
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;
@@ -123,7 +123,7 @@ class IoTelegramController extends Controller
     //postman
     public function addExternalDepartmentAjax(Request $request)
     {
-        // dd(0);
+
         $ExternalDepartment = new ExternalDepartment();
         $ExternalDepartment->name = $request->name;
         $ExternalDepartment->description = $request->desc;

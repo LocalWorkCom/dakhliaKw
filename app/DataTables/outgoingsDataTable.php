@@ -30,21 +30,20 @@ class outgoingsDataTable extends DataTable
             ->addColumn('updated_by_username', function ($row) {
                 return $row->updated_by_username ?? '';  // Use null coalescing operator to handle null values
             })
-            ->addColumn('active', function ($row) {
-                return $row->active ? 'مفعل' : 'غير مفعل';  // Display 'Active' or 'Not Active' based on the value of 'active'
-            })
+           
             ->addColumn('action', function ($row) {
-                $is_file = outgoing_files::where('outgoing_id', $row->id)->exists();
+                // $is_file = outgoing_files::where('outgoing_id', $row->id)->exists();
+                $fileCount = outgoing_files::where('outgoing_id', $row->id)->count();
+                 $is_file = $fileCount == 0;
                 $uploadButton = $is_file 
                     ? '<a href="' . route('Export.upload.files', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-upload"></i></a>'
-                    : '<a href="' . route('Export.view.files', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-file"></i></a>';
+                    : '<a href="' . route('Export.view.files', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-file"></i>('.$fileCount.')</a>';
     
                 return '
                     <a href="' . route('Export.show', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
                     <a href="' . route('Export.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
-                    ' . $uploadButton . '
-                    <a id="deleteBtn" data-id="' . $row->id . '" class="edit btn btn-danger btn-sm" data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash"></i></a>
-                ';
+                    ' . $uploadButton ;
+                
             })
             ->setRowId('id');
     }
@@ -59,6 +58,7 @@ class outgoingsDataTable extends DataTable
         ->leftJoin('users as person_to_user', 'outgoings.person_to', '=', 'person_to_user.id')
         ->leftJoin('users as created_by_user', 'outgoings.created_by', '=', 'created_by_user.id')
         ->leftJoin('users as updated_by_user', 'outgoings.updated_by', '=', 'updated_by_user.id')
+        ->where('outgoings.active', 0)
         ->select('outgoings.*', 
                  'person_to_user.username as person_to_username',  
                  'created_by_user.username as created_by_username',  
@@ -96,13 +96,13 @@ class outgoingsDataTable extends DataTable
                   ->exportable(false)
                   ->printable(false)
                   ->width(60)
-                  ->title(' ')
+                  ->title('الخيارات')
                   ->addClass('text-center'),
             Column::make('id')->title('رقم '),
             Column::make('name')->title('العنوان'),
             Column::make('num')->title('رقم الصادر'),
             Column::make('note')->title(' ملاحظات'),
-            Column::make('active')->title(' الحاله'),
+            Column::make('active')->title('الحاله')->render('function() { return this.active == 1 ? "مفعل" : " مفعل"; }'),
             Column::make('person_to_username')->title(' العسكرى'),  // Display the username for person_to
             Column::make('created_by_username')->title('أنشاء بواسطه'),  // Display the username for created_by
             Column::make('updated_by_username')->title(' تعديل بواسطه'),  // Display the username for updated_by

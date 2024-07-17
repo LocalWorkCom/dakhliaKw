@@ -1,7 +1,7 @@
 @extends('layout.header')
 
 @push('style')
-{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"> --}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 @endpush
 
 @section('content')
@@ -61,26 +61,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        {{-- <div class="form-group">
-                            <label for="select-created_by">created_by </label>
-                            <select id="select-created_by" name="created_by" class="form-control">
-                                <option disabled> اختر من القائمه</option>
-                                @foreach ($users as $user )
-                                <option value="{{ $user->id }}" >{{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="select-updated_by">updated_by </label>
-                            <select id="select-updated_by" name="updated_by" class="form-control" >
-                                <option disabled selected> اختر من القائمه</option>
-                                @foreach ($users as $user )
-                                <option value="{{ $user->id }}" >{{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})</option>
-                                @endforeach
-                            </select>
-                        </div> --}}
-
-                
+                       
                         <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="active">الحاله</label>
@@ -174,11 +155,11 @@
 @endsection
 
 @push('scripts')
-{{-- <!-- Latest compiled and minified JavaScript -->
+<!-- Latest compiled and minified JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
 
     <script> 
 
@@ -202,12 +183,12 @@
         });
          $(document).ready(function () {
             $('.selectpicker').selectpicker();
-        //     $('#select-person-to').selectize({
-        //         sortField: 'text',
-        //         searchField: 'text',  // Ensure the search field is specified
-        //         create: false  // Optional: Disable creating new items
-        //     });
-        // });
+            $('#select-person-to').selectize({
+                sortField: 'text',
+                searchField: 'text',  // Ensure the search field is specified
+                create: false  // Optional: Disable creating new items
+            });
+        });
         // $(document).ready(function () {
         //     $('#select-created_by').selectize({
         //         sortField: 'text',
