@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
 </head>
 
-<body lang="ar">
+<body lang="ar" dir="rtl">
 
     <div class="all-nav">
         <div class="upper-navbar d-flex">
