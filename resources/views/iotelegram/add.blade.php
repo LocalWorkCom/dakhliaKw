@@ -21,22 +21,22 @@
                     </div>
                     <div class="row" style="justify-content: space-evenly;">
                         <div class="mb-3">
-                            <input type="radio" id="intern" name="type" checked value="intern">
+                            <input type="radio" id="intern" name="type" checked value="in">
                             <label for="radio">داخلي</label>
                         </div>
                         <div class="mb-3">
-                            <input type="radio" id="extern" name="type" value="extern">
+                            <input type="radio" id="extern" name="type" value="out">
                             <label for="radio">خارجي</label>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="department_id">الجهة المرسلة:</label>
+                        <label for="from_departement">الجهة المرسلة:</label>
 
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
                             id="extern-department-dev" style="display: none" data-bs-target="#extern-department">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <select id="department_id" name="department_id" class="form-control">
+                        <select id="from_departement" name="from_departement" class="form-control">
                             <option value="">اختر الجهة</option>
                             @foreach ($departments as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -72,6 +72,8 @@
                         <label for="files_num"> عدد الكتب:</label>
                         <br>
                         <select id="files_num" name="files_num" class="form-control">
+                            <option value="">اختر العدد</option>
+
                             @for ($i = 1; $i <= 10; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
                             @endfor
@@ -97,8 +99,8 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label for="modal_department_id">الادارة:</label>
-                            <select id="modal_department_id" name="modal_department_id" class="form-control">
+                            <label for="modal_from_departement">الادارة:</label>
+                            <select id="modal_from_departement" name="modal_from_departement" class="form-control">
                                 <option value="">اختر الادارة</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -202,7 +204,7 @@
                                     });
                                     $('#representive_id').html(
                                         selectOptions
-                                    ); // Assuming you have a select element with id 'department_id'
+                                    ); // Assuming you have a select element with id 'from_departement'
 
                           
                                 },
@@ -235,7 +237,7 @@
                         success: function(response) {
                             // Handle success response
                             console.log(response);
-                            $('#department_id').empty();
+                            $('#from_departement').empty();
                             $.ajax({
 
                                 url: "{{ route('external.departments') }}",
@@ -250,9 +252,9 @@
                                             '">' + department.name +
                                             '</option>';
                                     });
-                                    $('#department_id').html(
+                                    $('#from_departement').html(
                                         selectOptions
-                                    ); // Assuming you have a select element with id 'department_id'
+                                    ); // Assuming you have a select element with id 'from_departement'
 
                                     // Optionally, you can close the modal after successful save
                                     $('#exampleModal').modal('hide');
@@ -277,15 +279,15 @@
                     if ($(this).is(':checked')) {
                         var value = $(this).val();
                         console.log(value);
-                        if (value == 'intern') {
-                            $('#department_id').show();
+                        if (value == 'in') {
+                            $('#from_departement').show();
                             $('#extern-department-dev').hide();
 
 
                         } else {
 
                             $('#extern-department-dev').show();
-                            $('#department_id').empty();
+                            $('#from_departement').empty();
                             $.ajax({
 
                                 url: "{{ route('external.departments') }}",
@@ -298,9 +300,9 @@
                                         selectOptions += '<option value="' + department.id +
                                             '">' + department.name + '</option>';
                                     });
-                                    $('#department_id').html(
+                                    $('#from_departement').html(
                                         selectOptions
-                                    ); // Assuming you have a select element with id 'department_id'
+                                    ); // Assuming you have a select element with id 'from_departement'
 
                                     // Optionally, you can close the modal after successful save
                                     $('#exampleModal').modal('hide');
