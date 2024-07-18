@@ -60,6 +60,9 @@ Route::get('/Export/All', [outgoingController::class, 'outgoingAll'])->name('Exp
 Route::get('/Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files');
 Route::get('/Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
 
+Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('testUpload');
+Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile');
+
 
 
 //End Export routes
@@ -77,6 +80,8 @@ Route::get('iotelegram/update', [IoTelegramController::class, 'update'])->name('
 Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name('iotelegram.show');
 Route::get('iotelegram/files/{id}', [IoTelegramController::class, 'files'])->name('iotelegram.files');
 Route::get('iotelegram/files/view/{id}', [IoTelegramController::class, 'Viewfiles'])->name('iotelegram.files.view');
+
+
 
 // Department routes
 Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');

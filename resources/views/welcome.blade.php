@@ -5,6 +5,12 @@
       <div class="container welcome col-11">
           <p> مرحـــــــــــــــبا بك </p>
       </div>
+     <!--   <form name="testUpload" method="post" enctype="multipart/form-data" action="{{route('testUpload')}}">
+        @csrf
+        <input type="file" name="files">
+        <button type="submit">Upload</button>
+        </form>  -->
+        <a href="{{route('downlaodfile',[7])}}" >downlad</a>
   </div>
   <br>
   <div class="row">
