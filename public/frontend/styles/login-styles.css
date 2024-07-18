@@ -1,0 +1,232 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  direction: rtl;
+  /* font-family: 'Roboto', sans-serif; */
+  background-image: url('');
+  background-repeat: repeat-y;
+  background-size: 100%;
+}
+body,
+html {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #F4F7FD;
+  /* font-family: "Cairo", sans-serif; */
+}
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: inherit;
+  cursor: pointer;
+}
+button {
+  outline: 0;
+  border: 0;
+  box-shadow: unset !important;
+  background-color: transparent;
+}
+@import url(https://fonts.googleapis.com/css?family=Roboto:100,300,400,900,700,500,300,100);
+*{
+  margin: 0;
+  box-sizing: border-box;
+
+}
+.logo {
+  width: 250px;
+  height: 250px;
+  /* padding-bottom: 30px; */
+  /* margin-top: 64px; */
+  /* padding-right: 40px; */
+}
+.login-h5 {
+  font-family: Cairo;
+  font-size: 33px;
+  font-weight: 900;
+  line-height: 45.96px;
+  text-align: left;
+  /* margin-top: 20px; */
+  padding-left: 100px;
+  color: #1E1E1E;
+}
+.login-p {
+  font-family: Cairo;
+  font-size: 35px;
+  font-weight: 900;
+  line-height: 74.96px;
+  text-align: left;
+  color: #032F70;
+}
+.login-h2 {
+  font-family: Cairo;
+  font-size: 67px;
+  font-weight: 900;
+  line-height: 125px;
+  text-align: left;
+  padding-left: 125px;
+  color: #089D49;
+}
+.login-input {
+  width: 100%;
+  height: 52px;
+  top: 51px;
+  border: 1px 0px 0px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  border-radius:8px;
+  padding-inline: 20px;
+  font-size: 20px;
+  color: gray;
+}
+.toggle-password {
+  position: relative;
+  cursor: pointer;
+}
+
+#toggleIcon {
+  position: absolute;
+  right: -31px;
+  top: 5%;
+  transform: translateY(-280%);
+}
+.password-container {
+  position: relative;
+}
+
+/* Hide password by default */
+#password[type="password"] {
+  -webkit-text-security: disc; 
+}
+.login-label {
+  font-family: Almarai;
+  font-size: 24px;
+  /* padding-bottom: 15px; */
+  /* font-weight: 400; */
+  line-height: 26.78px;
+  text-align: right;
+  padding-right: 6px;
+  margin-left: 364px;
+  /* padding-top: 20px; */
+}
+.login-label-2{
+    font-family: Almarai;
+    font-size: 24px;
+    /* padding-bottom: 15px; */
+    /* font-weight: 400; */
+    line-height: 26.78px;
+    text-align: right;
+    padding-right: 6px;
+    margin-left: 330px;
+    /* padding-top: 20px; */
+}
+
+.forget-pass-a{
+  margin-left: 340px;
+  font-weight: 400;
+  font-size: 20px;
+  color: #032F70;
+  text-decoration: underline;
+}
+.forget-pass-a:hover{
+  color: #DF0000;
+}
+.btn1 {
+  width: 100%;
+  height: 50px;
+  padding: 16px 36px 16px 36px;
+  background-color: #032F70;
+  color: #F8F8F8;
+  font-size: 20px;
+  line-height: 26px;
+  padding: 13px 27px 13px 30px;
+  margin-top: 29px;
+  border-radius: 8px;
+}
+/* .btn2{
+  width: 200px;
+  height: 55px;
+  padding: 16px 36px 16px 36px;
+  background-color: transparent;
+ color: #DF0000;
+  border: 1px solid #DF0000;
+  font-size: 20px;
+  line-height: 26px;
+  padding: 13px 27px 13px 30px;
+  margin-top: 30px;
+} */
+button:hover{
+    color: #E59113;
+  }
+  .background {
+    width: 680px;
+    height: 460px;
+    /* padding-right: 0px; */
+}
+
+/*************** verification style ************ */
+.code {
+  font-size: 2em;
+  margin-top: 20px;
+}
+.code-input {
+  margin-top: 10px;
+}
+.code-input input {
+  width: 2em;
+  font-size: 1.5em;
+  text-align: center;
+  margin: 0 5px;
+  padding: 5px;
+}
+.reset-pass h4{
+font-family: Almarai;
+font-size: 28px;
+font-weight: 400;
+line-height: 48px;
+text-align: center;
+color: #032F70;
+
+}
+
+.resend-pass-a:hover{
+  color: #DF0000;
+}
+.reset-pass h6{
+  font-family: Almarai;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 48px;
+  text-align: center;
+  color: #274373;
+  }
+  .reset-pass p{
+    font-family: Almarai;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 42px;
+    text-align: center;
+    }
+  .resend-pass-a{
+font-family: Almarai;
+font-size: 28px;
+font-weight: 400;
+line-height: 42px;
+text-align: right;
+padding-right: 10px;
+text-decoration: underline;
+color: #032F70;
+  }
+  .resend p{
+    font-family: Almarai;
+font-size: 28px;
+font-weight: 400;
+line-height: 42px;
+text-align: left;
+  }
