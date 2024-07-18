@@ -27,6 +27,6 @@ class iotelegrams extends Model
     }
     public function department()
     {
-        return $this->belongsTo(departements::class);
+        return $this->belongsTo(departements::class );
     }
 }
