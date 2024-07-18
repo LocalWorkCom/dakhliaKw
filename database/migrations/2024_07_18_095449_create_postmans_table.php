@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
         Schema::create('postmans', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
             $table->string('national_id')->unique()->nullable();
-            $table->foreignId('department_id')->nullable();
+            $table->string('department_id')->nullable();
 
             $table->string('phone1')->unique()->nullable();
             $table->string('phone2')->unique()->nullable();
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('postmans');
     }
 };
