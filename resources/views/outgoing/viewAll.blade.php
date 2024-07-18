@@ -11,6 +11,7 @@
 
             <div class="card-body">
                 <div class="mb-3">
+                    @include('inc.flash')
                     {{-- <input type="text" id="global_search" class="form-control" placeholder="بحث ..."> --}}
                 </div>
                 {!! $dataTable->table(['class' => 'table table-bordered table-hover dataTable']) !!}
