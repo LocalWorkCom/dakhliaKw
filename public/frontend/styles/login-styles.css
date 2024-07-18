@@ -128,9 +128,10 @@ button {
 }
 
 .forget-pass-a{
-  margin-left: 300px;
-  font-size: 17px;
-  
+  margin-left: 340px;
+  font-weight: 400;
+  font-size: 20px;
+  color: #032F70;
   text-decoration: underline;
 }
 .forget-pass-a:hover{
