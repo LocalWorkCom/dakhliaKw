@@ -41,10 +41,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function outgoingPersonTo()
-    {
-        return $this->hasMany(outgoings::class, 'person_to');
-    }
+    
 
     public function outgoingCreatedBy()
     {

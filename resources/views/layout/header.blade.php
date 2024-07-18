@@ -22,20 +22,17 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
 </head>
 
 <body>
     <div class="all-nav">
         <div class="upper-navbar d-flex">
             <div class="second-section d-flex mx-4 col-md-9 col-sm-6">
-
                 <div class="dropdown">
-
                     <button class="btn btn-2  mt-3" onclick="toggleDropdown()">
                         <i class="fa-solid fa-angle-down mx-2"></i>
                         اسم المستخدم
-                        <i class="fa-solid fa-user md-mx-2 "></i>
+                        <i class="fa-solid fa-user mx-2"></i>
                     </button>
                     <div id="dropdownMenu" class="dropdown-menu">
                         <a href="{{ route('logout') }}">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
@@ -44,7 +41,7 @@
                 <button class="btn2 btn-2 mx-5" style="    border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
                     onclick="toggleDropdown2()">
                     <a class="bell mx-5">
-                    <i class=" fa-regular fa-bell bell md-mx-5" ></i>
+                        <i class=" fa-regular fa-bell"></i>
                     </a>
                 </button>
                 <div id="dropdownMenu2" class="dropdown-menu2">
@@ -69,6 +66,7 @@
                     <select name="#" id="#" class=" mt-4">
                         <option value="#"> المستخدميين </option>
                         <option value="#"> الادارات </option>
+                        <option value="#"> التعيينات </option>
                         <option value="#"> الموظفين </option>
                         <option value="{{ route('Export.index') }}"> الصادر </option>
                         <option value="#"> الوارد </option>
@@ -81,47 +79,43 @@
             </div>
         </div>
         <div class="navbar navbar-expand-md mb-4 w-100" role="navigation">
-
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ml-auto">
-
                     <li class="nav-item">
                         <a href="{{ route('iotelegrams.list') }}">
                             <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
-                            <h6 class="nav-link">الوارد</h6>
+                            <h6>الوارد</h6>
                         </a>
                     </li>
-                    <li class="nav-item" onclick="makeActive(this)">
+                    <li class="nav-item">
                         <a href="{{ route('Export.index') }}">
-                        <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
-                        <h6>الصادر</h6>
+                            <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
+                            <h6>الصادر</h6>
                         </a>
                     </li>
-                    <li class="nav-item" onclick="makeActive(this)">
+                    <li class="nav-item">
                         <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
-                        <h6 class="nav-link">الموظفين</h6>
+                        <h6>الموظفين</h6>
                     </li>
-                    <!-- <li class="nav-item" onclick="makeActive(this)">
+                    <li class="nav-item">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>التعيينات</h6>
-                    </li> -->
-                    <li class="nav-item" onclick="makeActive(this)">
+                    </li>
+                    <li class="nav-item">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6 class="nav-link">الادارات</h6>
+                        <h6>الادارات</h6>
                     </li>
-                    <li class="nav-item" onclick="makeActive(this)">
+                    <li class="nav-item">
                         <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
-                        <h6 class="nav-link">المستخدمين</h6>
+                        <h6>المستخدمين</h6>
                     </li>
-                    <li class="nav-item" onclick="makeActive(this)">
-                        <a href="{{ route('welcome') }}">
-                            <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
-                            <h6 class="nav-link">الرئيسية</h6>
-                        </a>
+                    <li class="nav-item">
+                        <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
+                        <h6>الرئيسية</h6>
                     </li>
                 </ul>
             </div>
@@ -140,57 +134,99 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
     <script>
-      function toggleDropdown() {
-        var dropdownMenu = document.getElementById("dropdownMenu");
-        if (dropdownMenu.style.display === "block") {
-          dropdownMenu.style.display = "none";
-        } else {
-          dropdownMenu.style.display = "block";
-        }
-      }
-      
-      window.onclick = function(event) {
-        if (!event.target.matches('.btn')) {
-          var dropdowns = document.getElementsByClassName("dropdown-menu");
-          for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.style.display === "block") {
-              openDropdown.style.display = "none";
-            }
-          }
-        }
-      }
-      function toggleDropdown2() {
-        var dropdownMenu = document.getElementById("dropdownMenu2");
-        if (dropdownMenu.style.display === "block") {
-          dropdownMenu.style.display = "none";
-        } else {
-          dropdownMenu.style.display = "block";
-        }
-      }
-      
-      window.onclick = function(event) {
-        if (!event.target.matches('.btn2')) {
-          var dropdowns = document.getElementsByClassName("dropdown-menu2");
-          for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.style.display === "block") {
-              openDropdown.style.display = "none";
-            }
-          }
-        }
-      }
-      function makeActive(element) {
-    var navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach(function(link) {
-        link.classList.remove('active-page');
-    });
-    var navLink = element.querySelector('.nav-link');
-    navLink.classList.add('active-page');
-}
+        $(document).ready(function() {
 
-      
-      </script>
+            $("#saveExternalDepartment").on("submit", function(e) {
+
+                e.preventDefault();
+
+                // Serialize the form data
+                var formData = $(this).serialize(); // Changed to $(this)
+
+                // Submit AJAX request
+                $.ajax({
+                    url: $(this).attr('action'), // Changed to $(this)
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Handle success response
+                        console.log(response);
+                        $('#from_departement').empty();
+                        $.ajax({
+
+                            url: "{{ route('external.departments') }}",
+                            type: 'get',
+                            success: function(response) {
+                                // Handle success response
+                                var selectOptions =
+                                    '<option value="">اختر الادارة</option>';
+                                response.forEach(function(department) {
+                                    selectOptions += '<option value="' +
+                                        department.id +
+                                        '">' + department.name +
+                                        '</option>';
+                                });
+                                $('#from_departement').html(
+                                    selectOptions
+                                ); // Assuming you have a select element with id 'from_departement'
+
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle error response
+                                console.error(xhr.responseText);
+                            }
+                        });
+                        // Optionally, you can close the modal after successful save
+                        $('#extern-department').modal('hide'); // Changed modal ID
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
+        function toggleDropdown() {
+            var dropdownMenu = document.getElementById("dropdownMenu");
+            if (dropdownMenu.style.display === "block") {
+                dropdownMenu.style.display = "none";
+            } else {
+                dropdownMenu.style.display = "block";
+            }
+        }
+        window.onclick = function(event) {
+            if (!event.target.matches('.btn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === "block") {
+                        openDropdown.style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function toggleDropdown2() {
+            var dropdownMenu = document.getElementById("dropdownMenu2");
+            if (dropdownMenu.style.display === "block") {
+                dropdownMenu.style.display = "none";
+            } else {
+                dropdownMenu.style.display = "block";
+            }
+        }
+        window.onclick = function(event) {
+            if (!event.target.matches('.btn2')) {
+                var dropdowns = document.getElementsByClassName("dropdown-menu2");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === "block") {
+                        openDropdown.style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>

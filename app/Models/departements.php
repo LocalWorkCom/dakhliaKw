@@ -46,7 +46,7 @@ class departements extends Model
     }
     public function outgoings()
     {
-        return $this->hasMany(outgoings::class, 'from_departement');
+        return $this->hasMany(outgoings::class, 'created_department');
     }
 
     public function parent()
