@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\outgoingsDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\ExternalDepartment;
 use App\Models\outgoing_files;
 use App\Models\outgoings;
 use App\Models\User;
@@ -36,8 +37,8 @@ class outgoingController extends Controller
     {
        
         $users=User::all();
-        
-        return view('outgoing.add', compact('users'));
+        $departments=ExternalDepartment::all();
+        return view('outgoing.add', compact('users','departments'));
     }
 
     /**
@@ -46,7 +47,17 @@ class outgoingController extends Controller
     public function store(Request $request)
     {
       dd($request->all());
+        $export = new outgoings();
+        $export->name = $request->name;
+        $export->num = $request->num;
+        $export->note = $request->note;
+        $export->person_to = $request->person_to;
+        $export->created_by = auth()->id;
+        $export->active = $request->active;
+        $export->updated_by = $request->active;
+        $export->department_id = $request->department;
 
+        $export->save();
     }
 
     /**

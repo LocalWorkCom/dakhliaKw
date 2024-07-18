@@ -3,7 +3,7 @@
 @push('style')
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" /> 
 
 @endpush
 
@@ -35,7 +35,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="select-person-to">person_to </label>
@@ -78,30 +78,33 @@
                                     </select>
                                     <div class="invalid-feedback">Example invalid custom file feedback</div>
                                 </div>
-                                <div class="form-group col-md-6" id="fileInputs">
-                                
-                                    <label for="exampleFormControlFile1"> حمل الملف </label>
-                                    <input type="file" name="file[]" class="form-control-file" id="file1">
-                                    <button type="button" id="addFileInput" class="btn btn-primary">Add Another File</button>
-
+                                <div class="form-group col-md-6">
+                                    <label for="active">الاداره الخارجيه</label>
+                                    <select id="active" name="department" >
+                                        <option value="1" >اختر الاداره</option>
+                                        @foreach ($departments as $department )
+                                        <option value="{{ $department->id }}" >{{ $department->name }} </option>
+                                        @endforeach
+                                  
+                                    </select>
+                                    <div class="invalid-feedback">Example invalid custom file feedback</div>
                                 </div>
+                               
                                
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="active">الاداره الخارجيه</label>
-                                <select id="active" name="active" >
-                                    <option value="1" >اختر الاداره</option>
-                                    @foreach ($departments as $department )
-                                    <option value="{{ $department->id }}" >{{ $department->name }} </option>
-                                    @endforeach
-                              
-                                </select>
-                                <div class="invalid-feedback">Example invalid custom file feedback</div>
+                            <div class="form-group col-md-6" >
+                                
+                                <label for="exampleFormControlFile1"> حمل الملف </label>
+                                <input type="file" name="file[]" class="form-control-file" id="file1">
+
                             </div>
-                            
-                           
-                    </div>
+                            <div class="form-group col-md-6" id="fileInputs">
+                                
+                                <button type="button" id="addFileInput" class="btn btn-primary">Add Another File</button>
+
+                            </div>
+                        </div>
                         <div class="form-row">
                              <!-- Button trigger modal -->
                              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
@@ -156,13 +159,13 @@
 @endsection
 
 @push('scripts')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
 {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> --}}
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> --}}
+ {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
 
     <script> 
      $(document).ready(function() {

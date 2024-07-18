@@ -11,9 +11,7 @@
             <div class="card-header">الواردات</div>
 
             <div class="card-body">
-                <div class="mb-3">
-                    <input type="text" id="global_search" class="form-control" placeholder="بحث ...">
-                </div>
+         
                 {!! $dataTable->table(['class' => 'table table-bordered table-hover dataTable']) !!}
             </div>
         </div>
