@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\outgoingController;
+use App\Http\Controllers\PostmanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,3 +87,8 @@ Route::put('/departments/{department}', [DepartmentController::class, 'update'])
 Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
 
+// Route::resource('postmans', PostmanController::class);
+Route::get('/postmans/create', [PostmanController::class, 'create'])->name('postmans.create');
+Route::post('/postmans', [PostmanController::class, 'store'])->name('postmans.store');
+Route::get('/postmans/{postman}/edit', [PostmanController::class, 'edit'])->name('postmans.edit');
+Route::put('/postmans/{postman}', [PostmanController::class, 'update'])->name('postmans.update');
