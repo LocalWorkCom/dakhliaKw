@@ -48,4 +48,15 @@ class departements extends Model
     {
         return $this->hasMany(outgoings::class, 'from_departement');
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(departements::class, 'parent_id');
+    }
+
+    // Define the relationship to the child departments
+    public function children()
+    {
+        return $this->hasMany(departements::class, 'parent_id');
+    }
 }
