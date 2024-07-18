@@ -27,7 +27,7 @@
                             @csrf
                             <div class="form-group ">
                                 <h3>الصلاحية</h3>
-                                <select class="custom-select custom-select-lg mb-3" name="name[]" multiple>
+                                <select class="custom-select custom-select-lg mb-3" name="name">
                                     <option selected>Open this select menu</option>
                                     <option value="view">عرض</option>
                                     <option value="edit">تعديل</option>

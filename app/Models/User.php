@@ -56,4 +56,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(outgoings::class, 'updated_by');
     }
+
+    public function createdDepartments()
+    {
+        return $this->hasMany(departements::class, 'created_by');
+    }
+    public function hasPermission($permission)
+    {
+        $userPermission = Rule::find(auth()->user()->rule_id);
+        // 1,2,3,4,5
+        foreach ($this->roles as $role) {
+            if ($role->hasPermission($permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

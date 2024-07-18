@@ -69,7 +69,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
         $request->validate([
             'name' => 'required|string|unique:permissions,name',
             'model' => 'required|string',
