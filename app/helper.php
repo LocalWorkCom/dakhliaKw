@@ -99,36 +99,33 @@ if (!function_exists('send_sms_code')) {
       //  send_sms_code_msg($msg, $phone, $country_code);
     }
 }
-// if (!function_exists('send_push_notification')) {
-//   function send_push_notification($msg ,$phone,$country_code){
-//       $serverkey = 'AAAAFN778j8:APA91bFt1GglZf07Po-5ccwa8tYHuaIz0ymvDZCeDKJ2bxpaNrj2eM1TbON3_EdkhjkcH9IhKsaTOUv0mHSXHWQ-O2t61J6OwgoBmzoftKS-1uKBzTmwlGs0kkGClVYcP0TTXtFArxIT';// this is a Firebase server key 
-      
-//           $data = array(
-//               'to' => $phone,
-//               'notification' => 
-//                       array(
-//                       'body' => "test",
-//                       'title' => "testTitle"),
-//                       "data"=> array(
-//                               // "book_id"=> $book_id,
-//                               // "type" => $type,
-//                               // "mode"=>"booking",
-//                               "title"=>$msg
-                          
-//                           )
-//                       );
-      
-     
-                          
-//       $ch = curl_init();
-//       curl_setopt($ch, CURLOPT_URL,"https://fcm.googleapis.com/fcm/send");
-//       curl_setopt($ch, CURLOPT_POST, 1);
-//       curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($data));  //Post Fields
-//       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//       curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Authorization: key='.$serverkey));
-//       $output = curl_exec ($ch);
-//       $result=json_decode($output);
-//       curl_close ($ch);
-//   }
-// } 
+/**
+ * Upload Files
+ * @path =>physical path to save files in
+ * @image => name of file image in database
+ * @realname =>real name file in db
+ * @model => $model where to save files in
+ * @request => the file input request which holds the file uploading 
+ */
+
+ if (!function_exists('UploadFiles')) {
+
+    function UploadFiles($path, $image,$realname, $model, $request)
+    {
+    
+        $thumbnail = $request;
+        $destinationPath = $path;
+        $filerealname=$thumbnail->getClientOriginalName();
+        $filename = time() . '.' . $thumbnail->getClientOriginalExtension();
+        $thumbnail->move($destinationPath, $filename);
+        // $thumbnail->resize(1080, 1080);
+        $thumbnail = Image::make(public_path() . '/'.$path.'/' . $filename);
+        
+        $model->$image =asset($path).'/' .$filename;
+        $model->$realname =asset($path).'/' .$filerealname;
+
+        $model->save();
+    } 
+    }
+
 ?>
