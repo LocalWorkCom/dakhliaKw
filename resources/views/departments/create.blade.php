@@ -47,5 +47,21 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+
+    <h1>Departments</h1>
+    <ul>
+        @foreach($departments as $department)
+            <li>
+                {{ $department->name }} (Parent: {{ $department->parent ? $department->parent->name : 'None' }})
+                @if($department->children->count())
+                    <ul>
+                        @foreach($department->children as $child)
+                            <li>{{ $child->name }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+            </li>
+        @endforeach
+    </ul>
 </div>
 @endsection

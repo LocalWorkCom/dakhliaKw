@@ -3,6 +3,8 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
+        'reference' => 'a8a371c371d08bccacada400daa3648acdb7f59d',
+
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -160,15 +162,23 @@
             'pretty_version' => '7.8.1',
             'version' => '7.8.1.0',
             'reference' => '41042bc7ab002487b876a0683fc8dce04ddce104',
+
+            'pretty_version' => '7.8.2',
+            'version' => '7.8.2.0',
+            'reference' => 'f4152d9eb85c445fe1f992001d1748e8bec070d2',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/guzzle',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'guzzlehttp/promises' => array(
+
             'pretty_version' => '2.0.2',
             'version' => '2.0.2.0',
             'reference' => 'bbff78d96034045e58e13dedd6ad91b5d1253223',
+            'pretty_version' => '2.0.3',
+            'version' => '2.0.3.0',
+            'reference' => '6ea8dd08867a2a42619d65c3deb2c0fcbf81c8f8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/promises',
             'aliases' => array(),
@@ -178,6 +188,9 @@
             'pretty_version' => '2.6.2',
             'version' => '2.6.2.0',
             'reference' => '45b30f99ac27b5ca93cb4831afe16285f57b8221',
+            'pretty_version' => '2.7.0',
+            'version' => '2.7.0.0',
+            'reference' => 'a70f5c95fb43bc83f07c9c948baa0dc1829bf201',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/psr7',
             'aliases' => array(),
@@ -399,6 +412,15 @@
                 0 => 'v10.48.16',
             ),
         ),
+        'intervention/image' => array(
+            'pretty_version' => '2.7.0',
+            'version' => '2.7.0.0',
+            'reference' => '9a8cc99d30415ec0b3f7649e1647d03a55698545',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../intervention/image',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'kodova/hamcrest-php' => array(
             'dev_requirement' => true,
             'replaced' => array(
@@ -417,6 +439,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
+            'reference' => 'a8a371c371d08bccacada400daa3648acdb7f59d',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

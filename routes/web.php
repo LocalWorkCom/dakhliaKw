@@ -3,10 +3,13 @@
 use App\Http\Controllers\dashboard\IoTelegramController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\outgoingController;
+
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\PostmanController;
 
 
 /*
@@ -94,10 +97,14 @@ Route::resource('Export', outgoingController::class);
 Route::get('/Export/All', [outgoingController::class, 'outgoingAll'])->name('Export.view.all');
 Route::get('/Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files');
 Route::get('/Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
+Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax');
+Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users');
 
-
+Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('testUpload');
+Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile');
 
 //End Export routes
+
 
 Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->name('postman.ajax');
 Route::get('postmans', [IoTelegramController::class, 'getPostmanAjax'])->name('postman.get');
@@ -108,11 +115,21 @@ Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('ioteleg
 Route::get('iotelegram/add', [IoTelegramController::class, 'create'])->name('iotelegrams.add');
 Route::post('iotelegram/store', [IoTelegramController::class, 'store'])->name('iotelegram.store');
 Route::get('iotelegram/edit/{id}', [IoTelegramController::class, 'edit'])->name('iotelegram.edit');
-Route::get('iotelegram/update', [IoTelegramController::class, 'update'])->name('iotelegram.update');
+Route::post('iotelegram/update/{id}', [IoTelegramController::class, 'update'])->name('iotelegram.update');
 Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name('iotelegram.show');
-Route::get('iotelegram/files/{id}', [IoTelegramController::class, 'files'])->name('iotelegram.files');
-Route::get('iotelegram/files/view/{id}', [IoTelegramController::class, 'Viewfiles'])->name('iotelegram.files.view');
+Route::get('iotelegram/archives', [IoTelegramController::class, 'Archives'])->name('iotelegram.archives');
+Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add');
+Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
 
 
 
 
+
+
+
+
+// Route::resource('postmans', PostmanController::class);
+Route::get('/postmans/create', [PostmanController::class, 'create'])->name('postmans.create');
+Route::post('/postmans', [PostmanController::class, 'store'])->name('postmans.store');
+Route::get('/postmans/{postman}/edit', [PostmanController::class, 'edit'])->name('postmans.edit');
+Route::put('/postmans/{postman}', [PostmanController::class, 'update'])->name('postmans.update');

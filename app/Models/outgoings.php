@@ -17,9 +17,9 @@ class outgoings extends Model
         "created_by",
         "updated_by ",
     ];
-    public function department()
+    public function department_External()
     {
-        return $this->belongsTo(ExternalDepartment::class,'');
+        return $this->belongsTo(ExternalDepartment::class,'department_id');
     }
     public function files()
     {

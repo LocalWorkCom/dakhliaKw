@@ -23,16 +23,41 @@ class IoTelegramDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addColumn('representive_id', function ($row) {
+                return $row->representive->name ?? '';  // Use null coalescing operator to handle null values
+            })
+            ->addColumn('from_departement', function ($row) {
+                if ($row->type == 'in') {
+                    return $row->internal_department->name ?? '';  // Use null coalescing operator to handle null values
+
+                } else {
+                    return $row->external_department->name ?? '';  // Use null coalescing operator to handle null values
+
+                }
+            })
+            ->addColumn('recieved_by', function ($row) {
+                return $row->recieved_by->name ?? '';  // Use null coalescing operator to handle null values
+            })
+            ->addColumn('type', function ($row) {
+                if ($row->type == 'in') {
+
+                    return 'داخلي';  // Use null coalescing operator to handle null values
+                } else {
+                    return 'خارجي';  // Use null coalescing operator to handle null values
+
+                }
+            })
             ->addColumn('action', 'iotelegrams.action')
             ->addColumn('action', function ($row) {
-                $is_file = io_files::where('iotelegram_id', $row->id)->exists();
-                $uploadButton = $is_file
-                    ? '<a href="' . route('iotelegram.files', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-upload"></i></a>'
-                    : '<a href="' . route('iotelegram.files.view', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-file"></i></a>';
+                $archiveUrl = route('iotelegram.archive.add', $row->id);
+
+                CheckUploadIoFiles($row->id)
+
+                    ?   $uploadButton = '<a href="' . $archiveUrl . '" class="archive btn btn-success btn-sm" onclick="confirmArchive(event, this)"> <i class="fa fa-archive"></i> </a>'
+                    :   $uploadButton   = '<a href="' . route('iotelegram.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>';
 
                 return '
                     <a href="' . route('iotelegram.show', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                    <a href="' . route('iotelegram.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
                     ' . $uploadButton . '';
             })
             ->setRowId('id');
@@ -43,7 +68,7 @@ class IoTelegramDataTable extends DataTable
      */
     public function query(iotelegrams $model): QueryBuilder
     {
-        return $model->newQuery()->with(['created_by', 'recieved_by', 'representive', 'updated_by', 'department']);
+        return $model->newQuery()->where('active', 1)->with(['created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department']);
     }
 
     /**
@@ -76,11 +101,13 @@ class IoTelegramDataTable extends DataTable
     {
         return [
             Column::make('id')->title('الرقم'),
-            Column::make('from_departement')->title('الجهة المرسلة'),
             Column::make('date')->title('التاريخ'),
-            Column::make('representive_id')->title('المستلم'),
-            // Column::make('')->title('الموضوع'),
-            // Column::make('')->title('الملاحظات'),
+            Column::make('from_departement')->title('الجهة المرسلة'),
+            Column::make('representive_id')->title('المندوب'),
+            Column::make('recieved_by')->title('الموظف المستلم'),
+
+            Column::make('files_num')->title('عدد الفايلات'),
+            Column::make('type')->title('النوع'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

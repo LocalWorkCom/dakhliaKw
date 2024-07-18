@@ -13,7 +13,7 @@
         <div class="card">
             <div class="card-header">الواردات</div>
             <div class="card-body">
-                <form action="{{ route('iotelegram.store') }}" method="POST">
+                <form action="{{ route('iotelegram.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-3">
@@ -84,7 +84,7 @@
                         <label for="files">الملفات:</label>
                         <div id="fileInputs">
                             <div class="file-input mb-3">
-                                <input type="file" name="files[]" class="form-control-file" required>
+                                <input type="file" name="files[]" class="form-control-file">
                                 <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
                             </div>
                         </div>
@@ -301,8 +301,13 @@
                     }
                 });
                 $('#addFile').click(function() {
+                    var files_num = $('#files_num option:selected').val();
+                    if (files_num == '') {
+                        alert("please choose file number");
+                        return;
+                    }
                     var fileCount = $('#fileInputs').find('.file-input').length;
-                    if (fileCount < 10) {
+                    if (fileCount < files_num) {
                         var newInput = '<div class="file-input mb-3">' +
                             '<input type="file" name="files[]" class="form-control-file" required>' +
                             '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
@@ -329,6 +334,7 @@
                         $('.remove-file').prop('disabled', true);
                     }
                 }
+
             });
         </script>
     @endpush

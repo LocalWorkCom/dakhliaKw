@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\outgoingsDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\exportuser;
 use App\Models\ExternalDepartment;
 use App\Models\outgoing_files;
 use App\Models\outgoings;
@@ -31,44 +32,40 @@ class outgoingController extends Controller
     public function showFiles($id){
         dd($id);
     }
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function getExternalUsersAjax()
+    {
+        $users = exportuser::all();
+        return $users;
+    }
+    public function addUaersAjax(Request $request)
+    {
+        
+        $user = new exportuser();
+        $user->military_number = $request->military_number;
+        $user->filenum = $request->filenum;
+        $user->Civil_number = $request->Civil_number;
+        $user->phone = $request->phone;
+        $user->name = $request->name;
+        $user->save();
+        return true;
+    }
     public function create()
     {
        
-        $users=User::all();
+        $users=$this->getExternalUsersAjax();
         $departments=ExternalDepartment::all();
         return view('outgoing.add', compact('users','departments'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function storeDepartment(Request $request){
-    //     $validatedData = $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'desc' => 'nullable|string',
-    //         'phone' => 'nullable|string',
-    //     ]);
-    
-    //     $department = ExternalDepartment::create($validatedData);
-    
-    //     return response()->json([
-    //         'success' => true,
-    //         'id' => $department->id,
-    //         'name' => $department->name,
-    //     ]);
-    // }
     public function store(Request $request)
     {
-        
+        //dd($request->all());
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
             'num' => 'required|integer',
             'note' => 'nullable|string',
-            'person_to' => 'nullable|exists:users,id',
+            'person_to' => 'nullable|exists:export_users,id',
             'active' => 'required|boolean',
             'department_id' => 'nullable|exists:external_departements,id',
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
@@ -114,12 +111,12 @@ class outgoingController extends Controller
             if (function_exists('UploadFiles')) {
                  //  dd('file yes');
                 foreach ($request->file('files') as $file) {
-                  //  UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
+                    UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
                 }
             }
         }
       
-        return redirect()->route('Export.view.all')->with('status', 'تم الاضافه بنجاح');
+        return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }
 
     /**
@@ -130,6 +127,7 @@ class outgoingController extends Controller
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
         $is_file = outgoing_files::where('outgoing_id', $id)->exists();
+       
         $departments=ExternalDepartment::all();
 
         return view('outgoing.show', compact('data','users','is_file','departments'));
@@ -142,7 +140,7 @@ class outgoingController extends Controller
     {
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
-        $is_file = outgoing_files::where('outgoing_id', $id)->exists();
+        $is_file = outgoing_files::where('outgoing_id', $id)->where('active',0)->get();
         $departments=ExternalDepartment::all();
         return view('outgoing.edit', compact('data','users','is_file','departments'));
     }
@@ -161,7 +159,6 @@ class outgoingController extends Controller
             'person_to' => 'nullable|exists:users,id',
             'active' => 'required|boolean',
             'department_id' => 'nullable|exists:external_departements,id',
-            'file.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
 
         // // Define custom messages
@@ -174,14 +171,12 @@ class outgoingController extends Controller
             'active.required' => 'The active field is required.',
             'active.boolean' => 'The active field must be true or false.',
             'department_id.exists' => 'The selected department does not exist.',
-            'file.*.file' => 'Each file must be a valid file.',
-            'file.*.mimes' => 'Each file must be a file of type: jpg, jpeg, png, pdf',
         ];
 
         // // Validate the request
         $request->validate($rules, $messages);
-        
-        $export = new outgoings();
+        $user=User::findOrFail(auth()->id());
+        $export = outgoings::findOrFail( $id );
         $export->name = $request->nameex;
         $export->num = $request->num;
         $export->note = $request->note;
@@ -190,26 +185,34 @@ class outgoingController extends Controller
         $export->active = $request->active;
         $export->updated_by = auth()->id();//auth auth()->id
         $export->department_id = $request->department_id;
-        $export->save(); 
-        $files=new outgoing_files();
-        $files->outgoing_id = $export->id;
-        $files->created_by=auth()->id();//auth auth()->id
-        $files->updated_by=auth()->id();//auth auth()->id
-        $files->active =0;
-        $files->save(); 
+        $export->created_department =  $user->department_id;
 
-        $file_model = outgoing_files::find($files->id);
-        if( $request->hasFile('files') ){
+        $export->save(); 
+        // $files=outgoing_files::where('outgoing_id',$id)->get();
+        // if(count($files) > 0){
+        //     foreach($files as $filedb){
+        //         if(!(in_array($request->file, $filedb))){
+        //             $filedb->active=1;
+        //         }
+        //     }
+        // $files->outgoing_id = $id;
+        // $files->created_by=auth()->id();//auth auth()->id
+        // $files->updated_by=auth()->id();//auth auth()->id
+        // $files->save(); 
+        // $file_model = outgoing_files::find($files->id);
+        // }
+       
+        // if( $request->hasFile('files') ){
          
-            if (function_exists('UploadFiles')) {
-                 //  dd('file yes');
-                foreach ($request->file('files') as $file) {
-                    UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
-                }
-            }
-        }
+        //     if (function_exists('UploadFiles')) {
+        //          //  dd('file yes');
+        //         foreach ($request->file('files') as $file) {
+        //            // UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
+        //         }
+        //     }
+        // }
       
-        return redirect()->back()->with('success','');
+        return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }
 
     /**
@@ -218,5 +221,35 @@ class outgoingController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Test Upload
+     */
+    public function testUpload(Request $request)
+    {
+       // dd($request);
+        $test=new outgoing_files();
+        $test->outgoing_id=1;
+        $test->active=1;
+        $test->created_by=1;
+        $test->created_at=now();
+        $test->save();
+        UploadFiles('files/test', 'file_name','real_name', $test, $request->file('files'));
+        echo 'Uploaded';
+
+    }
+    /**
+     * Download file
+     */
+    public function downlaodfile($id)
+    {
+        $file=outgoing_files::find($id);
+       // $download=downloadFile($file->file_name,$file->real_name);
+        $file_path = public_path($file->file_name,);
+        $file_name =basename($file->real_name,);
+    
+        return response()->download($file_path, $file_name);
+        //echo 'downloaded';
     }
 }

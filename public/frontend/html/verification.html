@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>login</title>
+        <script type="application/javascript" src="../js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
+            rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+            integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link href="../styles/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <link rel="stylesheet" href="../styles/login-styles.css" />
+        <link rel="stylesheet" href="../styles/login-responsive.css" />
+    </head>
+
+<body>
+    <div class="container pt-5 pb-5">
+        <div class="row col-12 pt-5">
+          <div class=" col-md-4 col-sm-2">
+            <img src="../images/logo.svg" alt="logo" class="logo">
+          </div>
+          <div class=" col-md-8 col-sm-12 col-12">
+            <h5 class="login-h5">وزارة الداخلــــــــــــــــــية</h5>
+            <p class="login-p">الادارة العامة لشئون قوة الشرطة</p>
+            <h2 class="login-h2">المطــــور</h2>
+          </div>
+        </div>
+    
+        <div class=" row col-12 d-flex justify-content-between">
+            <div class="col-5 col-md-5 d-block reset-pass" >
+                <h4 > ادخل كود التفعيل</h1>
+                    <p>تم ارسال كود لرقم الهاتف المسجل وهو :</p>
+                    <h6>1222224899692</h6>
+                    <div class="code" id="codeDisplay" style="display: none;"></div>
+                
+                    <p id="timer"> </p>
+                    <form class="code-input d-flex justify-content-center" id="codeInputForm" dir="ltr">
+                        <input type="text" maxlength="1" size="1" id="digit1" onkeyup="moveToNext(this, 'digit2')">
+                        <input type="text" maxlength="1" size="1" id="digit2" onkeyup="moveToNext(this, 'digit3')">
+                        <input type="text" maxlength="1" size="1" id="digit3" onkeyup="moveToNext(this, 'digit4')">
+                        <input type="text" maxlength="1" size="1" id="digit4">
+                    </form>
+              
+              <div class="btns  ">
+                <button class="btn1">  ادخل الكود </button>  &nbsp; &nbsp; &nbsp;
+                
+              </div>
+             <div class="resend d-flex">
+                <p>لم يتم ارسال الكود؟</p>
+                <a href="" class="resend-pass-a"> اعادة ارسال</a>
+             </div>
+            </div>
+            <div class="col-7 col-md-6">
+      <img src="../images/login.svg" alt="background" class="background">
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+  
+
+    <script>
+        function generateVerificationCode() {
+            // Generate a random 4-digit code
+            return Math.floor(1000 + Math.random() * 9000);
+        }
+
+        function updateCodeDisplay() {
+            // Get the code display element
+            const codeDisplay = document.getElementById('codeDisplay');
+            // Generate a new verification code
+            const code = generateVerificationCode();
+            // Display the code
+            codeDisplay.textContent = code;
+            // Clear input fields
+            document.getElementById('digit1').value = '';
+            document.getElementById('digit2').value = '';
+            document.getElementById('digit3').value = '';
+            document.getElementById('digit4').value = '';
+        }
+
+        function startTimer(duration, display) {
+            let timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = ` الوقت المتبقي :${minutes}:${seconds}`;
+
+                if (--timer < 0) {
+                    timer = duration;
+                    // Update verification code every 30 seconds
+                    updateCodeDisplay();
+                }
+            }, 1000);
+        }
+
+        function moveToNext(current, nextFieldID) {
+            const maxLength = parseInt(current.getAttribute('maxlength'));
+            const currentLength = current.value.length;
+            if (currentLength >= maxLength) {
+                document.getElementById(nextFieldID).focus();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initial code display
+            updateCodeDisplay();
+            // Set 30 seconds timer
+            const thirtySeconds = 30,
+                  display = document.getElementById('timer');
+            startTimer(thirtySeconds, display);
+        });
+    </script>
+</body>
+</html>
