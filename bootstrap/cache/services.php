@@ -41,7 +41,7 @@
     37 => 'App\\Providers\\EventServiceProvider',
     38 => 'App\\Providers\\RouteServiceProvider',
     39 => 'Yajra\\DataTables\\DataTablesServiceProvider',
-    40 => 'Yajra\\DataTables\\DataTablesServiceProvider',
+    40 => 'Intervention\\Image\\ImageServiceProvider',
   ),
   'eager' => 
   array (
@@ -71,7 +71,7 @@
     23 => 'App\\Providers\\EventServiceProvider',
     24 => 'App\\Providers\\RouteServiceProvider',
     25 => 'Yajra\\DataTables\\DataTablesServiceProvider',
-    26 => 'Yajra\\DataTables\\DataTablesServiceProvider',
+    26 => 'Intervention\\Image\\ImageServiceProvider',
   ),
   'deferred' => 
   array (
