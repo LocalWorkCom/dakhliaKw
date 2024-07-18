@@ -69,3 +69,4 @@ Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit
 Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
 Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
+

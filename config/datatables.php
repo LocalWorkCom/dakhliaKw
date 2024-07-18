@@ -14,6 +14,7 @@ return [
         /*
          * Multi-term search will explode search keyword using spaces resulting into multiple term search.
          */
+        'multi_term'       => true,
         'multi_term' => true,
 
         /*
@@ -26,6 +27,7 @@ return [
          * Wild card will add "%" in between every characters of the keyword.
          * SQL: column LIKE "%k%e%y%w%o%r%d%"
          */
+        'use_wildcards'    => false,
         'use_wildcards' => false,
 
         /*
@@ -58,10 +60,10 @@ return [
      * Note, only change this if you know what you are doing!
      */
     'builders' => [
-        // Illuminate\Database\Eloquent\Relations\Relation::class => 'eloquent',
-        // Illuminate\Database\Eloquent\Builder::class            => 'eloquent',
-        // Illuminate\Database\Query\Builder::class               => 'query',
-        // Illuminate\Support\Collection::class                   => 'collection',
+        //Illuminate\Database\Eloquent\Relations\Relation::class => 'eloquent',
+        //Illuminate\Database\Eloquent\Builder::class            => 'eloquent',
+        //Illuminate\Database\Query\Builder::class               => 'query',
+        //Illuminate\Support\Collection::class                   => 'collection',
     ],
 
     /*
