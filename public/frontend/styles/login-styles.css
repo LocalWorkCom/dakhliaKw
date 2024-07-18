@@ -115,6 +115,18 @@ button {
   margin-left: 364px;
   /* padding-top: 20px; */
 }
+.login-label-2{
+    font-family: Almarai;
+    font-size: 24px;
+    /* padding-bottom: 15px; */
+    /* font-weight: 400; */
+    line-height: 26.78px;
+    text-align: right;
+    padding-right: 6px;
+    margin-left: 330px;
+    /* padding-top: 20px; */
+}
+
 .forget-pass-a{
   margin-left: 300px;
   font-size: 17px;
@@ -156,3 +168,64 @@ button:hover{
     height: 460px;
     /* padding-right: 0px; */
 }
+
+/*************** verification style ************ */
+.code {
+  font-size: 2em;
+  margin-top: 20px;
+}
+.code-input {
+  margin-top: 10px;
+}
+.code-input input {
+  width: 2em;
+  font-size: 1.5em;
+  text-align: center;
+  margin: 0 5px;
+  padding: 5px;
+}
+.reset-pass h4{
+font-family: Almarai;
+font-size: 28px;
+font-weight: 400;
+line-height: 48px;
+text-align: center;
+color: #032F70;
+
+}
+
+.resend-pass-a:hover{
+  color: #DF0000;
+}
+.reset-pass h6{
+  font-family: Almarai;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 48px;
+  text-align: center;
+  color: #274373;
+  }
+  .reset-pass p{
+    font-family: Almarai;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 42px;
+    text-align: center;
+    }
+  .resend-pass-a{
+font-family: Almarai;
+font-size: 28px;
+font-weight: 400;
+line-height: 42px;
+text-align: right;
+padding-right: 10px;
+text-decoration: underline;
+color: #032F70;
+  }
+  .resend p{
+    font-family: Almarai;
+font-size: 28px;
+font-weight: 400;
+line-height: 42px;
+text-align: left;
+  }

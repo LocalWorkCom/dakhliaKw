@@ -112,7 +112,7 @@ if (!function_exists('send_sms_code')) {
 
     function UploadFiles($path, $image,$realname, $model, $request)
     {
-    
+ 
         $thumbnail = $request;
         $destinationPath = $path;
         $filerealname=$thumbnail->getClientOriginalName();

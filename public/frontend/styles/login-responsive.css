@@ -251,110 +251,206 @@
 
 @media (max-width: 578px){
     .logo {
-        width: 135px;
-        height: 135px;
+        width: 145px;
+        height: 145px;
         margin-bottom: 25px;
-        margin-left: 75px;
+        margin-left: 140px;
     }
     .login-h5 {
         margin-top: 0px;
-        padding-left: -1px;
-        font-size: 17px;
+        padding-left: 115px;
+        font-size: 18px;
     }
     .login-p {
-        font-size: 15px;
+        font-size: 18px;
         line-height: 50px;
-        padding-left: 41px;
+        padding-left: 80px;
     }
     .login-h2 {
-        padding-left: 110px;
+        padding-left: 155px;
         line-height: 56px;
-        font-size: 23px;
-    }
-    .d-flex {
-        display: block !important;
+        font-size: 27px;
     }
     .login-input {
-        height: 36px;
-        width: 350px;
+        height: 40px;
+        width: 465px;
     }
     #toggleIcon {
-        position: absolute;
-        right: 200px;
-        top: 5%;
-        transform: translateY(-235%);
+        display: none;
     }
     .forget-pass-a {
-        margin-left: 22px;
-        font-size: 13px;
+        margin-left: 33px;
+        font-size: 18px;
         text-decoration: underline;
     }
     .login-label {
-        font-size: 20px;
+        font-size: 23px;
         line-height: 26.78px;
-        margin-left: 20px;
+        margin-left: 35px;
     }
     .btn1 {
-        width: 117px;
+        width: 145px;
         height: 40px;
-        font-size: 15px;
+        font-size: 18px;
         font-weight: 900;
         padding: 5px 0px 5px 0px;
-        margin-right: 115px;
+        margin-right: 150px;
     }
     .background {
        display: none;
     }
 }
 @media (max-width: 450px){
-
-}
-@media (max-width: 380px){
     .logo {
-        width: 255px;
-        height: 170px;
-        padding-right: 95px;
-        margin: auto;
+        width: 125px;
+        height: 125px;
+        margin-bottom: 25px;
+        margin-left: 75px;
+        margin-top: -45px !important;
+    }
+    #toggleIcon {
+        position: absolute;
+        right: 200px;
+        top: 5%;
+        transform: translateY(-228%);
     }
     .login-h5 {
         margin-top: 0px;
-        padding-left: 68px;
-        font-size: 17px;
+        padding-left: 42px;
+        font-size: 18px;
     }
     .login-p {
-        padding-left: 36px;
-        font-size: 17px;
-        line-height: 25px;
+        font-size: 18px;
+        line-height: 50px;
+        padding-left: 1px;
+    }
+    .login-label {
+        font-size: 25px;
+        line-height: 26.78px;
+        margin-left: -1px;
     }
     .login-h2 {
-        padding-left: 104px;
-        font-size: 29px;
-        line-height: 60px;
-    }
-    .d-flex {
-        display: block !important;
+        padding-left: 83px;
+        line-height: 56px;
+        font-size: 27px;
     }
     .login-input {
         height: 40px;
-        width: 332px;
+        width: 345px;
+    }
+    .forget-pass-a {
+        margin-left: 0px;
+        font-size: 17px;
+        text-decoration: underline;
+    }
+    .btn1 {
+        width: 145px;
+        height: 40px;
+        font-size: 18px;
+        padding: 5px 0px 5px 0px;
+        margin-right: 100px;
+    }
+}
+@media (max-width: 380px){
+    .logo {
+        width: 135px;
+        height: 135px;
+        margin-bottom: 25px;
+        margin-left: 65px;
+        margin-top: -45px !important;
+    }
+    .login-h5 {
+        margin-top: 0px;
+        padding-left: 53px;
+        font-size: 15px;
+    }
+    .login-p {
+        padding-left: 12px;
+        font-size: 16px;
+        line-height: 25px;
+    }
+    .login-h2 {
+        padding-left: 90px;
+        font-size: 20px;
+        line-height: 63px;
     }
     .login-label {
-        padding-right: 10px;
-    }   
-     .btn1, .btn2 {
-        width: 170px;
+        font-size: 20px;
+        line-height: 26.78px;
+        margin-left: 3px;
+    }
+   
+    #toggleIcon {
+        position: absolute;
+        right: 176px;
+        top: 5%;
+        transform: translateY(-212%);
+    }
+    .login-input {
+        height: 32px;
+        width: 303px;
+    }
+   
+     .btn1{
+        width: 150px;
         height: 36px;
         font-size: 15px;
         font-weight: 900;
         margin-right: 75px;
     }
-    .btns{
-    line-height: 0px;
+    .forget-pass-a {
+        margin-left: 0px;
+        font-size: 13px;
+        text-decoration: underline;
     }
     .background {
       display: none;
     }
 }
 @media (max-width: 340px){
-
+    .logo {
+        width: 125px;
+        height: 125px;
+        margin-bottom: 25px;
+        margin-left: 35px;
+        margin-top: -45px !important;
+    }
+    .login-h5 {
+        margin-top: 0px;
+        padding-left: 25px;
+        font-size: 14px;
+    }
+    .login-p {
+        padding-left: 0px;
+        font-size: 14px;
+        line-height: 30px;
+    }
+    .login-h2 {
+        padding-left: 65px;
+        font-size: 18px;
+        line-height: 63px;
+    }
+    .login-label {
+        font-size: 18px;
+        line-height: 26.78px;
+        margin-left: -8px;
+    }
+    .login-input {
+        height: 32px;
+        width: 260px;
+    }
+    #toggleIcon {
+        display: none;
+    }
+    .forget-pass-a {
+        margin-left: 0px;
+        font-size: 11px;
+    }
+    .btn1 {
+        width: 120px;
+        height: 36px;
+        font-size: 15px;
+        font-weight: 900;
+        margin-right: 75px;
+    }
 }

@@ -19,8 +19,8 @@
     <link rel="stylesheet" href="./assets/vendor/bootstrap/css/bootstrap.min.css" type="text/css" />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('frontend/styles/login-styles.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/styles/login-responsive.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('frontend/styles/login-styles.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ asset('frontend/styles/login-responsive.css') }}"> -->
 </head>
 
 <body>
