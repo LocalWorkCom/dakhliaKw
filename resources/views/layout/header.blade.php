@@ -74,7 +74,7 @@
                         <option value="#"> الادارات </option>
                         <option value="#"> التعيينات </option>
                         <option value="#"> الموظفين </option>
-                        <option value="#"> الصادر </option>
+                        <option value="{{ route('Export.index') }}"> الصادر </option>
                         <option value="#"> الوارد </option>
                     </select>
                 </div>
@@ -102,8 +102,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('Export.index') }}">
                         <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
                         <h6>الصادر</h6>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
