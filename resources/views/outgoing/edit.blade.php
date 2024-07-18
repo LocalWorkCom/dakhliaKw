@@ -163,58 +163,18 @@
         let fileInputCount = 1;
         const maxFileInputs = 9;
 
-                        <!-- Save button -->
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary">حفظ</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-@endsection
-
-@push('scripts')
-    <script> 
-
-$(document).ready(function() {
-    let fileInputCount = 1;
-            const maxFileInputs = 9;
-
-            $('#addFile').click(function() {
-                    var fileCount = $('#fileInputs').find('.file-input').length;
-                    if (fileCount < 10) {
-                        var newInput = '<div class="file-input mb-3">' +
-                            '<input type="file" name="files[]" class="form-control-file" >' +
-                            '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
-                            '</div>';
-                        $('#fileInputs').append(newInput);
-                        checkFileCount(); // Update button states
-                    } else {
-                        alert('لا يمكنك إضافة المزيد من الملفات.');
-                    }
-                });
-            function checkFileCount() {
-                    var fileCount = $('#fileInputs').find('.file-input').length;
-                    if (fileCount > 1) {
-                        $('.remove-file').prop('disabled', false);
-                    } else {
-                        $('.remove-file').prop('disabled', true);
-                    }
-                }
-           // Remove file input
-           $(document).on('click', '.remove-file', function() {
-                    $(this).parent('.file-input').remove();
-                    checkFileCount(); // Update button states
-
-                });
-
-                $(document).on('click', '.remove-file', function() {
-                    $(this).parent('.file-input-old').remove();
-                    checkFileCount(); // Update button states
-
-                });
+        $('#addFileInput').click(function() {
+            if (fileInputCount < maxFileInputs) {
+                fileInputCount++;
+                const newFileInput = `
+                        <div class="form-group">
+                            <label for="file${fileInputCount}">File ${fileInputCount}</label>
+                            <input type="file" name="files[]" id="file${fileInputCount}" class="form-control-file">
+                        </div>`;
+                $('#fileInputs').append(newFileInput);
+            } else {
+                alert('You can only add up to 10 files.');
+            }
         });
     });
     </script>

@@ -143,6 +143,7 @@
                             <button class="btn btn-primary" type="submit">اضافه </button>
                     </form>
                 </div>
+                </form>
             </div>
         </div>
     </div>
