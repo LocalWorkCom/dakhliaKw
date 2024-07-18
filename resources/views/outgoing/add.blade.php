@@ -76,7 +76,6 @@
                                         <option value="0">غير مفعل</option>
                                   
                                     </select>
-                                    <div class="invalid-feedback">Example invalid custom file feedback</div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="active">الاداره الخارجيه</label>
