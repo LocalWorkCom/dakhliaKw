@@ -8,11 +8,12 @@
         <div class="mb-3">
             <a href="{{ route('iotelegrams.list') }}" class="btn btn-primary mt-3">رجوع</a>
         </div>
+        @include('inc.flash')
 
         <div class="card">
             <div class="card-header">الواردات</div>
             <div class="card-body">
-                <form action="{{ route('iotelegram.update', $iotelegram->id) }}" method="POST">
+                <form action="{{ route('iotelegram.update', $iotelegram->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-3">
@@ -93,8 +94,18 @@
                             @endfor
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="files">الملفات:</label>
+                        <div id="fileInputs">
+                            <div class="file-input mb-3">
+                                <input type="file" name="files[]" class="form-control-file">
+                                <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
+                    </div>
 
-                    <button type="submit" class="btn btn-primary">التالي</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
                 </form>
             </div>
         </div>
@@ -183,6 +194,8 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
+                checkFileCount();
+
                 var value = $('input[name="type"]:checked').val();
                 if (value == 'in') {
                     $('#from_departement').show();
@@ -302,6 +315,38 @@
                         }
 
                     }
+                });
+                $('#addFile').click(function() {
+                    var files_num = $('#files_num option:selected').val();
+                    if (files_num == '') {
+                        alert("please choose file number");
+                        return;
+                    }
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount < files_num) {
+                        var newInput = '<div class="file-input mb-3">' +
+                            '<input type="file" name="files[]" class="form-control-file" required>' +
+                            '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
+                            '</div>';
+                        $('#fileInputs').append(newInput);
+                        checkFileCount(); // Update button states
+                    } else {
+                        alert('لا يمكنك إضافة المزيد من الملفات.');
+                    }
+                });
+                function checkFileCount() {
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount > 1) {
+                        $('.remove-file').prop('disabled', false);
+                    } else {
+                        $('.remove-file').prop('disabled', true);
+                    }
+                }
+                // Remove file input
+                $(document).on('click', '.remove-file', function() {
+                    $(this).parent('.file-input').remove();
+                    checkFileCount(); // Update button states
+
                 });
             });
         </script>
