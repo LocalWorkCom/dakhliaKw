@@ -105,6 +105,7 @@ class UserController extends Controller
 
     public function verfication_code(Request $request)
     {
+        // dd($request);
         // Validate incoming request data
         $validatedData = Validator::make($request->all(), [
             'verfication_code' => 'required', // Ensure verfication_code field is required
@@ -125,7 +126,7 @@ class UserController extends Controller
         $password = $request->password;
 
         // Check if the provided verification code matches the expected code
-        if ($request->code === $request->verfication_code) {
+        if ($request->code == $request->verfication_code) {
             // Find the user by military number
             $user = User::where('military_number', $request->military_number)->first();
 

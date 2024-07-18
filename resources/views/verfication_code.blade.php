@@ -58,6 +58,10 @@
                         </ul>
                     </div>
                     @endif
+
+                    <input type="hidden" name="code" value="{{ $code }}">
+                    <input type="hidden" name="military_number" value="{{ $military_number }}">
+                    <input type="hidden" name="password" value="{{ $password }}">
                     <h4 > ادخل الكود المرسل الي رقم هاتفك</h1>
                     <input type="text" name="verfication_code" id="username" class="login-input"><br>
               
@@ -67,6 +71,7 @@
                     
                     </div>
         </form>
+      </div>
         <div class="col-7 col-md-6">
                 <img src="{{asset('frontend/images/login.svg')}}" alt="background" class="background">
         </div>
