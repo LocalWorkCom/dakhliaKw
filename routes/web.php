@@ -39,6 +39,8 @@ Route::get('/login', function () {
     return view('login');
 });
 
+
+
 //  Auth verfication_code
 Route::post('/create', [UserController::class, 'store'])->name('create');
 Route::post('/login', [UserController::class, 'login'])->name('login');
@@ -53,30 +55,39 @@ Route::get('/forget-password', function () {
 Route::any('/forget_password2', [UserController::class, 'forget_password2'])->name('forget_password2');
 Route::any('/reset_password', [UserController::class, 'reset_password'])->name('reset_password');
 
-// //permission
-Route::middleware(['auth', 'check.permission:create Permission,view Permission,edit Permission'])->group(function () {
-    Route::any('/permission', [PermissionController::class, 'create'])->name('permission.create');
+
+// view All Models permission
+Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {
+    Route::any('/permission', [PermissionController::class, 'index'])->name('permission.index');
+    Route::any('/permission_store', [PermissionController::class, 'create'])->name('permission.create');
+    Route::any('/role',[RuleController::class, 'create'])->name('rule.create');
+});
+// create All Models permission
+Route::middleware(['auth', 'check.permission:create Permission,create Rule,create departements'])->group(function () {
     Route::any('/permission_store', [PermissionController::class, 'store'])->name('permission.store');
+    Route::any('/rule_store',[RuleController::class, 'store'])->name('rule.store');
+});
+// edit All Models permission
+Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit departements'])->group(function () {
     Route::any('/permission_edit', [PermissionController::class, 'edit'])->name('permissions.edit');
+    Route::any('/rule_edit',[RuleController::class, 'edit'])->name('rule.edit');
     Route::resource('permissions', PermissionController::class);
+});
+
+
+// //permission
     // Route::any('/permission_destroy',[PermissionController::class, 'destroy'])->name('permission.destroy');
     // Route::any('/permission_view',[PermissionController::class, 'show'])->name('permission.view');
-});
+
 
 
 
 
 //role
-Route::middleware(['auth', 'check.permission:create Rule,view Rule,edit Rule'])->group(function () {
-    Route::any('/role',[RuleController::class, 'create'])->name('rule.create');
-    Route::any('/rule_store',[RuleController::class, 'store'])->name('rule.store');
-    Route::any('/rule_edit',[RuleController::class, 'edit'])->name('rule.edit');
     // Route::any('/rule_destroy',[RuleController::class, 'destroy'])->name('rule.destroy');
     // Route::any('/rule_view',[RuleController::class, 'show'])->name('rule.view');
-});
 
 // department
-Route::middleware(['auth', 'check.permission:create departements,view departements,edit departements'])->group(function () {
     // Route::resource('departments', DepartmentController::class);
     Route::post('departments_store', [DepartmentController::class, 'store']);
     Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
@@ -90,7 +101,6 @@ Route::middleware(['auth', 'check.permission:create departements,view departemen
     Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
     Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
     Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
-});
 
 //Start Export routes
 Route::resource('Export', outgoingController::class);
