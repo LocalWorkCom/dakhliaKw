@@ -111,6 +111,7 @@ class IoTelegramController extends Controller
     //postman
     public function addExternalDepartmentAjax(Request $request)
     {
+        dd($request->all());
         $ExternalDepartment = new ExternalDepartment();
         $ExternalDepartment->name = $request->name;
         $ExternalDepartment->description = $request->desc;
