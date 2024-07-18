@@ -93,9 +93,11 @@
                                         data-image="{{ asset($file->file_name) }}" data-title="{{ $file->file_name }}">
                                         <img src="{{ asset($file->file_name) }}" class="img-thumbnail"
                                             alt="{{ $file->file_name }}">
-                                            <a id="downloadButton" href="#" class="btn btn-primary" download> <i class="fa fa-download"></i></a>
+                                        <a id="downloadButton"
+                                            href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
+                                            class="btn btn-primary"> <i class="fa fa-download"></i></a>
 
-                                            <i></i>
+                                        <i></i>
                                     </a>
 
                                 </div>
