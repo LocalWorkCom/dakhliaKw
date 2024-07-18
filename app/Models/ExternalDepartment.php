@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ExternalDepartment extends Model
 {
     use HasFactory;
+    public function outgoings()
+    {
+        return $this->hasMany(outgoings::class);
+
+    }
 }

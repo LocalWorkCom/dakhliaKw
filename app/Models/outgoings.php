@@ -19,7 +19,11 @@ class outgoings extends Model
     ];
     public function department()
     {
-        return $this->belongsTo(departements::class);
+        return $this->belongsTo(ExternalDepartment::class,'');
+    }
+    public function files()
+    {
+        return $this->belongsTo(outgoing_files::class,'');
     }
     public function personTo()
     {

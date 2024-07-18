@@ -36,6 +36,7 @@ class outgoingController extends Controller
     {
        
         $users=User::all();
+        
         return view('outgoing.add', compact('users'));
     }
 
@@ -44,7 +45,8 @@ class outgoingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      dd($request->all());
+
     }
 
     /**

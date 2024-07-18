@@ -1,7 +1,7 @@
 @extends('layout.header')
 
 @push('style')
-{{-- <script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"></script> --}}
+<script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"></script>
  @endpush
 
 @section('content')
