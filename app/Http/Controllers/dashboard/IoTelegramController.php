@@ -27,9 +27,11 @@ class IoTelegramController extends Controller
     public function create()
     {
         //
-        $representives = $recieves = User::all();
+        $representives = Postman::all();
+        $recieves = User::all();
         $departments = departements::all();
-        return view('iotelegram.add', compact('representives', 'departments', 'recieves'));
+        $external_departments = ExternalDepartment::all();
+        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments'));
     }
 
     /**
@@ -37,6 +39,7 @@ class IoTelegramController extends Controller
      */
     public function store(Request $request)
     {
+
         //
         $iotelegram = new iotelegrams();
         $iotelegram->type = $request->type;
@@ -45,10 +48,12 @@ class IoTelegramController extends Controller
         $iotelegram->date = $request->date;
         $iotelegram->recieved_by = $request->recieved_by;
         $iotelegram->files_num = $request->files_num;
-        $iotelegram->created_by = auth()->id;
+        $iotelegram->created_by = auth()->id();
         $iotelegram->save();
+        session()->flash('success', 'تم الحفظ بنجاح.');
 
-        return redirect()->back()->with(['success', 'Done']);
+        return redirect()->back();
+        // return redirect()->back()->with(['success', 'Done']);
     }
 
     /**
@@ -58,6 +63,7 @@ class IoTelegramController extends Controller
     {
         //
         $iotelegram = iotelegrams::find($id);
+
         return view('iotelegram.show', compact('iotelegram'));
     }
 
@@ -67,8 +73,10 @@ class IoTelegramController extends Controller
     public function edit($id)
     {
         //
-        $representives = $recieves = User::all();
+        $representives = Postman::all();
+        $recieves = User::all();
         $departments = departements::all();
+        $external_departments = ExternalDepartment::all();
         $iotelegram = iotelegrams::find($id);
 
         return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram'));
@@ -89,8 +97,10 @@ class IoTelegramController extends Controller
         $iotelegram->files_num = $request->files_num;
         $iotelegram->created_by = auth()->id;
         $iotelegram->save();
+        session()->flash('success', 'تم التعديل بنجاح.');
 
-        return redirect()->back()->with(['success', 'Done']);
+        return redirect()->back();
+
     }
     public function files($id)
     {
@@ -104,6 +114,8 @@ class IoTelegramController extends Controller
         $Postman->name = $request->name;
         $Postman->phone1 = $request->phone1;
         $Postman->phone2 = $request->phone2;
+        $Postman->department_id = $request->modal_department_id;
+
         $Postman->national_id = $request->national_id;
         $Postman->save();
         return true;
@@ -111,12 +123,22 @@ class IoTelegramController extends Controller
     //postman
     public function addExternalDepartmentAjax(Request $request)
     {
-        dd($request->all());
+
         $ExternalDepartment = new ExternalDepartment();
         $ExternalDepartment->name = $request->name;
         $ExternalDepartment->description = $request->desc;
         $ExternalDepartment->phone = $request->phone;
         $ExternalDepartment->save();
         return true;
+    }
+    public function getExternalDepartments()
+    {
+        $ExternalDepartments = ExternalDepartment::all();
+        return $ExternalDepartments;
+    }
+    public function getPostmanAjax()
+    {
+        $postmans = Postman::all();
+        return $postmans;
     }
 }

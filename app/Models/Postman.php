@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Postman extends Model
 {
     use HasFactory;
+    protected $table = "postmans";
 }

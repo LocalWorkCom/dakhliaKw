@@ -3,19 +3,22 @@
 namespace App\Http\Controllers;
 use App\Models\departements;
 use App\Models\User;
+use App\DataTables\DepartmentDataTable;
 
 use App\Http\Requests\StoreDepartmentRequest;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(DepartmentDataTable $dataTable)
     {
-        $departments = departements::with(['manager', 'managerAssistant'])->paginate(10);
-        return view('departments.index', compact('departments'));
+        return $dataTable->render('departments.index');
+        // $departments = departements::with(['manager', 'managerAssistant'])->paginate(10);
+        // return view('departments.index', compact('departments'));
         // return response()->json($departments);
     }
 
@@ -48,10 +51,10 @@ class DepartmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(departements $department)
+    public function show($id)
     {
+        $department = departements::with(['manager', 'managerAssistant'])->findOrFail($id);
         return view('departments.show', compact('department'));
-        // return response()->json($department);
     }
 
     /**
