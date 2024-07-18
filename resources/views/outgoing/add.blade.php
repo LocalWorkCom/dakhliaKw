@@ -64,14 +64,18 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="active">الاداره الخارجيه</label>
-                                    <select id="department_id" name="department_id" class="form-control">
-                                        <option value="">اختر الجهة</option>
-                                        @foreach ($departments as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                 
+                                <div class="mb-3">
+                                        <label for="from_departement">الجهة المرسلة:</label>
+                                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none" id="extern-department-dev"
+                                            data-bs-target="#extern-department">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                        <select id="from_departement" name="from_departement" class="form-control" required>
+                                            <option value="">اختر الجهة</option>
+                                            @foreach ($departments as $item)
+                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
                                 </div>
                                
                                
@@ -96,20 +100,14 @@
                                 أضافه أداره خارجيه
                             </button>
                         </div>
-                             <!-- Modal -->
-                            <!-- Modal for adding a new external department -->
-                       
-
-
                             <button class="btn btn-primary" type="submit">تعديل </button>
-
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -139,9 +137,42 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
   
- 
+    <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="extern-departmentLabel">إضافة جهة جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="saveExternalDepartment" action="{{ route('department.ajax') }}" method="POST">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="name">الاسم:</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="desc">الوصف:</label>
+                            <input type="text" id="desc" name="desc" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone">الهاتف</label>
+                            <input type="text" id="phone" name="phone" class="form-control" required>
+                        </div>
+
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">حفظ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 @endsection
 
@@ -149,73 +180,23 @@
     <script> 
 
 $(document).ready(function() {
-                $('#saveRepresentative').click(function(e) {
-                    e.preventDefault();
+    let fileInputCount = 1;
+            const maxFileInputs = 9;
 
-                    // Serialize the form data
-                    var formData = $('#addRepresentativeForm').serialize();
-
-                    // Submit AJAX request
-                    $.ajax({
-                        url: $('#addRepresentativeForm').attr('action'),
-                        type: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            // Handle success response
-                            console.log(response);
-
-                            // Optionally, you can close the modal after successful save
-                            $('#extern-departmen').modal('hide');
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error response
-                            console.error(xhr.responseText);
-                        }
-                    });
-                });
-                $('#saveExternalDepartment').click(function(e) {
-                    e.preventDefault();
-
-                    // Serialize the form data
-                    var formData = $('#saveExternalDepartment').serialize();
-
-                    // Submit AJAX request
-                    $.ajax({
-                        url: $('#saveExternalDepartment').attr('action'),
-                        type: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            // Handle success response
-                            console.log(response);
-
-                            // Optionally, you can close the modal after successful save
-                            $('#exampleModal').modal('hide');
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error response
-                            console.error(xhr.responseText);
-                        }
-                    });
-                });
-
-                $('input[name=type]').click(function() {
-                    if ($(this).is(':checked')) {
-                        var value = $(this).val();
-                        console.log(value);
-                        if (value == 'intern') {
-                            $('#department_id').show();
-                            $('#extern-department-dev').hide();
-
-
-                        } else {
-
-                            // $('#department_id').hide();
-                            $('#extern-department-dev').show();
-                        }
-
-                    }
-                });
+            $('#addFileInput').click(function() {
+                if (fileInputCount < maxFileInputs) {
+                    fileInputCount++;
+                    const newFileInput = `
+                        <div class="form-group">
+                            <label for="file${fileInputCount}">File ${fileInputCount}</label>
+                            <input type="file" name="files[]" id="file${fileInputCount}" class="form-control-file">
+                        </div>`;
+                    $('#fileInputs').append(newFileInput);
+                } else {
+                    alert('You can only add up to 10 files.');
+                }
             });
+        });
 
     </script>
 @endpush

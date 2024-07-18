@@ -40,7 +40,7 @@ class IoTelegramController extends Controller
     public function store(Request $request)
     {
 
-        //
+        //dd($request->all());
         $iotelegram = new iotelegrams();
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;

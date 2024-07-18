@@ -99,7 +99,7 @@ class outgoingController extends Controller
         $export->created_by = auth()->id();//auth auth()->id
         $export->active = $request->active;
         $export->updated_by = auth()->id();//auth auth()->id
-        $export->department_id = $request->department_id;
+        $export->department_id = $request->from_departement;
         $export->save(); 
         $files=new outgoing_files();
         $files->outgoing_id = $export->id;
@@ -114,12 +114,12 @@ class outgoingController extends Controller
             if (function_exists('UploadFiles')) {
                  //  dd('file yes');
                 foreach ($request->file('files') as $file) {
-                    UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
+                  //  UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
                 }
             }
         }
       
-        return redirect()->back()->with('success','');
+        return redirect()->back()->with('success','تم الأضافه بنجاح');
     }
 
     /**
