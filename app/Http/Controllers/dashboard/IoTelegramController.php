@@ -100,7 +100,6 @@ class IoTelegramController extends Controller
         session()->flash('success', 'تم التعديل بنجاح.');
 
         return redirect()->back();
-
     }
     public function files($id)
     {
@@ -135,6 +134,11 @@ class IoTelegramController extends Controller
     {
         $ExternalDepartments = ExternalDepartment::all();
         return $ExternalDepartments;
+    }
+    public function getDepartments()
+    {
+        $Departments = departements::all();
+        return $Departments;
     }
     public function getPostmanAjax()
     {

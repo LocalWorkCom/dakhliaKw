@@ -187,8 +187,6 @@
                 if (value == 'in') {
                     $('#from_departement').show();
                     $('#extern-department-dev').hide();
-
-
                 } else {
 
                     $('#extern-department-dev').show();
@@ -241,7 +239,7 @@
                         }
                     });
                 });
-             
+
                 // Additional event handler for radio button click
                 $('input[name=type]').click(function() {
                     if ($(this).is(':checked')) {
@@ -251,6 +249,27 @@
                             $('#from_departement').show();
                             $('#extern-department-dev').hide();
 
+                            $('#from_departement').empty();
+                            $.ajax({
+
+                                url: "{{ route('internal.departments') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    console.log(response);
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر الادارة</option>';
+                                    response.forEach(function(department) {
+                                        selectOptions += '<option value="' + department.id +
+                                            '">' + department.name + '</option>';
+                                    });
+                                    $('#from_departement').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+                                },
+                              
+                            });
 
                         } else {
 
