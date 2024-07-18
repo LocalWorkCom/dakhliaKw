@@ -27,6 +27,10 @@ class iotelegrams extends Model
     }
     public function department()
     {
-        return $this->belongsTo(departements::class );
+        return $this->belongsTo(departements::class);
+    }
+    public function ioFiles()
+    {
+        return $this->hasMany(io_files::class, 'iotelegram_id');
     }
 }

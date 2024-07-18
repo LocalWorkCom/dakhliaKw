@@ -13,7 +13,7 @@
         <div class="card">
             <div class="card-header">الواردات</div>
             <div class="card-body">
-                <form action="{{ route('iotelegram.store') }}" method="POST">
+                <form action="{{ route('iotelegram.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-3">

@@ -40,7 +40,12 @@ class IoTelegramController extends Controller
     public function store(Request $request)
     {
 
-        //dd($request->all());
+        if ($request->hasFile('files')) {
+            $request->validate([
+                'files.*' => 'mimes:jpeg,png,pdf|max:2048', // Adjust validation rules as needed
+            ]);
+        }
+
         $iotelegram = new iotelegrams();
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;
@@ -49,11 +54,32 @@ class IoTelegramController extends Controller
         $iotelegram->recieved_by = $request->recieved_by;
         $iotelegram->files_num = $request->files_num;
         $iotelegram->created_by = auth()->id();
+        // $iotelegram->created_departement = auth()->user()->departement_id;
         $iotelegram->save();
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                // You can modify the UploadFiles function call according to your needs
+                $io_file = new io_files();
+                $io_file->iotelegram_id = $iotelegram->id;
+                $io_file->created_by = auth()->id();
+                $io_file->updated_by = auth()->id();
+                $io_file->save();
+                if ($iotelegram->type == 'in') {
+                    $path = 'io_files/internal';
+                } else {
+                    $path = 'io_files/external';
+                }
+                if ($file->getClientOriginalExtension() == 'pdf') {
+                    $io_file->file_type = 'pdf';
+                } else {
+                    $io_file->file_type = 'image';
+                }
+                UploadFiles($path, 'file_name', 'real_name', $io_file, $file);
+            }
+        }
         session()->flash('success', 'تم الحفظ بنجاح.');
 
         return redirect()->back();
-        // return redirect()->back()->with(['success', 'Done']);
     }
 
     /**
@@ -63,8 +89,12 @@ class IoTelegramController extends Controller
     {
         //
         $iotelegram = iotelegrams::find($id);
+        $representives = Postman::all();
+        $recieves = User::all();
+        $departments = departements::all();
+        $external_departments = ExternalDepartment::all();
 
-        return view('iotelegram.show', compact('iotelegram'));
+        return view('iotelegram.show', compact('iotelegram', 'representives', 'departments', 'recieves', 'external_departments'));
     }
 
     /**
