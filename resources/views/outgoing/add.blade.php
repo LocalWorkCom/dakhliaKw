@@ -13,7 +13,7 @@
         <li class="breadcrumb-item"><a href="#">الرئيسيه</a></li>
         <li class="breadcrumb-item active"><a href="{{ route('Export.index') }}">الصادرات </a></li>
 
-        <li class="breadcrumb-item active">تعديل الصادر</li>
+        <li class="breadcrumb-item active">اضافه الصادر</li>
 
     </ol>
     
@@ -40,6 +40,7 @@
                         <div class="form-group">
                             <label for="select-person-to">person_to </label>
                             <select id="select-person-to" name="person_to" class="form-control">
+                                <option > اختر من القائمه</option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}">
                                         {{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})
