@@ -33,63 +33,51 @@ class UserController extends Controller
             'military_number.required' => 'رقم العسكري مطلوب.',
             'password.required' => 'كلمة المرور مطلوبة.',
         ];
-            $military_number = $request->military_number;
-            
-            $validatedData = Validator::make($request->all(), [
-                'military_number' => 'required|string',
+    
+        $validatedData = Validator::make($request->all(), [
+            'military_number' => 'required|string',
             'password' => 'required|string',
-
-          ], $messages);
-
-          if ($validatedData->fails()) {
-            return back()
-                ->withErrors($validatedData)
-                ->withInput();
-            }
-
+        ], $messages);
+    
+        if ($validatedData->fails()) {
+            return back()->withErrors($validatedData)->withInput();
+        }
+    
         $military_number = $request->military_number;
         $password = $request->password;
-
-        // Check if the military number exists in the database
-        $user = User::where('military_number', $request->military_number)->first();
-
+    
+        // Check if the user exists
+        $user = User::where('military_number', $military_number)->first();
+    
         if (!$user) {
             return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
         }
-
-        // Attempt to authenticate the user with provided credentials
+    
+        // Check if the user has the correct flag
+        if ($user->flag !== 'user') {
+            return back()->with('error', 'لا يسمح لك بدخول الهيئة');
+        }
+    
         $credentials = $request->only('military_number', 'password');
         if (Auth::attempt($credentials)) {
-            // Authentication passed
-
-            // Generate a random 4-digit code for activation
             $set = '123456789';
             $code = substr(str_shuffle($set), 0, 4);
-
-            // Prepare activation message
-            // $msg = trans('يرجى التحقق من حسابك') . "\n" . trans('تفعيل الكود') . "\n" . $code;
-            $msg  = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
-
-            // Send activation code via WhatsApp (assuming this is your preferred method)
+    
+            $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+    
             $response = send_sms_code($msg, $user->phone, $user->country_code);
             $result = json_decode($response, true);
-
-            $sent = $result['sent'];
-            // $firstlogin = 0 ;
-            if ($sent === 'true') {
-                return  view('verfication_code', compact('code', 'military_number','password'));
+    
+            if (isset($result['sent']) && $result['sent'] === 'true') {
+                return view('verfication_code', compact('code', 'military_number', 'password'));
             } else {
-
-                return back()->with('error', 'سجل الدخول مرة أخرى ');
+                return back()->with('error', 'سجل الدخول مرة أخرى');
             }
-
-            // Redirect to welcome view after successful login
-
         }
-
-        // Authentication failed
+    
         return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
     }
+    
 
     public function verfication_code(Request $request)
     {
@@ -101,14 +89,13 @@ class UserController extends Controller
             'verfication_code' => 'required', // Ensure verfication_code field is required
 
         ], $messages);
-       
+
         // Check if validation fails
         if ($validatedData->fails()) {
             return view('verfication_code')->withErrors($validatedData)
-                    ->with('code', $request->code)
-                    ->with('military_number',$request->military_number)
-                    ->with('password',$request->password)
-                    ;
+                ->with('code', $request->code)
+                ->with('military_number', $request->military_number)
+                ->with('password', $request->password);
         }
         $code = $request->code;
         $military_number = $request->military_number;
@@ -121,26 +108,23 @@ class UserController extends Controller
             $user->code = $request->code;
             $user->password = Hash::make($request->password);
             $user->save();
-            
+
             $firstlogin = 0;
-            if($user->token == null)
-            {
+            if ($user->token == null) {
                 $firstlogin = 1;
-                return view('resetpassword', compact('military_number','firstlogin'));
-            }
-            else
-            {
+                return view('resetpassword', compact('military_number', 'firstlogin'));
+            } else {
                 return redirect()->route('welcome');
             }
 
             // Redirect to the welcome view or return success message
-            
+
         } else {
             // If verification code does not match, return back with error message and input values
             return  view('verfication_code')->withErrors('الكود خاطئ.')
-                    ->with('code', $code)
-                    ->with('military_number',$military_number)
-                    ->with('password',$password);
+                ->with('code', $code)
+                ->with('military_number', $military_number)
+                ->with('password', $password);
         }
     }
     public function resend_code(Request $request)
@@ -160,7 +144,7 @@ class UserController extends Controller
         $sent = $result['sent'];
         if ($sent === 'true') {
             // dd("true");
-            return  view('verfication_code', compact('code', 'military_number','password'));
+            return  view('verfication_code', compact('code', 'military_number', 'password'));
         } else {
 
             return back()->with('error', 'سجل الدخول مرة أخرى');
@@ -183,7 +167,7 @@ class UserController extends Controller
         //     'military_number' => 'required|string',
         // ]);
         //  Check if validation fails
-         if ($validatedData->fails()) {
+        if ($validatedData->fails()) {
             return back()
                 ->withErrors($validatedData)
                 ->withInput();
@@ -194,59 +178,63 @@ class UserController extends Controller
         $firstlogin = 0;
         //     // Check if the military number exists in the database
         $user = User::where('military_number', $request->military_number)->first();
-        // dd($user);
+
         if (!$user) {
             return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
-        } else {
-            return view('resetpassword', compact('military_number','firstlogin'));
         }
+    
+        // Check if the user has the correct flag
+         elseif ($user->flag !== 'user') {
+            return back()->with('error', 'لا يسمح لك بدخول الهيئة');
+        }else {
+            return view('resetpassword', compact('military_number', 'firstlogin'));
+        }
+        
     }
 
     public function reset_password(Request $request)
     {
-       
+
         $messages = [
             'military_number.required' => 'رقم العسكري مطلوب.',
             'password.required' => 'كلمة المرور مطلوبة.',
             'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
         ];
 
-            $military_number = $request->military_number;
-            
-            $validatedData = Validator::make($request->all(), [
-                'military_number' => 'required|string',
-                'password' => 'required|string',
-                'password_confirm' => 'same:password',
+        $military_number = $request->military_number;
 
-          ], $messages);
-            if ($validatedData->fails()) {
-                // Alert('Fail', __('site.wrong'));
-                // return view('resetpassword', compact('military_number'));
-                return view('resetpassword')
+        $validatedData = Validator::make($request->all(), [
+            'military_number' => 'required|string',
+            'password' => 'required|string',
+            'password_confirm' => 'same:password',
+
+        ], $messages);
+        if ($validatedData->fails()) {
+            // Alert('Fail', __('site.wrong'));
+            // return view('resetpassword', compact('military_number'));
+            return view('resetpassword')
                 ->withErrors($validatedData)
                 ->with('military_number', $request->military_number)
-                ->with('firstlogin',$request->firstlogin);
+                ->with('firstlogin', $request->firstlogin);
 
-                // return back();
-            }
-            $user = User::where('military_number', $request->military_number)->first(); 
+            // return back();
+        }
+        $user = User::where('military_number', $request->military_number)->first();
 
-            if (Hash::check($request->password, $user->password)) {
-                return view('resetpassword')
-                    ->withErrors('لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية')
-                    ->with('military_number', $request->military_number)
-                    ->with('firstlogin',$request->firstlogin);
-            } 
-            if($request->firstlogin == 1)
-            {
-                // $user = User::where('military_number', $request->military_number)->first();
-                $user->token = "logined";
-                $user->password = Hash::make($request->password);
-                $user->save();
-                return redirect()->route('welcome');
-            }
-            else{  
-                
+        if (Hash::check($request->password, $user->password)) {
+            return view('resetpassword')
+                ->withErrors('لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية')
+                ->with('military_number', $request->military_number)
+                ->with('firstlogin', $request->firstlogin);
+        }
+        if ($request->firstlogin == 1) {
+            // $user = User::where('military_number', $request->military_number)->first();
+            $user->token = "logined";
+            $user->password = Hash::make($request->password);
+            $user->save();
+            return redirect()->route('welcome');
+        } else {
+
             if ($user) {
                 $set = '123456789';
                 $code = substr(str_shuffle($set), 0, 4);
@@ -262,13 +250,13 @@ class UserController extends Controller
                 $sent = $result['sent'];
                 if ($sent === 'true') {
                     // dd("true");
-                    return  view('verfication_code', compact('code', 'military_number' ,'password'));
+                    return  view('verfication_code', compact('code', 'military_number', 'password'));
                 } else {
 
                     return back()->with('error', 'سجل الدخول مرة أخرى');
                 }
             } else {
-                return back()->with('error','الرقم العسكري المقدم لا يتطابق مع سجلاتنا');
+                return back()->with('error', 'الرقم العسكري المقدم لا يتطابق مع سجلاتنا');
             }
         }
     }
