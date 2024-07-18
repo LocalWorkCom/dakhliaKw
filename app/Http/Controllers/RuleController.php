@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Rule;
 use App\Http\Requests\StoreRuleRequest;
 use App\Http\Requests\UpdateRuleRequest;
+use App\Models\Permission;
 
 class RuleController extends Controller
 {
@@ -21,7 +22,12 @@ class RuleController extends Controller
      */
     public function create()
     {
-        //
+        $allPermission = Permission::all() ;
+        // dd($allPermission);
+        return view('role.create',compact('allPermission'));
+
+        // return $dataTable->render('permission.create'  ,compact('models'));
+
     }
 
     /**
