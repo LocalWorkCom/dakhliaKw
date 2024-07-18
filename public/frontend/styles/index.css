@@ -179,7 +179,6 @@ padding: 0 !important;
 height: 220px;
 margin: 10px;
 border-radius: 20px;
-background-color: #FFF4DE;
 }
 .container{
     background-color: #FFFFFF;
@@ -509,23 +508,80 @@ color: #FFFFFF;
     height: 75px;
 }
 
-/* ******************login style ****************/
-.img-login-logo {
+
+/***************** style for categories **************/
+.btn-all {
+    width: 159px;
+    height: 45px;
+    border-radius: 10px;
+    background-color: #FAFBFD;
+    font-family: Almarai;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 26.78px;
+    text-align: center;
+    border: 0.5px solid #D7D8D9;
+}
+.wide-btn{
+    width: 200px;
+    height: 45px;
+    border-radius: 10px;
+    background-color: #FAFBFD;
+    font-family: Almarai;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 26.78px;
+    text-align: center;
+    border: 0.5px solid #D7D8D9;
+}
+.btn-all:hover{
+background-color: #f1f1f1;
+}
+.btn-all a{
+    text-decoration: none;
+}
+.btn-all img{
+    height: 25px;
+    width: 25px;
+}
+.dataTables_length{
+    display: none;
+}
+.breadcrumb-nav {
+    width: 90%;
+    margin-right: 100px;
+    background: #f5f6fa;
+    --bs-breadcrumb-divider: '>';
+}
+.breadcrumb {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 0px !important;
+    margin-bottom: 1rem;
+    list-style: none;
+    background-color: #f5f6fa;
+    height: 28px;
+    font-size: 15px;
 }
-.img-login-logo img{
-    width: 250px;
-    height: 250px;
-    
+/* .breadcrumb-item{
+    margin-inline: -10px;
 }
-.login-input{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; 
+.breadcrumb li{
+    width: 120px;
+    padding-right: 5px;
+} */
+.breadcrumb li {
+    /* width: 82px; */
+    display: contents;
+    /* padding-right: 5px; */
 }
-.login-label {
-    text-align: right; /* Ensure label text is aligned to the right */
-    margin-bottom: 5px; /* Space between label and input */
+table{
+    border-radius: 10px;
+}
+.table th{
+    width: 120px;
+    text-align: right;
+}
+.table td{
+    text-align: right;
+    color: #999999;
 }
