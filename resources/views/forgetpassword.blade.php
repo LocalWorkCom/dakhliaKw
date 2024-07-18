@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>هيئة التفتيش - تسجيل الدخول </title>
+    <title>هيئة التفتيش - نسيت كلمة السر  </title>
     <!-- Cairo Font --> 
     <script type="application/javascript" src="{{ asset('frontend/js/bootstrap.min.js')}}"></script>
 
