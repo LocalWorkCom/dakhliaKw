@@ -7,6 +7,7 @@ use App\DataTables\DepartmentDataTable;
 
 use App\Http\Requests\StoreDepartmentRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class DepartmentController extends Controller
@@ -27,8 +28,10 @@ class DepartmentController extends Controller
      */
     public function create()
     {
+        // dd(Auth::user());
         $users = User::all();
-         return view('departments.create', compact('users'));
+        $departments = departements::with('children', 'parent')->get();
+         return view('departments.create', compact('users','departments'));
     }
 
     /**
@@ -43,7 +46,11 @@ class DepartmentController extends Controller
             'manger' => 'required',
             'manger_assistance' => 'required',
         ]);
-         departements::create($request->all());
+         $departements =departements::create($request->all());
+          $departements->created_by = Auth::user()->id;
+
+          $departements->save();
+        //   dd($departements);
         return redirect()->route('departments.index')->with('success', 'Department created successfully.');
         // return response()->json($department, 201);
     }
@@ -53,7 +60,7 @@ class DepartmentController extends Controller
      */
     public function show($id)
     {
-        $department = departements::with(['manager', 'managerAssistant'])->findOrFail($id);
+        $department = departements::with(['manager', 'managerAssistant','children', 'parent'])->findOrFail($id);
         return view('departments.show', compact('department'));
     }
 
