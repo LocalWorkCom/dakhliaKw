@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,6 +23,7 @@
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
 </head>
+
 <body>
     <div class="all-nav">
         <div class="upper-navbar d-flex">
@@ -91,8 +93,8 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('Export.index') }}">
-                        <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
-                        <h6>الصادر</h6>
+                            <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
+                            <h6>الصادر</h6>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -132,6 +134,59 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
     <script>
+        $(document).ready(function() {
+
+            $("#saveExternalDepartment").on("submit", function(e) {
+
+                e.preventDefault();
+
+                // Serialize the form data
+                var formData = $(this).serialize(); // Changed to $(this)
+
+                // Submit AJAX request
+                $.ajax({
+                    url: $(this).attr('action'), // Changed to $(this)
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Handle success response
+                        console.log(response);
+                        $('#from_departement').empty();
+                        $.ajax({
+
+                            url: "{{ route('external.departments') }}",
+                            type: 'get',
+                            success: function(response) {
+                                // Handle success response
+                                var selectOptions =
+                                    '<option value="">اختر الادارة</option>';
+                                response.forEach(function(department) {
+                                    selectOptions += '<option value="' +
+                                        department.id +
+                                        '">' + department.name +
+                                        '</option>';
+                                });
+                                $('#from_departement').html(
+                                    selectOptions
+                                ); // Assuming you have a select element with id 'from_departement'
+
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle error response
+                                console.error(xhr.responseText);
+                            }
+                        });
+                        // Optionally, you can close the modal after successful save
+                        $('#extern-department').modal('hide'); // Changed modal ID
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
         function toggleDropdown() {
             var dropdownMenu = document.getElementById("dropdownMenu");
             if (dropdownMenu.style.display === "block") {
@@ -151,6 +206,7 @@
                 }
             }
         }
+
         function toggleDropdown2() {
             var dropdownMenu = document.getElementById("dropdownMenu2");
             if (dropdownMenu.style.display === "block") {
@@ -172,4 +228,5 @@
         }
     </script>
 </body>
+
 </html>

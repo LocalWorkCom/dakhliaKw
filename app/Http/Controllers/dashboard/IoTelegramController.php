@@ -79,7 +79,7 @@ class IoTelegramController extends Controller
         $external_departments = ExternalDepartment::all();
         $iotelegram = iotelegrams::find($id);
 
-        return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram'));
+        return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram', 'external_departments'));
     }
 
     /**

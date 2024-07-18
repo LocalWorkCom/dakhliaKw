@@ -33,7 +33,7 @@
                     <div class="mb-3">
                         <label for="from_departement">الجهة المرسلة:</label>
 
-                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none" id="extern-department-dev"
                             data-bs-target="#extern-department">
                             <i class="fa fa-plus"></i>
                         </button>
@@ -48,7 +48,7 @@
                     <div class="mb-3">
                         <label for="representive_id">اسم المندوب الجهة المرسلة :</label>
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                            data-bs-target="#representative">
+                            data-bs-target="#representative" id="representative-dev">
                             <i class="fa fa-plus"></i>
                         </button>
                         <select id="representive_id" name="representive_id" class="form-control" required>
@@ -284,14 +284,14 @@
 
 
                         } else {
-
                             $('#extern-department-dev').show();
                             $('#from_departement').empty();
                             $.ajax({
-
+                                
                                 url: "{{ route('external.departments') }}",
                                 type: 'get',
                                 success: function(response) {
+                                    console.log(response);
                                     // Handle success response
                                     var selectOptions =
                                         '<option value="">اختر الادارة</option>';
