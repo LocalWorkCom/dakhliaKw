@@ -34,10 +34,10 @@ class outgoingsDataTable extends DataTable
             ->addColumn('action', function ($row) {
                 // $is_file = outgoing_files::where('outgoing_id', $row->id)->exists();
                 $fileCount = outgoing_files::where('outgoing_id', $row->id)->count();
-                 $is_file = $fileCount > 0;
+                 $is_file = $fileCount < 0;
                 $uploadButton = $is_file 
-                    ? '<a href="' . route('Export.upload.files', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-upload"></i>('.$fileCount.')</a>'
-                    : '<a href="' . route('Export.view.files', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-file"></i></a>';
+                    ? '<a href="' . route('Export.upload.files', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-upload"></i></a>'
+                    : '<a href="' . route('Export.view.files', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-file"></i>('.$fileCount.')</a>';
     
                 return '
                     <a href="' . route('Export.show', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>

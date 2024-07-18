@@ -30,8 +30,8 @@
                         @csrf
                         <div class="form-row">
                           <div class="form-group col-md-6">
-                            <label for="name">العنوان</label>
-                            <input type="text" class="form-control" name="name_ts"  id="name_ts" placeholder="العنوان" required>
+                            <label for="nameex">العنوان</label>
+                            <input type="text" class="form-control" name="nameex"  id="nameex" placeholder="العنوان" required>
                           </div>
                           <div class="form-group col-md-6">
                             <label for="exportnum">رقم الصادر</label>

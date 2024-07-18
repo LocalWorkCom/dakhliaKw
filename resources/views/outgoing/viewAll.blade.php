@@ -7,7 +7,7 @@
             <a href="{{ route('Export.create') }}" class="btn btn-primary mt-3">إضافة جديد</a>
         </div>
         <div class="card">
-            <div class="card-header">الواردات</div>
+            <div class="card-header">الصادرات</div>
 
             <div class="card-body">
                 <div class="mb-3">
