@@ -17,15 +17,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-block">
-                    @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                    @include('inc.flash')
                     <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-row">
