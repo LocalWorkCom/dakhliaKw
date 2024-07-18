@@ -99,42 +99,44 @@
 
   
   <!-- Modal -->
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle"> </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group col-md-12">
-                <label for="newdepart">اسم الجهه الجديده </label>
-               <input type="text" name="nameDepart" id="newdepart">
+  <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="extern-departmentLabel">إضافة جهة جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addRepresentativeForm" action="{{ route('department.ajax') }}" method="POST">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="name">الاسم:</label>
+                            <input type="text" id="name" name="name" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="desc">الوصف:</label>
+                            <input type="text" id="desc" name="desc" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone">الهاتف</label>
+                            <input type="text" id="phone" name="phone" class="form-control">
+                        </div>
+
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="button" class="btn btn-primary" id="saveExternalDepartment">حفظ</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="name">العنوان</label>
-                  <input type="text" class="form-control" name="name" id="name" placeholder="العنوان">
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="exportnum">رقم الصادر</label>
-                  <input type="text" class="form-control"  name="num" id="exportnum">
-                </div>
-              </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-          <button type="button" class="btn btn-primary">أضف </button>
-        </div>
-      </div>
     </div>
-  </div>
 </section>
 @endsection
 
-@push('javascripts')
+@push('scripts')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> --}}

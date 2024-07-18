@@ -122,8 +122,10 @@
                         </a>
                     </li>
                     <li style="margin-right: 10px;width: 260px;">
-                        <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo" style="">
-                        <h6>الصادر</h6>
+                        <a href="{{ route('Export.index') }}">
+                            <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo" style="">
+                            <h6>الصادر</h6>
+                        </a>
                     </li>
                     <li style="margin-right: 10px;width: 260px;">
                         <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo" style="">

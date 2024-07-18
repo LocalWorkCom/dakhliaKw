@@ -26,7 +26,7 @@
 </section>
 @endsection
 
-@push('javascripts')
+@push('scripts')
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 {{ $dataTable->scripts() }}
 @endpush
