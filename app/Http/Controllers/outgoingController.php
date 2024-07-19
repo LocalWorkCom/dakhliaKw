@@ -185,7 +185,7 @@ class outgoingController extends Controller
         $export->active = $request->active;
         $export->updated_by = auth()->id();//auth auth()->id
         $export->department_id = $request->department_id;
-        $export->created_department =  auth()->;
+        $export->created_department =  auth()->id();
 
         $export->save(); 
         // $files=outgoing_files::where('outgoing_id',$id)->get();
