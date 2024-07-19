@@ -1,11 +1,10 @@
-<<<<<<< HEAD
 /node_modules
-/public/build
-/public/hot
-/public/images
-/public/uploads
-/public/storage
-/public/index.php
+# /public/build
+# /public/hot
+# /public/images
+# /public/uploads
+# /public/storage
+# /public/index.php
 /storage/*.key
 /vendor
 /images
@@ -15,18 +14,6 @@ index.php
 .env.backup
 .env.production
 .phpunit.result.cache
-=======
-/.phpunit.cache
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/vendor
-.env
-.env.backup
-.env.production
->>>>>>> 881dbacdfc9d14f54507c4bcc6057250a55868ab
 Homestead.json
 Homestead.yaml
 auth.json
@@ -35,3 +22,13 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+
+
+
+
+
+
+
+
+
