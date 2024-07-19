@@ -222,4 +222,34 @@ class outgoingController extends Controller
     {
         //
     }
+
+    /**
+     * Test Upload
+     */
+    public function testUpload(Request $request)
+    {
+       // dd($request);
+        $test=new outgoing_files();
+        $test->outgoing_id=1;
+        $test->active=1;
+        $test->created_by=1;
+        $test->created_at=now();
+        $test->save();
+        UploadFiles('files/test', 'file_name','real_name', $test, $request->file('files'));
+        echo 'Uploaded';
+
+    }
+    /**
+     * Download file
+     */
+    public function downlaodfile(Request $request,$id)
+    {
+        $file=outgoing_files::find($id);
+       // $download=downloadFile($file->file_name,$file->real_name);
+        $file_path = public_path($file->file_name,);
+        $file_name =basename($file->real_name,);
+    
+        return response()->download($file_path, $file_name);
+        //echo 'downloaded';
+    }
 }
