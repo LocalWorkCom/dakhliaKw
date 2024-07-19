@@ -175,7 +175,7 @@ class outgoingController extends Controller
 
         // // Validate the request
         $request->validate($rules, $messages);
-        
+        $user=User::findOrFail(auth()->id());
         $export = outgoings::findOrFail( $id );
         $export->name = $request->nameex;
         $export->num = $request->num;
@@ -185,7 +185,7 @@ class outgoingController extends Controller
         $export->active = $request->active;
         $export->updated_by = auth()->id();//auth auth()->id
         $export->department_id = $request->department_id;
-        $export->created_department =  auth()->id();
+        $export->created_department =  $user->department_id;
 
         $export->save(); 
         // $files=outgoing_files::where('outgoing_id',$id)->get();

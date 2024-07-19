@@ -56,11 +56,11 @@ class outgoingsDataTable extends DataTable
     public function query(outgoings $model): QueryBuilder
     {
         return $model->newQuery()
-        ->leftJoin('users as person_to_user', 'outgoings.person_to', '=', 'person_to_user.id')
+        ->leftJoin('external_users as person_to_user', 'outgoings.person_to', '=', 'person_to_user.id')
         ->leftJoin('external_departements as external_departements', 'outgoings.department_id', '=', 'external_departements.id')
         ->where('outgoings.active', 0)
         ->select('outgoings.*', 
-                 'person_to_user.username as person_to_username',  
+                 'person_to_user.name as person_to_name',  
                  'external_departements.name as external_departements_name');
     }
 
@@ -103,7 +103,7 @@ class outgoingsDataTable extends DataTable
             Column::make('note')->title(' ملاحظات'),
             Column::make('active')->title('الحاله')->render('function() { return this.active == 1 ? "مفعل" : " مفعل"; }'),
             Column::make('person_to_username')->title(' العسكرى'),  
-            Column::make('external_departements_name')->title('الاداره الصادر منها'),  
+             Column::make('external_departements_name')->title('الاداره الصادر منها'),  
         ];
     }
 

@@ -9,4 +9,8 @@ class exportuser extends Model
 {
     use HasFactory;
     protected $table = 'export_users';
+    public function outgoingPersonTo()
+    {
+        return $this->hasMany(outgoings::class, 'person_to');
+    }
 }
