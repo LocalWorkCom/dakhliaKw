@@ -116,12 +116,13 @@ if (!function_exists('send_sms_code')) {
         $thumbnail = $request;
         $destinationPath = $path;
         $filerealname=$thumbnail->getClientOriginalName();
+       
         $filename = time() . '.' . $thumbnail->getClientOriginalExtension();
-        $destinationPath=asset($path).'/' .$filename;
-        //$thumbnail->move($destinationPath, $filename);
+       // $destinationPath=asset($path).'/' .$filename;
+        $thumbnail->move($destinationPath, $filename);
         // $thumbnail->resize(1080, 1080);
       //  $thumbnail = Image::make(public_path() . '/'.$path.'/' . $filename);
-        Storage::disk('public')->put($destinationPath, file_get_contents($thumbnail));
+        //Storage::disk('public')->put($destinationPath, file_get_contents($thumbnail));
 
         $model->$image =asset($path).'/' .$filename;
         $model->$realname =asset($path).'/' .$filerealname;

@@ -37,6 +37,12 @@ class outgoingController extends Controller
         $users = exportuser::all();
         return $users;
     }
+    public function addToArchive($id){
+        $export = outgoings::find($id);
+        $export->archive=1;
+        $export->save();
+        return redirect()->back()->with('success','تم الأضافه الى الارشيف');
+    }
     public function addUaersAjax(Request $request)
     {
         
@@ -92,26 +98,28 @@ class outgoingController extends Controller
         $export->name = $request->nameex;
         $export->num = $request->num;
         $export->note = $request->note;
+        $export->date = $request->date;
         $export->person_to = $request->person_to  ?  $request->person_to :null;
         $export->created_by = auth()->id();//auth auth()->id
         $export->active = $request->active;
         $export->updated_by = auth()->id();//auth auth()->id
         $export->department_id = $request->from_departement;
         $export->save(); 
-        $files=new outgoing_files();
-        $files->outgoing_id = $export->id;
-        $files->created_by=auth()->id();//auth auth()->id
-        $files->updated_by=auth()->id();//auth auth()->id
-        $files->active =0;
-        $files->save(); 
-
-        $file_model = outgoing_files::find($files->id);
+        
         if( $request->hasFile('files') ){
          
             if (function_exists('UploadFiles')) {
-                 //  dd('file yes');
+                  //dd($request->file('files'));
                 foreach ($request->file('files') as $file) {
-                    UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
+                    $files=new outgoing_files();
+                    $files->outgoing_id = $export->id;
+                    $files->created_by=auth()->id();//auth auth()->id
+                    $files->updated_by=auth()->id();//auth auth()->id
+                    $files->active =0;
+                    $files->save(); 
+
+                    $file_model = outgoing_files::find($files->id);
+                    UploadFiles('files/export','file_name', 'real_name', $file_model, $file);
                 }
             }
         }
@@ -180,6 +188,7 @@ class outgoingController extends Controller
         $export->name = $request->nameex;
         $export->num = $request->num;
         $export->note = $request->note;
+        $export->date = $request->date;
         $export->person_to = $request->person_to  ?  $request->person_to :null;
         $export->created_by = auth()->id();//auth auth()->id
         $export->active = $request->active;

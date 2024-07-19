@@ -14,7 +14,7 @@
                     @include('inc.flash')
                     {{-- <input type="text" id="global_search" class="form-control" placeholder="بحث ..."> --}}
                 </div>
-                {!! $dataTable->table(['class' => 'table table-bordered table-hover dataTable']) !!}
+                {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
             </div>
         </div>
     </div>
