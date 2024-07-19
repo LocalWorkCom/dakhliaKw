@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '7cd80f9a2ff2660bef58bdf507207299c1353cfe',
+        'reference' => '61cb3676e98792f16e4499d373722d131f92c989',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -400,6 +400,15 @@
                 0 => 'v10.48.16',
             ),
         ),
+        'intervention/image' => array(
+            'pretty_version' => '2.7.0',
+            'version' => '2.7.0.0',
+            'reference' => '9a8cc99d30415ec0b3f7649e1647d03a55698545',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../intervention/image',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'kodova/hamcrest-php' => array(
             'dev_requirement' => true,
             'replaced' => array(
@@ -418,7 +427,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '7cd80f9a2ff2660bef58bdf507207299c1353cfe',
+            'reference' => '61cb3676e98792f16e4499d373722d131f92c989',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

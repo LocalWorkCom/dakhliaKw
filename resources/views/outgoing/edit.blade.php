@@ -36,7 +36,7 @@
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> {{ $data->note }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="select-person-to">person_to </label>
+                            <label for="select-person-to">الشخص الصادر </label>
                             <select id="select-person-to" name="person_to" class="form-control">
                                 <option disabled> اختر من القائمه</option>
                                 @foreach ($users as $user)
@@ -55,43 +55,13 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="from_departement">الجهة المرسلة:</label>
+                            <label for="from_departement">الجهة الصادر منها:</label>
                             <select id="from_departement" name="from_departement" class="form-control" >
                                 <option value="">اختر الجهة</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}" @if($data->department_id == $item->id) selected @endif>{{ $item->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                        {{-- for show and delete the old files --}}
-
-                        {{-- @if(isset($is_file))
-            <div class="file-container">
-                @php
-                    $filePath = asset('files/export' . $file->real_name);
-                    $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-                @endphp
-
-                @if(in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
-                    <img src="{{ $filePath }}" alt="Image" width="100px">
-                @elseif($fileExtension === 'pdf')
-                    <a href="{{ $filePath }}" target="_blank">View PDF</a>
-                @else
-                    <a href="{{ $filePath }}" target="_blank">Download File</a>
-                @endif
-
-                <input type="hidden" name="existing_file_id" value="{{ $data->file_id }}">
-            </div>
-        @endif --}}
-
-                        <div class="form-row">
-                            @foreach ($is_file as $file )
-                            <div class="col-3 file-input-old">
-                                <input type="file" name="file[]" class="form-control-file " id="file1" value="{{ $file->id }}" disabled>
-                                <span id="fileName"> {{ $file->real_name}}</span>
-                                <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
-                            </div>
-                            @endforeach
                         </div>
                         <div class="form-row">
                             

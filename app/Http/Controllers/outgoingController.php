@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\outgoingsDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\exportuser;
 use App\Models\ExternalDepartment;
 use App\Models\outgoing_files;
 use App\Models\outgoings;
@@ -31,13 +32,27 @@ class outgoingController extends Controller
     public function showFiles($id){
         dd($id);
     }
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function getExternalUsersAjax()
+    {
+        $users = exportuser::all();
+        return $users;
+    }
+    public function addUaersAjax(Request $request)
+    {
+        
+        $user = new exportuser();
+        $user->military_number = $request->military_number;
+        $user->filenum = $request->filenum;
+        $user->Civil_number = $request->Civil_number;
+        $user->phone = $request->phone;
+        $user->name = $request->name;
+        $user->save();
+        return true;
+    }
     public function create()
     {
        
-        $users=User::all();
+        $users=$this->getExternalUsersAjax();
         $departments=ExternalDepartment::all();
         return view('outgoing.add', compact('users','departments'));
     }
@@ -50,7 +65,7 @@ class outgoingController extends Controller
             'nameex' => 'required|string',
             'num' => 'required|integer',
             'note' => 'nullable|string',
-            'person_to' => 'nullable|exists:users,id',
+            'person_to' => 'nullable|exists:export_users,id',
             'active' => 'required|boolean',
             'department_id' => 'nullable|exists:external_departements,id',
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
@@ -125,7 +140,7 @@ class outgoingController extends Controller
     {
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
-        $is_file = outgoing_files::where('outgoing_id', $id)->get();
+        $is_file = outgoing_files::where('outgoing_id', $id)->where('active',0)->get();
         $departments=ExternalDepartment::all();
         return view('outgoing.edit', compact('data','users','is_file','departments'));
     }
@@ -135,7 +150,7 @@ class outgoingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-       dd($request->all());
+       //dd($request->all());
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
@@ -144,7 +159,6 @@ class outgoingController extends Controller
             'person_to' => 'nullable|exists:users,id',
             'active' => 'required|boolean',
             'department_id' => 'nullable|exists:external_departements,id',
-            'file.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
 
         // // Define custom messages
@@ -157,8 +171,6 @@ class outgoingController extends Controller
             'active.required' => 'The active field is required.',
             'active.boolean' => 'The active field must be true or false.',
             'department_id.exists' => 'The selected department does not exist.',
-            'file.*.file' => 'Each file must be a valid file.',
-            'file.*.mimes' => 'Each file must be a file of type: jpg, jpeg, png, pdf',
         ];
 
         // // Validate the request
@@ -173,26 +185,32 @@ class outgoingController extends Controller
         $export->active = $request->active;
         $export->updated_by = auth()->id();//auth auth()->id
         $export->department_id = $request->department_id;
+        $export->created_department =  auth()->;
+
         $export->save(); 
-        $files=outgoing_files::where('outgoing_id',$id)->get();
-        if(count($files) > 0){
-        $files->outgoing_id = $id;
-        $files->created_by=auth()->id();//auth auth()->id
-        $files->updated_by=auth()->id();//auth auth()->id
-        $files->active =0;
-        $files->save(); 
-        $file_model = outgoing_files::find($files->id);
-        }
+        // $files=outgoing_files::where('outgoing_id',$id)->get();
+        // if(count($files) > 0){
+        //     foreach($files as $filedb){
+        //         if(!(in_array($request->file, $filedb))){
+        //             $filedb->active=1;
+        //         }
+        //     }
+        // $files->outgoing_id = $id;
+        // $files->created_by=auth()->id();//auth auth()->id
+        // $files->updated_by=auth()->id();//auth auth()->id
+        // $files->save(); 
+        // $file_model = outgoing_files::find($files->id);
+        // }
        
-        if( $request->hasFile('files') ){
+        // if( $request->hasFile('files') ){
          
-            if (function_exists('UploadFiles')) {
-                 //  dd('file yes');
-                foreach ($request->file('files') as $file) {
-                   // UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
-                }
-            }
-        }
+        //     if (function_exists('UploadFiles')) {
+        //          //  dd('file yes');
+        //         foreach ($request->file('files') as $file) {
+        //            // UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
+        //         }
+        //     }
+        // }
       
         return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }
