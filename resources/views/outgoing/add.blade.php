@@ -46,91 +46,97 @@
                             </select>
                         </div>
                        
-                        <div class="form-row">
-                                <div class="form-group col-md-6">
+                        <div class="form-group">
+                                <div class="form-row">
                                     <label for="active">الحاله</label>
-                                    <select id="active" name="active" >
-                                        <option value="1" >مفعل</option>
-                                        <option value="0">غير مفعل</option>
+                                    <select id="active" class="form-control" name="active" >
+                                        <option value="0" >مفعل</option>
+                                        <option value="1">غير مفعل</option>
                                   
                                     </select>
                                 </div>
-                                <div class="form-group col-md-6">
-                                <div class="mb-3">
-                                        <label for="from_departement">الجهة المرسلة:</label>
-                                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none" id="extern-department-dev"
-                                            data-bs-target="#extern-department">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                        <select id="from_departement" name="from_departement" class="form-control" required>
-                                            <option value="">اختر الجهة</option>
-                                            @foreach ($departments as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                            @endforeach
-                                        </select>
+                                <div class="form-row">
+                                    <label for="from_departement">الجهة المرسلة:</label>
+                                    <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none" id="extern-department-dev"
+                                        data-bs-target="#extern-department">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <select id="from_departement" name="from_departement" class="form-control" required>
+                                        <option value="">اختر الجهة</option>
+                                        @foreach ($departments as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select> 
+                               </div>
+                        </div>
+                    
+                        {{-- <div class="form-row">
+                            <div class="mb-3">
+                                <label for="files">حمل الملفات</label>
+                                <div id="fileInputs">
+                                    <div class="file-input mb-3">
+                                        <input type="file" name="files[]" class="form-control-file" required>
+                                        <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                    </div>
                                 </div>
-                               
-                               
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6" >
-                                
-                                <label for="exampleFormControlFile1"> حمل الملف </label>
-                                <input type="file" name="files[]" class="form-control-file" id="file1">
-
                             </div>
-                            <div class="form-group col-md-6" id="fileInputs">
-                                
-                                <button type="button" id="addFileInput" class="btn btn-primary">Add Another File</button>
-
-                            </div>
-                        </div>
+                        </div> --}}
                         <div class="form-row">
-                             <!-- Button trigger modal -->
+                            
+                           <div class="form-group col-md-6">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                        id="extern-department-dev" data-bs-target="#extern-department">
+                                    أضافه أداره خارجيه
+                                </button>
+                           </div>
+                           <div class="form-group col-md-6">
                             <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                    id="extern-department-dev" data-bs-target="#extern-department">
-                                أضافه أداره خارجيه
+                                    id="addFile-dev" data-bs-target="#addFile">
+                                    اضافه ملفات
                             </button>
+                            {{-- <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button> --}}
+
+                           </div>
+
                         </div>
-                            <button class="btn btn-primary" type="submit">تعديل </button>
+                         {{-- model for add files --}}
+                            <div class="modal fade" id="addFile" tabindex="-1" aria-labelledby="extern-departmentLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="extern-departmentLabel">إضافة ملفات جديدة</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-row">
+                                                <div class="mb-3">
+                                                    <label for="files">حمل الملفات</label>
+                                                    <div id="fileInputs">
+                                                        <div class="file-input mb-3">
+                                                            <input type="file" name="files[]" class="form-control-file" required>
+                                                            <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
+
+                                                <!-- Save button -->
+                                                {{-- <div class="text-end">
+                                                    <button type="submit" class="btn btn-primary">حفظ</button>
+                                                </div> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">اضافه </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    {{-- <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="extern-departmentLabel">إضافة جهة جديدة</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="addRepresentativeForm" action="{{ route('department.ajax') }}" method="POST">
-                    @csrf
-
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="name">الاسم:</label>
-                        <input type="text" id="name" name="name" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="desc">الوصف:</label>
-                        <input type="text" id="desc" name="desc" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="phone">الهاتف:</label>
-                        <input type="text" id="phone" name="phone" class="form-control">
-                    </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary" id="saveExternalDepartment">حفظ</button>
-                    </div>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
-  
+  {{-- model for add new department --}}
     <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -165,6 +171,8 @@
             </div>
         </div>
     </div>
+
+  
 </section>
 @endsection
 
@@ -175,19 +183,49 @@ $(document).ready(function() {
     let fileInputCount = 1;
             const maxFileInputs = 9;
 
-            $('#addFileInput').click(function() {
-                if (fileInputCount < maxFileInputs) {
-                    fileInputCount++;
-                    const newFileInput = `
-                        <div class="form-group">
-                            <label for="file${fileInputCount}">File ${fileInputCount}</label>
-                            <input type="file" name="files[]" id="file${fileInputCount}" class="form-control-file">
-                        </div>`;
-                    $('#fileInputs').append(newFileInput);
-                } else {
-                    alert('You can only add up to 10 files.');
+            // $('#addFileInput').click(function() {
+            //     if (fileInputCount < maxFileInputs) {
+            //         fileInputCount++;
+            //         const newFileInput = `
+            //             <div class="form-group">
+            //                 <label for="file${fileInputCount}">File ${fileInputCount}</label>
+            //                 <input type="file" name="files[]" id="file${fileInputCount}" class="form-control-file">
+            //             </div>`;
+            //         $('#fileInputs').append(newFileInput);
+            //     } else {
+            //         alert('You can only add up to 10 files.');
+            //     }
+            // });
+
+            $('#addFile').click(function() {
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount < 10) {
+                        var newInput = '<div class="file-input mb-3">' +
+                            '<input type="file" name="files[]" class="form-control-file" >' +
+                            '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
+                            '</div>';
+                        $('#fileInputs').append(newInput);
+                        checkFileCount(); // Update button states
+                    } else {
+                        alert('لا يمكنك إضافة المزيد من الملفات.');
+                    }
+                });
+
+                // Remove file input
+                $(document).on('click', '.remove-file', function() {
+                    $(this).parent('.file-input').remove();
+                    checkFileCount(); // Update button states
+
+                });
+
+                function checkFileCount() {
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount > 1) {
+                        $('.remove-file').prop('disabled', false);
+                    } else {
+                        $('.remove-file').prop('disabled', true);
+                    }
                 }
-            });
         });
 
     </script>
