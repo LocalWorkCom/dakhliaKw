@@ -10,7 +10,7 @@
         <input type="file" name="files">
         <button type="submit">Upload</button>
         </form>  -->
-        <a href="{{route('downlaodfile',[7])}}" >downlad</a>
+      <!--   <a href="{{route('downlaodfile',[7])}}" >downlad</a> -->
   </div>
   <br>
   <div class="row">

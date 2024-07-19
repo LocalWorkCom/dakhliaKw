@@ -251,7 +251,7 @@ class outgoingController extends Controller
     /**
      * Download file
      */
-    public function downlaodfile(Request $request,$id)
+    public function downlaodfile($id)
     {
         $file=outgoing_files::find($id);
        // $download=downloadFile($file->file_name,$file->real_name);
