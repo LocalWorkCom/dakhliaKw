@@ -27,12 +27,6 @@ class outgoingController extends Controller
        //return view("outgoing.viewAll");
    
     }
-    public function uploadFiles($id){
-        dd($id);
-    }
-    public function showFiles($id){
-        dd($id);
-    }
     public function getExternalUsersAjax()
     {
         $users = exportuser::all();
@@ -76,7 +70,7 @@ class outgoingController extends Controller
         $rules = [
             'nameex' => 'required|string',
             'num' => 'required|integer',
-            'note' => 'nullable|string',
+            'note' => 'required|string',
             'person_to' => 'nullable|exists:export_users,id',
             'active' => 'required|boolean',
             'department_id' => 'nullable|exists:external_departements,id',
@@ -85,31 +79,32 @@ class outgoingController extends Controller
 
         // // Define custom messages
         $messages = [
-            'nameex.required' => 'The name field is required.',
-            'nameex.string' => 'The name must be a string.',
-            'num.required' => 'The number field is required.',
-            'num.integer' => 'The number must be an integer.',
-            'person_to.exists' => 'The selected person does not exist.',
-            'active.required' => 'The active field is required.',
-            'active.boolean' => 'The active field must be true or false.',
-            'department_id.exists' => 'The selected department does not exist.',
+            'nameex.required' => 'يجب ادخال عنوان الصادر',
+            'num.required' => 'يجب ادخال رقم الصادر',
+            'num.integer' => 'يجب ان يكون رقم الصادر ارقام فقط',
+            'note.required' =>'يجب ادخال الملاحظات الخاصه بالصادر',
+            'person_to.exists' => 'هذا المستخدم ليس متاح ',
+            'active.required' => 'يجب ادخال حاله الصادر',
+            'department_id.exists' => 'هذا القسم غير متاح',
             'files.*.file' => 'Each file must be a valid file.',
-            'files.*.mimes' => 'Each file must be a file of type: jpg, jpeg, png, pdf',
+            'files.*.mimes' => 'يجب رفع ملفات من نوع pdf او jpg او png او jepeg',
         ];
 
         // // Validate the request
         $request->validate($rules, $messages);
         //dd( $request->validate($rules, $messages));
+        $user = User::find(auth()->id());
         $export = new outgoings();
         $export->name = $request->nameex;
         $export->num = $request->num;
         $export->note = $request->note;
         $export->date = $request->date;
         $export->person_to = $request->person_to  ?  $request->person_to :null;
-        $export->created_by = auth()->id();//auth auth()->id
+        $export->created_department = $user->department_id ;
+        $export->created_by = $user->id;//auth auth()->id
         $export->active = $request->active;
-        $export->updated_by = auth()->id();//auth auth()->id
-        $export->department_id = $request->from_departement;
+        $export->updated_by = $user->id;//auth auth()->id
+        $export->department_id = $request->from_departement ?  $request->from_departement :null;
         $export->save(); 
         
         if( $request->hasFile('files') ){
@@ -139,13 +134,15 @@ class outgoingController extends Controller
      */
     public function show(string $id)
     {
+    
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
         $is_file = outgoing_files::where('outgoing_id', $id)->get();
        
         $departments=ExternalDepartment::all();
+        //dd(view('outgoing.show'));
+        return view('outgoing.showdetail', compact('data','users','is_file','departments'));
 
-        return view('outgoing.show', compact('data','users','is_file','departments'));
     }
 
     /**
@@ -157,7 +154,7 @@ class outgoingController extends Controller
         $users=User::all();
         $is_file = outgoing_files::where('outgoing_id', $id)->where('active',0)->get();
         $departments=ExternalDepartment::all();
-        return view('outgoing.edit', compact('data','users','is_file','departments'));
+        return view('outgoing.editexport', compact('data','users','is_file','departments'));
     }
 
     /**
