@@ -67,7 +67,7 @@
                     <select name="#" id="#" class=" mt-4">
                         <option value="#"> المستخدميين </option>
                         <option value="#"> الادارات </option>
-                        <option value="#"> الأعدادات </option>
+                        <option value="{{ route('setting.index') }}"> الأعدادات </option>
                         <option value="#"> الموظفين </option>
                         <option value="{{ route('Export.index') }}"> الصادر </option>
                         <option value="#"> الوارد </option>
