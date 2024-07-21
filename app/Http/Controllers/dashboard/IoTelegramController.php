@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\departements;
 use App\Models\ExternalDepartment;
 use App\Models\Io_file;
-use App\Models\io_files;
 use App\Models\Iotelegram;
 use App\Models\iotelegrams;
 use App\Models\Postman;
