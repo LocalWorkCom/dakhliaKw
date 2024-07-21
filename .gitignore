@@ -9,6 +9,8 @@
 /vendor
 /images
 /node_modules
+vendor/
+node_modules/
 .env
 .htaccess
 index.php
