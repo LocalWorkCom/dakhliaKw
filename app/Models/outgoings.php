@@ -27,7 +27,7 @@ class outgoings extends Model
     }
     public function personTo()
     {
-        return $this->belongsTo(User::class, 'person_to');
+        return $this->belongsTo(exportuser::class, 'person_to', 'id');
     }
 
     public function createdBy()

@@ -32,6 +32,10 @@
                           </div>
                         </div>
                         <div class="form-group">
+                            <label for="date">تاريخ الصادر </label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> {{ $data->note }}</textarea>
                         </div>
