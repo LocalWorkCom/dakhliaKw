@@ -4,7 +4,8 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
+class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
+
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -6941,7 +6942,6 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'Symfony\\Component\\String\\Inflector\\FrenchInflector' => __DIR__ . '/..' . '/symfony/string/Inflector/FrenchInflector.php',
         'Symfony\\Component\\String\\Inflector\\InflectorInterface' => __DIR__ . '/..' . '/symfony/string/Inflector/InflectorInterface.php',
         'Symfony\\Component\\String\\LazyString' => __DIR__ . '/..' . '/symfony/string/LazyString.php',
-        'Symfony\\Component\\String\\Resources\\WcswidthDataGenerator' => __DIR__ . '/..' . '/symfony/string/Resources/WcswidthDataGenerator.php',
         'Symfony\\Component\\String\\Slugger\\AsciiSlugger' => __DIR__ . '/..' . '/symfony/string/Slugger/AsciiSlugger.php',
         'Symfony\\Component\\String\\Slugger\\SluggerInterface' => __DIR__ . '/..' . '/symfony/string/Slugger/SluggerInterface.php',
         'Symfony\\Component\\String\\UnicodeString' => __DIR__ . '/..' . '/symfony/string/UnicodeString.php',
@@ -7352,6 +7352,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+
             $loader->prefixLengthsPsr4 = ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8::$classMap;

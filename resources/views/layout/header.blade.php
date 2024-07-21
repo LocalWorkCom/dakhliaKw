@@ -81,6 +81,15 @@
                     <div id="dropdownMenu" class="dropdown-menu">
                         <a href="{{ route('logout') }}">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
                     </div>
+                    <select name="#" id="#" class=" mt-4">
+                        <option value="#"> المستخدميين </option>
+                        <option value="{{ route('departments.index') }}"> الادارات </option>
+                        <option value="#"> التعيينات </option>
+                        <option value="#"> الموظفين </option>
+                        <option value="{{ route('Export.index') }}"> الصادر </option>
+                        <option value="#"> الوارد </option>
+                    </select>
+
                 </div>
             </div>
             
@@ -116,6 +125,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                  
                         <a href="{{ route('iotelegrams.list') }}">
                             <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
                             <h6>الوارد</h6>
