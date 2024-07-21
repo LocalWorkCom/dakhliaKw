@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit044115ff7381bbe0901dad0f0ff55c04
+class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -202,11 +202,11 @@ class ComposerStaticInit044115ff7381bbe0901dad0f0ff55c04
         ),
         'Yajra\\DataTables\\' => 
         array (
-            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
-            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
+            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
+            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
             2 => __DIR__ . '/..' . '/yajra/laravel-datatables-fractal/src',
-            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
-            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
+            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
+            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
         ),
         'Whoops\\' => 
         array (
@@ -388,8 +388,8 @@ class ComposerStaticInit044115ff7381bbe0901dad0f0ff55c04
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -7490,9 +7490,9 @@ class ComposerStaticInit044115ff7381bbe0901dad0f0ff55c04
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit044115ff7381bbe0901dad0f0ff55c04::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit044115ff7381bbe0901dad0f0ff55c04::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit044115ff7381bbe0901dad0f0ff55c04::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$classMap;
 
         }, null, ClassLoader::class);
     }
