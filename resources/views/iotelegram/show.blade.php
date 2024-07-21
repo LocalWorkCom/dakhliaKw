@@ -97,7 +97,6 @@
                                             href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
                                             class="btn btn-primary"> <i class="fa fa-download"></i></a>
 
-                                        <i></i>
                                     </a>
 
                                 </div>
@@ -112,7 +111,10 @@
                         @foreach ($iotelegram->ioFiles as $file)
                             @if ($file->file_type == 'pdf')
                                 <li class="list-group-item">
-                                    <a href="{{ asset($file->file_name) }}" target="_blank">{{ $file->file_name }}</a>
+                                    <a id="downloadButton"
+                                        href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}" target="_blank">
+                                        <i class="fa fa-download"></i> {{ basename($file->real_name) }}</a>
+
                                 </li>
                             @endif
                         @endforeach
