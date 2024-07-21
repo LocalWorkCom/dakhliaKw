@@ -11,7 +11,6 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
-use Illuminate\Support\Facades\Auth;
 
 class DepartmentDataTable extends DataTable
 {
@@ -24,10 +23,6 @@ class DepartmentDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', 'department.action')
-            // ->addColumn('departments_count', function ($row) {
-            //     if( Auth::user()->id == $row->created_by)
-            //     return $row->departments_count;
-            // })
             ->addColumn('iotelegrams_count', function ($row) {
                 return $row->iotelegrams_count;
             })
@@ -59,6 +54,7 @@ class DepartmentDataTable extends DataTable
         ->withCount('children')
         ->with(['createdBy', 'managerAssistant', 'manager', 'updatedBy'])
         ->where('parent_id', Auth::user()->department_id);
+
     }
 
     /**
@@ -93,7 +89,6 @@ class DepartmentDataTable extends DataTable
             Column::make('name')->title('الاسم'),
             Column::make('manger')->title('المدير'),
             Column::make('manger_assistance')->title('مساعد المدير'),
-            // Column::make('departments_count')->title('الاقسام'),
             Column::make('outgoings_count')->title(' الصادر'),
             Column::make('iotelegrams_count')->title('الوارد'),
             Column::computed('action')

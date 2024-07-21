@@ -18,7 +18,7 @@
             <div class="col-lg-12">
                 <div class="bg-white p-5">
                     <div >
-                        <a href="{{ route('permission.create') }}" class="btn btn-lg bg-primary text-white" dir="rtl"> اضافه جديد</a>
+                        <a href="{{ route('rule.create') }}" class="btn btn-lg bg-primary text-white" dir="rtl"> اضافه جديد</a>
                     </div>
                     <br>
 

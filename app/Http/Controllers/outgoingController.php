@@ -19,29 +19,23 @@ class outgoingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(outgoingsDataTable $dataTable, Request $request)
+    public function index(outgoingsDataTable $dataTable)
     {
        
-        $status = $request->get('status', 'active'); // Default to 'active' if not provided
-        return $dataTable->with('status', $status)->render('outgoing.viewAll');
+        return $dataTable->render('outgoing.viewAll');
        //return view("outgoing.viewAll");
    
+    }
+    public function uploadFiles($id){
+        dd($id);
+    }
+    public function showFiles($id){
+        dd($id);
     }
     public function getExternalUsersAjax()
     {
         $users = exportuser::all();
         return $users;
-    }
-    public function addToArchive($id){
-        $export = outgoings::find($id);
-        $export->active=1;
-        $export->save();
-        return redirect()->back()->with('success','تم الأضافه الى الارشيف');
-    }
-    public function showArchive(outgoingsDataTable $dataTable, Request $request){
-        $status = $request->get('status', 'inactive'); // Default to 'active' if not provided
-        return $dataTable->with('status', $status)->render('outgoing.archiveall');
-
     }
     public function addUaersAjax(Request $request)
     {
@@ -70,7 +64,7 @@ class outgoingController extends Controller
         $rules = [
             'nameex' => 'required|string',
             'num' => 'required|integer',
-            'note' => 'required|string',
+            'note' => 'nullable|string',
             'person_to' => 'nullable|exists:export_users,id',
             'active' => 'required|boolean',
             'department_id' => 'nullable|exists:external_departements,id',
@@ -79,49 +73,45 @@ class outgoingController extends Controller
 
         // // Define custom messages
         $messages = [
-            'nameex.required' => 'يجب ادخال عنوان الصادر',
-            'num.required' => 'يجب ادخال رقم الصادر',
-            'num.integer' => 'يجب ان يكون رقم الصادر ارقام فقط',
-            'note.required' =>'يجب ادخال الملاحظات الخاصه بالصادر',
-            'person_to.exists' => 'هذا المستخدم ليس متاح ',
-            'active.required' => 'يجب ادخال حاله الصادر',
-            'department_id.exists' => 'هذا القسم غير متاح',
+            'nameex.required' => 'The name field is required.',
+            'nameex.string' => 'The name must be a string.',
+            'num.required' => 'The number field is required.',
+            'num.integer' => 'The number must be an integer.',
+            'person_to.exists' => 'The selected person does not exist.',
+            'active.required' => 'The active field is required.',
+            'active.boolean' => 'The active field must be true or false.',
+            'department_id.exists' => 'The selected department does not exist.',
             'files.*.file' => 'Each file must be a valid file.',
-            'files.*.mimes' => 'يجب رفع ملفات من نوع pdf او jpg او png او jepeg',
+            'files.*.mimes' => 'Each file must be a file of type: jpg, jpeg, png, pdf',
         ];
 
         // // Validate the request
         $request->validate($rules, $messages);
         //dd( $request->validate($rules, $messages));
-        $user = User::find(auth()->id());
         $export = new outgoings();
         $export->name = $request->nameex;
         $export->num = $request->num;
         $export->note = $request->note;
-        $export->date = $request->date;
         $export->person_to = $request->person_to  ?  $request->person_to :null;
-        $export->created_department = $user->department_id ;
-        $export->created_by = $user->id;//auth auth()->id
+        $export->created_by = auth()->id();//auth auth()->id
         $export->active = $request->active;
-        $export->updated_by = $user->id;//auth auth()->id
-        $export->department_id = $request->from_departement ?  $request->from_departement :null;
+        $export->updated_by = auth()->id();//auth auth()->id
+        $export->department_id = $request->from_departement;
         $export->save(); 
-        
+        $files=new outgoing_files();
+        $files->outgoing_id = $export->id;
+        $files->created_by=auth()->id();//auth auth()->id
+        $files->updated_by=auth()->id();//auth auth()->id
+        $files->active =0;
+        $files->save(); 
+
+        $file_model = outgoing_files::find($files->id);
         if( $request->hasFile('files') ){
          
             if (function_exists('UploadFiles')) {
-                  //dd($request->file('files'));
+                 //  dd('file yes');
                 foreach ($request->file('files') as $file) {
-                    $files=new outgoing_files();
-                    $files->outgoing_id = $export->id;
-                    $files->created_by=auth()->id();//auth auth()->id
-                    $files->updated_by=auth()->id();//auth auth()->id
-                    $files->file_type=$file->getClientOriginalExtension();
-                    $files->active =0;
-                    $files->save(); 
-
-                    $file_model = outgoing_files::find($files->id);
-                    UploadFiles('files/export','file_name', 'real_name', $file_model, $file);
+                    UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
                 }
             }
         }
@@ -134,15 +124,13 @@ class outgoingController extends Controller
      */
     public function show(string $id)
     {
-    
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
-        $is_file = outgoing_files::where('outgoing_id', $id)->get();
+        $is_file = outgoing_files::where('outgoing_id', $id)->exists();
        
         $departments=ExternalDepartment::all();
-        //dd(view('outgoing.show'));
-        return view('outgoing.showdetail', compact('data','users','is_file','departments'));
 
+        return view('outgoing.show', compact('data','users','is_file','departments'));
     }
 
     /**
@@ -154,7 +142,7 @@ class outgoingController extends Controller
         $users=User::all();
         $is_file = outgoing_files::where('outgoing_id', $id)->where('active',0)->get();
         $departments=ExternalDepartment::all();
-        return view('outgoing.editexport', compact('data','users','is_file','departments'));
+        return view('outgoing.edit', compact('data','users','is_file','departments'));
     }
 
     /**
@@ -192,7 +180,6 @@ class outgoingController extends Controller
         $export->name = $request->nameex;
         $export->num = $request->num;
         $export->note = $request->note;
-        $export->date = $request->date;
         $export->person_to = $request->person_to  ?  $request->person_to :null;
         $export->created_by = auth()->id();//auth auth()->id
         $export->active = $request->active;
@@ -201,24 +188,29 @@ class outgoingController extends Controller
         $export->created_department =  $user->department_id;
 
         $export->save(); 
-        if( $request->hasFile('files') ){
+        // $files=outgoing_files::where('outgoing_id',$id)->get();
+        // if(count($files) > 0){
+        //     foreach($files as $filedb){
+        //         if(!(in_array($request->file, $filedb))){
+        //             $filedb->active=1;
+        //         }
+        //     }
+        // $files->outgoing_id = $id;
+        // $files->created_by=auth()->id();//auth auth()->id
+        // $files->updated_by=auth()->id();//auth auth()->id
+        // $files->save(); 
+        // $file_model = outgoing_files::find($files->id);
+        // }
+       
+        // if( $request->hasFile('files') ){
          
-            if (function_exists('UploadFiles')) {
-                  //dd($request->file('files'));
-                foreach ($request->file('files') as $file) {
-                    $files=new outgoing_files();
-                    $files->outgoing_id = $export->id;
-                    $files->created_by=auth()->id();//auth auth()->id
-                    $files->updated_by=auth()->id();//auth auth()->id
-                    $files->active =0;
-                    $files->file_type=$file->getClientOriginalExtension();
-                    $files->save(); 
-
-                    $file_model = outgoing_files::find($files->id);
-                    UploadFiles('files/export','file_name', 'real_name', $file_model, $file);
-                }
-            }
-        }
+        //     if (function_exists('UploadFiles')) {
+        //          //  dd('file yes');
+        //         foreach ($request->file('files') as $file) {
+        //            // UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
+        //         }
+        //     }
+        // }
       
         return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }

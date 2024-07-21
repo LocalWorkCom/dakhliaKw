@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Postman extends Model
+class io_files extends Model
 {
     use HasFactory;
-    protected $table = "postmans";
 }

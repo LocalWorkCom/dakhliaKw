@@ -2,18 +2,18 @@
 
 namespace App\DataTables;
 
-use App\Models\PermissionRole;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Spatie\Permission\Models\Permission;
-use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use App\Models\Role;
+use App\Models\Rule;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class PermissionRoleDataTable extends DataTable
+class RoleDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,8 +23,9 @@ class PermissionRoleDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            // ->addColumn('action', 'role.action')
             ->addColumn('action', function ($row) {
-                $editUrl = route('permissions_edit', $row->id);
+                $editUrl = route('rule_edit', $row->id);
                 return '
                     <a href="' . $editUrl . '" class="btn btn-sm btn-primary">Edit</a>
                 ';
@@ -32,11 +33,11 @@ class PermissionRoleDataTable extends DataTable
             ->rawColumns(['action'])
             ->setRowId('id');
     }
-    
+
     /**
      * Get the query source of dataTable.
      */
-    public function query(Permission $model): QueryBuilder
+    public function query(Rule $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -47,7 +48,7 @@ class PermissionRoleDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('permissions-table')
+                    ->setTableId('rules-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -76,8 +77,9 @@ class PermissionRoleDataTable extends DataTable
             //       ->addClass('text-center'),
             Column::make('id'),
             Column::make('name'),
-            Column::make('guard_name'),
+            // Column::make('guard_name'),
             // Column::make('created_at'),
+            // Column::make('updated_at'),
             Column::make('action'),
         ];
     }
@@ -87,6 +89,6 @@ class PermissionRoleDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'PermissionRole_' . date('YmdHis');
+        return 'Role_' . date('YmdHis');
     }
 }
