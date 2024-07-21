@@ -22,6 +22,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
+
 </head>
 
 <body>
@@ -29,14 +31,30 @@
         <div class="upper-navbar d-flex">
             <div class="second-section d-flex mx-4 col-md-9 col-sm-6">
                 <div class="dropdown">
-                    <button class="btn btn-2  mt-3" onclick="toggleDropdown()">
-                        <i class="fa-solid fa-angle-down mx-2"></i>
-                        اسم المستخدم
-                        <i class="fa-solid fa-user mx-2"></i>
+                    {{-- @if ($user->login) --}}
+                    @php
+                        $user = auth()->user();
+                    @endphp
+
+                    @if (!empty($user))
+                        <button class="btn btn-2 mt-3" onclick="toggleDropdown()">
+                            <i class="fa-solid fa-angle-down mx-2"></i>
+                            {{ $user->name }}
+                            <i class="fa-solid fa-user mx-2"></i>
+                        </button>
+                        <div id="dropdownMenu" class="dropdown-menu">
+                            <a href="{{ route('logout') }}">تسجيل خروج <i
+                                    class="fa-solid fa-right-from-bracket"></i></a>
+                        </div>
+                    @else
+                    <button class="btn btn-2 mt-3" >
+                        <a href="{{ route('login') }}" style="color: #ffffff; text-decoration:none;">سجل الدخول <i class="fa-solid fa-user mx-2"></i></a>
                     </button>
-                    <div id="dropdownMenu" class="dropdown-menu">
-                        <a href="{{ route('logout') }}">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
-                    </div>
+
+                    @endif
+
+
+
                 </div>
                 <button class="btn2 btn-2 mx-5" style="    border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
                     onclick="toggleDropdown2()">
