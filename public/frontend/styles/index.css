@@ -1,3 +1,8 @@
+body{
+    font-family: Almarai;
+  
+
+}
 .upper-navbar{
     background-color: #274373;
 }
@@ -6,6 +11,12 @@
  background-color: #FFFFFF;
 
 }
+::-webkit-scrollbar {
+    width: 5px;
+    background-color: rgba(207, 206, 206, 0.788);
+    border-radius: 20px;
+}
+    
 .navbar-nav li h6 {
     font-family: Almarai;
     font-size: 21px;
@@ -17,7 +28,7 @@
 cursor: pointer;
 }
 
-.nav-item {
+/* .nav-item {
     position: relative;
     text-decoration: none;
     color: inherit;
@@ -61,8 +72,8 @@ cursor: pointer;
 .nav-item:hover::after,
 .nav-item.active-page::after {
     height: 5px; /* Adjust thickness of underline */
-    transform: scaleX(1); /* Scale to full width on hover/active */
-}
+    /* transform: scaleX(1); Scale to full width on hover/active */
+/* } */
 
 
 
@@ -75,6 +86,29 @@ li img{
 li {
     width: 205px;
     margin-inline: 10px;
+}
+ul {
+    list-style-type: none; /* Remove default list styles */
+    padding: 0;
+}
+
+li {
+    display: inline-block; 
+    padding: 1px 2px;
+    cursor: pointer;
+    position: relative; 
+}
+li.active::after,
+li:hover::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 31%;
+    height: 4px; /* Adjust thickness of the bottom border */
+    background-color: #274373; /* Adjust color of the bottom border */
+    margin-top: 5px;
 }
 .first-section img{
     height:70px;
@@ -120,11 +154,22 @@ li {
     width: 220px !important;
     text-align: center;
 }
-#dropdownMenu2 a{
+#dropdownMenu3 a{
+    color: rgb(134, 133, 133);
+    background-color: #ffffff;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: 400;
+  }
+  #dropdownMenu2 a {
     color: red;
     background-color: #ffffff;
     font-size: 18px;
   }
+ #dropdownMenu3 a:hover{
+    color: #081d64;
+ }
+
   .dropdown-menu2 {
     display: none;
     position: absolute;
@@ -141,7 +186,23 @@ li {
     padding: 7px;
     overflow-y: scroll;
 }
-
+.dropdown-menu3 {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    top: 70px;
+    left: 710px;
+    height: 100px;
+    width: 130px !important;
+    text-align: center;
+    border-radius: 5px;
+    padding: 7px;
+    /* color: aquamarine; */
+    overflow-y: scroll;
+}
 .second-section .bell i{
 font-size: 24px;
 color: #FFFFFF;

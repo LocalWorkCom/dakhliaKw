@@ -23,12 +23,13 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
 </head>
 
 <body>
     <div class="all-nav">
         <div class="upper-navbar d-flex">
-            <div class="second-section d-flex mx-4 col-md-9 col-sm-6">
+            <div class="second-section d-flex mx-1 col-md-9 col-sm-6">
                 <div class="dropdown">
                     <button class="btn btn-2  mt-3" onclick="toggleDropdown()">
                         <i class="fa-solid fa-angle-down mx-2"></i>
@@ -96,12 +97,18 @@
                         <a href="{{ route('Export.index') }}">
                             <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
                             <h6>الصادر</h6>
+                            
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item"  onclick="toggleDropdown3()">
                         <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
                         <h6>الموظفين</h6>
+                        
                     </li>
+                    <div id="dropdownMenu3" class="dropdown-menu3">
+                        <a href="#">الاجازات</a> <hr>
+                        <a href="#">الشيفتات</a> 
+                    </div>
                     <li class="nav-item">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>التعيينات</h6>
@@ -229,6 +236,26 @@
                 }
             }
         }
+        function toggleDropdown3() {
+            var dropdownMenu = document.getElementById("dropdownMenu3");
+            if (dropdownMenu.style.display === "block") {
+                dropdownMenu.style.display = "none";
+            } else {
+                dropdownMenu.style.display = "block";
+            }
+        }
+        window.onclick = function(event) {
+            if (!event.target.matches('.btn2')) {
+                var dropdowns = document.getElementsByClassName("dropdownmenu3");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === "block") {
+                        openDropdown.style.display = "none";
+                    }
+                }
+            }
+        }
+        document.querySelector('li').classList.add('active');
     </script>
 </body>
 
