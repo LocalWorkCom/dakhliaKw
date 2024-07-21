@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\io_files;
+use App\Models\User;
+use App\Models\VacationType;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -137,4 +139,12 @@ function CheckUploadIoFiles($id)
         return true;
     }
     return false;
+}
+function getEmployees()
+{
+    return User::where('flag', 'employee')->get();
+}
+function getVactionTypes()
+{
+    return VacationType::all();
 }
