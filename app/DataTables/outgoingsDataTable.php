@@ -23,18 +23,17 @@ class outgoingsDataTable extends DataTable
         return (new EloquentDataTable($query))
            
             ->addColumn('person_to_username', function ($row) {
-                return $row->personTo->name ?? ''; // Assuming 'name' is the column in external_users
+                return $row->personTo->name ?? 'لايوجد شخص صادر له'; // Assuming 'name' is the column in external_users
             })
             ->addColumn('department_External_name', function ($row) {
-                return $row->department_External->name ?? ''; // Assuming 'name' is the column in external_users
+                return $row->department_External->name ?? 'لا يوجد قسم خارجى صادر له'; // Assuming 'name' is the column in external_users
             })
             ->addColumn('action', function ($row) {
                 // $is_file = outgoing_files::where('outgoing_id', $row->id)->exists();
                 $fileCount = outgoing_files::where('outgoing_id', $row->id)->count();
                  $is_file = $fileCount == 0;
                 $uploadButton = $is_file 
-                    ? '<a href="' . route('Export.upload.files', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-upload"></i></a>
-                     <a href="' . route('Export.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>'
+                    ? '<a href="' . route('Export.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>'
                     : '<a href="' . route('Export.view.files', $row->id) . '" class="edit btn btn-info btn-sm" ><i class="fa fa-file"></i>('.$fileCount.')</a>
                     <a href="' . route('export.archive', $row->id) . '" class="edit btn btn-info btn-sm" ><i class="fa fa-archive"></i></a>';
     
@@ -102,6 +101,8 @@ class outgoingsDataTable extends DataTable
               ->title('الخيارات')
               ->addClass('text-center'),
         Column::make('num')->title('رقم الصادر')->addClass('text-center'),
+        Column::make('note')->title('الملاحظات')->addClass('text-center'),
+        Column::make('date')->title('تايخ الصادر')->addClass('text-center'),
         Column::make('person_to_username')->title(' العسكرى')->addClass('text-center'),  
         Column::make('department_External_name')->title('الاداره الصادر منها')->addClass('text-center'),  
     ];

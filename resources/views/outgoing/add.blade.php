@@ -98,11 +98,11 @@
                         <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> </textarea>
                     </div>
                 </div>
-                <div class="form-row mx-2" dir="rtl">
+                <div class="form-row mx-2">
                     <div class="form-group col-md-12">
-                        <label for="files">الملفات:</label>
-                        <div id="fileInputs">
-                            <input type="file" name="files[]" class="form-control">
+                        <label for="files">الملفات</label>
+                        <div class="mb-2 d-flex" id="fileInputs">
+                            <input type="file" name="files[]" class="form-control" dir="rtl" style="border: none"> <br>
                             <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
 
                         </div>
@@ -261,9 +261,8 @@
                 $('#addFile').click(function() {
                     var fileCount = $('#fileInputs').find('.file-input').length;
                     if (fileCount < 10) {
-                        var newInput = '<div class="file-input mb-3">' +
-                            '<input type="file" name="files[]" class="form-control-file" >' +
-                            '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
+                        var newInput = '<div class="file-input mb-3" dir="rtl">' +
+                            '<input type="file" name="files[]" class="form-control-file" >' + 
                             '</div>';
                         $('#fileInputs').append(newInput);
                         checkFileCount(); // Update button states

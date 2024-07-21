@@ -23,9 +23,10 @@ class outgoingController extends Controller
     {
        
         $status = $request->get('status', 'active'); // Default to 'active' if not provided
-        return $dataTable->with('status', $status)->render('outgoing.viewAll');
-       //return view("outgoing.viewAll");
-   
+        // $data =$dataTable->with('status', $status);
+        // return view('outgoing.viewAll',compact('data'));
+        $view = 'outgoing.viewall';
+        return $dataTable->with('status', $status)->render($view);
     }
     public function getExternalUsersAjax()
     {
@@ -39,9 +40,13 @@ class outgoingController extends Controller
         return redirect()->back()->with('success','تم الأضافه الى الارشيف');
     }
     public function showArchive(outgoingsDataTable $dataTable, Request $request){
-        $status = $request->get('status', 'inactive'); // Default to 'active' if not provided
-        return $dataTable->with('status', $status)->render('outgoing.archiveall');
+        $status = $request->get('status', 'inactive'); // Default to 'inactive' if 
+        return $dataTable->with('status', $status)->render('outgoing.archiveAll');
 
+    }
+    public function showFiles($id){
+        
+        return view('outgoing.showfile');
     }
     public function addUaersAjax(Request $request)
     {

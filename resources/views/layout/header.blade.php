@@ -67,7 +67,7 @@
                     <select name="#" id="#" class=" mt-4">
                         <option value="#"> المستخدميين </option>
                         <option value="#"> الادارات </option>
-                        <option value="#"> التعيينات </option>
+                        <option value="#"> الأعدادات </option>
                         <option value="#"> الموظفين </option>
                         <option value="{{ route('Export.index') }}"> الصادر </option>
                         <option value="#"> الوارد </option>
@@ -103,8 +103,10 @@
                         <h6>الموظفين</h6>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('setting.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6>التعيينات</h6>
+                        <h6>الأعدادات</h6>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">

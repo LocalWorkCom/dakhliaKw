@@ -3,25 +3,38 @@
 
 @section('content')
     <div class="container">
-        <div class="mb-3">
-            <a href="{{ route('Export.create') }}" class="btn btn-primary mt-3"> </a>
+      
+<div class="row ">
+    <div class="container welcome col-11">
+        <p> ارشيف الصادر</p>
+    </div>
+</div>
 
-        </div>
-        <h2>الارشيف</h2>
-
-           
-                <div class="mb-3">
-                    @include('inc.flash')
-                    {{-- <input type="text" id="global_search" class="form-control" placeholder="بحث ..."> --}}
-                </div>
-                {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
+    <div class="container  col-11 mt-3 p-0 ">
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <button class="btn-all mt-3">
+                    <a href="{{ route('Export.index') }}" style="color:#0D992C;">رجوع<img
+                            src="{{ asset('frontend/images/add-btn')}}" alt=""></a>
+                </button>
             </div>
         </div>
     </div>
        
     
+
+        <div class="row ">
+            <div class="mb-3">
+                {{-- <input type="text" id="global_search" class="form-control" placeholder="بحث ..."> --}}
+            </div>
+            {!! $dataTable->table(['class' => 'table table-responsive table-bordered table-hover dataTable']) !!}
+        </div>
+   
+
 @endsection
 
 @push('scripts')
-    {{ $dataTable->scripts() }}
+{{ $dataTable->scripts() }}
 @endpush
+
+

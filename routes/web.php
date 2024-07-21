@@ -6,6 +6,7 @@ use App\Http\Controllers\outgoingController;
 
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
+use App\Http\Controllers\settingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -117,7 +118,9 @@ Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('tes
 Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile');
 
 //End Export routes
-
+//setting start
+Route::resource('setting', settingController::class);
+//setting end
 
 Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->name('postman.ajax');
 Route::get('postmans', [IoTelegramController::class, 'getPostmanAjax'])->name('postman.get');
