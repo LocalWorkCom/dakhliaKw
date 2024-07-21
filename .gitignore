@@ -8,9 +8,6 @@
 /storage/*.key
 /vendor
 /images
-/node_modules
-vendor/
-node_modules/
 .env
 .htaccess
 index.php
@@ -24,4 +21,4 @@ npm-debug.log
 yarn-error.log
 /.fleet
 /.idea
-/.vscod
+/.vscode
