@@ -23,18 +23,18 @@
                         <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
                             <option value="">اختر النوع</option>
                             @foreach ($vacation_types as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                <option value="{{ $item->id }}" @if ($item->id == $vacation->vacation_type_id) selected @endif>
+                                    {{ $item->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="employee_id">اسم الموظف:</label>
-
-
-                        <select id="employee_id" name="employee_id" class="form-control" required>
+                        <select id="employee_id" name="employee_id" class="form-control" required
+                            @if ($vacation->vacation_type_id == '3') disabled @endif>
                             <option value="">اختر الموظف</option>
                             @foreach ($employees as $item)
-                                <option value="{{ $item->id }}" @if ($id && $id == $item->id) selected @endif>
+                                <option value="{{ $item->id }}" @if ($vacation->id == $item->id) selected @endif>
                                     {{ $item->name }}</option>
                             @endforeach
                         </select>
@@ -43,11 +43,13 @@
 
                     <div class="mb-3">
                         <label for="date_from">تاريخ البداية:</label>
-                        <input type="date" id="date_from" name="date_from" class="form-control" required>
+                        <input type="date" id="date_from" name="date_from" class="form-control" required
+                            value="{{ $vacation->date_from }}">
                     </div>
                     <div class="mb-3">
                         <label for="date_to">تاريخ النهاية:</label>
-                        <input type="date" id="date_to" name="date_to" class="form-control">
+                        <input type="date" id="date_to" name="date_to" class="form-control"
+                            value="{{ $vacation->date_to }}">
                     </div>
 
 
@@ -68,7 +70,7 @@
 
                 $('#date_from').attr('value', today);
                 $('#date_to').attr('value', today);
-          
+
 
                 $('#vacation_type_id').change(function() {
                     var value = $('#vacation_type_id option:selected').val();
