@@ -62,7 +62,7 @@
                           </div>
                         
                         <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group">
                                     <label for="inputAddress2">الحاله</label>
                                     <select id="select-state" disabled>
                                         <option value="1" @if($data->active == 1) selected @endif >مفعل</option>
@@ -70,14 +70,20 @@
                                   
                                     </select>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    @unless ($is_file)
-                                    <label for="exampleFormControlFile1"> file upload</label>
-                                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
-                                  @endunless
-                                </div>
-                              </div>
                         </div>
+                        <div class="form-row">
+                          
+                          <div class="form-group ">
+                              @if(!empty($is_file))
+                              @foreach ($is_file as $file )
+                              <embed src="{{ asset($file->file_name) }}" width="100px" height="80px" />
+                              <a href="{{ route('downlaodfile', $file->id) }}" class="btn btn-info btn-sm" ><i class="fa fa-download"></i></a>
+                              @endforeach
+
+                            @endif
+                          </div>
+                        </div>
+                  </div>
                         
                 </div>
             </div>
