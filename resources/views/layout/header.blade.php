@@ -24,6 +24,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
+
 </head>
 
 <body dir="rtl">
@@ -34,24 +36,31 @@
                 <img class="mt-2" src="{{ asset('frontend/images/logo.svg') }}" alt="">
             </div>
             <div class="second-section d-flex mx-4 col-md-9 col-sm-6">
-               
-                <div class="input-group">
-                    <select name="#" id="#" class=" mt-4">
-                        <option value="#"> المستخدميين </option>
-                        <option value="#"> الادارات </option>
-                        <option value="#"> الموظفين </option>
-                        <option value="{{ route('Export.index') }}"> الصادر </option>
-                        <option value="#"> الوارد </option>
-                        <option value="#"> الاعدادات </option>
+                <div class="dropdown">
+                    {{-- @if ($user->login) --}}
+                    @php
+                        $user = auth()->user();
+                    @endphp
 
-                    </select>
-                    <div class="form-outline  mt-4">
-                        <input type="search" id="" class="form-control" placeholder="بحث" />
-                    </div>
-                    <button type="button" class="btn  mt-4" data-mdb-ripple-init>
-                        <i class="fas fa-search"></i>
+                    @if (!empty($user))
+                        <button class="btn btn-2 mt-3" onclick="toggleDropdown()">
+                            <i class="fa-solid fa-angle-down mx-2"></i>
+                            {{ $user->name }}
+                            <i class="fa-solid fa-user mx-2"></i>
+                        </button>
+                        <div id="dropdownMenu" class="dropdown-menu">
+                            <a href="{{ route('logout') }}">تسجيل خروج <i
+                                    class="fa-solid fa-right-from-bracket"></i></a>
+                        </div>
+                    @else
+                    <button class="btn btn-2 mt-3" >
+                        <a href="{{ route('login') }}" style="color: #ffffff; text-decoration:none;">سجل الدخول <i class="fa-solid fa-user mx-2"></i></a>
                     </button>
-                   
+
+                    @endif
+
+
+
                 </div>
                 
                 <button class="btn2 btn-2 mx-5" style="    border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
