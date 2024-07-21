@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\io_files;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,33 +12,33 @@ if (!function_exists('whats_send')) {
         // dd("ss");
         $mobile = $country_code . $mobile;
         // dd($mobile);
-        $params=array(
+        $params = array(
             'token' => 'rouxlvet3m3jl0a3',
             'to' => $mobile,
             'body' => $message
-            );
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://api.ultramsg.com/instance31865/messages/chat",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 30,
-              CURLOPT_SSL_VERIFYHOST => 0,
-              CURLOPT_SSL_VERIFYPEER => 0,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => http_build_query($params),
-              CURLOPT_HTTPHEADER => array(
+        );
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.ultramsg.com/instance31865/messages/chat",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => http_build_query($params),
+            CURLOPT_HTTPHEADER => array(
                 "content-type: application/x-www-form-urlencoded"
-              ),
-            ));
-            
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-            // dd($err);
-            curl_close($curl); 
-            return $response;
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        // dd($err);
+        curl_close($curl);
+        return $response;
     }
 }
 
@@ -65,7 +66,7 @@ if (!function_exists('send_sms_code_msg')) {
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
         curl_setopt($ch, CURLOPT_TIMEOUT, 60);
         $result = curl_exec($ch);
-        
+
         if (curl_errno($ch) !== 0) {
             error_log('cURL error when connecting to ' . $url . ': ' . curl_error($ch));
         }
@@ -76,10 +77,10 @@ if (!function_exists('send_sms_code_msg')) {
         // if ($result) {
 
         //   $status = "success";
-          
+
 
         // } else {
-          
+
         //  // echo $response;
         // }
         // return $status;
@@ -92,11 +93,11 @@ if (!function_exists('send_sms_code')) {
     {
 
         // dd("Ff");
-       $response = whats_send($phone, $msg, $country_code);
-      //  dd($ff);
-      return $response;
+        $response = whats_send($phone, $msg, $country_code);
+        //  dd($ff);
+        return $response;
 
-      //  send_sms_code_msg($msg, $phone, $country_code);
+        //  send_sms_code_msg($msg, $phone, $country_code);
     }
 }
 /**
@@ -108,33 +109,32 @@ if (!function_exists('send_sms_code')) {
  * @request => the file input request which holds the file uploading 
  */
 
- if (!function_exists('UploadFiles')) {
+if (!function_exists('UploadFiles')) {
 
-    function UploadFiles($path, $image,$realname, $model, $request)
+    function UploadFiles($path, $image, $realname, $model, $request)
     {
-    
+
         $thumbnail = $request;
         $destinationPath = $path;
-        $filerealname=$thumbnail->getClientOriginalName();
+        $filerealname = $thumbnail->getClientOriginalName();
         $filename = time() . '.' . $thumbnail->getClientOriginalExtension();
+        // $destinationPath = asset($path) . '/' . $filename;
         $thumbnail->move($destinationPath, $filename);
         // $thumbnail->resize(1080, 1080);
-        $thumbnail = Image::make(public_path() . '/'.$path.'/' . $filename);
-        
-        $model->$image =asset($path).'/' .$filename;
-        $model->$realname =asset($path).'/' .$filerealname;
+        //  $thumbnail = Image::make(public_path() . '/'.$path.'/' . $filename);
+        //Storage::move('public')->put($destinationPath, file_get_contents($thumbnail));
+
+        $model->$image = asset($path) . '/' . $filename;
+        $model->$realname = asset($path) . '/' . $filerealname;
 
         $model->save();
-    } 
     }
-
-    if (!function_exists('downloadFile')) {
-
-        function downloadFile($filename)
-        {
-        
-           
-        }
+}
+function CheckUploadIoFiles($id)
+{
+    $count = io_files::where('iotelegram_id', $id)->count();
+    if ($count > 0) {
+        return true;
     }
-
-?>
+    return false;
+}

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->integer('num');
             $table->text('note');
+            $table->foreignId('from_departement')->nullable()->references('id')->on('departements')->onDelete('cascade');
+
             $table->foreignId('person_to')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->boolean('active')->default(1);
 

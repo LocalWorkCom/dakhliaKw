@@ -39,4 +39,24 @@ class departements extends Model
         return $this->belongsTo(User::class, 'updated_by');
 
     }
+
+    public function iotelegrams()
+    {
+        return $this->hasMany(iotelegrams::class , 'from_departement');
+    }
+    public function outgoings()
+    {
+        return $this->hasMany(outgoings::class, 'created_department');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(departements::class, 'parent_id');
+    }
+
+    // Define the relationship to the child departments
+    public function children()
+    {
+        return $this->hasMany(departements::class, 'parent_id');
+    }
 }

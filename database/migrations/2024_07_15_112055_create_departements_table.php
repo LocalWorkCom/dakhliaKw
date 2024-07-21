@@ -16,11 +16,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
 
+            
+
             $table->foreignId('manger')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('manger_assistance')->nullable( )->references('id')->on('users')->onDelete('cascade');
             
             $table->foreignId('created_by')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('updated_by')->nullable( )->references('id')->on('users')->onDelete('cascade');
+            
             $table->timestamps();
             $table->softDeletes();
 
