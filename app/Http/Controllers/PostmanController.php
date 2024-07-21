@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Postman;
+use App\Models\departements;
 
 use Illuminate\Http\Request;
 
@@ -20,7 +21,8 @@ class PostmanController extends Controller
      */
     public function create()
     {
-        return view('postmans.create');
+        $departments = departements::all();
+        return view('postmans.create', compact('departments'));
     }
 
     /**

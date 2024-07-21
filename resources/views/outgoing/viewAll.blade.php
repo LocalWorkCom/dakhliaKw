@@ -2,6 +2,8 @@
 
 
 @section('content')
+    <div class="container">
+      
 <div class="row ">
     <div class="container welcome col-11">
         <p> الصـــــــــادرات</p>
@@ -15,8 +17,15 @@
                     <a href="{{ route('Export.create') }}" style="color:#0D992C;">إضافة جديد <img
                             src="{{ asset('frontend/images/addnew.svg')}}" alt=""></a>
                 </button>
+                <button class="btn-all mt-3">
+                    <a href="{{ route('Export.archive.show',['status' => 'inactive']) }}" style="color:#0D992C;">إضافة جديد <img
+                            src="{{ asset('frontend/images/addnew.svg')}}" alt=""></a>
+                </button>
             </div>
         </div>
+    </div>
+       
+    
 
         <div class="row ">
             <div class="mb-3">

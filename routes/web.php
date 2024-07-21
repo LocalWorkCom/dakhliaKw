@@ -59,7 +59,7 @@ Route::any('/reset_password', [UserController::class, 'reset_password'])->name('
 // view All Models permission
 Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {
     Route::any('/permission', [PermissionController::class, 'index'])->name('permission.index');
-    Route::any('/permission_store', [PermissionController::class, 'create'])->name('permission.create');
+    Route::any('/permission_create', [PermissionController::class, 'create'])->name('permission.create');
     Route::any('/role',[RuleController::class, 'create'])->name('rule.create');
 });
 // create All Models permission
@@ -109,7 +109,9 @@ Route::get('/Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->n
 Route::get('/Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
 Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax');
 Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users');
-Route::get('external/archive', [outgoingController::class, 'addToArchive'])->name('external.archive');
+Route::get('export/archive/{id}', [outgoingController::class, 'addToArchive'])->name('export.archive');
+Route::get('export/archive/', [outgoingController::class, 'showArchive'])->name('Export.archive.show');
+
 
 Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('testUpload');
 Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile');

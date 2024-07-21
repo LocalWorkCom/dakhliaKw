@@ -34,6 +34,7 @@ class CheckPermission
 
         // Fetch all permissions that the user has access to based on their role
         $allPermissions = Permission::whereIn('id', $permission_ids)->pluck('name')->toArray();
+        // dd($allPermissions);
 
         // Check if the user has any of the required permissions
         foreach ($permissions as $permission) {
