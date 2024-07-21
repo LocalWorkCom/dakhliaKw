@@ -147,6 +147,7 @@ Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('v
 Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store');
 Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit');
 Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update');
+Route::post('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show');
 Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete');
 
 

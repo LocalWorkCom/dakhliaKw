@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('employee_vacations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->nullable()->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('vacation_type_id')->nullable( )->references('id')->on('vacation_type')->onDelete('cascade');
+            $table->foreignId('vacation_type_id')->nullable( )->references('id')->on('vacation_types')->onDelete('cascade');
             $table->date('date_from');
             $table->date('date_to');
             $table->boolean('active')->default(1);
