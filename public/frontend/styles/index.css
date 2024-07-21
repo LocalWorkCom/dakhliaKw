@@ -73,10 +73,9 @@ li img{
 }
 
 li {
-    width: 300px;
-    /* margin-inline: 30px; */
+    width: 205px;
+    margin-inline: 10px;
 }
-
 .first-section img{
     height:70px;
     width:70px;
@@ -325,7 +324,9 @@ select option{
 list-style:circle;
 color: #999595;
 }
-
+.container-responsive{
+    display: none;
+}
 .progress {
     width: 135px;
     height: 135px;
