@@ -62,16 +62,30 @@ Route::middleware(['auth', 'check.permission:view Rule,view Permission,view depa
     Route::any('/permission', [PermissionController::class, 'index'])->name('permission.index');
     Route::any('/permission_create', [PermissionController::class, 'create'])->name('permission.create');
     Route::any('/role',[RuleController::class, 'create'])->name('rule.create');
+
+    // department
+    Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
+    Route::get('/departments/show/{department}', [DepartmentController::class, 'show'])->name('departments.show');
 });
+
+
 // create All Models permission
 Route::middleware(['auth', 'check.permission:create Permission,create Rule,create departements'])->group(function () {
     Route::any('/permission_store', [PermissionController::class, 'store'])->name('permission.store');
-    Route::any('/rule_store',[RuleController::class, 'store'])->name('rule.store');
+    Route::any('/rule_store', [RuleController::class, 'store'])->name('rule.store');
+// department
+    Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create');
+    Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
 });
 // edit All Models permission
 Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit departements'])->group(function () {
     Route::any('/permission_edit', [PermissionController::class, 'edit'])->name('permissions.edit');
-    Route::any('/rule_edit',[RuleController::class, 'edit'])->name('rule.edit');
+    Route::any('/rule_edit', [RuleController::class, 'edit'])->name('rule.edit');
+    // Route::resource('permissions', PermissionController::class);
+    // department
+    Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
+    Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
+
     Route::resource('permissions', PermissionController::class);
 });
 
@@ -89,12 +103,25 @@ Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit depa
     // Route::any('/rule_view',[RuleController::class, 'show'])->name('rule.view');
 
 // department
-    // Route::resource('departments', DepartmentController::class);
-    Route::post('departments_store', [DepartmentController::class, 'store']);
-    Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
-    Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
-    // Department routes
-    Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
+// Route::resource('departments', DepartmentController::class);
+// Route::post('departments_store', [DepartmentController::class, 'store']);
+// Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
+// Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
+// Department routes
+
+
+
+
+
+
+Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+
+
+Route::post('departments_store', [DepartmentController::class, 'store']);
+Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
+Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
+// Department routes
+Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
 
     Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create');
     Route::get('/departments/show/{department}', [DepartmentController::class, 'show'])->name('departments.show');
