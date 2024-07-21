@@ -4,7 +4,7 @@
 .navbar-nav , .navbar {
  /* margin-inline: 80px; */
  background-color: #FFFFFF;
- 
+
 }
 .navbar-nav li h6 {
     font-family: Almarai;
@@ -18,44 +18,44 @@ cursor: pointer;
 }
 
 .nav-item {
-    position: relative; 
+    position: relative;
     text-decoration: none;
-    color: inherit; 
-    transition: color 0.3s ease; 
+    color: inherit;
+    transition: color 0.3s ease;
 }
 
 .nav-item::before,
 .nav-item::after {
-    content: ''; 
+    content: '';
     position: absolute;
     left: 0;
-    width: 20%; 
-    height: 3px; 
+    width: 20%;
+    height: 3px;
     background-color: transparent;
     transition: background-color 0.3s ease;
 }
 
 .nav-item::before {
-    bottom: 0; 
+    bottom: 0;
 }
 
 .nav-item::after {
-    bottom: 0; 
-    transform: scaleX(0); 
-    transform-origin: center bottom; 
+    bottom: 0;
+    transform: scaleX(0);
+    transform-origin: center bottom;
 }
 
 .nav-item:hover::before,
 .nav-item:hover::after,
 .nav-item.active-page::before,
 .nav-item.active-page::after {
-    background-color: #032F70; 
+    background-color: #032F70;
 }
 
 .nav-item:hover::before,
 .nav-item.active-page::before {
-    height: 5px; 
-    margin-top: 150px !important; 
+    height: 5px;
+    margin-top: 150px !important;
 }
 
 .nav-item:hover::after,
@@ -68,7 +68,7 @@ cursor: pointer;
 
 li img{
     width: 30px;
-     height: 30px; 
+     height: 30px;
      margin-left: 15px;
 }
 
@@ -172,7 +172,7 @@ padding: 0 !important;
     width: 80px;
     border-radius: 50%;
     padding: 20px;
-    
+
 }
 .card1 , .card2 , .card3 , .card4{
     /* width: 233px; */
@@ -259,7 +259,7 @@ text-align: center;
 .card svg circle:last-of-type {
   stroke-dasharray: 625px;
   stroke-dashoffset: calc(625px - (625px * var(--percent)) / 100);
-  stroke: #3498db; 
+  stroke: #3498db;
 }
 
 .card .number {
@@ -273,7 +273,7 @@ text-align: center;
 height: 100px;
 border-radius: 20px 20px 0px 0px;
 background-color: #F4F7FD;
-box-shadow: rgba(99, 99, 99, 0.2) 0px -2px 1px -11px, 
+box-shadow: rgba(99, 99, 99, 0.2) 0px -2px 1px -11px,
 rgba(99, 99, 99, 0.2) -2px 0px 4px -3px,
  rgba(99, 99, 99, 0.2) 2px 0px 4px -2px;
 }
@@ -283,9 +283,9 @@ height: 50px;
 
 }
 .header-side {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .header-side p {
     font-family: Almarai;
@@ -469,12 +469,12 @@ color: #999595;
     justify-content: center;
     align-items: center;
   }
-  
+
   .name {
-    text-align: center; 
+    text-align: center;
     padding: 30px;
-    display: block; 
-    width: 300px; 
+    display: block;
+    width: 300px;
   }
   .name p{
     font-family: Almarai;
@@ -501,7 +501,7 @@ color: #FFFFFF;
   }
   .navbar-toggler {
     background-color: #ffffff;
-    color: #032F70; 
+    color: #032F70;
     box-shadow: #032F70;
   }
   .header-side {
@@ -534,13 +534,13 @@ color: #FFFFFF;
     text-align: center;
     border: 0.5px solid #D7D8D9;
 }
-.btn-all:hover{
+.btn-all:hover , .wide-btn:hover{
 background-color: #f1f1f1;
 }
 .btn-all a{
     text-decoration: none;
 }
-.btn-all img{
+.btn-all img , .wide-btn img{
     height: 25px;
     width: 25px;
 }
@@ -560,21 +560,23 @@ background-color: #f1f1f1;
     list-style: none;
     background-color: #f5f6fa;
     height: 28px;
-    font-size: 15px;
 }
-/* .breadcrumb-item{
-    margin-inline: -10px;
+.breadcrumb a{
+text-decoration: none;
+color: #081d64;
+padding-right: 10px;
+font-size: 18px;
 }
-.breadcrumb li{
-    width: 120px;
-    padding-right: 5px;
-} */
+.breadcrumb-item.active a {
+    color: #878686;
+  }
+  .breadcrumb a:hover{
+color: #878686;
+  }
 .breadcrumb li {
-    /* width: 82px; */
     display: contents;
-    /* padding-right: 5px; */
 }
-table{
+.table{
     border-radius: 10px;
 }
 .table th{
@@ -585,3 +587,19 @@ table{
     text-align: right;
     color: #999999;
 }
+.form-group input , .form-group textarea , .form-group select{
+border-radius: 10px !important;
+text-align: center;
+}
+.form-group label {
+    font-family: Almarai;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 26.78px;
+    text-align: right;
+display: flex;
+justify-content: flex-end;
+padding-right: 20px;
+}
+
+
