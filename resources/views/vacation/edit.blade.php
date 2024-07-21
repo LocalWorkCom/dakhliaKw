@@ -23,16 +23,15 @@
                         <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
                             <option value="">اختر النوع</option>
                             @foreach ($vacation_types as $item)
-                                <option value="{{ $item->id }}" @if ($item->id == $vacation->id) selected @endif>
+                                <option value="{{ $item->id }}" @if ($item->id == $vacation->vacation_type_id) selected @endif>
                                     {{ $item->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="employee_id">اسم الموظف:</label>
-
-
-                        <select id="employee_id" name="employee_id" class="form-control" required>
+                        <select id="employee_id" name="employee_id" class="form-control" required
+                            @if ($vacation->vacation_type_id == '3') disabled @endif>
                             <option value="">اختر الموظف</option>
                             @foreach ($employees as $item)
                                 <option value="{{ $item->id }}" @if ($vacation->id == $item->id) selected @endif>
