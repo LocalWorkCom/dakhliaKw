@@ -33,7 +33,7 @@ use App\Http\Controllers\PostmanController;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('welcome');
+})->name('home');
 
 Route::get('/login', function () {
     return view('login');
@@ -42,7 +42,17 @@ Route::get('/login', function () {
 
 
 //  Auth verfication_code
-Route::post('/create', [UserController::class, 'store'])->name('create');
+Route::middleware(['auth'])->group(function () {
+    // Route::any('/user', [UserController::class, 'index'])->name('user.index');
+    Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index');
+    Route::get('api/users/{id}', [UserController::class, 'getUsers'])->name('api.users');
+    Route::get('/users_create/{id}', [UserController::class, 'create'])->name('user.create');
+    Route::post('/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('/employees/{id}', [UserController::class, 'index'])->name('user.employees');
+
+});
+
+
 Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::any('/logout', [UserController::class, 'logout'])->name('logout');
 Route::post('/verfication_code', [UserController::class, 'verfication_code'])->name('verfication_code');
