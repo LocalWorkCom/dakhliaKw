@@ -5,6 +5,7 @@
 namespace Composer\Autoload;
 
 class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
+
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -202,11 +203,11 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         ),
         'Yajra\\DataTables\\' => 
         array (
-            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
-            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
+            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
+            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
             2 => __DIR__ . '/..' . '/yajra/laravel-datatables-fractal/src',
-            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
-            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
+            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
+            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
         ),
         'Whoops\\' => 
         array (
@@ -388,8 +389,8 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -596,6 +597,7 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         'App\\DataTables\\IoTelegramDataTable' => __DIR__ . '/../..' . '/app/DataTables/IoTelegramDataTable.php',
         'App\\DataTables\\PermissionRoleDataTable' => __DIR__ . '/../..' . '/app/DataTables/PermissionRoleDataTable.php',
         'App\\DataTables\\UsersDataTable' => __DIR__ . '/../..' . '/app/DataTables/UsersDataTable.php',
+        'App\\DataTables\\VacationDataTable' => __DIR__ . '/../..' . '/app/DataTables/VacationDataTable.php',
         'App\\DataTables\\outgoingsDataTable' => __DIR__ . '/../..' . '/app/DataTables/outgoingsDataTable.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
@@ -603,8 +605,10 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         'App\\Http\\Controllers\\PermissionController' => __DIR__ . '/../..' . '/app/Http/Controllers/PermissionController.php',
         'App\\Http\\Controllers\\PostmanController' => __DIR__ . '/../..' . '/app/Http/Controllers/PostmanController.php',
         'App\\Http\\Controllers\\RuleController' => __DIR__ . '/../..' . '/app/Http/Controllers/RuleController.php',
+        'App\\Http\\Controllers\\SettingsController' => __DIR__ . '/../..' . '/app/Http/Controllers/SettingsController.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Controllers\\dashboard\\IoTelegramController' => __DIR__ . '/../..' . '/app/Http/Controllers/dashboard/IoTelegramController.php',
+        'App\\Http\\Controllers\\dashboard\\VacationController' => __DIR__ . '/../..' . '/app/Http/Controllers/dashboard/VacationController.php',
         'App\\Http\\Controllers\\outgoingController' => __DIR__ . '/../..' . '/app/Http/Controllers/outgoingController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
@@ -622,15 +626,17 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         'App\\Http\\Requests\\StoreRuleRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StoreRuleRequest.php',
         'App\\Http\\Requests\\UpdatePermissionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdatePermissionRequest.php',
         'App\\Http\\Requests\\UpdateRuleRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateRuleRequest.php',
+        'App\\Models\\EmployeeVacation' => __DIR__ . '/../..' . '/app/Models/EmployeeVacation.php',
         'App\\Models\\ExternalDepartment' => __DIR__ . '/../..' . '/app/Models/ExternalDepartment.php',
+        'App\\Models\\Io_file' => __DIR__ . '/../..' . '/app/Models/Io_file.php',
+        'App\\Models\\Iotelegram' => __DIR__ . '/../..' . '/app/Models/Iotelegram.php',
         'App\\Models\\Permission' => __DIR__ . '/../..' . '/app/Models/Permission.php',
         'App\\Models\\Postman' => __DIR__ . '/../..' . '/app/Models/Postman.php',
         'App\\Models\\Rule' => __DIR__ . '/../..' . '/app/Models/Rule.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
+        'App\\Models\\VacationType' => __DIR__ . '/../..' . '/app/Models/VacationType.php',
         'App\\Models\\departements' => __DIR__ . '/../..' . '/app/Models/departements.php',
         'App\\Models\\exportuser' => __DIR__ . '/../..' . '/app/Models/exportuser.php',
-        'App\\Models\\io_files' => __DIR__ . '/../..' . '/app/Models/io_files.php',
-        'App\\Models\\iotelegrams' => __DIR__ . '/../..' . '/app/Models/iotelegrams.php',
         'App\\Models\\outgoing_files' => __DIR__ . '/../..' . '/app/Models/outgoing_files.php',
         'App\\Models\\outgoings' => __DIR__ . '/../..' . '/app/Models/outgoings.php',
         'App\\Policies\\PermissionPolicy' => __DIR__ . '/../..' . '/app/Policies/PermissionPolicy.php',
@@ -757,6 +763,7 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         'Database\\Seeders\\PermissionSeeder' => __DIR__ . '/../..' . '/database/seeders/PermissionSeeder.php',
         'Database\\Seeders\\RolesAndPermissionsSeeder' => __DIR__ . '/../..' . '/database/seeders/RolesAndPermissionsSeeder.php',
         'Database\\Seeders\\RuleSeeder' => __DIR__ . '/../..' . '/database/seeders/RuleSeeder.php',
+        'Database\\Seeders\\VacationTypeSeeder' => __DIR__ . '/../..' . '/database/seeders/VacationTypeSeeder.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
         'DateException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
         'DateInvalidOperationException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateInvalidOperationException.php',
@@ -7345,9 +7352,10 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$classMap;
+
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8::$classMap;
 
         }, null, ClassLoader::class);
     }

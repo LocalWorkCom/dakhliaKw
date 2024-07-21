@@ -35,7 +35,7 @@ use App\Http\Controllers\SettingsController;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('welcome');
+})->name('home');
 
 Route::get('/login', function () {
     return view('login');
@@ -89,6 +89,7 @@ Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit depa
     Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
     Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
 
+    Route::resource('permissions', PermissionController::class);
 });
 
 Route::get('/sub_departments', [DepartmentController::class, 'index_1'])->name('sub_departments.index');
@@ -121,6 +122,18 @@ Route::get('/sub_departments/create', [DepartmentController::class, 'create_1'])
 Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
 
+Route::post('departments_store', [DepartmentController::class, 'store']);
+Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
+Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
+// Department routes
+Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
+
+Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create');
+Route::get('/departments/show/{department}', [DepartmentController::class, 'show'])->name('departments.show');
+Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
+Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
+Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
+Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
 //Start Export routes
 Route::resource('Export', outgoingController::class);
@@ -179,3 +192,4 @@ Route::put('/postmans/{postman}', [PostmanController::class, 'update'])->name('p
  * Settings
  */
 Route::get('/settings', [ SettingsController::class, 'index'])->name('settings.index');
+
