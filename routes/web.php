@@ -60,7 +60,10 @@ Route::any('/reset_password', [UserController::class, 'reset_password'])->name('
 Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {
     Route::any('/permission', [PermissionController::class, 'index'])->name('permission.index');
     Route::any('/permission_create', [PermissionController::class, 'create'])->name('permission.create');
-    Route::any('/role',[RuleController::class, 'create'])->name('rule.create');
+
+    Route::any('/rule', [RuleController::class, 'index'])->name('rule.index');
+    Route::any('/rule_create',[RuleController::class, 'create'])->name('rule.create');
+
 });
 // create All Models permission
 Route::middleware(['auth', 'check.permission:create Permission,create Rule,create departements'])->group(function () {
@@ -69,9 +72,11 @@ Route::middleware(['auth', 'check.permission:create Permission,create Rule,creat
 });
 // edit All Models permission
 Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit departements'])->group(function () {
-    Route::any('/permission_edit', [PermissionController::class, 'edit'])->name('permissions.edit');
-    Route::any('/rule_edit',[RuleController::class, 'edit'])->name('rule.edit');
-    Route::resource('permissions', PermissionController::class);
+    Route::any('/permission_edit/{id}', [PermissionController::class, 'edit'])->name('permissions_edit');
+    Route::any('/rule_edit/{id}',[RuleController::class, 'edit'])->name('rule_edit');
+    Route::any('/rule_update/{id}',[RuleController::class, 'update'])->name('rule_update');
+    // Route::resource('permissions', PermissionController::class);
+    // Route::resource('rules', RuleController::class);
 });
 
 
