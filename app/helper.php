@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\EmployeeVacation;
 use App\Models\Io_file;
 use App\Models\User;
 use App\Models\VacationType;
@@ -147,4 +148,13 @@ function getEmployees()
 function getVactionTypes()
 {
     return VacationType::all();
+}
+
+function CheckStartVacationDate($id)
+{
+    $EmployeeVaction =  EmployeeVacation::find($id);
+    if ($EmployeeVaction->date_from > date('Y-m-d')) {
+        return true;
+    }
+    return false;
 }

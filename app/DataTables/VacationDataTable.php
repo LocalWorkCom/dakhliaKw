@@ -34,11 +34,16 @@ class VacationDataTable extends DataTable
 
             ->addColumn('action', 'employee_vactions.action')
             ->addColumn('action', function ($row) {
+                CheckStartVacationDate($row->id)
+
+                    ?   $deleteButton = '<a href="' . route('vacation.delete', $row->id) . '" class="delete btn btn-success btn-sm"><i class="fa fa-trash"></i></a>'
+                    :   $deleteButton   = '';
+
 
                 return
                     '<a href="' . route('vacation.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>' . '
                     <a href="' . route('vacation.show', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                    ';
+                    ' . $deleteButton . '';
             })
             ->setRowId('id');
     }

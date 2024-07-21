@@ -13,7 +13,7 @@
         <div class="card">
             <div class="card-header">الاجازات</div>
             <div class="card-body">
-                <form action="{{ route('iotelegram.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-3">
@@ -64,13 +64,6 @@
         <script>
             $(document).ready(function() {
                 // Get today's date
-                var today = new Date().toISOString().split('T')[0];
-                $('#date_from').attr('min', today);
-                $('#date_to').attr('min', today);
-
-                $('#date_from').attr('value', today);
-                $('#date_to').attr('value', today);
-
 
                 $('#vacation_type_id').change(function() {
                     var value = $('#vacation_type_id option:selected').val();

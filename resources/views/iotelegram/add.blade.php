@@ -145,7 +145,7 @@
         </div>
     </div>
 
-
+   
     <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

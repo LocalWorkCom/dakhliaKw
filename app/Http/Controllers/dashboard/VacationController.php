@@ -97,4 +97,12 @@ class VacationController extends Controller
 
         return redirect()->route('vacations.list');
     }
+    public  function delete($id)
+    {
+        $EmployeeVacation = EmployeeVacation::find($id);
+        $EmployeeVacation->delete();
+        session()->flash('success', 'تم الحذف بنجاح.');
+
+        return redirect()->route('vacations.list');
+    }
 }
