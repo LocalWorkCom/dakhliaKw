@@ -38,7 +38,5 @@
 @endsection
 
 @push('scripts')
-{{ $dataTable->scripts() }}
+    {{ $dataTable->scripts() }}
 @endpush
-
-
