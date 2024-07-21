@@ -148,7 +148,7 @@ class UserController extends Controller
                     return view('resetpassword', compact('military_number', 'firstlogin'));
                 }
                 else {
-                    return redirect()->route('welcome');
+                    return redirect()->route('home');
                 }
             }
         } else {
@@ -246,7 +246,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        return redirect()->route('welcome');
+        return redirect()->route('home');
     }
 
 
