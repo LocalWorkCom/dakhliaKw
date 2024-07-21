@@ -75,8 +75,9 @@
                     </div>
                     <br>
                     
-                    </div>
+                    
         </form>
+    </div>
         <div class="col-7 col-md-6">
                 <img src="{{asset('frontend/images/login.svg')}}" alt="background" class="background">
         </div>
