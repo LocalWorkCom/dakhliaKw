@@ -113,6 +113,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                    <a href="{{ route('sub_departments.index') }}">
+                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <h6>الاقسام</h6>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
                         <h6>المستخدمين</h6>
                     </li>
