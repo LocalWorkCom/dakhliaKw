@@ -8,11 +8,12 @@
         <div class="mb-3">
             <a href="{{ route('iotelegrams.list') }}" class="btn btn-primary mt-3">رجوع</a>
         </div>
+        @include('inc.flash')
 
         <div class="card">
             <div class="card-header">الواردات</div>
             <div class="card-body">
-                <form action="{{ route('iotelegram.update', $iotelegram->id) }}" method="POST">
+                <form action="{{ route('iotelegram.update', $iotelegram->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-3">
@@ -22,43 +23,46 @@
                     </div>
                     <div class="row" style="justify-content: space-evenly;">
                         <div class="mb-3">
-                            <input type="radio" id="intern" name="type"
-                                @if ('intern' == $iotelegram->type) checked @endif>
+                            <input type="radio" id="intern" name="type" value="in"
+                                @if ('in' == $iotelegram->type) checked @endif>
                             <label for="radio">داخلي</label>
                         </div>
                         <div class="mb-3">
-                            <input type="radio" id="extern" name="type"
-                                @if ('extern' == $iotelegram->type) checked @endif>
+                            <input type="radio" id="extern" name="type" value="out"
+                                @if ('out' == $iotelegram->type) checked @endif>
                             <label for="radio">خارجي</label>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="department_id">الجهة المرسلة:</label>
-                        <div id="extern-department-dev" style="display: none">
+                        <label for="from_departement">الجهة المرسلة:</label>
 
-                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                data-bs-target="#extern-department">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <select id="department_id" name="department_id" class="form-control">
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                            id="extern-department-dev" data-bs-target="#extern-department">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <select id="from_departement" name="from_departement" class="form-control">
                             <option value="">اختر الجهة</option>
-                            @foreach ($departments as $item)
-                                <option value="{{ $item->id }}" @if ($item->id == $iotelegram->department_id) selected @endif>
-                                    {{ $item->name }}</option>
-                            @endforeach
+                            @if ($iotelegram->type == 'in')
+                                @foreach ($departments as $item)
+                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->from_departement) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            @else
+                                @foreach ($external_departments as $item)
+                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->from_departement) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
 
                     <div class="mb-3">
 
-                        <div id="extern-department-dev" style="display: none">
 
-                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                data-bs-target="#extern-department">
-                                <i class="fa fa-plus"></i> اضافة جديد
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                            data-bs-target="#representative" id="representative-dev">
+                            <i class="fa fa-plus"></i>
+                        </button>
                         <label for="representive_id">اسم المندوب الجهة المرسلة :</label>
                         <select id="representive_id" name="representive_id" class="form-control">
                             <option value="">اختر المندوب</option>
@@ -90,8 +94,18 @@
                             @endfor
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="files">الملفات:</label>
+                        <div id="fileInputs">
+                            <div class="file-input mb-3">
+                                <input type="file" name="files[]" class="form-control-file">
+                                <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
+                    </div>
 
-                    <button type="submit" class="btn btn-primary">التالي</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
                 </form>
             </div>
         </div>
@@ -136,7 +150,7 @@
                         </div>
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="button" class="btn btn-primary" id="saveRepresentative">حفظ</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                         </div>
                     </form>
                 </div>
@@ -152,7 +166,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addRepresentativeForm" action="{{ route('department.ajax') }}" method="POST">
+                    <form id="saveExternalDepartment" action="{{ route('department.ajax') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">
@@ -170,7 +184,7 @@
 
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="button" class="btn btn-primary" id="saveExternalDepartment">حفظ</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                         </div>
                     </form>
                 </div>
@@ -180,34 +194,57 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
-                var value = $('input[name=type]').val();
-                if (value == 'intern') {
+                checkFileCount();
 
-                    $('#department_id').show();
+                var value = $('input[name="type"]:checked').val();
+                if (value == 'in') {
+                    $('#from_departement').show();
                     $('#extern-department-dev').hide();
-
                 } else {
-                    $('#department_id').hide();
+
                     $('#extern-department-dev').show();
-
                 }
-                $('#saveRepresentative').click(function(e) {
+                $("#addRepresentativeForm").on("submit", function(e) {
                     e.preventDefault();
 
                     // Serialize the form data
-                    var formData = $('#addRepresentativeForm').serialize();
+                    var formData = $(this).serialize(); // Changed to $(this)
 
                     // Submit AJAX request
                     $.ajax({
-                        url: $('#addRepresentativeForm').attr('action'),
+                        url: $(this).attr('action'), // Changed to $(this)
                         type: 'POST',
                         data: formData,
                         success: function(response) {
                             // Handle success response
                             console.log(response);
+                            $.ajax({
 
+                                url: "{{ route('postman.get') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر المندوب</option>';
+                                    response.forEach(function(postman) {
+                                        selectOptions += '<option value="' +
+                                            postman.id +
+                                            '">' + postman.name +
+                                            '</option>';
+                                    });
+                                    $('#representive_id').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle error response
+                                    console.error(xhr.responseText);
+                                }
+                            });
                             // Optionally, you can close the modal after successful save
-                            $('#exampleModal').modal('hide');
+                            $('#representative').modal('hide'); // Changed modal ID
                         },
                         error: function(xhr, status, error) {
                             // Handle error response
@@ -215,44 +252,101 @@
                         }
                     });
                 });
-                $('#saveExternalDepartment').click(function(e) {
-                    e.preventDefault();
 
-                    // Serialize the form data
-                    var formData = $('#saveExternalDepartment').serialize();
-
-                    // Submit AJAX request
-                    $.ajax({
-                        url: $('#saveExternalDepartment').attr('action'),
-                        type: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            // Handle success response
-                            console.log(response);
-
-                            // Optionally, you can close the modal after successful save
-                            $('#exampleModal').modal('hide');
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error response
-                            console.error(xhr.responseText);
-                        }
-                    });
-                });
-
-
+                // Additional event handler for radio button click
                 $('input[name=type]').click(function() {
-                    var value = $(this).val();
-                    if (value == 'intern') {
+                    if ($(this).is(':checked')) {
+                        var value = $(this).val();
+                        console.log(value);
+                        if (value == 'in') {
+                            $('#from_departement').show();
+                            $('#extern-department-dev').hide();
 
-                        $('#department_id').show();
-                        $('#extern-department-dev').hide();
+                            $('#from_departement').empty();
+                            $.ajax({
 
-                    } else {
-                        $('#department_id').hide();
-                        $('#extern-department-dev').show();
+                                url: "{{ route('internal.departments') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    console.log(response);
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر الادارة</option>';
+                                    response.forEach(function(department) {
+                                        selectOptions += '<option value="' + department.id +
+                                            '">' + department.name + '</option>';
+                                    });
+                                    $('#from_departement').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+                                },
+                              
+                            });
+
+                        } else {
+
+                            $('#extern-department-dev').show();
+                            $('#from_departement').empty();
+                            $.ajax({
+
+                                url: "{{ route('external.departments') }}",
+                                type: 'get',
+                                success: function(response) {
+                                    // Handle success response
+                                    var selectOptions =
+                                        '<option value="">اختر الادارة</option>';
+                                    response.forEach(function(department) {
+                                        selectOptions += '<option value="' + department.id +
+                                            '">' + department.name + '</option>';
+                                    });
+                                    $('#from_departement').html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
+
+                                    // Optionally, you can close the modal after successful save
+                                    $('#exampleModal').modal('hide');
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle error response
+                                    console.error(xhr.responseText);
+                                }
+                            });
+                        }
 
                     }
+                });
+                $('#addFile').click(function() {
+                    var files_num = $('#files_num option:selected').val();
+                    if (files_num == '') {
+                        alert("please choose file number");
+                        return;
+                    }
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount < files_num) {
+                        var newInput = '<div class="file-input mb-3">' +
+                            '<input type="file" name="files[]" class="form-control-file" required>' +
+                            '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
+                            '</div>';
+                        $('#fileInputs').append(newInput);
+                        checkFileCount(); // Update button states
+                    } else {
+                        alert('لا يمكنك إضافة المزيد من الملفات.');
+                    }
+                });
+                function checkFileCount() {
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount > 1) {
+                        $('.remove-file').prop('disabled', false);
+                    } else {
+                        $('.remove-file').prop('disabled', true);
+                    }
+                }
+                // Remove file input
+                $(document).on('click', '.remove-file', function() {
+                    $(this).parent('.file-input').remove();
+                    checkFileCount(); // Update button states
+
                 });
             });
         </script>

@@ -1,10 +1,6 @@
 @extends('layout.header')
 
 @push('style')
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" /> 
-
 @endpush
 
 @section('content')
@@ -21,21 +17,26 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-block">
-                    <form action="{{ route('Export.store') }}" method="POST">
+                    @include('inc.flash')
+                    <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-row">
                           <div class="form-group col-md-6">
-                            <label for="name">العنوان</label>
-                            <input type="text" class="form-control" name="name"  id="name" placeholder="العنوان">
+                            <label for="nameex">العنوان</label>
+                            <input type="text" class="form-control" name="nameex"  id="nameex" placeholder="العنوان" required>
                           </div>
                           <div class="form-group col-md-6">
                             <label for="exportnum">رقم الصادر</label>
-                            <input type="text" class="form-control"  name="num" id="exportnum">
+                            <input type="text" class="form-control"  name="num" id="exportnum" required>
                           </div>
                         </div>
                         <div class="form-group">
+                            <label for="date">تاريخ الصادر </label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
-                            <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> </textarea>
                         </div>
                         <div class="form-group">
                             <label for="select-person-to">person_to </label>
@@ -43,84 +44,111 @@
                                 <option disabled> اختر من القائمه</option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}">
-                                        {{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})
+                                        {{ $user->name }}  (الرقم العسكرى : {{ $user->military_number }})
                                     </option>
                                 @endforeach
                             </select>
                         </div>
+                       
                         <div class="form-group">
-                            <label for="select-created_by">created_by </label>
-                            <select id="select-created_by" name="created_by" class="form-control">
-                                <option disabled> اختر من القائمه</option>
-                                @foreach ($users as $user )
-                                <option value="{{ $user->id }}" >{{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="select-updated_by">updated_by </label>
-                            <select id="select-updated_by" name="updated_by" class="form-control" >
-                                <option disabled selected> اختر من القائمه</option>
-                                @foreach ($users as $user )
-                                <option value="{{ $user->id }}" >{{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                
-                        <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-row">
                                     <label for="active">الحاله</label>
-                                    <select id="active" name="active" >
-                                        <option value="1" >مفعل</option>
-                                        <option value="0">غير مفعل</option>
+                                    <select id="active" class="form-control" name="active" >
+                                        <option value="0" >مفعل</option>
+                                        <option value="1">غير مفعل</option>
                                   
                                     </select>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="active">الاداره الخارجيه</label>
-                                    <select id="active" name="department" >
-                                        <option value="1" >اختر الاداره</option>
-                                        @foreach ($departments as $department )
-                                        <option value="{{ $department->id }}" >{{ $department->name }} </option>
+                                <div class="form-row">
+                                    <label for="from_departement">الجهة المرسلة:</label>
+                                    <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none" id="extern-department-dev"
+                                        data-bs-target="#extern-department">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <select id="from_departement" name="from_departement" class="form-control" >
+                                        <option value="">اختر الجهة</option>
+                                        @foreach ($departments as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                                         @endforeach
-                                  
-                                    </select>
-                                    <div class="invalid-feedback">Example invalid custom file feedback</div>
+                                    </select> 
+                               </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="files">الملفات:</label>
+                            <div id="fileInputs">
+                                <div class="file-input mb-3">
+                                    <input type="file" name="files[]" class="form-control-file" >
+                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
                                 </div>
-                               
-                               
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-6" >
-                                
-                                <label for="exampleFormControlFile1"> حمل الملف </label>
-                                <input type="file" name="file[]" class="form-control-file" id="file1">
-
+                            
+                           <div class="form-group col-md-4">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                        id="extern-department-dev" data-bs-target="#extern-department">
+                                    أضافه أداره خارجيه
+                                </button>
+                           </div>
+                           <div class="form-group col-md-5">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                        id="extern-user-dev" data-bs-target="#extern-user">
+                                    أضافه شخص صادر خارجى 
+                                </button>   
                             </div>
-                            <div class="form-group col-md-6" id="fileInputs">
-                                
-                                <button type="button" id="addFileInput" class="btn btn-primary">Add Another File</button>
+                       </div>
+                           {{-- <div class="form-group col-md-2">
+                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                    id="addFile-dev" data-bs-target="#addFile">
+                                    اضافه ملفات
+                            </button> --}}
+                            {{-- <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button> --}}
 
-                            </div>
+                           </div>
+
                         </div>
-                        <div class="form-row">
-                             <!-- Button trigger modal -->
-                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                                أضافه أداره خارجيه
-                               </button>
-                        </div>
-                            <button class="btn btn-primary" type="submit">تعديل </button>
+                         {{-- model for add files --}}
+                            {{-- <div class="modal fade" id="addFile" tabindex="-1" aria-labelledby="extern-departmentLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="extern-departmentLabel">إضافة ملفات جديدة</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-row">
+                                                <div class="mb-3">
+                                                    <label for="files">حمل الملفات</label>
+                                                    <div id="fileInputs">
+                                                        <div class="file-input mb-3">
+                                                            <input type="file" name="files[]" class="form-control-file" required>
+                                                            <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
+
+                                                <!-- Save button -->
+                                                {{-- <div class="text-end">
+                                                    <button type="submit" class="btn btn-primary">حفظ</button>
+                                                </div> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            {{-- </div> --}} 
+                            <button class="btn btn-primary" type="submit">اضافه </button>
                     </form>
                 </div>
+                </form>
             </div>
         </div>
     </div>
-
-
-  
-  <!-- Modal -->
-  <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel"
+  {{-- model for add new department --}}
+    <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -129,86 +157,160 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addRepresentativeForm" action="{{ route('department.ajax') }}" method="POST">
+                    <form id="saveExternalDepartment" action="{{ route('department.ajax') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">
                             <label for="name">الاسم:</label>
-                            <input type="text" id="name" name="name" class="form-control">
+                            <input type="text" id="name" name="name" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="desc">الوصف:</label>
-                            <input type="text" id="desc" name="desc" class="form-control">
+                            <input type="text" id="desc" name="desc" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="phone">الهاتف</label>
-                            <input type="text" id="phone" name="phone" class="form-control">
+                            <input type="text" id="phone" name="phone" class="form-control" required>
                         </div>
 
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="button" class="btn btn-primary" id="saveExternalDepartment">حفظ</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+   {{-- model for add new user --}}
+   <div class="modal fade" id="extern-user" tabindex="-1" aria-labelledby="extern-departmentLabel"
+      aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h5 class="modal-title" id="extern-departmentLabel">إضافة شخص صادر جديدة</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           <div class="modal-body">
+               <form id="saveExternalUser" action="{{ route('userexport.ajax') }}" method="POST">
+                   @csrf
+
+                   <div class="mb-3">
+                        <label for="nameus"> الاسم</label>
+                        <input type="text" id="nameus" name="name" class="form-control" required>
+                        </div>
+                    <div class="mb-3">
+                        <label for="phone">الهاتف</label>
+                        <input type="text" id="phone" name="phone" class="form-control" required>
+                    </div>
+                   <div class="mb-3">
+                       <label for="military_number">رقم العسكرى:</label>
+                       <input type="text" id="military_number" name="military_number" class="form-control" required>
+                   </div>
+                   <div class="mb-3">
+                       <label for="filenum">رقم الملف:</label>
+                       <input type="text" id="filenum" name="filenum" class="form-control" required>
+                   </div>
+                   <div class="mb-3">
+                       <label for="Civil_number">رقم الهويه</label>
+                       <input type="text" id="Civil_number" name="Civil_number" class="form-control" required>
+                   </div>
+
+                   <!-- Save button -->
+                   <div class="text-end">
+                       <button type="submit" class="btn btn-primary">حفظ</button>
+                   </div>
+               </form>
+           </div>
+       </div>
+   </div>
+</div>
 </section>
 @endsection
 
 @push('scripts')
-{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
-{{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> --}}
- {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> --}}
- {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
-{{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
-
     <script> 
-     $(document).ready(function() {
-            let fileInputCount = 1;
-            const maxFileInputs = 9;
+            $(document).ready(function() {
 
-            $('#addFileInput').click(function() {
-                if (fileInputCount < maxFileInputs) {
-                    fileInputCount++;
-                    const newFileInput = `
-                        <div class="form-group">
-                            <label for="file${fileInputCount}">File ${fileInputCount}</label>
-                            <input type="file" name="files[]" id="file${fileInputCount}" class="form-control-file">
-                        </div>`;
-                    $('#fileInputs').append(newFileInput);
-                } else {
-                    alert('You can only add up to 10 files.');
-                }
+            $("#saveExternalUser").on("submit", function(e) {
+                e.preventDefault();
+                // Serialize the form data
+                var formData = $(this).serialize(); // Changed to $(this)
+                // Submit AJAX request
+                $.ajax({
+                    url: $(this).attr('action'), // Changed to $(this)
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#select-person-to').empty();
+                        $.ajax({
+
+                            url: "{{ route('external.users') }}",
+                            type: 'get',
+                            success: function(response) {
+                                // Handle success response
+                                var selectOptions =
+                                    '<option value="">اختر الشخص الصادر</option>';
+                                response.forEach(function(department) {
+                                    selectOptions += '<option value="' +
+                                        department.id +
+                                        '">' + department.name +
+                                        '</option>';
+                                });
+                                $('#select-person-to').html(
+                                    selectOptions
+                                );
+
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle error response
+                                console.error(xhr.responseText);
+                            }
+                        });
+                        // Optionally, you can close the modal after successful save
+                        $('#extern-user').modal('hide'); // Changed modal ID
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                    }
+                });
             });
-        });
-         $(document).ready(function () {
-            $('#select-person-to').selectize({
-                sortField: 'text',
-                searchField: 'text',  // Ensure the search field is specified
-                create: false  // Optional: Disable creating new items
             });
-        });
-        $(document).ready(function () {
-            $('#select-created_by').selectize({
-                sortField: 'text',
-                searchField: 'text',  // Ensure the search field is specified
-                create: false  // Optional: Disable creating new items
-            });
-        });
-        $(document).ready(function () {
-            $('#select-updated_by').selectize({
-                sortField: 'text',
-                searchField: 'text',  // Ensure the search field is specified
-                create: false  // Optional: Disable creating new items
-            });
-            $('#myModal').on('shown.bs.modal', function () {
-  $('#myInput').trigger('focus')
-})
-        });
-    
+            $(document).ready(function() {
+                let fileInputCount = 1;
+                        const maxFileInputs = 9;
+                        $('#addFile').click(function() {
+                                var fileCount = $('#fileInputs').find('.file-input').length;
+                                if (fileCount < 10) {
+                                    var newInput = '<div class="file-input mb-3">' +
+                                        '<input type="file" name="files[]" class="form-control-file" >' +
+                                        '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
+                                        '</div>';
+                                    $('#fileInputs').append(newInput);
+                                    checkFileCount(); // Update button states
+                                } else {
+                                    alert('لا يمكنك إضافة المزيد من الملفات.');
+                                }
+                            });
+
+                            // Remove file input
+                            $(document).on('click', '.remove-file', function() {
+                                $(this).parent('.file-input').remove();
+                                checkFileCount(); // Update button states
+
+                            });
+
+                            function checkFileCount() {
+                                var fileCount = $('#fileInputs').find('.file-input').length;
+                                if (fileCount > 1) {
+                                    $('.remove-file').prop('disabled', false);
+                                } else {
+                                    $('.remove-file').prop('disabled', true);
+                                }
+                            }
+                });
+
     </script>
 @endpush

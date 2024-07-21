@@ -27,9 +27,11 @@ class IoTelegramController extends Controller
     public function create()
     {
         //
-        $representives = $recieves = User::all();
+        $representives = Postman::all();
+        $recieves = User::all();
         $departments = departements::all();
-        return view('iotelegram.add', compact('representives', 'departments', 'recieves'));
+        $external_departments = ExternalDepartment::all();
+        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments'));
     }
 
     /**
@@ -37,7 +39,13 @@ class IoTelegramController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        if ($request->hasFile('files')) {
+            $request->validate([
+                'files.*' => 'mimes:jpeg,png,pdf|max:2048', // Adjust validation rules as needed
+            ]);
+        }
+
         $iotelegram = new iotelegrams();
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;
@@ -45,10 +53,33 @@ class IoTelegramController extends Controller
         $iotelegram->date = $request->date;
         $iotelegram->recieved_by = $request->recieved_by;
         $iotelegram->files_num = $request->files_num;
-        $iotelegram->created_by = auth()->id;
+        $iotelegram->created_by = auth()->id();
+        $iotelegram->created_departement = auth()->user()->department_id;
         $iotelegram->save();
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                // You can modify the UploadFiles function call according to your needs
+                $io_file = new io_files();
+                $io_file->iotelegram_id = $iotelegram->id;
+                $io_file->created_by = auth()->id();
+                $io_file->updated_by = auth()->id();
+                $io_file->save();
+                if ($iotelegram->type == 'in') {
+                    $path = 'io_files/internal';
+                } else {
+                    $path = 'io_files/external';
+                }
+                if ($file->getClientOriginalExtension() == 'pdf') {
+                    $io_file->file_type = 'pdf';
+                } else {
+                    $io_file->file_type = 'image';
+                }
+                UploadFiles($path, 'file_name', 'real_name', $io_file, $file);
+            }
+        }
+        session()->flash('success', 'تم الحفظ بنجاح.');
 
-        return redirect()->back()->with(['success', 'Done']);
+        return redirect()->route('iotelegrams.list');
     }
 
     /**
@@ -58,7 +89,12 @@ class IoTelegramController extends Controller
     {
         //
         $iotelegram = iotelegrams::find($id);
-        return view('iotelegram.show', compact('iotelegram'));
+        $representives = Postman::all();
+        $recieves = User::all();
+        $departments = departements::all();
+        $external_departments = ExternalDepartment::all();
+
+        return view('iotelegram.show', compact('iotelegram', 'representives', 'departments', 'recieves', 'external_departments'));
     }
 
     /**
@@ -67,11 +103,13 @@ class IoTelegramController extends Controller
     public function edit($id)
     {
         //
-        $representives = $recieves = User::all();
+        $representives = Postman::all();
+        $recieves = User::all();
         $departments = departements::all();
+        $external_departments = ExternalDepartment::all();
         $iotelegram = iotelegrams::find($id);
 
-        return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram'));
+        return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram', 'external_departments'));
     }
 
     /**
@@ -87,14 +125,36 @@ class IoTelegramController extends Controller
         $iotelegram->date = $request->date;
         $iotelegram->recieved_by = $request->recieved_by;
         $iotelegram->files_num = $request->files_num;
-        $iotelegram->created_by = auth()->id;
-        $iotelegram->save();
+        $iotelegram->created_by = auth()->id();
+        $iotelegram->created_departement = auth()->user()->department_id;
 
-        return redirect()->back()->with(['success', 'Done']);
-    }
-    public function files($id)
-    {
-        $io_files = new io_files();
+        $iotelegram->save();
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                // You can modify the UploadFiles function call according to your needs
+                $io_file = new io_files();
+                $io_file->iotelegram_id = $iotelegram->id;
+                $io_file->created_by = auth()->id();
+                $io_file->updated_by = auth()->id();
+                $io_file->save();
+                if ($iotelegram->type == 'in') {
+                    $path = 'io_files/internal';
+                } else {
+                    $path = 'io_files/external';
+                }
+                if ($file->getClientOriginalExtension() == 'pdf') {
+                    $io_file->file_type = 'pdf';
+                } else {
+                    $io_file->file_type = 'image';
+                }
+                $io_file->save();
+
+                UploadFiles($path, 'file_name', 'real_name', $io_file, $file);
+            }
+        }
+        session()->flash('success', 'تم التعديل بنجاح.');
+
+        return redirect()->route('iotelegrams.list');
     }
 
     //postman
@@ -104,18 +164,60 @@ class IoTelegramController extends Controller
         $Postman->name = $request->name;
         $Postman->phone1 = $request->phone1;
         $Postman->phone2 = $request->phone2;
+        $Postman->department_id = $request->modal_department_id;
+
         $Postman->national_id = $request->national_id;
         $Postman->save();
         return true;
     }
-    //postman
+    //external department
     public function addExternalDepartmentAjax(Request $request)
     {
+
         $ExternalDepartment = new ExternalDepartment();
         $ExternalDepartment->name = $request->name;
         $ExternalDepartment->description = $request->desc;
         $ExternalDepartment->phone = $request->phone;
         $ExternalDepartment->save();
         return true;
+    }
+    //update ajax 
+    public function getExternalDepartments()
+    {
+        $ExternalDepartments = ExternalDepartment::all();
+        return $ExternalDepartments;
+    }
+
+    public function getDepartments()
+    {
+        $Departments = departements::all();
+        return $Departments;
+    }
+    //update ajax 
+
+    public function getPostmanAjax()
+    {
+        $postmans = Postman::all();
+        return $postmans;
+    }
+    public function downlaodfile($id)
+    {
+        $file = io_files::find($id);
+        // $download=downloadFile($file->file_name,$file->real_name);
+        $file_path = public_path($file->file_name);
+        $file_name = basename($file->real_name);
+
+        return response()->download($file_path, $file_name);
+        //echo 'downloaded';
+    }
+    public function AddArchive($id)
+    {
+        $iotelegram = iotelegrams::find($id);
+        $iotelegram->active = 0;
+        $iotelegram->save();
+
+        session()->flash('success', 'تم الارشفة بنجاح.');
+
+        return redirect()->route('iotelegrams.list');
     }
 }
