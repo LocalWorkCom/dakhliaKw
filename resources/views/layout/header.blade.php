@@ -103,7 +103,7 @@
                         <h6>الموظفين</h6>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('Export.index') }}">
+                        <a href="{{ route('setting.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>الأعدادات</h6>
                         </a>
