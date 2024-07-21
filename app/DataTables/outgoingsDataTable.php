@@ -36,8 +36,7 @@ class outgoingsDataTable extends DataTable
                     ? '<a href="' . route('Export.upload.files', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-upload"></i></a>
                      <a href="' . route('Export.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>'
                     : '<a href="' . route('Export.view.files', $row->id) . '" class="edit btn btn-info btn-sm" ><i class="fa fa-file"></i>('.$fileCount.')</a>
-                      <a href="' . route('external.archive', $row->id) . '" class="edit btn btn-info btn-sm" data-bs-toggle="modal"
-                                        id="extern-user-dev" data-bs-target="#extern-user" title="اضف الى الارشيف"><i class="fa fa-archive"></i></a>';
+                    <a href="' . route('export.archive', $row->id) . '" class="edit btn btn-info btn-sm" ><i class="fa fa-archive"></i></a>';
     
                 return '
                     <a href="' . route('Export.show', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
@@ -54,15 +53,20 @@ class outgoingsDataTable extends DataTable
      */
     public function query(outgoings $model): QueryBuilder
     {
-        return $model->newQuery()
-        ->with(['personTo','department_External'])
-            ->where('outgoings.active', 0)
-            ->select(
-                'outgoings.*',
-            );
-    }
-    
+        $status = $this->request()->get('status', 'active'); // Default to 'active' if not provided
 
+        if ($status === 'active') {
+            return $model->newQuery()
+                ->with(['personTo', 'department_External'])
+                ->where('outgoings.active', 0)
+                ->select('outgoings.*');
+        } else {
+            return $model->newQuery()
+                ->with(['personTo', 'department_External'])
+                ->where('outgoings.active', 1)
+                ->select('outgoings.*');
+        }
+    }
 
     /**
      * Optional method if you want to use the html builder.

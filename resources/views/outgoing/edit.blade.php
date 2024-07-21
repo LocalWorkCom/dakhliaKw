@@ -33,6 +33,163 @@
                         </div>
                         <div class="form-group">
                             <label for="date">تاريخ الصادر </label>
+                            <input type="date" id="date" name="date" class="form-control" value="{{ $data->date }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">ملاحظات </label>
+                            <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> {{ $data->note }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="select-person-to">الشخص الصادر </label>
+                            <select id="select-person-to" name="person_to" class="form-control">
+                                <option disabled> اختر من القائمه</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}" @if($data->person_to == $user->id) selected @endif>
+                                        {{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="active">الحاله</label>
+                            <select id="active" name="active" class="form-control">
+                                <option value="0" @if($data->active == 0) selected @endif >مفعل</option>
+                                <option value="1" @if($data->active == 1) selected @endif>غير مفعل</option>
+                          
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="from_departement">الجهة الصادر منها:</label>
+                            <select id="from_departement" name="from_departement" class="form-control" >
+                                <option value="">اختر الجهة</option>
+                                @foreach ($departments as $item)
+                                    <option value="{{ $item->id }}" @if($data->department_id == $item->id) selected @endif>{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="files">الملفات:</label>
+                            <div id="fileInputs">
+                                <div class="file-input mb-3">
+                                    <input type="file" name="files[]" class="form-control-file" >
+                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
+                        </div>
+                        <div class="form-row">
+                            
+                            <div class="form-group col-md-6">
+                                 <!-- Button trigger modal -->
+                                 <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                         id="extern-department-dev" data-bs-target="#extern-department">
+                                     أضافه أداره خارجيه
+                                 </button>
+                            </div>
+                         
+ 
+                         </div>
+
+                            {{-- model for add files --}}
+                            <div class="modal fade" id="addFile" tabindex="-1" aria-labelledby="extern-departmentLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="extern-departmentLabel">إضافة ملفات جديدة</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-row">
+                                                <div class="mb-3">
+                                                    <label for="files">حمل الملفات</label>
+                                                    <div id="fileInputs">
+                                                        <div class="file-input mb-3">
+                                                            <input type="file" name="files[]" class="form-control-file" >
+                                                            <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
+
+                                                <!-- Save button -->
+                                                {{-- <div class="text-end">
+                                                    <button type="submit" class="btn btn-primary">حفظ</button>
+                                                </div> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         {{-- endmodel --}}
+                       
+                            <button class="btn btn-primary" type="submit">تعديل </button>
+                    </form>
+        @include('inc.flash')
+        <form action="{{ route('Export.update', ['Export' => $data->id]) }}" method="POST"
+            enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="nameex">العنوان</label>
+                    <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
+                        value="{{ $data->name }}" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="exportnum">رقم الصادر</label>
+                    <input type="text" class="form-control" name="num" id="exportnum" value="{{ $data->num }}" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="select-person-to">person_to </label>
+                    <select id="select-person-to" name="person_to" class="form-control">
+                        <option disabled> اختر من القائمه</option>
+                        @foreach ($users as $user)
+                        <option value="{{ $user->id }}" @if($data->person_to == $user->id) selected @endif>
+                            {{ $user->username }} (الرقم العسكرى : {{ $user->military_number }})
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="from_departement">الجهة المرسلة:</label>
+                    <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                        id="extern-department-dev" data-bs-target="#extern-department">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <select id="from_departement" name="from_departement" class="form-control" required>
+                        <option value="">اختر الجهة</option>
+                        @foreach ($departments as $item)
+                        <option value="{{ $item->id }}" @if($data->department_id == $item->id) selected
+                            @endif>{{ $item->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+    </ol>
+    
+    <div class="container-fluid" style="text-align: center">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-block">
+                    @include('inc.flash')
+                    <form action="{{ route('Export.update', ['Export' => $data->id]) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <label for="nameex">العنوان</label>
+                            <input type="text" class="form-control" name="nameex"  id="nameex" placeholder="العنوان" value="{{ $data->name }}" required>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="exportnum">رقم الصادر</label>
+                            <input type="text" class="form-control"  name="num" id="exportnum" value="{{ $data->num }}" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">تاريخ الصادر </label>
                             <input type="date" id="date" name="date" class="form-control" required>
                         </div>
                         <div class="form-group">
