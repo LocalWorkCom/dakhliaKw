@@ -4,11 +4,10 @@
 @section('content')
     <div class="container">
         <div class="mb-3">
-            <a href="{{ route('Export.create') }}" class="btn btn-primary mt-3">إضافة جديد</a>
-            <a href="{{ route('Export.archive.show',['status' => 'inactive']) }}" class="btn btn-primary mt-3">عرض الارشيف </a>
+            <a href="{{ route('Export.create') }}" class="btn btn-primary mt-3"> </a>
 
         </div>
-        <h2>الصادرات</h2>
+        <h2>الارشيف</h2>
 
            
                 <div class="mb-3">

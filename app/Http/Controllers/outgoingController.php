@@ -19,10 +19,11 @@ class outgoingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(outgoingsDataTable $dataTable)
+    public function index(outgoingsDataTable $dataTable, Request $request)
     {
        
-        return $dataTable->render('outgoing.viewAll');
+        $status = $request->get('status', 'active'); // Default to 'active' if not provided
+        return $dataTable->with('status', $status)->render('outgoing.viewAll');
        //return view("outgoing.viewAll");
    
     }
@@ -39,9 +40,14 @@ class outgoingController extends Controller
     }
     public function addToArchive($id){
         $export = outgoings::find($id);
-        $export->archive=1;
+        $export->active=1;
         $export->save();
         return redirect()->back()->with('success','تم الأضافه الى الارشيف');
+    }
+    public function showArchive(outgoingsDataTable $dataTable, Request $request){
+        $status = $request->get('status', 'inactive'); // Default to 'active' if not provided
+        return $dataTable->with('status', $status)->render('outgoing.archiveall');
+
     }
     public function addUaersAjax(Request $request)
     {
@@ -115,6 +121,7 @@ class outgoingController extends Controller
                     $files->outgoing_id = $export->id;
                     $files->created_by=auth()->id();//auth auth()->id
                     $files->updated_by=auth()->id();//auth auth()->id
+                    $files->file_type=$file->getClientOriginalExtension();
                     $files->active =0;
                     $files->save(); 
 
@@ -134,7 +141,7 @@ class outgoingController extends Controller
     {
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
-        $is_file = outgoing_files::where('outgoing_id', $id)->exists();
+        $is_file = outgoing_files::where('outgoing_id', $id)->get();
        
         $departments=ExternalDepartment::all();
 
@@ -197,29 +204,24 @@ class outgoingController extends Controller
         $export->created_department =  $user->department_id;
 
         $export->save(); 
-        // $files=outgoing_files::where('outgoing_id',$id)->get();
-        // if(count($files) > 0){
-        //     foreach($files as $filedb){
-        //         if(!(in_array($request->file, $filedb))){
-        //             $filedb->active=1;
-        //         }
-        //     }
-        // $files->outgoing_id = $id;
-        // $files->created_by=auth()->id();//auth auth()->id
-        // $files->updated_by=auth()->id();//auth auth()->id
-        // $files->save(); 
-        // $file_model = outgoing_files::find($files->id);
-        // }
-       
-        // if( $request->hasFile('files') ){
+        if( $request->hasFile('files') ){
          
-        //     if (function_exists('UploadFiles')) {
-        //          //  dd('file yes');
-        //         foreach ($request->file('files') as $file) {
-        //            // UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
-        //         }
-        //     }
-        // }
+            if (function_exists('UploadFiles')) {
+                  //dd($request->file('files'));
+                foreach ($request->file('files') as $file) {
+                    $files=new outgoing_files();
+                    $files->outgoing_id = $export->id;
+                    $files->created_by=auth()->id();//auth auth()->id
+                    $files->updated_by=auth()->id();//auth auth()->id
+                    $files->active =0;
+                    $files->file_type=$file->getClientOriginalExtension();
+                    $files->save(); 
+
+                    $file_model = outgoing_files::find($files->id);
+                    UploadFiles('files/export','file_name', 'real_name', $file_model, $file);
+                }
+            }
+        }
       
         return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }

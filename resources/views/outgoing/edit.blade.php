@@ -33,7 +33,7 @@
                         </div>
                         <div class="form-group">
                             <label for="date">تاريخ الصادر </label>
-                            <input type="date" id="date" name="date" class="form-control" required>
+                            <input type="date" id="date" name="date" class="form-control" value="{{ $data->date }}" required>
                         </div>
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
@@ -67,6 +67,16 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="mb-3">
+                            <label for="files">الملفات:</label>
+                            <div id="fileInputs">
+                                <div class="file-input mb-3">
+                                    <input type="file" name="files[]" class="form-control-file" >
+                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
+                        </div>
                         <div class="form-row">
                             
                             <div class="form-group col-md-6">
@@ -76,14 +86,7 @@
                                      أضافه أداره خارجيه
                                  </button>
                             </div>
-                            <div class="form-group col-md-6">
-                             <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                     id="addFile-dev" data-bs-target="#addFile">
-                                     اضافه ملفات
-                             </button>
-                             {{-- <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button> --}}
- 
-                            </div>
+                         
  
                          </div>
 
@@ -118,31 +121,7 @@
                                 </div>
                             </div>
                          {{-- endmodel --}}
-                        {{-- <div class="form-row">
-                          
-                                <div class="form-group col-md-6" >
-                                    
-                                    <label for="exampleFormControlFile1"> حمل الملف </label>
-                                    <input type="file" name="files[]" class="form-control-file" id="file1">
-
-                                </div>
-                                <div class="form-group col-md-6" id="fileInputs">
-                                    
-                                    <button type="button" id="addFileInput" class="btn btn-primary">Add Another File</button>
-
-                                </div>
-                           
-                            <img src="path/to/your/image.jpg" alt="Image Preview" class="small-image">
-                            <iframe src="path/to/your/document.pdf" class="small-pdf"></iframe>
-                            
-                        </div>
-                        <div class="form-row">
-                           
-                           <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                   id="extern-department-dev" data-bs-target="#extern-department">
-                               أضافه أداره خارجيه
-                           </button>
-                       </div> --}}
+                       
                             <button class="btn btn-primary" type="submit">تعديل </button>
                     </form>
                 </div>
