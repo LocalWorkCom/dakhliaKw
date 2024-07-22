@@ -7,10 +7,13 @@ use App\Http\Controllers\dashboard\VacationController;
 
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
+
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostmanController;
+use App\Http\Controllers\settingController;
 
 
 /*
@@ -127,12 +130,28 @@ Route::get('/Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->n
 Route::get('/Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
 Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax');
 Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users');
+Route::get('export/archive/{id}', [outgoingController::class, 'addToArchive'])->name('export.archive');
+Route::get('export/archive/', [outgoingController::class, 'showArchive'])->name('Export.archive.show');
+
 
 Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('testUpload');
 Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile');
 
 //End Export routes
+//setting start
+// Route::resource('setting', settingController::class);
+Route::get('setting', [settingController::class,'index'])->name('setting.index');
+Route::get('setting/jobs/add', [settingController::class,'addJob'])->name('jobs.add');
+Route::get('setting/jobs/{id}', [settingController::class,'editJob'])->name('jobs.edit');
 
+Route::post('setting/grade/add', [settingController::class,'addgrade'])->name('grade.add');
+Route::get('setting/grade/{id}', [settingController::class,'editgrade'])->name('grade.edit');
+
+Route::get('setting/vacation/add', [settingController::class,'addVacation'])->name('vacation.add');
+Route::get('setting/vacation/{id}', [settingController::class,'editVacation'])->name('vacation.edit');
+
+
+//setting end
 
 
 
@@ -151,6 +170,7 @@ Route::get('iotelegram/archives', [IoTelegramController::class, 'Archives'])->na
 Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add');
 Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
 
+// Route::resource('setting', SettingsController::class);
 
 
 
