@@ -20,11 +20,10 @@ class settingController extends Controller
      * Display a listing of the resource.
      */
     // public function index(vacationTypeDataTable $dataTable ,gradeDataTable $dataTableGrade ,jobDataTable $jobDataTable )
-    public function index(gradeDataTable $dataTable )
+    public function index(Request $request )
     {
-   
-      //return $dataTable->render("setting.view");
-      $activeTab=1;
+        $activeTab = $request->query('activeTab', 1); // Default to 1 if not present
+        $message = $request->query('message', '');
     return view("setting.view",compact('activeTab'));
     }
     public function getAllGrade()
@@ -64,21 +63,30 @@ class settingController extends Controller
      * Show the form for creating a new resource.
      */
     public function addJob(Request $request){
-        $request=$request->except('_token');
-        $job = job::create($request);
-        return redirect()->back()->with("success","تم اضافه الوظيفه");
+        $requestinput=$request->except('_token');
+        $job = job::create($requestinput);
+        $activeTab=2;
+        $message="تم اضافه الوظيفه";
+        return redirect()->route('setting.index',compact('activeTab','message'));
+        //return redirect()->back()->with(compact('activeTab','message'));
     }
 
     public function addgrade(Request $request){
-        $request=$request->except('_token');
-        $grade = grade::create($request);
-        return redirect()->back()->with("success","تم اضافه رتبه عسكريه جديده");
+        $requestinput=$request->except('_token');
+        $grade = grade::create($requestinput);
+        $activeTab=1;
+        $message="تم اضافه رتبه عسكريه جديده";
+        return redirect()->route('setting.index',compact('activeTab','message'));
+
+        //return redirect()->back()->with(compact('activeTab','message'));
     }
 
     public function addVacation(Request $request){
         $request=$request->except('_token');
         $vacation = VacationType::create($request);
-        return redirect()->back()->with("success","تم اضافه نوع اجازه جديد");
+        $activeTab=3;
+        $message="تم اضافه نوع اجازه جديد";
+        return redirect()->route('setting.index',compact('activeTab','message'));
     }
     
     public function editJob(Request $request ){
@@ -90,7 +98,9 @@ class settingController extends Controller
         $job->name=$request->namegrade;
         $job->save();
         $activeTab =$request->tab;
-        return redirect()->back()->with(compact('activeTab'));
+        $message='';
+        return redirect()->route('setting.index',compact('activeTab','message'));
+       // return redirect()->back()->with(compact('activeTab'));
         
     }
 
@@ -103,8 +113,9 @@ class settingController extends Controller
         }
         $grade->name=$request->namegrade;
         $grade->save();
-    
-        return redirect()->back()->with("success","تم اضافه نوع اجازه جديد");
+        $activeTab =$request->tab;
+        $message='';
+        return redirect()->route('setting.index',compact('activeTab','message'));
     }
 
     public function editVacation(Request $request ){
@@ -116,48 +127,59 @@ class settingController extends Controller
         $type->name=$request->namegrade;
         $type->save();
     
-        return redirect()->back()->with("success","تم اضافه نوع اجازه جديد");
+        $activeTab =$request->tab;
+        $message='';
+        return redirect()->route('setting.index',compact('activeTab','message'));
     }
     public function deleteVacation(Request $request ){
         $isForeignKeyUsed = DB::table('employee_vacations')->where('vacation_type_id', $request->id)->exists();
         //dd($isForeignKeyUsed);  
         if( $isForeignKeyUsed ){
-            return redirect()->back()->with("success",'عفوا هذه الاجازه مرتبطه بموظفين');
+           
+            $message='';
+            
 
         }else{
             $type= VacationType::find($request->id);
             $type->delete();
-            return redirect()->back()->with("success",' تم المسح');
+            $message='';
 
         }
+        $activeTab =3;
+        return redirect()->route('setting.index',compact('activeTab','message'));
     }
 
     public function deletegrade(Request $request ){
         $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
         //dd($isForeignKeyUsed);  
         if( $isForeignKeyUsed ){
-            return redirect()->back()->with("success",'عفوا هذه الرتبه مرتبطه بموظفين');
+            $message='';
 
         }else{
             $type= grade::find($request->id);
             $type->delete();
-            return redirect()->back()->with("success",' تم المسح');
-
+            $message='';
+    
         }
+        $activeTab =1;
+        return redirect()->route('setting.index',compact('activeTab','message'));
+        //return view("setting.view",compact('activeTab','message'));
     }
 
     public function deletejob(Request $request ){
         $isForeignKeyUsed = DB::table('users')->where('job_id', $request->id)->exists();
         //dd($isForeignKeyUsed);  
         if( $isForeignKeyUsed ){
-            return redirect()->back()->with("success",'عفوا هذه الوظيفه مرتبطه بموظفين');
+            $message='';
 
         }else{
             $type= job::find($request->id);
             $type->delete();
-            return redirect()->back()->with("success",' تم المسح');
+            $message='';
 
         }
+        $activeTab =2;
+        return redirect()->route('setting.index',compact('activeTab','message'));
     }
     /**
      * Store a newly created resource in storage.

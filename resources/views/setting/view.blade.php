@@ -11,20 +11,23 @@
                 <p> الاعدادات</p>
             </div>
         </div>
-
         <div class="row " dir="rtl">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link @if($activeTab == 1) active @endif" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-                        type="button" role="tab" aria-controls="nav-home" aria-selected="true">رتب العسكريه</button>
-                    <button class="nav-link @if($activeTab == 2) active @endif" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-                        type="button" role="tab" aria-controls="nav-profile" aria-selected="false">الوظائف</button>
-                    <button class="nav-link @if($activeTab == 3) active @endif" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
-                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">الاجازات</button>
+                    <button class="nav-link @if ($activeTab == 1) active @endif" id="nav-home-tab"
+                        data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab"
+                        aria-controls="nav-home" aria-selected="true">رتب العسكريه</button>
+                    <button class="nav-link @if ($activeTab == 2) active @endif" id="nav-profile-tab"
+                        data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab"
+                        aria-controls="nav-profile" aria-selected="false">الوظائف</button>
+                    <button class="nav-link @if ($activeTab == 3) active @endif" id="nav-contact-tab"
+                        data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab"
+                        aria-controls="nav-contact" aria-selected="false">الاجازات</button>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade  @if($activeTab == 1)show active @endif" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="tab-pane fade  @if ($activeTab == 1) show active @endif" id="nav-home"
+                    role="tabpanel" aria-labelledby="nav-home-tab">
                     <div class="container  col-11 mt-3 p-0 ">
                         <div class="row justify-content-end">
                             <div class="col-auto">
@@ -49,7 +52,8 @@
                         </table>
                     </div>
                 </div>
-                <div class="tab-pane fade @if($activeTab == 2)show active @endif" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="tab-pane fade @if ($activeTab == 2) show active @endif" id="nav-profile"
+                    role="tabpanel" aria-labelledby="nav-profile-tab">
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                         <div class="container  col-11 mt-3 p-0 ">
                             <div class="row justify-content-end">
@@ -76,7 +80,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade @if($activeTab == 3)show active @endif" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                <div class="tab-pane fade @if ($activeTab == 3) show active @endif" id="nav-contact"
+                    role="tabpanel" aria-labelledby="nav-contact-tab">
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                         <div class="container  col-11 mt-3 p-0 ">
                             <div class="row justify-content-end">
@@ -185,7 +190,7 @@
         </div>
     </div>
     {{-- this for edit form --}}
-    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true" >
+    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -193,19 +198,22 @@
                         <h5 class="modal-title" id="lable"> </h5>
                         <img src="../images/add-mandob.svg" alt="">
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times; </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form class="edit-grade-form" id="edit-form" action="" method="POST">
-                                @csrf
+                        @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
                             <input type="text" id="nameinput" value="" name="namegrade" class="form-control">
-                            <input type="text" id="idinput" value="" name="id" hidden class="form-control">
-                            <input type="text" id="tab" value="" name="tab" hidden class="form-control">
+                            <input type="text" id="idinput" value="" name="id" hidden
+                                class="form-control">
+                            <input type="text" id="tab" value="" name="tab" hidden
+                                class="form-control">
 
                         </div>
-                       <!-- Save button -->
+                        <!-- Save button -->
                         <div class="text-end">
                             <button type="submit" class="btn-blue">حفظ</button>
                         </div>
@@ -215,8 +223,8 @@
         </div>
     </div>
 
-      {{-- this for delete form --}}
-      <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true" >
+    {{-- this for delete form --}}
+    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -224,18 +232,21 @@
                         <h5 class="modal-title" id="lable"> </h5>
                         <img src="../images/add-mandob.svg" alt="">
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times; </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form class="delete-grade-form" id="delete-form" action="" method="POST">
-                                @csrf
+                        @csrf
                         <div class="form-group">
                             <label for="name">هل تريد مسح هذا العنصر ؟</label>
-                            <input type="text" id="iddelete" value="" name="id" hidden class="form-control">
-                            <input type="text" id="tabActive" value="" name="tab" hidden class="form-control">
+                            <input type="text" id="iddelete" value="" name="id" hidden
+                                class="form-control">
+                            <input type="text" id="tabActive" value="" name="tab" hidden
+                                class="form-control">
 
                         </div>
-                       <!-- Save button -->
+                        <!-- Save button -->
                         <div class="text-end">
                             <button type="submit" class="btn-blue">حفظ</button>
                         </div>
@@ -287,25 +298,26 @@
                     }
                 }]
             });
-            
+
         });
-        function openedit(id,name,tab){
+
+        function openedit(id, name, tab) {
             document.getElementById('nameinput').value = name;
             document.getElementById('idinput').value = id;
             document.getElementById('tab').value = tab;
-  
-            if(tab == 1){
-                document.getElementById('edit-form').setAttribute('action', '/setting/grade');
+
+            if (tab == 1) {
+                document.getElementById('edit-form').setAttribute('action', '/grade');
 
                 document.getElementById('lable').innerHTML = 'تعديل الرتبه';
 
-            }else if( tab == 2){
-                document.getElementById('edit-form').setAttribute('action', '/setting/jobs');
+            } else if (tab == 2) {
+                document.getElementById('edit-form').setAttribute('action', '/jobs');
 
                 document.getElementById('lable').innerHTML = 'تعديل الوظيفه';
 
-            }else{
-                document.getElementById('edit-form').setAttribute('action', '/setting/vacation');
+            } else {
+                document.getElementById('edit-form').setAttribute('action', '/vacationType');
 
                 document.getElementById('lable').innerHTML = 'تعديل مسمى الاجازه';
 
@@ -316,18 +328,18 @@
 
         }
 
-        function opendelete(id,tab){
+        function opendelete(id, tab) {
             document.getElementById('iddelete').value = id;
             document.getElementById('tabActive').value = tab;
-         
-            if(tab == 1){
-                document.getElementById('delete-form').setAttribute('action', 'setting/grade/delete');
 
-            }else if( tab == 2){
-                document.getElementById('delete-form').setAttribute('action', 'setting/jobs/delete');
+            if (tab == 1) {
+                document.getElementById('delete-form').setAttribute('action', '/grade/delete');
 
-            }else{
-                document.getElementById('delete-form').setAttribute('action', 'setting/vacation/delete');
+            } else if (tab == 2) {
+                document.getElementById('delete-form').setAttribute('action', '/jobs/delete');
+
+            } else {
+                document.getElementById('delete-form').setAttribute('action', 'vacationType/delete');
 
             }
             $('#delete').modal('show');
@@ -422,7 +434,7 @@
                     }
                 }]
             });
-            
+
         });
     </script>
 @endpush
