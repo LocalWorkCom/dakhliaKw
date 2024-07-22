@@ -48,9 +48,10 @@ class PermissionController extends Controller
         return $models;
     }
 
-    public function index()
+    public function index(PermissionRoleDataTable $dataTable)
     {
         //
+        return $dataTable->render('permission.view');
     }
 
     /**
