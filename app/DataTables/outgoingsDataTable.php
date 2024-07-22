@@ -21,16 +21,13 @@ class outgoingsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('person_to_username', function ($row) {
-                return $row->person_to_username ?? '';  // Use null coalescing operator to handle null values
-            })
-            ->addColumn('created_by_username', function ($row) {
-                return $row->created_by_username ?? '';  // Use null coalescing operator to handle null values
-            })
-            ->addColumn('updated_by_username', function ($row) {
-                return $row->updated_by_username ?? '';  // Use null coalescing operator to handle null values
-            })
            
+            ->addColumn('person_to_username', function ($row) {
+                return $row->personTo->name ?? ''; // Assuming 'name' is the column in external_users
+            })
+            ->addColumn('department_External_name', function ($row) {
+                return $row->department_External->name ?? ''; // Assuming 'name' is the column in external_users
+            })
             ->addColumn('action', function ($row) {
                 // $is_file = outgoing_files::where('outgoing_id', $row->id)->exists();
                 $fileCount = outgoing_files::where('outgoing_id', $row->id)->count();
@@ -38,7 +35,8 @@ class outgoingsDataTable extends DataTable
                 $uploadButton = $is_file 
                     ? '<a href="' . route('Export.upload.files', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-upload"></i></a>
                      <a href="' . route('Export.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>'
-                    : '<a href="' . route('Export.view.files', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-file"></i>('.$fileCount.')</a>';
+                    : '<a href="' . route('Export.view.files', $row->id) . '" class="edit btn btn-info btn-sm" ><i class="fa fa-file"></i>('.$fileCount.')</a>
+                    <a href="' . route('export.archive', $row->id) . '" class="edit btn btn-info btn-sm" ><i class="fa fa-archive"></i></a>';
     
                 return '
                     <a href="' . route('Export.show', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
@@ -55,13 +53,19 @@ class outgoingsDataTable extends DataTable
      */
     public function query(outgoings $model): QueryBuilder
     {
-        return $model->newQuery()
-        ->leftJoin('external_users as person_to_user', 'outgoings.person_to', '=', 'person_to_user.id')
-        ->leftJoin('external_departements as external_departements', 'outgoings.department_id', '=', 'external_departements.id')
-        ->where('outgoings.active', 0)
-        ->select('outgoings.*', 
-                 'person_to_user.name as person_to_name',  
-                 'external_departements.name as external_departements_name');
+        $status = $this->request()->get('status', 'active'); // Default to 'active' if not provided
+
+        if ($status === 'active') {
+            return $model->newQuery()
+                ->with(['personTo', 'department_External'])
+                ->where('outgoings.active', 0)
+                ->select('outgoings.*');
+        } else {
+            return $model->newQuery()
+                ->with(['personTo', 'department_External'])
+                ->where('outgoings.active', 1)
+                ->select('outgoings.*');
+        }
     }
 
     /**
@@ -89,23 +93,20 @@ class outgoingsDataTable extends DataTable
      * Get the dataTable columns definition.
      */
     public function getColumns(): array
-    {
-        return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->title('الخيارات')
-                  ->addClass('text-center'),
-            Column::make('id')->title('رقم '),
-            Column::make('name')->title('العنوان'),
-            Column::make('num')->title('رقم الصادر'),
-            Column::make('note')->title(' ملاحظات'),
-            Column::make('active')->title('الحاله')->render('function() { return this.active == 1 ? "مفعل" : " مفعل"; }'),
-            Column::make('person_to_username')->title(' العسكرى'),  
-             Column::make('external_departements_name')->title('الاداره الصادر منها'),  
-        ];
-    }
+{
+    return [
+        Column::computed('action')
+              ->exportable(false)
+              ->printable(false)
+              ->width(60)
+              ->title('الخيارات')
+              ->addClass('text-center'),
+        Column::make('num')->title('رقم الصادر')->addClass('text-center'),
+        Column::make('person_to_username')->title(' العسكرى')->addClass('text-center'),  
+        Column::make('department_External_name')->title('الاداره الصادر منها')->addClass('text-center'),  
+    ];
+}
+
 
     /**
      * Get the filename for export.

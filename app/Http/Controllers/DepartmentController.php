@@ -23,13 +23,6 @@ class DepartmentController extends Controller
         // return response()->json($departments);
     }
 
-
-    public function index_1()
-    {
-        $departments = departements::with(['manager', 'managerAssistant'])->paginate(10);
-        return view('sub_departments.index', compact('departments'));
-        // return response()->json($departments);
-    }
     /**
      * Show the form for creating a new resource.
      */
@@ -41,14 +34,6 @@ class DepartmentController extends Controller
          return view('departments.create', compact('users','departments'));
     }
 
-
-    public function create_1()
-    {
-        // dd(Auth::user());
-        $users = User::all();
-        $departments = departements::whereNull('parent_id')->with('children')->get();
-         return view('sub_departments.create', compact('users','departments'));
-    }
     /**
      * Store a newly created resource in storage.
      */
@@ -70,21 +55,6 @@ class DepartmentController extends Controller
         // return response()->json($department, 201);
     }
 
-
-    public function store_1(Request $request)
-    {
-        // dd($request->all());
-        
-        $request->validate([
-        ]);
-         $departements =departements::create($request->all());
-          $departements->created_by = Auth::user()->id;
-
-          $departements->save();
-        //   dd($departements);
-        return redirect()->route('departments.index')->with('success', 'Department created successfully.');
-        // return response()->json($department, 201);
-    }
     /**
      * Display the specified resource.
      */

@@ -62,13 +62,13 @@ class PermissionController extends Controller
         $models = $this->getAllModels();
 
         return $dataTable->render('permission.create', compact('models'));
-        // return view('permission.create', compact('models'));
+        // return view('permission.create';
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request , PermissionRoleDataTable $dataTable)
+    public function store(Request $request)
     {
         // dd($request);
         $request->validate([
@@ -87,6 +87,20 @@ class PermissionController extends Controller
             $permission->name = $nameModel;
             $permission->guard_name = $modelClass;
             $permission->save();
+
+
+            // Assign the permission to the specified model
+            // $modelClass = $request->model;
+
+            // $modelPermission = "{$modelClass}"; // Example format: App\Models\UserPermission
+
+            // // // dd($modelPermission);
+            // // // Assume you have a model that handles permissions for each specific model
+            // $modelPermission::create([
+            //     'permission_id' => $permission->id,
+            // ]);
+            // Dynamically create model instance based on the model class string
+
             DB::insert('INSERT INTO model_has_permissions (permission_id , model_type ,model_id ) VALUES (?, ?, ?)', [
                 $permission->id,
                 $request->name,
@@ -96,9 +110,8 @@ class PermissionController extends Controller
 
             // return response()->json("ok");
             // dd("sara");
-            return redirect()->back()->with('alert', 'Permission created successfully.');
-            // return $dataTable->render('permission.view')->with('alert', 'Permission created successfully.');
-            // return $dataTable->render('permission.view');
+            // return redirect()->back()->with('alert', 'Permission created successfully.')
+            return redirect()->back()->with('success', 'Permission created successfully.');
         } catch (\Exception $e) {
             // dd("yy");
             return response()->json($e->getMessage());
