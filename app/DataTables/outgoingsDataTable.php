@@ -34,8 +34,7 @@ class outgoingsDataTable extends DataTable
                  $is_file = $fileCount == 0;
                 $uploadButton = $is_file 
                     ? '<a href="' . route('Export.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>'
-                    : '<a href="' . route('Export.view.files', $row->id) . '" class="edit btn btn-info btn-sm" ><i class="fa fa-file"></i>('.$fileCount.')</a>
-                    <a href="' . route('export.archive', $row->id) . '" class="edit btn btn-info btn-sm" ><i class="fa fa-archive"></i></a>';
+                    : '<a href="' . route('export.archive', $row->id) . '" class="edit btn btn-info btn-sm" ><i class="fa fa-archive"></i></a>';
     
                 return '
                     <a href="' . route('Export.show', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
