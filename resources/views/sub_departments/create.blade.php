@@ -12,12 +12,12 @@
             <input type="text" class="form-control" id="name" name="name" >
         </div>
         <div class="form-group">
-            <label for="parent_id">اختر القسم الرئيسي</label>
-            <select class="form-control" id="parent_id" name="parent_id">
-                <option value="">قسم رئيسي</option>
-                @foreach($departments as $department)
-                
-                    @include('departments.partials.department-option', ['department' => $department, 'level' => 0])
+            <select name="parent_id" id="parent_id" class="form-control">
+                <option value="{{$parentDepartment->id}}">اختار القسم</option>
+                @foreach ($departments as $department)
+                    <option value="{{ $department->parent_id }}">
+                        {{ $department->name }}
+                    </option>
                 @endforeach
             </select>
         </div>
