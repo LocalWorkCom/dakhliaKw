@@ -1,14 +1,14 @@
 @extends('layout.main')
 
 @section('title')
-    اضافة
+    تعديل
 @endsection
 @section('content')
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('vacations.list') }}">الاجازات </a></li>
+                <li class="breadcrumb-item"><a href="{{ route('vacations.list', $id) }}">الاجازات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
             </ol>
         </nav>
@@ -40,10 +40,10 @@
                     <div class="form-group col-md-6">
                         <label for="employee_id">اسم الموظف:</label>
                         <select id="employee_id" name="employee_id" class="form-control" required
-                            @if ($vacation->vacation_type_id == '3') disabled @endif>
+                            disabled>
                             <option value="">اختر الموظف</option>
                             @foreach ($employees as $item)
-                                <option value="{{ $item->id }}" @if ($vacation->id == $item->id) selected @endif>
+                                <option value="{{ $item->id }}" @if ($vacation->employee_id == $item->id) selected @endif>
                                     {{ $item->name }}</option>
                             @endforeach
                         </select>
@@ -63,6 +63,16 @@
                         <label for="date_to">تاريخ النهاية:</label>
                         <input type="date" id="date_to" name="date_to" class="form-control"
                             value="{{ $vacation->date_to }}">
+                    </div>
+                </div>
+                <div class="form-row mx-2 mt-4">
+                    <div class="form-group col-md-12">
+                        <label for="reportImage">اضافة ملف</label>
+                        <div id="reportImage">
+                            <div class="file-input mb-3" dir="rtl">
+                                <input type="file" name="reportImage" class="form-control-file">
+                            </div>
+                        </div>
                     </div>
                 </div>
 

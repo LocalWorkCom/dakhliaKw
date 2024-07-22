@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Rule;
 use App\Models\User;
-use Illuminate\Support\Str;
+use App\Models\grade;
 // use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\DataTables\UsersDataTable;
@@ -42,6 +43,7 @@ class UserController extends Controller
         $data = User::where('flag', $flagType)->get();
        
         return DataTables::of($data)->addColumn('action', function ($row) {
+            
             return '<button class="btn btn-primary btn-sm">Edit</button>
               <a href="" class="btn btn-primary btn-sm">vacations</a>'
                     ;
@@ -294,12 +296,13 @@ class UserController extends Controller
         $user = User::find(Auth::user()->id);
         $rule = Rule::all();
         $flag = $id;
+        $grade = grade::all();
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
         $alldepartment =$user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
-        return view('user.create',compact('alldepartment','rule' ,'flag'));
+        return view('user.create',compact('alldepartment','rule' ,'flag' ,'grade'));
     }
 
     /**
@@ -327,7 +330,6 @@ class UserController extends Controller
             $newUser->flag = "user";
             $newUser->rule_id = $request->rule;
             $newUser->department_id  = $request->department;
-            // $newUser->password = Hash::make($validatedData['password']);
             $newUser->password = Hash::make($request->password);
             $newUser->save();
         }
@@ -340,15 +342,24 @@ class UserController extends Controller
             $newUser->name = $request->name;
             $newUser->file_number = $request->file_number;
             $newUser->flag = "employee";
-            $newUser->rule_id = $request->rule;
-            $newUser->department_id  = $request->department;
-            // $newUser->password = Hash::make($validatedData['password']);
-            $newUser->password = Hash::make($request->password);
+            if($request->has('solder') && $request->solder == "on")
+            {
+                $newUser->grade_id = $request->grade_id;
+            } 
+            // $newUser->password = NUll;
+            $newUser->description = $request->description;
+            $newUser->job = $request->job;
+            $newUser->date_of_birth = $request->date_of_birth;
+            $newUser->public_administration = $request->department;
+
             $newUser->save();
         }
+
+        $id = $request->type;
         
 
-        return response()->json($newUser);
+        // return response()->json($newUser);
+        return view('user.view' ,compact('id'));
     }
 
     /**
@@ -358,6 +369,8 @@ class UserController extends Controller
     {
         //
         $user = User::find($id);
+        $rule = Rule::all();
+        $grade = grade::all();
         return view('user.edit',compact('user'));
     }
 
@@ -372,9 +385,36 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        dd($request);
+        $user = User::find($id);
+        if($user->flag == "employee")
+        {
+            $user->military_number = $request->military_number;
+            $user->phone = $request->phone;
+            $user->country_code = "+20";
+            $user->name = $request->name;
+            $user->file_number = $request->file_number;
+            $user->flag = "employee";
+            if($request->has('solder') && $request->solder == "on")
+            {
+                $user->grade_id = $request->grade_id;
+            } 
+            // $newUser->password = NUll;
+            $user->description = $request->description;
+            $user->job = $request->job;
+            $user->date_of_birth = $request->date_of_birth;
+            $user->public_administration = $request->department;
+
+           
+        }
+        else
+        {
+
+        }
+        $user->save();
+        return view('user.edit',compact('user'));
     }
 
     /**
