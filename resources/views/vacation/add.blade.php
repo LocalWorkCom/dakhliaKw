@@ -14,7 +14,7 @@
         </nav>
     </div>
     @include('inc.flash')
-    <div class="row ">
+    <div class="row">
         <div class="container welcome col-11">
             <p> الاجـــــــــازات </p>
         </div>
@@ -27,7 +27,7 @@
 
                 <div class="form-row mx-2 mt-4">
                     <div class="form-group col-md-6 ">
-                        <label for="vacation_type_id">نوع الاجازة:</label>
+                        <label for="vacation_type_id">نوع الاجازة</label>
 
 
                         <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
@@ -38,7 +38,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="employee_id">اسم الموظف:</label>
+                        <label for="employee_id">اسم الموظف</label>
 
 
                         <select id="employee_id" name="employee_id" class="form-control" required
@@ -55,15 +55,25 @@
                 <div class="form-row mx-2 mt-4">
 
                     <div class="form-group col-md-6">
-                        <label for="date_from">تاريخ البداية:</label>
+                        <label for="date_from">تاريخ البداية</label>
                         <input type="date" id="date_from" name="date_from" class="form-control" required>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="date_to">تاريخ النهاية:</label>
+                        <label for="date_to">تاريخ النهاية</label>
                         <input type="date" id="date_to" name="date_to" class="form-control">
                     </div>
                 </div>
 
+                <div class="form-row mx-2 mt-4">
+                    <div class="form-group col-md-12">
+                        <label for="reportImage">اضافة ملف</label>
+                        <div id="reportImage">
+                            <div class="file-input mb-3" dir="rtl">
+                                <input type="file" name="reportImage" class="form-control-file">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="container col-12 ">
                     <div class="form-row mt-4 mb-5">
@@ -91,12 +101,26 @@
                     var value = $('#vacation_type_id option:selected').val();
 
                     if (value == '3') {
-                        console.log("kjhjgf");
+                        $('#reportImage').hide();
+
                         $('#employee_id').prop('disabled', true);
 
                         $('#employee_id').removeAttr('required');
 
+                    } else if (value == '4') {
+                        $('#reportImage').hide();
+
+                        $('#date_to').prop('disabled', true);
+                        $('#employee_id').prop('disabled', false);
+                        $('#employee_id').attr('required', true);
+
+                    } else if (value == '2') {
+                        $('#reportImage').show();
+                        $('#employee_id').prop('disabled', false);
+                        $('#employee_id').attr('required', true);
                     } else {
+                        $('#reportImage').hide();
+
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
                     }
