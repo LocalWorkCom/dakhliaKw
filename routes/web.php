@@ -35,9 +35,6 @@ use App\Http\Controllers\settingController;
 
 // });
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
 
 Route::get('/login', function () {
     return view('login');
@@ -47,6 +44,11 @@ Route::get('/login', function () {
 
 //  Auth verfication_code
 Route::middleware(['auth'])->group(function () {
+    
+    Route::get('/', function () {
+        return view('welcome');
+    })->name('home');
+    
     // Route::any('/user', [UserController::class, 'index'])->name('user.index');
     Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index');
     Route::get('api/users/{id}', [UserController::class, 'getUsers'])->name('api.users');
