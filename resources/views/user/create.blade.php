@@ -39,7 +39,7 @@
 
 
 
-                    <form action="{{ route('user.store') }}" method="post" class="text-right">
+                    <form action="{{ route('user.store') }}" method="post" class="text-right" >
                         @csrf
 
                         <input type="hidden" name="type" value="{{ $flag }}">
@@ -111,10 +111,10 @@
                                 <label for="grade_id">الرتبة</label>
                                 <select class="custom-select custom-select-lg mb-3" name="grade_id" id="grade_id">
                                     <option selected>Open this select menu</option>
-                                    {{-- @foreach ($rule as $item) --}}
-                                    {{-- <option value="{{ $item->id }}">{{ $item->name }}</option> --}}
-                                    <option value=""></option>
-                                    {{-- @endforeach --}}
+                                    @foreach ($grade as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    {{-- <option value=""></option> --}}
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
