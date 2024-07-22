@@ -147,7 +147,7 @@ class outgoingController extends Controller
        
         $departments=ExternalDepartment::all();
 
-        return view('outgoing.show', compact('data','users','is_file','departments'));
+        return view('outgoing.showdetail', compact('data','users','is_file','departments'));
     }
 
     /**
@@ -159,7 +159,7 @@ class outgoingController extends Controller
         $users=User::all();
         $is_file = outgoing_files::where('outgoing_id', $id)->where('active',0)->get();
         $departments=ExternalDepartment::all();
-        return view('outgoing.edit', compact('data','users','is_file','departments'));
+        return view('outgoing.editexport', compact('data','users','is_file','departments'));
     }
 
     /**
