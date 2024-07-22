@@ -2,7 +2,7 @@
 
 <div class="all-nav" >
         <div class="upper-navbar d-flex">
-            <div class="second-section d-flex mx-1 col-md-9 col-sm-6">
+            <div class="second-section d-flex  col-md-9 col-sm-6">
                 <div class="dropdown">
                     {{-- @if ($user->login) --}}
                     @php
@@ -47,7 +47,7 @@
                     <p>notification notification notification notification </p>
                     <hr>
                 </div>
-                <div class="input-group">
+                <div class="input-group mx-2">
                     <button type="button" class="btn  mt-4" data-mdb-ripple-init>
                         <i class="fas fa-search"></i>
                     </button>

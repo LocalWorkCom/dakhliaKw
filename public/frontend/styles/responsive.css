@@ -3,6 +3,9 @@
         width: 180px;
         /* margin-inline: 9px; */
     }
+    .first-section {
+        margin-left: -35px;
+    }
     .container-responsive {
         display: none;
     }
@@ -184,6 +187,9 @@
     .card1, .card2, .card3, .card4 {
         height: 160px;
         margin: 0px;
+    }
+    .first-section {
+        margin-left: -10px;
     }
     .container-responsive {
         display: none;
@@ -380,13 +386,16 @@
         justify-content: flex-end;
         display: flex;
     }
+    .first-section {
+        margin-left: 8px;
+    }
     .navbar-nav{
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
     }
     li {
-        width: 85px;
+        width: 71px;
     }
     .bell {
         margin-right: 15px;
@@ -491,6 +500,9 @@
 @media (max-width: 578px){
 .input-group{
     display: none;
+}
+.first-section {
+    margin-left: 0px;
 }
 .second-section .btn-2 {
     font-size: 14px;
