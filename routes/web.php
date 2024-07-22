@@ -34,7 +34,7 @@ use App\Http\Controllers\settingController;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('welcome');
+})->name('home');
 
 Route::get('/login', function () {
     return view('login');
@@ -149,8 +149,14 @@ Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->n
 // Route::resource('setting', settingController::class);
 Route::get('setting', [settingController::class,'index'])->name('setting.index');
 Route::get('setting/jobs/add', [settingController::class,'addJob'])->name('jobs.add');
-Route::get('setting/grade/add', [settingController::class,'addCrade'])->name('grade.add');
+Route::get('setting/jobs/{id}', [settingController::class,'editJob'])->name('jobs.edit');
+
+Route::post('setting/grade/add', [settingController::class,'addgrade'])->name('grade.add');
+Route::get('setting/grade/{id}', [settingController::class,'editgrade'])->name('grade.edit');
+
 Route::get('setting/vacation/add', [settingController::class,'addVacation'])->name('vacation.add');
+Route::get('setting/vacation/{id}', [settingController::class,'editVacation'])->name('vacation.edit');
+
 
 //setting end
 

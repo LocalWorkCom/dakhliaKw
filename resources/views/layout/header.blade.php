@@ -85,7 +85,7 @@
                     <select name="#" id="#" class=" mt-4">
                         <option value="#"> المستخدميين </option>
                         <option value="{{ route('departments.index') }}"> الادارات </option>
-                        <option value="{{ route('setting.index') }}"> الادارات </option>
+                        <option value="{{ route('setting.index') }}"> الاعدادات </option>
                         <option value="#"> الموظفين </option>
                         <option value="{{ route('Export.index') }}"> الصادر </option>
                         <option value="#"> الوارد </option>
@@ -127,6 +127,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{route('setting.index')}}">
+                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <h6>الاعدادات</h6>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                   
                         <a href="{{ route('iotelegrams.list') }}">
                             <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
@@ -139,28 +145,9 @@
                             <h6>الصادر</h6>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
-                        <h6>الموظفين</h6>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('setting.index') }}">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6>الأعدادات</h6>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6>الادارات</h6>
-                    </li>
-                    <li class="nav-item">
-                        <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
-                        <h6>المستخدمين</h6>
-                    </li>
-                    <li class="nav-item">
-                        <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
-                        <h6>الرئيسية</h6>
-                    </li>
+                   
+                   
+                   
                 </ul>
             </div>
         </div>

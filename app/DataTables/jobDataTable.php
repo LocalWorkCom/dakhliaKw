@@ -22,7 +22,10 @@ class jobDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'job.action')
+        ->addColumn('action', function ($row) {
+            return '
+               <a href="' . route('job.edit', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-edit"></i></a>';   
+        })
             ->setRowId('id');
     }
 
