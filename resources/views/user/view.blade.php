@@ -34,11 +34,11 @@
                         <table id="users-table" class="display table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Phone</th>
-                                    <th>military_number</th>
-                                    <th>action</th>
+                                    <th>رقم التعريف</th>
+                                    <th>الاسم</th>
+                                    <th>الهاتف</th>
+                                    <th>الرقم العسكري</th>
+                                    <th>العمليات</th>
                                 </tr>
                             </thead>
                         </table>
@@ -68,8 +68,8 @@
                                         var showUrl = '{{ route("user.show", ":id") }}';
                                         showUrl = showUrl.replace(':id', row.id);
                                         return `
-                                            <a href="` + showUrl + `" class="btn btn-primary btn-sm">Edit</a>
-                                            <a href="" class="btn btn-primary btn-sm">vacations</a>
+                                            <a href="` + showUrl + `" class="btn btn-primary btn-sm">تعديل</a>
+                                            <a href="" class="btn btn-primary btn-sm">الاجازات</a>
                                         `;
                                         }
                                         
