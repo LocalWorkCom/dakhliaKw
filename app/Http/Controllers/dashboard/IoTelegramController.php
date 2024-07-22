@@ -8,7 +8,6 @@ use App\Models\departements;
 use App\Models\ExternalDepartment;
 use App\Models\Io_file;
 use App\Models\Iotelegram;
-use App\Models\iotelegrams;
 use App\Models\Postman;
 use App\Models\User;
 use Illuminate\Http\Request;

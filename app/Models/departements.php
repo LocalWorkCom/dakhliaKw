@@ -13,7 +13,8 @@ class departements extends Model
         'name',
         'manger',
         'manger_assistance',
-        'description'
+        'description',
+        'parent_id'
     ];
 
    

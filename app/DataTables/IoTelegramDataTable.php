@@ -4,7 +4,6 @@ namespace App\DataTables;
 
 use App\Models\io_files;
 use App\Models\Iotelegram;
-use App\Models\iotelegrams;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
