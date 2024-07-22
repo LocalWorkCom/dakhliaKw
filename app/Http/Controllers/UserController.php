@@ -167,9 +167,7 @@ class UserController extends Controller
                 // }
 
             } else {
-                if (url()->previous() == route('forget_password2')) {
-                    return view('resetpassword', compact('military_number', 'firstlogin'));
-                }elseif(url()->previous() == route('resend_code')) {
+                if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code')|| url()->previous() == route('verfication_code')) {
                     return view('resetpassword', compact('military_number', 'firstlogin'));
                 }
                 else {
@@ -272,6 +270,8 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->route('home');
+        // return redirect()->route('home')->with('user', auth()->user());
+
     }
 
 

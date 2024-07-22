@@ -46,8 +46,11 @@ class DepartmentController extends Controller
     {
         // dd(Auth::user());
         $users = User::all();
-        $departments = departements::whereNull('parent_id')->with('children')->get();
-         return view('sub_departments.create', compact('users','departments'));
+        $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
+
+        // Get the children of the parent department
+        $departments = $parentDepartment ? $parentDepartment->children : collect();         
+        return view('sub_departments.create', compact('parentDepartment','departments'));
     }
     /**
      * Store a newly created resource in storage.

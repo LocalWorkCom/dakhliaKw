@@ -29,6 +29,9 @@ class DepartmentDataTable extends DataTable
             ->addColumn('outgoings_count', function ($row) {
                 return $row->outgoings_count;
             })
+            ->addColumn('children_count', function ($row) { // New column for departments count
+                return $row->children_count;
+            })
             ->addColumn('action', function ($row) {
                 return '
                     <a href="' . route('departments.show', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
@@ -52,8 +55,8 @@ class DepartmentDataTable extends DataTable
         ->withCount('iotelegrams')
         ->withCount('outgoings')
         ->withCount('children')
-        ->with(['createdBy', 'managerAssistant', 'manager', 'updatedBy'])
-        ->where('parent_id', Auth::user()->department_id);
+        ->with(['createdBy', 'managerAssistant', 'manager', 'updatedBy']);
+        // ->where('parent_id', Auth::user()->department_id);
 
     }
 
@@ -89,6 +92,7 @@ class DepartmentDataTable extends DataTable
             Column::make('name')->title('الاسم'),
             Column::make('manger')->title('المدير'),
             Column::make('manger_assistance')->title('مساعد المدير'),
+            Column::make('children_count')->title('الاقسام'),
             Column::make('outgoings_count')->title(' الصادر'),
             Column::make('iotelegrams_count')->title('الوارد'),
             Column::computed('action')

@@ -1,6 +1,9 @@
 <?php
 
-use App\Models\io_files;
+use App\Models\EmployeeVacation;
+use App\Models\Io_file;
+use App\Models\User;
+use App\Models\VacationType;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -132,8 +135,25 @@ if (!function_exists('UploadFiles')) {
 }
 function CheckUploadIoFiles($id)
 {
-    $count = io_files::where('iotelegram_id', $id)->count();
+    $count = Io_file::where('iotelegram_id', $id)->count();
     if ($count > 0) {
+        return true;
+    }
+    return false;
+}
+function getEmployees()
+{
+    return User::where('flag', 'employee')->get();
+}
+function getVactionTypes()
+{
+    return VacationType::all();
+}
+
+function CheckStartVacationDate($id)
+{
+    $EmployeeVaction =  EmployeeVacation::find($id);
+    if ($EmployeeVaction->date_from > date('Y-m-d')) {
         return true;
     }
     return false;

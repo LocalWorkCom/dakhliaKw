@@ -19,24 +19,39 @@ class outgoingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(outgoingsDataTable $dataTable)
+    public function index(outgoingsDataTable $dataTable,Request $request)
     {
        
-        return $dataTable->render('outgoing.viewAll');
-       //return view("outgoing.viewAll");
-   
+        $status = $request->get('status', 'active'); // Default to 'active' if not provided
+        // $data =$dataTable->with('status', $status);
+        // return view('outgoing.viewAll',compact('data'));
+        $view = 'outgoing.viewall';
+        return $dataTable->with('status', $status)->render($view);
     }
     public function uploadFiles($id){
         dd($id);
     }
     public function showFiles($id){
-        dd($id);
+        
+        return view('outgoing.showfile');
     }
     public function getExternalUsersAjax()
     {
         $users = exportuser::all();
         return $users;
     }
+    public function addToArchive($id){
+        $export = outgoings::find($id);
+        $export->active=1;
+        $export->save();
+        return redirect()->back()->with('success','تم الأضافه الى الارشيف');
+    }
+    public function showArchive(outgoingsDataTable $dataTable, Request $request){
+        $status = $request->get('status', 'inactive'); // Default to 'inactive' if 
+        return $dataTable->with('status', $status)->render('outgoing.archiveAll');
+
+    }
+    
     public function addUaersAjax(Request $request)
     {
         
@@ -98,19 +113,21 @@ class outgoingController extends Controller
         $export->updated_by = auth()->id();//auth auth()->id
         $export->department_id = $request->from_departement;
         $export->save(); 
-        $files=new outgoing_files();
-        $files->outgoing_id = $export->id;
-        $files->created_by=auth()->id();//auth auth()->id
-        $files->updated_by=auth()->id();//auth auth()->id
-        $files->active =0;
-        $files->save(); 
+    
 
-        $file_model = outgoing_files::find($files->id);
         if( $request->hasFile('files') ){
          
             if (function_exists('UploadFiles')) {
                  //  dd('file yes');
                 foreach ($request->file('files') as $file) {
+                    $files=new outgoing_files();
+                    $files->outgoing_id = $export->id;
+                    $files->created_by=auth()->id();//auth auth()->id
+                    $files->updated_by=auth()->id();//auth auth()->id
+                    $files->active =0;
+                    $files->save();
+                    $file_model = outgoing_files::find($files->id);
+
                     UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
                 }
             }
@@ -130,7 +147,7 @@ class outgoingController extends Controller
        
         $departments=ExternalDepartment::all();
 
-        return view('outgoing.show', compact('data','users','is_file','departments'));
+        return view('outgoing.showdetail', compact('data','users','is_file','departments'));
     }
 
     /**
@@ -142,7 +159,7 @@ class outgoingController extends Controller
         $users=User::all();
         $is_file = outgoing_files::where('outgoing_id', $id)->where('active',0)->get();
         $departments=ExternalDepartment::all();
-        return view('outgoing.edit', compact('data','users','is_file','departments'));
+        return view('outgoing.editexport', compact('data','users','is_file','departments'));
     }
 
     /**
@@ -188,30 +205,23 @@ class outgoingController extends Controller
         $export->created_department =  $user->department_id;
 
         $export->save(); 
-        // $files=outgoing_files::where('outgoing_id',$id)->get();
-        // if(count($files) > 0){
-        //     foreach($files as $filedb){
-        //         if(!(in_array($request->file, $filedb))){
-        //             $filedb->active=1;
-        //         }
-        //     }
-        // $files->outgoing_id = $id;
-        // $files->created_by=auth()->id();//auth auth()->id
-        // $files->updated_by=auth()->id();//auth auth()->id
-        // $files->save(); 
-        // $file_model = outgoing_files::find($files->id);
-        // }
-       
-        // if( $request->hasFile('files') ){
+        if( $request->hasFile('files') ){
          
-        //     if (function_exists('UploadFiles')) {
-        //          //  dd('file yes');
-        //         foreach ($request->file('files') as $file) {
-        //            // UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
-        //         }
-        //     }
-        // }
-      
+            if (function_exists('UploadFiles')) {
+                 //  dd('file yes');
+                foreach ($request->file('files') as $file) {
+                    $files=new outgoing_files();
+                    $files->outgoing_id = $export->id;
+                    $files->created_by=auth()->id();//auth auth()->id
+                    $files->updated_by=auth()->id();//auth auth()->id
+                    $files->active =0;
+                    $files->save();
+                    $file_model = outgoing_files::find($files->id);
+
+                    UploadFiles('files/export', 'real_name','file_name', $file_model, $file);
+                }
+            }
+        }
         return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }
 
