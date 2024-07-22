@@ -23,10 +23,6 @@
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
-<<<<<<< HEAD
-=======
-
->>>>>>> 498db510a088c34f675ece339b385b53936ba5a4
 </head>
 
 <body>
