@@ -83,14 +83,22 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
-                        <h6>المستخدمين</h6>
+                        <a href="{{ route('user.index',0) }}">
+                            <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
+                            <h6>المستخدمين</h6>
+                        </a>
                     </li>
                    
                     <li class="nav-item">
-                        <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
-                        <h6>الموظفين</h6>
+                        <a href="{{ route('user.employees',1) }}">
+                            <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
+                            <h6>الموظفين</h6>
+                        </a>
+                        
                     </li>
+                    <div id="dropdownMenu3" class="dropdown-menu3">
+                        <a href="#">الاجازات</a> <hr>
+                    </div>
                  
                     <li class="nav-item">
                         <a href="{{route('departments.index')}}">
@@ -98,6 +106,12 @@
                         <h6>الادارات</h6>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('sub_departments.index') }}">
+                            <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                            <h6>الاقسام</h6>
+                            </a>
+                        </li>
                     <li class="nav-item">
                         <a href="{{route('setting.index')}}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
@@ -118,41 +132,13 @@
                             
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('user.employees',1) }}">
-                            <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
-                            <h6>الموظفين</h6>
-                        </a>
-                        
-                    </li>
-                    <div id="dropdownMenu3" class="dropdown-menu3">
-                        <a href="#">الاجازات</a> <hr>
-                        <a href="#">الشيفتات</a> 
-                    </div>
-                    <li class="nav-item">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6>التعيينات</h6>
-                    </li>
-                    <li class="nav-item">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6>الادارات</h6>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('user.index',0) }}">
-                            <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
-                            <h6>المستخدمين</h6>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
-                        <h6>الرئيسية</h6>
-                    </li>
-                    <li class="nav-item">
-                    <a href="{{ route('sub_departments.index') }}">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6>الاقسام</h6>
-                        </a>
-                    </li>
+                  
+                    
+                    
+                    
+                   
+                  
+                   
                  
 
                 </ul>
