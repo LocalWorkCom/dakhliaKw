@@ -16,11 +16,11 @@
                 <form action="{{ route('iotelegram.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="date">التاريخ:</label>
                         <input type="date" id="date" name="date" class="form-control" required>
-                    </div>
-                    <div class="row" style="justify-content: space-evenly;">
+                    </div> -->
+                    <!-- <div class="row" style="justify-content: space-evenly;">
                         <div class="mb-3">
                             <input type="radio" id="intern" name="type" checked value="in" required>
                             <label for="radio">داخلي</label>
@@ -29,8 +29,8 @@
                             <input type="radio" id="extern" name="type" value="out" required>
                             <label for="radio">خارجي</label>
                         </div>
-                    </div>
-                    <div class="mb-3">
+                    </div> -->
+                    <!-- <div class="mb-3">
                         <label for="from_departement">الجهة المرسلة:</label>
 
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
@@ -43,9 +43,9 @@
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="representive_id">اسم المندوب الجهة المرسلة :</label>
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
                             data-bs-target="#representative" id="representative-dev">
@@ -57,9 +57,9 @@
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="recieved_by">الموظف المستلم:</label>
                         <select id="recieved_by" name="recieved_by" class="form-control" required>
                             <option value="">اختر الموظف</option>
@@ -67,9 +67,9 @@
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="files_num"> عدد الكتب:</label>
                         <br>
                         <select id="files_num" name="files_num" class="form-control" required>
@@ -79,16 +79,16 @@
                                 <option value="{{ $i }}">{{ $i }}</option>
                             @endfor
                         </select>
-                    </div>
+                    </div> -->
                     <div class="mb-3">
-                        <label for="files">الملفات:</label>
+                        <!-- <label for="files">الملفات:</label>
                         <div id="fileInputs">
                             <div class="file-input mb-3">
                                 <input type="file" name="files[]" class="form-control-file">
                                 <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
-                            </div>
+                            </div> -->
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
+                        <!-- <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button> -->
                     </div>
 
                     <button type="submit" class="btn btn-primary">حفظ</button>

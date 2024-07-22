@@ -23,13 +23,16 @@
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
+<<<<<<< HEAD
+=======
 
+>>>>>>> 498db510a088c34f675ece339b385b53936ba5a4
 </head>
 
 <body>
     <div class="all-nav">
         <div class="upper-navbar d-flex">
-            <div class="second-section d-flex mx-4 col-md-9 col-sm-6">
+            <div class="second-section d-flex mx-1 col-md-9 col-sm-6">
                 <div class="dropdown">
                     {{-- @if ($user->login) --}}
                     @php
@@ -113,6 +116,7 @@
                         <a href="{{ route('Export.index') }}">
                             <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
                             <h6>الصادر</h6>
+                            
                         </a>
                     </li>
                     <li class="nav-item">
@@ -122,6 +126,10 @@
                         </a>
                         
                     </li>
+                    <div id="dropdownMenu3" class="dropdown-menu3">
+                        <a href="#">الاجازات</a> <hr>
+                        <a href="#">الشيفتات</a> 
+                    </div>
                     <li class="nav-item">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>التعيينات</h6>
@@ -257,6 +265,26 @@
                 }
             }
         }
+        function toggleDropdown3() {
+            var dropdownMenu = document.getElementById("dropdownMenu3");
+            if (dropdownMenu.style.display === "block") {
+                dropdownMenu.style.display = "none";
+            } else {
+                dropdownMenu.style.display = "block";
+            }
+        }
+        window.onclick = function(event) {
+            if (!event.target.matches('.btn2')) {
+                var dropdowns = document.getElementsByClassName("dropdownmenu3");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === "block") {
+                        openDropdown.style.display = "none";
+                    }
+                }
+            }
+        }
+        document.querySelector('li').classList.add('active');
     </script>
 </body>
 
