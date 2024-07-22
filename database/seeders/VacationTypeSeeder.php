@@ -23,7 +23,7 @@ class VacationTypeSeeder extends Seeder
 
         // Insert data into the table
         foreach ($types as $type) {
-            DB::table('vacation_type')->insert($type);
+            DB::table('vacation_types')->insert($type);
         }
     }
 }
