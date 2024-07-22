@@ -3,7 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\io_files;
-use App\Models\iotelegrams;
+use App\Models\Iotelegram;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -66,7 +66,7 @@ class IoTelegramDataTable extends DataTable
     /**
      * Get the query source of dataTable.
      */
-    public function query(iotelegrams $model): QueryBuilder
+    public function query(Iotelegram $model): QueryBuilder
     {
         return $model->newQuery()->where('active', 1)->with(['created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department']);
     }
@@ -105,7 +105,6 @@ class IoTelegramDataTable extends DataTable
             Column::make('from_departement')->title('الجهة المرسلة'),
             Column::make('representive_id')->title('المندوب'),
             Column::make('recieved_by')->title('الموظف المستلم'),
-
             Column::make('files_num')->title('عدد الفايلات'),
             Column::make('type')->title('النوع'),
             Column::computed('action')

@@ -6,8 +6,8 @@ use App\DataTables\IoTelegramDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\departements;
 use App\Models\ExternalDepartment;
-use App\Models\io_files;
-use App\Models\iotelegrams;
+use App\Models\Io_file;
+use App\Models\Iotelegram;
 use App\Models\Postman;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -46,7 +46,7 @@ class IoTelegramController extends Controller
             ]);
         }
 
-        $iotelegram = new iotelegrams();
+        $iotelegram = new Iotelegram();
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;
         $iotelegram->representive_id = $request->representive_id;
@@ -59,7 +59,7 @@ class IoTelegramController extends Controller
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 // You can modify the UploadFiles function call according to your needs
-                $io_file = new io_files();
+                $io_file = new Io_file();
                 $io_file->iotelegram_id = $iotelegram->id;
                 $io_file->created_by = auth()->id();
                 $io_file->updated_by = auth()->id();
@@ -88,7 +88,7 @@ class IoTelegramController extends Controller
     public function show($id)
     {
         //
-        $iotelegram = iotelegrams::find($id);
+        $iotelegram = Iotelegram::find($id);
         $representives = Postman::all();
         $recieves = User::all();
         $departments = departements::all();
@@ -107,7 +107,7 @@ class IoTelegramController extends Controller
         $recieves = User::all();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-        $iotelegram = iotelegrams::find($id);
+        $iotelegram = Iotelegram::find($id);
 
         return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram', 'external_departments'));
     }
@@ -118,7 +118,7 @@ class IoTelegramController extends Controller
     public function update(Request $request, $id)
     {
 
-        $iotelegram =  iotelegrams::find($id);
+        $iotelegram =  Iotelegram::find($id);
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;
         $iotelegram->representive_id = $request->representive_id;
@@ -132,7 +132,7 @@ class IoTelegramController extends Controller
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 // You can modify the UploadFiles function call according to your needs
-                $io_file = new io_files();
+                $io_file = new Io_file();
                 $io_file->iotelegram_id = $iotelegram->id;
                 $io_file->created_by = auth()->id();
                 $io_file->updated_by = auth()->id();
@@ -202,7 +202,7 @@ class IoTelegramController extends Controller
     }
     public function downlaodfile($id)
     {
-        $file = io_files::find($id);
+        $file = Io_file::find($id);
         // $download=downloadFile($file->file_name,$file->real_name);
         $file_path = public_path($file->file_name);
         $file_name = basename($file->real_name);
@@ -212,7 +212,7 @@ class IoTelegramController extends Controller
     }
     public function AddArchive($id)
     {
-        $iotelegram = iotelegrams::find($id);
+        $iotelegram = Iotelegram::find($id);
         $iotelegram->active = 0;
         $iotelegram->save();
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\dashboard\IoTelegramController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\outgoingController;
+use App\Http\Controllers\dashboard\VacationController;
 
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
@@ -31,9 +32,6 @@ use App\Http\Controllers\PostmanController;
 
 // });
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
 
 Route::get('/login', function () {
     return view('login');
@@ -42,7 +40,21 @@ Route::get('/login', function () {
 
 
 //  Auth verfication_code
-Route::post('/create', [UserController::class, 'store'])->name('create');
+Route::middleware(['auth'])->group(function () {
+    
+    Route::get('/', function () {
+        return view('welcome');
+    })->name('home');
+    
+    // Route::any('/user', [UserController::class, 'index'])->name('user.index');
+    Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index');
+    Route::get('api/users/{id}', [UserController::class, 'getUsers'])->name('api.users');
+    Route::get('/users_create/{id}', [UserController::class, 'create'])->name('user.create');
+    Route::post('/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('/employees/{id}', [UserController::class, 'index'])->name('user.employees');
+});
+
+
 Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::any('/logout', [UserController::class, 'logout'])->name('logout');
 Route::post('/verfication_code', [UserController::class, 'verfication_code'])->name('verfication_code');
@@ -62,52 +74,51 @@ Route::middleware(['auth', 'check.permission:view Rule,view Permission,view depa
     Route::any('/permission_create', [PermissionController::class, 'create'])->name('permission.create');
 
     Route::any('/rule', [RuleController::class, 'index'])->name('rule.index');
-    Route::any('/rule_create',[RuleController::class, 'create'])->name('rule.create');
-
+    Route::any('/rule_create', [RuleController::class, 'create'])->name('rule.create');
 });
 // create All Models permission
 Route::middleware(['auth', 'check.permission:create Permission,create Rule,create departements'])->group(function () {
     Route::any('/permission_store', [PermissionController::class, 'store'])->name('permission.store');
-    Route::any('/rule_store',[RuleController::class, 'store'])->name('rule.store');
+    Route::any('/rule_store', [RuleController::class, 'store'])->name('rule.store');
 });
 // edit All Models permission
 Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit departements'])->group(function () {
     Route::any('/permission_edit/{id}', [PermissionController::class, 'edit'])->name('permissions_edit');
-    Route::any('/rule_edit/{id}',[RuleController::class, 'edit'])->name('rule_edit');
-    Route::any('/rule_update/{id}',[RuleController::class, 'update'])->name('rule_update');
+    Route::any('/rule_edit/{id}', [RuleController::class, 'edit'])->name('rule_edit');
+    Route::any('/rule_update/{id}', [RuleController::class, 'update'])->name('rule_update');
     // Route::resource('permissions', PermissionController::class);
     // Route::resource('rules', RuleController::class);
 });
 
 Route::get('/sub_departments', [DepartmentController::class, 'index_1'])->name('sub_departments.index');
 Route::get('/sub_departments/create', [DepartmentController::class, 'create_1'])->name('sub_departments.create');
-    Route::post('/sub_departments', [DepartmentController::class, 'store_1'])->name('sub_departments.store');
+Route::post('/sub_departments', [DepartmentController::class, 'store_1'])->name('sub_departments.store');
 // //permission
-    // Route::any('/permission_destroy',[PermissionController::class, 'destroy'])->name('permission.destroy');
-    // Route::any('/permission_view',[PermissionController::class, 'show'])->name('permission.view');
+// Route::any('/permission_destroy',[PermissionController::class, 'destroy'])->name('permission.destroy');
+// Route::any('/permission_view',[PermissionController::class, 'show'])->name('permission.view');
 
 
 
 
 
 //role
-    // Route::any('/rule_destroy',[RuleController::class, 'destroy'])->name('rule.destroy');
-    // Route::any('/rule_view',[RuleController::class, 'show'])->name('rule.view');
+// Route::any('/rule_destroy',[RuleController::class, 'destroy'])->name('rule.destroy');
+// Route::any('/rule_view',[RuleController::class, 'show'])->name('rule.view');
 
 // department
-    // Route::resource('departments', DepartmentController::class);
-    Route::post('departments_store', [DepartmentController::class, 'store']);
-    Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
-    Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
-    // Department routes
-    Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
+// Route::resource('departments', DepartmentController::class);
+Route::post('departments_store', [DepartmentController::class, 'store']);
+Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
+Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
+// Department routes
+Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
 
-    Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create');
-    Route::get('/departments/show/{department}', [DepartmentController::class, 'show'])->name('departments.show');
-    Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
-    Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
-    Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
-    Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create');
+Route::get('/departments/show/{department}', [DepartmentController::class, 'show'])->name('departments.show');
+Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
+Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
+Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
+Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
 //Start Export routes
 Route::resource('Export', outgoingController::class);
@@ -121,6 +132,8 @@ Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('tes
 Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile');
 
 //End Export routes
+
+
 
 
 Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->name('postman.ajax');
@@ -138,6 +151,17 @@ Route::get('iotelegram/archives', [IoTelegramController::class, 'Archives'])->na
 Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add');
 Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
 
+
+
+
+
+Route::get('vacations', [VacationController::class, 'index'])->name('vacations.list');
+Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add');
+Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store');
+Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit');
+Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update');
+Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show');
+Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete');
 
 
 
