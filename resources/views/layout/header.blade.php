@@ -128,8 +128,16 @@
                         <h6>التعيينات</h6>
                     </li>
                     <li class="nav-item">
+                    <a href="{{ route('sub_departments.index') }}">
+                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <h6>الاقسام</h6>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                    <a href="{{ route('departments.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>الادارات</h6>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('user.index',0) }}">
@@ -141,12 +149,7 @@
                         <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
                         <h6>الرئيسية</h6>
                     </li>
-                    <li class="nav-item">
-                    <a href="{{ route('sub_departments.index') }}">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6>الاقسام</h6>
-                        </a>
-                    </li>
+                    
                  
 
                 </ul>
