@@ -3,7 +3,6 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-
         'reference' => '024a158dff5c328fd48369248be8687fb20f4b7d',
 
         'type' => 'project',
