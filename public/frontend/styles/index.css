@@ -1,6 +1,11 @@
 body{
     font-family: Almarai;
-
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+main {
+    flex: 1; 
 }
 .upper-navbar{
     background-color: #274373;
@@ -82,7 +87,7 @@ li img{
 }
 
 li {
-    width: 205px;
+    width: 160px;
     margin-inline: 10px;
 }
 ul {
@@ -266,6 +271,7 @@ footer{
     background-color: #274373 ;
     height: 50px;
     padding: 10px;
+    margin-top: auto;
 }
 footer p{
     text-align: center;
@@ -547,22 +553,17 @@ font-weight: 700;
 line-height: 30px;
 color: #1C1B1B;
   }
-  .name h3{
-    font-family: Almarai;
-font-size: 25px;
-font-weight: 400;
-line-height: 30px;
-color: #032F70;
-  }
-  .name button{
-    width: 136px;
-height: 47px;
-padding: 10px 27px 10px 27px;
-border-radius:10px;
-background-color: #B3261E;
-border: none;
-color: #FFFFFF;
-  }
+  .name button {
+    width: 91px;
+    height: 38px;
+    /* padding: 10px 27px 10px 27px; */
+    border-radius: 10px;
+    background-color: #f5f6fa;
+    border: none;
+    color: #259240;
+    font-size: 26px;
+}
+
   .navbar-toggler {
     background-color: #ffffff;
     color: #032F70;
@@ -764,13 +765,19 @@ background-color: #F4F7FD;
 }
 /* /* ******************** data table style ************* */
 .dataTables_filter input {
-    width: 100%;
+    width: 37%;
     border-radius: 20px;
     border: 1.5px solid #cfc8c8;
-height: 32px;
-margin-bottom: 10px;
-text-align: center !important;
-color: #9b9999 !important;
+    height: 35px;
+    margin-bottom: 10px;
+    text-align: center !important;
+    color: #9b9999 !important;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    float: left !important;
+    text-align: right;
+    width: 100% !important;
 }
 .dataTables_filter label {
     display: flex;
@@ -849,6 +856,7 @@ table.dataTable.no-footer {
     font-size: 17px !important;
     display: flex !important;
     justify-content: center !important;
+    margin-bottom: 10px !important;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     color: #333 !important;
