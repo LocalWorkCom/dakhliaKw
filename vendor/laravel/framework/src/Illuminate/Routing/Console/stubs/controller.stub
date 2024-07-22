@@ -2,8 +2,20 @@
 
 namespace {{ namespace }};
 
+<<<<<<< HEAD:vendor/laravel/framework/src/Illuminate/Routing/Console/stubs/controller.stub
 use {{ rootNamespace }}Http\Controllers\Controller;
 use Illuminate\Http\Request;
+=======
+use App\Models\Rule;
+use App\Models\User;
+use App\Models\Permission;
+use App\Models\departements;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreRuleRequest;
+use App\Http\Requests\UpdateRuleRequest;
+>>>>>>> e17e76b65ca999f8b3ba0307038961661e4df953:app/Http/Controllers/RuleController.php
 
 class {{ class }} extends Controller
 {
@@ -20,7 +32,16 @@ class {{ class }} extends Controller
      */
     public function create()
     {
-        //
+        $user = User::find(Auth::user()->id);
+        $rule_permisssion = Rule::find($user->rule_id);
+        $permission_ids = explode(',', $rule_permisssion->permission_ids);
+        $allPermission = Permission::whereIn('id', $permission_ids)->get();
+        // dd($allPermission);
+        $alldepartment =$user->createdDepartments;
+        return view('role.create',compact('allPermission','alldepartment'));
+
+        // return $dataTable->render('permission.create'  ,compact('models'));
+
     }
 
     /**
@@ -28,7 +49,37 @@ class {{ class }} extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request);
+        // dd($request);
+        $request->validate([
+            'name' => 'required|string',
+            'permissions_ids' => 'required',
+            'department_id' => 'required',
+        ]);
+
+
+        try {
+            // dd("");
+            $permission_ids = implode(",", $request->permissions_ids);
+            // dd( $permission_ids);
+            // Create the rule
+            $rule = new Rule();
+            $rule->name = $request->name;
+            $rule->department_id = $request->department_id;
+            $rule->permission_ids = $permission_ids;
+            $rule->save();
+            // Dynamically create model instance based on the model class string
+
+            return response()->json("ok");
+            // dd("sara");
+            // return redirect()->back()->with('alert', 'Permission created successfully.')
+            // return redirect()->back()->with('success', 'Permission created successfully.');
+        } catch (\Exception $e) {
+            // dd("yy");
+            return response()->json($e->getMessage());
+            // return redirect()->back()->with('error', 'Failed to create permission. ' . );
+        }
+        
     }
 
     /**
