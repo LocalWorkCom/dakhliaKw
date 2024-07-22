@@ -99,6 +99,8 @@ Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit depa
 Route::get('/sub_departments', [DepartmentController::class, 'index_1'])->name('sub_departments.index');
 Route::get('/sub_departments/create', [DepartmentController::class, 'create_1'])->name('sub_departments.create');
 Route::post('/sub_departments', [DepartmentController::class, 'store_1'])->name('sub_departments.store');
+Route::get('/sub_departments/{department}/edit', [DepartmentController::class, 'edit_1'])->name('sub_departments.edit');
+Route::put('/sub_departments/{department}', [DepartmentController::class, 'update_1'])->name('sub_departments.update');
 // //permission
 // Route::any('/permission_destroy',[PermissionController::class, 'destroy'])->name('permission.destroy');
 // Route::any('/permission_view',[PermissionController::class, 'show'])->name('permission.view');
