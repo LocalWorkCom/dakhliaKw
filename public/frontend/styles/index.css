@@ -1,6 +1,6 @@
 body{
     font-family: Almarai;
-  
+
 
 }
 .upper-navbar{
@@ -16,7 +16,7 @@ body{
     background-color: rgba(207, 206, 206, 0.788);
     border-radius: 20px;
 }
-    
+
 .navbar-nav li h6 {
     font-family: Almarai;
     font-size: 21px;
@@ -93,10 +93,10 @@ ul {
 }
 
 .nav-item {
-    display: inline-block; 
+    display: inline-block;
     padding: 1px 2px;
     cursor: pointer;
-    position: relative; 
+    position: relative;
 }
 .nav-item.active::after,
 .nav-item:hover::after {
@@ -640,7 +640,7 @@ background-color: #f1f1f1;
 text-decoration: none;
 color: #081d64;
 padding-right: 10px;
-font-size: 18px;
+font-size: 20px;
 }
 .breadcrumb-item.active a {
     color: #878686;
@@ -707,4 +707,46 @@ text-align: right;
 input[type="radio"]{
     height: 20px;
     width: 30px;
+}
+.welcome p{
+    position: absolute;
+    right: -100px;
+    animation: welcome-text 1s forwards;
+}
+
+@keyframes welcome-text {
+    0% {
+        right: -100px; /* Start position */
+    }
+    100% {
+        right: 100px; /* End position */
+    }
+}
+.modal-header{
+position: relative;
+background-color: #F4F7FD;
+}
+.modal-header img {
+    height: 40px;
+    width: 40px;
+    margin-inline: 15px;
+}
+.modal-header h5{
+    font-family: Almarai;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 44.64px;
+    text-align: center;
+
+}
+.btn-close {
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    top: -15px;
+    right: -13px;
+    border-radius: 50%;
+    font-size: 25px;
+    background-color: #274373;
+    color: whitesmoke;
 }

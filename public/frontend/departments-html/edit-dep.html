@@ -22,7 +22,6 @@
 </head>
 
 <body>
-
     <div class="all-nav">
         <div class="upper-navbar d-flex ">
             <div class="second-section d-flex mx-md-4 mx-sm-0 col-md-9 col-sm-6">
@@ -133,120 +132,112 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-                    <li class="breadcrumb-item"><a href="#">الواردات </a></li>
-                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
+                    <li class="breadcrumb-item"><a href="#">الاقسام </a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل علي القسم </a></li>
                 </ol>
             </nav>
         </div>
         <div class="row ">
             <div class="container welcome col-11">
-                <p> الــــــــــــواردات </p>
+                <p> الصــــــــــــادرات </p>
             </div>
         </div>
         <br>
+
+
         <div class="row">
             <div class="container  col-11 mt-3 p-0 ">
-                <div class="container col-10 mt-5" dir="rtl">
-                    <div class="form-row justify-content-center">
-                        <div class="header-radio d-flex align-items-center justify-content-around">
-                            <div class="radio1 mr-3">
-                                <input type="radio" id="extern" name="type" value="out" required>
-                                <label for="extern">خارجي</label>
-                            </div>
-                            <div class="radio2">
-                                <input type="radio" id="intern" name="type" checked value="in" required>
-                                <label for="intern">داخلي</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <div class="container col-10 mt-4" style="border:0.5px solid #C7C7CC;">
 
-                <div class="form-row pt-4">
-                    <div class="form-group col-md-6 ">
-                        <label for="representive_id">اختر المندوب </label>
-                        <select id="representive_id" name="representive_id" class="form-control" required>
-                            <option value="">اختر المندوب</option>
-                            @foreach ($representives as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div class="form-row pt-4 mx-2">
                     <div class="form-group col-md-6">
-                        <label for="recieved_by">الموظف المستلم</label>
-                        <select id="recieved_by" name="recieved_by" class="form-control" required>
-                            <option value="">اختر الموظف</option>
-                            @foreach ($recieves as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
+                        <label for="name">اسم القسم </label>
+            <input type="text" name="name" class="form-control" value="{{ old('name', $department->name) }}">
+            @error('name')
+                <div class="alert alert-danger" style="height: 40px;">{{ $message }}</div>
+            @enderror
                     </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="date">التاريخ:</label>
-                        <input type="date" id="date" name="date" class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="from_departement">الجهة المرسلة</label>
 
-                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
-                            id="extern-department-dev" data-bs-target="#extern-department">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <select id="from_departement" name="from_departement" class="form-control" required>
-                            <option value="">اختر الجهة</option>
-                            @foreach ($departments as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="form-group col-md-6">
+                        <label for="manger">المدير</label>
+            <select name="manger" class="form-control">
+                <option value="">اختر المدير </option>
+                @foreach($users as $user)
+                    <option value="{{ $user->id }}" {{ $user->id == old('manger', $department->manger) ? 'selected' : '' }}>
+                        {{ $user->name }}
+                    </option>
+                @endforeach
+            </select>
                     </div>
                 </div>
-                <div class="form-row">
+
+                <div class="form-row mx-2">
+                    <div class="form-group  col-md-12">
+                        <label for="manger_assistance">مساعد المدير </label>
+                        <select name="manger_assistance" class="form-control">
+                            <option value="">اختر مساعد المدير  </option>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ $user->id == old('manger_assistance', $department->manger_assistance) ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('manger_assistance')
+                            <div class="alert alert-danger" style="height: 40px;">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-row mx-2">
                     <div class="form-group col-md-12">
-                        <label for="files_num"> عدد الكتب</label>
-
-                        <select id="files_num" name="files_num" class="form-control" required>
-                            <option value="">اختر العدد</option>
-
-                            @for ($i = 1; $i <= 10; $i++)
-                                <option value="{{ $i }}">{{ $i }}</option>
-                            @endfor
-                        </select>
+                        <label for="description">الوصف </label>
+                        <input type="text" name="description" class="form-control"  value="{{ old('name', $department->description) }}">
+                        @error('description')
+                            <div class="alert alert-danger" style="height: 40px;">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
-                <div class="form-row" dir="rtl">
-                    <button type="button" class="btn-all mt-3" data-bs-toggle="modal"
-                    data-bs-target="#representative" id="representative-dev"
-                    style="background-color: #FAFBFD; border: none;">
-                 <img src="../images/add-btn.svg" alt=""> اضافة مندوب
-                </button>
-                </div> <br>
-                <div class="form-row d-block " >
-                    <div class="form-group col-md-12">
-                        <label for="files" >اضافة ملف</label>
-                    <div id="fileInputs">
-                        <div class="file-input mb-3" dir="rtl">
-                            <input type="file" name="files[]" class="form-control-file">
-                            <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             <div class="form-row" dir="rtl">
-                    <button type="button" class="btn-all btn-sm mt-2" id="addFile"
-                    style="background-color: #FAFBFD; border: none;"><img src="../images/add-btn.svg" alt="">إضافة ملف جديد
-                </button>
+<div class="form-row mx-2" >
+    <button class="btn-blue " type="submit" dir="rtl">
+        <img class="px-1" src="../images/edit.svg" alt="">تعديل
 
-             </div> <br>
-            </div>
-               <div class="container col-10 ">
-                <div class="form-row mt-4 mb-5">
-                    <button type="submit" class="btn-blue">حفظ</button>
-                </div>
-               </div>
+
+
+    </button>
+</div><br><br>
             </div>
         </div>
+            <!-- **********modal******** -->
+            <div class="modal fade" id="addFile" tabindex="-1" aria-labelledby="extern-departmentLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="extern-departmentLabel">إضافة ملفات جديدة</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="mb-3">
+                                    <label for="files">حمل الملفات</label>
+                                    <div id="fileInputs">
+                                        <div class="file-input mb-3">
+                                            <input type="file" name="files[]" class="form-control-file">
+                                            <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف
+                                جديد</button>
+
+                            <!-- Save button -->
+                            {{-- <div class="text-end">
+                                <button type="submit" class="btn btn-primary">حفظ</button>
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
         <br> <br> <br> <br>
         <footer class="my-2">
@@ -254,5 +245,48 @@
                 <p>جميع الحقوق محفوظه </p>
             </div>
         </footer>
-        </body>
-            </html>
+        <script>
+
+            $(document).ready(function() {
+                let fileInputCount = 1;
+                        const maxFileInputs = 9;
+
+                        $('#addFile').click(function() {
+                                var fileCount = $('#fileInputs').find('.file-input').length;
+                                if (fileCount < 10) {
+                                    var newInput = '<div class="file-input mb-3">' +
+                                        '<input type="file" name="files[]" class="form-control-file" >' +
+                                        '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
+                                        '</div>';
+                                    $('#fileInputs').append(newInput);
+                                    checkFileCount(); // Update button states
+                                } else {
+                                    alert('لا يمكنك إضافة المزيد من الملفات.');
+                                }
+                            });
+                        function checkFileCount() {
+                                var fileCount = $('#fileInputs').find('.file-input').length;
+                                if (fileCount > 1) {
+                                    $('.remove-file').prop('disabled', false);
+                                } else {
+                                    $('.remove-file').prop('disabled', true);
+                                }
+                            }
+                       // Remove file input
+                       $(document).on('click', '.remove-file', function() {
+                                $(this).parent('.file-input').remove();
+                                checkFileCount(); // Update button states
+
+                            });
+
+                            $(document).on('click', '.remove-file', function() {
+                                $(this).parent('.file-input-old').remove();
+                                checkFileCount(); // Update button states
+
+                            });
+                    });
+
+                </script>
+</body></html>
+
+<!-- toqa -->
