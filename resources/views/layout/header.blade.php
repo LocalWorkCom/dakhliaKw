@@ -1,6 +1,6 @@
 
 
-    <div class="all-nav">
+    <div class="all-nav" >
         <div class="upper-navbar d-flex">
             <div class="second-section d-flex mx-1 col-md-9 col-sm-6">
                 <div class="dropdown">

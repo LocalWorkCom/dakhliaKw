@@ -42,7 +42,8 @@ class UserController extends Controller
         $data = User::where('flag', $flagType)->get();
        
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<button class="btn btn-primary btn-sm">Edit</button>'
+            return '<button class="btn btn-primary btn-sm">Edit</button>
+              <a href="" class="btn btn-primary btn-sm">vacations</a>'
                     ;
         })
         ->rawColumns(['action'])
@@ -166,7 +167,7 @@ class UserController extends Controller
                 // }
 
             } else {
-                if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code')) {
+                if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code')|| url()->previous() == route('verfication_code')) {
                     return view('resetpassword', compact('military_number', 'firstlogin'));
                 }
                 else {
@@ -306,7 +307,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
         // validation
         // $validatedData = $request->validate([
         //     'military_number' => 'required|string|unique:users|max:255',
@@ -353,9 +354,11 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         //
+        $user = User::find($id);
+        return view('user.edit',compact('user'));
     }
 
     /**
