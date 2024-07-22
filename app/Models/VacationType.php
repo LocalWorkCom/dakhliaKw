@@ -9,4 +9,7 @@ class VacationType extends Model
 {
     use HasFactory;
     protected $table = "vacation_types";
+    protected $fillable = [
+        'name'
+    ];
 }
