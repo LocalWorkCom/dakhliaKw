@@ -11,6 +11,8 @@ use App\Models\Iotelegram;
 use App\Models\Postman;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class IoTelegramController extends Controller
 {
@@ -160,16 +162,37 @@ class IoTelegramController extends Controller
     //postman
     public function addPostmanAjax(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'phone1' => 'required|unique:postmans,phone1',
+            'phone2' => 'unique:postmans,phone2',
+            'national_id' => 'required|unique:postmans,national_id',
+            'modal_department_id' => 'required',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422); // HTTP 422 Unprocessable Entity
+        }
+    
         $Postman = new Postman();
         $Postman->name = $request->name;
         $Postman->phone1 = $request->phone1;
         $Postman->phone2 = $request->phone2;
         $Postman->department_id = $request->modal_department_id;
-
         $Postman->national_id = $request->national_id;
         $Postman->save();
-        return true;
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Postman created successfully',
+            'postman' => $Postman // Optionally return the created postman object
+        ], 201); // HTTP 201 Created
     }
+    
+    
     //external department
     public function addExternalDepartmentAjax(Request $request)
     {

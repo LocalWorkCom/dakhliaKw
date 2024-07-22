@@ -1,6 +1,6 @@
 
 
-    <div class="all-nav">
+    <div class="all-nav" >
         <div class="upper-navbar d-flex">
             <div class="second-section d-flex mx-1 col-md-9 col-sm-6">
                 <div class="dropdown">
@@ -69,7 +69,7 @@
                 <img class="mt-2" src="{{ asset('frontend/images/logo.svg') }}" alt="">
             </div>
         </div>
-        <div class="navbar navbar-expand-md mb-4 w-100" role="navigation">
+        <div class="navbar navbar-expand-md mb-4 w-100" role="navigation" dir="rtl">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -101,7 +101,17 @@
                     </div>
                  
                     <li class="nav-item">
-                        <a href="{{route('departments.index')}}">
+                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <h6>التعيينات</h6>
+                    </li>
+                    <li class="nav-item">
+                    <a href="{{ route('sub_departments.index') }}">
+                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <h6>الاقسام</h6>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                    <a href="{{ route('departments.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>الادارات</h6>
                         </a>
@@ -125,6 +135,7 @@
                             <h6>الوارد</h6>
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a href="{{ route('Export.index') }}">
                             <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
@@ -132,13 +143,8 @@
                             
                         </a>
                     </li>
-                  
-                    
-                    
-                    
-                   
-                  
-                   
+              
+
                  
 
                 </ul>

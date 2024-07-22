@@ -4,20 +4,29 @@
     اضافة
 @endsection
 @section('content')
-    <div class="container">
-        <div class="mb-3">
-            <a href="{{ route('vacations.list') }}" class="btn btn-primary mt-3">رجوع</a>
+    <div class="row col-11" dir="rtl">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('vacations.list') }}">الاجازات </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
+            </ol>
+        </nav>
+    </div>
+    @include('inc.flash')
+    <div class="row ">
+        <div class="container welcome col-11">
+            <p> الاجـــــــــازات </p>
         </div>
-        @include('inc.flash')
+    </div>
+    <br>
+    <div class="row">
+        <div class="container  col-11 mt-3 p-0 ">
+            <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-        <div class="card">
-            <div class="card-header">الاجازات</div>
-            <div class="card-body">
-                <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="mb-3">
-                        <label for="vacation_type_id">نوع الاجازة:</label>
+                <div class="form-row mx-2 mt-4">
+                    <div class="form-group col-md-6 "> <label for="vacation_type_id">نوع الاجازة:</label>
 
 
                         <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
@@ -28,7 +37,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group col-md-6">
                         <label for="employee_id">اسم الموظف:</label>
                         <select id="employee_id" name="employee_id" class="form-control" required
                             @if ($vacation->vacation_type_id == '3') disabled @endif>
@@ -39,23 +48,31 @@
                             @endforeach
                         </select>
                     </div>
+                </div>
 
 
-                    <div class="mb-3">
+
+                <div class="form-row mx-2 mt-4">
+
+                    <div class="form-group col-md-6">
                         <label for="date_from">تاريخ البداية:</label>
                         <input type="date" id="date_from" name="date_from" class="form-control" required
                             value="{{ $vacation->date_from }}">
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group col-md-6">
                         <label for="date_to">تاريخ النهاية:</label>
                         <input type="date" id="date_to" name="date_to" class="form-control"
                             value="{{ $vacation->date_to }}">
                     </div>
+                </div>
 
 
-                    <button type="submit" class="btn btn-primary">حفظ</button>
-                </form>
-            </div>
+                <div class="container col-12 ">
+                    <div class="form-row mt-4 mb-5">
+                        <button type="submit" class="btn-blue">حفظ</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

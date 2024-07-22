@@ -43,7 +43,7 @@ class departements extends Model
 
     public function iotelegrams()
     {
-        return $this->hasMany(iotelegrams::class , 'from_departement');
+        return $this->hasMany(Iotelegram::class , 'from_departement');
     }
     public function outgoings()
     {

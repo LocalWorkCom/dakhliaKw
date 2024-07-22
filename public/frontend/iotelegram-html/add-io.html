@@ -160,99 +160,100 @@
                         </div>
                     </div>
                 </div>
-            <div class="container col-10 mt-4" style="border:0.5px solid #C7C7CC;">
+                <div class="container col-10 mt-4" style="border:0.5px solid #C7C7CC;">
 
-                <div class="form-row pt-4">
-                    <div class="form-group col-md-6 ">
-                        <label for="representive_id">اختر المندوب </label>
-                        <select id="representive_id" name="representive_id" class="form-control" required>
-                            <option value="">اختر المندوب</option>
-                            @foreach ($representives as $item)
+                    <div class="form-row pt-4">
+                        <div class="form-group col-md-6 ">
+                            <label for="representive_id">اختر المندوب </label>
+                            <select id="representive_id" name="representive_id" class="form-control" required>
+                                <option value="">اختر المندوب</option>
+                                @foreach ($representives as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="recieved_by">الموظف المستلم</label>
-                        <select id="recieved_by" name="recieved_by" class="form-control" required>
-                            <option value="">اختر الموظف</option>
-                            @foreach ($recieves as $item)
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="recieved_by">الموظف المستلم</label>
+                            <select id="recieved_by" name="recieved_by" class="form-control" required>
+                                <option value="">اختر الموظف</option>
+                                @foreach ($recieves as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="date">التاريخ:</label>
-                        <input type="date" id="date" name="date" class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="from_departement">الجهة المرسلة</label>
-
-                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
-                            id="extern-department-dev" data-bs-target="#extern-department">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <select id="from_departement" name="from_departement" class="form-control" required>
-                            <option value="">اختر الجهة</option>
-                            @foreach ($departments as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="files_num"> عدد الكتب</label>
-
-                        <select id="files_num" name="files_num" class="form-control" required>
-                            <option value="">اختر العدد</option>
-
-                            @for ($i = 1; $i <= 10; $i++)
-                                <option value="{{ $i }}">{{ $i }}</option>
-                            @endfor
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row" dir="rtl">
-                    <button type="button" class="btn-all mt-3" data-bs-toggle="modal"
-                    data-bs-target="#representative" id="representative-dev"
-                    style="background-color: #FAFBFD; border: none;">
-                 <img src="../images/add-btn.svg" alt=""> اضافة مندوب
-                </button>
-                </div> <br>
-                <div class="form-row d-block " >
-                    <div class="form-group col-md-12">
-                        <label for="files" >اضافة ملف</label>
-                    <div id="fileInputs">
-                        <div class="file-input mb-3" dir="rtl">
-                            <input type="file" name="files[]" class="form-control-file">
-                            <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
-                </div>
-            </div>
-             <div class="form-row" dir="rtl">
-                    <button type="button" class="btn-all btn-sm mt-2" id="addFile"
-                    style="background-color: #FAFBFD; border: none;"><img src="../images/add-btn.svg" alt="">إضافة ملف جديد
-                </button>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="date">التاريخ:</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="from_departement">الجهة المرسلة</label>
 
-             </div> <br>
-            </div>
-               <div class="container col-10 ">
-                <div class="form-row mt-4 mb-5">
-                    <button type="submit" class="btn-blue">حفظ</button>
+                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                style="display: none" id="extern-department-dev" data-bs-target="#extern-department">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                            <select id="from_departement" name="from_departement" class="form-control" required>
+                                <option value="">اختر الجهة</option>
+                                @foreach ($departments as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="files_num"> عدد الكتب</label>
+
+                            <select id="files_num" name="files_num" class="form-control" required>
+                                <option value="">اختر العدد</option>
+
+                                @for ($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" dir="rtl">
+                        <button type="button" class="btn-all mt-3" data-bs-toggle="modal"
+                            data-bs-target="#representative" id="representative-dev"
+                            style="background-color: #FAFBFD; border: none;">
+                            <img src="../images/add-btn.svg" alt=""> اضافة مندوب
+                        </button>
+                    </div> <br>
+                    <div class="form-row d-block ">
+                        <div class="form-group col-md-12">
+                            <label for="files">اضافة ملف</label>
+                            <div id="fileInputs">
+                                <div class="file-input mb-3" dir="rtl">
+                                    <input type="file" name="files[]" class="form-control-file">
+                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row" dir="rtl">
+                        <button type="button" class="btn-all btn-sm mt-2" id="addFile"
+                            style="background-color: #FAFBFD; border: none;"><img src="../images/add-btn.svg"
+                                alt="">إضافة ملف جديد
+                        </button>
+
+                    </div> <br>
                 </div>
-               </div>
+                <div class="container col-10 ">
+                    <div class="form-row mt-4 mb-5">
+                        <button type="submit" class="btn-blue">حفظ</button>
+                    </div>
+                </div>
             </div>
         </div>
-        </main>
-        <br> <br> <br> <br>
-        <footer class="my-2">
-            <div class="footer ">
-                <p>جميع الحقوق محفوظه </p>
-            </div>
-        </footer>
-        </body>
-            </html>
+    </main>
+    <br> <br> <br> <br>
+    <footer class="my-2">
+        <div class="footer ">
+            <p>جميع الحقوق محفوظه </p>
+        </div>
+    </footer>
+</body>
+
+</html>

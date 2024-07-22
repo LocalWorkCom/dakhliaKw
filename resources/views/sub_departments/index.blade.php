@@ -14,9 +14,11 @@
             <div class="card-header">الاقسام</div>
 
             <div class="card-body">
-         
+            {!! $dataTable->table(['class' => 'table table-bordered table-hover dataTable']) !!}
             </div>
         </div>
     </div>
 @endsection
-
+@push('scripts')
+    {!! $dataTable->scripts() !!}
+@endpush
