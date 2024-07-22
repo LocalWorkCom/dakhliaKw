@@ -42,7 +42,8 @@ class UserController extends Controller
         $data = User::where('flag', $flagType)->get();
        
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<button class="btn btn-primary btn-sm">Edit</button>'
+            return '<button class="btn btn-primary btn-sm">Edit</button>
+              <a href="" class="btn btn-primary btn-sm">vacations</a>'
                     ;
         })
         ->rawColumns(['action'])

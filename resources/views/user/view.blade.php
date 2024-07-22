@@ -211,6 +211,7 @@
                                         showUrl = showUrl.replace(':id', row.id);
                                         return `
                                             <a href="` + showUrl + `" class="btn btn-primary btn-sm">Edit</a>
+                                            <a href="" class="btn btn-primary btn-sm">vacations</a>
                                         `;
                                         }
                                         
