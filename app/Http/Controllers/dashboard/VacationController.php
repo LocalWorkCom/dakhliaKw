@@ -2,26 +2,32 @@
 
 namespace App\Http\Controllers\dashboard;
 
-use App\DataTables\VacationDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\departements;
-use App\Models\ExternalDepartment;
-use App\Models\io_files;
-use App\Models\Vacation;
-use App\Models\Postman;
-use App\Models\User;
 use App\Models\EmployeeVacation;
-use App\Models\VacationType;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class VacationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(VacationDataTable $dataTable)
+    public function index($id)
     {
-        return $dataTable->render('vacation.index');
+        return view('vacation.index',compact('id'));
+        // return $dataTable->render('vacation.index');
+    }
+    public function getVacations($id) 
+     {
+        $data = EmployeeVacation::where('employee_id ', $id)->get();
+        return DataTables::of($data)
+        // ->addColumn('action', function ($row) {
+        //     return '<button class="btn btn-primary btn-sm">Edit</button>
+        //       <a href="" class="btn btn-primary btn-sm">vacations</a>'
+        //             ;
+        // })
+        ->rawColumns(['action'])
+        ->make(true);
     }
     /**
      * Show the form for creating a new resource.

@@ -5,8 +5,7 @@
     <title>User DataTable</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js">
-    </script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
 
 
     <script type="application/javascript" src="{{ asset('frontend/js/bootstrap.min.js')}}"></script>
@@ -37,24 +36,24 @@
                 <div class="dropdown">
                     {{-- @if ($user->login) --}}
                     @php
-                    $user = auth()->user();
+                        $user = auth()->user();
                     @endphp
 
                     @if (!empty($user))
-                    <button class="btn btn-2 mt-3" onclick="toggleDropdown()">
-                        <i class="fa-solid fa-angle-down mx-2"></i>
-                        {{ $user->name }}
-                        <i class="fa-solid fa-user mx-2"></i>
-                    </button>
-                    <div id="dropdownMenu" class="dropdown-menu">
-                        <a href="{{ route('logout') }}">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
-                    </div>
+                        <button class="btn btn-2 mt-3" onclick="toggleDropdown()">
+                            <i class="fa-solid fa-angle-down mx-2"></i>
+                            {{ $user->name }}
+                            <i class="fa-solid fa-user mx-2"></i>
+                        </button>
+                        <div id="dropdownMenu" class="dropdown-menu">
+                            <a href="{{ route('logout') }}">تسجيل خروج <i
+                                    class="fa-solid fa-right-from-bracket"></i></a>
+                        </div>
                     @else
-                    <button class="btn btn-2 mt-3">
-                        <a href="{{ route('login') }}" style="color: #ffffff; text-decoration:none;">سجل الدخول <i
-                                class="fa-solid fa-user mx-2"></i></a>
-                    </button>
-
+                        <button class="btn btn-2 mt-3">
+                            <a href="{{ route('login') }}" style="color: #ffffff; text-decoration:none;">سجل الدخول <i
+                                    class="fa-solid fa-user mx-2"></i></a>
+                        </button>
                     @endif
 
 
@@ -120,7 +119,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('user.employees',1) }}">
+                        <a href="{{ route('user.employees', 1) }}">
                             <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
                             <h6>الموظفين</h6>
                         </a>
@@ -135,7 +134,7 @@
                         <h6>الادارات</h6>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('user.index',0) }}">
+                        <a href="{{ route('user.index', 0) }}">
                             <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
                             <h6>المستخدمين</h6>
                         </a>
@@ -157,17 +156,18 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-        <div class="row " dir="rtl">
-        <div class="form-group mt-4  mx-2 col-12 d-flex ">
-        <button type="button" class="wide-btn" href="{{ route('user.create',$id) }}">
-                            <img src="../images/add-btn.svg" alt="img">
-                              اضافة جديد
-                        </button>
-        </div></div>
+            <div class="row " dir="rtl">
+                <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                    <button type="button" class="wide-btn" href="{{ route('user.create', $id) }}">
+                        <img src="../images/add-btn.svg" alt="img">
+                        اضافة جديد
+                    </button>
+                </div>
+            </div>
             <div class="col-lg-12">
                 <div class="bg-white p-5">
                     <!-- <div>
-                        <a href="{{ route('user.create',$id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
+                        <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
                             اضافه جديد</a>
                     </div>
                     <br> -->
@@ -195,37 +195,54 @@
                                     processing: true,
                                     serverSide: true,
                                     ajax: '{{ url('api/users') }}/' + id, // Correct URL concatenation
-                                    columns: [
-                                        { data: 'id', name: 'id' },
-                                        { data: 'name', name: 'name' },
-                                        { data: 'phone', name: 'phone' },
-                                        { data: 'military_number', name: 'military_number' },
-                                        { data: 'action', name: 'action', orderable: false, searchable: false }
+                                    columns: [{
+                                            data: 'id',
+                                            name: 'id'
+                                        },
+                                        {
+                                            data: 'name',
+                                            name: 'name'
+                                        },
+                                        {
+                                            data: 'phone',
+                                            name: 'phone'
+                                        },
+                                        {
+                                            data: 'military_number',
+                                            name: 'military_number'
+                                        },
+                                        {
+                                            data: 'action',
+                                            name: 'action',
+                                            orderable: false,
+                                            searchable: false
+                                        }
                                     ],
                                     columnDefs: [{
                                         targets: -1,
                                         render: function(data, type, row) {
-                                            
-                                        // Using route generation correctly in JavaScript
-                                        var showUrl = '{{ route("user.show", ":id") }}';
-                                        showUrl = showUrl.replace(':id', row.id);
-                                        return `
+
+                                            // Using route generation correctly in JavaScript
+                                            var showUrl = '{{ route('user.show', ':id') }}';
+                                            var vacationUrl = '{{ route('vacations.list', ':id') }}';
+                                            showUrl = showUrl.replace(':id', row.id);
+                                            vacationUrl = vacationUrl.replace(':id', row.id);
+                                            return `
                                             <a href="` + showUrl + `" class="btn btn-primary btn-sm">Edit</a>
-                                            <a href="" class="btn btn-primary btn-sm">vacations</a>
+                                            <a href="` + vacationUrl + `" class="btn btn-primary btn-sm">vacations</a>
                                         `;
                                         }
-                                        
+
                                     }]
                                 });
                             });
-                            
                         </script>
 
 
                     </div>
                 </div>
             </div>
-            
+
         </div>
 
     </div>
