@@ -1,7 +1,6 @@
 body{
     font-family: Almarai;
 
-
 }
 .upper-navbar{
     background-color: #274373;
@@ -9,14 +8,13 @@ body{
 .navbar-nav , .navbar {
  /* margin-inline: 80px; */
  background-color: #FFFFFF;
- 
+
 }
 ::-webkit-scrollbar {
     width: 5px;
     background-color: rgba(207, 206, 206, 0.788);
     border-radius: 20px;
 }
-
 .navbar-nav li h6 {
     font-family: Almarai;
     font-size: 21px;
@@ -31,42 +29,42 @@ cursor: pointer;
 /* .nav-item {
     position: relative;
     text-decoration: none;
-    color: inherit; 
-    transition: color 0.3s ease; 
+    color: inherit;
+    transition: color 0.3s ease;
 }
 
 .nav-item::before,
 .nav-item::after {
-    content: ''; 
+    content: '';
     position: absolute;
     left: 0;
-    width: 20%; 
-    height: 3px; 
+    width: 20%;
+    height: 3px;
     background-color: transparent;
     transition: background-color 0.3s ease;
 }
 
 .nav-item::before {
-    bottom: 0; 
+    bottom: 0;
 }
 
 .nav-item::after {
-    bottom: 0; 
-    transform: scaleX(0); 
-    transform-origin: center bottom; 
+    bottom: 0;
+    transform: scaleX(0);
+    transform-origin: center bottom;
 }
 
 .nav-item:hover::before,
 .nav-item:hover::after,
 .nav-item.active-page::before,
 .nav-item.active-page::after {
-    background-color: #032F70; 
+    background-color: #032F70;
 }
 
 .nav-item:hover::before,
 .nav-item.active-page::before {
-    height: 5px; 
-    margin-top: 150px !important; 
+    height: 5px;
+    margin-top: 150px !important;
 }
 
 .nav-item:hover::after,
@@ -79,13 +77,17 @@ cursor: pointer;
 
 li img{
     width: 30px;
-     height: 30px; 
+     height: 30px;
      margin-left: 15px;
 }
 
 li {
-    width: 300px;
-    /* margin-inline: 30px; */
+    width: 205px;
+    margin-inline: 10px;
+}
+ul {
+    list-style-type: none; /* Remove default list styles */
+    padding: 0;
 }
 ul {
     list-style-type: none; /* Remove default list styles */
@@ -232,14 +234,13 @@ padding: 0 !important;
     width: 80px;
     border-radius: 50%;
     padding: 20px;
-    
+
 }
 .card1 , .card2 , .card3 , .card4{
     /* width: 233px; */
 height: 220px;
 margin: 10px;
 border-radius: 20px;
-background-color: #FFF4DE;
 }
 .container{
     background-color: #FFFFFF;
@@ -320,7 +321,7 @@ text-align: center;
 .card svg circle:last-of-type {
   stroke-dasharray: 625px;
   stroke-dashoffset: calc(625px - (625px * var(--percent)) / 100);
-  stroke: #3498db; 
+  stroke: #3498db;
 }
 
 .card .number {
@@ -334,7 +335,7 @@ text-align: center;
 height: 100px;
 border-radius: 20px 20px 0px 0px;
 background-color: #F4F7FD;
-box-shadow: rgba(99, 99, 99, 0.2) 0px -2px 1px -11px, 
+box-shadow: rgba(99, 99, 99, 0.2) 0px -2px 1px -11px,
 rgba(99, 99, 99, 0.2) -2px 0px 4px -3px,
  rgba(99, 99, 99, 0.2) 2px 0px 4px -2px;
 }
@@ -344,9 +345,9 @@ height: 50px;
 
 }
 .header-side {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .header-side p {
     font-family: Almarai;
@@ -386,7 +387,9 @@ select option{
 list-style:circle;
 color: #999595;
 }
-
+.container-responsive{
+    display: none;
+}
 .progress {
     width: 135px;
     height: 135px;
@@ -530,12 +533,12 @@ color: #999595;
     justify-content: center;
     align-items: center;
   }
-  
+
   .name {
-    text-align: center; 
+    text-align: center;
     padding: 30px;
-    display: block; 
-    width: 300px; 
+    display: block;
+    width: 300px;
   }
   .name p{
     font-family: Almarai;
@@ -562,7 +565,7 @@ color: #FFFFFF;
   }
   .navbar-toggler {
     background-color: #ffffff;
-    color: #032F70; 
+    color: #032F70;
     box-shadow: #032F70;
   }
   .header-side {
@@ -629,8 +632,11 @@ background-color: #f1f1f1;
 }
 .breadcrumb {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 0px !important;
+    margin-bottom: 1rem;
+    list-style: none;
+    background-color: #f5f6fa;
+    height: 28px;
 }
 .breadcrumb a{
 text-decoration: none;
@@ -638,10 +644,14 @@ color: #081d64;
 padding-right: 10px;
 font-size: 20px;
 }
-.login-input{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; 
+.breadcrumb-item.active a {
+    color: #878686;
+  }
+  .breadcrumb a:hover{
+color: #878686;
+  }
+.breadcrumb li {
+    display: contents;
 }
 .table{
     border-radius: 10px;
