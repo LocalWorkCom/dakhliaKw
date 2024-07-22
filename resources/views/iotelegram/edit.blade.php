@@ -4,9 +4,7 @@
     تعديل
 @endsection
 @section('content')
-    {{-- <div class="mb-3">
-            <a href="{{ route('iotelegrams.list') }}" class="btn btn-primary mt-3">رجوع</a>
-        </div> --}}
+
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
