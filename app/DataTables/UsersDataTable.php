@@ -22,7 +22,14 @@ class UsersDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'users.action')
+            // ->addColumn('action', 'users.action')
+            ->addColumn('action', function ($row) {
+                $editUrl = route('permissions_edit', $row->id);
+                return '
+                    <a href="' . $editUrl . '" class="btn btn-sm btn-primary">Edit</a>
+                ';
+            })
+            ->rawColumns(['action'])
             ->setRowId('id');
     }
 
@@ -43,7 +50,7 @@ class UsersDataTable extends DataTable
                     ->setTableId('users-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    //->dom('Bfrtip')
+                    // ->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
@@ -62,15 +69,18 @@ class UsersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+            // Column::computed('action')
+            //       ->exportable(false)
+            //       ->printable(false)
+            //       ->width(60)
+            //       ->addClass('text-center'),
             Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('name'),
+            Column::make('phone'),
+            Column::make('military_number'),
+            Column::make('action'),
+            // Column::make('created_at'),
+            // Column::make('updated_at'),
         ];
     }
 

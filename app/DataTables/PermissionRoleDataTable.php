@@ -24,7 +24,7 @@ class PermissionRoleDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($row) {
-                $editUrl = route('permissions.edit', $row->id);
+                $editUrl = route('permissions_edit', $row->id);
                 return '
                     <a href="' . $editUrl . '" class="btn btn-sm btn-primary">Edit</a>
                 ';

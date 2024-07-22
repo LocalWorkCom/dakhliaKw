@@ -22,7 +22,38 @@ class gradeDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'grade.action')
+        ->addColumn('action', function ($row) {
+            return ' <button type="button" class="wide-btn  " data-bs-toggle="modal" id="#edit'.$row->id.'" 
+                                    data-bs-target="#edit'.$row->id.'" style="color: #0D992C;">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                  <div class="modal fade" id="#edit'.$row->id.'" tabindex="-1" aria-labelledby="extern-departmentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="extern-departmentLabel">إضافة رتبه عسكريه  جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="saveExternalUser" action="{{' .route('grade.edit',$row->id).' }}" method="POST">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="name"> اسم الرتبه</label>
+                            <input type="text" id="name" value="'.$row->name.'" name="name" class="form-control" required>
+                        </div>
+                       
+
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">حفظ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>';   
+        })
             ->setRowId('id');
     }
 
@@ -67,7 +98,6 @@ class gradeDataTable extends DataTable
                   ->printable(false)
                   ->width(60)
                   ->addClass('text-center'),
-            Column::make('id'),
             Column::make('name'),
         ];
     }

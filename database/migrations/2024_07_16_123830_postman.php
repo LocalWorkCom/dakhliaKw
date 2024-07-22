@@ -11,11 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vacation_types', function (Blueprint $table) {
+        //
+        Schema::create('postmans', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
+            $table->string('national_id')->unique()->nullable();
+            $table->foreignId('department_id')->nullable();
+
+            $table->string('phone1')->unique()->nullable();
+            $table->string('phone2')->unique()->nullable();
             $table->boolean('active')->default(1);
-            $table->foreignId('created_departement')->nullable()->references('id')->on('departements')->onDelete('cascade');
             $table->foreignId('created_by')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('updated_by')->nullable( )->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
@@ -27,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vacation_types');
+        //
     }
 };

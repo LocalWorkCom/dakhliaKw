@@ -22,8 +22,9 @@ class vacationTypeDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'vacationtype.action')
-            ->setRowId('id');
+        ->addColumn('action', function ($row) {
+            return ' <a href="' . route('vacation.edit', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-edit"></i></a>';   }) 
+        ->setRowId('id');
     }
 
     /**

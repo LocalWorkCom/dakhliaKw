@@ -24,7 +24,7 @@
                     @endif
                     <div class="p-5" dir="rtl">
                         @if(isset($permission))
-                            <form action="{{ route('permissions.update', $permission->id) }}" method="post">
+                            <form action="" method="post">
                             @method('PUT')
                         @else
                             <form action="{{ route('permissions.store') }}" method="post">

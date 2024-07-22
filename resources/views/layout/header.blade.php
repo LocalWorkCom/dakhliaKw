@@ -19,6 +19,7 @@
     <link href="{{ asset('frontend/styles/bootstrap.min.css') }}" rel="stylesheet" id="bootstrap-css">
     <!-- <link src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"> -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    {{-- <link src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"> --}}
     </link>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @stack('style')
@@ -85,7 +86,7 @@
                     <select name="#" id="#" class=" mt-4">
                         <option value="#"> المستخدميين </option>
                         <option value="{{ route('departments.index') }}"> الادارات </option>
-                        <option value="{{ route('setting.index') }}"> الادارات </option>
+                        <option value="{{ route('setting.index') }}"> الاعدادات </option>
                         <option value="#"> الموظفين </option>
                         <option value="{{ route('Export.index') }}"> الصادر </option>
                         <option value="#"> الوارد </option>
@@ -145,7 +146,9 @@
                             <h6>الصادر</h6>
                         </a>
                     </li>
-                    
+                   
+                   
+                   
                 </ul>
             </div>
         </div>

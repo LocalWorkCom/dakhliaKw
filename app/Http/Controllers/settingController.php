@@ -7,6 +7,9 @@ use App\DataTables\jobDataTable;
 use App\DataTables\VacationDataTable;
 use App\DataTables\vacationTypeDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\grade;
+use App\Models\job;
+use App\Models\VacationType;
 use Illuminate\Http\Request;
 
 class settingController extends Controller
@@ -27,15 +30,19 @@ class settingController extends Controller
      * Show the form for creating a new resource.
      */
     public function addJob(Request $request){
-        
+        $request=$request->except('_token');
+        $job = job::create($request);
+        return redirect()->back()->with("success","تم اضافه الوظيفه");
     }
 
-    public function addCrade(Request $request){
-        
+    public function addgrade(Request $request){
+        $grade = grade::create($request->all());
+        return redirect()->back()->with("success","تم اضافه رتبه عسكريه جديده");
     }
 
     public function addVacation(Request $request){
-        
+        $vacation = VacationType::create($request->all());
+        return redirect()->back()->with("success","تم اضافه نوع اجازه جديد");
     }
     public function create()
     {

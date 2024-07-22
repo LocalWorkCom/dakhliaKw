@@ -28,9 +28,10 @@
                     <div class="container  col-11 mt-3 p-0 ">
                         <div class="row justify-content-end">
                             <div class="col-auto">
-                                <button class="btn-all mt-3">
-                                    <a href="" style="color:#0D992C;">إضافة جديد <img
-                                            src="{{ asset('frontend/images/add-btn.svg') }}" alt=""></a>
+                                <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
+                                    data-bs-target="#extern-user" style="color: #0D992C;">
+                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                    اضافةرتبه عسكريه
                                 </button>
                             </div>
                         </div>
@@ -47,6 +48,32 @@
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                     {{-- {!! $vacation->table(['class' => 'table table-bordered table-striped'], true) !!} --}}
 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="extern-user" tabindex="-1" aria-labelledby="extern-departmentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="extern-departmentLabel">إضافة رتبه عسكريه  جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="saveExternalUser" action="{{ route('grade.add') }}" method="POST">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="name"> اسم الرتبه</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                       
+
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">حفظ</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

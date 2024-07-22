@@ -2,17 +2,18 @@
 
 namespace App\DataTables;
 
-use App\Models\job;
+use App\Models\Role;
+use App\Models\Rule;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Services\DataTable;
-use Yajra\DataTables\Html\Editor\Fields;
-use Yajra\DataTables\Html\Editor\Editor;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
+use Yajra\DataTables\Html\Editor\Editor;
+use Yajra\DataTables\Html\Editor\Fields;
+use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class jobDataTable extends DataTable
+class RoleDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,17 +23,21 @@ class jobDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-        ->addColumn('action', function ($row) {
-            return '
-               <a href="' . route('job.edit', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-edit"></i></a>';   
-        })
+            // ->addColumn('action', 'role.action')
+            ->addColumn('action', function ($row) {
+                $editUrl = route('rule_edit', $row->id);
+                return '
+                    <a href="' . $editUrl . '" class="btn btn-sm btn-primary">Edit</a>
+                ';
+            })
+            ->rawColumns(['action'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(job $model): QueryBuilder
+    public function query(Rule $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -43,7 +48,7 @@ class jobDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('jobs-table')
+                    ->setTableId('rules-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -65,13 +70,17 @@ class jobDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            // Column::computed('action')
+            //       ->exportable(false)
+            //       ->printable(false)
+            //       ->width(60)
+            //       ->addClass('text-center'),
+            Column::make('id'),
             Column::make('name'),
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-           
+            // Column::make('guard_name'),
+            // Column::make('created_at'),
+            // Column::make('updated_at'),
+            Column::make('action'),
         ];
     }
 
@@ -80,6 +89,6 @@ class jobDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'jobs_' . date('YmdHis');
+        return 'Role_' . date('YmdHis');
     }
 }
