@@ -25,13 +25,12 @@
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
-
 </head>
 
 <body>
     <div class="all-nav">
         <div class="upper-navbar d-flex">
-            <div class="second-section d-flex mx-4 col-md-9 col-sm-6">
+            <div class="second-section d-flex mx-1 col-md-9 col-sm-6">
                 <div class="dropdown">
                     {{-- @if ($user->login) --}}
                     @php
@@ -144,11 +143,46 @@
                         <a href="{{ route('Export.index') }}">
                             <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
                             <h6>الصادر</h6>
+                            
                         </a>
                     </li>
-                   
-                   
-                   
+                    <li class="nav-item">
+                        <a href="{{ route('user.employees',1) }}">
+                            <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
+                            <h6>الموظفين</h6>
+                        </a>
+                        
+                    </li>
+                    <div id="dropdownMenu3" class="dropdown-menu3">
+                        <a href="#">الاجازات</a> <hr>
+                        <a href="#">الشيفتات</a> 
+                    </div>
+                    <li class="nav-item">
+                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <h6>التعيينات</h6>
+                    </li>
+                    <li class="nav-item">
+                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <h6>الادارات</h6>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('user.index',0) }}">
+                            <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
+                            <h6>المستخدمين</h6>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
+                        <h6>الرئيسية</h6>
+                    </li>
+                    <li class="nav-item">
+                    <a href="{{ route('sub_departments.index') }}">
+                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <h6>الاقسام</h6>
+                        </a>
+                    </li>
+                 
+
                 </ul>
             </div>
         </div>
@@ -260,6 +294,26 @@
                 }
             }
         }
+        function toggleDropdown3() {
+            var dropdownMenu = document.getElementById("dropdownMenu3");
+            if (dropdownMenu.style.display === "block") {
+                dropdownMenu.style.display = "none";
+            } else {
+                dropdownMenu.style.display = "block";
+            }
+        }
+        window.onclick = function(event) {
+            if (!event.target.matches('.btn2')) {
+                var dropdowns = document.getElementsByClassName("dropdownmenu3");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === "block") {
+                        openDropdown.style.display = "none";
+                    }
+                }
+            }
+        }
+        document.querySelector('li').classList.add('active');
     </script>
 </body>
 

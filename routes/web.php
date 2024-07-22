@@ -9,6 +9,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
+
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostmanController;
