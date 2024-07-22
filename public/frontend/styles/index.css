@@ -117,6 +117,9 @@ ul {
     background-color: #274373; /* Adjust color of the bottom border */
     margin-top: 5px;
 }
+.first-section {
+    margin-left: 70px;
+}
 .first-section img{
     height:70px;
     width:70px;
@@ -158,8 +161,9 @@ ul {
     top: 60px;
     left: 0px;
     height: 55px;
-    width: 220px !important;
-    text-align: center;
+    width: 206px !important;
+    /* text-align: center; */
+    padding-inline: 45px;
 }
 #dropdownMenu3 a{
     color: rgb(134, 133, 133);
@@ -729,10 +733,10 @@ input[type="radio"]{
 
 @keyframes welcome-text {
     0% {
-        right: -100px; /* Start position */
+        right: -70px; /* Start position */
     }
     100% {
-        right: 100px; /* End position */
+        right: 70px; /* End position */
     }
 }
 .modal-header{
