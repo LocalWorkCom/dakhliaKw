@@ -142,6 +142,9 @@ Route::get('/Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->n
 Route::get('/Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
 Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax');
 Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users');
+Route::get('export/archive/{id}', [outgoingController::class, 'addToArchive'])->name('export.archive');
+Route::get('export/archive/', [outgoingController::class, 'showArchive'])->name('Export.archive.show');
+
 
 Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('testUpload');
 Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile');
