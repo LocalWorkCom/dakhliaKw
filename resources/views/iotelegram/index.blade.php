@@ -1,4 +1,4 @@
-@extends('layout.header')
+@extends('layout.main')
 
 @section('title', 'الواردات')
 
