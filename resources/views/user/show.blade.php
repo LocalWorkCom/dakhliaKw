@@ -48,8 +48,6 @@
                             <label for="input2"> البريد الالكتروني</label>
                             <input type="text" id="input2" name="email" class="form-control" placeholder=" البريد الالكترونى" value="{{ $user->email  }}" disabled>
                         </div>
-                        
-                        
                         <div class="form-group col-md-6">
                           <label for="input4"> رقم المحمول</label>
                           <input type="text" id="input4" name="phone" class="form-control" placeholder=" رقم المحمول" value="{{ $user->phone  }}" disabled>
