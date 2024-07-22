@@ -3,6 +3,7 @@
 use App\Http\Controllers\dashboard\IoTelegramController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\outgoingController;
+use App\Http\Controllers\dashboard\VacationController;
 
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
@@ -133,6 +134,8 @@ Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->n
 //End Export routes
 
 
+
+
 Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->name('postman.ajax');
 Route::get('postmans', [IoTelegramController::class, 'getPostmanAjax'])->name('postman.get');
 Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
@@ -147,7 +150,6 @@ Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name(
 Route::get('iotelegram/archives', [IoTelegramController::class, 'Archives'])->name('iotelegram.archives');
 Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add');
 Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
-
 
 
 

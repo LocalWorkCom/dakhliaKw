@@ -3,7 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\io_files;
-use App\Models\iotelegrams;
+use App\Models\Iotelegram;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
