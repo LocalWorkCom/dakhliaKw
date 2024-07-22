@@ -1,6 +1,7 @@
 @media (max-width: 1600px){
     li {
-        width: 205px;
+        width: 180px;
+        /* margin-inline: 9px; */
     }
     .container-responsive {
         display: none;
@@ -258,7 +259,7 @@
         width: 100%;
     }
     li {
-        width: 150px;
+        width: 123px;
     }
     .container-responsive {
         display: none;
@@ -385,7 +386,7 @@
         flex-direction: row;
     }
     li {
-        width: 115px;
+        width: 85px;
     }
     .bell {
         margin-right: 15px;
@@ -534,9 +535,14 @@
         margin-left: 20px;
     }
     .first-section h2 {
-        font-size: 18px;
+        font-size: 15px;
         line-height: 80px;
-        margin-right: 19px;
+        margin-right: 1px;
+    }
+    .second-section .btn-2 {
+        font-size: 14px;
+        line-height: 40.32px;
+        width: 73px;
     }
     .details {
         padding: 47px 50px 79px 55px;

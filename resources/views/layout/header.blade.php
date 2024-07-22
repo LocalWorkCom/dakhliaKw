@@ -3,7 +3,7 @@
 
     <div class="all-nav">
         <div class="upper-navbar d-flex">
-            <div class="second-section d-flex mx-4 col-md-9 col-sm-6">
+            <div class="second-section d-flex mx-1 col-md-9 col-sm-6">
                 <div class="dropdown">
                     {{-- @if ($user->login) --}}
                     @php
@@ -87,6 +87,7 @@
                         <a href="{{ route('Export.index') }}">
                             <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
                             <h6>الصادر</h6>
+                            
                         </a>
                     </li>
                     <li class="nav-item">
@@ -96,6 +97,10 @@
                         </a>
                         
                     </li>
+                    <div id="dropdownMenu3" class="dropdown-menu3">
+                        <a href="#">الاجازات</a> <hr>
+                        <a href="#">الشيفتات</a> 
+                    </div>
                     <li class="nav-item">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>التعيينات</h6>
