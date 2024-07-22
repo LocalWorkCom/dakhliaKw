@@ -148,7 +148,6 @@ class settingController extends Controller
 
     public function deletejob(Request $request ){
         $isForeignKeyUsed = DB::table('users')->where('job_id', $request->id)->exists();
-        dd($isForeignKeyUsed);  
         //dd($isForeignKeyUsed);  
         if( $isForeignKeyUsed ){
             return redirect()->back()->with("success",'عفوا هذه الوظيفه مرتبطه بموظفين');

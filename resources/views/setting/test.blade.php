@@ -168,7 +168,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="saveExternalUser" action="{{ route('vacationType.add') }}" method="POST">
+                    <form id="saveExternalUser" action="{{ route('vacation.add') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">

@@ -161,7 +161,7 @@ Route::post('setting/grade', [settingController::class,'editgrade'])->name('grad
 Route::post('setting/grade/delete', [settingController::class,'deletegrade'])->name('grade.delete');
 
 
-Route::post('setting/vacation/add', [settingController::class,'addVacation'])->name('vacation.add');
+Route::post('setting/vacation/add', [settingController::class,'addVacation'])->name('vacationType.add');
 Route::post('setting/vacation', [settingController::class,'editVacation'])->name('vacation.edit');
 Route::post('setting/vacation/delete', [settingController::class,'deleteVacation'])->name('vacation.delete');
 
