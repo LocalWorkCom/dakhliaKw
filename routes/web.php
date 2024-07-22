@@ -34,7 +34,7 @@ use App\Http\Controllers\settingController;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('welcome');
+})->name('home');
 
 Route::get('/login', function () {
     return view('login');
