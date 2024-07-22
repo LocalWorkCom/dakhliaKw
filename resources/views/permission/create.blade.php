@@ -4,15 +4,15 @@
 <section>
     <ol class="breadcrumb" dir="rtl">
         <li class="breadcrumb-item"><a href="#">الرئيسيه</a></li>
-        <li class="breadcrumb-item active"><a href="">الصلاحيات  </a></li>
+        <li class="breadcrumb-item active"><a href="{{ route('permission.index') }}">الصلاحيات  </a></li>
 
         <li class="breadcrumb-item active"> اضافه صلاحية</li>
 
     </ol>
      
-    <div class="container-fluid p-5" dir="rtl" >
+    <div class="container-fluid p-5">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-7 offset-2">
                 <div class="bg-white">
                     @if (session('success'))
                             <div class="alert alert-success">
@@ -26,8 +26,8 @@
                         <form action="{{ route('permission.store') }}" method="post">
                             @csrf
                             <div class="form-group ">
-                                <h3>الصلاحية</h3>
-                                <select class="custom-select custom-select-lg mb-3" name="name">
+                                <label>الصلاحية</label>
+                                <select class="custom-select custom-select-lg mb-3" name="name" multiple>
                                     <option selected>Open this select menu</option>
                                     <option value="view">عرض</option>
                                     <option value="edit">تعديل</option>
@@ -36,7 +36,7 @@
                                   </select>
                             </div>
                             <div class="form-group">
-                                <h3>القسم</h3>
+                                <label>القسم</label>
                                 <select class="custom-select custom-select-lg mb-3" name="model">
                                     <option selected>Open this select menu</option>
                                     @foreach ($models as $item)
@@ -45,17 +45,17 @@
                                   </select>
                             </div>
                             
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn-all mt-2">Submit</button>
                           </form>
                             
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            {{-- <div class="col-lg-6">
                 <div class="bg-white p-5">
                     {!! $dataTable->table(['class' => 'table table-bordered table-hover dataTable']) !!}
                 </div>
-            </div>
+            </div> --}}
         </div>
         
     </div>

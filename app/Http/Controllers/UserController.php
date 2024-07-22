@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rule;
 use App\Models\User;
 use Illuminate\Support\Str;
+// use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
+use App\DataTables\UsersDataTable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -20,11 +22,33 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index(UsersDataTable $dataTable)
+    // {
+    //     $data = User::all();
+    //     return DataTables::of($data)->make(true);
+    //     // return $dataTable->render('user.view');
+     
+
+
+    // }
+    public function index($id)
     {
-        $data = User::all();
-        return DataTables::of($data)->make(true);
+        return view('user.view',compact('id'));
     }
+
+    public function getUsers($id)
+    {
+        $flagType = $id == 0 ? 'user' : 'employee';
+        $data = User::where('flag', $flagType)->get();
+       
+        return DataTables::of($data)->addColumn('action', function ($row) {
+            return '<button class="btn btn-primary btn-sm">Edit</button>'
+                    ;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
+
     public function login(Request $request)
     {
         $messages = [
@@ -263,9 +287,18 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id)
     {
         //
+        $user = User::find(Auth::user()->id);
+        $rule = Rule::all();
+        $flag = $id;
+        // $permission_ids = explode(',', $rule_permisssion->permission_ids);
+        // $allPermission = Permission::whereIn('id', $permission_ids)->get();
+        // dd($allPermission);
+        $alldepartment =$user->createdDepartments;
+        // return view('role.create',compact('allPermission','alldepartment'));
+        return view('user.create',compact('alldepartment','rule' ,'flag'));
     }
 
     /**
@@ -273,7 +306,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd("dd");
+        dd($request);
         // validation
         // $validatedData = $request->validate([
         //     'military_number' => 'required|string|unique:users|max:255',
@@ -282,13 +315,37 @@ class UserController extends Controller
         //     'country_code' =>'required',
         // ]);
 
-        $newUser = new User();
-        $newUser->military_number = "123";
-        $newUser->phone = "01114057863";
-        $newUser->country_code = "+20";
-        // $newUser->password = Hash::make($validatedData['password']);
-        $newUser->password = Hash::make("123");
-        $newUser->save();
+        if($request->type == "0")
+        {
+            $newUser = new User();
+            $newUser->military_number = $request->military_number;
+            $newUser->phone = $request->phone;
+            $newUser->country_code = "+20";
+            $newUser->name = $request->name;
+            $newUser->file_number = $request->file_number;
+            $newUser->flag = "user";
+            $newUser->rule_id = $request->rule;
+            $newUser->department_id  = $request->department;
+            // $newUser->password = Hash::make($validatedData['password']);
+            $newUser->password = Hash::make($request->password);
+            $newUser->save();
+        }
+        else
+        {
+            $newUser = new User();
+            $newUser->military_number = $request->military_number;
+            $newUser->phone = $request->phone;
+            $newUser->country_code = "+20";
+            $newUser->name = $request->name;
+            $newUser->file_number = $request->file_number;
+            $newUser->flag = "employee";
+            $newUser->rule_id = $request->rule;
+            $newUser->department_id  = $request->department;
+            // $newUser->password = Hash::make($validatedData['password']);
+            $newUser->password = Hash::make($request->password);
+            $newUser->save();
+        }
+        
 
         return response()->json($newUser);
     }
