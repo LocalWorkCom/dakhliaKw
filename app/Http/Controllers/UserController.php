@@ -166,7 +166,7 @@ class UserController extends Controller
                 // }
 
             } else {
-                if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code')) {
+                if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code')|| url()->previous() == route('verfication_code')) {
                     return view('resetpassword', compact('military_number', 'firstlogin'));
                 }
                 else {
