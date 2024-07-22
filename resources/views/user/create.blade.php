@@ -28,10 +28,8 @@
                             </ul>
                         </div>
                     @endif
+                    {{-- {{ dd($flag) }} --}}
                     <div class="p-5">
-    
-                        
-    
                         <form  action="{{ route('user.store') }}" method="post" class="text-right">
                             @csrf
 
@@ -53,10 +51,22 @@
                                 <label for="filenum">رقم الملف</label>
                                 <input type="text" id="filenum" name="file_number" class="form-control" required>
                             </div>
-                            <div class="mb-3">
-                               <label for="Civil_number">الباسورد</label>
-                                <input type="text" id="password" name="password" class="form-control" required>
-                            </div>
+                            @if ($flag == "0")
+                                <div class="mb-3">
+                                    <label for="password">الباسورد</label>
+                                    <input type="text" id="password" name="password" class="form-control">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="rule_id">الادوار</label>
+                                    <select class="custom-select custom-select-lg mb-3" name="rule"  id="rule_id">
+                                        <option selected>Open this select menu</option>
+                                        @foreach ($rule as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endif
+                          
                              <div class="form-group mb-3">
                                 <label for="department">الادارة</label>
                                 <select class="custom-select custom-select-lg mb-3" name="department"  id="department">
@@ -66,15 +76,10 @@
                                     @endforeach
                                   </select>
                             </div>
-                            <div class="form-group mb-3">
-                                <label for="rule_id">الادوار</label>
-                                <select class="custom-select custom-select-lg mb-3" name="rule"  id="rule_id">
-                                    <option selected>Open this select menu</option>
-                                    @foreach ($rule as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                  </select>
-                            </div>
+                            {{-- @if ($flag == "1")
+                                
+                            @endif --}}
+                           
          
                             <!-- Save button -->
                             <div class="text-end text-center">

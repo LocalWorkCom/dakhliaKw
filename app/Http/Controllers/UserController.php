@@ -306,7 +306,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
         // validation
         // $validatedData = $request->validate([
         //     'military_number' => 'required|string|unique:users|max:255',
@@ -353,9 +353,11 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         //
+        $user = User::find($id);
+        return view('user.edit',compact('user'));
     }
 
     /**
