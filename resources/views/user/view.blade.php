@@ -5,30 +5,31 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
 @section('content')
-
-<section>
-    <div class="row ">
-        <div class="container welcome col-11">
-            <p> المستخـــــــــــدمين </p>
+    <section>
+        <div class="row ">
+            <div class="container welcome col-11">
+                <p> المستخـــــــــــدمين </p>
+            </div>
         </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="container  col-11 mt-3 p-0 ">
-        <div class="row " dir="rtl">
-        <div class="form-group mt-4  mx-2 col-12 d-flex ">
-        <button type="button" class="wide-btn" onclick="window.location.href='{{ route('user.create', $id) }}'">
+        <br>
+        <div class="row">
+            <div class="container  col-11 mt-3 p-0 ">
+                <div class="row " dir="rtl">
+                    <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                        <button type="button" class="wide-btn"
+                            onclick="window.location.href='{{ route('user.create', $id) }}'">
                             <img src="../images/add-btn.svg" alt="img">
-                              اضافة جديد
+                            اضافة جديد
                         </button>
-        </div></div>
-            <div class="col-lg-12">
-                <div class="bg-white p-5">
-                    <!-- <div>
-                        <a href="{{ route('user.create',$id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
-                            اضافه جديد</a>
                     </div>
-                    <br> -->
+                </div>
+                <div class="col-lg-12">
+                    <div class="bg-white p-5">
+                        <!-- <div>
+                            <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
+                                اضافه جديد</a>
+                        </div>
+                        <br> -->
 
                     <div>
                         <table id="users-table" class="display table table-bordered table-hover dataTable">
@@ -71,24 +72,20 @@
                                             <a href="` + showUrl + `" class="btn btn-primary btn-sm">تعديل</a>
                                             <a href="" class="btn btn-primary btn-sm">الاجازات</a>
                                         `;
-                                        }
-                                        
-                                    }]
+                                            }
+
+                                        }]
+                                    });
                                 });
-                            });
-                            
-                        </script>
+                            </script>
 
 
+                        </div>
                     </div>
                 </div>
+
             </div>
-            
+
         </div>
-
-    </div>
-</section>
-
-   
-
->@endsection
+    </section>
+@endsection
