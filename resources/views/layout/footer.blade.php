@@ -1,10 +1,11 @@
-@stack('scripts')
+
     <br> <br> <br> <br>
     <footer class="my-2">
         <div class="footer ">
             <p>جميع الحقوق محفوظه </p>
         </div>
     </footer>
+    @stack('scripts')
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
     <script>

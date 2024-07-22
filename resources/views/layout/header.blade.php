@@ -100,10 +100,10 @@
                         <a href="#">الاجازات</a> <hr>
                     </div>
                  
-                    <li class="nav-item">
+                   <!--  <li class="nav-item">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>التعيينات</h6>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                     <a href="{{ route('sub_departments.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
