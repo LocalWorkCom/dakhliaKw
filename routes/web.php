@@ -3,6 +3,7 @@
 use App\Http\Controllers\dashboard\IoTelegramController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\outgoingController;
+use App\Http\Controllers\dashboard\VacationController;
 
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
@@ -165,6 +166,8 @@ Route::get('setting/vacation/{id}', [settingController::class,'editVacation'])->
 
 //setting end
 
+
+
 Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->name('postman.ajax');
 Route::get('postmans', [IoTelegramController::class, 'getPostmanAjax'])->name('postman.get');
 Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
@@ -181,7 +184,6 @@ Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'
 Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
 
 // Route::resource('setting', SettingsController::class);
-
 
 
 
