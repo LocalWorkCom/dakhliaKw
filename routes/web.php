@@ -146,14 +146,25 @@ Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->n
 //setting start
 // Route::resource('setting', settingController::class);
 Route::get('setting', [settingController::class,'index'])->name('setting.index');
-Route::get('setting/jobs/add', [settingController::class,'addJob'])->name('jobs.add');
-Route::get('setting/jobs/{id}', [settingController::class,'editJob'])->name('jobs.edit');
+Route::get('setting/all/grade', [settingController::class, 'getAllGrade'])->name('setting.getAllGrade');
+Route::get('setting/all/job', [settingController::class, 'getAllJob'])->name('setting.getAllJob');
+Route::get('setting/all/vacation', [settingController::class, 'getAllVacation'])->name('setting.getAllVacation');
+
+
+Route::post('setting/jobs/add', [settingController::class,'addJob'])->name('jobs.add');
+Route::post('setting/jobs', [settingController::class,'editJob'])->name('jobs.edit');
+Route::post('setting/jobs/delete', [settingController::class,'deletejob'])->name('jobs.delete');
+
 
 Route::post('setting/grade/add', [settingController::class,'addgrade'])->name('grade.add');
-Route::get('setting/grade/{id}', [settingController::class,'editgrade'])->name('grade.edit');
+Route::post('setting/grade', [settingController::class,'editgrade'])->name('grade.edit');
+Route::post('setting/grade/delete', [settingController::class,'deletegrade'])->name('grade.delete');
 
-Route::get('setting/vacation/add', [settingController::class,'addVacation'])->name('vacation.add');
-Route::get('setting/vacation/{id}', [settingController::class,'editVacation'])->name('vacation.edit');
+
+Route::post('setting/vacation/add', [settingController::class,'addVacation'])->name('vacation.add');
+Route::post('setting/vacation', [settingController::class,'editVacation'])->name('vacation.edit');
+Route::post('setting/vacation/delete', [settingController::class,'deleteVacation'])->name('vacation.delete');
+
 
 
 //setting end
