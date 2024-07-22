@@ -4,57 +4,60 @@
     اضافة
 @endsection
 @section('content')
-    <div class="container">
-        <div class="mb-3">
-            <a href="{{ route('vacations.list') }}" class="btn btn-primary mt-3">رجوع</a>
+    <div class="row col-11" dir="rtl">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('vacations.list') }}">الاجازات </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href="">عرض</a></li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row ">
+        <div class="container welcome col-11">
+            <p> الاجـــــــــازات </p>
         </div>
-        @include('inc.flash')
+    </div>
+    <br>
+    <div class="row">
+        <div class="container  col-11 mt-3 p-0 ">
+            <div class="row " dir="rtl">
+                <div class="form-group mt-4  mx-2 col-12 d-flex ">
 
-        <div class="card">
-            <div class="card-header">الاجازات</div>
-            <div class="card-body">
-                <form action="{{ route('iotelegram.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="mb-3">
-                        <label for="vacation_type_id">نوع الاجازة:</label>
-
-
-                        <select id="vacation_type_id" name="vacation_type_id" class="form-control" required disabled>
-                            <option value="">اختر النوع</option>
-                            @foreach ($vacation_types as $item)
-                                <option value="{{ $item->id }}" @if ($item->id == $vacation->vacation_type_id) selected @endif>
-                                    {{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employee_id">اسم الموظف:</label>
-                        <select id="employee_id" name="employee_id" class="form-control" required disabled
-                         >
-                            <option value="">اختر الموظف</option>
-                            @foreach ($employees as $item)
-                                <option value="{{ $item->id }}" @if ($vacation->id == $item->id) selected @endif>
-                                    {{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                </div>
+            </div>
 
 
-                    <div class="mb-3">
-                        <label for="date_from">تاريخ البداية:</label>
-                        <input type="date" id="date_from" name="date_from" class="form-control" required disabled
-                            value="{{ $vacation->date_from }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="date_to">تاريخ النهاية:</label>
-                        <input type="date" id="date_to" name="date_to" class="form-control" disabled
-                            value="{{ $vacation->date_to }}">
-                    </div>
+
+            <div class="form-row mx-2 ">
+                <table class="table table-bordered" dir="rtl">
+                    <tbody>
+                        <tr>
+                            <th scope="row"style="background: #f5f6fa;">نوع الاجازة:</th>
+                            <td>{{ $vacation->vacation_type->name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">اسم الموظف:</th>
+                            <td>
+                                {{-- {{ $vacation->employee->name }} --}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">تاريخ البداية:</th>
+                            <td>{{ $vacation->date_from }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;"> تاريخ النهاية:</th>
+                            <td>{{ $vacation->date_to }}</td>
+                        </tr>
 
 
-                    <button type="submit" class="btn btn-primary">حفظ</button>
-                </form>
+
+                    </tbody>
+                </table>
+
+
+
             </div>
         </div>
     </div>

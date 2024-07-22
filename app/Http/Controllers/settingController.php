@@ -36,12 +36,33 @@ class settingController extends Controller
     }
 
     public function addgrade(Request $request){
-        $grade = grade::create($request->all());
+        $request=$request->except('_token');
+        $grade = grade::create($request);
         return redirect()->back()->with("success","تم اضافه رتبه عسكريه جديده");
     }
 
     public function addVacation(Request $request){
-        $vacation = VacationType::create($request->all());
+        $request=$request->except('_token');
+        $vacation = VacationType::create($request);
+        return redirect()->back()->with("success","تم اضافه نوع اجازه جديد");
+    }
+    
+    public function editJob(Request $request ,$id){
+        $request=$request->except('_token');
+        $job = Job::find($id);
+       
+        return redirect()->back()->with("success","تم اضافه الوظيفه");
+    }
+
+    public function editgrade(Request $request ,$id){
+        $request=$request->except('_token');
+        $grade = grade::create($request);
+        return redirect()->back()->with("success","تم اضافه رتبه عسكريه جديده");
+    }
+
+    public function editVacation(Request $request ,$id){
+        $request=$request->except('_token');
+        $vacation = VacationType::create($request);
         return redirect()->back()->with("success","تم اضافه نوع اجازه جديد");
     }
     public function create()
