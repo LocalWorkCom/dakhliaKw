@@ -86,24 +86,26 @@
                         </a>
                     </li>
                    
-                    <li class="nav-item">
-                        <a href="{{ route('user.employees',1) }}">
+                    <li class="nav-item btn3"  onclick="toggleDropdown3()">
+                        <!-- <a href="{{ route('user.employees',1) }}"> -->
+                        <a href="#">
                             <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
                             <h6>الموظفين</h6>
                         </a>
                         
                     </li>
                     <div id="dropdownMenu3" class="dropdown-menu3">
-                        <a href="#">الاجازات</a> <hr>
+                        <a href="#">الاجازات</a>  <br> <hr>
+                        <a href="#">الشيفتات</a> <br>
                     </div>
-                 
-                   <!--  <li class="nav-item">
+                   
+
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>التعيينات</h6>
                     </li> -->
                     <li class="nav-item">
                     <a href="{{ route('sub_departments.index') }}">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
                         <h6>الاقسام</h6>
                     </a>
                 </li>
@@ -111,17 +113,7 @@
                     <a href="{{ route('departments.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>الادارات</h6>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('sub_departments.index') }}">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6>الاقسام</h6>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('setting.index') }}">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+
                         <h6>الاعدادات</h6>
                     </a>
                 </li>
