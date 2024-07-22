@@ -31,64 +31,46 @@
                         </div>
                         <br> -->
 
-                        <div>
-                            <table id="users-table" class="display table table-bordered table-hover dataTable">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Phone</th>
-                                        <th>military_number</th>
-                                        <th>action</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                    <div>
+                        <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>رقم التعريف</th>
+                                    <th>الاسم</th>
+                                    <th>الهاتف</th>
+                                    <th>الرقم العسكري</th>
+                                    <th>العمليات</th>
+                                </tr>
+                            </thead>
+                        </table>
 
 
 
 
-                            <script>
-                                $(document).ready(function() {
-                                    var id = {{ $id }};
-                                    $('#users-table').DataTable({
-                                        processing: true,
-                                        serverSide: true,
-                                        ajax: '{{ url('api/users') }}/' + id, // Correct URL concatenation
-                                        columns: [{
-                                                data: 'id',
-                                                name: 'id'
-                                            },
-                                            {
-                                                data: 'name',
-                                                name: 'name'
-                                            },
-                                            {
-                                                data: 'phone',
-                                                name: 'phone'
-                                            },
-                                            {
-                                                data: 'military_number',
-                                                name: 'military_number'
-                                            },
-                                            {
-                                                data: 'action',
-                                                name: 'action',
-                                                orderable: false,
-                                                searchable: false
-                                            }
-                                        ],
-                                        columnDefs: [{
-                                            targets: -1,
-                                            render: function(data, type, row) {
-
-                                                // Using route generation correctly in JavaScript
-                                                var showUrl = '{{ route('user.show', ':id') }}';
-                                                var vacationUrl = '{{ route('vacations.list', ':id') }}';
-                                                showUrl = showUrl.replace(':id', row.id);
-                                                vacationUrl = vacationUrl.replace(':id', row.id);
-                                                return `
-                                            <a href="` + showUrl + `" class="btn btn-primary btn-sm">Edit</a>
-                                            <a href="` + vacationUrl + `" class="btn btn-primary btn-sm">vacations</a>
+                        <script>
+                            $(document).ready(function() {
+                                var id = {{ $id }};
+                                $('#users-table').DataTable({
+                                    processing: true,
+                                    serverSide: true,
+                                    ajax: '{{ url('api/users') }}/' + id, // Correct URL concatenation
+                                    columns: [
+                                        { data: 'id', name: 'id' },
+                                        { data: 'name', name: 'name' },
+                                        { data: 'phone', name: 'phone' },
+                                        { data: 'military_number', name: 'military_number' },
+                                        { data: 'action', name: 'action', orderable: false, searchable: false }
+                                    ],
+                                    columnDefs: [{
+                                        targets: -1,
+                                        render: function(data, type, row) {
+                                            
+                                        // Using route generation correctly in JavaScript
+                                        var showUrl = '{{ route("user.show", ":id") }}';
+                                        showUrl = showUrl.replace(':id', row.id);
+                                        return `
+                                            <a href="` + showUrl + `" class="btn btn-primary btn-sm">تعديل</a>
+                                            <a href="" class="btn btn-primary btn-sm">الاجازات</a>
                                         `;
                                             }
 
