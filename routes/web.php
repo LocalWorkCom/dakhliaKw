@@ -3,6 +3,7 @@
 use App\Http\Controllers\dashboard\IoTelegramController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\outgoingController;
+use App\Http\Controllers\dashboard\VacationController;
 
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
@@ -133,6 +134,8 @@ Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->n
 //End Export routes
 
 
+
+
 Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->name('postman.ajax');
 Route::get('postmans', [IoTelegramController::class, 'getPostmanAjax'])->name('postman.get');
 Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
@@ -148,6 +151,14 @@ Route::get('iotelegram/archives', [IoTelegramController::class, 'Archives'])->na
 Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add');
 Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
 
+
+Route::get('vacations', [VacationController::class, 'index'])->name('vacations.list');
+Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add');
+Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store');
+Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit');
+Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update');
+Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show');
+Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete');
 
 
 
