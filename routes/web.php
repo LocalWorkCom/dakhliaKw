@@ -191,7 +191,9 @@ Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfi
 
 
 
-Route::get('vacations', [VacationController::class, 'index'])->name('vacations.list');
+Route::get('vacations/{id?}', [VacationController::class, 'index'])->name('vacations.list');
+Route::get('vacations/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations');
+
 Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add');
 Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store');
 Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit');
