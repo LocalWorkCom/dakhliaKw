@@ -177,7 +177,6 @@ return array(
     'Database\\Seeders\\PermissionSeeder' => $baseDir . '/database/seeders/PermissionSeeder.php',
     'Database\\Seeders\\RolesAndPermissionsSeeder' => $baseDir . '/database/seeders/RolesAndPermissionsSeeder.php',
     'Database\\Seeders\\RuleSeeder' => $baseDir . '/database/seeders/RuleSeeder.php',
-    'Database\\Seeders\\VacationTypeSeeder' => $baseDir . '/database/seeders/VacationTypeSeeder.php',
     'DateError' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
     'DateException' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
     'DateInvalidOperationException' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateInvalidOperationException.php',
