@@ -99,6 +99,8 @@ Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit depa
 Route::get('/sub_departments', [DepartmentController::class, 'index_1'])->name('sub_departments.index');
 Route::get('/sub_departments/create', [DepartmentController::class, 'create_1'])->name('sub_departments.create');
 Route::post('/sub_departments', [DepartmentController::class, 'store_1'])->name('sub_departments.store');
+Route::get('/sub_departments/{department}/edit', [DepartmentController::class, 'edit_1'])->name('sub_departments.edit');
+Route::put('/sub_departments/{department}', [DepartmentController::class, 'update_1'])->name('sub_departments.update');
 // //permission
 // Route::any('/permission_destroy',[PermissionController::class, 'destroy'])->name('permission.destroy');
 // Route::any('/permission_view',[PermissionController::class, 'show'])->name('permission.view');
@@ -144,14 +146,25 @@ Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->n
 //setting start
 // Route::resource('setting', settingController::class);
 Route::get('setting', [settingController::class,'index'])->name('setting.index');
-Route::get('setting/jobs/add', [settingController::class,'addJob'])->name('jobs.add');
-Route::get('setting/jobs/{id}', [settingController::class,'editJob'])->name('jobs.edit');
+Route::get('setting/all/grade', [settingController::class, 'getAllGrade'])->name('setting.getAllGrade');
+Route::get('setting/all/job', [settingController::class, 'getAllJob'])->name('setting.getAllJob');
+Route::get('setting/all/vacation', [settingController::class, 'getAllVacation'])->name('setting.getAllVacation');
+
+
+Route::post('setting/jobs/add', [settingController::class,'addJob'])->name('jobs.add');
+Route::post('setting/jobs', [settingController::class,'editJob'])->name('jobs.edit');
+Route::post('setting/jobs/delete', [settingController::class,'deletejob'])->name('jobs.delete');
+
 
 Route::post('setting/grade/add', [settingController::class,'addgrade'])->name('grade.add');
-Route::get('setting/grade/{id}', [settingController::class,'editgrade'])->name('grade.edit');
+Route::post('setting/grade', [settingController::class,'editgrade'])->name('grade.edit');
+Route::post('setting/grade/delete', [settingController::class,'deletegrade'])->name('grade.delete');
 
-Route::get('setting/vacation/add', [settingController::class,'addVacation'])->name('vacation.add');
-Route::get('setting/vacation/{id}', [settingController::class,'editVacation'])->name('vacation.edit');
+
+Route::post('setting/vacation/add', [settingController::class,'addVacation'])->name('vacation.add');
+Route::post('setting/vacation', [settingController::class,'editVacation'])->name('vacation.edit');
+Route::post('setting/vacation/delete', [settingController::class,'deleteVacation'])->name('vacation.delete');
+
 
 
 //setting end
@@ -178,7 +191,9 @@ Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfi
 
 
 
-Route::get('vacations', [VacationController::class, 'index'])->name('vacations.list');
+Route::get('vacations/{id?}', [VacationController::class, 'index'])->name('vacations.list');
+Route::get('vacations/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations');
+
 Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add');
 Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store');
 Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit');

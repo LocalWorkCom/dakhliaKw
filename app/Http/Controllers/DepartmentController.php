@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\departements;
 use App\Models\User;
 use App\DataTables\DepartmentDataTable;
+use App\DataTables\subDepartmentsDataTable;
 
 use App\Http\Requests\StoreDepartmentRequest;
 use Illuminate\Http\Request;
@@ -24,10 +25,11 @@ class DepartmentController extends Controller
     }
 
 
-    public function index_1()
+    public function index_1(subDepartmentsDataTable $dataTable)
     {
-        $departments = departements::with(['manager', 'managerAssistant'])->paginate(10);
-        return view('sub_departments.index', compact('departments'));
+        return $dataTable->render('sub_departments.index');
+        // $departments = departements::with(['manager', 'managerAssistant'])->paginate(10);
+        // return view('sub_departments.index', compact('departments'));
         // return response()->json($departments);
     }
     /**
@@ -106,6 +108,15 @@ class DepartmentController extends Controller
         return view('departments.edit', compact('department', 'users'));
     }
 
+    public function edit_1(departements $department)
+    {
+        $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
+
+        // Get the children of the parent department
+        $departments = $parentDepartment ? $parentDepartment->children : collect();   
+        return view('sub_departments.edit', compact('department', 'departments' ,'parentDepartment'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -122,6 +133,16 @@ class DepartmentController extends Controller
         // return response()->json($department);
     }
 
+    public function update_1(Request $request, departements $department)
+    {
+        $request->validate([
+            
+        ]);
+
+        $department->update($request->all());
+        return redirect()->route('departments.index')->with('success', 'Department updated successfully.');
+        // return response()->json($department);
+    }
     /**
      * Remove the specified resource from storage.
      */

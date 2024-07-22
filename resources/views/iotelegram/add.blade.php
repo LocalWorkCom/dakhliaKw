@@ -71,10 +71,10 @@
                         <div class="form-group col-md-6">
                             <label for="from_departement">الجهة المرسلة</label>
 
-                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                            <!-- <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
                                 id="extern-department-dev" data-bs-target="#extern-department">
                                 <i class="fa fa-plus"></i>
-                            </button>
+                            </button> -->
                             <select id="from_departement" name="from_departement" class="form-control" required>
                                 <option value="">اختر الجهة</option>
                                 @foreach ($departments as $item)
@@ -97,9 +97,15 @@
                         </div>
                     </div>
                     <div class="form-row" dir="rtl">
-                        <button type="button" class="btn-all mt-3" data-bs-toggle="modal" data-bs-target="#representative"
+                        <button type="button" class="btn-all mt-3 mx-5" data-bs-toggle="modal" data-bs-target="#representative"
                             data-dismiss="modal" id="representative-dev" style="background-color: #FAFBFD; border: none;">
-                            <img src="../images/add-btn.svg" alt=""> اضافة مندوب
+                            <img
+                                src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
+                        </button>  
+                        <button type="button" class="btn-all mt-3" data-bs-toggle="modal"    id="extern-department-dev" data-bs-target="#extern-department"
+                            data-dismiss="modal"  style="background-color: #FAFBFD; border: none; display: none;">
+                            <img
+                                src="{{ asset('frontend/images/add-btn.svg') }}" alt="">  اضافة جهه جديده 
                         </button>
                     </div> <br>
                     <div class="form-row d-block ">
@@ -115,8 +121,8 @@
                     </div>
                     <div class="form-row" dir="rtl">
                         <button type="button" class="btn-all btn-sm mt-2" id="addFile"
-                            style="background-color: #FAFBFD; border: none;"><img src="../images/add-btn.svg"
-                                alt="">إضافة ملف جديد
+                            style="background-color: #FAFBFD; border: none;"><img
+                            src="{{ asset('frontend/images/add-btn.svg') }}" alt="">إضافة ملف جديد
                         </button>
 
                     </div> <br>
