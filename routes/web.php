@@ -151,19 +151,19 @@ Route::get('setting/all/job', [settingController::class, 'getAllJob'])->name('se
 Route::get('setting/all/vacation', [settingController::class, 'getAllVacation'])->name('setting.getAllVacation');
 
 
-Route::post('setting/jobs/add', [settingController::class,'addJob'])->name('jobs.add');
-Route::post('setting/jobs', [settingController::class,'editJob'])->name('jobs.edit');
-Route::post('setting/jobs/delete', [settingController::class,'deletejob'])->name('jobs.delete');
+Route::post('jobs/add', [settingController::class,'addJob'])->name('jobs.add');
+Route::post('jobs', [settingController::class,'editJob'])->name('jobs.edit');
+Route::post('jobs/delete', [settingController::class,'deletejob'])->name('jobs.delete');
 
 
-Route::post('setting/grade/add', [settingController::class,'addgrade'])->name('grade.add');
-Route::post('setting/grade', [settingController::class,'editgrade'])->name('grade.edit');
-Route::post('setting/grade/delete', [settingController::class,'deletegrade'])->name('grade.delete');
+Route::post('grade/add', [settingController::class,'addgrade'])->name('grade.add');
+Route::post('grade', [settingController::class,'editgrade'])->name('grade.edit');
+Route::post('grade/delete', [settingController::class,'deletegrade'])->name('grade.delete');
 
 
-Route::post('setting/vacation/add', [settingController::class,'addVacation'])->name('vacationType.add');
-Route::post('setting/vacation', [settingController::class,'editVacation'])->name('vacation.edit');
-Route::post('setting/vacation/delete', [settingController::class,'deleteVacation'])->name('vacation.delete');
+Route::post('vacationType/add', [settingController::class,'addVacation'])->name('vacationType.add');
+Route::post('vacationType', [settingController::class,'editVacation'])->name('vacation.edit');
+Route::post('vacationType/delete', [settingController::class,'deleteVacation'])->name('vacation.delete');
 
 
 
