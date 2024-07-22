@@ -1,3 +1,4 @@
+
 <?php return array(
     'root' => array(
         'name' => 'laravel/laravel',

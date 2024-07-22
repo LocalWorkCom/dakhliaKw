@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
 
 </head>
-<body>
+<body dir="rtl">
 @include('layout.header')
 
 <main>
