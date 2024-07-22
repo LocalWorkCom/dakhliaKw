@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        @yield('title')
-    </title>
+    <title>User DataTable</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+
+
     <script type="application/javascript" src="{{ asset('frontend/js/bootstrap.min.js')}}"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,22 +17,20 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Bootstrap-->
     <link href="{{ asset('frontend/styles/bootstrap.min.css') }}" rel="stylesheet" id="bootstrap-css">
-    <link src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
-    </link>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    {{-- <link src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+    </link> --}}
+    {{-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --}}
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
-<<<<<<< HEAD
-=======
 
->>>>>>> 498db510a088c34f675ece339b385b53936ba5a4
+
 </head>
-
 <body>
+
     <div class="all-nav">
         <div class="upper-navbar d-flex">
-            <div class="second-section d-flex mx-1 col-md-9 col-sm-6">
+            <div class="second-section d-flex mx-4 col-md-9 col-sm-6">
                 <div class="dropdown">
                     {{-- @if ($user->login) --}}
                     @php
@@ -85,7 +83,7 @@
                         <input type="search" id="" class="form-control" placeholder="بحث" />
                     </div>
                     <select name="#" id="#" class=" mt-4">
-                        <option value="{{ route('user.index' ,0) }}"> المستخدميين </option>
+                        <option value="#"> المستخدميين </option>
                         <option value="#"> الادارات </option>
                         <option value="#"> التعيينات </option>
                         <option value="#"> الموظفين </option>
@@ -116,7 +114,6 @@
                         <a href="{{ route('Export.index') }}">
                             <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
                             <h6>الصادر</h6>
-                            
                         </a>
                     </li>
                     <li class="nav-item">
@@ -126,10 +123,6 @@
                         </a>
                         
                     </li>
-                    <div id="dropdownMenu3" class="dropdown-menu3">
-                        <a href="#">الاجازات</a> <hr>
-                        <a href="#">الشيفتات</a> 
-                    </div>
                     <li class="nav-item">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>التعيينات</h6>
@@ -148,144 +141,72 @@
                         <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
                         <h6>الرئيسية</h6>
                     </li>
-                    <li class="nav-item">
-                    <a href="{{ route('sub_departments.index') }}">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6>الاقسام</h6>
-                        </a>
-                    </li>
-                 
-
                 </ul>
             </div>
         </div>
     </div>
-    <main>
-        @yield('content')
-    </main>
-    @stack('scripts')
-    <br> <br> <br> <br>
-    <footer class="my-2">
-        <div class="footer ">
-            <p>جميع الحقوق محفوظه </p>
-        </div>
-    </footer>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
-    <script>
-        $(document).ready(function() {
+     
+    <div class="container-fluid p-5">
+        <div class="row">
+            
+            <div class="col-lg-12">
+                <div class="bg-white p-5">
+                    <div >
+                        <a href="{{ route('user.create',$id) }}" class="btn btn-lg bg-primary text-white" dir="rtl"> اضافه جديد</a>
+                    </div>
+                    <br>
 
-            $("#saveExternalDepartment").on("submit", function(e) {
+                    <div>
+                        <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>military_number</th>
+                                    <th>action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    
 
-                e.preventDefault();
 
-                // Serialize the form data
-                var formData = $(this).serialize(); // Changed to $(this)
-
-                // Submit AJAX request
-                $.ajax({
-                    url: $(this).attr('action'), // Changed to $(this)
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        // Handle success response
-                        console.log(response);
-                        $('#from_departement').empty();
-                        $.ajax({
-
-                            url: "{{ route('external.departments') }}",
-                            type: 'get',
-                            success: function(response) {
-                                // Handle success response
-                                var selectOptions =
-                                    '<option value="">اختر الادارة</option>';
-                                response.forEach(function(department) {
-                                    selectOptions += '<option value="' +
-                                        department.id +
-                                        '">' + department.name +
-                                        '</option>';
-                                });
-                                $('#from_departement').html(
-                                    selectOptions
-                                ); // Assuming you have a select element with id 'from_departement'
-
-                            },
-                            error: function(xhr, status, error) {
-                                // Handle error response
-                                console.error(xhr.responseText);
-                            }
-                        });
-                        // Optionally, you can close the modal after successful save
-                        $('#extern-department').modal('hide'); // Changed modal ID
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle error response
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
+                        
+<script>
+    $(document).ready(function() {
+        var id = {{ $id }};
+        $('#users-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('api/users') }}/' + id, // Correct URL concatenation
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name' },
+                { data: 'phone', name: 'phone' },
+                { data: 'military_number', name: 'military_number' },
+                { data: 'action', name: 'action', orderable: false, searchable: false }
+            ],
+            columnDefs: [{
+                targets: -1,
+                render: function(data, type, row) {
+                    return `
+                        <a href="/users/edit/${row.id}" class="btn btn-primary btn-sm">Edit</a>
+                    `;
+                }
+            }]
         });
+    });
+</script>
 
-        function toggleDropdown() {
-            var dropdownMenu = document.getElementById("dropdownMenu");
-            if (dropdownMenu.style.display === "block") {
-                dropdownMenu.style.display = "none";
-            } else {
-                dropdownMenu.style.display = "block";
-            }
-        }
-        window.onclick = function(event) {
-            if (!event.target.matches('.btn')) {
-                var dropdowns = document.getElementsByClassName("dropdown-menu");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.style.display === "block") {
-                        openDropdown.style.display = "none";
-                    }
-                }
-            }
-        }
 
-        function toggleDropdown2() {
-            var dropdownMenu = document.getElementById("dropdownMenu2");
-            if (dropdownMenu.style.display === "block") {
-                dropdownMenu.style.display = "none";
-            } else {
-                dropdownMenu.style.display = "block";
-            }
-        }
-        window.onclick = function(event) {
-            if (!event.target.matches('.btn2')) {
-                var dropdowns = document.getElementsByClassName("dropdown-menu2");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.style.display === "block") {
-                        openDropdown.style.display = "none";
-                    }
-                }
-            }
-        }
-        function toggleDropdown3() {
-            var dropdownMenu = document.getElementById("dropdownMenu3");
-            if (dropdownMenu.style.display === "block") {
-                dropdownMenu.style.display = "none";
-            } else {
-                dropdownMenu.style.display = "block";
-            }
-        }
-        window.onclick = function(event) {
-            if (!event.target.matches('.btn2')) {
-                var dropdowns = document.getElementsByClassName("dropdownmenu3");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.style.display === "block") {
-                        openDropdown.style.display = "none";
-                    }
-                }
-            }
-        }
-        document.querySelector('li').classList.add('active');
-    </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+   
 </body>
-
 </html>

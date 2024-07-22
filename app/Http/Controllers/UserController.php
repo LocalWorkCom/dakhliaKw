@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rule;
 use App\Models\User;
 use Illuminate\Support\Str;
+// use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
+use App\DataTables\UsersDataTable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
-
-
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Console\View\Components\Alert;
 use App\helper; // Adjust this namespace as per your helper file location
@@ -22,11 +22,33 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index(UsersDataTable $dataTable)
+    // {
+    //     $data = User::all();
+    //     return DataTables::of($data)->make(true);
+    //     // return $dataTable->render('user.view');
+     
+
+
+    // }
+    public function index($id)
     {
-        $data = User::all();
-        return DataTables::of($data)->make(true);
+        return view('user.view',compact('id'));
     }
+
+    public function getUsers($id)
+    {
+        $flagType = $id == 0 ? 'user' : 'employee';
+        $data = User::where('flag', $flagType)->get();
+       
+        return DataTables::of($data)->addColumn('action', function ($row) {
+            return '<button class="btn btn-primary btn-sm">Edit</button>'
+                    ;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
+
     public function login(Request $request)
     {
         $messages = [
@@ -105,7 +127,6 @@ class UserController extends Controller
 
     public function verfication_code(Request $request)
     {
-        // dd($request);
         // Validate incoming request data
         $validatedData = Validator::make($request->all(), [
             'verfication_code' => 'required', // Ensure verfication_code field is required
@@ -126,36 +147,34 @@ class UserController extends Controller
         $password = $request->password;
 
         // Check if the provided verification code matches the expected code
-        if ($request->code == $request->verfication_code) {
+        if ($request->code === $request->verfication_code) {
             // Find the user by military number
             $user = User::where('military_number', $request->military_number)->first();
 
             // Save the activation code and password
             $user->code = $request->code;
-            $user->password = Hash::make($request->password);
             $user->save();
-            
+
 
             // dd($user);
             $firstlogin = 0;
-          
-                // Coming from forget_password2
-                if ($user->token == null) {
-                    $firstlogin = 1;
-                    return view('resetpassword', compact('military_number', 'firstlogin'));
-                // }
-                   
-                } else {
-                    if (url()->previous() == route('forget_password2')) {
-                        return view('resetpassword', compact('military_number', 'firstlogin'));
-                    }
-                    else{
-                        return redirect()->route('welcome');
-                    }
 
-                   
+            // Coming from forget_password2
+            if ($user->token == null) {
+                $firstlogin = 1;
+                return view('resetpassword', compact('military_number', 'firstlogin'));
+                // }
+
+            } else {
+                if (url()->previous() == route('forget_password2')) {
+                    return view('resetpassword', compact('military_number', 'firstlogin'));
+                }elseif(url()->previous() == route('resend_code')) {
+                    return view('resetpassword', compact('military_number', 'firstlogin'));
                 }
-                
+                else {
+                    return redirect()->route('home');
+                }
+            }
         } else {
             // If verification code does not match, return back with error message and input values
             return view('verfication_code')->withErrors('الكود خاطئ.')
@@ -201,7 +220,7 @@ class UserController extends Controller
             $password = $request->password;
             $sent = $result['sent'];
             if ($sent === 'true') {
-                
+
                 return  view('verfication_code', compact('code', 'military_number', 'password'));
             } else {
 
@@ -209,7 +228,6 @@ class UserController extends Controller
             }
         }
     }
-
 
     public function reset_password(Request $request)
     {
@@ -228,7 +246,8 @@ class UserController extends Controller
         if ($validatedData->fails()) {
             return view('resetpassword')
                 ->withErrors($validatedData)
-                ->with('military_number', $request->military_number);
+                ->with('military_number', $request->military_number)
+                ->with('firstlogin', $request->firstlogin);
         }
 
         $user = User::where('military_number', $request->military_number)->first();
@@ -236,26 +255,24 @@ class UserController extends Controller
         if (!$user) {
             return back()->with('error', 'الرقم العسكري المقدم لا يتطابق مع سجلاتنا');
         }
-
-        if (Hash::check($request->password, $user->password)) {
+        if (Hash::check($request->password , $user->password) == true) {
             return view('resetpassword')
                 ->withErrors('لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية')
                 ->with('military_number', $request->military_number)
                 ->with('firstlogin', $request->firstlogin); // Define $firstlogin here if needed
         }
 
-
         // Update password and set token for first login if applicable
-        
+
         if ($request->firstlogin == 1) {
             $user->token = "logined";
-            
         }
         $user->password = Hash::make($request->password);
         $user->save();
 
-        return redirect()->route('welcome');
+        return redirect()->route('home');
     }
+
 
     public function logout(Request $request)
     {
@@ -270,9 +287,18 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id)
     {
         //
+        $user = User::find(Auth::user()->id);
+        $rule = Rule::all();
+        $flag = $id;
+        // $permission_ids = explode(',', $rule_permisssion->permission_ids);
+        // $allPermission = Permission::whereIn('id', $permission_ids)->get();
+        // dd($allPermission);
+        $alldepartment =$user->createdDepartments;
+        // return view('role.create',compact('allPermission','alldepartment'));
+        return view('user.create',compact('alldepartment','rule' ,'flag'));
     }
 
     /**
@@ -280,7 +306,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd("dd");
+        dd($request);
         // validation
         // $validatedData = $request->validate([
         //     'military_number' => 'required|string|unique:users|max:255',
@@ -289,13 +315,37 @@ class UserController extends Controller
         //     'country_code' =>'required',
         // ]);
 
-        $newUser = new User();
-        $newUser->military_number = "123";
-        $newUser->phone = "01114057863";
-        $newUser->country_code = "+20";
-        // $newUser->password = Hash::make($validatedData['password']);
-        $newUser->password = Hash::make("123");
-        $newUser->save();
+        if($request->type == "0")
+        {
+            $newUser = new User();
+            $newUser->military_number = $request->military_number;
+            $newUser->phone = $request->phone;
+            $newUser->country_code = "+20";
+            $newUser->name = $request->name;
+            $newUser->file_number = $request->file_number;
+            $newUser->flag = "user";
+            $newUser->rule_id = $request->rule;
+            $newUser->department_id  = $request->department;
+            // $newUser->password = Hash::make($validatedData['password']);
+            $newUser->password = Hash::make($request->password);
+            $newUser->save();
+        }
+        else
+        {
+            $newUser = new User();
+            $newUser->military_number = $request->military_number;
+            $newUser->phone = $request->phone;
+            $newUser->country_code = "+20";
+            $newUser->name = $request->name;
+            $newUser->file_number = $request->file_number;
+            $newUser->flag = "employee";
+            $newUser->rule_id = $request->rule;
+            $newUser->department_id  = $request->department;
+            // $newUser->password = Hash::make($validatedData['password']);
+            $newUser->password = Hash::make($request->password);
+            $newUser->save();
+        }
+        
 
         return response()->json($newUser);
     }

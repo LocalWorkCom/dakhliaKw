@@ -7,10 +7,7 @@
 @section('content')
     <div class="container">
         <div class="mb-3">
-            <a href="{{ route('departments.create') }}" class="btn btn-primary mt-3">إضافة ادارة</a>
-        </div>
-        <div class="mb-3">
-            <a href="{{ route('postmans.create') }}" class="btn btn-primary mt-3">إضافة مندوب</a>
+            <a href="{{ route('departments.create') }}" class="btn btn-primary mt-3">إضافة جديد</a>
         </div>
         <div class="card">
             <div class="card-header">الادارات</div>

@@ -51,7 +51,10 @@ class DepartmentDataTable extends DataTable
         return $model->newQuery()
         ->withCount('iotelegrams')
         ->withCount('outgoings')
-        ->with(['createdBy', 'managerAssistant', 'manager', 'updatedBy']);
+        ->withCount('children')
+        ->with(['createdBy', 'managerAssistant', 'manager', 'updatedBy'])
+        ->where('parent_id', Auth::user()->department_id);
+
     }
 
     /**

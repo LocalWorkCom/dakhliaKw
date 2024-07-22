@@ -31,10 +31,6 @@
                           </div>
                         </div>
                         <div class="form-group">
-                            <label for="date">تاريخ الصادر </label>
-                            <input type="date" id="date" name="date" class="form-control" required>
-                        </div>
-                        <div class="form-group">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> </textarea>
                         </div>
@@ -44,7 +40,7 @@
                                 <option disabled> اختر من القائمه</option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}">
-                                        {{ $user->name }}  (الرقم العسكرى : {{ $user->military_number }})
+                                        {{ $user->username }}  (الرقم العسكرى : {{ $user->military_number }})
                                     </option>
                                 @endforeach
                             </select>
@@ -65,23 +61,13 @@
                                         data-bs-target="#extern-department">
                                         <i class="fa fa-plus"></i>
                                     </button>
-                                    <select id="from_departement" name="from_departement" class="form-control" >
+                                    <select id="from_departement" name="from_departement" class="form-control" required>
                                         <option value="">اختر الجهة</option>
                                         @foreach ($departments as $item)
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                                         @endforeach
                                     </select> 
                                </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="files">الملفات:</label>
-                            <div id="fileInputs">
-                                <div class="file-input mb-3">
-                                    <input type="file" name="files[]" class="form-control-file" >
-                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button>
                         </div>
                         <div class="form-row">
                             
@@ -93,25 +79,24 @@
                                 </button>
                            </div>
                            <div class="form-group col-md-5">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                        id="extern-user-dev" data-bs-target="#extern-user">
-                                    أضافه شخص صادر خارجى 
-                                </button>   
-                            </div>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                    id="extern-user-dev" data-bs-target="#extern-user">
+                                أضافه شخص صادر خارجى 
+                            </button>
                        </div>
-                           {{-- <div class="form-group col-md-2">
+                           <div class="form-group col-md-2">
                             <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
                                     id="addFile-dev" data-bs-target="#addFile">
                                     اضافه ملفات
-                            </button> --}}
+                            </button>
                             {{-- <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button> --}}
 
                            </div>
 
                         </div>
                          {{-- model for add files --}}
-                            {{-- <div class="modal fade" id="addFile" tabindex="-1" aria-labelledby="extern-departmentLabel" aria-hidden="true">
+                            <div class="modal fade" id="addFile" tabindex="-1" aria-labelledby="extern-departmentLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -139,11 +124,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            {{-- </div> --}} 
+                            </div>
                             <button class="btn btn-primary" type="submit">اضافه </button>
                     </form>
                 </div>
-                </form>
             </div>
         </div>
     </div>
@@ -185,8 +169,8 @@
 
    {{-- model for add new user --}}
    <div class="modal fade" id="extern-user" tabindex="-1" aria-labelledby="extern-departmentLabel"
-      aria-hidden="true">
-     <div class="modal-dialog modal-dialog-centered">
+   aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content">
            <div class="modal-header">
                <h5 class="modal-title" id="extern-departmentLabel">إضافة شخص صادر جديدة</h5>
@@ -231,86 +215,86 @@
 
 @push('scripts')
     <script> 
-            $(document).ready(function() {
+$(document).ready(function() {
 
-            $("#saveExternalUser").on("submit", function(e) {
-                e.preventDefault();
-                // Serialize the form data
-                var formData = $(this).serialize(); // Changed to $(this)
-                // Submit AJAX request
-                $.ajax({
-                    url: $(this).attr('action'), // Changed to $(this)
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        $('#select-person-to').empty();
-                        $.ajax({
+$("#saveExternalUser").on("submit", function(e) {
+    e.preventDefault();
+    // Serialize the form data
+    var formData = $(this).serialize(); // Changed to $(this)
+    // Submit AJAX request
+    $.ajax({
+        url: $(this).attr('action'), // Changed to $(this)
+        type: 'POST',
+        data: formData,
+        success: function(response) {
+            $('#select-person-to').empty();
+            $.ajax({
 
-                            url: "{{ route('external.users') }}",
-                            type: 'get',
-                            success: function(response) {
-                                // Handle success response
-                                var selectOptions =
-                                    '<option value="">اختر الشخص الصادر</option>';
-                                response.forEach(function(department) {
-                                    selectOptions += '<option value="' +
-                                        department.id +
-                                        '">' + department.name +
-                                        '</option>';
-                                });
-                                $('#select-person-to').html(
-                                    selectOptions
-                                );
+                url: "{{ route('external.users') }}",
+                type: 'get',
+                success: function(response) {
+                    // Handle success response
+                    var selectOptions =
+                        '<option value="">اختر الشخص الصادر</option>';
+                    response.forEach(function(department) {
+                        selectOptions += '<option value="' +
+                            department.id +
+                            '">' + department.name +
+                            '</option>';
+                    });
+                    $('#select-person-to').html(
+                        selectOptions
+                    );
 
-                            },
-                            error: function(xhr, status, error) {
-                                // Handle error response
-                                console.error(xhr.responseText);
-                            }
-                        });
-                        // Optionally, you can close the modal after successful save
-                        $('#extern-user').modal('hide'); // Changed modal ID
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle error response
-                        console.error(xhr.responseText);
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    console.error(xhr.responseText);
+                }
+            });
+            // Optionally, you can close the modal after successful save
+            $('#extern-user').modal('hide'); // Changed modal ID
+        },
+        error: function(xhr, status, error) {
+            // Handle error response
+            console.error(xhr.responseText);
+        }
+    });
+});
+});
+$(document).ready(function() {
+    let fileInputCount = 1;
+            const maxFileInputs = 9;
+            $('#addFile').click(function() {
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount < 10) {
+                        var newInput = '<div class="file-input mb-3">' +
+                            '<input type="file" name="files[]" class="form-control-file" >' +
+                            '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
+                            '</div>';
+                        $('#fileInputs').append(newInput);
+                        checkFileCount(); // Update button states
+                    } else {
+                        alert('لا يمكنك إضافة المزيد من الملفات.');
                     }
                 });
-            });
-            });
-            $(document).ready(function() {
-                let fileInputCount = 1;
-                        const maxFileInputs = 9;
-                        $('#addFile').click(function() {
-                                var fileCount = $('#fileInputs').find('.file-input').length;
-                                if (fileCount < 10) {
-                                    var newInput = '<div class="file-input mb-3">' +
-                                        '<input type="file" name="files[]" class="form-control-file" >' +
-                                        '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
-                                        '</div>';
-                                    $('#fileInputs').append(newInput);
-                                    checkFileCount(); // Update button states
-                                } else {
-                                    alert('لا يمكنك إضافة المزيد من الملفات.');
-                                }
-                            });
 
-                            // Remove file input
-                            $(document).on('click', '.remove-file', function() {
-                                $(this).parent('.file-input').remove();
-                                checkFileCount(); // Update button states
+                // Remove file input
+                $(document).on('click', '.remove-file', function() {
+                    $(this).parent('.file-input').remove();
+                    checkFileCount(); // Update button states
 
-                            });
-
-                            function checkFileCount() {
-                                var fileCount = $('#fileInputs').find('.file-input').length;
-                                if (fileCount > 1) {
-                                    $('.remove-file').prop('disabled', false);
-                                } else {
-                                    $('.remove-file').prop('disabled', true);
-                                }
-                            }
                 });
+
+                function checkFileCount() {
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount > 1) {
+                        $('.remove-file').prop('disabled', false);
+                    } else {
+                        $('.remove-file').prop('disabled', true);
+                    }
+                }
+        });
 
     </script>
 @endpush
