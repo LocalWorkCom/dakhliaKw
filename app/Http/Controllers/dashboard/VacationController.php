@@ -12,22 +12,35 @@ class VacationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($id)
+    public function index($id = 0)
     {
-        return view('vacation.index',compact('id'));
+        return view('vacation.index', compact('id'));
         // return $dataTable->render('vacation.index');
     }
-    public function getVacations($id) 
-     {
-        $data = EmployeeVacation::where('employee_id ', $id)->get();
-        return DataTables::of($data)
-        // ->addColumn('action', function ($row) {
-        //     return '<button class="btn btn-primary btn-sm">Edit</button>
-        //       <a href="" class="btn btn-primary btn-sm">vacations</a>'
-        //             ;
-        // })
-        ->rawColumns(['action'])
-        ->make(true);
+    public function getVacations($id)
+    {
+        if ($id) {
+
+            $EmployeeVacations = EmployeeVacation::where('employee_id', $id)->get();
+            foreach ($EmployeeVacations as  $EmployeeVacation) {
+                # code...
+                $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
+            }
+            return DataTables::of($EmployeeVacations)
+
+                ->rawColumns(['action'])
+                ->make(true);
+        } else {
+            $EmployeeVacations = EmployeeVacation::all();
+            foreach ($EmployeeVacations as  $EmployeeVacation) {
+                # code...
+                $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
+            }
+            return DataTables::of($EmployeeVacations)
+
+                ->rawColumns(['action'])
+                ->make(true);
+        }
     }
     /**
      * Show the form for creating a new resource.
@@ -36,6 +49,12 @@ class VacationController extends Controller
     {
         $employees = getEmployees();
         $vacation_types = getVactionTypes();
+        if ($id) {
+
+            $vacation_types = getVactionTypes()->where('id', '<>', '3');
+        } else {
+            $vacation_types = getVactionTypes();
+        }
         return view('vacation.add', compact('employees', 'vacation_types', 'id'));
     }
 
@@ -69,7 +88,7 @@ class VacationController extends Controller
         $employees = getEmployees();
         $vacation_types = getVactionTypes();
 
-        return view('vacation.show', compact('vacation', 'employees', 'vacation_types'));
+        return view('vacation.show', compact('vacation', 'employees', 'vacation_types', 'id'));
     }
 
     /**
@@ -79,9 +98,13 @@ class VacationController extends Controller
     {
         $employees = getEmployees();
         $vacation = EmployeeVacation::find($id);
-        $vacation_types = getVactionTypes();
+        if ($vacation->employee_id) {
 
-        return view('vacation.edit', compact('employees', 'vacation', 'vacation_types'));
+            $vacation_types = getVactionTypes()->where('id', '<>', '3');
+        } else {
+            $vacation_types = getVactionTypes();
+        }
+        return view('vacation.edit', compact('employees', 'vacation', 'vacation_types', 'id'));
     }
 
     /**
