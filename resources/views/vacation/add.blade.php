@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('vacations.list') }}">الاجازات </a></li>
+                <li class="breadcrumb-item"><a href="{{ route('vacations.list', $id) }}">الاجازات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
             </ol>
         </nav>
@@ -22,7 +22,7 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-            <form action="{{ route('vacation.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('vacation.store', $id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="form-row mx-2 mt-4">
