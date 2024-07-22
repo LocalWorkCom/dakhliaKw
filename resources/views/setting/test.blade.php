@@ -139,7 +139,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="extern-departmentLabel">إضافة مسمى وظيفى </h5>
+                    <h5 class="modal-title" id="extern-departmentLabel">إضافة مسمى وظيفى جديد</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -168,7 +168,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="saveExternalUser" action="{{ route('vacationType.add') }}" method="POST">
+                    <form id="saveExternalUser" action="{{ route('vacation.add') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">
