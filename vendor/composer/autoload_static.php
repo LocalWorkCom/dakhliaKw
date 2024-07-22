@@ -202,11 +202,11 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         ),
         'Yajra\\DataTables\\' => 
         array (
-            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
-            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
+            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
+            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
             2 => __DIR__ . '/..' . '/yajra/laravel-datatables-fractal/src',
-            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
-            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
+            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
+            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
         ),
         'Whoops\\' => 
         array (
@@ -388,8 +388,8 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -598,7 +598,10 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         'App\\DataTables\\RoleDataTable' => __DIR__ . '/../..' . '/app/DataTables/RoleDataTable.php',
         'App\\DataTables\\UsersDataTable' => __DIR__ . '/../..' . '/app/DataTables/UsersDataTable.php',
         'App\\DataTables\\VacationDataTable' => __DIR__ . '/../..' . '/app/DataTables/VacationDataTable.php',
+        'App\\DataTables\\gradeDataTable' => __DIR__ . '/../..' . '/app/DataTables/gradeDataTable.php',
+        'App\\DataTables\\jobDataTable' => __DIR__ . '/../..' . '/app/DataTables/jobDataTable.php',
         'App\\DataTables\\outgoingsDataTable' => __DIR__ . '/../..' . '/app/DataTables/outgoingsDataTable.php',
+        'App\\DataTables\\vacationTypeDataTable' => __DIR__ . '/../..' . '/app/DataTables/vacationTypeDataTable.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\DepartmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/DepartmentController.php',
@@ -609,6 +612,7 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         'App\\Http\\Controllers\\dashboard\\IoTelegramController' => __DIR__ . '/../..' . '/app/Http/Controllers/dashboard/IoTelegramController.php',
         'App\\Http\\Controllers\\dashboard\\VacationController' => __DIR__ . '/../..' . '/app/Http/Controllers/dashboard/VacationController.php',
         'App\\Http\\Controllers\\outgoingController' => __DIR__ . '/../..' . '/app/Http/Controllers/outgoingController.php',
+        'App\\Http\\Controllers\\settingController' => __DIR__ . '/../..' . '/app/Http/Controllers/settingController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CheckPermission' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckPermission.php',
@@ -636,6 +640,8 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         'App\\Models\\VacationType' => __DIR__ . '/../..' . '/app/Models/VacationType.php',
         'App\\Models\\departements' => __DIR__ . '/../..' . '/app/Models/departements.php',
         'App\\Models\\exportuser' => __DIR__ . '/../..' . '/app/Models/exportuser.php',
+        'App\\Models\\grade' => __DIR__ . '/../..' . '/app/Models/grade.php',
+        'App\\Models\\job' => __DIR__ . '/../..' . '/app/Models/job.php',
         'App\\Models\\outgoing_files' => __DIR__ . '/../..' . '/app/Models/outgoing_files.php',
         'App\\Models\\outgoings' => __DIR__ . '/../..' . '/app/Models/outgoings.php',
         'App\\Policies\\PermissionPolicy' => __DIR__ . '/../..' . '/app/Policies/PermissionPolicy.php',
