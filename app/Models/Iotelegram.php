@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class iotelegrams extends Model
+class Iotelegram extends Model
 {
     use HasFactory;
 
@@ -39,6 +39,6 @@ class iotelegrams extends Model
     }
     public function ioFiles()
     {
-        return $this->hasMany(io_files::class, 'iotelegram_id');
+        return $this->hasMany(Io_file::class, 'iotelegram_id');
     }
 }
