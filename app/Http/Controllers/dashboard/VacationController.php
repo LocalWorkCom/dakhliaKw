@@ -93,7 +93,7 @@ class VacationController extends Controller
     public function show($id)
     {
         //
-        $vacation = EmployeeVacation::find($id);
+        $vacation = EmployeeVacation::with('employee', 'vacation_type')->where('id', $id)->first();
         $employees = getEmployees();
         $vacation_types = getVactionTypes();
 
@@ -148,5 +148,15 @@ class VacationController extends Controller
         session()->flash('success', 'تم الحذف بنجاح.');
 
         return redirect()->route('vacations.list');
+    }
+    public function downlaodfile($id)
+    {
+        $file = EmployeeVacation::find($id);
+        // $download=downloadFile($file->file_name,$file->real_name);
+        $file_path = public_path($file->file_name);
+        $file_name = basename($file->real_name);
+
+        return response()->download($file_path, $file_name);
+        //echo 'downloaded';
     }
 }

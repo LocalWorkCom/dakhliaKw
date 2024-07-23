@@ -210,6 +210,8 @@ Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vac
 Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update');
 Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show');
 Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete');
+Route::get('vacation/downlaod/{id}', [VacationController::class, 'downlaodfile'])->name('vacation.downlaodfile');
+
 
 
 
