@@ -298,7 +298,7 @@ class settingController extends Controller
           }
           $job->name=$request->name;
           $job->save();
-          $message='';
+          $message='تم تعديل الاسم';
           return redirect()->route('vacationType.index',compact('message'));
          // return redirect()->back()->with(compact('activeTab'));
           
