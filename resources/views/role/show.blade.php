@@ -45,14 +45,14 @@
                         <div class="form-group col-md-6">
                             <label for="input8">الدور</label>
                             <input type="text" id="input8" name="name" class="form-control" placeholder="الوظيفة"
-                                value="{{ $rule_permission->name }}">
+                                value="{{ $rule_permission->name }}" disabled>
                         </div>
 
                         <div class="form-group col-md-6">
                             <label for="input25"> القسم</label>
-                            <select id="input25" name="department_id" class="form-control" placeholder="القسم">
+                            <select id="input25" name="department_id" class="form-control" placeholder="القسم" disabled >
                                 @foreach ($alldepartment as $item)
-                                    <option value="{{ $item->id }}" {{ $rule_permission->department_id  == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}" {{ $rule_permission->department_id  == $item->id ? 'selected' : '' }} >{{ $item->name }}</option>
                                 @endforeach
 
                             </select>
@@ -67,24 +67,22 @@
                                         @foreach ($allpermission as $item)
                                             <div class="col-6 col-md-4 col-lg-3 my-2">
                                                 <div class="form-check">
-                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input">
+                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input" disabled>
                                                     <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{ $item->name }}</label>
                                                 </div>
                                             </div>
                                         @endforeach
                                     @else
-                                        @php
-                                            $hisPermissionIds = $hisPermissions->pluck('id')->toArray();
-                                        @endphp
+                                    @php
+                                        $hisPermissionIds = $hisPermissions->pluck('id')->toArray();
+                                    @endphp
                                     @foreach ($allpermission as $item)
-                                        {{-- @foreach ($hisPermissions as $item) --}}
-                                            <div class="col-6 col-md-4 col-lg-3 my-2">
-                                                <div class="form-check">
-                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input"  {{ in_array($item->id, $hisPermissionIds) ? 'checked' : '' }} >
-                                                    <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{ $item->name }}</label>
-                                                </div>
+                                        <div class="col-6 col-md-4 col-lg-3 my-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input" {{ in_array($item->id, $hisPermissionIds) ? 'checked' : '' }} disabled>
+                                                <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{ $item->name }}</label>
                                             </div>
-                                        {{-- @endforeach --}}
+                                        </div>
                                     @endforeach
                                     @endif
                                 </div>

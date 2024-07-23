@@ -81,6 +81,7 @@ Route::middleware(['auth', 'check.permission:view Rule,view Permission,view depa
     Route::any('/permission_create', [PermissionController::class, 'create'])->name('permission.create');
 
     Route::any('/rule', [RuleController::class, 'index'])->name('rule.index');
+    Route::any('api/rule', [RuleController::class, 'getRule'])->name('api.rule');
     Route::any('/rule_create', [RuleController::class, 'create'])->name('rule.create');
 });
 // create All Models permission
@@ -93,7 +94,9 @@ Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit depa
     Route::any('/permission_edit/{id}', [PermissionController::class, 'edit'])->name('permissions_edit');
     Route::any('/permission_show/{id}', [PermissionController::class, 'show'])->name('permissions_show');
     Route::any('/rule_edit/{id}', [RuleController::class, 'edit'])->name('rule_edit');
+    Route::any('/rule_show/{id}', [RuleController::class, 'show'])->name('rule_show');
     Route::any('/rule_update/{id}', [RuleController::class, 'update'])->name('rule_update');
+    Route::any('/permission_delete/{id}', [PermissionController::class, 'destroy'])->name('permissions_destroy');
     // Route::resource('permissions', PermissionController::class);
     // Route::resource('rules', RuleController::class);
 });
