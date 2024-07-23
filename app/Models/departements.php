@@ -45,6 +45,7 @@ class departements extends Model
     {
         return $this->hasMany(Iotelegram::class , 'from_departement');
     }
+    
     public function outgoings()
     {
         return $this->hasMany(outgoings::class, 'created_department');
