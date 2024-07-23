@@ -19,14 +19,56 @@ class outgoingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(outgoingsDataTable $dataTable,Request $request)
+    public function index()
     {
        
-        $status = $request->get('status', 'active'); // Default to 'active' if not provided
-        // $data =$dataTable->with('status', $status);
-        // return view('outgoing.viewAll',compact('data'));
-        $view = 'outgoing.viewall';
-        return $dataTable->with('status', $status)->render($view);
+        return view('outgoing.viewall');
+    }
+    public function getExportActive()
+    {
+        $data = outgoings::with(['personTo', 'department_External'])
+        ->where('outgoings.active', 0)
+        ->select('outgoings.*');
+       
+        return DataTables::of($data)->addColumn('action', function ($row) {
+            $fileCount = outgoing_files::where('outgoing_id', $row->id)->count();
+            $is_file = $fileCount == 0;
+           $uploadButton = $is_file 
+               ? '<a class="btn btn-primary btn-sm" href=' . route('Export.edit', $row->id) . '>تعديل</a>'
+               : '<a class="btn btn-primary btn-sm" onclick="openarchive('.$row->id.')" >اضف للأرشيف</a>';
+
+            return '
+                   <a class="btn btn-primary btn-sm" href=' . route('Export.show', $row->id) . '>عرض تفاصيل</a>
+                    ' . $uploadButton ;
+        })
+        ->addColumn('person_to_username', function ($row) {
+            return $row->personTo->name ?? 'لايوجد شخص صادر له'; // Assuming 'name' is the column in external_users
+        })
+        ->addColumn('department_External_name', function ($row) {
+            return $row->department_External->name ?? 'لا يوجد قسم خارجى صادر له'; // Assuming 'name' is the column in external_users
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
+    public function getExportInActive()
+    {
+       
+        $data = outgoings::with(['personTo', 'department_External'])
+        ->where('outgoings.active', 1)
+        ->select('outgoings.*');
+       
+        return DataTables::of($data)->addColumn('action', function ($row) {
+            return '
+                   <a class="btn btn-primary btn-sm" href=' . route('Export.show', $row->id) . '">عرض تفاصيل</a>' ;
+        })
+        ->addColumn('person_to_username', function ($row) {
+            return $row->personTo->name ?? 'لايوجد شخص صادر له'; // Assuming 'name' is the column in external_users
+        })
+        ->addColumn('department_External_name', function ($row) {
+            return $row->department_External->name ?? 'لا يوجد قسم خارجى صادر له'; // Assuming 'name' is the column in external_users
+        })
+        ->rawColumns(['action'])
+        ->make(true);
     }
     public function uploadFiles($id){
         dd($id);
@@ -40,11 +82,12 @@ class outgoingController extends Controller
         $users = exportuser::all();
         return $users;
     }
-    public function addToArchive($id){
-        $export = outgoings::find($id);
+    public function addToArchive(Request $request){
+        $export = outgoings::find($request->id);
         $export->active=1;
         $export->save();
-        return redirect()->back()->with('success','تم الأضافه الى الارشيف');
+        session()->flash('success', 'تم الاضافه الى الارشيف بنجاح.');
+        return redirect()->back();
     }
     public function showArchive(outgoingsDataTable $dataTable, Request $request){
         $status = $request->get('status', 'inactive'); // Default to 'inactive' if 
@@ -79,25 +122,22 @@ class outgoingController extends Controller
         $rules = [
             'nameex' => 'required|string',
             'num' => 'required|integer',
-            'note' => 'nullable|string',
+            'note' => 'required|string',
             'person_to' => 'nullable|exists:export_users,id',
-            'active' => 'required|boolean',
+            'date' => 'required|date|after_or_equal:today',
             'department_id' => 'nullable|exists:external_departements,id',
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
 
         // // Define custom messages
         $messages = [
-            'nameex.required' => 'The name field is required.',
-            'nameex.string' => 'The name must be a string.',
-            'num.required' => 'The number field is required.',
-            'num.integer' => 'The number must be an integer.',
-            'person_to.exists' => 'The selected person does not exist.',
-            'active.required' => 'The active field is required.',
-            'active.boolean' => 'The active field must be true or false.',
-            'department_id.exists' => 'The selected department does not exist.',
-            'files.*.file' => 'Each file must be a valid file.',
-            'files.*.mimes' => 'Each file must be a file of type: jpg, jpeg, png, pdf',
+            'nameex.required' => 'عفوا يجب ادخال اسم الصادر',
+            'num.required' => 'عفوا يجب ادخال رقم الصادر',
+            'note.required' => 'عفوا يجب ادخال ملاحظات الصادر',
+            'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
+            'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
+            'date.after_or_equal' => 'عفوا يجب ادخال تاريخ صحيح',
+            'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
         ];
 
         // // Validate the request
@@ -143,7 +183,7 @@ class outgoingController extends Controller
     {
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
-        $is_file = outgoing_files::where('outgoing_id', $id)->exists();
+        $is_file = outgoing_files::where('outgoing_id', $id)->get();
        
         $departments=ExternalDepartment::all();
 

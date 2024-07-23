@@ -42,6 +42,10 @@
       <td>{{ $data->num ? $data->num :'لا يوجد رقم للصادر' }}</td>
     </tr>
     <tr>
+      <th scope="row">تاريخ الصادر</th>
+      <td>{{ $data->date ? $data->date :'لا يوجد تاريخ للصادر' }}</td>
+    </tr>
+    <tr>
       <th scope="row"> الحالة</th>
       <td>{{ $data->active ? 'مفعل' : 'غير مفعل' }}</td>
     </tr>
