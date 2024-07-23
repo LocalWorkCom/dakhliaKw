@@ -37,47 +37,25 @@
                                     </tr>
                                 </thead>
                             </table>
-
-                            <script>
-                                $(document).ready(function() {
-                                    $('#permissions-table').DataTable({
-                                        processing: true,
-                                        serverSide: true,
-                                        ajax: {
-                                            url: '{{ url('api/permission') }}',
-                                            type: 'GET', // Ensure the HTTP method is correct
-                                        },
-                                        columns: [{
-                                                data: 'id',
-                                                name: 'id'
-                                            },
-                                            {
-                                                data: 'name',
-                                                name: 'name'
-                                            },
-                                            {
-                                                data: 'model',
-                                                name: 'model'
-                                            },
-                                            {
-                                                data: 'action',
-                                                name: 'action',
-                                                orderable: false,
-                                                searchable: false,
-                                                render: function(data, type, row) {
-                                                    var editUrl = '{{ route('permissions_edit', ':id') }}';
-                                                    editUrl = editUrl.replace(':id', row.id);
-                                                    return `<a href="${editUrl}" class="btn btn-primary btn-sm">تعديل</a>`;
-                                                }
-                                            }
-                                        ]
-                                    });
-                                });
-                            </script>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    <script>
+        $(document).ready(function() {
+            $('#permissions-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ url('api/permission') }}',
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'name', name: 'name' },
+                    { data: 'guard_name', name: 'guard_name' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false }
+                ]
+            });
+        });
+    </script>
 @endsection
