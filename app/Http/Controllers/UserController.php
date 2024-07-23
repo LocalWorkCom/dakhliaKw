@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Rule;
 use App\Models\User;
-use App\Models\grade;
 // use Illuminate\Validation\Rule;
+use App\Models\grade;
 use Illuminate\Support\Str;
+use App\Models\departements;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\DataTables\UsersDataTable;
@@ -371,7 +373,13 @@ class UserController extends Controller
         $user = User::find($id);
         $rule = Rule::all();
         $grade = grade::all();
-        return view('user.edit',compact('user'));
+        $joining_date = Carbon::parse($user->joining_date);
+        $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
+        $end_of_service = $end_of_serviceUnit->format('Y-m-d');
+
+        $department = departements::all();
+        $hisdepartment =$user->createdDepartments;
+        return view('user.edit',compact('user' ,'rule' ,'grade' ,'department','hisdepartment','end_of_service'));
     }
 
     /**
@@ -380,6 +388,16 @@ class UserController extends Controller
     public function edit(string $id)
     {
         //
+        $user = User::find($id);
+        $rule = Rule::all();
+        $grade = grade::all();
+        $joining_date = Carbon::parse($user->joining_date);
+        $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
+        $end_of_service = $end_of_serviceUnit->format('Y-m-d');
+
+        $department = departements::all();
+        $hisdepartment =$user->createdDepartments;
+        return view('user.edit',compact('user' ,'rule' ,'grade' ,'department','hisdepartment','end_of_service'));
     }
 
     /**
@@ -387,34 +405,60 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request);
-        $user = User::find($id);
-        if($user->flag == "employee")
-        {
-            $user->military_number = $request->military_number;
-            $user->phone = $request->phone;
-            $user->country_code = "+20";
+    
+            // dd($request);
+            $user = User::find($id);
             $user->name = $request->name;
+            $user->email = $request->email;
+            $user->phone = $request->phone;
+            $user->description = $request->description;
+            $user->military_number = $request->military_number;
+            $user->job = $request->job;
+            $user->job_title = $request->job_title;
+            $user->nationality = $request->nationality;
+            $user->Civil_number = $request->Civil_number;
             $user->file_number = $request->file_number;
-            $user->flag = "employee";
-            if($request->has('solder') && $request->solder == "on")
+            $user->flag = $request->flag;
+            $user->seniority = $request->seniority;
+            $user->public_administration = $request->public_administration;
+            $user->work_location = $request->work_location;
+            // $user->position = $request->position;
+            $user->qualification = $request->qualification;
+            $user->date_of_birth = $request->date_of_birth;
+            $user->joining_date = $request->joining_date;
+            $user->age = Carbon::parse($request->input('date_of_birth'))->age;
+            
+            $joining_dateDate = Carbon::parse($request->input('joining_date'));
+            $end_of_serviceDate = Carbon::parse($request->input('end_of_service'));
+            $user->length_of_service =  $end_of_serviceDate->year - $joining_dateDate->year;       
+            if($request->has('grade_id'))
             {
                 $user->grade_id = $request->grade_id;
             } 
-            // $newUser->password = NUll;
-            $user->description = $request->description;
-            $user->job = $request->job;
-            $user->date_of_birth = $request->date_of_birth;
-            $user->public_administration = $request->department;
-
+            $user->image = $request->image;
            
-        }
-        else
-        {
+        if($user->flag == "user")
+        {   $user->rule_id = $request->rule_id;
+            $user->department_id  = $request->department_id;
+            $user->password = Hash::make($request->password);
 
         }
         $user->save();
-        return view('user.edit',compact('user'));
+        // dd($user);
+        if($user->flag == "user")
+        {
+            $id = "0";
+        }
+        else
+        {
+            $id = "1";
+        }
+        
+        
+
+        // return response()->json($newUser);
+        return view('user.view' ,compact('id'));
+        // return view('user.edit',compact('user'));
     }
 
     /**
