@@ -4,7 +4,6 @@
     عرض
 @endsection
 @section('content')
-
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -30,76 +29,85 @@
 
 
 
-            <div class="form-row mx-3 mb-3" >
-                <table class="table table-bordered" dir="rtl" >
-                    <tbody >
+            <div class="form-row mx-3 mb-3">
+                <table class="table table-bordered" dir="rtl">
+                    <tbody>
                         <tr>
                             <th scope="row"style="background: #f5f6fa;">الجهه المرسلة</th>
                             <td style="background: #f5f6fa;">{{ $iotelegram->external_department->name }}</td>
                         </tr>
                         <tr>
-                            <th scope="row"  style="background: #f5f6fa;" >نوع الوارد</th>
+                            <th scope="row" style="background: #f5f6fa;">نوع الوارد</th>
                             <td>
                                 {{ $iotelegram->type == 'in' ? 'داخلي' : 'خارجي' }}
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"  style="background: #f5f6fa;">اسم مندوب الجهه المرسلة </th>
+                            <th scope="row" style="background: #f5f6fa;">اسم مندوب الجهه المرسلة </th>
                             <td>{{ $iotelegram->representive->name }}</td>
                         </tr>
                         <tr>
-                            <th scope="row"  style="background: #f5f6fa;"> الموظف المستلم </th>
+                            <th scope="row" style="background: #f5f6fa;"> الموظف المستلم </th>
                             <td>{{ $iotelegram->recieved_by }}</td>
                         </tr>
                         <tr>
-                            <th scope="row"  style="background: #f5f6fa;"> التاريخ</th>
+                            <th scope="row" style="background: #f5f6fa;"> التاريخ</th>
                             <td>{{ $iotelegram->date }}</td>
                         </tr>
                         <tr>
-                            <th scope="row"  style="background: #f5f6fa;"> الصور المرفقه </th>
-                            <td><div class="row">
-                            @foreach ($iotelegram->ioFiles as $file)
-                                @if ($file->file_type == 'image')
-                                    <div class="col-md-11 mb-3 px-5 mt-2">
-                                        <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
-                                            data-image="{{ asset($file->file_name) }}" data-title="{{ $file->file_name }}">
-                                            <img src="{{ asset($file->file_name) }}" class="img-thumbnail mx-2"
-                                                alt="{{ $file->file_name }}"> <br> <br>
-                                            <a id="downloadButton"
-                                                href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
-                                                class="btn-download"><i class="fa fa-download" style="color:green;"></i>
-                                                تحميل الملف
-                                              </a>
+                            <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-11 mb-3 px-5 mt-2 d-flex">
+                                        @foreach ($iotelegram->ioFiles as $file)
+                                            @if ($file->file_type == 'image')
+                                                <div >
 
-                                        </a>
+                                                    <a href="#" class="image-popup" data-toggle="modal"
+                                                        data-target="#imageModal" data-image="{{ asset($file->file_name) }}"
+                                                        data-title="{{ $file->file_name }}">
+                                                        <img src="{{ asset($file->file_name) }}" class="img-thumbnail mx-2"
+                                                            alt="{{ $file->file_name }}"> <br> <br>
+                                                        <a id="downloadButton"
+                                                            href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
+                                                            class="btn-download"><i class="fa fa-download"
+                                                                style="color:green;"></i>
+                                                            تحميل الملف
+                                                        </a>
 
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        @endforeach
                                     </div>
-                                @endif
-                            @endforeach
-                        </div></td>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">  الملفات المرفقة الاخري </th>
-                            <td> <ul class="list-group">
-                            @foreach ($iotelegram->ioFiles as $file)
-                                @if ($file->file_type == 'pdf')
-                                    <li class="list-group-item col-md-11 mb-3 px-5">
-                                        <a id="downloadButton"
-                                            href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
-                                            target="_blank"  class="btn-download">
-                                            <i class="fa fa-download" style="color:green; "> </i> {{ basename($file->real_name) }}</a>
+                            <th scope="row" style="background: #f5f6fa;"> الملفات المرفقة الاخري </th>
+                            <td>
+                                <ul class="list-group">
+                                    @foreach ($iotelegram->ioFiles as $file)
+                                        @if ($file->file_type == 'pdf')
+                                            <div class="col-md-11 mb-3 px-5 mt-3">
+                                                <a id="downloadButton"
+                                                    href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
+                                                    target="_blank" class="btn-download">
+                                                    <i class="fa fa-download" style="color:green; "> </i>
+                                                    {{ basename($file->real_name) }}</a>
 
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul></td>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </ul>
+                            </td>
                         </tr>
-                        
+
 
 
                     </tbody>
-                </table>  
-            
+                </table>
+
             </div>
         </div>
     </div>

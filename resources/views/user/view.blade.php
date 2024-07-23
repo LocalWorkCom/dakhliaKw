@@ -5,6 +5,9 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
 @section('content')
+@section('title')
+    عرض
+@endsection
     <section>
         <div class="row">
             @if (url()->current() == url('/users/0'))
@@ -34,10 +37,10 @@
                 <div class="col-lg-12">
                     <div class="bg-white p-5">
                         <!-- <div>
-                                            <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
-                                                اضافه جديد</a>
-                                        </div>
-                                        <br> -->
+                                                <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
+                                                    اضافه جديد</a>
+                                            </div>
+                                            <br> -->
 
                         <div>
                             <table id="users-table" class="display table table-bordered table-hover dataTable">
@@ -94,7 +97,7 @@
                                                 useredit = useredit.replace(':id', row.id);
                                                 var usershow = '{{ route('user.show', ':id') }}';
                                                 usershow = usershow.replace(':id', row.id);
-                                                var vacation='{{ route('vacations.list',':id') }}';
+                                                var vacation = '{{ route('vacations.list', ':id') }}';
                                                 vacation = vacation.replace(':id', row.id);
 
                                                 return `

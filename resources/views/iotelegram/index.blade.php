@@ -113,11 +113,11 @@
 
                                     // Checking if the vacation start date condition is met
                                     var archiveButton = (row.archives) ?
-                                        `<a href="${archiveUrl}" class="archive btn btn-success btn-sm" onclick="confirmArchive(event, this)"> <i class="fa fa-archive"></i> </a>` :
+                                        `<a href="${archiveUrl}" class="archive btn btn-primary btn-sm" onclick="confirmArchive(event, this)"> <i class="fa fa-archive"></i> </a>` :
                                         `<a href="${editUrl}" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>`;
 
 
-                                    return `<a href="${editUrl}" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a><a href="${showUrl}" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>${archiveButton}`;
+                                    return `<a href="${showUrl}" class="archive btn btn-info btn-sm"><i class="fa fa-eye"></i></a>${archiveButton}`;
 
                                 }
 
@@ -133,6 +133,8 @@
 
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         function confirmArchive(event, ele) {
             event.preventDefault();

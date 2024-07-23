@@ -1,6 +1,8 @@
 @extends('layout.main')
 @section('content')
-
+@section('title')
+    اضافة
+@endsection
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -42,7 +44,7 @@
                 <form action="{{ route('rule.store') }}" method="post" class="text-right">
                     @csrf
 
-                    <div class="form-row mx-2 mt-4">
+                    <div class="form-row mx-2 mt-4 d-flex flex-row-reverse">
 
                         <div class="form-group col-md-6">
                             <label for="nameus"> الدور</label>
@@ -58,20 +60,25 @@
                                 @endforeach
                             </select>
                         </div>
-
-                        <div class="form-group col-md-6">
-                            <label for="department">الصلاحية</label>
-                            @foreach ($allPermission as $item)
-                                <div class="form-check">
-                                    <input type="checkbox" id="exampleCheck1" value="{{ $item->id }}"
-                                        name="permissions_ids[]" class="form-control" required>
-                                    <label class="form-check-label" for="exampleCheck1">{{ $item->name }}</label>
-                                </div>
-                            @endforeach
-                            </select>
-                        </div>
-
                     </div>
+                 
+
+                    <div class="form-row mx-2 mt-4 text-right">
+                        <div class="form-group col-md-12">
+                            <div class="row">
+                                <label for="department" class="col-12">الصلاحية</label>
+                                @foreach ($allPermission as $item)
+                                <div class="col-6 col-md-4 col-lg-3 my-2">
+                                    <div class="form-check">
+                                        <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input">
+                                        <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{ $item->name }}</label>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    
 
                     <!-- Save button -->
                     <div class="container col-12 ">

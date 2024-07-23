@@ -130,7 +130,7 @@
                             <label for="files">اضافة ملف</label>
                             <div id="fileInputs">
                                 <div class="file-input mb-3" dir="rtl">
-                                    <input type="file" name="files[]" class="form-control-file">
+                                    <input type="file" name="files[]" class="form-control">
                                     <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
                                 </div>
                             </div>

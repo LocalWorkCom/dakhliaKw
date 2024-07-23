@@ -1,6 +1,9 @@
 @extends('layout.main')
 
 @section('content')
+@section('title')
+    تعديل
+@endsection
 <section>
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
