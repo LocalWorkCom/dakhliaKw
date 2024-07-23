@@ -91,6 +91,7 @@ Route::middleware(['auth', 'check.permission:create Permission,create Rule,creat
 // edit All Models permission
 Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit departements'])->group(function () {
     Route::any('/permission_edit/{id}', [PermissionController::class, 'edit'])->name('permissions_edit');
+    Route::any('/permission_show/{id}', [PermissionController::class, 'show'])->name('permissions_show');
     Route::any('/rule_edit/{id}', [RuleController::class, 'edit'])->name('rule_edit');
     Route::any('/rule_update/{id}', [RuleController::class, 'update'])->name('rule_update');
     // Route::resource('permissions', PermissionController::class);

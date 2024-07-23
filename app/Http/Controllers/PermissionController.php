@@ -75,6 +75,7 @@ class PermissionController extends Controller
     {
         $models = $this->getAllModels();
 
+        // dd($models);
         return $dataTable->render('permission.create', compact('models'));
         // return view('permission.create', compact('models'));
     }
@@ -123,24 +124,39 @@ class PermissionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Permission $permission)
+    public function show($id)
     {
         //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-   public function edit(Permission $permission, PermissionRoleDataTable $dataTable)
-{
+        $permission = Permission::find($id);
     $models = $this->getAllModels();
+    // dd($models);
     
     // Split the name into action and model parts
     $nameParts = explode(' ', $permission->name);
     $permissionAction = $nameParts[0] ?? '';
     $permissionModel = $nameParts[1] ?? '';
+    // dd($permissionAction);
 
-    return $dataTable->render('permission.edit', compact('permission', 'models', 'permissionAction', 'permissionModel'));
+    return view('permission.show', compact('permission', 'models', 'permissionAction', 'permissionModel'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+   public function edit($id)
+{
+    // dd($id);
+    $permission = Permission::find($id);
+    $models = $this->getAllModels();
+    // dd($models);
+    
+    // Split the name into action and model parts
+    $nameParts = explode(' ', $permission->name);
+    $permissionAction = $nameParts[0] ?? '';
+    $permissionModel = $nameParts[1] ?? '';
+    // dd($permissionAction);
+
+    return view('permission.edit', compact('permission', 'models', 'permissionAction', 'permissionModel'));
 }
 
 
