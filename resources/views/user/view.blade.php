@@ -5,6 +5,9 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
 @section('content')
+@section('title')
+    عرض
+@endsection
     <section>
         <div class="row">
             @if (url()->current() == url('/users/0'))

@@ -1,6 +1,8 @@
 @extends('layout.main')
 @section('content')
-
+@section('title')
+    تعديل
+@endsection
 {{-- <body> --}}
   <section>
     <div class="row col-11" dir="rtl">

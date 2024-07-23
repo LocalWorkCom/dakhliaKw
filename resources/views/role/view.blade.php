@@ -5,6 +5,9 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
 @section('content')
+@section('title')
+    عرض
+@endsection
     <section>
         <div class="row">
                 <div class="container welcome col-11">
@@ -20,7 +23,7 @@
                     <div class="form-group mt-4  mx-2 col-12 d-flex ">
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('rule.create') }}'">
-                            <img src="../images/add-btn.svg" alt="img">
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
                     </div>
