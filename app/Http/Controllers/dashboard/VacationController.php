@@ -15,7 +15,6 @@ class VacationController extends Controller
     public function index($id = 0)
     {
         return view('vacation.index', compact('id'));
-        // return $dataTable->render('vacation.index');
     }
     public function getVacations($id)
     {

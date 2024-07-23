@@ -38,25 +38,25 @@
                             <td style="background: #f5f6fa;">{{ $iotelegram->external_department->name }}</td>
                         </tr>
                         <tr>
-                            <th scope="row" >نوع الوارد</th>
+                            <th scope="row"  style="background: #f5f6fa;" >نوع الوارد</th>
                             <td>
                                 {{ $iotelegram->type == 'in' ? 'داخلي' : 'خارجي' }}
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row" >اسم مندوب الجهه المرسلة </th>
+                            <th scope="row"  style="background: #f5f6fa;">اسم مندوب الجهه المرسلة </th>
                             <td>{{ $iotelegram->representive->name }}</td>
                         </tr>
                         <tr>
-                            <th scope="row" > الموظف المستلم </th>
+                            <th scope="row"  style="background: #f5f6fa;"> الموظف المستلم </th>
                             <td>{{ $iotelegram->recieved_by }}</td>
                         </tr>
                         <tr>
-                            <th scope="row" > التاريخ</th>
+                            <th scope="row"  style="background: #f5f6fa;"> التاريخ</th>
                             <td>{{ $iotelegram->date }}</td>
                         </tr>
                         <tr>
-                            <th scope="row" > الصور المرفقه </th>
+                            <th scope="row"  style="background: #f5f6fa;"> الصور المرفقه </th>
                             <td><div class="row">
                             @foreach ($iotelegram->ioFiles as $file)
                                 @if ($file->file_type == 'image')
@@ -99,46 +99,7 @@
 
                     </tbody>
                 </table>  
-                <!-- <div dir="rtl" style="text-align: right">
-                    <div class="mb-3">
-                        <label for="uploaded_images">الصور المرفقة:</label>
-                        <div class="row">
-                            @foreach ($iotelegram->ioFiles as $file)
-                                @if ($file->file_type == 'image')
-                                    <div class="col-md-3 mb-3">
-                                        <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
-                                            data-image="{{ asset($file->file_name) }}" data-title="{{ $file->file_name }}">
-                                            <img src="{{ asset($file->file_name) }}" class="img-thumbnail"
-                                                alt="{{ $file->file_name }}">
-                                            <a id="downloadButton"
-                                                href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
-                                                class="btn btn-primary"> <i class="fa fa-download"></i></a>
-
-                                        </a>
-
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-                    </div>
-                    {{-- Display Uploaded Other Files --}}
-                    <div class="mb-3">
-                        <label for="uploaded_files">الملفات المرفقة الأخرى:</label>
-                        <ul class="list-group">
-                            @foreach ($iotelegram->ioFiles as $file)
-                                @if ($file->file_type == 'pdf')
-                                    <li class="list-group-item">
-                                        <a id="downloadButton"
-                                            href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
-                                            target="_blank">
-                                            <i class="fa fa-download"></i> {{ basename($file->real_name) }}</a>
-
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
-                    </div>
-                </div> -->
+            
             </div>
         </div>
     </div>

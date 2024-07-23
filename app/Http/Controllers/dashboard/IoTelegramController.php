@@ -20,9 +20,29 @@ class IoTelegramController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IoTelegramDataTable $dataTable)
+    public function index()
     {
         return view('iotelegram.index');
+    }
+    public function archives()
+    {
+        return view('iotelegram.archive');
+    }
+    public function getArchives()
+    {
+        $IoTelegrams = Iotelegram::where('active', 1)->with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+            ->get();
+       
+        foreach ($IoTelegrams as  $IoTelegram) {
+            $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
+                $IoTelegram->internal_department->name :
+                $IoTelegram->external_department->name;
+            $IoTelegram['archives'] = CheckUploadIoFiles($IoTelegram->id);
+            $IoTelegram['type'] = ($IoTelegram->type == 'in') ? 'داخلي' : 'خارجي';
+        }
+        return DataTables::of($IoTelegrams)
+            ->rawColumns(['action'])
+            ->make(true);
     }
     public function getIotelegrams()
     {

@@ -183,6 +183,7 @@ Route::get('postmans', [IoTelegramController::class, 'getPostmanAjax'])->name('p
 Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
 Route::get('external/departments', [IoTelegramController::class, 'getExternalDepartments'])->name('external.departments');
 Route::get('internal/departments', [IoTelegramController::class, 'getDepartments'])->name('internal.departments');
+
 Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('iotelegrams.list');
 Route::get('iotelegrams/get/{id?}', [IoTelegramController::class, 'getIotelegrams'])->name('iotelegrams.get');
 
@@ -191,7 +192,8 @@ Route::post('iotelegram/store', [IoTelegramController::class, 'store'])->name('i
 Route::get('iotelegram/edit/{id}', [IoTelegramController::class, 'edit'])->name('iotelegram.edit');
 Route::post('iotelegram/update/{id}', [IoTelegramController::class, 'update'])->name('iotelegram.update');
 Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name('iotelegram.show');
-Route::get('iotelegram/archives', [IoTelegramController::class, 'Archives'])->name('iotelegram.archives');
+Route::get('iotelegram/archives', [IoTelegramController::class, 'archives'])->name('iotelegram.archives');
+Route::get('iotelegram/archives/get', [IoTelegramController::class, 'getArchives'])->name('iotelegram.archives.get');
 Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add');
 Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
 
@@ -200,9 +202,8 @@ Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfi
 
 
 
-Route::get('vacations/{id?}', [VacationController::class, 'index'])->name('vacations.list');
-Route::get('vacations/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations');
-
+Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list');
+Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations');
 Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add');
 Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store');
 Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit');
