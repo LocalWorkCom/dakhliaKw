@@ -20,11 +20,11 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-
+        <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
             <form action="{{ route('postmans.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="form-row mx-2 mt-4">
-                    <div class="form-group col-md-6">
+                <div class="form-row mx-2 mt-4 d-flex justify-content-center">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="department_id">الادارة التابعه</label>
                         <select name="department_id" class="form-control">
                             <option value="">اختر الادارة</option>
@@ -33,7 +33,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="name">الاسم</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
                         @error('name')
@@ -41,8 +41,8 @@
                         @enderror
                     </div>
                 </div>
-                <div class="form-row mx-2 ">
-                <div class="form-group col-md-6">
+                <div class="form-row mx-2 d-flex justify-content-center">
+                <div class="form-group col-md-5 mx-2">
                 <label for="phone2">الهاتف الثانى</label>
                     <input type="phone" class="form-control" id="phone2" name="phone2" value="{{ old('phone2') }}">
                     @error('phone2')
@@ -52,7 +52,7 @@
 
                    
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-5 mx-2">
                     <label for="phone1">الهاتف الاول</label>
                     <input type="phone" class="form-control" id="phone1" name="phone1" value="{{ old('phone1') }}">
                     @error('phone1')
@@ -60,8 +60,8 @@
                     @enderror
                 </div>
                 </div>
-                <div class="form-row mx-2 ">
-                <div class="form-group col-md-12">
+                <div class="form-row  d-flex justify-content-center">
+                <div class="form-group col-md-10 ">
                 <label for="national_id">رقم الهوية</label>
                     <input type="text" class="form-control" id="national_id" name="national_id"
                         value="{{ old('national_id') }}">
@@ -69,11 +69,15 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                </div>
-                <div class="form-row" dir="ltr">
-                <button type="submit" class="btn-blue mx-3">اضافة</button>
-                </div>        <br>
+                </div>  </div>
+                <div class="container col-10 mt-5 mb-5 " >
+                <div class="form-row col-10 " dir="ltr">
+                    <button class="btn-blue " type="submit">
+                        اضافة </button>
+                </div>   </div>
+                <br>
             </form>
+        </div>
         </div>
     </div>
     @endsection
