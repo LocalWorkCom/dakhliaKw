@@ -379,7 +379,7 @@ class UserController extends Controller
 
         $department = departements::all();
         $hisdepartment =$user->createdDepartments;
-        return view('user.edit',compact('user' ,'rule' ,'grade' ,'department','hisdepartment','end_of_service'));
+        return view('user.show',compact('user' ,'rule' ,'grade' ,'department','hisdepartment','end_of_service'));
     }
 
     /**

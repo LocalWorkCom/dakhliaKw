@@ -54,8 +54,25 @@
                     { data: 'name', name: 'name' },
                     { data: 'guard_name', name: 'guard_name' },
                     { data: 'action', name: 'action', orderable: false, searchable: false }
-                ]
+                ],
+                columnDefs: [{
+                    targets: -1,
+                    render: function(data, type, row) {
+
+                        // Using route generation correctly in JavaScript
+                        var permissionedit = '{{ route('permissions_edit', ':id') }}';
+                        permissionedit = permissionedit.replace(':id', row.id);
+                        var permissionshow = '{{ route('permissions_show', ':id') }}';
+                        permissionshow = permissionshow.replace(':id', row.id);
+                        return `
+                       <a href="` + permissionshow + `" class="btn btn-primary btn-sm">مشاهدة</a>
+                       <a href="` + permissionedit + `" class="btn btn-primary btn-sm">تعديل</a>
+                       <a href="" class="btn btn-primary btn-sm">حذف</a>`;
+                    }
+
+                }]
             });
         });
     </script>
 @endsection
+{{-- <a href="` + permissionshow + `" class="btn btn-primary btn-sm">مشاهدة</a> --}}
