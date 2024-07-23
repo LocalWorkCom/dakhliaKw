@@ -94,10 +94,13 @@
                                                 useredit = useredit.replace(':id', row.id);
                                                 var usershow = '{{ route('user.show', ':id') }}';
                                                 usershow = usershow.replace(':id', row.id);
+                                                var vacation='{{ route('vacations.list',':id') }}';
+                                                vacation = vacation.replace(':id', row.id);
+
                                                 return `
                                         <a href="` + usershow + `" class="btn btn-primary btn-sm">مشاهدة</a>
                                         <a href="` + useredit + `" class="btn btn-primary btn-sm">تعديل</a>
-                                        <a href="{{ route('vacations.list') }}">الاجازات</a>  <br> <hr>
+                                        <a href="${vacation}">الاجازات</a>  <br> <hr>
 
                                         `;
                                             }
