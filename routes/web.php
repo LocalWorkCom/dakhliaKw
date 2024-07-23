@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostmanController;
 use App\Http\Controllers\settingController;
+use App\Http\Controllers\HomeController;
 
 
 /*
@@ -44,10 +45,8 @@ Route::get('/login', function () {
 
 //  Auth verfication_code
 Route::middleware(['auth'])->group(function () {
-    
-    Route::get('/', function () {
-        return view('welcome');
-    })->name('home');
+         
+    Route::get('/',[HomeController::class,'index'])->name('home');
     
     // Route::any('/user', [UserController::class, 'index'])->name('user.index');
     Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index');
@@ -55,8 +54,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users_create/{id}', [UserController::class, 'create'])->name('user.create');
     Route::post('/store', [UserController::class, 'store'])->name('user.store');
     Route::get('/employees/{id}', [UserController::class, 'index'])->name('user.employees');
-    Route::get('/edit/{id}', [UserController::class, 'show'])->name('user.show');
+    Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+    Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show');
     Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update');
+    // getDepartment
+    Route::get('api/department', [DepartmentController::class, 'getDepartment'])->name('api.department');
+
+    Route::get('api/sub_department', [DepartmentController::class, 'getSub_Department'])->name('api.sub_department');
 
 });
 
@@ -77,9 +81,11 @@ Route::any('/reset_password', [UserController::class, 'reset_password'])->name('
 // view All Models permission
 Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {
     Route::any('/permission', [PermissionController::class, 'index'])->name('permission.index');
+    Route::get('api/permission', [PermissionController::class, 'getPermision'])->name('api.permission');
     Route::any('/permission_create', [PermissionController::class, 'create'])->name('permission.create');
 
     Route::any('/rule', [RuleController::class, 'index'])->name('rule.index');
+    Route::any('api/rule', [RuleController::class, 'getRule'])->name('api.rule');
     Route::any('/rule_create', [RuleController::class, 'create'])->name('rule.create');
 });
 // create All Models permission
@@ -90,8 +96,11 @@ Route::middleware(['auth', 'check.permission:create Permission,create Rule,creat
 // edit All Models permission
 Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit departements'])->group(function () {
     Route::any('/permission_edit/{id}', [PermissionController::class, 'edit'])->name('permissions_edit');
+    Route::any('/permission_show/{id}', [PermissionController::class, 'show'])->name('permissions_show');
     Route::any('/rule_edit/{id}', [RuleController::class, 'edit'])->name('rule_edit');
+    Route::any('/rule_show/{id}', [RuleController::class, 'show'])->name('rule_show');
     Route::any('/rule_update/{id}', [RuleController::class, 'update'])->name('rule_update');
+    Route::any('/permission_delete/{id}', [PermissionController::class, 'destroy'])->name('permissions_destroy');
     // Route::resource('permissions', PermissionController::class);
     // Route::resource('rules', RuleController::class);
 });
@@ -130,13 +139,15 @@ Route::delete('departments/{department}/delete', [DepartmentController::class, '
 
 //Start Export routes
 Route::resource('Export', outgoingController::class);
-Route::get('/Export/All', [outgoingController::class, 'outgoingAll'])->name('Export.view.all');
-Route::get('/Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files');
-Route::get('/Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
+Route::get('/Export/All/Archive', [outgoingController::class, 'getExportInActive'])->name('Export.view.archive');
+
+Route::get('exports/get/active', [outgoingController::class, 'getExportActive'])->name('exports.view.all');
+Route::get('Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files');
+Route::get('Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
 Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax');
 Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users');
-Route::get('export/archive/{id}', [outgoingController::class, 'addToArchive'])->name('export.archive');
-Route::get('export/archive/', [outgoingController::class, 'showArchive'])->name('Export.archive.show');
+Route::get('export/archive/add', [outgoingController::class, 'addToArchive'])->name('export.archive.add');
+Route::get('export/archive', [outgoingController::class, 'showArchive'])->name('Export.archive.show');
 
 
 Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('testUpload');
@@ -146,16 +157,30 @@ Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->n
 //setting start
 // Route::resource('setting', settingController::class);
 Route::get('setting', [settingController::class,'index'])->name('setting.index');
-Route::get('setting/jobs/add', [settingController::class,'addJob'])->name('jobs.add');
-Route::get('setting/jobs/{id}', [settingController::class,'editJob'])->name('jobs.edit');
-
-Route::post('setting/grade/add', [settingController::class,'addgrade'])->name('grade.add');
-Route::get('setting/grade/{id}', [settingController::class,'editgrade'])->name('grade.edit');
-
-Route::get('setting/vacation/add', [settingController::class,'addVacation'])->name('vacation.add');
-Route::get('setting/vacation/{id}', [settingController::class,'editVacation'])->name('vacation.edit');
+Route::get('setting/all/grade', [settingController::class, 'getAllGrade'])->name('setting.getAllGrade');
+Route::get('setting/all/job', [settingController::class, 'getAllJob'])->name('setting.getAllJob');
+Route::get('setting/all/vacation', [settingController::class, 'getAllVacation'])->name('setting.getAllVacation');
+Route::get('setting/all/government', [settingController::class, 'getAllgovernment'])->name('setting.getAllgovernment');
 
 
+Route::post('jobs/add', [settingController::class,'addJob'])->name('jobs.add');
+Route::post('jobs', [settingController::class,'editJob'])->name('jobs.edit');
+Route::post('jobs/delete', [settingController::class,'deletejob'])->name('jobs.delete');
+
+
+Route::post('grade/add', [settingController::class,'addgrade'])->name('grade.add');
+Route::post('grade', [settingController::class,'editgrade'])->name('grade.edit');
+Route::post('grade/delete', [settingController::class,'deletegrade'])->name('grade.delete');
+
+
+Route::post('vacationType/add', [settingController::class,'addVacation'])->name('vacationType.add');
+Route::post('vacationType', [settingController::class,'editVacation'])->name('vacation.edit');
+Route::post('vacationType/delete', [settingController::class,'deleteVacation'])->name('vacation.delete');
+
+
+Route::post('government/add', [settingController::class,'addgovernment'])->name('government.add');
+Route::post('government', [settingController::class,'editgovernment'])->name('government.edit');
+Route::post('government/delete', [settingController::class,'deletegovernment'])->name('government.delete');
 //setting end
 
 
@@ -165,13 +190,17 @@ Route::get('postmans', [IoTelegramController::class, 'getPostmanAjax'])->name('p
 Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
 Route::get('external/departments', [IoTelegramController::class, 'getExternalDepartments'])->name('external.departments');
 Route::get('internal/departments', [IoTelegramController::class, 'getDepartments'])->name('internal.departments');
+
 Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('iotelegrams.list');
+Route::get('iotelegrams/get/{id?}', [IoTelegramController::class, 'getIotelegrams'])->name('iotelegrams.get');
+
 Route::get('iotelegram/add', [IoTelegramController::class, 'create'])->name('iotelegrams.add');
 Route::post('iotelegram/store', [IoTelegramController::class, 'store'])->name('iotelegram.store');
 Route::get('iotelegram/edit/{id}', [IoTelegramController::class, 'edit'])->name('iotelegram.edit');
 Route::post('iotelegram/update/{id}', [IoTelegramController::class, 'update'])->name('iotelegram.update');
 Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name('iotelegram.show');
-Route::get('iotelegram/archives', [IoTelegramController::class, 'Archives'])->name('iotelegram.archives');
+Route::get('iotelegram/archives', [IoTelegramController::class, 'archives'])->name('iotelegram.archives');
+Route::get('iotelegram/archives/get', [IoTelegramController::class, 'getArchives'])->name('iotelegram.archives.get');
 Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add');
 Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
 
@@ -180,13 +209,16 @@ Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfi
 
 
 
-Route::get('vacations', [VacationController::class, 'index'])->name('vacations.list');
+Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list');
+Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations');
 Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add');
 Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store');
 Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit');
 Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update');
 Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show');
 Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete');
+Route::get('vacation/downlaod/{id}', [VacationController::class, 'downlaodfile'])->name('vacation.downlaodfile');
+
 
 
 
