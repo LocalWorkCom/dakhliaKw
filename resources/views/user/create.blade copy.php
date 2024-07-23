@@ -1,8 +1,6 @@
 @extends('layout.main')
 @section('content')
-@section('title')
-    اضافة
-@endsection
+
 <div class="row col-11" dir="rtl">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -13,15 +11,9 @@
     </nav>
 </div>
 <div class="row ">
-@if (url()->current() == url('/users/0'))
-                <div class="container welcome col-11">
-                    <p>المستخـــــــــــدمين</p>
-                </div>
-            @elseif (url()->current() == url('/employees/1'))
-                <div class="container welcome col-11">
-                    <p>المـــــــــــوظفين</p>
-                </div>
-            @endif
+    <div class="container welcome col-11">
+        <p> المـــــــــــوظفين </p>
+    </div>
 </div>
 <br>
 
