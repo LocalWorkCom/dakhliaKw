@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
+class ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -346,13 +346,13 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         ),
         'Spatie\\LaravelIgnition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
-            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
+            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
+            1 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
         ),
         'Spatie\\Ignition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/ignition/src',
-            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
+            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
+            1 => __DIR__ . '/..' . '/spatie/ignition/src',
         ),
         'Spatie\\FlareClient\\' => 
         array (
@@ -612,6 +612,7 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         'App\\Factories\\ConfigurationResolverFactory' => __DIR__ . '/..' . '/laravel/pint/app/Factories/ConfigurationResolverFactory.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\DepartmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/DepartmentController.php',
+        'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\PermissionController' => __DIR__ . '/../..' . '/app/Http/Controllers/PermissionController.php',
         'App\\Http\\Controllers\\PostmanController' => __DIR__ . '/../..' . '/app/Http/Controllers/PostmanController.php',
         'App\\Http\\Controllers\\RuleController' => __DIR__ . '/../..' . '/app/Http/Controllers/RuleController.php',
@@ -639,6 +640,7 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
         'App\\Kernel' => __DIR__ . '/..' . '/laravel/pint/app/Kernel.php',
         'App\\Models\\EmployeeVacation' => __DIR__ . '/../..' . '/app/Models/EmployeeVacation.php',
         'App\\Models\\ExternalDepartment' => __DIR__ . '/../..' . '/app/Models/ExternalDepartment.php',
+        'App\\Models\\Group' => __DIR__ . '/../..' . '/app/Models/Group.php',
         'App\\Models\\Io_file' => __DIR__ . '/../..' . '/app/Models/Io_file.php',
         'App\\Models\\Iotelegram' => __DIR__ . '/../..' . '/app/Models/Iotelegram.php',
         'App\\Models\\Permission' => __DIR__ . '/../..' . '/app/Models/Permission.php',
@@ -7503,9 +7505,9 @@ class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a::$classMap;
 
         }, null, ClassLoader::class);
     }

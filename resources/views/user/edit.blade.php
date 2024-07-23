@@ -194,7 +194,7 @@
                       </div>
                        <!-- Save button -->
                        <div class="container col-12 ">
-                        <div class="form-row mt-4 mb-5">
+                        <div class="form-row mt-4 mb-2">
                             <button type="submit" class="btn-blue">حفظ</button>
                         </div>
                     </div>

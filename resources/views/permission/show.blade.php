@@ -41,18 +41,18 @@
                     <div class="form-row mx-2 mt-4 d-flex flex-row-reverse">
                         <div class="form-group col-md-6">
                             <label for="input1"> الصلاحية</label>
-                            <select class="custom-select custom-select-lg mb-3" name="name">
+                            <select class="custom-select custom-select-lg mb-3" name="name" disabled>
                                 <option selected disabled>اختر الصلاحية</option>
                                 <option value="view" {{ $permissionAction == 'view' ? 'selected' : '' }}>عرض</option>
                                 <option value="edit" {{ $permissionAction == 'edit' ? 'selected' : '' }}>تعديل</option>
                                 <option value="create" {{ $permissionAction == 'create' ? 'selected' : '' }}>اضافة</option>
-                                <option value="delete" {{ $permissionAction == 'delete' ? 'selected' : '' }}>ازالة</option>
+                                {{-- <option value="delete" {{ $permissionAction == 'delete' ? 'selected' : '' }}>ازالة</option> --}}
                             </select>
                         </div>
 
                         <div class="form-group col-md-6">
                             <label for="input15">القسم</label>
-                            <select id="input15" name="model" class="form-control" placeholder="القسم">
+                            <select id="input15" name="model" class="form-control" placeholder="القسم" disabled>
                                 @foreach ($models as $item)
                                 <option value="{{ $item}}" {{ $permission->guard_name == $item ? 'selected' : '' }}> {{ $item }}</option>
                                 @endforeach
