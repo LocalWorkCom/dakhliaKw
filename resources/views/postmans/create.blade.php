@@ -1,48 +1,79 @@
 @extends('welcome')
 
 @section('content')
-<div class="container">
-    <h1>Create Postman</h1>
-    <form action="{{ route('postmans.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="form-group">
-            <select name="department_id" class="form-control">
-                <option value="">اختر الادارة</option>
-                @foreach($departments as $department)
-                    <option value="{{ $department->id }}">{{ $department->name }}</option>
-                @endforeach
-            </select>
+<main>
+    <div class="row col-11" dir="rtl">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a href="{{ route('home') }}">الرئيسيه</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">الادارات </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href="{{ route('departments.create') }}">
+                        اضافة مندوب </a></li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row ">
+        <div class="container welcome col-11">
+            <p> الــــــــــادارات </p>
         </div>
-        <div class="form-group">
-            <label for="name">الاسم</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
-            @error('name')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+    </div>
+    <br>
+    <div class="row">
+        <div class="container  col-11 mt-3 p-0 ">
+
+            <form action="{{ route('postmans.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-row mx-2 mt-4">
+                    <div class="form-group col-md-6">
+                        <label for="department_id">الادارة التابعه</label>
+                        <select name="department_id" class="form-control">
+                            <option value="">اختر الادارة</option>
+                            @foreach($departments as $department)
+                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="name">الاسم</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
+                        @error('name')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-row mx-2 ">
+                <div class="form-group col-md-6">
+                <label for="phone2">الهاتف الثانى</label>
+                    <input type="phone" class="form-control" id="phone2" name="phone2" value="{{ old('phone2') }}">
+                    @error('phone2')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+
+                   
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="phone1">الهاتف الاول</label>
+                    <input type="phone" class="form-control" id="phone1" name="phone1" value="{{ old('phone1') }}">
+                    @error('phone1')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                </div>
+                <div class="form-row mx-2 ">
+                <div class="form-group col-md-12">
+                <label for="national_id">رقم الهوية</label>
+                    <input type="text" class="form-control" id="national_id" name="national_id"
+                        value="{{ old('national_id') }}">
+                    @error('national_id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                </div>
+                <div class="form-row" dir="ltr">
+                <button type="submit" class="btn-blue mx-3">اضافة</button>
+                </div>        <br>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="national_id">رقم الهوية</label>
-            <input type="text" class="form-control" id="national_id" name="national_id" value="{{ old('national_id') }}">
-            @error('national_id')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        
-        <div class="form-group">
-            <label for="phone1">الهاتف الاول</label>
-            <input type="phone" class="form-control" id="phone1" name="phone1" value="{{ old('phone1') }}">
-            @error('phone1')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="form-group">
-            <label for="phone2">الهاتف الثانى</label>
-            <input type="phone" class="form-control" id="phone2" name="phone2" value="{{ old('phone2') }}">
-            @error('phone2')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
-@endsection
+    </div>
+    @endsection
