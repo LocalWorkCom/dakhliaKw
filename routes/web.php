@@ -57,6 +57,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
     Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show');
     Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update');
+    // getDepartment
+    Route::get('api/department', [DepartmentController::class, 'getDepartment'])->name('api.department');
+
+    Route::get('api/sub_department', [DepartmentController::class, 'getSub_Department'])->name('api.sub_department');
 
 });
 
@@ -152,6 +156,32 @@ Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->n
 //End Export routes
 //setting start
 // Route::resource('setting', settingController::class);
+Route::get('setting', [settingController::class,'index'])->name('setting.index');
+Route::get('setting/all/grade', [settingController::class, 'getAllGrade'])->name('setting.getAllGrade');
+Route::get('setting/all/job', [settingController::class, 'getAllJob'])->name('setting.getAllJob');
+Route::get('setting/all/vacation', [settingController::class, 'getAllVacation'])->name('setting.getAllVacation');
+Route::get('setting/all/government', [settingController::class, 'getAllgovernment'])->name('setting.getAllgovernment');
+
+
+Route::post('jobs/add', [settingController::class,'addJob'])->name('jobs.add');
+Route::post('jobs', [settingController::class,'editJob'])->name('jobs.edit');
+Route::post('jobs/delete', [settingController::class,'deletejob'])->name('jobs.delete');
+
+
+Route::post('grade/add', [settingController::class,'addgrade'])->name('grade.add');
+Route::post('grade', [settingController::class,'editgrade'])->name('grade.edit');
+Route::post('grade/delete', [settingController::class,'deletegrade'])->name('grade.delete');
+
+
+Route::post('vacationType/add', [settingController::class,'addVacation'])->name('vacationType.add');
+Route::post('vacationType', [settingController::class,'editVacation'])->name('vacation.edit');
+Route::post('vacationType/delete', [settingController::class,'deleteVacation'])->name('vacation.delete');
+
+
+Route::post('government/add', [settingController::class,'addgovernment'])->name('government.add');
+Route::post('government', [settingController::class,'editgovernment'])->name('government.edit');
+Route::post('government/delete', [settingController::class,'deletegovernment'])->name('government.delete');
+
 
 //start government
 Route::get('setting/government', [settingController::class, 'getAllgovernment'])->name('setting.getAllgovernment');

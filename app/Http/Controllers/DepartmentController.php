@@ -9,28 +9,81 @@ use App\DataTables\subDepartmentsDataTable;
 use App\Http\Requests\StoreDepartmentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\DataTables;
 
 class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(DepartmentDataTable $dataTable)
+    // public function index(DepartmentDataTable $dataTable)
+    // {
+    //     return $dataTable->render('departments.index');
+    //     // $departments = departements::with(['manager', 'managerAssistant'])->paginate(10);
+    //     // return view('departments.index', compact('departments'));
+    //     // return response()->json($departments);
+    // }
+    public function index()
     {
-        return $dataTable->render('departments.index');
-        // $departments = departements::with(['manager', 'managerAssistant'])->paginate(10);
-        // return view('departments.index', compact('departments'));
-        // return response()->json($departments);
+        //
+        // return $dataTable->render('permission.view');
+        return view('departments.index');
     }
-
-
-    public function index_1(subDepartmentsDataTable $dataTable)
+    public function getDepartment()
     {
-        return $dataTable->render('sub_departments.index');
-        // $departments = departements::with(['manager', 'managerAssistant'])->paginate(10);
-        // return view('sub_departments.index', compact('departments'));
-        // return response()->json($departments);
+        $data = departements::withCount('iotelegrams')
+        ->withCount('outgoings')
+        ->withCount('children')->get();
+
+    return DataTables::of($data)
+        ->addColumn('action', function ($row) {
+            return '<button class="btn btn-primary btn-sm">Edit</button>';
+        })
+        ->addColumn('iotelegrams_count', function ($row) {
+            return $row->iotelegrams_count;  // Display the count of iotelegrams
+        })
+        ->addColumn('outgoings_count', function ($row) {
+            return $row->outgoings_count;
+        })
+        ->addColumn('children_count', function ($row) { // New column for departments count
+            return $row->children_count;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
+    
+
+
+    // public function index_1(subDepartmentsDataTable $dataTable)
+    // {
+    //     return $dataTable->render('sub_departments.index');
+    //     // $departments = departements::with(['manager', 'managerAssistant'])->paginate(10);
+    //     // return view('sub_departments.index', compact('departments'));
+    //     // return response()->json($departments);
+    // }
+
+    public function index_1()
+    {
+        //
+        // return $dataTable->render('permission.view');
+        return view('sub_departments.index');
+    }
+    public function getSub_Department()
+    {
+        $data = departements::withCount('children')
+        ->where('parent_id', Auth::user()->department_id)
+        ->with(['children'])->get();
+
+    return DataTables::of($data)
+        ->addColumn('action', function ($row) {
+            return '<button class="btn btn-primary btn-sm">Edit</button>';
+        })
+       
+        ->addColumn('children_count', function ($row) { // New column for departments count
+            return $row->children_count;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
     }
     /**
      * Show the form for creating a new resource.
