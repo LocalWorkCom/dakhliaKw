@@ -91,7 +91,6 @@
                    
                     <li class="nav-item btn3"  onclick="toggleDropdown3()">
                         <a href="{{ route('user.employees', 1) }}">
-                        <a href="#">
                             <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
                             <h6>الموظفين</h6>
                         </a>
