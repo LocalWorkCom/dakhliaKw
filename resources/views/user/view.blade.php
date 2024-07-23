@@ -26,51 +26,69 @@
                 <div class="col-lg-12">
                     <div class="bg-white p-5">
                         <!-- <div>
-                            <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
-                                اضافه جديد</a>
-                        </div>
-                        <br> -->
+                                <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
+                                    اضافه جديد</a>
+                            </div>
+                            <br> -->
 
-                    <div>
-                        <table id="users-table" class="display table table-bordered table-hover dataTable">
-                            <thead>
-                                <tr>
-                                    <th>رقم التعريف</th>
-                                    <th>الاسم</th>
-                                    <th>الهاتف</th>
-                                    <th>الرقم العسكري</th>
-                                    <th>العمليات</th>
-                                </tr>
-                            </thead>
-                        </table>
-
-
+                        <div>
+                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>رقم التعريف</th>
+                                        <th>الاسم</th>
+                                        <th>الهاتف</th>
+                                        <th>الرقم العسكري</th>
+                                        <th>العمليات</th>
+                                    </tr>
+                                </thead>
+                            </table>
 
 
-                        <script>
-                            $(document).ready(function() {
-                                var id = {{ $id }};
-                                $('#users-table').DataTable({
-                                    processing: true,
-                                    serverSide: true,
-                                    ajax: '{{ url('api/users') }}/' + id, // Correct URL concatenation
-                                    columns: [
-                                        { data: 'id', name: 'id' },
-                                        { data: 'name', name: 'name' },
-                                        { data: 'phone', name: 'phone' },
-                                        { data: 'military_number', name: 'military_number' },
-                                        { data: 'action', name: 'action', orderable: false, searchable: false }
-                                    ],
-                                    columnDefs: [{
-                                        targets: -1,
-                                        render: function(data, type, row) {
-                                            
-                                        // Using route generation correctly in JavaScript
-                                        var showUrl = '{{ route("user.show", ":id") }}';
-                                        showUrl = showUrl.replace(':id', row.id);
-                                        return `
+
+
+                            <script>
+                                $(document).ready(function() {
+                                    var id = {{ $id }};
+                                    $('#users-table').DataTable({
+                                        processing: true,
+                                        serverSide: true,
+                                        ajax: '{{ url('api/users') }}/' + id, // Correct URL concatenation
+                                        columns: [{
+                                                data: 'id',
+                                                name: 'id'
+                                            },
+                                            {
+                                                data: 'name',
+                                                name: 'name'
+                                            },
+                                            {
+                                                data: 'phone',
+                                                name: 'phone'
+                                            },
+                                            {
+                                                data: 'military_number',
+                                                name: 'military_number'
+                                            },
+                                            {
+                                                data: 'action',
+                                                name: 'action',
+                                                orderable: false,
+                                                searchable: false
+                                            }
+                                        ],
+                                        columnDefs: [{
+                                            targets: -1,
+                                            render: function(data, type, row) {
+
+                                                // Using route generation correctly in JavaScript
+                                                var showUrl = '{{ route('user.show', ':id') }}';
+                                                showUrl = showUrl.replace(':id', row.id);
+                                                var vacationUrl = '{{ route('vacations.list', ':id') }}';
+                                                vacationUrl = vacationUrl.replace(':id', row.id);
+                                                return `
                                             <a href="` + showUrl + `" class="btn btn-primary btn-sm">تعديل</a>
-                                            <a href="" class="btn btn-primary btn-sm">الاجازات</a>
+                                            <a href="${vacationUrl}" class="btn btn-primary btn-sm">الاجازات</a>
                                         `;
                                             }
 

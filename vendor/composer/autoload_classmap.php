@@ -16,6 +16,7 @@ return array(
     'App\\DataTables\\gradeDataTable' => $baseDir . '/app/DataTables/gradeDataTable.php',
     'App\\DataTables\\jobDataTable' => $baseDir . '/app/DataTables/jobDataTable.php',
     'App\\DataTables\\outgoingsDataTable' => $baseDir . '/app/DataTables/outgoingsDataTable.php',
+    'App\\DataTables\\subDepartmentsDataTable' => $baseDir . '/app/DataTables/subDepartmentsDataTable.php',
     'App\\DataTables\\vacationTypeDataTable' => $baseDir . '/app/DataTables/vacationTypeDataTable.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
