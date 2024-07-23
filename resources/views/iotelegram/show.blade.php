@@ -35,7 +35,7 @@
                     <tbody >
                         <tr>
                             <th scope="row"style="background: #f5f6fa;">الجهه المرسلة</th>
-                            <td>{{ $iotelegram->external_department->name }}</td>
+                            <td style="background: #f5f6fa;">{{ $iotelegram->external_department->name }}</td>
                         </tr>
                         <tr>
                             <th scope="row"  style="background: #f5f6fa;" >نوع الوارد</th>
