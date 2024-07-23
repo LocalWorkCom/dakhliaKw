@@ -177,6 +177,8 @@ Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartm
 Route::get('external/departments', [IoTelegramController::class, 'getExternalDepartments'])->name('external.departments');
 Route::get('internal/departments', [IoTelegramController::class, 'getDepartments'])->name('internal.departments');
 Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('iotelegrams.list');
+Route::get('iotelegrams/get/{id?}', [IoTelegramController::class, 'getIotelegrams'])->name('iotelegrams.get');
+
 Route::get('iotelegram/add', [IoTelegramController::class, 'create'])->name('iotelegrams.add');
 Route::post('iotelegram/store', [IoTelegramController::class, 'store'])->name('iotelegram.store');
 Route::get('iotelegram/edit/{id}', [IoTelegramController::class, 'edit'])->name('iotelegram.edit');

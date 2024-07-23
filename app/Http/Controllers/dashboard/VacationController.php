@@ -21,7 +21,9 @@ class VacationController extends Controller
     {
         if ($id) {
 
-            $EmployeeVacations = EmployeeVacation::where('employee_id', $id)->get();
+            $EmployeeVacations = EmployeeVacation::where('employee_id', $id)
+                ->with('employee', 'vacation_type')
+                ->get();
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 # code...
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
@@ -31,7 +33,7 @@ class VacationController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         } else {
-            $EmployeeVacations = EmployeeVacation::all();
+            $EmployeeVacations = EmployeeVacation::with('employee', 'vacation_type')->get();
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 # code...
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
@@ -61,7 +63,7 @@ class VacationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
 
         $employee_vacation = new EmployeeVacation();
@@ -73,9 +75,17 @@ class VacationController extends Controller
         $employee_vacation->created_departement = auth()->user()->department_id;
         $employee_vacation->save();
 
+        if ($request->hasFile('reportImage')) {
+            $file = $request->reportImage;
+            // You can modify the UploadFiles function call according to your needs
+            $path = 'vacations/employee';
+
+            UploadFiles($path, 'report_image', 'report_image_real', $employee_vacation, $file);
+        }
+
         session()->flash('success', 'تم الحفظ بنجاح.');
 
-        return redirect()->route('vacations.list');
+        return redirect()->route('vacations.list', $id);
     }
 
     /**
@@ -121,7 +131,13 @@ class VacationController extends Controller
         $employee_vacation->created_by = auth()->id();
         $employee_vacation->created_departement = auth()->user()->department_id;
         $employee_vacation->save();
+        if ($request->hasFile('reportImage')) {
+            $file = $request->reportImage;
+            // You can modify the UploadFiles function call according to your needs
+            $path = 'vacations/employee';
 
+            UploadFiles($path, 'report_image', 'report_image_real', $employee_vacation, $file);
+        }
         session()->flash('success', 'تم التعديل بنجاح.');
 
         return redirect()->route('vacations.list');

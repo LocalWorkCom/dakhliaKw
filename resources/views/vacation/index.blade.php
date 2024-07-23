@@ -59,8 +59,8 @@
                                     name: 'id'
                                 },
                                 {
-                                    data: 'vacation_type_id',
-                                    name: 'vacation_type_id'
+                                    data: 'vacation_type.name',
+                                    name: 'vacation_type.name'
                                 },
                                 {
                                     data: 'date_from',
