@@ -34,10 +34,10 @@
                 <div class="col-lg-12">
                     <div class="bg-white p-5">
                         <!-- <div>
-                                    <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
-                                        اضافه جديد</a>
-                                </div>
-                                <br> -->
+                                            <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
+                                                اضافه جديد</a>
+                                        </div>
+                                        <br> -->
 
                         <div>
                             <table id="users-table" class="display table table-bordered table-hover dataTable">
@@ -96,8 +96,9 @@
                                                 usershow = usershow.replace(':id', row.id);
                                                 return `
                                         <a href="` + usershow + `" class="btn btn-primary btn-sm">مشاهدة</a>
-                                            <a href="` + useredit + `" class="btn btn-primary btn-sm">تعديل</a>
-                                            <a href="" class="btn btn-primary btn-sm">الاجازات</a>
+                                        <a href="` + useredit + `" class="btn btn-primary btn-sm">تعديل</a>
+                                        <a href="{{ route('vacations.list') }}">الاجازات</a>  <br> <hr>
+
                                         `;
                                             }
 
