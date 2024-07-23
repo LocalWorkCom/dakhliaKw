@@ -102,6 +102,7 @@
 
                     if (value == '3') {
                         $('#reportImage').hide();
+                        $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', true);
 
@@ -116,10 +117,13 @@
 
                     } else if (value == '2') {
                         $('#reportImage').show();
+                        $('#date_to').prop('disabled', false);
+
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
                     } else {
                         $('#reportImage').hide();
+                        $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
