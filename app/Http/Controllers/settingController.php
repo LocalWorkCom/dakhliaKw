@@ -7,6 +7,7 @@ use App\DataTables\jobDataTable;
 use App\DataTables\VacationDataTable;
 use App\DataTables\vacationTypeDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\Government;
 use App\Models\grade;
 use App\Models\job;
 use App\Models\VacationType;
@@ -31,8 +32,7 @@ class settingController extends Controller
         $data = grade::get();
        
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<button class="btn btn-primary btn-sm">Edit</button>'
-                    ;
+            return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -59,12 +59,32 @@ class settingController extends Controller
         ->rawColumns(['action'])
         ->make(true);
     }
+
+    public function getAllgovernment()
+    {
+        $data = Government::get();
+       
+        return DataTables::of($data)->addColumn('action', function ($row) {
+            return '<button class="btn btn-primary btn-sm">Edit</button>'
+                    ;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function addJob(Request $request){
         $requestinput=$request->except('_token');
         $job = job::create($requestinput);
+        $activeTab=2;
+        $message="تم اضافه الوظيفه";
+        return redirect()->route('setting.index',compact('activeTab','message'));
+        //return redirect()->back()->with(compact('activeTab','message'));
+    }
+    public function addgovernment(Request $request){
+        $requestinput=$request->except('_token');
+        $job = Government::create($requestinput);
         $activeTab=2;
         $message="تم اضافه الوظيفه";
         return redirect()->route('setting.index',compact('activeTab','message'));

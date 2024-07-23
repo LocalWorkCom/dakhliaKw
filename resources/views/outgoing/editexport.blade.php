@@ -131,102 +131,102 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="extern-departmentLabel">إضافة جهة جديدة</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="extern-departmentLabel">إضافة جهة جديدة</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                        </button>
+                    </div>
                 </div>
                 <div class="modal-body">
                     <form id="saveExternalDepartment" action="{{ route('department.ajax') }}" method="POST">
                         @csrf
-
-                        <div class="mb-3">
-                            <label for="name">الاسم:</label>
+                        <div class="form-group">
+                            <label for="name">الاسم</label>
                             <input type="text" id="name" name="name" class="form-control" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="desc">الوصف:</label>
+                        <div class="form-group">
+                            <label for="desc">الوصف</label>
                             <input type="text" id="desc" name="desc" class="form-control" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label for="phone">الهاتف</label>
                             <input type="text" id="phone" name="phone" class="form-control" required>
                         </div>
-
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="submit" class="btn btn-primary">حفظ</button>
+                            <button type="submit" class="btn-blue">حفظ</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
     {{-- model for add new user --}}
     <div class="modal fade" id="extern-user" tabindex="-1" aria-labelledby="extern-departmentLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="extern-departmentLabel">إضافة شخص صادر جديدة</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="extern-departmentLabel">إضافة شخص صادر جديدة</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            &times;</button>
+                    </div>
                 </div>
                 <div class="modal-body">
                     <form id="saveExternalUser" action="{{ route('userexport.ajax') }}" method="POST">
                         @csrf
-
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label for="nameus"> الاسم</label>
                             <input type="text" id="nameus" name="name" class="form-control" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label for="phone">الهاتف</label>
                             <input type="text" id="phone" name="phone" class="form-control" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label for="military_number">رقم العسكرى:</label>
                             <input type="text" id="military_number" name="military_number" class="form-control"
                                 required>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label for="filenum">رقم الملف:</label>
                             <input type="text" id="filenum" name="filenum" class="form-control" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label for="Civil_number">رقم الهويه</label>
                             <input type="text" id="Civil_number" name="Civil_number" class="form-control" required>
                         </div>
-
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="submit" class="btn btn-primary">حفظ</button>
+                            <button type="submit" class="btn-blue">حفظ</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection
 
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            let fileInputCount = 1;
-            const maxFileInputs = 9;
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                let fileInputCount = 1;
+                const maxFileInputs = 9;
 
-            $('#addFileInput').click(function() {
-                if (fileInputCount < maxFileInputs) {
-                    fileInputCount++;
-                    const newFileInput = `
+                $('#addFileInput').click(function() {
+                    if (fileInputCount < maxFileInputs) {
+                        fileInputCount++;
+                        const newFileInput = `
                         <div class="form-group">
                             <label for="file${fileInputCount}">File ${fileInputCount}</label>
                             <input type="file" name="files[]" id="file${fileInputCount}" class="form-control-file">
                         </div>`;
-                    $('#fileInputs').append(newFileInput);
-                } else {
-                    alert('You can only add up to 10 files.');
-                }
+                        $('#fileInputs').append(newFileInput);
+                    } else {
+                        alert('You can only add up to 10 files.');
+                    }
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
