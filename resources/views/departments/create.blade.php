@@ -14,7 +14,7 @@
         </div>
         <div class="row ">
             <div class="container welcome col-11">
-                <p> الادارات </p>
+                <p> الــــــــــادارات </p>
             </div>
         </div>
         <br>
@@ -73,10 +73,9 @@
                     </div>
                 </div>
 
-                <div class="form-row" dir="rtl">
-                    <button class="btn-all mx-3" type="submit" style="color: #0D992C;">
-                         <img src="../images/add-btn.svg"
-                            alt="img"> اضافة </button>
+                <div class="form-row" dir="ltr">
+                    <button class="btn-blue mx-3" type="submit" >
+                      اضافة </button>
                 </div>
                 <br>
 
