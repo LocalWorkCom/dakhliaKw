@@ -147,7 +147,7 @@ ul {
     text-align: center;
     border-radius: 5px;
     padding: 7px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .dropdown-menu4 {
@@ -163,7 +163,7 @@ ul {
     width: 150px !important;
     text-align: right;
     border-radius: 5px;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding-inline: 10px;
 }
 .dropdown-menu3 {
@@ -179,7 +179,7 @@ ul {
     width: 150px !important;
     text-align: right;
     border-radius: 5px;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding-inline: 10px;
 }
 .second-section .bell i{

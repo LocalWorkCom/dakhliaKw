@@ -13,9 +13,15 @@
     </nav>
 </div>
 <div class="row ">
-    <div class="container welcome col-11">
-        <p> المـــــــــــوظفين </p>
-    </div>
+@if (url()->current() == url('/users/0'))
+                <div class="container welcome col-11">
+                    <p>المستخـــــــــــدمين</p>
+                </div>
+            @elseif (url()->current() == url('/employees/1'))
+                <div class="container welcome col-11">
+                    <p>المـــــــــــوظفين</p>
+                </div>
+            @endif
 </div>
 <br>
 

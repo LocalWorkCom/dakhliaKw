@@ -22,11 +22,12 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
+        <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
             <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="form-row mx-2 mt-4">
-                    <div class="form-group col-md-6 "> <label for="vacation_type_id">نوع الاجازة:</label>
+                <div class="form-row mx-3 mt-4 d-flex justify-content-center">
+                    <div class="form-group col-md-5 mx-2 "> <label for="vacation_type_id">نوع الاجازة:</label>
 
 
                         <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
@@ -37,8 +38,8 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="employee_id">اسم الموظف:</label>
+                    <div class="form-group col-md-5 mx-2">
+                        <label for="employee_id">اسم الموظف</label>
                         <select id="employee_id" name="employee_id" class="form-control" required disabled>
                             <option value="">اختر الموظف</option>
                             @foreach ($employees as $item)
@@ -51,15 +52,15 @@
 
 
 
-                <div class="form-row mx-2 mt-4">
+                <div class="form-row mx-3 mt-4 d-flex justify-content-center">
 
-                    <div class="form-group col-md-6">
-                        <label for="date_from">تاريخ البداية:</label>
+                    <div class="form-group col-md-5 mx-2">
+                        <label for="date_from">تاريخ البداية</label>
                         <input type="date" id="date_from" name="date_from" class="form-control" required
                             value="{{ $vacation->date_from }}">
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="date_to">تاريخ النهاية:</label>
+                    <div class="form-group col-md-5 mx-2">
+                        <label for="date_to">تاريخ النهاية</label>
                         <input type="date" id="date_to" name="date_to" class="form-control"
                             value="{{ $vacation->date_to }}">
                     </div>
@@ -90,10 +91,10 @@
                         </div>
                     </div>
                 </div>
+                </div>
 
-
-                <div class="container col-12 ">
-                    <div class="form-row mt-4 mb-5">
+                <div class="container  col-10 mt-5 mb-5 ">
+                    <div class="form-row col-10 " dir="ltr">
                         <button type="submit" class="btn-blue">حفظ</button>
                     </div>
                 </div>
