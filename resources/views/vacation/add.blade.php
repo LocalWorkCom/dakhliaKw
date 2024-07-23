@@ -63,18 +63,19 @@
                         <input type="date" id="date_to" name="date_to" class="form-control">
                     </div>
                 </div>
-
-                <div class="form-row mx-2 mt-4">
+           
+                <div class="form-row mx-2 mt-4" id="reportImage-div">
                     <div class="form-group col-md-12">
                         <label for="reportImage">اضافة ملف</label>
                         <div id="reportImage">
                             <div class="file-input mb-3" dir="rtl">
-                                <input type="file" name="reportImage" class="form-control-file">
+                                <input type="file" name="reportImage" class="form-control">
                             </div>
                         </div>
                     </div>
                 </div>
 
+            
                 <div class="container col-12 ">
                     <div class="form-row mt-4 mb-5">
                         <button type="submit" class="btn-blue">حفظ</button>
@@ -101,25 +102,29 @@
                     var value = $('#vacation_type_id option:selected').val();
 
                     if (value == '3') {
-                        $('#reportImage').hide();
+                        $('#reportImage-div').hide();
+                        $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', true);
 
                         $('#employee_id').removeAttr('required');
 
                     } else if (value == '4') {
-                        $('#reportImage').hide();
+                        $('#reportImage-div').hide();
 
                         $('#date_to').prop('disabled', true);
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
 
                     } else if (value == '2') {
-                        $('#reportImage').show();
+                        $('#reportImage-div').show();
+                        $('#date_to').prop('disabled', false);
+
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
                     } else {
-                        $('#reportImage').hide();
+                        $('#reportImage-div').hide();
+                        $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);

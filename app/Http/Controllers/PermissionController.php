@@ -75,6 +75,7 @@ class PermissionController extends Controller
     {
         $models = $this->getAllModels();
 
+        // dd($models);
         return $dataTable->render('permission.create', compact('models'));
         // return view('permission.create', compact('models'));
     }
@@ -101,16 +102,17 @@ class PermissionController extends Controller
             $permission->name = $nameModel;
             $permission->guard_name = $modelClass;
             $permission->save();
+// dd($permission);
             DB::insert('INSERT INTO model_has_permissions (permission_id , model_type ,model_id ) VALUES (?, ?, ?)', [
                 $permission->id,
                 $request->name,
                 $request->model, // or specify your guard name if different
 
             ]);
-
+            return view('permission.view');
             // return response()->json("ok");
             // dd("sara");
-            return redirect()->back()->with('alert', 'Permission created successfully.');
+            // return redirect()->back()->with('alert', 'Permission created successfully.');
             // return $dataTable->render('permission.view')->with('alert', 'Permission created successfully.');
             // return $dataTable->render('permission.view');
         } catch (\Exception $e) {
@@ -123,24 +125,39 @@ class PermissionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Permission $permission)
+    public function show($id)
     {
         //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-   public function edit(Permission $permission, PermissionRoleDataTable $dataTable)
-{
+        $permission = Permission::find($id);
     $models = $this->getAllModels();
+    // dd($models);
     
     // Split the name into action and model parts
     $nameParts = explode(' ', $permission->name);
     $permissionAction = $nameParts[0] ?? '';
     $permissionModel = $nameParts[1] ?? '';
+    // dd($permissionAction);
 
-    return $dataTable->render('permission.edit', compact('permission', 'models', 'permissionAction', 'permissionModel'));
+    return view('permission.show', compact('permission', 'models', 'permissionAction', 'permissionModel'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+   public function edit($id)
+{
+    // dd($id);
+    $permission = Permission::find($id);
+    $models = $this->getAllModels();
+    // dd($models);
+    
+    // Split the name into action and model parts
+    $nameParts = explode(' ', $permission->name);
+    $permissionAction = $nameParts[0] ?? '';
+    $permissionModel = $nameParts[1] ?? '';
+    // dd($permissionAction);
+
+    return view('permission.edit', compact('permission', 'models', 'permissionAction', 'permissionModel'));
 }
 
 
@@ -181,8 +198,11 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Permission $permission)
+    public function destroy($id)
     {
         //
+        $permission =Permission::findOrFail($id);
+        $permission->delete();
+        return view('permission.view');
     }
 }

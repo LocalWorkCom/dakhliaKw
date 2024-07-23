@@ -81,6 +81,7 @@ Route::middleware(['auth', 'check.permission:view Rule,view Permission,view depa
     Route::any('/permission_create', [PermissionController::class, 'create'])->name('permission.create');
 
     Route::any('/rule', [RuleController::class, 'index'])->name('rule.index');
+    Route::any('api/rule', [RuleController::class, 'getRule'])->name('api.rule');
     Route::any('/rule_create', [RuleController::class, 'create'])->name('rule.create');
 });
 // create All Models permission
@@ -91,8 +92,11 @@ Route::middleware(['auth', 'check.permission:create Permission,create Rule,creat
 // edit All Models permission
 Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit departements'])->group(function () {
     Route::any('/permission_edit/{id}', [PermissionController::class, 'edit'])->name('permissions_edit');
+    Route::any('/permission_show/{id}', [PermissionController::class, 'show'])->name('permissions_show');
     Route::any('/rule_edit/{id}', [RuleController::class, 'edit'])->name('rule_edit');
+    Route::any('/rule_show/{id}', [RuleController::class, 'show'])->name('rule_show');
     Route::any('/rule_update/{id}', [RuleController::class, 'update'])->name('rule_update');
+    Route::any('/permission_delete/{id}', [PermissionController::class, 'destroy'])->name('permissions_destroy');
     // Route::resource('permissions', PermissionController::class);
     // Route::resource('rules', RuleController::class);
 });
@@ -198,13 +202,17 @@ Route::get('postmans', [IoTelegramController::class, 'getPostmanAjax'])->name('p
 Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
 Route::get('external/departments', [IoTelegramController::class, 'getExternalDepartments'])->name('external.departments');
 Route::get('internal/departments', [IoTelegramController::class, 'getDepartments'])->name('internal.departments');
+
 Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('iotelegrams.list');
+Route::get('iotelegrams/get/{id?}', [IoTelegramController::class, 'getIotelegrams'])->name('iotelegrams.get');
+
 Route::get('iotelegram/add', [IoTelegramController::class, 'create'])->name('iotelegrams.add');
 Route::post('iotelegram/store', [IoTelegramController::class, 'store'])->name('iotelegram.store');
 Route::get('iotelegram/edit/{id}', [IoTelegramController::class, 'edit'])->name('iotelegram.edit');
 Route::post('iotelegram/update/{id}', [IoTelegramController::class, 'update'])->name('iotelegram.update');
 Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name('iotelegram.show');
-Route::get('iotelegram/archives', [IoTelegramController::class, 'Archives'])->name('iotelegram.archives');
+Route::get('iotelegram/archives', [IoTelegramController::class, 'archives'])->name('iotelegram.archives');
+Route::get('iotelegram/archives/get', [IoTelegramController::class, 'getArchives'])->name('iotelegram.archives.get');
 Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add');
 Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
 
@@ -213,15 +221,16 @@ Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfi
 
 
 
-Route::get('vacations/{id?}', [VacationController::class, 'index'])->name('vacations.list');
-Route::get('vacations/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations');
-
+Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list');
+Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations');
 Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add');
 Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store');
 Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit');
 Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update');
 Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show');
 Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete');
+Route::get('vacation/downlaod/{id}', [VacationController::class, 'downlaodfile'])->name('vacation.downlaodfile');
+
 
 
 

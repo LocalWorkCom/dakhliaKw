@@ -21,11 +21,8 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-            @include('inc.flash')
-            <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="row " dir="rtl">
-                    <div class="form-group mt-4  mx-2 col-12 d-flex ">
+        <div class="row justify-content-center" dir="rtl">
+                    <div class="form-group mt-4  mx-5 col-10 d-flex ">
                         <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
                             data-bs-target="#extern-user" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
@@ -39,13 +36,18 @@
                         </button>
                     </div>
                 </div>
-                <div class="form-row mx-2 ">
-                    <div class="form-group col-md-6">
+        <div class="container col-10 mt-1 mb-5 pb-5 pt-4" style="border:0.5px solid #C7C7CC;">
+            @include('inc.flash')
+            <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+             
+                <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="nameex">العنوان</label>
                         <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
                             required>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5 mx-2 ">
                         <label for="select-person-to">person_to </label>
                         <select id="select-person-to" name="person_to" class="form-control">
                             <option value="" disabled selected> اختر من القائمه</option>
@@ -58,19 +60,19 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-row mx-2">
-                    <div class="form-group col-md-6">
+                <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="date">تاريخ الصادر </label>
                         <input type="date" id="date" name="date" class="form-control" required>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="exportnum">رقم الصادر</label>
                         <input type="text" class="form-control" name="num" id="exportnum" required>
                     </div>
 
                 </div>
-                <div class="form-row mx-2">
-                    <div class="form-group col-md-6">
+                <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="active">الحاله</label>
                         <select id="active" class="form-control" name="active">
                             <option value="0">مفعل</option>
@@ -78,7 +80,7 @@
 
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="from_departement">الجهة المرسلة</label>
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
                             id="extern-department-dev" data-bs-target="#extern-department">
@@ -92,14 +94,14 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-row mx-2">
-                    <div class="form-group col-md-12">
+                <div class="form-row  d-flex justify-content-center">
+                    <div class="form-group col-md-10">
                         <label for="exampleFormControlTextarea1">ملاحظات </label>
                         <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> </textarea>
                     </div>
                 </div>
-                <div class="form-row mx-2">
-                    <div class="form-group col-md-12">
+                <div class="form-row  d-flex justify-content-center">
+                    <div class="form-group col-md-10">
                         <label for="files">الملفات</label>
                         <div class="mb-2 d-flex" id="fileInputs">
                             <input type="file" name="files[]" class="form-control" dir="rtl"
@@ -111,11 +113,15 @@
                     </div>
                 </div>
 
-                <div class="form-row" dir="ltr">
-                    <button class="btn-blue mx-4" type="submit" >  اضافة </button>
                 </div>
+                <div class="container col-10 mt-5 mb-5 " >
+                <div class="form-row col-10 " dir="ltr">
+                    <button class="btn-blue " type="submit">
+                        اضافة </button>
+                </div>   </div>
                 <br>
             </form>
+        </div>
         </div>
     </div>
 
