@@ -149,6 +149,12 @@
                         <li style="list-style: inside;">
                             <a href="#">الاجازات</a>
                         </li>
+                        <li style="list-style: inside;">
+                            <a href="{{ route('rule.index') }}">المهام</a>
+                        </li>
+                        <li style="list-style: inside;">
+                            <a href="{{ route('permission.index') }}">الصلاحيات</a>
+                        </li>
                     </ul>
                 </div>
     
