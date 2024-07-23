@@ -1,10 +1,11 @@
-@stack('scripts')
+
     <br> <br> <br> <br>
     <footer class="my-2">
         <div class="footer ">
             <p>جميع الحقوق محفوظه </p>
         </div>
     </footer>
+    @stack('scripts')
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
     <script>
@@ -100,4 +101,44 @@
                 }
             }
         }
+        function toggleDropdown3() {
+        var dropdownMenu = document.getElementById("dropdownMenu3");
+        if (dropdownMenu.style.display === "block") {
+          dropdownMenu.style.display = "none";
+        } else {
+          dropdownMenu.style.display = "block";
+        }
+      }
+    
+      window.onclick = function(event) {
+        if (!event.target.matches('.btn3')) {
+          var dropdowns = document.getElementsByClassName("dropdown-menu3");
+          for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.style.display === "block") {
+              openDropdown.style.display = "none";
+            }
+          }
+        }
+      } 
+      function toggleDropdown4() {
+        var dropdownMenu = document.getElementById("dropdownMenu4");
+        if (dropdownMenu.style.display === "block") {
+          dropdownMenu.style.display = "none";
+        } else {
+          dropdownMenu.style.display = "block";
+        }
+      }
+    
+      window.onclick = function(event) {
+        if (!event.target.matches('.btn4')) {
+          var dropdowns = document.getElementsByClassName("dropdown-menu4");
+          for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.style.display === "block") {
+              openDropdown.style.display = "none";
+            }
+          }
+        }
+      }
     </script>

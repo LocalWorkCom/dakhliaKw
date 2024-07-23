@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('vacations.list') }}">الاجازات </a></li>
+                <li class="breadcrumb-item"><a href="{{ route('vacations.list', $id) }}">الاجازات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
             </ol>
         </nav>
@@ -22,11 +22,12 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-            <form action="{{ route('vacation.store') }}" method="POST" enctype="multipart/form-data">
+        <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
+            <form action="{{ route('vacation.store', $id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="form-row mx-2 mt-4">
-                    <div class="form-group col-md-6 ">
+                <div class="form-row mx-3 mt-4 d-flex justify-content-center">
+                    <div class="form-group col-md-5 mx-2 ">
                         <label for="vacation_type_id">نوع الاجازة</label>
 
 
@@ -37,7 +38,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="employee_id">اسم الموظف</label>
 
 
@@ -52,37 +53,39 @@
                     </div>
                 </div>
 
-                <div class="form-row mx-2 mt-4">
+                <div class="form-row mx-3 mt-4 d-flex justify-content-center">
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="date_from">تاريخ البداية</label>
                         <input type="date" id="date_from" name="date_from" class="form-control" required>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="date_to">تاريخ النهاية</label>
                         <input type="date" id="date_to" name="date_to" class="form-control">
                     </div>
                 </div>
-
-                <div class="form-row mx-2 mt-4">
-                    <div class="form-group col-md-12">
+           
+                <div class="form-row mx-2 mt-4 d-flex justify-content-center" id="reportImage-div">
+                    <div class="form-group col-md-10">
                         <label for="reportImage">اضافة ملف</label>
                         <div id="reportImage">
                             <div class="file-input mb-3" dir="rtl">
-                                <input type="file" name="reportImage" class="form-control-file">
+                                <input type="file" name="reportImage" class="form-control">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="container col-12 ">
-                    <div class="form-row mt-4 mb-5">
+</div>
+                <div class="container col-10 mt-5 mb-5 ">
+                    <div class="form-row col-10 " dir="ltr">
                         <button type="submit" class="btn-blue">حفظ</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+  
 
 
     @push('scripts')
@@ -101,25 +104,29 @@
                     var value = $('#vacation_type_id option:selected').val();
 
                     if (value == '3') {
-                        $('#reportImage').hide();
+                        $('#reportImage-div').hide();
+                        $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', true);
 
                         $('#employee_id').removeAttr('required');
 
                     } else if (value == '4') {
-                        $('#reportImage').hide();
+                        $('#reportImage-div').hide();
 
                         $('#date_to').prop('disabled', true);
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
 
                     } else if (value == '2') {
-                        $('#reportImage').show();
+                        $('#reportImage-div').show();
+                        $('#date_to').prop('disabled', false);
+
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
                     } else {
-                        $('#reportImage').hide();
+                        $('#reportImage-div').hide();
+                        $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);

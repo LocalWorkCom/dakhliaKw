@@ -1,40 +1,143 @@
 @extends('layout.main')
 
-
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
+</script>
 @section('content')
-    <div class="container">
+    <section>
+        <div class="row">
 
-        <div class="row ">
             <div class="container welcome col-11">
                 <p> الصـــــــــادرات</p>
             </div>
         </div>
 
-        <div class="container  col-11 mt-3 p-0 ">
-            <div class="row justify-content-end">
-                <div class="col-auto">
-                    <button class="btn-all mt-3">
-                        <a href="{{ route('Export.create') }}" style="color:#0D992C;">إضافة جديد <img
-                                src="{{ asset('frontend/images/add-btn.svg') }}" alt=""></a>
-                    </button>
-                    <button class="btn-all mt-3">
-                        <a href="{{ route('Export.archive.show', ['status' => 'inactive']) }}" style="color:#0D992C;">الارشيف
-                            <img src="{{ asset('frontend/images/archieve.svg') }}" alt=""></a>
-                    </button>
+        <br>
+        <div class="row">
+            <div class="container  col-11 mt-3 p-0 ">
+
+                <div class="row " dir="rtl">
+                    <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                        <button type="button" class="btn-all mx-3 "
+                            onclick="window.location.href='{{ route('Export.archive.show') }}'" style="color: #C1920C;">
+                            <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
+                            عرض الارشيف
+                        </button>
+                        <button type="button" class="btn-all  "
+                            onclick="window.location.href='{{ route('Export.create') }}'" style="color: #0D992C;">
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            اضافة جديد
+                        </button>
+
+
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="bg-white p-5">
+
+                        <div>
+                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>رقم الصادر</th>
+                                        <th>الاسم</th>
+                                        <th>الملاحظات</th>
+                                        <th>تاريخ الصادر</th>
+                                        <th> العسكرى</th>
+                                        <th>الاداره الصادر لها</th>
+                                        <th>العمليات</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    {{-- model for add to archive  --}}
+    <div class="modal fade" id="archive" tabindex="-1" aria-labelledby="archive"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="archive"> هل تريد اضافه هذا الصادر الى الارشيف ؟ </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="saveExternalDepartment" action="{{ route('export.archive.add') }}" method="POST">
+                        @csrf
+                            <input type="text" id="id" hidden name="id" class="form-control">
+                       
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn-blue">نعم</button>
+                        </div>
+                         <!-- Save button -->
+                         <div class="text-end">
+                            <button type="button" class="btn-black">لا</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
+@endsection
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#users-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('exports.view.all') }}', // Correct URL concatenation
+                columns: [{
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'note',
+                        name: 'note'
+                    },
+                    {
+                        data: 'date',
+                        name: 'date'
+                    },
+                    {
+                        data: 'person_to_username',
+                        name: 'person_to_username'
+                    },
+                    {
+                        data: 'department_External_name',
+                        name: 'department_External_name'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+
+            });
+
+            function openarchive(id) {
+            document.getElementById('id').value = id;
+            $('#archive').modal('show');
 
 
+        }
 
-        <div class="row ">
-            <div class="mb-3">
-                {{-- <input type="text" id="global_search" class="form-control" placeholder="بحث ..."> --}}
-            </div>
-            {!! $dataTable->table(['class' => 'table table-responsive table-bordered table-hover dataTable']) !!}
-        </div>
-    @endsection
-
-    @push('scripts')
-        {{ $dataTable->scripts() }}
-    @endpush
+        });
+    </script>
+@endpush

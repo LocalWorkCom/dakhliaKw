@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Rule;
 use App\Models\User;
-use Illuminate\Support\Str;
 // use Illuminate\Validation\Rule;
+use App\Models\grade;
+use Illuminate\Support\Str;
+use App\Models\departements;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\DataTables\UsersDataTable;
@@ -27,27 +30,27 @@ class UserController extends Controller
     //     $data = User::all();
     //     return DataTables::of($data)->make(true);
     //     // return $dataTable->render('user.view');
-     
+
 
 
     // }
     public function index($id)
     {
-        return view('user.view',compact('id'));
+        return view('user.view', compact('id'));
     }
 
     public function getUsers($id)
     {
         $flagType = $id == 0 ? 'user' : 'employee';
         $data = User::where('flag', $flagType)->get();
-       
+
         return DataTables::of($data)->addColumn('action', function ($row) {
+
             return '<button class="btn btn-primary btn-sm">Edit</button>
-              <a href="" class="btn btn-primary btn-sm">vacations</a>'
-                    ;
+              <a href="" class="btn btn-primary btn-sm">vacations</a>';
         })
-        ->rawColumns(['action'])
-        ->make(true);
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function login(Request $request)
@@ -167,10 +170,9 @@ class UserController extends Controller
                 // }
 
             } else {
-                if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code')|| url()->previous() == route('verfication_code')) {
+                if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code') || url()->previous() == route('verfication_code')) {
                     return view('resetpassword', compact('military_number', 'firstlogin'));
-                }
-                else {
+                } else {
                     return redirect()->route('home');
                 }
             }
@@ -254,7 +256,7 @@ class UserController extends Controller
         if (!$user) {
             return back()->with('error', 'الرقم العسكري المقدم لا يتطابق مع سجلاتنا');
         }
-        if (Hash::check($request->password , $user->password) == true) {
+        if (Hash::check($request->password, $user->password) == true) {
             return view('resetpassword')
                 ->withErrors('لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية')
                 ->with('military_number', $request->military_number)
@@ -294,12 +296,13 @@ class UserController extends Controller
         $user = User::find(Auth::user()->id);
         $rule = Rule::all();
         $flag = $id;
+        $grade = grade::all();
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
-        $alldepartment =$user->createdDepartments;
+        $alldepartment = $user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
-        return view('user.create',compact('alldepartment','rule' ,'flag'));
+        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade'));
     }
 
     /**
@@ -316,8 +319,7 @@ class UserController extends Controller
         //     'country_code' =>'required',
         // ]);
 
-        if($request->type == "0")
-        {
+        if ($request->type == "0") {
             $newUser = new User();
             $newUser->military_number = $request->military_number;
             $newUser->phone = $request->phone;
@@ -327,12 +329,9 @@ class UserController extends Controller
             $newUser->flag = "user";
             $newUser->rule_id = $request->rule;
             $newUser->department_id  = $request->department;
-            // $newUser->password = Hash::make($validatedData['password']);
             $newUser->password = Hash::make($request->password);
             $newUser->save();
-        }
-        else
-        {
+        } else {
             $newUser = new User();
             $newUser->military_number = $request->military_number;
             $newUser->phone = $request->phone;
@@ -340,15 +339,30 @@ class UserController extends Controller
             $newUser->name = $request->name;
             $newUser->file_number = $request->file_number;
             $newUser->flag = "employee";
-            $newUser->rule_id = $request->rule;
-            $newUser->department_id  = $request->department;
-            // $newUser->password = Hash::make($validatedData['password']);
-            $newUser->password = Hash::make($request->password);
-            $newUser->save();
-        }
-        
+            if ($request->has('solder') && $request->solder == "on") {
+                $newUser->grade_id = $request->grade_id;
+            }
+            // $newUser->password = NUll;
+            $newUser->description = $request->description;
+            // $newUser->job = $request->job;
+            $newUser->date_of_birth = $request->date_of_birth;
+            $newUser->public_administration = $request->department;
 
-        return response()->json($newUser);
+            $newUser->save();
+            
+            if ($request->hasFile('image')) {
+                $file = $request->image;
+                $path = 'users/user_profile';
+    
+                UploadFilesWithoutReal($path, 'image', $newUser, $file);
+            }
+        }
+
+        $id = $request->type;
+
+
+        // return response()->json($newUser);
+        return view('user.view', compact('id'));
     }
 
     /**
@@ -358,7 +372,15 @@ class UserController extends Controller
     {
         //
         $user = User::find($id);
-        return view('user.edit',compact('user'));
+        $rule = Rule::all();
+        $grade = grade::all();
+        $joining_date = Carbon::parse($user->joining_date);
+        $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
+        $end_of_service = $end_of_serviceUnit->format('Y-m-d');
+
+        $department = departements::all();
+        $hisdepartment = $user->createdDepartments;
+        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service'));
     }
 
     /**
@@ -367,14 +389,77 @@ class UserController extends Controller
     public function edit(string $id)
     {
         //
+        $user = User::find($id);
+        $rule = Rule::all();
+        $grade = grade::all();
+        $joining_date = Carbon::parse($user->joining_date);
+        $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
+        $end_of_service = $end_of_serviceUnit->format('Y-m-d');
+
+        $department = departements::all();
+        $hisdepartment = $user->createdDepartments;
+        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+
+        // dd($request);
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->description = $request->description;
+        $user->military_number = $request->military_number;
+        // $user->job = $request->job;
+        $user->job_title = $request->job_title;
+        $user->nationality = $request->nationality;
+        $user->Civil_number = $request->Civil_number;
+        $user->file_number = $request->file_number;
+        $user->flag = $request->flag;
+        $user->seniority = $request->seniority;
+        $user->public_administration = $request->public_administration;
+        $user->work_location = $request->work_location;
+        // $user->position = $request->position;
+        $user->qualification = $request->qualification;
+        $user->date_of_birth = $request->date_of_birth;
+        $user->joining_date = $request->joining_date;
+        $user->age = Carbon::parse($request->input('date_of_birth'))->age;
+
+        $joining_dateDate = Carbon::parse($request->input('joining_date'));
+        $end_of_serviceDate = Carbon::parse($request->input('end_of_service'));
+        $user->length_of_service =  $end_of_serviceDate->year - $joining_dateDate->year;
+        if ($request->has('grade_id')) {
+            $user->grade_id = $request->grade_id;
+        }
+        if ($request->hasFile('image')) {
+            $file = $request->image;
+            $path = 'users/user_profile';
+
+            UploadFilesWithoutReal($path, 'image', $user, $file);
+        }
+
+        if ($user->flag == "user") {
+            $user->rule_id = $request->rule_id;
+            $user->department_id  = $request->department_id;
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
+        // dd($user);
+        if ($user->flag == "user") {
+            $id = "0";
+        } else {
+            $id = "1";
+        }
+
+
+
+        // return response()->json($newUser);
+        return view('user.view', compact('id'));
+        // return view('user.edit',compact('user'));
     }
 
     /**

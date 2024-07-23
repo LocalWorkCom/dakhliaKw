@@ -181,6 +181,48 @@ Route::post('vacationType/delete', [settingController::class,'deleteVacation'])-
 Route::post('government/add', [settingController::class,'addgovernment'])->name('government.add');
 Route::post('government', [settingController::class,'editgovernment'])->name('government.edit');
 Route::post('government/delete', [settingController::class,'deletegovernment'])->name('government.delete');
+
+
+//start government
+Route::get('setting/government', [settingController::class, 'getAllgovernment'])->name('setting.getAllgovernment');
+Route::get('setting/government/all', [settingController::class,'indexgovernment'])->name('government.all');
+Route::post('setting/government/add', [settingController::class,'addgovernment'])->name('government.add');
+Route::get('setting/government/create', [settingController::class,'creategovernment'])->name('government.create');
+Route::post('setting/government/update', [settingController::class,'updategovernment'])->name('government.update');
+Route::get('setting/government/edit/{id}', [settingController::class,'editgovernment'])->name('government.edit');
+Route::get('setting/government/show/{id}', [settingController::class,'showgovernment'])->name('government.show');
+//endgovernment
+
+//start jobs
+Route::get('setting/jobs', [settingController::class, 'getAlljob'])->name('setting.getAlljob');
+Route::get('setting/jobs/all', [settingController::class,'indexjob'])->name('job.index');
+Route::post('setting/jobs/add', [settingController::class,'addjob'])->name('job.add');
+Route::get('setting/jobs/create', [settingController::class,'createjob'])->name('job.create');
+Route::post('setting/jobs/update', [settingController::class,'updatejob'])->name('job.update');
+Route::get('setting/jobs/edit/{id}', [settingController::class,'editjob'])->name('job.edit');
+Route::get('setting/jobs/show/{id}', [settingController::class,'showjob'])->name('job.show');
+Route::post('setting/jobs/delete', [settingController::class,'deletejob'])->name('job.delete');
+//end jobs
+//start vacation type
+Route::get('setting/vacationType', [settingController::class, 'getAllvacationType'])->name('setting.getAllvacationType');
+Route::get('setting/vacationType/all', [settingController::class,'indexvacationType'])->name('vacationType.index');
+Route::post('setting/vacationType/add', [settingController::class,'addvacationType'])->name('vacationType.add');
+Route::get('setting/vacationType/create', [settingController::class,'createvacationType'])->name('vacationType.create');
+Route::post('setting/vacationType/update', [settingController::class,'updatevacationType'])->name('vacationType.update');
+Route::get('setting/vacationType/edit/{id}', [settingController::class,'editvacationType'])->name('vacationType.edit');
+Route::get('setting/vacationType/show/{id}', [settingController::class,'showvacationType'])->name('vacationType.show');
+Route::post('setting/vacationType/delete', [settingController::class,'deletevacationType'])->name('vacationType.delete');
+//end vacation type
+//start gards
+Route::get('setting/grads', [settingController::class, 'getAllgrads'])->name('setting.getAllgrads');
+Route::get('setting/grads/all', [settingController::class,'indexgrads'])->name('grads.index');
+Route::post('setting/grads/add', [settingController::class,'addgrads'])->name('grads.add');
+Route::get('setting/grads/create', [settingController::class,'creategrads'])->name('grads.create');
+Route::post('setting/grads/update', [settingController::class,'updategrads'])->name('grads.update');
+Route::get('setting/grads/edit/{id}', [settingController::class,'editgrads'])->name('grads.edit');
+Route::get('setting/grads/show/{id}', [settingController::class,'showgrads'])->name('grads.show');
+Route::post('setting/grads/delete', [settingController::class,'deletegrads'])->name('grads.delete');
+//end grads
 //setting end
 
 

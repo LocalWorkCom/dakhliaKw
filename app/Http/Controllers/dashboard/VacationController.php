@@ -2,26 +2,46 @@
 
 namespace App\Http\Controllers\dashboard;
 
-use App\DataTables\VacationDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\departements;
-use App\Models\ExternalDepartment;
-use App\Models\io_files;
-use App\Models\Vacation;
-use App\Models\Postman;
-use App\Models\User;
 use App\Models\EmployeeVacation;
-use App\Models\VacationType;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class VacationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(VacationDataTable $dataTable)
+    public function index($id = 0)
     {
-        return $dataTable->render('vacation.index');
+        return view('vacation.index', compact('id'));
+    }
+    public function getVacations($id)
+    {
+        if ($id) {
+
+            $EmployeeVacations = EmployeeVacation::where('employee_id', $id)
+                ->with('employee', 'vacation_type')
+                ->get();
+            foreach ($EmployeeVacations as  $EmployeeVacation) {
+                # code...
+                $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
+            }
+            return DataTables::of($EmployeeVacations)
+
+                ->rawColumns(['action'])
+                ->make(true);
+        } else {
+            $EmployeeVacations = EmployeeVacation::with('employee', 'vacation_type')->get();
+            foreach ($EmployeeVacations as  $EmployeeVacation) {
+                # code...
+                $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
+            }
+            return DataTables::of($EmployeeVacations)
+
+                ->rawColumns(['action'])
+                ->make(true);
+        }
     }
     /**
      * Show the form for creating a new resource.
@@ -30,13 +50,19 @@ class VacationController extends Controller
     {
         $employees = getEmployees();
         $vacation_types = getVactionTypes();
+        if ($id) {
+
+            $vacation_types = getVactionTypes()->where('id', '<>', '3');
+        } else {
+            $vacation_types = getVactionTypes();
+        }
         return view('vacation.add', compact('employees', 'vacation_types', 'id'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
 
         $employee_vacation = new EmployeeVacation();
@@ -48,9 +74,17 @@ class VacationController extends Controller
         $employee_vacation->created_departement = auth()->user()->department_id;
         $employee_vacation->save();
 
+        if ($request->hasFile('reportImage')) {
+            $file = $request->reportImage;
+            // You can modify the UploadFiles function call according to your needs
+            $path = 'vacations/employee';
+
+            UploadFiles($path, 'report_image', 'report_image_real', $employee_vacation, $file);
+        }
+
         session()->flash('success', 'تم الحفظ بنجاح.');
 
-        return redirect()->route('vacations.list');
+        return redirect()->route('vacations.list', $id);
     }
 
     /**
@@ -59,11 +93,11 @@ class VacationController extends Controller
     public function show($id)
     {
         //
-        $vacation = EmployeeVacation::find($id);
+        $vacation = EmployeeVacation::with('employee', 'vacation_type')->where('id', $id)->first();
         $employees = getEmployees();
         $vacation_types = getVactionTypes();
 
-        return view('vacation.show', compact('vacation', 'employees', 'vacation_types'));
+        return view('vacation.show', compact('vacation', 'employees', 'vacation_types', 'id'));
     }
 
     /**
@@ -73,9 +107,13 @@ class VacationController extends Controller
     {
         $employees = getEmployees();
         $vacation = EmployeeVacation::find($id);
-        $vacation_types = getVactionTypes();
+        if ($vacation->employee_id) {
 
-        return view('vacation.edit', compact('employees', 'vacation', 'vacation_types'));
+            $vacation_types = getVactionTypes()->where('id', '<>', '3');
+        } else {
+            $vacation_types = getVactionTypes();
+        }
+        return view('vacation.edit', compact('employees', 'vacation', 'vacation_types', 'id'));
     }
 
     /**
@@ -92,7 +130,13 @@ class VacationController extends Controller
         $employee_vacation->created_by = auth()->id();
         $employee_vacation->created_departement = auth()->user()->department_id;
         $employee_vacation->save();
+        if ($request->hasFile('reportImage')) {
+            $file = $request->reportImage;
+            // You can modify the UploadFiles function call according to your needs
+            $path = 'vacations/employee';
 
+            UploadFiles($path, 'report_image', 'report_image_real', $employee_vacation, $file);
+        }
         session()->flash('success', 'تم التعديل بنجاح.');
 
         return redirect()->route('vacations.list');
@@ -104,5 +148,15 @@ class VacationController extends Controller
         session()->flash('success', 'تم الحذف بنجاح.');
 
         return redirect()->route('vacations.list');
+    }
+    public function downlaodfile($id)
+    {
+        $file = EmployeeVacation::find($id);
+        // $download=downloadFile($file->file_name,$file->real_name);
+        $file_path = public_path($file->file_name);
+        $file_name = basename($file->real_name);
+
+        return response()->download($file_path, $file_name);
+        //echo 'downloaded';
     }
 }

@@ -133,6 +133,21 @@ if (!function_exists('UploadFiles')) {
         $model->save();
     }
 }
+
+
+function UploadFilesWithoutReal($path, $image, $model, $request)
+{
+
+    $thumbnail = $request;
+    $destinationPath = $path;
+    $filename = time() . '.' . $thumbnail->getClientOriginalExtension();
+    $thumbnail->move($destinationPath, $filename);
+
+    $model->$image = asset($path) . '/' . $filename;
+
+    $model->save();
+}
+
 function CheckUploadIoFiles($id)
 {
     $count = Io_file::where('iotelegram_id', $id)->count();
