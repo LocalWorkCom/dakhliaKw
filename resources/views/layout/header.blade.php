@@ -90,7 +90,7 @@
                     </li>
                    
                     <li class="nav-item btn3"  onclick="toggleDropdown3()">
-                        <!-- <a href="{{ route('user.employees',1) }}"> -->
+                        <a href="{{ route('user.employees', 1) }}">
                         <a href="#">
                             <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
                             <h6>الموظفين</h6>
@@ -98,7 +98,7 @@
                         
                     </li>
                     <div id="dropdownMenu3" class="dropdown-menu3">
-                        <a href="#">الاجازات</a>  <br> <hr>
+                        <a href="{{ route('vacations.list') }}">الاجازات</a>  <br> <hr>
                         <a href="#">الشيفتات</a> <br>
                     </div>
                    
