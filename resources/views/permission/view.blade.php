@@ -27,7 +27,7 @@
                 <div class="col-lg-12">
                     <div class="bg-white p-5">
                         <div>
-                            <table id="permissions-table" class="display table table-bordered table-hover dataTable">
+                            <table id="users-table" class="display table table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>رقم التعريف</th>
@@ -45,7 +45,7 @@
     </section>
     <script>
         $(document).ready(function() {
-            $('#permissions-table').DataTable({
+            $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{{ url('api/permission') }}',
@@ -60,14 +60,15 @@
                     render: function(data, type, row) {
 
                         // Using route generation correctly in JavaScript
-                        var permissionedit = '{{ route('permissions_edit', ':id') }}';
-                        permissionedit = permissionedit.replace(':id', row.id);
+                        // var permissionedit = '{{ route('permissions_edit', ':id') }}';
+                        // permissionedit = permissionedit.replace(':id', row.id);
                         var permissionshow = '{{ route('permissions_show', ':id') }}';
                         permissionshow = permissionshow.replace(':id', row.id);
+                        var permissiondelete = '{{ route('permissions_destroy', ':id') }}';
+                        permissiondelete = permissiondelete.replace(':id', row.id);
                         return `
-                       <a href="` + permissionshow + `" class="btn btn-primary btn-sm">مشاهدة</a>
-                       <a href="` + permissionedit + `" class="btn btn-primary btn-sm">تعديل</a>
-                       <a href="" class="btn btn-primary btn-sm">حذف</a>`;
+                       <a href="` + permissionshow + `" class="btn btn-primary btn-sm w-25">مشاهدة</a>
+                       <a href="` + permissiondelete + `" class="btn btn-primary btn-sm w-25">حذف</a>`;
                     }
 
                 }]
@@ -75,4 +76,4 @@
         });
     </script>
 @endsection
-{{-- <a href="` + permissionshow + `" class="btn btn-primary btn-sm">مشاهدة</a> --}}
+{{-- <a href="` + permissionedit + `" class="btn btn-primary btn-sm">تعديل</a> --}}

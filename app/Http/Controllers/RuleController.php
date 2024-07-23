@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Permission;
 use App\Models\departements;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use App\DataTables\RoleDataTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -18,11 +19,24 @@ class RuleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(RoleDataTable $dataTable)
+    public function index()
     {
         //
 
-        return $dataTable->render('role.view');
+        // return $dataTable->render('role.view');
+        return view('role.view');
+    }
+    public function getRule()
+    {
+        $data = Rule::all();
+       
+        return DataTables::of($data)->addColumn('action', function ($row) {
+            
+            return '<button class="btn btn-primary btn-sm">Edit</button>'
+                    ;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
     }
 
     /**
@@ -67,8 +81,8 @@ class RuleController extends Controller
             $rule->permission_ids = $permission_ids;
             $rule->save();
             // Dynamically create model instance based on the model class string
-
-            return response()->json("ok");
+            return view('role.view');
+            // return response()->json("ok");
             // dd("sara");
             // return redirect()->back()->with('alert', 'Permission created successfully.')
             // return redirect()->back()->with('success', 'Permission created successfully.');
@@ -85,7 +99,20 @@ class RuleController extends Controller
      */
     public function show($id)
     {
-        
+        // dd("ss");
+        $rule_permission = Rule::find($id);
+        $allpermission = Permission::get();
+
+        $permission_ids = explode(',', $rule_permission->permission_ids);
+
+            // Fetch all permissions that the user has access to based on their role
+        $hisPermissions = Permission::whereIn('id', $permission_ids)->get();
+        $user = User::find(Auth::user()->id);
+        $alldepartment =$user->createdDepartments;
+       
+        // dd($allPermissions);
+
+        return view('role.show' ,compact('allpermission','alldepartment','hisPermissions','rule_permission'));
     }
 
     /**
@@ -117,6 +144,7 @@ class RuleController extends Controller
      */
     public function update($id ,Request $request)
     {
+        // dd($request);
 
         $request->validate([
             'name' => 'required|string',
@@ -130,11 +158,12 @@ class RuleController extends Controller
             // Create the rule
             $rule = Rule::find($id);
             $rule->name = $request->name;
-            // $rule->department_id = $request->department_id;
+            $rule->department_id = $request->department_id;
             $rule->permission_ids = $permission_ids;
             $rule->save();
+            return view('role.view');
             // Dynamically create model instance based on the model class string
-            return response()->json("ok");
+            // return response()->json("ok");
             // dd("sara");
             // return redirect()->back()->with('alert', 'Permission created successfully.')
             // return redirect()->back()->with('success', 'Permission created successfully.');
