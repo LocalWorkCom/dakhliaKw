@@ -39,7 +39,7 @@
 
 
 
-                    <form action="{{ route('user.store') }}" method="post" class="text-right" >
+                    <form action="{{ route('user.store') }}" method="post" class="text-right" enctype="multipart/form-data">
                         @csrf
 
                         <input type="hidden" name="type" value="{{ $flag }}">
