@@ -55,7 +55,7 @@
                 <select name="#" id="#" class=" mt-4">
                     <option value="#"> المستخدميين </option>
                     <option value="{{ route('departments.index') }}"> الادارات </option>
-                    <option value="{{ route('setting.index') }}"> الاعدادات </option>
+                    
                     <option value="#"> الموظفين </option>
                     <option value="{{ route('Export.index') }}"> الصادر </option>
                     <option value="#"> الوارد </option>
@@ -138,16 +138,16 @@
 
                     <ul>
                         <li style="list-style: inside;">
-                            <a href="#"> الاعدادات</a>
+                            <a href="{{ route('grads.index') }}">الرتب العسكريه</a>
                         </li>
                         <li style="list-style: inside;">
-                            <a href="#">الرتب العسكريه</a>
+                            <a href="{{ route('job.index') }}">الوظائف</a>
                         </li>
                         <li style="list-style: inside;">
-                            <a href="#">الوظائف</a>
+                            <a href="{{ route('government.all') }}">المحافظات</a>
                         </li>
                         <li style="list-style: inside;">
-                            <a href="#">الاجازات</a>
+                            <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
                         </li>
                         <li style="list-style: inside;">
                             <a href="{{ route('rule.index') }}">المهام</a>

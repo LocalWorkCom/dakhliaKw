@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a
+class ComposerStaticInit344e6ba2d7c00a55586b94269e848420
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -619,8 +619,12 @@ class ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Controllers\\dashboard\\IoTelegramController' => __DIR__ . '/../..' . '/app/Http/Controllers/dashboard/IoTelegramController.php',
         'App\\Http\\Controllers\\dashboard\\VacationController' => __DIR__ . '/../..' . '/app/Http/Controllers/dashboard/VacationController.php',
+        'App\\Http\\Controllers\\gardController' => __DIR__ . '/../..' . '/app/Http/Controllers/gardController.php',
+        'App\\Http\\Controllers\\governmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/governmentController.php',
+        'App\\Http\\Controllers\\jobController' => __DIR__ . '/../..' . '/app/Http/Controllers/jobController.php',
         'App\\Http\\Controllers\\outgoingController' => __DIR__ . '/../..' . '/app/Http/Controllers/outgoingController.php',
         'App\\Http\\Controllers\\settingController' => __DIR__ . '/../..' . '/app/Http/Controllers/settingController.php',
+        'App\\Http\\Controllers\\vacationTypeController' => __DIR__ . '/../..' . '/app/Http/Controllers/vacationTypeController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CheckPermission' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckPermission.php',
@@ -642,6 +646,7 @@ class ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a
         'App\\Models\\ExternalDepartment' => __DIR__ . '/../..' . '/app/Models/ExternalDepartment.php',
         'App\\Models\\Government' => __DIR__ . '/../..' . '/app/Models/Government.php',
         'App\\Models\\Group' => __DIR__ . '/../..' . '/app/Models/Group.php',
+        'App\\Models\\Inspector' => __DIR__ . '/../..' . '/app/Models/Inspector.php',
         'App\\Models\\Io_file' => __DIR__ . '/../..' . '/app/Models/Io_file.php',
         'App\\Models\\Iotelegram' => __DIR__ . '/../..' . '/app/Models/Iotelegram.php',
         'App\\Models\\Permission' => __DIR__ . '/../..' . '/app/Models/Permission.php',
@@ -7506,9 +7511,9 @@ class ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitce24ba03a04e2c2f6d57288e45f38d0a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit344e6ba2d7c00a55586b94269e848420::$classMap;
 
         }, null, ClassLoader::class);
     }
