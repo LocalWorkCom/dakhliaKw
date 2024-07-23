@@ -77,6 +77,7 @@ Route::any('/reset_password', [UserController::class, 'reset_password'])->name('
 // view All Models permission
 Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {
     Route::any('/permission', [PermissionController::class, 'index'])->name('permission.index');
+    Route::get('api/permission', [PermissionController::class, 'getPermision'])->name('api.permission');
     Route::any('/permission_create', [PermissionController::class, 'create'])->name('permission.create');
 
     Route::any('/rule', [RuleController::class, 'index'])->name('rule.index');

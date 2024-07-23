@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Permission;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use App\DataTables\PermissionRoleDataTable;
 use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
-use App\Models\Permission;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class PermissionController extends Controller
 {
@@ -48,10 +49,23 @@ class PermissionController extends Controller
         return $models;
     }
 
-    public function index(PermissionRoleDataTable $dataTable)
+    public function index()
     {
         //
-        return $dataTable->render('permission.view');
+        // return $dataTable->render('permission.view');
+        return view('permission.view');
+    }
+    public function getPermision()
+    {
+        $data = Permission::all();
+       
+        return DataTables::of($data)->addColumn('action', function ($row) {
+            
+            return '<button class="btn btn-primary btn-sm">Edit</button>'
+                    ;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
     }
 
     /**

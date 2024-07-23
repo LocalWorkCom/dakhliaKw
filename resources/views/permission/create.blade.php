@@ -1,71 +1,100 @@
 @extends('layout.main')
 @section('content')
 
-<section>
-    <ol class="breadcrumb" dir="rtl">
-        <li class="breadcrumb-item"><a href="#">الرئيسيه</a></li>
-        <li class="breadcrumb-item active"><a href="{{ route('permission.index') }}">الصلاحيات  </a></li>
-
-        <li class="breadcrumb-item active"> اضافه صلاحية</li>
-
-    </ol>
-     
-    <div class="container-fluid p-5">
-        <div class="row">
-            <div class="col-lg-7 offset-2">
-                <div class="bg-white">
-                    @if (session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                    <div class="p-5" dir="rtl">
-    
-                        
-    
-                        <form action="{{ route('permission.store') }}" method="post">
-                            @csrf
-                            <div class="form-group ">
-                                <label>الصلاحية</label>
-                                <select class="custom-select custom-select-lg mb-3" name="name" multiple>
-                                    <option selected>Open this select menu</option>
-                                    <option value="view">عرض</option>
-                                    <option value="edit">تعديل</option>
-                                    <option value="create">اضافة</option>
-                                    {{-- <option value="delete">ازالة</option> --}}
-                                  </select>
-                            </div>
-                            <div class="form-group">
-                                <label>القسم</label>
-                                <select class="custom-select custom-select-lg mb-3" name="model">
-                                    <option selected>Open this select menu</option>
-                                    @foreach ($models as $item)
-                                    <option value="{{ $item }}">{{ $item }}</option>
-                                    @endforeach
-                                  </select>
-                            </div>
-                            
-                            <button type="submit" class="btn-all mt-2">Submit</button>
-                          </form>
-                            
-                    </div>
-                </div>
-            </div>
-            {{-- <div class="col-lg-6">
-                <div class="bg-white p-5">
-                    {!! $dataTable->table(['class' => 'table table-bordered table-hover dataTable']) !!}
-                </div>
-            </div> --}}
+    <div class="row col-11" dir="rtl">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('permission.index') }}">الصلاحيات </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href="#"> اضافه صلاحية</a></li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row ">
+        <div class="container welcome col-11">
+            <p> الصلاحيات </p>
         </div>
-        
+    </div>
+    <br>
+
+    <div class="row">
+        <div class="container  col-11 mt-3 p-0 ">
+
+
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <div class="p-5">
+
+                <form action="{{ route('permission.store') }}" method="post" class="text-right">
+                    @csrf
+                    <div class="form-row mx-2">
+                        <div class="form-group col-md-6">
+                            <label for="filenum">الصلاحية</label>
+                            <select class="custom-select custom-select-lg mb-3" name="name" id="name" multiple>
+                                <option selected>Open this select menu</option>
+                                <option value="view">عرض</option>
+                                <option value="edit">تعديل</option>
+                                <option value="create">اضافة</option>
+                                {{-- <option value="delete">ازالة</option> --}}
+                            </select>
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="model">القسم</label>
+                            <select class="custom-select custom-select-lg mb-3" name="model" id="model">
+                                <option selected>Open this select menu</option>
+                                @foreach ($alldepartment as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Save button -->
+                    <div class="container col-12 ">
+                        <div class="form-row mt-4 mb-5">
+                            <button type="submit" class="btn-blue">حفظ</button>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
 
-   
-</section>
 
-    
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const checkbox = document.getElementById("myCheckbox");
+            const grade = document.getElementById("grade");
+
+            checkbox.addEventListener("change", function() {
+                if (checkbox.checked) {
+                    grade.style.display = "block";
+                } else {
+                    grade.style.display = "none";
+                }
+
+            });
+        });
+    </script>
+
+
 @endsection
-
-@push('scripts')
-    {{ $dataTable->scripts() }}
-@endpush
