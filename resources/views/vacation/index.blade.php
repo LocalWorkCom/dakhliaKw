@@ -32,7 +32,7 @@
                 </div>
 
 
-                <table id="vacations-table" class="display table table-bordered table-hover dataTable">
+                <table id="users-table" class="display table table-bordered table-hover dataTable">
                     <thead>
                         <tr>
                             <th>الرقم</th>
@@ -50,7 +50,7 @@
                 <script>
                     $(document).ready(function() {
                         var id = {{ $id }};
-                        $('#vacations-table').DataTable({
+                        $('#users-table').DataTable({
                             processing: true,
                             serverSide: true,
                             ajax: '{{ route('employee.vacations', $id) }}', // Correct URL concatenation

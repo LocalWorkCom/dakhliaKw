@@ -55,7 +55,7 @@
                 <select name="#" id="#" class=" mt-4">
                     <option value="#"> المستخدميين </option>
                     <option value="{{ route('departments.index') }}"> الادارات </option>
-                    <option value=""> الاعدادات </option>
+                    <option value="{{ route('setting.index') }}"> الاعدادات </option>
                     <option value="#"> الموظفين </option>
                     <option value="{{ route('Export.index') }}"> الصادر </option>
                     <option value="#"> الوارد </option>
@@ -124,16 +124,11 @@
                     <a href="{{ route('departments.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>الادارات</h6>
-                        </a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a href="{{ route('sub_departments.index') }}">
-                            <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                            <h6>الاقسام</h6>
-                            </a>
-                        </li> -->
-                    <li class="nav-item">
-                        <a href="">
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#">
                         <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
                         <h6 class=" btn4" onclick="toggleDropdown4()"> الاعدادات <i class="fa-solid fa-angle-down"></i>
                         </h6>
@@ -142,12 +137,14 @@
                 <div id="dropdownMenu4" class="dropdown-menu4">
 
                     <ul>
-                     
                         <li style="list-style: inside;">
                             <a href="{{ route('grads.index') }}">الرتب العسكريه</a>
                         </li>
                         <li style="list-style: inside;">
                             <a href="{{ route('job.index') }}">الوظائف</a>
+                        </li>
+                        <li style="list-style: inside;">
+                            <a href="{{ route('government.all') }}">المحافظات</a>
                         </li>
                         <li style="list-style: inside;">
                             <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
