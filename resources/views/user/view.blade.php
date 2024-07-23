@@ -26,7 +26,7 @@
                     <div class="form-group mt-4  mx-2 col-12 d-flex ">
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('user.create', $id) }}'">
-                            <img src="../images/add-btn.svg" alt="img">
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
                     </div>
@@ -34,10 +34,10 @@
                 <div class="col-lg-12">
                     <div class="bg-white p-5">
                         <!-- <div>
-                                            <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
-                                                اضافه جديد</a>
-                                        </div>
-                                        <br> -->
+                                                <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
+                                                    اضافه جديد</a>
+                                            </div>
+                                            <br> -->
 
                         <div>
                             <table id="users-table" class="display table table-bordered table-hover dataTable">
@@ -94,7 +94,7 @@
                                                 useredit = useredit.replace(':id', row.id);
                                                 var usershow = '{{ route('user.show', ':id') }}';
                                                 usershow = usershow.replace(':id', row.id);
-                                                var vacation='{{ route('vacations.list',':id') }}';
+                                                var vacation = '{{ route('vacations.list', ':id') }}';
                                                 vacation = vacation.replace(':id', row.id);
 
                                                 return `

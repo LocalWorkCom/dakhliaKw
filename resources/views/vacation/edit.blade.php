@@ -85,7 +85,7 @@
                         <label for="reportImage">تعديل ملف</label>
                         <div id="reportImage">
                             <div class="file-input mb-3" dir="rtl">
-                                <input type="file" name="reportImage" class="form-control-file">
+                                <input type="file" name="reportImage" class="form-control">
                             </div>
                         </div>
                     </div>
