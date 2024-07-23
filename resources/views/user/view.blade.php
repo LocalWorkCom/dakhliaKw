@@ -13,7 +13,7 @@
                 </div>
             @elseif (url()->current() == url('/employees/1'))
                 <div class="container welcome col-11">
-                    <p>الموظفين</p>
+                    <p>المـــــــــــوظفين</p>
                 </div>
             @endif
         </div>
@@ -23,7 +23,7 @@
         <div class="row">
             <div class="container  col-11 mt-3 p-0 ">
                 <div class="row " dir="rtl">
-                    <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                    <div class="form-group mt-4  mx-5 col-12 d-flex ">
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('user.create', $id) }}'">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
