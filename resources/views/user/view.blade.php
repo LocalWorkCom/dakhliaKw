@@ -6,11 +6,19 @@
 </script>
 @section('content')
     <section>
-        <div class="row ">
-            <div class="container welcome col-11">
-                <p> المستخـــــــــــدمين </p>
-            </div>
+        <div class="row">
+            @if (url()->current() == url('/users/0'))
+                <div class="container welcome col-11">
+                    <p>المستخـــــــــــدمين</p>
+                </div>
+            @elseif (url()->current() == url('/employees/1'))
+                <div class="container welcome col-11">
+                    <p>الموظفين</p>
+                </div>
+            @endif
         </div>
+        
+        
         <br>
         <div class="row">
             <div class="container  col-11 mt-3 p-0 ">
