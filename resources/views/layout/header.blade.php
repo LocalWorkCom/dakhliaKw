@@ -133,7 +133,7 @@
                             </a>
                         </li> -->
                     <li class="nav-item">
-                        <a href="{{route('setting.index')}}">
+                        <a href="">
                         <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
                         <h6 class=" btn4" onclick="toggleDropdown4()"> الاعدادات <i class="fa-solid fa-angle-down"></i>
                         </h6>
@@ -142,17 +142,15 @@
                 <div id="dropdownMenu4" class="dropdown-menu4">
 
                     <ul>
+                     
                         <li style="list-style: inside;">
-                            <a href="#"> الاعدادات</a>
+                            <a href="{{ route('grads.index') }}">الرتب العسكريه</a>
                         </li>
                         <li style="list-style: inside;">
-                            <a href="#">الرتب العسكريه</a>
+                            <a href="{{ route('job.index') }}">الوظائف</a>
                         </li>
                         <li style="list-style: inside;">
-                            <a href="#">الوظائف</a>
-                        </li>
-                        <li style="list-style: inside;">
-                            <a href="#">الاجازات</a>
+                            <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
                         </li>
                         <li style="list-style: inside;">
                             <a href="{{ route('rule.index') }}">المهام</a>
