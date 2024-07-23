@@ -41,54 +41,6 @@
                             </table>
 
 
-                            <script>
-                                $(document).ready(function() {
-                                    $('#rules-table').DataTable({
-                                        processing: true,
-                                        serverSide: true,
-                                        ajax: '{{ url('api/rules') }}/' + id, // Correct URL concatenation
-                                        columns: [{
-                                                data: 'id',
-                                                name: 'id'
-                                            },
-                                            {
-                                                data: 'name',
-                                                name: 'name'
-                                            },
-                                            {
-                                                data: 'permissions_ids',
-                                                name: 'permissions_ids'
-                                            },
-                                            {
-                                                data: 'department_id',
-                                                name: 'department_id'
-                                            },
-                                            {
-                                                data: 'action',
-                                                name: 'action',
-                                                orderable: false,
-                                                searchable: false
-                                            }
-                                        ],
-                                        columnDefs: [{
-                                            targets: -1,
-                                            render: function(data, type, row) {
-
-                                                // Using route generation correctly in JavaScript
-                                                var ruleedit = '{{ route('rule.edit', ':id') }}';
-                                                ruleedit = ruleedit.replace(':id', row.id);
-                                                var ruleshow = '{{ route('rule.show', ':id') }}';
-                                                ruleshow = ruleshow.replace(':id', row.id);
-                                                return `
-                                        <a href="` + ruleshow + `" class="btn btn-primary btn-sm">مشاهدة</a>
-                                            <a href="` + ruleedit + `" class="btn btn-primary btn-sm">تعديل</a>
-                                        `;
-                                            }
-
-                                        }]
-                                    });
-                                });
-                            </script>
 
 
                         </div>
@@ -99,4 +51,35 @@
 
         </div>
     </section>
+    <script>
+        $(document).ready(function() {
+            $('#users-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ url('api/rule') }}',
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'name', name: 'name' },
+                    { data: 'permission_ids', name: 'permission_ids' },
+                    { data: 'department_id', name: 'department_id' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false }
+                ],
+                columnDefs: [{
+                    targets: -1,
+                    render: function(data, type, row) {
+
+                        // Using route generation correctly in JavaScript
+                       var ruleedit = '{{ route('rule_edit', ':id') }}';
+                        ruleedit = ruleedit.replace(':id', row.id);
+                        var ruleshow = '{{ route('rule_show', ':id') }}';
+                        ruleshow = ruleshow.replace(':id', row.id);
+                        return `
+                            <a href="` + ruleshow + `" class="btn btn-primary btn-sm">مشاهدة</a>
+                            <a href="` + ruleedit + `" class="btn btn-primary btn-sm">تعديل</a>`;
+                    }
+
+                }]
+            });
+        });
+    </script>
 @endsection

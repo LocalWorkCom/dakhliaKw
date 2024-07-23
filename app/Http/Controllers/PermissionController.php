@@ -102,16 +102,17 @@ class PermissionController extends Controller
             $permission->name = $nameModel;
             $permission->guard_name = $modelClass;
             $permission->save();
+// dd($permission);
             DB::insert('INSERT INTO model_has_permissions (permission_id , model_type ,model_id ) VALUES (?, ?, ?)', [
                 $permission->id,
                 $request->name,
                 $request->model, // or specify your guard name if different
 
             ]);
-
+            return view('permission.view');
             // return response()->json("ok");
             // dd("sara");
-            return redirect()->back()->with('alert', 'Permission created successfully.');
+            // return redirect()->back()->with('alert', 'Permission created successfully.');
             // return $dataTable->render('permission.view')->with('alert', 'Permission created successfully.');
             // return $dataTable->render('permission.view');
         } catch (\Exception $e) {
@@ -197,8 +198,11 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Permission $permission)
+    public function destroy($id)
     {
         //
+        $permission =Permission::findOrFail($id);
+        $permission->delete();
+        return view('permission.view');
     }
 }
