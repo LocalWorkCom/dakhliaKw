@@ -70,9 +70,7 @@ class outgoingController extends Controller
         ->rawColumns(['action'])
         ->make(true);
     }
-    public function uploadFiles($id){
-        dd($id);
-    }
+    
     public function showFiles($id){
         
         return view('outgoing.showfile');
@@ -124,7 +122,7 @@ class outgoingController extends Controller
             'num' => 'required|integer',
             'note' => 'required|string',
             'person_to' => 'nullable|exists:export_users,id',
-            'date' => 'required|date|after_or_equal:today',
+            'date' => 'required|date',
             'department_id' => 'nullable|exists:external_departements,id',
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
@@ -136,7 +134,6 @@ class outgoingController extends Controller
             'note.required' => 'عفوا يجب ادخال ملاحظات الصادر',
             'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
-            'date.after_or_equal' => 'عفوا يجب ادخال تاريخ صحيح',
             'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
         ];
 
@@ -212,22 +209,21 @@ class outgoingController extends Controller
         $rules = [
             'nameex' => 'required|string',
             'num' => 'required|integer',
-            'note' => 'nullable|string',
-            'person_to' => 'nullable|exists:users,id',
-            'active' => 'required|boolean',
+            'note' => 'required|string',
+            'person_to' => 'nullable|exists:export_users,id',
+            'date' => 'required|date',
             'department_id' => 'nullable|exists:external_departements,id',
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
 
         // // Define custom messages
         $messages = [
-            'nameex.required' => 'The name field is required.',
-            'nameex.string' => 'The name must be a string.',
-            'num.required' => 'The number field is required.',
-            'num.integer' => 'The number must be an integer.',
-            'person_to.exists' => 'The selected person does not exist.',
-            'active.required' => 'The active field is required.',
-            'active.boolean' => 'The active field must be true or false.',
-            'department_id.exists' => 'The selected department does not exist.',
+            'nameex.required' => 'عفوا يجب ادخال اسم الصادر',
+            'num.required' => 'عفوا يجب ادخال رقم الصادر',
+            'note.required' => 'عفوا يجب ادخال ملاحظات الصادر',
+            'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
+            'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
+            'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
         ];
 
         // // Validate the request

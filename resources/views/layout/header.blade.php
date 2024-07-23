@@ -57,7 +57,7 @@
                     <select name="#" id="#" class=" mt-4">
                         <option value="#"> المستخدميين </option>
                         <option value="{{ route('departments.index') }}"> الادارات </option>
-                        <option value="{{ route('setting.index') }}"> الاعدادات </option>
+                        <option value=""> الاعدادات </option>
                         <option value="#"> الموظفين </option>
                         <option value="{{ route('Export.index') }}"> الصادر </option>
                         <option value="#"> الوارد </option>
@@ -125,7 +125,7 @@
                             </a>
                         </li> -->
                     <li class="nav-item">
-                        <a href="{{route('setting.index')}}">
+                        <a href="">
                         <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
                         <h6>الاعدادات</h6>
                         </a>
