@@ -288,7 +288,8 @@
                   <i class="fa fa-edit"></i> 
                 </button>
                 </div> 
-                      <div class="form-row" dir="rtl">
+                      <div class="form-
+                      " dir="rtl">
                     <button type="button" class="btn-all mt-3" onclick=opendelete(${row.id},1)
                     style="background-color: #FAFBFD; border: none;">
                   <i class="fa fa-de"></i> 
