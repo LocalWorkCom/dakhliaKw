@@ -878,3 +878,7 @@ padding-inline: 45px;
 padding-block: 5px;
 text-decoration: none !;
 }
+select.form-control:not([size]):not([multiple]) {
+    height: calc(2.25rem + 2px);
+    direction: rtl !important;
+}
