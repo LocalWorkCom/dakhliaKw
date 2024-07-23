@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostmanController;
 use App\Http\Controllers\settingController;
+use App\Http\Controllers\HomeController;
 
 
 /*
@@ -44,10 +45,8 @@ Route::get('/login', function () {
 
 //  Auth verfication_code
 Route::middleware(['auth'])->group(function () {
-    
-    Route::get('/', function () {
-        return view('welcome');
-    })->name('home');
+         
+    Route::get('/',[HomeController::class,'index'])->name('home');
     
     // Route::any('/user', [UserController::class, 'index'])->name('user.index');
     Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index');
@@ -55,7 +54,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users_create/{id}', [UserController::class, 'create'])->name('user.create');
     Route::post('/store', [UserController::class, 'store'])->name('user.store');
     Route::get('/employees/{id}', [UserController::class, 'index'])->name('user.employees');
-    Route::get('/edit/{id}', [UserController::class, 'show'])->name('user.show');
+    Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+    Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show');
     Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update');
 
 });

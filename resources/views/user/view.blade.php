@@ -92,9 +92,11 @@
                                                 // Using route generation correctly in JavaScript
                                                 var showUrl = '{{ route('user.show', ':id') }}';
                                                 showUrl = showUrl.replace(':id', row.id);
+                                                var vacationUrl = '{{ route('vacations.list', ':id') }}';
+                                                vacationUrl = vacationUrl.replace(':id', row.id);
                                                 return `
                                             <a href="` + showUrl + `" class="btn btn-primary btn-sm">تعديل</a>
-                                            <a href="" class="btn btn-primary btn-sm">الاجازات</a>
+                                            <a href="${vacationUrl}" class="btn btn-primary btn-sm">الاجازات</a>
                                         `;
                                             }
 

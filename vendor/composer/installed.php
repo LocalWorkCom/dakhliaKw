@@ -3,8 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '41c49a16ec453a75cc39928e9b0f914f27f3113b',
-
+        'reference' => 'd66347d67c1db1c3eab511f09f3a8b98adf54138',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -428,8 +427,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '41c49a16ec453a75cc39928e9b0f914f27f3113b',
-
+            'reference' => 'd66347d67c1db1c3eab511f09f3a8b98adf54138',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -490,9 +488,9 @@
             'dev_requirement' => false,
         ),
         'league/commonmark' => array(
-            'pretty_version' => '2.4.3',
-            'version' => '2.4.3.0',
-            'reference' => 'b7a7af3a23a818dcc5836e62e93e4b9ce4704481',
+            'pretty_version' => '2.5.0',
+            'version' => '2.5.0.0',
+            'reference' => '0026475f5c9a104410ae824cb5a4d63fa3bdb1df',
             'type' => 'library',
             'install_path' => __DIR__ . '/../league/commonmark',
             'aliases' => array(),
