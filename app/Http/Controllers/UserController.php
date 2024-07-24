@@ -361,8 +361,8 @@ class UserController extends Controller
         else
         {
             $messages = [
-                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
-                'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
+                // 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                // 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
                 'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
 
@@ -373,12 +373,12 @@ class UserController extends Controller
             ];
             
             $validatedData = Validator::make($request->all(), [
-                'military_number' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    ValidationRule::unique('users', 'military_number'),
-                ],
+                // 'military_number' => [
+                //     'required',
+                //     'string',
+                //     'max:255',
+                //     ValidationRule::unique('users', 'military_number'),
+                // ],
                 'phone' => 'required|string',
                 'file_number' => 'required|string',
                 'department' => 'required',
