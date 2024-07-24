@@ -105,9 +105,9 @@
                         <li style="list-style: inside;">
                             <a href="#">الشيفتات</a>
                         </li>
-                        <li style="list-style: inside;">
+                        {{-- <li style="list-style: inside;">
                             <a href="#">الاجازات</a>
-                        </li>
+                        </li> --}}
                     </ul>
 
                 </div>
