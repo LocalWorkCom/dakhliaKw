@@ -35,6 +35,16 @@ class RuleController extends Controller
             return '<button class="btn btn-primary btn-sm">Edit</button>'
                     ;
         })
+        ->addColumn('permissions', function ($row) { // New column for departments count
+            $permission_ids = explode(',', $row->permission_ids);
+            $allPermission = Permission::whereIn('id', $permission_ids)->pluck('name')->toArray();
+            return implode(', ', $allPermission);
+        })
+        ->addColumn('department', function ($row) { // New column for departments count
+        
+            $department = departements::where('id', $row->department_id)->pluck('name')->first();
+            return $department;
+        })
         ->rawColumns(['action'])
         ->make(true);
     }
