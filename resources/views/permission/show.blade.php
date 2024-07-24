@@ -8,18 +8,16 @@
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="#">الصلاحيات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href="#"> تعديل صلاحية</a></li>
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+    
+                    <li class="breadcrumb-item"><a href="{{ route('permission.index') }}">الصلاحيات</a></li>
+    
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض </a></li>
             </ol>
+           
         </nav>
     </div>
-    <div class="row ">
-        <div class="container welcome col-11">
-            <p> الصـــلاحيات </p>
-        </div>
-    </div>
-    <br>
+   
 
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
