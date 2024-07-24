@@ -2,7 +2,9 @@
 
 @push('style')
 @endpush
-
+@section('title')
+تعديل
+@endsection
 @section('content')
     <main>
         <div class="row col-11" dir="rtl">

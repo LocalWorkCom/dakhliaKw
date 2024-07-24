@@ -11,7 +11,7 @@
         </div>
         
         <div class="card">
-            <div class="card-header">الاقسام</div>
+            <div class="card-header">الاقســـام</div>
 
             <div class="card-body">
             {!! $dataTable->table(['class' => 'table table-bordered table-hover dataTable']) !!}

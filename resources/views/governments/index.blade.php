@@ -1,15 +1,19 @@
 @extends('layout.main')
-
+@push('style')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
+@endpush
+@section('title')
+    المحـــافظات
+@endsection
 @section('content')
     <section>
         <div class="row">
 
             <div class="container welcome col-11">
-                <p> المحافظات</p>
+                <p> المحـــافظات</p>
             </div>
         </div>
 

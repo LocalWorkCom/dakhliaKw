@@ -1,4 +1,7 @@
 @extends('layout.main')
+@section('title')
+ الموظفين
+@endsection
 @section('content')
 
 <div class="row col-11" dir="rtl">

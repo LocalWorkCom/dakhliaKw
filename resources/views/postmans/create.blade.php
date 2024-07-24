@@ -1,5 +1,7 @@
 @extends('welcome')
-
+@section('title')
+أضافه مندوب
+@endsection
 @section('content')
 <main>
     <div class="row col-11" dir="rtl">

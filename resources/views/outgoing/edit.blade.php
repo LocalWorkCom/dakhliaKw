@@ -2,7 +2,9 @@
 
 @push('style')
 @endpush
-
+@section('title')
+تعديل
+@endsection
 @section('content')
 <section style="direction: rtl;">
     <ol class="breadcrumb">

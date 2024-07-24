@@ -2,7 +2,9 @@
 
 @push('style')
 @endpush
-
+@section('title')
+ أنواع الأجازات
+@endsection
 @section('content')
 <div class="row col-11" dir="rtl">
     <nav aria-label="breadcrumb">
@@ -22,7 +24,7 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
             @include('inc.flash')
-            <form action="{{ route('vacationType .add') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('vacationType.add') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="form-row mx-2 ">

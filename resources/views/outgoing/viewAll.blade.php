@@ -4,6 +4,9 @@
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
+@section('title')
+الصادرات
+@endsection
 @section('content')
     <section>
         <div class="row">
@@ -35,7 +38,11 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white p-5">
-
+                        @if(session()->has('message'))
+                        <div class="alert alert-info">
+                            {{ session('message') }}
+                        </div>
+                     @endif
                         <div>
                             <table id="users-table" class="display table table-bordered table-hover dataTable">
                                 <thead>
@@ -60,38 +67,51 @@
     </section>
 
     {{-- model for add to archive  --}}
-    <div class="modal fade" id="archive" tabindex="-1" aria-labelledby="archive"
-        aria-hidden="true">
+    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="archive"> هل تريد اضافه هذا الصادر الى الارشيف ؟ </h5>
+                        <h5 class="modal-title" id="deleteModalLabel"> !تنبــــــيه</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                         </button>
                     </div>
                 </div>
-                <div class="modal-body">
-                    <form id="saveExternalDepartment" action="{{ route('export.archive.add') }}" method="POST">
-                        @csrf
-                            <input type="text" id="id" hidden name="id" class="form-control">
-                       
-                        <!-- Save button -->
+                <form id="delete-form" action="{{ route('export.archive.add') }}" method="POST">
+                    @csrf
+                    <div class="modal-body  d-flex justify-content-center">
+                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد أضافه هذا الصادر الى الارشيف ؟</h5>
+
+
+                        <input type="text" id="id" hidden name="id" class="form-control">
+                    </div>
+                    <div class="modal-footer mx-2 d-flex justify-content-center">
                         <div class="text-end">
-                            <button type="submit" class="btn-blue">نعم</button>
+                            <button type="button" class="btn-blue">لا</button>
                         </div>
-                         <!-- Save button -->
-                         <div class="text-end">
-                            <button type="button" class="btn-black">لا</button>
+                        <div class="text-end">
+                            <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 @endsection
 @push('scripts')
     <script>
+         function opendelete(id) {
+            document.getElementById('id').value = id;
+            $('#delete').modal('show');
+        }
+
+        function confirmDelete() {
+            var id = document.getElementById('id').value;
+            var form = document.getElementById('delete-form');
+          
+            form.submit();
+
+        }
         $(document).ready(function() {
             $('#users-table').DataTable({
                 processing: true,
