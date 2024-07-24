@@ -120,7 +120,7 @@ if (!function_exists('UploadFiles')) {
         $thumbnail = $request;
         $destinationPath = $path;
         $filerealname = $thumbnail->getClientOriginalName();
-        $filename = time() . '.' . $thumbnail->getClientOriginalExtension();
+        $filename = $model->id.time() . '.' . $thumbnail->getClientOriginalExtension();
         // $destinationPath = asset($path) . '/' . $filename;
         $thumbnail->move($destinationPath, $filename);
         // $thumbnail->resize(1080, 1080);

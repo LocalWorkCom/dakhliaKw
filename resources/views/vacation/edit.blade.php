@@ -7,7 +7,10 @@
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                @if ($id)
+                    <li class="breadcrumb-item "><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
+                @endif
                 <li class="breadcrumb-item"><a href="{{ route('vacations.list', $id) }}">الاجازات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
             </ol>
@@ -22,82 +25,83 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-        <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
-            <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
+            <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
+                <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
 
-                <div class="form-row mx-3 mt-4 d-flex justify-content-center">
-                    <div class="form-group col-md-5 mx-2 "> <label for="vacation_type_id">نوع الاجازة:</label>
+                    <div class="form-row mx-3 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-2 "> <label for="vacation_type_id">نوع الاجازة:</label>
 
 
-                        <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
-                            <option value="">اختر النوع</option>
-                            @foreach ($vacation_types as $item)
-                                <option value="{{ $item->id }}" @if ($item->id == $vacation->vacation_type_id) selected @endif>
-                                    {{ $item->name }}</option>
-                            @endforeach
-                        </select>
+                            <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
+                                <option value="">اختر النوع</option>
+                                @foreach ($vacation_types as $item)
+                                    <option value="{{ $item->id }}" @if ($item->id == $vacation->vacation_type_id) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="employee_id">اسم الموظف</label>
+                            <select id="employee_id" name="employee_id" class="form-control" required disabled>
+                                <option value="">اختر الموظف</option>
+                                @foreach ($employees as $item)
+                                    <option value="{{ $item->id }}" @if ($vacation->employee_id == $item->id) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="employee_id">اسم الموظف</label>
-                        <select id="employee_id" name="employee_id" class="form-control" required disabled>
-                            <option value="">اختر الموظف</option>
-                            @foreach ($employees as $item)
-                                <option value="{{ $item->id }}" @if ($vacation->employee_id == $item->id) selected @endif>
-                                    {{ $item->name }}</option>
-                            @endforeach
-                        </select>
+
+
+
+                    <div class="form-row mx-3 mt-4 d-flex justify-content-center">
+
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="date_from">تاريخ البداية</label>
+                            <input type="date" id="date_from" name="date_from" class="form-control" required
+                                value="{{ $vacation->date_from }}">
+                        </div>
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="date_to">تاريخ النهاية</label>
+                            <input type="date" id="date_to" name="date_to" class="form-control"
+                                value="{{ $vacation->date_to }}">
+                        </div>
                     </div>
-                </div>
-
-
-
-                <div class="form-row mx-3 mt-4 d-flex justify-content-center">
-
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="date_from">تاريخ البداية</label>
-                        <input type="date" id="date_from" name="date_from" class="form-control" required
-                            value="{{ $vacation->date_from }}">
-                    </div>
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="date_to">تاريخ النهاية</label>
-                        <input type="date" id="date_to" name="date_to" class="form-control"
-                            value="{{ $vacation->date_to }}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-11 mb-3 px-5 mt-2">
-                        <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
-                            data-image="{{ asset($vacation->report_image) }}" data-title="{{ $vacation->report_image }}">
-                            <img src="{{ asset($vacation->report_image) }}" class="img-thumbnail mx-2"
-                                alt="{{ $vacation->report_image }}"> <br> <br>
-                            {{-- <a id="downloadButton" href="{{ route('vacation.downlaodfile', ['id' => $vacation->id]) }}"
+                    <div class="row">
+                        <div class="col-md-11 mb-3 px-5 mt-2">
+                            <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
+                                data-image="{{ asset($vacation->report_image) }}"
+                                data-title="{{ $vacation->report_image }}">
+                                <img src="{{ asset($vacation->report_image) }}" class="img-thumbnail mx-2"
+                                    alt="{{ $vacation->report_image }}"> <br> <br>
+                                {{-- <a id="downloadButton" href="{{ route('vacation.downlaodfile', ['id' => $vacation->id]) }}"
                                 class="btn-download"><i class="fa fa-download" style="color:green;"></i>
                                 تحميل الملف
                             </a> --}}
 
-                        </a>
+                            </a>
+
+                        </div>
 
                     </div>
-
-                </div>
-                <div class="form-row mx-2 mt-4" id="reportImage-div">
-                    <div class="form-group col-md-12">
-                        <label for="reportImage">تعديل ملف</label>
-                        <div id="reportImage">
-                            <div class="file-input mb-3" dir="rtl">
-                                <input type="file" name="reportImage" class="form-control">
+                    <div class="form-row mx-2 mt-4" id="reportImage-div">
+                        <div class="form-group col-md-12">
+                            <label for="reportImage">تعديل ملف</label>
+                            <div id="reportImage">
+                                <div class="file-input mb-3" dir="rtl">
+                                    <input type="file" name="reportImage" class="form-control">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                </div>
+            </div>
 
-                <div class="container  col-10 mt-5 mb-5 ">
-                    <div class="form-row col-10 " dir="ltr">
-                        <button type="submit" class="btn-blue">حفظ</button>
-                    </div>
+            <div class="container  col-10 mt-5 mb-5 ">
+                <div class="form-row col-10 " dir="ltr">
+                    <button type="submit" class="btn-blue">حفظ</button>
                 </div>
+            </div>
             </form>
         </div>
     </div>
