@@ -49,7 +49,15 @@ class RuleController extends Controller
         $permission_ids = explode(',', $rule_permisssion->permission_ids);
         $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
-        $alldepartment =$user->createdDepartments;
+        // $alldepartment =$user->createdDepartments;
+        if($user->flag == "user")
+        {
+            $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        }
+        else
+        {
+            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        }
         return view('role.create',compact('allPermission','alldepartment'));
 
         // return $dataTable->render('permission.create'  ,compact('models'));
@@ -108,7 +116,16 @@ class RuleController extends Controller
             // Fetch all permissions that the user has access to based on their role
         $hisPermissions = Permission::whereIn('id', $permission_ids)->get();
         $user = User::find(Auth::user()->id);
-        $alldepartment =$user->createdDepartments;
+        if($user->flag == "user")
+        {
+            $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        }
+        else
+        {
+            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        }
+
+        // $alldepartment =$user->createdDepartments;
        
         // dd($allPermissions);
 
@@ -130,7 +147,15 @@ class RuleController extends Controller
             // Fetch all permissions that the user has access to based on their role
         $hisPermissions = Permission::whereIn('id', $permission_ids)->get();
         $user = User::find(Auth::user()->id);
-        $alldepartment =$user->createdDepartments;
+        if($user->flag == "user")
+        {
+            $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        }
+        else
+        {
+            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        }
+        // $alldepartment =$user->createdDepartments;
        
         // dd($allPermissions);
 

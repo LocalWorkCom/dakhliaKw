@@ -75,8 +75,14 @@
 
                         <div class="form-group col-md-6">
                             <label for="input8">الوظيفة</label>
-                            <input type="text" id="input8" name="job" class="form-control" placeholder="الوظيفة"
-                                value="{{ $user->job }}" disabled>
+                            {{-- <input type="text" id="input8" name="job" class="form-control" placeholder="الوظيفة"
+                                value="{{ $user->job }}" disabled> --}}
+                                <select class="custom-select custom-select-lg mb-3" name="job" id="job" disabled>
+                                    <option selected disabled>Open this select menu</option>
+                                    @foreach ($job as $item)
+                                    <option value="{{ $item->id }}" {{ $user->job == $item->id ? 'selected' : ''}}>{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
                         </div>
 
                         <div class="form-group col-md-6">
@@ -108,8 +114,8 @@
                                     placeholder="الباسورد" disabled>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="input7"> الادوار</label>
-                                <select id="input7" name="rule_id" class="form-control" placeholder="الادوار"
+                                <label for="input7"> المهام</label>
+                                <select id="input7" name="rule_id" class="form-control" placeholder="المهام"
                                     disabled>
                                     @foreach ($rule as $item)
                                         <option value="{{ $item->id }}"
@@ -123,8 +129,8 @@
                             <div class="form-group col-md-6">
                                 <label for="input25"> القسم</label>
                                 <select id="input25" name="department_id" class="form-control" placeholder="القسم"
-                                    disabled>
-                                    @foreach ($hisdepartment as $item)
+                                disabled>
+                                    @foreach ($department as $item)
                                         <option value="{{ $item->id }}"
                                             {{ $user->department_id == $item->id ? 'selected' : '' }}>
                                             {{ $item->name }}</option>

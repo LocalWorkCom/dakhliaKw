@@ -41,8 +41,8 @@
                 @endif
                 {{-- {{ dd($user) }} --}}
                 <div class="p-5">
-                    <form action="{{ route('rule_update', $rule_permission->id) }}" method="POST">
-                        @csrf
+                    {{-- <form action="{{ route('rule_update', $rule_permission->id) }}" method="POST">
+                        @csrf --}}
                         <div class="form-row mx-2 mt-4 d-flex flex-row-reverse">
                         <div class="form-group col-md-6">
                             <label for="input8">الدور</label>
@@ -94,12 +94,12 @@
 
 
                         <!-- Save button -->
-                        <div class="container col-12 ">
+                        {{-- <div class="container col-12 ">
                             <div class="form-row mt-4 mb-5">
                                 <button type="submit" class="btn-blue">حفظ</button>
                             </div>
                         </div>
-                    </form>
+                    </form> --}}
                 </div>
             </div>
         </div>
