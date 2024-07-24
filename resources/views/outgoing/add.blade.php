@@ -3,28 +3,28 @@
 @push('style')
 @endpush
 @section('title')
-أضافه
+    أضافه
 @endsection
 @section('content')
-<div class="row col-11" dir="rtl">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('Export.index') }}">الصادرات </a></li>
-            <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه الصادر</a></li>
-        </ol>
-    </nav>
-</div>
-<div class="row ">
-    <div class="container welcome col-11">
-        <p> الصــــــــــــادرات </p>
+    <div class="row col-11" dir="rtl">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('Export.index') }}">الصادرات </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه الصادر</a></li>
+            </ol>
+        </nav>
     </div>
-</div>
-<br>
-<div class="row">
-    <div class="container  col-11 mt-3 p-0 ">
-        <!-- <div class="row justify-content-center" dir="rtl"> -->
-            <!-- <div class="form-group mt-4  mx-5 col-10 d-flex ">
+    <div class="row ">
+        <div class="container welcome col-11">
+            <p> الصــــــــــــادرات </p>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="container  col-11 mt-3 p-0 ">
+            <!-- <div class="row justify-content-center" dir="rtl">
+                <div class="form-group mt-4  mx-5 col-10 d-flex ">
                     <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
                         data-bs-target="#extern-user" style="color: #0D992C;">
                         <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
@@ -36,43 +36,14 @@
                         <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         اضافة أداره خارجيه
                     </button>
-                </div> -->
-        <!-- </div> -->
-        <div class="container col-10 mt-1 mb-3 mt-5 pb-5 pt-4" style="border:0.5px solid #C7C7CC;">
-            @include('inc.flash')
-            <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-
-                <div class="form-row mx-3 d-flex justify-content-center">
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="nameex">العنوان</label>
-                        <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
-                            required>
-                    </div>
-                    <div class="form-group col-md-5 mx-2 ">
-                        <label for="select-person-to">person_to </label>
-                        <select id="select-person-to" name="person_to" class="form-control">
-                            <option value="" disabled selected> اختر من القائمه</option>
-                            @foreach ($users as $user)
-                            <option value="{{ $user->id }}">
-                                {{ $user->name }} (الرقم العسكرى : {{ $user->military_number }})
-                            </option>
-                            @endforeach
-                            </option>
-                        </select>
-                    </div>
                 </div>
-                <div class="form-row mx-3 d-flex justify-content-center">
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="date">تاريخ الصادر </label>
-                        <input type="date" id="date" name="date" class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="exportnum">رقم الصادر</label>
-                        <input type="text" class="form-control" name="num" id="exportnum" required>
-                    </div>
+            </div> -->
+            <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
+                @include('inc.flash')
+                <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
 
-                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-row mx-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-2">
                             <label for="nameex">العنوان</label>
                             <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
@@ -91,7 +62,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-row mx-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-2">
                             <label for="date">تاريخ الصادر </label>
                             <input type="date" id="date" name="date" class="form-control" required>
@@ -101,44 +72,38 @@
                             <input type="text" class="form-control" name="num" id="exportnum" required>
                         </div>
 
-                        </select>
                     </div>
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="from_departement">الجهة المرسلة</label>
-                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
-                            id="extern-department-dev" data-bs-target="#extern-department">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <select id="from_departement" name="from_departement" class="form-control">
-                            <option value="">اختر الجهة</option>
-                            @foreach ($departments as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row mx-2 d-flex justify-content-center">
-                    <div class="form-group col-md-10 ">
-                        <label for="exampleFormControlTextarea1">ملاحظات </label>
-                        <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"
-                            required> </textarea>
-                    </div>
-                </div>
-                {{-- <div class="form-row mx-2 d-flex justify-content-center">
-                    <div class="form-group col-md-10 ">
-                        <label for="files">الملفات</label>
-                        <div class="mb-2 d-flex" id="fileInputs">
-                            <input type="file" name="files[]" class="form-control" dir="rtl"
-                                style="border: none"> <br>
-                            <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                    <div class="form-row mx-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="active">الحاله</label>
+                            <select id="active" class="form-control" name="active">
+                                <option value="0">مفعل</option>
+                                <option value="1">غير مفعل</option>
 
+                            </select>
                         </div>
-                        <button type="button" class=" btn-all mx-3" id="addFile">إضافة ملف جديد</button>
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="from_departement">الجهة المرسلة</label>
+                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                                id="extern-department-dev" data-bs-target="#extern-department">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                            <select id="from_departement" name="from_departement" class="form-control">
+                                <option value="">اختر الجهة</option>
+                                @foreach ($departments as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                </div> --}}
-
-
-                <div class="form-row d-flex justify-content-center">
+                    <div class="form-row mx-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10">
+                            <label for="exampleFormControlTextarea1">ملاحظات </label>
+                            <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> </textarea>
+                        </div>
+                    </div>
+                  
+                <div class="form-row mx-2 d-flex justify-content-center">
                     <div class="form-group  col-md-10 ">
                         <label for="files"> اضف ملفات بحد اقصي 10 </label>
                     </div>
@@ -146,7 +111,7 @@
                         <div class=" fileupload d-inline">
                             <div class="d-flex">
                                 <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control">
-                            <button class="btn-all mx-1" onclick="uploadFiles()" style="color:green;"> اضف </button>
+                            <button class="btn-all mx-1" type="button" onclick="uploadFiles()" style="color:green;"> اضف </button>
                             </div>
                             <div class="space-uploading">
                                 <ul id="fileList" class="d-flex flex-wrap">
@@ -178,37 +143,40 @@
 
                         </button>
                     </div>
-                </div>
+                
         </div><br>
+                    <!-- <div class="form-row d-block ">
+                        <div class="form-group col-md-12">
+                            <label for="files">اضافة ملف</label>
+                            <div id="fileInputs">
+                                <div class="file-input mb-3" dir="rtl">
+                                    <input type="file" name="files[]" class="form-control">
+                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row" dir="rtl">
+                        <button type="button" class="btn-all btn-sm mt-2" id="addFile"
+                            style="background-color: #FAFBFD; border: none;"><img
+                                src="{{ asset('frontend/images/add-btn.svg') }}" alt="">إضافة ملف جديد
+                        </button>
 
-        <!-- <div class="form-group mt-4   col-10 d-flex " dir="rtl">
-                    <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
-                        data-bs-target="#extern-user" style="color: #0D992C;">
-                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                        اضافة شخص خارجى
-                    </button>
-
-                    <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
-                        data-bs-target="#extern-department" style="color: #0D992C;">
-                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                        اضافة أداره خارجيه
-                    </button>
-                </div><br> -->
-
-    <div class="container col-10  mb-3 ">
-        <div class="form-row col-10 " dir="ltr">
-            <button class="btn-blue " type="submit">
-                اضافة </button>
+                    </div> <br> -->
+            </div>
+            <div class="container col-10 mt-5 mb-3 ">
+                <div class="form-row col-10 " dir="ltr">
+                    <button class="btn-blue " type="submit">
+                        اضافة </button>
+                </div>
+            </div>
+            <br>
+            </form>
         </div>
     </div>
-    <br>
-    </form>
-</div>
-</div>
-</div>
-</div>
-
-</div>
+    </div>
+    </div>
+    </div>
 
 
 {{-- model for add new department --}}
