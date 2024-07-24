@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inline File Upload with Delete Button</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom CSS for file list */
+    #fileList {
+      display: flex;
+      flex-wrap: wrap;
+      list-style: none;
+      padding: 0;
+    }
+    #fileList li {
+      width: calc(20% - 10px); /* Adjust width to fit 5 files per row with margin */
+      margin: 5px;
+      position: relative;
+    }
+    @media (max-width: 768px) {
+      #fileList li {
+        width: calc(50% - 10px); /* Adjust width for smaller screens to fit 2 files per row */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container " dir="rtl">
+<h2> اضف ملفات ب</h2>
+    <input type="file" id="fileInput" multiple class="mb-2">
+    <button class="btn btn-primary mb-2" onclick="uploadFiles()">اضافة ملف </button>
+
+    <ul id="fileList" class="d-flex flex-wrap">
+      <!-- Uploaded files will be listed here -->
+    </ul>
+  </div>
+
+  <script>
+    function uploadFiles() {
+      const files = document.getElementById('fileInput').files;
+      const fileList = document.getElementById('fileList');
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        // Check if file with the same name already exists in the list
+        let fileExists = false;
+        Array.from(fileList.children).forEach(item => {
+          if (item.dataset.filename === file.name) {
+            fileExists = true;
+          }
+        });
+
+        if (!fileExists) {
+          const listItem = document.createElement('li');
+          listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+          listItem.dataset.filename = file.name; // Store filename as dataset attribute
+
+          const fileName = document.createElement('span');
+          fileName.textContent = file.name;
+
+          const deleteButton = document.createElement('button');
+          deleteButton.className = 'btn btn-danger btn-sm';
+          deleteButton.textContent = 'Delete';
+          deleteButton.onclick = function() {
+            fileList.removeChild(listItem);
+          };
+
+          listItem.appendChild(fileName);
+          listItem.appendChild(deleteButton);
+          fileList.appendChild(listItem);
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

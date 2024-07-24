@@ -13,15 +13,54 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class IoTelegramController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(IoTelegramDataTable $dataTable)
+    public function index()
     {
-        return $dataTable->render('iotelegram.index');
+        return view('iotelegram.index');
+    }
+    public function archives()
+    {
+        return view('iotelegram.archive');
+    }
+    public function getArchives()
+    {
+        $IoTelegrams = Iotelegram::where('active', 1)->with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        foreach ($IoTelegrams as  $IoTelegram) {
+            $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
+                $IoTelegram->internal_department->name :
+                $IoTelegram->external_department->name;
+            $IoTelegram['archives'] = CheckUploadIoFiles($IoTelegram->id);
+            $IoTelegram['type'] = ($IoTelegram->type == 'in') ? 'داخلي' : 'خارجي';
+        }
+        return DataTables::of($IoTelegrams)
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+    public function getIotelegrams()
+    {
+        $IoTelegrams = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        foreach ($IoTelegrams as  $IoTelegram) {
+            $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
+                $IoTelegram->internal_department->name :
+                $IoTelegram->external_department->name;
+            $IoTelegram['archives'] = CheckUploadIoFiles($IoTelegram->id);
+            $IoTelegram['type'] = ($IoTelegram->type == 'in') ? 'داخلي' : 'خارجي';
+        }
+        return DataTables::of($IoTelegrams)
+            ->rawColumns(['action'])
+            ->make(true);
     }
     /**
      * Show the form for creating a new resource.
@@ -30,7 +69,7 @@ class IoTelegramController extends Controller
     {
         //
         $representives = Postman::all();
-        $recieves = User::all();
+        $recieves = getEmployees();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
         return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments'));
@@ -90,9 +129,9 @@ class IoTelegramController extends Controller
     public function show($id)
     {
         //
-        $iotelegram = Iotelegram::find($id);
+        $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
         $representives = Postman::all();
-        $recieves = User::all();
+        $recieves = getEmployees();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
 
@@ -106,10 +145,10 @@ class IoTelegramController extends Controller
     {
         //
         $representives = Postman::all();
-        $recieves = User::all();
+        $recieves = getEmployees();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-        $iotelegram = Iotelegram::find($id);
+        $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
 
         return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram', 'external_departments'));
     }
@@ -169,14 +208,14 @@ class IoTelegramController extends Controller
             'national_id' => 'required|unique:postmans,national_id',
             'modal_department_id' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
             ], 422); // HTTP 422 Unprocessable Entity
         }
-    
+
         $Postman = new Postman();
         $Postman->name = $request->name;
         $Postman->phone1 = $request->phone1;
@@ -184,15 +223,15 @@ class IoTelegramController extends Controller
         $Postman->department_id = $request->modal_department_id;
         $Postman->national_id = $request->national_id;
         $Postman->save();
-    
+
         return response()->json([
             'success' => true,
             'message' => 'Postman created successfully',
             'postman' => $Postman // Optionally return the created postman object
         ], 201); // HTTP 201 Created
     }
-    
-    
+
+
     //external department
     public function addExternalDepartmentAjax(Request $request)
     {

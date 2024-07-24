@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class outgoings extends Model
 {
     use HasFactory;
+    protected $table = 'outgoings';
     protected $fillable = [ 
         "name",
         "num",

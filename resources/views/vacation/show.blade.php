@@ -7,7 +7,7 @@
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('vacations.list') }}">الاجازات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href="">عرض</a></li>
             </ol>
@@ -39,7 +39,7 @@
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">اسم الموظف:</th>
                             <td>
-                                {{-- {{ $vacation->employee->name }} --}}
+                                {{ $vacation->employee ? $vacation->employee->name : '____________' }}
                             </td>
                         </tr>
                         <tr>
@@ -49,6 +49,29 @@
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> تاريخ النهاية:</th>
                             <td>{{ $vacation->date_to }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-11 mb-3 px-5 mt-2">
+                                        <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
+                                            data-image="{{ asset($vacation->report_image) }}"
+                                            data-title="{{ $vacation->report_image }}">
+                                            <img src="{{ asset($vacation->report_image) }}" class="img-thumbnail mx-2"
+                                                alt="{{ $vacation->report_image }}"> <br> <br>
+                                            <a id="downloadButton"
+                                                href="{{ route('vacation.downlaodfile', ['id' => $vacation->id]) }}"
+                                                class="btn-download"><i class="fa fa-download" style="color:green;"></i>
+                                                تحميل الملف
+                                            </a>
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+                            </td>
                         </tr>
 
 

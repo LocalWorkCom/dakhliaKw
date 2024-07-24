@@ -1,10 +1,18 @@
 @media (max-width: 1600px){
-    li {
+    /* li {
         width: 180px;
-        /* margin-inline: 9px; */
+        margin-inline: 9px;
+    } */
+
+    .nav-item {
+        display: inline-block;
+        padding: 1px 2px;
+        cursor: pointer;
+        position: relative;
+        padding-inline: 65px;
     }
     .first-section {
-        margin-left: -35px;
+        margin-left: -84px;
     }
     .container-responsive {
         display: none;
@@ -95,11 +103,21 @@
     .container-responsive {
         display: none;
     }
-   
+
 }
 @media (max-width: 1400px){
-    li {
+    /* li {
         width: 135px;
+    } */
+    .nav-item {
+        display: inline-block;
+        padding: 1px 2px;
+        cursor: pointer;
+        position: relative;
+        padding-inline: 62px;
+    }
+    .first-section {
+        margin-left: -30px;
     }
     .container-responsive {
         display: none;
@@ -188,8 +206,15 @@
         height: 160px;
         margin: 0px;
     }
+    .nav-item {
+        display: inline-block;
+        padding: 1px 2px;
+        cursor: pointer;
+        position: relative;
+        padding-inline: 46px;
+    }
     .first-section {
-        margin-left: -10px;
+        margin-left: -50px;
     }
     .container-responsive {
         display: none;
@@ -264,8 +289,18 @@
     .navbar{
         width: 100%;
     }
-    li {
+    /* li {
         width: 123px;
+    } */
+    .first-section {
+        margin-left: -40px;
+    }
+    .nav-item {
+        display: inline-block;
+        padding: 1px 2px;
+        cursor: pointer;
+        position: relative;
+        padding-inline: 35px;
     }
     .container-responsive {
         display: none;
@@ -343,8 +378,15 @@
         margin-right: 15px;
         font-size: 23px;
     }
-    li {
+    /* li {
         width: 115px;
+    } */
+    .nav-item {
+        display: inline-block;
+        padding: 1px 2px;
+        cursor: pointer;
+        position: relative;
+        padding-inline: 59px;
     }
     .second-section input {
         width: 120px;
@@ -379,23 +421,24 @@
     }
 }
 @media (max-width: 768px){
-    .navbar {
-        width: 100%;
-        height: 100%;
-        padding-bottom: 10px;
-        justify-content: flex-end;
-        display: flex;
-    }
+ 
     .first-section {
-        margin-left: 8px;
+        margin-left: -33px;
     }
     .navbar-nav{
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
     }
-    li {
+    /* li {
         width: 71px;
+    } */
+    .nav-item {
+        display: inline-block;
+        padding: 1px 2px;
+        cursor: pointer;
+        position: relative;
+        padding-inline: 19px;
     }
     .bell {
         margin-right: 15px;
@@ -410,7 +453,7 @@
         height: 35px;
         font-size: 14px;
     }
-   
+
     li img {
         width: 22px;
         height: 22px;
@@ -502,7 +545,7 @@
     display: none;
 }
 .first-section {
-    margin-left: 0px;
+    margin-left: 114px;
 }
 .second-section .btn-2 {
     font-size: 14px;
@@ -518,7 +561,7 @@
     width: 355px;
 }
 .first-section h2 {
-    font-size: 15px;
+    font-size: 19px;
     line-height: 80px;
     margin-right: 1px;
 }
@@ -546,6 +589,32 @@
         width: 110px;
         margin-left: 20px;
     }
+    .header-side {
+        height: 50px;
+    }
+    .name {
+        text-align: center;
+        padding: 30px;
+        display: block;
+        width: 175px;
+    }
+    .name p {
+        font-size: 22px;
+        line-height: 0px;
+    }
+    .name h3 {
+        font-size: 21px;
+        line-height: 52px;
+    }
+    .name button {
+        width: 103px;
+        height: 29px;
+        padding: 1px 15px 10px 15px;
+        font-size: 20px;
+    }
+    .first-section {
+        margin-left: 0px;
+    }
     .first-section h2 {
         font-size: 15px;
         line-height: 80px;
@@ -569,18 +638,18 @@
         padding-right: 15px;
     }
     .progress {
-        width: 115px;
-        height: 115px;
+        width: 100px;
+        height: 101px;
     }
     .progress .progress-value {
-        font-size: 22px;
-        line-height: 135px;
-        top: -8%;
+        font-size: 20px;
+        line-height: 121px;
+        top: -12%;
         left: 12%;
     }
     .progress .progress-bar {
-        border-width: 18px;
-    
+        border-width: 16px;
+
 }
 }
 @media (max-width: 380px){
@@ -594,6 +663,12 @@
     }
     .upper-navbar {
         height: 70px;
+    }
+    .name {
+        text-align: center;
+        padding: 0px;
+        display: block;
+        width: 146px;
     }
     .second-section .btn-2 {
         font-size: 13px;
@@ -632,26 +707,48 @@
         font-size: 15px;
     }
     .name p {
-        font-size: 23px;
+        font-size: 20px;
         line-height: 0px;
     }
     .name h3 {
-        font-size: 22px;
-        line-height: 70px;
+        font-size: 19px;
+        line-height: 40px;
     }
     .name button {
-        width: 184px;
-        height: 33px;
-        padding: 6px 27px 10px 27px;
+        width: 90px;
+        height: 30px;
+        padding: 1px 15px 10px 15px;
     }
     footer p {
         font: 20px;
         font-weight: 700;
         font-size: 12px;
     }
+    .header-side p {
+        font-size: 23px;
+        line-height: 82.18px;
+        padding-top: 21px;
+        padding-right: 6px;
+    }
+    .header-side {
+        height: 45px;
+    }
     footer {
         height: 40px;
         padding: 9px;
+    }
+    .progress {
+        width: 75px;
+        height: 75px;
+    }
+    .progress .progress-value {
+        font-size: 19px;
+        line-height: 114px;
+        top: -15%;
+        left: 12%;
+    }
+    .progress .progress-bar {
+        border-width: 14px;
     }
 }
 @media (max-width: 340px){
@@ -684,26 +781,30 @@
         font-size: 22px;
     }
     .progress {
-        width: 95px;
-        height: 95px;
+        width: 65px;
+        height: 65px;
     }
     .progress .progress-value {
-        font-size: 18px;
-        line-height: 135px;
+        font-size: 15px;
+        line-height: 95px;
         top: -18%;
         left: 12%;
     }
     .progress .progress-bar {
-        border-width: 13px;
+        border-width: 11px;
     }
     .name p {
-        font-size: 22px;
+        font-size: 20px;
         line-height: 0px;
     }
+    .name h3 {
+        font-size: 19px;
+        line-height: 40px;
+    }
     .name button {
-        width: 165px;
-        height: 33px;
-        padding: 6px 27px 10px 27px;
+        width: 90px;
+        height: 30px;
+        padding: 1px 15px 10px 15px;
     }
     .first-section img {
         height: 45px;
