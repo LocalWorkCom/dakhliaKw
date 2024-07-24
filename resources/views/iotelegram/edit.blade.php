@@ -8,7 +8,7 @@
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('iotelegrams.list') }}">الواردات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
             </ol>
@@ -372,7 +372,7 @@
                     var fileCount = $('#fileInputs').find('.file-input').length;
                     if (fileCount < files_num) {
                         var newInput = '<div class="file-input mb-3">' +
-                            '<input type="file" name="files[]" class="form-control-file" required>' +
+                            '<input type="file" name="files[]" class="form-control" required>' +
                             '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
                             '</div>';
                         $('#fileInputs').append(newInput);
