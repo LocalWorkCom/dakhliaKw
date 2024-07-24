@@ -47,7 +47,7 @@ class PermissionController extends Controller
             }
         }
 
-        dd($models);
+        // dd($models);
         return $models;
     }
 
