@@ -102,9 +102,9 @@
                         <li style="list-style: inside;">
                             <a href="{{ route('vacations.list') }}">الاجازات</a>
                         </li>
-                        <li style="list-style: inside;">
+                     <!--    <li style="list-style: inside;">
                             <a href="#">الشيفتات</a>
-                        </li>
+                        </li> -->
                         {{-- <li style="list-style: inside;">
                             <a href="#">الاجازات</a>
                         </li> --}}
