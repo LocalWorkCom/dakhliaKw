@@ -54,7 +54,7 @@
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label for="select-person-to">الشخص الصادر </label>
+                            <label for="select-person-to"> الموظف المستلم </label>
                             <select id="select-person-to" name="person_to" class="form-control">
                                 <option disabled> اختر من القائمه</option>
                                 @foreach ($users as $user)
