@@ -107,14 +107,14 @@
                     var value = $('#vacation_type_id option:selected').val();
                     console.log(value);
                     if (value == '3') {
-                        $('#reportImage-div').css('display', 'none !important');
+                        $('#reportImage-div').hide()
                         $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', true);
                         $('#employee_id').removeAttr('required');
 
                     } else if (value == '4') {
-                        $('#reportImage-div').css('display', 'none !important');
+                        $('#reportImage-div').hide()
 
                         $('#date_to').prop('disabled', true);
                         if (!id) {
@@ -124,14 +124,14 @@
                         }
 
                     } else if (value == '2') {
-                        $('#reportImage-div').css('display', 'block');
+                        $('#reportImage-div').show();
                         $('#date_to').prop('disabled', false);
                         if (!id) {
                             $('#employee_id').prop('disabled', false);
                             $('#employee_id').attr('required', true);
                         }
                     } else {
-                        $('#reportImage-div').css('display', 'none !important');
+                        $('#reportImage-div').hide()
                         $('#date_to').prop('disabled', false);
                         if (!id) {
 
