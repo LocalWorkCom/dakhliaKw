@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use App\DataTables\PermissionRoleDataTable;
 use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
+use Illuminate\Validation\Rule as ValidationRule;
 
 class PermissionController extends Controller
 {
@@ -41,9 +43,9 @@ class PermissionController extends Controller
 
             // Check if the class exists and is an instance of Eloquent Model
             if (class_exists($modelClass) && is_subclass_of($modelClass, 'Illuminate\Database\Eloquent\Model')) {
-                $translatedName = __('models.' . $modelName);
+                // $translatedName = __('models.' . $modelName);
 
-                $models[] = $translatedName;
+                $models[] = $modelName;
             }
         }
 
@@ -88,10 +90,34 @@ class PermissionController extends Controller
     public function store(Request $request , PermissionRoleDataTable $dataTable)
     {
         // dd($request);
-        $request->validate([
-            'name' => 'required|string|unique:permissions,name',
-            'model' => 'required|string',
-        ]);
+        $messages = [
+            'model.required' => 'القسم  مطلوب ولا يمكن تركه فارغاً.',
+            'model.unique' => 'القسم  الذي أدخلته موجود بالفعل.',
+
+            'name.required' => 'الصلاحية  مطلوب ولا يمكن تركه فارغاً.',
+            // 'name.unique' => 'رقم الهاتف يجب أن يكون نصاً.',
+
+            // Add more custom messages here
+        ];
+        
+        $validatedData = Validator::make($request->all(), [
+            'model' => [
+                'required',
+                'string',
+                'max:255',
+                ValidationRule::unique('permissions', 'guard_name'),
+            ],
+            'name' => 'required|unique:permissions,name',
+            
+        ], $messages);
+    
+    
+
+    // Handle validation failure
+    if ($validatedData->fails()) {
+        return redirect()->back()->withErrors($validatedData)->withInput();
+    }
+        
 
         $nameModel = $request->name . " " . $request->model;
 
@@ -165,11 +191,33 @@ class PermissionController extends Controller
 
     public function update(Request $request, Permission $permission)
     {
-        $request->validate([
-            'name' => 'required|string|unique:permissions,name,' . $permission->id,
-            'model' => 'required|string',
-        ]);
+        $messages = [
+            'model.required' => 'القسم  مطلوب ولا يمكن تركه فارغاً.',
+            // 'model.unique' => 'القسم  الذي أدخلته موجود بالفعل.',
 
+            'name.required' => 'الصلاحية  مطلوب ولا يمكن تركه فارغاً.',
+            // 'name.unique' => 'رقم الهاتف يجب أن يكون نصاً.',
+
+            // Add more custom messages here
+        ];
+        
+        $validatedData = Validator::make($request->all(), [
+            'model' => [
+                'required',
+                'string',
+                'max:255',
+                // ValidationRule::unique('permissions', 'guard_name'),
+            ],
+            'name' => 'required|unique:permissions,name',
+            
+        ], $messages);
+    
+    
+
+    // Handle validation failure
+    if ($validatedData->fails()) {
+        return redirect()->back()->withErrors($validatedData)->withInput();
+    }
         $nameModel = $request->name . " " . $request->model;
 
         try {

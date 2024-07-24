@@ -40,6 +40,7 @@
             <div class="p-5">
 
 
+                {{-- {{dd($flag)}} --}}
 
                 <form action="{{ route('user.store') }}" method="post" class="text-right" enctype="multipart/form-data">
                     @csrf
@@ -63,11 +64,15 @@
                         </div>
                     </div>
                     <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="military_number">رقم العسكرى</label>
-                            <input type="text" id="military_number" name="military_number" class="form-control"
-                                required>
-                        </div>
+                        @if ($flag == "0")
+                            <div class="form-group col-md-5 mx-2" >
+                                <label for="military_number">رقم العسكرى</label>
+                                <input type="text" id="military_number" name="military_number" class="form-control"
+                                    >
+                            </div>
+                        @endif
+                        
+
                         <div class="form-group col-md-5 mx-2">
                             <label for="phone">رقم المحمول</label>
                             <input type="text" id="phone" name="phone" class="form-control" required>
@@ -119,18 +124,26 @@
                     <label class="form-check-label mx-2" for="myCheckbox">عسكرى</label>
                 </div>
             </div>
-       
-                        <div class="form-row mx-2 d-flex justify-content-center">
-                <div class="form-group col-md-10 " id="grade" style="display: none;">
-                    <label for="grade_id">الرتبة</label>
-                    <select class="custom-select custom-select-lg mb-3" name="grade_id" id="grade_id">
-                        <option selected disabled>Open this select menu</option>
-                        @foreach ($grade as $item)
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                        {{-- <option value=""></option> --}}
-                        @endforeach
-                    </select>
-                </div>
+            <div id="grade" style="display: none;">
+                <div class="form-row mx-2 d-flex justify-content-center">
+                   
+                        <div class="form-group col-md-5 ">
+                            <label for="grade_id">الرتبة</label>
+                            <select class="custom-select custom-select-lg mb-3" name="grade_id" id="grade_id">
+                                <option selected disabled>Open this select menu</option>
+                                @foreach ($grade as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                {{-- <option value=""></option> --}}
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5 mx-2" >
+                            <label for="military_number">رقم العسكرى</label>
+                            <input type="text" id="military_number" name="military_number" class="form-control"
+                                >
+                        </div>
+                    </div>
+                
             </div>
             <div class="form-row mx-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-2">
