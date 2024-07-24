@@ -873,8 +873,9 @@ table.dataTable.no-footer {
     background-color: #fff;
     border: 1px solid #dee2e6;
     border-radius: .25rem;
-    max-width: 100%;
+    /* max-width: 100%; */
     height: 100px !important;
+    width: 200px !important;
 }
 .btn-download {
 cursor: pointer;
@@ -897,3 +898,91 @@ select.form-control:not([size]):not([multiple]) {
     height: calc(2.25rem + 2px);
     direction: rtl !important;
 }
+
+/* ******** header collapse ******  */
+@media (max-width: 767px) {
+    .navbar-collapse {
+      position: fixed;
+      top: 0;
+      right: -100%; /* Initially off-screen */
+      width: 40%; /* Adjust width as needed */
+      height: 100%;
+      background-color: #ffffff; /* Background color of the navbar */
+      transition: right 0.3s ease; /* Smooth transition animation */
+      z-index: 1000; /* Ensure it's above other content */
+      overflow-y: auto; /* Enable vertical scroll */
+    }
+  
+    .navbar-collapse.show {
+      right: 0; /* Show the navbar by bringing it to the screen */
+    }
+  
+    .navbar-nav {
+      width: 100%; /* Ensure full width for the list */
+      padding: 20px; /* Adjust padding as needed */
+      text-align: right; /* Right-align the navbar items */
+      display: flex; /* Use flexbox to arrange items */
+      flex-direction: column-reverse; /* Reverse the order of items */
+    }
+  
+    .navbar-nav .nav-item {
+      margin-bottom: 10px; /* Adjust spacing between items */
+    }
+  
+    .navbar-nav .nav-link {
+      color: #333333; /* Color of the nav links */
+      font-size: 16px; /* Adjust font size as needed */
+      font-weight: bold; /* Adjust font weight as needed */
+    }
+  
+    .navbar-nav .nav-item img {
+      width: 24px; /* Adjust image size as needed */
+      margin-right: 10px; /* Adjust spacing between image and text */
+    }
+    .navbar-collapse::-webkit-scrollbar {
+      width: 5px;
+    }
+  
+    .navbar-collapse::-webkit-scrollbar-track {
+      background: #ffffff; /* Track color */
+    }
+  
+    .navbar-collapse::-webkit-scrollbar-thumb {
+      background-color: #b3b1b1; /* Thumb color */
+      border-radius: 10px;
+      height:5px;
+    }
+  
+    /* Optional: Handle on hover */
+    .navbar-collapse::-webkit-scrollbar-thumb:hover {
+      background-color: #b3b1b1; /* Hover color */
+    }
+  }
+
+  /* ************* for file upload ***************  */
+  #fileList {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+  }
+  #fileList li {
+    margin: 5px;
+    position: relative;
+    height: 50px ;
+    width: 250px;
+    font-size: 12px;
+  }
+ 
+ .btn-danger {
+    /* margin-inline: 50px; */
+    width: auto;
+}
+  #fileInput{
+    width: 95%;
+  }
+  @media (max-width: 768px) {
+    #fileList li {
+      width: calc(50% - 10px); /* Adjust width for smaller screens to fit 2 files per row */
+    }
+  }
