@@ -40,10 +40,10 @@
                 </div>
             </div>
 
-            <div class="container col-10 mt-4" style="border:0.5px solid #C7C7CC;">
+            <div class="container col-10 mt-4 pb-3 " style="border:0.5px solid #C7C7CC;">
 
-                <div class="form-row pt-4">
-                    <div class="form-group col-md-6 ">
+                <div class="form-row pt-4 mx-3 d-flex justify-content-center">
+                    <div class="form-group col-md-5 mx-2 ">
                         <label for="representive_id">اختر المندوب </label>
                         <select id="representive_id" name="representive_id" class="form-control" required>
                             <option value="">اختر المندوب</option>
@@ -52,7 +52,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="recieved_by">الموظف المستلم</label>
                         <select id="recieved_by" name="recieved_by" class="form-control" required>
                             <option value="">اختر الموظف</option>
@@ -62,12 +62,12 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
+                <div class="form-row mx-3 d-flex justify-content-center">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="date">التاريخ:</label>
                         <input type="date" id="date" name="date" class="form-control" required>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="from_departement">الجهة المرسلة</label>
 
                         <!-- <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
@@ -82,8 +82,8 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
+                <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-group col-md-10">
                         <label for="files_num"> عدد الكتب</label>
 
                         <select id="files_num" name="files_num" class="form-control" required>
@@ -96,29 +96,26 @@
                 </div>
                
 
-                <div class="form-row d-flex  mt-1 " dir="rtl">
-                    <div class="form-group">
-                    <label for="files"> اضف ملفات بحد اقصي 10 </label>
+                <div class="form-row d-flex justify-content-center">
+                    <div class="form-group  col-md-10 ">
+                        <label for="files"> اضف ملفات بحد اقصي 10 </label>
                     </div>
-                    <div class="form-group col-md-12 " dir="rtl">
+                    <div class="form-group col-md-10 " dir="rtl">
                         <div class=" fileupload d-inline">
-                            <input id="fileInput" type="file" name="files[]" multiple class="mb-2">
+                            <div class="d-flex">
+                                <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control">
                             <button class="btn-all mx-1" onclick="uploadFiles()" style="color:green;"> اضف </button>
-
+                            </div>
                             <div class="space-uploading">
-                            <ul id="fileList" class="d-flex flex-wrap">
-                                <!-- Uploaded files will be listed here -->
-                            </ul>
+                                <ul id="fileList" class="d-flex flex-wrap">
+                                    <!-- Uploaded files will be listed here -->
+                                </ul>
                             </div>
                         </div>
-                        <!-- <label for="files">اضافة ملف</label>
-                            <div id="fileInputs">
-                                <div class="file-input mb-3" dir="rtl">
-                                    <input type="file" name="files[]" class="form-control"> -->
-                        <!-- <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button> -->
                     </div>
                 </div>
-                <div class="form-row mb-5" dir="rtl">
+                <div class="form-row d-flex  justify-content-center" dir="rtl">
+                <div class="form-group d-flex justify-content-start col-md-10 " >
                     <button type="button" class="btn-all  mx-3" data-bs-toggle="modal"
                         data-bs-target="#representative" data-dismiss="modal" id="representative-dev"
                         style="background-color: #FAFBFD; border: none;">
@@ -129,7 +126,7 @@
                         style="background-color: #FAFBFD; border: none; display: none;">
                         <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة جهه جديده
                     </button>
-                </div> <br>
+                </div> </div> <br>
            
 
     <!-- <div class="form-row" dir="rtl">
@@ -143,7 +140,7 @@
   
 </div>
 <div class="container col-10 ">
-    <div class="form-row mt-4 mb-5">
+    <div class="form-row mt-5 mb-5">
         <button type="submit" class="btn-blue">حفظ</button>
     </div>
 </div>
