@@ -6,19 +6,15 @@
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="#">المهام </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href="#"> اضافه مهمه</a></li>
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+    
+                    <li class="breadcrumb-item"><a href="{{ route('rule.index') }}">المهام</a></li>
+    
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
             </ol>
         </nav>
     </div>
-    <div class="row ">
-        <div class="container welcome col-11">
-            <p> المــهام </p>
-        </div>
-    </div>
-    <br>
-
+ 
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
 
