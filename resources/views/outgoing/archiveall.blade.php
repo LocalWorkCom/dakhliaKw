@@ -25,19 +25,9 @@
         </div>
         <br>
         <div class="row">
-            <div class="container  col-11 mt-3 p-0 ">
-
-                <div class="row " dir="rtl">
-                    <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                        <button type="button" class="btn-all mx-3 "
-                            onclick="window.location.href='{{ route('Export.index') }}'" style="color: #C1920C;">
-                            <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
-                            رجوع
-                        </button>
-                    </div>
-                </div>
+            <div class="container  col-11 mt-3 p-0 pt-5">
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white ">
 
                         <div>
                             <table id="users-table" class="display table table-bordered table-hover dataTable">

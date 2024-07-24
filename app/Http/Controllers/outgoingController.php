@@ -9,6 +9,7 @@ use App\Models\ExternalDepartment;
 use App\Models\outgoing_files;
 use App\Models\outgoings;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -33,6 +34,7 @@ class outgoingController extends Controller
     {
         $data = outgoings::with(['personTo', 'department_External'])
         ->where('outgoings.active', 0)
+        ->orderBy('created_at','desc')
         ->select('outgoings.*');
        
         return DataTables::of($data)->addColumn('action', function ($row) {
@@ -60,6 +62,7 @@ class outgoingController extends Controller
        
         $data = outgoings::with(['personTo', 'department_External'])
         ->where('outgoings.active', 1)
+        ->orderBy('created_at','desc')
         ->select('outgoings.*');
        
         return DataTables::of($data)->addColumn('action', function ($row) {
@@ -94,7 +97,7 @@ class outgoingController extends Controller
     }
     public function showArchive(outgoingsDataTable $dataTable, Request $request){
         $status = $request->get('status', 'inactive'); // Default to 'inactive' if 
-        return $dataTable->with('status', $status)->render('outgoing.archiveAll');
+        return $dataTable->with('status', $status)->render('outgoing.archiveall');
 
     }
     
@@ -141,21 +144,33 @@ class outgoingController extends Controller
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
             'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
         ];
-
+        $validatedData = Validator::make($request->all(), $rules, $messages);
         // // Validate the request
-        $request->validate($rules, $messages);
+       // $request->validate($rules, $messages);
+        if ($validatedData->fails()) {
+            return redirect()->back()
+                ->withErrors($validatedData)
+                ->with('nameex', $request->name)
+                ->with('note', $request->note)
+                ->with('person_to', $request->person_to)
+                ->with('date', $request->date)
+                ->with('department_id', $request->department_id)
+                ->with('files', $request->files)
+                ->with('num', $request->num);
+        }
         //dd( $request->validate($rules, $messages));
         if(auth()->id()){
+            $user = User::find(auth()->id());
         $export = new outgoings();
         $export->name = $request->nameex;
         $export->num = $request->num;
         $export->note = $request->note;
         $export->date = $request->date;
-
         $export->person_to = $request->person_to  ?  $request->person_to :null;
-        $export->created_by = auth()->id();//auth auth()->id
+        $export->created_by = $user->id;//auth auth()->id
+        $export->created_department = $user->department_id;
         $export->active = $request->active;
-        $export->updated_by = auth()->id();//auth auth()->id
+        $export->updated_by = $user->id;//auth auth()->id
         $export->department_id = $request->from_departement;
         $export->save(); 
     
@@ -179,7 +194,8 @@ class outgoingController extends Controller
             }
         }
       
-        return redirect()->route('Export.index')->with('status', 'تم الاضافة بنجاح');
+        
+        return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }else{
         return redirect()->route('login');
 
@@ -194,7 +210,7 @@ class outgoingController extends Controller
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
         $is_file = outgoing_files::where('outgoing_id', $id)->get();
-       
+        //dd($is_file);
         $departments=ExternalDepartment::all();
 
         return view('outgoing.showdetail', compact('data','users','is_file','departments'));
@@ -250,9 +266,9 @@ class outgoingController extends Controller
         $export->note = $request->note;
         $export->date = $request->date;
         $export->person_to = $request->person_to  ?  $request->person_to :null;
-        $export->created_by = auth()->id();//auth auth()->id
+        $export->created_by = $user->id;//auth auth()->id
         $export->active = $request->active;
-        $export->updated_by = auth()->id();//auth auth()->id
+        $export->updated_by = $user->id;//auth auth()->id
         $export->department_id = $request->department_id;
         $export->created_department =  $user->department_id;
 

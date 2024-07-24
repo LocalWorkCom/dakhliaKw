@@ -3,7 +3,7 @@
 @push('style')
 @endpush
 @section('title')
-التفاصيل
+    التفاصيل
 @endsection
 @section('content')
     <div class="row" style="direction: rtl;">
@@ -23,7 +23,7 @@
 
     <section style="direction: rtl;">
         <div class="row">
-            <div class="container c col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11">
+            <div class="container c col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11 pt-5 pb-4 px-3">
                 <table class="table table-bordered ">
                     <tbody>
                         <tr style="background-color:#f5f6fa;">
@@ -82,10 +82,10 @@
                                                     </div>
                                                 @endif
                                             @endforeach
-                                      
+
                                     </div>
                                 </div>
-                                @else
+                            @else
                                 لا يوجد صور لهذا الصادر
                                 @endif
                             </td>
@@ -94,24 +94,23 @@
                             <th scope="row" style="background: #f5f6fa;"> الملفات المرفقة الاخري </th>
                             <td>
                                 <ul class="list-group">
-                                  @if (!empty($is_file))
-                                    @foreach ($is_file as $file)
-                                        @if ($file->file_type == 'pdf')
-                                            <div class="col-md-11 mb-3 px-5 mt-3">
-                                                <a id="downloadButton"
-                                                    href="{{ route('downlaodfile', $file->id) }}"
-                                                    target="_blank" class="btn-download">
-                                                    <i class="fa fa-download" style="color:green; "> </i>
-                                                    {{ basename($file->real_name) }}</a>
+                            @if (!empty($is_file))
+                                        @foreach ($is_file as $file)
+                                            @if ($file->file_type == 'pdf')
+                                                <div class="col-md-11 mb-3 px-5 mt-3">
+                                                    <a id="downloadButton" href="{{ route('downlaodfile', $file->id) }}"
+                                                        target="_blank" class="btn-download">
+                                                        <i class="fa fa-download" style="color:green; "> </i>
+                                                        {{ basename($file->real_name) }}</a>
 
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                 
+                                                </div>
+                                            @endif
+                                        @endforeach
+
                                 </ul>
-                                @else
+                            @else
                                 لا يوجد ملفات لهذا الصادر
-                                @endif
+                            @endif
                             </td>
                         </tr>
                     </tbody>
@@ -137,9 +136,41 @@
 
             </div>
 
-
+            {{-- Modal for Image Popup --}}
+            <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <img id="modalImage" src="#" class="img-fluid" alt="صورة">
+                        </div>
+                    </div>
+                </div>
+            </div>
     </section>
 @endsection
 
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.image-popup').click(function(event) {
+                event.preventDefault();
+                var imageUrl = $(this).data('image');
+                var imageTitle = $(this).data('title');
+
+                // Set modal image and title
+                $('#modalImage').attr('src', imageUrl);
+                $('#imageModalLabel').text(imageTitle);
+
+                // Show the modal
+                $('#imageModal').modal('show');
+            });
+        });
+    </script>
 @endpush
