@@ -6,25 +6,19 @@
 <div class="row col-11" dir="rtl">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-            <li class="breadcrumb-item"><a href="#">الموظفين </a></li>
-            <li class="breadcrumb-item active" aria-current="page"> <a href="#"> اضافه موظف</a></li>
+            <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+
+                @if (url()->current() == url('/users_create/0'))
+                <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
+
+                @elseif (url()->current() == url('/users_create/1'))
+                <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
+
+                @endif
+            <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
         </ol>
     </nav>
 </div>
-<div class="row ">
-@if (url()->current() == url('/users/0'))
-                <div class="container welcome col-11">
-                    <p>المستخـــــــــــدمين</p>
-                </div>
-            @elseif (url()->current() == url('/employees/1'))
-                <div class="container welcome col-11">
-                    <p>المـــــــــــوظفين</p>
-                </div>
-            @endif
-</div>
-<br>
-
 <div class="row">
     <div class="container  col-11 mt-3 p-0 ">
         <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">

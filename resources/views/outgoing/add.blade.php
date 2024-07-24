@@ -50,8 +50,8 @@
                                 required>
                         </div>
                         <div class="form-group col-md-5 mx-2 ">
-                            <label for="select-person-to">person_to </label>
-                            <select id="select-person-to" name="person_to" class="form-control">
+                            <label for="select-person-to">الموظف المستلم </label>
+                            <select id="mySelect" name="person_to" class="form-control js-example-basic-single" >
                                 <option value="" disabled selected> اختر من القائمه</option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}">
@@ -234,6 +234,16 @@
     @endsection
 
     @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+
+        <script>
+            $(document).ready(function() {
+                $('.js-example-basic-single').select2();
+            });
+        </script>
+
+        </script>
         <script>
             $(document).ready(function() {
 

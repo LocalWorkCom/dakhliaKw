@@ -94,7 +94,7 @@ class outgoingController extends Controller
     }
     public function showArchive(outgoingsDataTable $dataTable, Request $request){
         $status = $request->get('status', 'inactive'); // Default to 'inactive' if 
-        return $dataTable->with('status', $status)->render('outgoing.archiveAll');
+        return $dataTable->with('status', $status)->render('outgoing.archiveall');
 
     }
     
@@ -146,16 +146,17 @@ class outgoingController extends Controller
         $request->validate($rules, $messages);
         //dd( $request->validate($rules, $messages));
         if(auth()->id()){
+            $user = User::find(auth()->id());
         $export = new outgoings();
         $export->name = $request->nameex;
         $export->num = $request->num;
         $export->note = $request->note;
         $export->date = $request->date;
-
         $export->person_to = $request->person_to  ?  $request->person_to :null;
-        $export->created_by = auth()->id();//auth auth()->id
+        $export->created_by = $user->id;//auth auth()->id
+        $export->created_department = $user->department_id;
         $export->active = $request->active;
-        $export->updated_by = auth()->id();//auth auth()->id
+        $export->updated_by = $user->id;//auth auth()->id
         $export->department_id = $request->from_departement;
         $export->save(); 
     
@@ -250,9 +251,9 @@ class outgoingController extends Controller
         $export->note = $request->note;
         $export->date = $request->date;
         $export->person_to = $request->person_to  ?  $request->person_to :null;
-        $export->created_by = auth()->id();//auth auth()->id
+        $export->created_by = $user->id;//auth auth()->id
         $export->active = $request->active;
-        $export->updated_by = auth()->id();//auth auth()->id
+        $export->updated_by = $user->id;//auth auth()->id
         $export->department_id = $request->department_id;
         $export->created_department =  $user->department_id;
 

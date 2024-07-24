@@ -41,8 +41,9 @@ class settingController extends Controller
         $data = Government::get();
        
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<a class="btn btn-primary btn-sm" href=' . route('government.edit', $row->id) . '>تعديل</a>
-            <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>' ;
+            return '<a class="btn btn-primary btn-sm" href=' . route('government.edit', $row->id) . '>تعديل</a>' ;
+            
+            // <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -105,8 +106,9 @@ class settingController extends Controller
        
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<a class="btn btn-primary btn-sm" href=' . route('job.edit', $row->id) . '>تعديل</a>
-            <a class="btn btn-primary btn-sm" href=' . route('job.show', $row->id) . '>التفاصيل</a>
             <a class="btn btn-primary btn-sm"  onclick="opendelete('.$row->id.')">حذف</a>' ;
+            // <a class="btn btn-primary btn-sm" href=' . route('job.show', $row->id) . '>التفاصيل</a>
+
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -186,8 +188,9 @@ class settingController extends Controller
        
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<a class="btn btn-primary btn-sm" href=' . route('grads.edit', $row->id) . '>تعديل</a>
-            <a class="btn btn-primary btn-sm" href=' . route('grads.show', $row->id) . '>التفاصيل</a>
             <a class="btn btn-primary btn-sm"  onclick="opendelete('.$row->id.')">حذف</a>' ;
+            // <a class="btn btn-primary btn-sm" href=' . route('grads.show', $row->id) . '>التفاصيل</a>
+
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -266,8 +269,9 @@ class settingController extends Controller
          
           return DataTables::of($data)->addColumn('action', function ($row) {
               return '<a class="btn btn-primary btn-sm" href=' . route('vacationType.edit', $row->id) . '>تعديل</a>
-              <a class="btn btn-primary btn-sm" href=' . route('vacationType.show', $row->id) . '>التفاصيل</a>
               <a class="btn btn-primary btn-sm"  onclick="opendelete('.$row->id.')">حذف</a>' ;
+            //   <a class="btn btn-primary btn-sm" href=' . route('vacationType.show', $row->id) . '>التفاصيل</a>
+
           })
           ->rawColumns(['action'])
           ->make(true);
