@@ -24,7 +24,7 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                        <button type="button" class="btn-all  " onclick="window.location.href='{{ route('job.create') }}'"
+                        <button type="button" class="btn-all  " onclick="openadd()"
                             style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
@@ -56,7 +56,66 @@
         </div>
     </section>
 
-    {{-- model for add to archive  --}}
+    {{-- this for add form --}}
+    <div class="modal fade" id="add" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="lable"> أضافه وظيفه جديد</h5>
+                        <img src="../images/add-mandob.svg" alt="">
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="edit-grade-form" id="add-form" action=" {{ route('job.add') }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label for="name">الاسم</label>
+                            <input type="text" id="nameadd" name="nameadd" class="form-control">
+
+                        </div>
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn-blue" onclick="confirmAdd()">اضافه</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- this for edit form --}}
+    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="lable"> تعديل اسم الوظيفه ؟</h5>
+                        <img src="../images/add-mandob.svg" alt="">
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="edit-grade-form" id="edit-form" action=" {{ route('job.update') }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label for="name">الاسم</label>
+                            <input type="text" id="nameedit" value="" name="name" class="form-control">
+                            <input type="text" id="idedit" value="" name="id" hidden class="form-control">
+
+                        </div>
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- model for delete form --}}
     <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -98,11 +157,38 @@
         function confirmDelete() {
             var id = document.getElementById('id').value;
             var form = document.getElementById('delete-form');
-          
+
             form.submit();
 
         }
 
+        function openedit(id, name) {
+            document.getElementById('nameedit').value = name;
+            document.getElementById('idedit').value = id;
+
+            $('#edit').modal('show');
+
+
+        }
+
+        function confirmEdit() {
+            var id = document.getElementById('id').value;
+            var form = document.getElementById('edit-form');
+
+            form.submit();
+
+        }
+        function openadd() {
+            $('#add').modal('show');
+        }
+
+        function confirmAdd() {
+            var name = document.getElementById('nameadd').value;
+            var form = document.getElementById('add-form');
+
+            form.submit();
+
+        }
         $(document).ready(function() {
             $('#users-table').DataTable({
                 processing: true,
