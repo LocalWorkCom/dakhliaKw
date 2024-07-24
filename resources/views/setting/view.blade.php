@@ -2,7 +2,9 @@
 
 @push('style')
 @endpush
-
+@section('title')
+الاعدادات
+@endsection
 @section('content')
     <div class="container">
 

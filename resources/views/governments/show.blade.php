@@ -3,7 +3,9 @@
 @push('style')
 
 @endpush
-
+@section('title')
+    أضافه
+@endsection
 @section('content')
 <div class="row col-11" dir="rtl">
     <nav aria-label="breadcrumb">
@@ -16,7 +18,7 @@
 </div>
 <div class="row ">
     <div class="container welcome col-11">
-        <p> المحافظات </p>
+        <p> المحـــافظات </p>
     </div>
 </div>
 <br>

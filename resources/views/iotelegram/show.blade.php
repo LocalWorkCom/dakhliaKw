@@ -1,7 +1,7 @@
 @extends('layout.main')
 
 @section('title')
-    عرض
+    التفاصيل
 @endsection
 @section('content')
     <div class="row col-11" dir="rtl">

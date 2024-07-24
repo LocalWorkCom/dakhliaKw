@@ -140,13 +140,12 @@ Route::delete('departments/{department}/delete', [DepartmentController::class, '
 //Start Export routes
 Route::resource('Export', outgoingController::class);
 Route::get('/Export/All/Archive', [outgoingController::class, 'getExportInActive'])->name('Export.view.archive');
-
 Route::get('exports/get/active', [outgoingController::class, 'getExportActive'])->name('exports.view.all');
 Route::get('Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files');
 Route::get('Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
 Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax');
 Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users');
-Route::get('export/archive/add', [outgoingController::class, 'addToArchive'])->name('export.archive.add');
+Route::post('export/archive/add', [outgoingController::class, 'addToArchive'])->name('export.archive.add');
 Route::get('export/archive', [outgoingController::class, 'showArchive'])->name('Export.archive.show');
 
 

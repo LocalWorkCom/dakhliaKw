@@ -1,6 +1,8 @@
 @extends('layout.main')
 
-
+@section('title')
+أضافه قسم
+@endsection
 @section('content')
 <div class="container">
     <h2>اضافة قسم جديد</h2>

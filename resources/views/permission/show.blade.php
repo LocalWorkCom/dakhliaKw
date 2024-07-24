@@ -16,7 +16,7 @@
     </div>
     <div class="row ">
         <div class="container welcome col-11">
-            <p> الصلاحيات </p>
+            <p> الصـــلاحيات </p>
         </div>
     </div>
     <br>

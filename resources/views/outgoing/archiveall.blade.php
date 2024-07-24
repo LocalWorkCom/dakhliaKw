@@ -4,15 +4,25 @@
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
+@section('title')
+الأرشيف
+@endsection
 @section('content')
     <section>
-        <div class="row">
-
+        <div class="row col-11" dir="rtl">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('Export.index') }}">الصادرات </a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> الأرشيف </a></li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row ">
             <div class="container welcome col-11">
-                <p> الصـــــــــادرات</p>
+                <p> الصــــــــــــادرات </p>
             </div>
         </div>
-
         <br>
         <div class="row">
             <div class="container  col-11 mt-3 p-0 ">

@@ -1,4 +1,7 @@
 @extends('layout.main')
+@section('title')
+الرئيسيه
+@endsection
 @section('content')
 
   <div class="row ">
