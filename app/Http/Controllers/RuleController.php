@@ -38,7 +38,10 @@ class RuleController extends Controller
         ->addColumn('permissions', function ($row) { // New column for departments count
             $permission_ids = explode(',', $row->permission_ids);
             $allPermission = Permission::whereIn('id', $permission_ids)->pluck('name')->toArray();
-            return implode(', ', $allPermission);
+            $translatedPermissions = array_map(function ($permission) {
+                return __('permissions.' . $permission);
+            }, $allPermission);
+            return implode(', ', $translatedPermissions);
         })
         ->addColumn('department', function ($row) { // New column for departments count
         

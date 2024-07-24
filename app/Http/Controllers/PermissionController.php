@@ -41,11 +41,13 @@ class PermissionController extends Controller
 
             // Check if the class exists and is an instance of Eloquent Model
             if (class_exists($modelClass) && is_subclass_of($modelClass, 'Illuminate\Database\Eloquent\Model')) {
-                $models[] = $modelName;
+                $translatedName = __('models.' . $modelName);
+
+                $models[] = $translatedName;
             }
         }
 
-        // dd($models);
+        dd($models);
         return $models;
     }
 

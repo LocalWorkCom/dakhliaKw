@@ -71,7 +71,7 @@
                                 <div class="col-6 col-md-4 col-lg-3 my-2">
                                     <div class="form-check">
                                         <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input">
-                                        <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{ $item->name }}</label>
+                                        <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}"> {{__('permissions.' . $item->name)}}</label>
                                     </div>
                                 </div>
                                 @endforeach
