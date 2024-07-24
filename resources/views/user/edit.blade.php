@@ -7,20 +7,22 @@
   <section>
     <div class="row col-11" dir="rtl">
       <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-              <li class="breadcrumb-item"><a href="#">المستخدمين </a></li>
-              <li class="breadcrumb-item active" aria-current="page"> <a href="#"> تعديل مستخدم</a></li>
-          </ol>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+
+              @if ($user->flag == "user")
+              <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
+
+              @elseif ($user->flag == "employee")
+              <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
+
+              @endif
+          <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
+      </ol>
+         
       </nav>
   </div>
-  <div class="row ">
-      <div class="container welcome col-11">
-          <p> المستخـــــــــــدمين </p>
-      </div>
-  </div>
-  <br>
-     
+  
         <div class="row">
           <div class="container  col-11 mt-3 p-0 ">
        
