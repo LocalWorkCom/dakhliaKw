@@ -69,7 +69,7 @@
                     <div class="form-row mx-2">
                         <div class="form-group  col-md-6">
                             <label for="date">تاريخ الصادر </label>
-                            <input type="date" id="date" name="date" class="form-control"
+                            <input type="date" id="date"  name="date" class="form-control"
                                 value="{{ $data->date }}" required>
                         </div>
                         <div class="form-group col-md-6">
@@ -105,20 +105,30 @@
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> {{ $data->note }}</textarea>
                         </div>
                     </div>
-                    <div class="form-row mx-2" dir="rtl">
+                    <div class="form-row d-block ">
                         <div class="form-group col-md-12">
-                            <label for="files">الملفات:</label>
+                            <label for="files">اضافة ملف</label>
                             <div id="fileInputs">
-                                <input type="file" name="files[]" class="form-control">
-                                <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
-
+                                <div class="file-input mb-3" dir="rtl">
+                                    <input type="file" name="files[]" class="form-control">
+                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                </div>
                             </div>
-                            <button type="button" class=" btn-all mx-3" id="addFile">إضافة ملف جديد</button>
                         </div>
                     </div>
                     <div class="form-row" dir="rtl">
-                        <button class="btn-all mx-3" type="submit" style="color: #0D992C;"> <img
-                                src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> تعديل </button>
+                        <button type="button" class="btn-all btn-sm mt-2" id="addFile"
+                            style="background-color: #FAFBFD; border: none;"><img
+                                src="{{ asset('frontend/images/add-btn.svg') }}" alt="">إضافة ملف جديد
+                        </button>
+
+                    </div> <br>
+                
+                    <div class="container col-10 mt-5 mb-5 ">
+                        <div class="form-row col-10 " dir="ltr">
+                            <button class="btn-blue " type="submit">
+                                تعديل </button>
+                        </div>
                     </div>
                     <br>
                 </form>
@@ -212,23 +222,38 @@
 
     @push('scripts')
         <script>
-            $(document).ready(function() {
+              $(document).ready(function() {
                 let fileInputCount = 1;
                 const maxFileInputs = 9;
-
-                $('#addFileInput').click(function() {
-                    if (fileInputCount < maxFileInputs) {
-                        fileInputCount++;
-                        const newFileInput = `
-                        <div class="form-group">
-                            <label for="file${fileInputCount}">File ${fileInputCount}</label>
-                            <input type="file" name="files[]" id="file${fileInputCount}" class="form-control-file">
-                        </div>`;
-                        $('#fileInputs').append(newFileInput);
+                $('#addFile').click(function() {
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount < 10) {
+                        var newInput = '<div class="file-input mb-3">' +
+                            '<input type="file" name="files[]" class="form-control-file" required>' +
+                            '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
+                            '</div>';
+                        $('#fileInputs').append(newInput);
+                        checkFileCount(); // Update button states
                     } else {
-                        alert('You can only add up to 10 files.');
+                        alert('لا يمكنك إضافة المزيد من الملفات.');
                     }
                 });
+
+                // Remove file input
+                $(document).on('click', '.remove-file', function() {
+                    $(this).parent('.file-input').remove();
+                    checkFileCount(); // Update button states
+
+                });
+
+                function checkFileCount() {
+                    var fileCount = $('#fileInputs').find('.file-input').length;
+                    if (fileCount > 1) {
+                        $('.remove-file').prop('disabled', false);
+                    } else {
+                        $('.remove-file').prop('disabled', true);
+                    }
+                }
             });
         </script>
     @endpush
