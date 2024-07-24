@@ -5,7 +5,7 @@ body{
     flex-direction: column;
 }
 main {
-    flex: 1; 
+    flex: 1;
 }
 .upper-navbar{
     background-color: #274373;
@@ -30,7 +30,22 @@ main {
 .navbar-nav li h6:hover , .btn-1:hover , .btn-2:hover , .nav-item , .second-section .bell i:hover{
 cursor: pointer;
 }
+.name {
+    display: flex; /* Use flexbox to align items */
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Distribute items evenly along the row */
+  }
 
+  .small-img {
+    width: 24px; /* Adjust image width as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 10px; /* Adjust spacing between image and button */
+  }
+
+  .order {
+    padding: 8px 16px; /* Adjust button padding as needed */
+    font-size: 14px; /* Adjust button font size as needed */
+  }
 
 
 
@@ -66,7 +81,7 @@ ul {
     left: 0;
     width: 31%;
     height: 4px;
-    background-color: #274373; 
+    background-color: #274373;
     margin-top: 5px;
 } */
 .first-section {
@@ -834,7 +849,7 @@ table.dataTable.no-footer {
     color: #333 !important;
     border: 0.5px solid #979797 !important;
     background-color: #f5f8fd !important;
-  
+
     background: #f5f8fd !important;
 }
 .dataTables_wrapper .dataTables_info {
