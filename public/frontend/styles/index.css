@@ -986,18 +986,4 @@ select.form-control:not([size]):not([multiple]) {
   }
 
 
-  <!--  ***********buttons for table *********** -->
-  /* btn for holidays  */
-  `<a href="#" class="edit btn  btn-sm" style=" background-color:#864824; "><i class="fa-solid fa-mug-hot" ></i></a>`;
-
-/* btn for edit  */
-`<a href="#" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></a>`;
-
-/* btn for show  */
-`<a href="#" class="archive btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>`;
-
-/* btn for archive  */
-`<a href="#" class="archive btn  btn-sm"  style="background-color:#c1920c;"> <i class="fa-solid fa-file-arrow-up"></i> </a>`
-
-/* btn for delete  */
-`<a href="#" class="edit btn  btn-sm" style="background-color: #c91d1d;"><i class="fa-solid fa-trash"></i></a>`;
+ 
