@@ -28,7 +28,7 @@
             @include('inc.flash')
 
             <div class="col-lg-12">
-                <div class="bg-white p-5">
+                <div class="bg-white ">
                 </div>
 
 
@@ -92,11 +92,11 @@
 
                                     // Checking if the vacation start date condition is met
                                     var deleteButton = (row.StartVacation) ?
-                                        `<a href="${deleteUrl}" class="delete btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>` :
+                                        `<a href="${deleteUrl}" class="delete btn  btn-sm" style="background-color: #c91d1d;"><i class="fa fa-trash"></i></a>` :
                                         '';
 
 
-                                    return `<a href="${editUrl}" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a><a href="${showUrl}" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>${deleteButton}`;
+                                    return `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></a><a href="${showUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>${deleteButton}`;
 
                                 }
 

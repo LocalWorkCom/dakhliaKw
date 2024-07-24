@@ -833,17 +833,15 @@ table.dataTable.no-footer {
     direction: rtl;
 }
 #users-table td a {
-    /* padding-inline: 20px !important; */
     color: #ffffff !important;
-    background-color: #274373 !important;
     border: none !important;
     border-radius: 10px !important;
-    width: auto !important;
-    height: 35px !important;
-    font-size: 17px !important;
-    display: flex !important;
+    width: 33px !important;
+    height: 33px !important;
+    font-size: 16px !important;
     justify-content: center !important;
-    margin-bottom: 10px !important;
+    padding-block: 8px;
+    margin-inline: 2px;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     color: #333 !important;
@@ -986,3 +984,6 @@ select.form-control:not([size]):not([multiple]) {
       width: calc(50% - 10px); /* Adjust width for smaller screens to fit 2 files per row */
     }
   }
+
+
+ 
