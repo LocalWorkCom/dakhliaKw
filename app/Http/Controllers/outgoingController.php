@@ -170,6 +170,7 @@ class outgoingController extends Controller
             }
         }
       
+        
         return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }
 

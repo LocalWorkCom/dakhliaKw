@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Console\View\Components\Alert;
 use App\helper; // Adjust this namespace as per your helper file location
+use App\Models\job;
 
 class UserController extends Controller
 {
@@ -297,12 +298,23 @@ class UserController extends Controller
         $rule = Rule::all();
         $flag = $id;
         $grade = grade::all();
+        $job = job::all();
+        // dd($user->department_id);
+        if($user->flag == "user")
+        {
+            $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        }
+        else
+        {
+            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        }
+        
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
-        $alldepartment = $user->createdDepartments;
+        // $alldepartment = $user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
-        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade'));
+        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade','job'));
     }
 
     /**
@@ -312,11 +324,25 @@ class UserController extends Controller
     {
         // dd($request);
         // validation
+
+        $messages = [
+            'military_number.required' => 'وغير مدخل مسبقا رقم العسكري مطلوب.',
+            'phone.required' => 'كلمة المرور مطلوبة.',
+            // 'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
+        ];
+
+        $validatedData = Validator::make($request->all(), [
+            'military_number' => 'required|string|unique:users|max:255',
+            'phone' => 'required|string',
+            // 'password_confirm' => 'same:password',
+        ], $messages);
+
+
         // $validatedData = $request->validate([
         //     'military_number' => 'required|string|unique:users|max:255',
-        //     'phone' => 'required|unique:users|max:255',
-        //     'password' => 'required|string|min:8|confirmed',
-        //     'country_code' =>'required',
+        //     'phone' => 'required|max:255',
+        //     // 'password' => 'required|string|min:8|confirmed',
+        //     // 'country_code' =>'required',
         // ]);
 
         if ($request->type == "0") {
@@ -328,6 +354,10 @@ class UserController extends Controller
             $newUser->file_number = $request->file_number;
             $newUser->flag = "user";
             $newUser->rule_id = $request->rule;
+            if($request->has('job'))
+            {
+                $newUser->job_id = $request->job;
+            }
             $newUser->department_id  = $request->department;
             $newUser->password = Hash::make($request->password);
             $newUser->save();
@@ -342,12 +372,16 @@ class UserController extends Controller
             if ($request->has('solder') && $request->solder == "on") {
                 $newUser->grade_id = $request->grade_id;
             }
+            if($request->has('job'))
+            {
+                $newUser->job_id = $request->job;
+            }
             // $newUser->password = NUll;
             $newUser->description = $request->description;
             // $newUser->job = $request->job;
             $newUser->date_of_birth = $request->date_of_birth;
             $newUser->public_administration = $request->department;
-
+            // $newUser->department_id  = $request->department;
             $newUser->save();
             
             if ($request->hasFile('image')) {
@@ -377,10 +411,20 @@ class UserController extends Controller
         $joining_date = Carbon::parse($user->joining_date);
         $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
-
-        $department = departements::all();
+        $job = job::all();
+        // dd($user);
+        if($user->flag == "user")
+        {
+            $department = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        }
+        else
+        {
+            $department = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        }
+        // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
-        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service'));
+        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service' ,'job' ));
+
     }
 
     /**
@@ -396,9 +440,19 @@ class UserController extends Controller
         $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
 
-        $department = departements::all();
+        $job = job::all();
+        // dd($user);
+        if($user->flag == "user")
+        {
+            $department = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        }
+        else
+        {
+            $department = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        }
+        // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
-        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service'));
+        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service' ,'job' ));
     }
 
     /**
@@ -414,7 +468,11 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->description = $request->description;
         $user->military_number = $request->military_number;
-        // $user->job = $request->job;
+        if($request->has('job'))
+        {
+            $user->job_id = $request->job;
+        }
+        // $user->job_id = $request->job;
         $user->job_title = $request->job_title;
         $user->nationality = $request->nationality;
         $user->Civil_number = $request->Civil_number;

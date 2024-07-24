@@ -47,7 +47,7 @@
 
 
 
-                <form action="{{ route('user.store') }}" method="post" class="text-right">
+                <form action="{{ route('user.store') }}" method="post" class="text-right" enctype="multipart/form-data">
                     @csrf
 
                     <input type="hidden" name="type" value="{{ $flag }}">
@@ -55,7 +55,13 @@
                       
                         <div class="form-group col-md-5 mx-2 ">
                             <label for="job"> الوظيفة</label>
-                            <input type="text" id="job" name="job" class="form-control" required>
+                            <select class="custom-select custom-select-lg mb-3" name="job" id="job">
+                                <option selected disabled>Open this select menu</option>
+                                @foreach ($job as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            {{-- <input type="text" id="job" name="job" class="form-control" required> --}}
                         </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="nameus"> الاسم</label>
@@ -80,12 +86,12 @@
             <div class="form-row mx-3 d-flex justify-content-center">
                 <div class="form-group col-md-5 mx-2">
                     <label for="filenum">رقم الملف</label>
-                    <input type="text" id="filenum" name="file_number" class="form-control" required>
+                    <input type="text" id="filenum" name="file_number" class="form-control">
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="department">الادارة</label>
                     <select class="custom-select custom-select-lg mb-3" name="department" id="department">
-                        <option selected>Open this select menu</option>
+                        <option selected disabled>Open this select menu</option>
                         @foreach ($alldepartment as $item)
                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
@@ -97,9 +103,9 @@
             @if ($flag == "0")
             <div class="form-row mx-3 d-flex justify-content-center">
                 <div class="form-group col-md-5 mx-2">
-                    <label for="rule_id">الادوار</label>
+                    <label for="rule_id">المهام</label>
                     <select class="custom-select custom-select-lg mb-3" name="rule" id="rule_id">
-                        <option selected>Open this select menu</option>
+                        <option selected disabled>Open this select menu</option>
                         @foreach ($rule as $item)
                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
@@ -107,7 +113,7 @@
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="Civil_number">الباسورد</label>
-                    <input type="text" id="password" name="password" class="form-control" required>
+                    <input type="text" id="password" name="password" class="form-control" >
 
                 </div>
             </div>
@@ -124,7 +130,7 @@
                 <div class="form-group col-md-10 " id="grade" style="display: none;">
                     <label for="grade_id">الرتبة</label>
                     <select class="custom-select custom-select-lg mb-3" name="grade_id" id="grade_id">
-                        <option selected>Open this select menu</option>
+                        <option selected disabled>Open this select menu</option>
                         @foreach ($grade as $item)
                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                         {{-- <option value=""></option> --}}
