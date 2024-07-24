@@ -69,7 +69,7 @@ class IoTelegramController extends Controller
     {
         //
         $representives = Postman::all();
-        $recieves = User::all();
+        $recieves = getEmployees();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
         return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments'));
@@ -131,7 +131,7 @@ class IoTelegramController extends Controller
         //
         $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
         $representives = Postman::all();
-        $recieves = User::all();
+        $recieves = getEmployees();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
 
@@ -145,7 +145,7 @@ class IoTelegramController extends Controller
     {
         //
         $representives = Postman::all();
-        $recieves = User::all();
+        $recieves = getEmployees();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
         $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
