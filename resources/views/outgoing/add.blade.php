@@ -72,13 +72,34 @@
                         <input type="text" class="form-control" name="num" id="exportnum" required>
                     </div>
 
-                </div>
-                <div class="form-row mx-3 d-flex justify-content-center">
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="active">الحاله</label>
-                        <select id="active" class="form-control" name="active">
-                            <option value="0">مفعل</option>
-                            <option value="1">غير مفعل</option>
+                    <div class="form-row mx-2 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="nameex">العنوان</label>
+                            <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
+                                required>
+                        </div>
+                        <div class="form-group col-md-5 mx-2 ">
+                            <label for="select-person-to">الموظف المستلم </label>
+                            <select id="mySelect" name="person_to" class="form-control js-example-basic-single" >
+                                <option value="" disabled selected> اختر من القائمه</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}">
+                                        {{ $user->name }} (الرقم العسكرى : {{ $user->military_number }})
+                                    </option>
+                                @endforeach
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row mx-2 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="date">تاريخ الصادر </label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="exportnum">رقم الصادر</label>
+                            <input type="text" class="form-control" name="num" id="exportnum" required>
+                        </div>
 
                         </select>
                     </div>
@@ -273,8 +294,18 @@
     @endsection
 
     @push('scripts')
-    <script>
-    $(document).ready(function() {
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+
+        <script>
+            $(document).ready(function() {
+                $('.js-example-basic-single').select2();
+            });
+        </script>
+
+        </script>
+        <script>
+            $(document).ready(function() {
 
         $("#saveExternalUser").on("submit", function(e) {
             e.preventDefault();

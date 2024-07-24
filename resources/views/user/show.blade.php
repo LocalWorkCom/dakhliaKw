@@ -8,18 +8,21 @@
         <div class="row col-11" dir="rtl">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-                    <li class="breadcrumb-item"><a href="#">المستخدمين </a></li>
-                    <li class="breadcrumb-item active" aria-current="page"> <a href="#"> تعديل مستخدم</a></li>
+                    <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+          
+                        @if ($user->flag == "user")
+                        <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
+          
+                        @elseif ($user->flag == "employee")
+                        <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
+          
+                        @endif
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض </a></li>
                 </ol>
+              
             </nav>
         </div>
-        <div class="row ">
-            <div class="container welcome col-11">
-                <p> المستخـــــــــــدمين </p>
-            </div>
-        </div>
-        <br>
+        
 
         <div class="row">
             <div class="container  col-11 mt-3 p-0 ">
@@ -72,8 +75,14 @@
 
                         <div class="form-group col-md-6">
                             <label for="input8">الوظيفة</label>
-                            <input type="text" id="input8" name="job" class="form-control" placeholder="الوظيفة"
-                                value="{{ $user->job }}" disabled>
+                            {{-- <input type="text" id="input8" name="job" class="form-control" placeholder="الوظيفة"
+                                value="{{ $user->job }}" disabled> --}}
+                                <select class="custom-select custom-select-lg mb-3" name="job" id="job" disabled>
+                                    <option selected disabled>Open this select menu</option>
+                                    @foreach ($job as $item)
+                                    <option value="{{ $item->id }}" {{ $user->job == $item->id ? 'selected' : ''}}>{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
                         </div>
 
                         <div class="form-group col-md-6">
@@ -105,8 +114,8 @@
                                     placeholder="الباسورد" disabled>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="input7"> الادوار</label>
-                                <select id="input7" name="rule_id" class="form-control" placeholder="الادوار"
+                                <label for="input7"> المهام</label>
+                                <select id="input7" name="rule_id" class="form-control" placeholder="المهام"
                                     disabled>
                                     @foreach ($rule as $item)
                                         <option value="{{ $item->id }}"
@@ -120,8 +129,8 @@
                             <div class="form-group col-md-6">
                                 <label for="input25"> القسم</label>
                                 <select id="input25" name="department_id" class="form-control" placeholder="القسم"
-                                    disabled>
-                                    @foreach ($hisdepartment as $item)
+                                disabled>
+                                    @foreach ($department as $item)
                                         <option value="{{ $item->id }}"
                                             {{ $user->department_id == $item->id ? 'selected' : '' }}>
                                             {{ $item->name }}</option>
@@ -240,9 +249,9 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
-                        </button>
+                        </button> --}}
                     </div>
                     <div class="modal-body text-center">
                         <img id="modalImage" src="#" class="img-fluid" alt="صورة">

@@ -4,19 +4,15 @@
 اضافة
 @endsection
 @section('content')
-<div class="row col-11" dir="rtl">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('iotelegrams.list') }}">الواردات </a></li>
-            <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
-        </ol>
-    </nav>
-</div>
-@include('inc.flash')
-<div class="row ">
-    <div class="container welcome col-11">
-        <p> الــــــــــــواردات </p>
+
+    <div class="row col-11" dir="rtl">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('iotelegrams.list') }}">الواردات </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
+            </ol>
+        </nav>
     </div>
 </div>
 <br>

@@ -63,8 +63,8 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name' },
-                    { data: 'permission_ids', name: 'permission_ids' },
-                    { data: 'department_id', name: 'department_id' },
+                    { data: 'permissions', name: 'permissions' },
+                    { data: 'department', name: 'department' },
                     { data: 'action', name: 'action', orderable: false, searchable: false }
                 ],
                 columnDefs: [{

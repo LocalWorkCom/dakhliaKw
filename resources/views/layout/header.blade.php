@@ -52,7 +52,7 @@
                 <div class="form-outline  mt-4">
                     <input type="search" id="" class="form-control" placeholder="بحث" />
                 </div>
-                <select name="#" id="#" class=" mt-4">
+                <select name="#" id="#" class=" mt-4" style="direction:rtl;">
                     <option value="#"> المستخدميين </option>
                     <option value="{{ route('departments.index') }}"> الادارات </option>
                     
@@ -102,12 +102,12 @@
                         <li style="list-style: inside;">
                             <a href="{{ route('vacations.list') }}">الاجازات</a>
                         </li>
-                        <li style="list-style: inside;">
+                     <!--    <li style="list-style: inside;">
                             <a href="#">الشيفتات</a>
-                        </li>
-                        <li style="list-style: inside;">
+                        </li> -->
+                        {{-- <li style="list-style: inside;">
                             <a href="#">الاجازات</a>
-                        </li>
+                        </li> --}}
                     </ul>
 
                 </div>
