@@ -36,7 +36,7 @@
                 <div class="bg-white p-5">
                 </div>
 
-                <table id="iotelegrams-table" class="display table table-bordered table-hover dataTable">
+                <table id="users-table" class="display table table-bordered table-hover dataTable">
                     <thead>
                         <tr>
                             <th>الرقم</th>
@@ -55,7 +55,7 @@
 
                 <script>
                     $(document).ready(function() {
-                        $('#iotelegrams-table').DataTable({
+                        $('#users-table').DataTable({
                             processing: true,
                             serverSide: true,
                             ajax: '{{ route('iotelegrams.get') }}', // Correct URL concatenation
