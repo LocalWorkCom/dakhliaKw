@@ -175,25 +175,24 @@ class outgoingController extends Controller
         $export->save(); 
     
 
-        if( $request->hasFile('files') ){
+   if( $request->hasFile('files') ){
          
-            if (function_exists('UploadFiles')) {
+            //if (function_exists('UploadFiles')) {
                  //  dd('file yes');
                 foreach ($request->file('files') as $file) {
-                    $files=new outgoing_files();
-                    $files->outgoing_id = $export->id;
-                    $files->created_by=auth()->id();//auth auth()->id
-                    $files->updated_by=auth()->id();//auth auth()->id
-                    $files->file_type = ($file->getClientOriginalExtension() == 'pdf')? 'pdf' : 'image';
-                    $files->active =0;
-                    $files->save();
+                    $exfiles=new outgoing_files();
+                    $exfiles->outgoing_id = $export->id;
+                    $exfiles->created_by=auth()->id();//auth auth()->id
+                    $exfiles->updated_by=auth()->id();//auth auth()->id
+                    $exfiles->file_type = ($file->getClientOriginalExtension() == 'pdf')? 'pdf' : 'image';
+                    $exfiles->active =0;
+                    $exfiles->save();
                     $file_model = outgoing_files::find($files->id);
-
-                    UploadFiles('files/export','file_name',  'real_name',$file_model, $file);
-                }
+                    //UploadFiles($path, 'file_name', 'real_name', $io_file, $file);
+                    UploadFiles('files/export','file_name',  'real_name',$exfiles, $file);
+               // }
             }
-        }
-      
+        }     
         
         return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }else{
@@ -331,8 +330,8 @@ class outgoingController extends Controller
     {
         $file=outgoing_files::find($id);
        // $download=downloadFile($file->file_name,$file->real_name);
-        $file_path = public_path($file->file_name,);
-        $file_name =basename($file->real_name,);
+        $file_path = public_path($file->file_name);
+        $file_name =basename($file->real_name);
     
         return response()->download($file_path, $file_name);
         //echo 'downloaded';
