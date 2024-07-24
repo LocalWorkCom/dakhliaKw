@@ -123,7 +123,7 @@ class outgoingController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request->all());
+       // dd($request->all());
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
@@ -132,7 +132,7 @@ class outgoingController extends Controller
             'person_to' => 'nullable|exists:export_users,id',
             'date' => 'required|date',
             'department_id' => 'nullable|exists:external_departements,id',
-            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+          //  'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
 
         // // Define custom messages
@@ -142,9 +142,10 @@ class outgoingController extends Controller
             'note.required' => 'عفوا يجب ادخال ملاحظات الصادر',
             'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
-            'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
+           // 'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
         ];
         $validatedData = Validator::make($request->all(), $rules, $messages);
+       // dd($validatedData->fails());
         // // Validate the request
        // $request->validate($rules, $messages);
         if ($validatedData->fails()) {
@@ -155,7 +156,7 @@ class outgoingController extends Controller
                 ->with('person_to', $request->person_to)
                 ->with('date', $request->date)
                 ->with('department_id', $request->department_id)
-                ->with('files', $request->files)
+               // ->with('files', $request->files)
                 ->with('num', $request->num);
         }
         //dd( $request->validate($rules, $messages));
@@ -187,7 +188,7 @@ class outgoingController extends Controller
                     $exfiles->file_type = ($file->getClientOriginalExtension() == 'pdf')? 'pdf' : 'image';
                     $exfiles->active =0;
                     $exfiles->save();
-                    $file_model = outgoing_files::find($files->id);
+                    $file_model = outgoing_files::find($exfiles->id);
                     //UploadFiles($path, 'file_name', 'real_name', $io_file, $file);
                     UploadFiles('files/export','file_name',  'real_name',$exfiles, $file);
                // }
