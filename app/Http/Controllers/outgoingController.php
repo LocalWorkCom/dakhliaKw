@@ -79,10 +79,6 @@ class outgoingController extends Controller
         ->make(true);
     }
     
-    public function showFiles($id){
-        
-        return view('outgoing.showfile');
-    }
     public function getExternalUsersAjax()
     {
         $users = exportuser::all();
@@ -95,9 +91,9 @@ class outgoingController extends Controller
         session()->flash('success', 'تم الاضافة الى الارشيف بنجاح.');
         return redirect()->back();
     }
-    public function showArchive(outgoingsDataTable $dataTable, Request $request){
-        $status = $request->get('status', 'inactive'); // Default to 'inactive' if 
-        return $dataTable->with('status', $status)->render('outgoing.archiveall');
+    public function showArchive(){
+        return view('outgoing.archiveall');
+        // return $dataTable->with('status', $status)->render('outgoing.archiveall');
 
     }
     

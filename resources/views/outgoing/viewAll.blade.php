@@ -23,7 +23,7 @@
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-2 col-12 d-flex ">
                         <button type="button" class="btn-all mx-3 "
-                            onclick="window.location.href='{{ route('Export.archive.show') }}'" style="color: #C1920C;">
+                            onclick="window.location.href='{{ route('Export.AllArchive') }}'" style="color: #C1920C;">
                             <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
                             عرض الارشيف
                         </button>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <div class="bg-white">
+                    <div class="bg-white p-5">
                         @if(session()->has('message'))
                         <div class="alert alert-info">
                             {{ session('message') }}
@@ -79,7 +79,7 @@
                 </div>
                 <form id="delete-form" action="{{ route('export.archive.add') }}" method="POST">
                     @csrf
-                    <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
+                    <div class="modal-body  d-flex justify-content-center">
                         <h5 class="modal-title " id="deleteModalLabel"> هل تريد أضافه هذا الصادر الى الارشيف ؟</h5>
 
 

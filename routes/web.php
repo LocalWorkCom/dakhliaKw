@@ -138,49 +138,31 @@ Route::put('/departments/{department}', [DepartmentController::class, 'update'])
 Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
 //Start Export routes
-Route::resource('Export', outgoingController::class);
-Route::get('/Export/All/Archive', [outgoingController::class, 'getExportInActive'])->name('Export.view.archive');
+//Route::resource('Export', outgoingController::class);
+Route::get('/export/all', [outgoingController::class, 'index'])->name('Export.index');
+Route::get('/export/{id}/edit', [outgoingController::class, 'edit'])->name('Export.edit');
+Route::get('/export/{id}', [outgoingController::class, 'show'])->name('Export.show');
+
+Route::post('/export/{id}', [outgoingController::class, 'update'])->name('Export.update');
+Route::get('/export/create', [outgoingController::class, 'create'])->name('Export.create');
+Route::post('/export', [outgoingController::class, 'store'])->name('Export.store');
+
+Route::get('/export/All/Archive', [outgoingController::class, 'getExportInActive'])->name('Export.view.archive');
 Route::get('exports/get/active', [outgoingController::class, 'getExportActive'])->name('exports.view.all');
-Route::get('Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files');
-Route::get('Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
-Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax');
-Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users');
 Route::post('export/archive/add', [outgoingController::class, 'addToArchive'])->name('export.archive.add');
-Route::get('export/archive', [outgoingController::class, 'showArchive'])->name('Export.archive.show');
+Route::get('export/AllArchives', [outgoingController::class, 'showArchive'])->name('Export.AllArchive');
 
 
+//external users
+Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users');
+Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax');
+//outgingfiles
+Route::get('export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files');
+Route::get('export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
 Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('testUpload');
 Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile');
-
 //End Export routes
 //setting start
-// Route::resource('setting', settingController::class);
-// Route::get('setting', [settingController::class,'index'])->name('setting.index');
-// Route::get('setting/all/grade', [settingController::class, 'getAllGrade'])->name('setting.getAllGrade');
-// Route::get('setting/all/job', [settingController::class, 'getAllJob'])->name('setting.getAllJob');
-// Route::get('setting/all/vacation', [settingController::class, 'getAllVacation'])->name('setting.getAllVacation');
-// Route::get('setting/all/government', [settingController::class, 'getAllgovernment'])->name('setting.getAllgovernment');
-
-
-// Route::post('jobs/add', [settingController::class,'addJob'])->name('jobs.add');
-// Route::post('jobs', [settingController::class,'editJob'])->name('jobs.edit');
-// Route::post('jobs/delete', [settingController::class,'deletejob'])->name('jobs.delete');
-
-
-// Route::post('grade/add', [settingController::class,'addgrade'])->name('grade.add');
-// Route::post('grade', [settingController::class,'editgrade'])->name('grade.edit');
-// Route::post('grade/delete', [settingController::class,'deletegrade'])->name('grade.delete');
-
-
-// Route::post('vacationType/add', [settingController::class,'addVacation'])->name('vacationType.add');
-// Route::post('vacationType', [settingController::class,'editVacation'])->name('vacation.edit');
-// Route::post('vacationType/delete', [settingController::class,'deleteVacation'])->name('vacation.delete');
-
-
-// Route::post('government/add', [settingController::class,'addgovernment'])->name('government.add');
-// Route::post('government', [settingController::class,'editgovernment'])->name('government.edit');
-// Route::post('government/delete', [settingController::class,'deletegovernment'])->name('government.delete');
-
 
 //start government
 Route::get('setting/government', [settingController::class, 'getAllgovernment'])->name('setting.getAllgovernment');

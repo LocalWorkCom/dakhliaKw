@@ -105,24 +105,24 @@
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> {{ $data->note }}</textarea>
                         </div>
                     </div>
-                    <div class="form-row d-block ">
-                        <div class="form-group col-md-12">
-                            <label for="files">اضافة ملف</label>
-                            <div id="fileInputs">
-                                <div class="file-input mb-3" dir="rtl">
-                                    <input type="file" name="files[]" class="form-control">
-                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                    <div class="form-row mx-2 d-flex justify-content-center">
+                        <div class="form-group  col-md-10 ">
+                            <label for="files"> اضف ملفات بحد اقصي 10 </label>
+                        </div>
+                        <div class="form-group col-md-10 " dir="rtl">
+                            <div class=" fileupload d-inline">
+                                <div class="d-flex">
+                                    <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control">
+                                <button class="btn-all mx-1" type="button" onclick="uploadFiles()" style="color:green;"> اضف </button>
+                                </div>
+                                <div class="space-uploading">
+                                    <ul id="fileList" class="d-flex flex-wrap">
+                                        <!-- Uploaded files will be listed here -->
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-row" dir="rtl">
-                        <button type="button" class="btn-all btn-sm mt-2" id="addFile"
-                            style="background-color: #FAFBFD; border: none;"><img
-                                src="{{ asset('frontend/images/add-btn.svg') }}" alt="">إضافة ملف جديد
-                        </button>
-
-                    </div> <br>
+                    </div><br>
                 
                     <div class="container col-10 mt-5 mb-5 ">
                         <div class="form-row col-10 " dir="ltr">

@@ -42,7 +42,7 @@ class settingController extends Controller
        
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
-            $editButton = '<a class="btn btn-primary btn-sm" onclick="openedit(' . $row->id . ', '.$name.')">تعديل</a>';
+            $editButton = '<a class="edit btn  btn-sm" style="background-color: #259240;" onclick="openedit(' . $row->id . ', '.$name.')"><i class="fa fa-edit"></i></a>';
             return $editButton;
             
             // <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>
