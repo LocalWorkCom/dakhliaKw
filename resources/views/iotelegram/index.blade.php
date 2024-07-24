@@ -33,7 +33,7 @@
             @include('inc.flash')
 
             <div class="col-lg-12">
-                <div class="bg-white p-5">
+                <div class="bg-white ">
                 </div>
 
                 <table id="users-table" class="display table table-bordered table-hover dataTable">

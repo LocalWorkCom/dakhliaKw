@@ -8,18 +8,20 @@
         <div class="row col-11" dir="rtl">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-                    <li class="breadcrumb-item"><a href="#">المهام </a></li>
-                    <li class="breadcrumb-item active" aria-current="page"> <a href="#"> تعديل المهام</a></li>
+                    <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+        
+                        <li class="breadcrumb-item"><a href="{{ route('rule_show', $rule_permission->id) }}">المهام</a></li>
+        
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض </a></li>
                 </ol>
             </nav>
         </div>
-        <div class="row ">
+        {{-- <div class="row ">
             <div class="container welcome col-11">
                 <p> المــهام </p>
             </div>
         </div>
-        <br>
+        <br> --}}
 
         <div class="row">
             <div class="container  col-11 mt-3 p-0 ">
@@ -41,8 +43,8 @@
                 @endif
                 {{-- {{ dd($user) }} --}}
                 <div class="p-5">
-                    <form action="{{ route('rule_update', $rule_permission->id) }}" method="POST">
-                        @csrf
+                    {{-- <form action="{{ route('rule_update', $rule_permission->id) }}" method="POST">
+                        @csrf --}}
                         <div class="form-row mx-2 mt-4 d-flex flex-row-reverse">
                         <div class="form-group col-md-6">
                             <label for="input8">الدور</label>
@@ -70,7 +72,7 @@
                                             <div class="col-6 col-md-4 col-lg-3 my-2">
                                                 <div class="form-check">
                                                     <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input" disabled>
-                                                    <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{ $item->name }}</label>
+                                                    <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.' . $item->name)}}{{ $item->name }}</label>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -82,7 +84,7 @@
                                         <div class="col-6 col-md-4 col-lg-3 my-2">
                                             <div class="form-check">
                                                 <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input" {{ in_array($item->id, $hisPermissionIds) ? 'checked' : '' }} disabled>
-                                                <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{ $item->name }}</label>
+                                                <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.' . $item->name)}}</label>
                                             </div>
                                         </div>
                                     @endforeach
@@ -94,12 +96,12 @@
 
 
                         <!-- Save button -->
-                        <div class="container col-12 ">
+                        {{-- <div class="container col-12 ">
                             <div class="form-row mt-4 mb-5">
                                 <button type="submit" class="btn-blue">حفظ</button>
                             </div>
                         </div>
-                    </form>
+                    </form> --}}
                 </div>
             </div>
         </div>

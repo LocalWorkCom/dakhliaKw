@@ -35,6 +35,19 @@ class RuleController extends Controller
             return '<button class="btn btn-primary btn-sm">Edit</button>'
                     ;
         })
+        ->addColumn('permissions', function ($row) { // New column for departments count
+            $permission_ids = explode(',', $row->permission_ids);
+            $allPermission = Permission::whereIn('id', $permission_ids)->pluck('name')->toArray();
+            $translatedPermissions = array_map(function ($permission) {
+                return __('permissions.' . $permission);
+            }, $allPermission);
+            return implode(', ', $translatedPermissions);
+        })
+        ->addColumn('department', function ($row) { // New column for departments count
+        
+            $department = departements::where('id', $row->department_id)->pluck('name')->first();
+            return $department;
+        })
         ->rawColumns(['action'])
         ->make(true);
     }
@@ -49,7 +62,15 @@ class RuleController extends Controller
         $permission_ids = explode(',', $rule_permisssion->permission_ids);
         $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
-        $alldepartment =$user->createdDepartments;
+        // $alldepartment =$user->createdDepartments;
+        if($user->flag == "user")
+        {
+            $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        }
+        else
+        {
+            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        }
         return view('role.create',compact('allPermission','alldepartment'));
 
         // return $dataTable->render('permission.create'  ,compact('models'));
@@ -108,7 +129,16 @@ class RuleController extends Controller
             // Fetch all permissions that the user has access to based on their role
         $hisPermissions = Permission::whereIn('id', $permission_ids)->get();
         $user = User::find(Auth::user()->id);
-        $alldepartment =$user->createdDepartments;
+        if($user->flag == "user")
+        {
+            $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        }
+        else
+        {
+            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        }
+
+        // $alldepartment =$user->createdDepartments;
        
         // dd($allPermissions);
 
@@ -130,7 +160,15 @@ class RuleController extends Controller
             // Fetch all permissions that the user has access to based on their role
         $hisPermissions = Permission::whereIn('id', $permission_ids)->get();
         $user = User::find(Auth::user()->id);
-        $alldepartment =$user->createdDepartments;
+        if($user->flag == "user")
+        {
+            $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        }
+        else
+        {
+            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        }
+        // $alldepartment =$user->createdDepartments;
        
         // dd($allPermissions);
 

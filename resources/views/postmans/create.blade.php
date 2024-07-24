@@ -35,7 +35,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-5 mx-2">
+                    <div class="form-group col-md-5 mx-3">
                         <label for="name">الاسم</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
                         @error('name')
@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="form-row mx-2 d-flex justify-content-center">
-                <div class="form-group col-md-5 mx-2">
+                <div class="form-group col-md-5 mx-3">
                 <label for="phone2">الهاتف الثانى</label>
                     <input type="phone" class="form-control" id="phone2" name="phone2" value="{{ old('phone2') }}">
                     @error('phone2')
@@ -54,7 +54,7 @@
 
                    
                 </div>
-                <div class="form-group col-md-5 mx-2">
+                <div class="form-group col-md-5 mx-3">
                     <label for="phone1">الهاتف الاول</label>
                     <input type="phone" class="form-control" id="phone1" name="phone1" value="{{ old('phone1') }}">
                     @error('phone1')
@@ -63,7 +63,7 @@
                 </div>
                 </div>
                 <div class="form-row  d-flex justify-content-center">
-                <div class="form-group col-md-10 ">
+                <div class="form-group col-md-10 mx-1">
                 <label for="national_id">رقم الهوية</label>
                     <input type="text" class="form-control" id="national_id" name="national_id"
                         value="{{ old('national_id') }}">

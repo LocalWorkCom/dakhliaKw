@@ -8,19 +8,16 @@
         <div class="row col-11" dir="rtl">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-                    <li class="breadcrumb-item"><a href="#">المهام </a></li>
-                    <li class="breadcrumb-item active" aria-current="page"> <a href="#"> تعديل المهام</a></li>
+                    <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+        
+                        <li class="breadcrumb-item"><a href="{{ route('rule_update', $rule_permission->id) }}">المهام</a></li>
+        
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
                 </ol>
+
             </nav>
         </div>
-        <div class="row ">
-            <div class="container welcome col-11">
-                <p> المــهام </p>
-            </div>
-        </div>
-        <br>
-
+    
         <div class="row">
             <div class="container  col-11 mt-3 p-0 ">
 
@@ -70,7 +67,7 @@
                                             <div class="col-6 col-md-4 col-lg-3 my-2">
                                                 <div class="form-check">
                                                     <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input">
-                                                    <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{ $item->name }}</label>
+                                                    <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.' . $item->name)}}</label>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -83,7 +80,7 @@
                                             <div class="col-6 col-md-4 col-lg-3 my-2">
                                                 <div class="form-check">
                                                     <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input"  {{ in_array($item->id, $hisPermissionIds) ? 'checked' : '' }} >
-                                                    <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{ $item->name }}</label>
+                                                    <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.' . $item->name)}}</label>
                                                 </div>
                                             </div>
                                         {{-- @endforeach --}}

@@ -979,7 +979,7 @@ select.form-control:not([size]):not([multiple]) {
     width: auto;
 }
   #fileInput{
-    width: 95%;
+    width: 100%;
   }
   @media (max-width: 768px) {
     #fileList li {
