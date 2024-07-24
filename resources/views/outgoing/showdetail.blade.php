@@ -23,7 +23,7 @@
 
     <section style="direction: rtl;">
         <div class="row">
-            <div class="container c col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11">
+            <div class="container c col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11 pt-5 pb-4 px-3">
                 <table class="table table-bordered ">
                     <tbody>
                         <tr style="background-color:#f5f6fa;">

@@ -6,7 +6,15 @@
 @section('title', 'الارشيف')
 
 @section('content')
-
+<div class="row col-11" dir="rtl">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                <li class="breadcrumb-item"><a href="">الواردات </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href="">   الارشيف</a></li>
+            </ol>
+        </nav>
+    </div>
     <div class="row">
         <div class="container welcome col-11">
             <p> الارشيـــــــــــــف </p>
@@ -14,19 +22,19 @@
     </div>
     <br>
     <div class="row">
-        <div class="container  col-11 mt-3 p-0 ">
-            <div class="row " dir="rtl">
+        <div class="container  col-11 mt-3 p-0 pt-5 ">
+            <!-- <div class="row " dir="rtl">
                 <div class="form-group mt-4  mx-2 col-12 d-flex ">
                     <button type="button" class="wide-btn" onclick="window.location.href='{{ route('iotelegrams.add') }}'">
                         <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         اضافة جديد
                     </button>
                 </div>
-            </div>
+            </div> -->
             @include('inc.flash')
 
-            <div class="col-lg-12">
-                <div class="bg-white p-5">
+            <div class="col-lg-12 mb-2" >
+                <div class="bg-white ">
                 </div>
 
                 <table id="users-table" class="display table table-bordered table-hover dataTable">
