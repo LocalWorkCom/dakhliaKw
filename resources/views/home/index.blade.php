@@ -10,6 +10,7 @@
   <br>
   <div class="row">
   <div class="container container-not-responsive col-12 mt-3 p-0 col-md-11 col-lg-3 col-s-12">
+    {{dd(phpinfo());}}
           <div class="header-side d-flex">
               <p>المهام</p>
               <img src="{{ asset('frontend/images/tasks.svg')}}" alt="">
