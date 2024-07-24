@@ -67,11 +67,10 @@
             <img class="mt-2" src="{{ asset('frontend/images/logo.svg') }}" alt="">
         </div>
     </div>
-    <div class="navbar navbar-expand-md mb-4 w-100" role="navigation" dir="rtl">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <div class="navbar navbar-expand-md mb-4" role="navigation" dir="rtl">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa-solid fa-bars side-nav" ></i>
+          </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
