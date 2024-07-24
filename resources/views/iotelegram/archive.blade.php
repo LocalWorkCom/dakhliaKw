@@ -106,7 +106,7 @@
                                     var showUrl = '{{ route('iotelegram.show', ':id') }}';
                                     showUrl = showUrl.replace(':id', row.id);
 
-                                    return `<a href="${showUrl}" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>`;
+                                    return `<a href="${showUrl}" class="archive btn btn-info btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>`;
 
                                 }
 
