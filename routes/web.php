@@ -141,8 +141,7 @@ Route::delete('departments/{department}/delete', [DepartmentController::class, '
 //Route::resource('Export', outgoingController::class);
 Route::get('/export/all', [outgoingController::class, 'index'])->name('Export.index');
 Route::get('/export/{id}/edit', [outgoingController::class, 'edit'])->name('Export.edit');
-Route::get('/export/{id}', [outgoingController::class, 'show'])->name('Export.show');
-
+Route::get('/export/{id}/show', [outgoingController::class, 'show'])->name('Export.show');
 Route::post('/export/{id}', [outgoingController::class, 'update'])->name('Export.update');
 Route::get('/export/create', [outgoingController::class, 'create'])->name('Export.create');
 Route::post('/export', [outgoingController::class, 'store'])->name('Export.store');
