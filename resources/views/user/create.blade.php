@@ -59,18 +59,18 @@
                         </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="nameus"> الاسم</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
+                            <input type="text" id="name" name="name" class="form-control" >
                         </div>
                     </div>
                     <div class="form-row mx-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-2">
                             <label for="military_number">رقم العسكرى</label>
                             <input type="text" id="military_number" name="military_number" class="form-control"
-                                required>
+                                >
                         </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="phone">رقم المحمول</label>
-                            <input type="text" id="phone" name="phone" class="form-control" required>
+                            <input type="text" id="phone" name="phone" class="form-control" >
                         </div>
 
                     </div>
@@ -107,7 +107,7 @@
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="Civil_number">الباسورد</label>
-                    <input type="text" id="password" name="password" class="form-control" >
+                    <input type="password" id="password" name="password" class="form-control" >
 
                 </div>
             </div>
