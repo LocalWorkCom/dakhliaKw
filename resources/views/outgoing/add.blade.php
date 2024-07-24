@@ -50,7 +50,7 @@
                                 required>
                         </div>
                         <div class="form-group col-md-5 mx-2 ">
-                            <label for="select-person-to">person_to </label>
+                            <label for="select-person-to">الموظف المستلم </label>
                             <select id="mySelect" name="person_to" class="form-control js-example-basic-single" >
                                 <option value="" disabled selected> اختر من القائمه</option>
                                 @foreach ($users as $user)

@@ -94,7 +94,7 @@ class outgoingController extends Controller
     }
     public function showArchive(outgoingsDataTable $dataTable, Request $request){
         $status = $request->get('status', 'inactive'); // Default to 'inactive' if 
-        return $dataTable->with('status', $status)->render('outgoing.archiveAll');
+        return $dataTable->with('status', $status)->render('outgoing.archiveall');
 
     }
     
