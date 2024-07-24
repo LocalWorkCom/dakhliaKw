@@ -31,9 +31,12 @@ class DepartmentController extends Controller
     }
     public function getDepartment()
     {
-        $data = departements::withCount('iotelegrams')
+        $data = departements::where('parent_id', Auth::user()->department_id)
+        ->withCount('iotelegrams')
         ->withCount('outgoings')
-        ->withCount('children')->get();
+        ->withCount('children')
+        ->with(['children', 'children.manager', 'children.managerAssistant'])
+        ->get();
 
     return DataTables::of($data)
         ->addColumn('action', function ($row) {
@@ -47,6 +50,11 @@ class DepartmentController extends Controller
         })
         ->addColumn('children_count', function ($row) { // New column for departments count
             return $row->children_count;
+        })
+        ->addColumn('children', function ($row) {
+            $children = $row->children;
+            $childNames = $children->pluck('name')->implode(', '); // Assuming 'name' is the attribute to display
+            return $childNames;
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -70,9 +78,12 @@ class DepartmentController extends Controller
     }
     public function getSub_Department()
     {
-        $data = departements::withCount('children')
-        ->where('parent_id', Auth::user()->department_id)
-        ->with(['children'])->get();
+        $datacopy =  Auth::user()->department_id;
+        // ->with('childrenDepartments')  // Use the method to eager load children and their children
+        // ->get();
+
+        $data = departements::where('parent_id', $datacopy)->with('childrenDepartments')
+        ->withCount('children')->get();
 
     return DataTables::of($data)
         ->addColumn('action', function ($row) {

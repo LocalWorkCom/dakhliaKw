@@ -49,6 +49,7 @@
                                         <th>الاقسام</th>
                                         <th>الوارد</th>
                                         <th>الصادر</th>
+                                        <th>الأقسام الفرعية</th> <!-- New column for child departments -->
                                         <th>إجراء</th>
                                     </tr>
                                 </thead>
@@ -73,6 +74,7 @@
                 { data: 'children_count', name: 'children_count' },
                 { data: 'iotelegrams_count', name: 'iotelegrams_count' },
                 { data: 'outgoings_count', name: 'outgoings_count' },
+                { data: 'children', name: 'children' }, // Add children column here
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
             columnDefs: [{
