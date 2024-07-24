@@ -27,10 +27,10 @@
         <div class="row">
             <div class="container  col-11 mt-3 p-0 ">
                 @include('inc.flash')
-                <form action="{{ route('Export.update', ['Export' => $data->id]) }}" method="POST"
+                <form action="{{ route('Export.update', ['id' => $data->id]) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
-                    @method('PUT')
+                   
                     <div class="row " dir="rtl">
                         <div class="form-group mt-4  mx-2 col-12 d-flex ">
                             <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
@@ -221,6 +221,20 @@
     @endsection
 
     @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            let dateInput = document.getElementById('date');
+            let dateInputValue = dateInput.value;
+            console.log(dateInputValue);
+            if(dateInputValue === ""){
+                let today = new Date();
+                let day = ("0" + today.getDate()).slice(-2);
+                let month = ("0" + (today.getMonth() + 1)).slice(-2);
+                let todayDate = today.getFullYear() + "-" + (month) + "-" + (day);
+                dateInput.value = todayDate;
+            }
+        });
+    </script>
         <script>
               $(document).ready(function() {
                 let fileInputCount = 1;

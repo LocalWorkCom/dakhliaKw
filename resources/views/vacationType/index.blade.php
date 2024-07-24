@@ -22,8 +22,7 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                        <button type="button" class="btn-all  "
-                            onclick="openadd()" style="color: #0D992C;">
+                        <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
@@ -91,7 +90,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="edit-grade-form" id="edit-form" action=" {{ route('vacationType.update') }}" method="POST">
+                    <form class="edit-grade-form" id="edit-form" action=" {{ route('vacationType.update') }}"
+                        method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
@@ -129,7 +129,7 @@
                     </div>
                     <div class="modal-footer mx-2 d-flex justify-content-center">
                         <div class="text-end">
-                            <button type="button" class="btn-blue">لا</button>
+                            <button type="button" class="btn-blue" id="closeButton">لا</button>
                         </div>
                         <div class="text-end">
                             <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
@@ -141,6 +141,17 @@
     </div>
 @endsection
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            function closeModal() {
+                $('#delete').modal('hide');
+            }
+
+            $('#closeButton').on('click', function() {
+                closeModal();
+            });
+        });
+    </script>
     <script>
         function opendelete(id) {
             document.getElementById('id').value = id;
@@ -171,6 +182,7 @@
             form.submit();
 
         }
+
         function openadd() {
             $('#add').modal('show');
         }

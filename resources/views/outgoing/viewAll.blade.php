@@ -5,7 +5,7 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
 @section('title')
-الصادرات
+    الصادرات
 @endsection
 @section('content')
     <section>
@@ -38,11 +38,11 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white p-5">
-                        @if(session()->has('message'))
-                        <div class="alert alert-info">
-                            {{ session('message') }}
-                        </div>
-                     @endif
+                        @if (session()->has('message'))
+                            <div class="alert alert-info">
+                                {{ session('message') }}
+                            </div>
+                        @endif
                         <div>
                             <table id="users-table" class="display table table-bordered table-hover dataTable">
                                 <thead>
@@ -87,7 +87,7 @@
                     </div>
                     <div class="modal-footer mx-2 d-flex justify-content-center">
                         <div class="text-end">
-                            <button type="button" class="btn-blue">لا</button>
+                            <button type="button" class="btn-blue" id="closeButton">لا</button>
                         </div>
                         <div class="text-end">
                             <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
@@ -100,7 +100,18 @@
 @endsection
 @push('scripts')
     <script>
-         function opendelete(id) {
+        $(document).ready(function() {
+            function closeModal() {
+                $('#delete').modal('hide');
+            }
+
+            $('#closeButton').on('click', function() {
+                closeModal();
+            });
+        });
+    </script>
+    <script>
+        function opendelete(id) {
             document.getElementById('id').value = id;
             $('#delete').modal('show');
         }
@@ -108,11 +119,12 @@
         function confirmDelete() {
             var id = document.getElementById('id').value;
             var form = document.getElementById('delete-form');
-          
+
             form.submit();
 
         }
         $(document).ready(function() {
+
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -152,11 +164,11 @@
             });
 
             function openarchive(id) {
-            document.getElementById('id').value = id;
-            $('#archive').modal('show');
+                document.getElementById('id').value = id;
+                $('#archive').modal('show');
 
 
-        }
+            }
 
         });
     </script>

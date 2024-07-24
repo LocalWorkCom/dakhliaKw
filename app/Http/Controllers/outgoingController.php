@@ -54,6 +54,9 @@ class outgoingController extends Controller
         ->addColumn('department_External_name', function ($row) {
             return $row->department_External->name ?? 'لا يوجد قسم خارجى صادر له'; // Assuming 'name' is the column in external_users
         })
+        ->addColumn('date', function ($row) {
+            return $row->date ?? 'لا يوجد تاريخ'; // Assuming 'name' is the column in external_users
+        })
         ->rawColumns(['action'])
         ->make(true);
     }
@@ -67,7 +70,7 @@ class outgoingController extends Controller
        
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '
-                   <a class="btn btn-primary btn-sm" href=' . route('Export.show', $row->id) . '">عرض تفاصيل</a>' ;
+                   <a class="btn btn-primary btn-sm" href=' . route('Export.show', $row->id) . '>عرض تفاصيل</a>' ;
         })
         ->addColumn('person_to_username', function ($row) {
             return $row->personTo->name ?? 'لايوجد شخص صادر له'; // Assuming 'name' is the column in external_users
@@ -251,7 +254,20 @@ class outgoingController extends Controller
         ];
 
         // // Validate the request
-        $request->validate($rules, $messages);
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+        // // Validate the request
+       // $request->validate($rules, $messages);
+        if ($validatedData->fails()) {
+            return redirect()->back()
+                ->withErrors($validatedData)
+                ->with('nameex', $request->name)
+                ->with('note', $request->note)
+                ->with('person_to', $request->person_to)
+                ->with('date', $request->date)
+                ->with('department_id', $request->department_id)
+                ->with('files', $request->files)
+                ->with('num', $request->num);
+        }
         //dd(auth()->id());
         if(auth()->id()){
         $user=User::findOrFail(auth()->id());

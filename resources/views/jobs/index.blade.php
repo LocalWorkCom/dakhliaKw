@@ -1,13 +1,13 @@
 @extends('layout.main')
 @push('style')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
-</script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
+    </script>
 @endpush
 
 @section('title')
-الوظـــــائف
+    الوظـــــائف
 @endsection
 @section('content')
     <section>
@@ -24,8 +24,7 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                        <button type="button" class="btn-all  " onclick="openadd()"
-                            style="color: #0D992C;">
+                        <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
@@ -33,11 +32,11 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white p-5">
-                        @if(session()->has('message'))
-                        <div class="alert alert-info">
-                            {{ session('message') }}
-                        </div>
-                     @endif
+                        @if (session()->has('message'))
+                            <div class="alert alert-info">
+                                {{ session('message') }}
+                            </div>
+                        @endif
                         <div>
                             <table id="users-table" class="display table table-bordered table-hover dataTable">
                                 <thead>
@@ -136,7 +135,7 @@
                     </div>
                     <div class="modal-footer mx-2 d-flex justify-content-center">
                         <div class="text-end">
-                            <button type="button" class="btn-blue">لا</button>
+                            <button type="button" class="btn-blue" id="closeButton">لا</button>
                         </div>
                         <div class="text-end">
                             <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
@@ -148,6 +147,17 @@
     </div>
 @endsection
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            function closeModal() {
+                $('#delete').modal('hide');
+            }
+
+            $('#closeButton').on('click', function() {
+                closeModal();
+            });
+        });
+    </script>
     <script>
         function opendelete(id) {
             document.getElementById('id').value = id;
@@ -178,6 +188,7 @@
             form.submit();
 
         }
+
         function openadd() {
             $('#add').modal('show');
         }
