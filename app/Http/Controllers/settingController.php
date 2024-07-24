@@ -51,7 +51,7 @@ class settingController extends Controller
     public function addgovernment(Request $request){
         $requestinput=$request->except('_token');
         $job = Government::create($requestinput);
-        $message="تم اضافه الوظيفه";
+        $message="تم اضافة الوظيفه";
         return redirect()->route('government.all',compact('message'));
         //return redirect()->back()->with(compact('activeTab','message'));
     }
@@ -116,7 +116,7 @@ class settingController extends Controller
         $requestinput=$request->except('_token');
         $job = job::create($requestinput);
         $activeTab=2;
-        $message="تم اضافه الوظيفه";
+        $message="تم اضافة الوظيفه";
         return redirect()->route('job.index',compact('activeTab','message'));
         //return redirect()->back()->with(compact('activeTab','message'));
     }
@@ -196,7 +196,7 @@ class settingController extends Controller
     public function addgrads(Request $request){
         $requestinput=$request->except('_token');
         $job = grade::create($requestinput);
-        $message="تم اضافه الوظيفه";
+        $message="تم اضافة الوظيفه";
         return redirect()->route('grads.index',compact('message'));
         //return redirect()->back()->with(compact('activeTab','message'));
     }
@@ -277,7 +277,7 @@ class settingController extends Controller
           $requestinput=$request->except('_token');
           $job = VacationType::create($requestinput);
          
-          $message="تم اضافه الوظيفه";
+          $message="تم اضافة الوظيفه";
           return redirect()->route('vacationType.index',compact('message'));
           //return redirect()->back()->with(compact('activeTab','message'));
       }
@@ -366,7 +366,7 @@ class settingController extends Controller
         $requestinput=$request->except('_token');
         $grade = grade::create($requestinput);
         $activeTab=1;
-        $message="تم اضافه رتبه عسكريه جديده";
+        $message="تم اضافة رتبه عسكريه جديده";
         return redirect()->route('setting.index',compact('activeTab','message'));
 
         //return redirect()->back()->with(compact('activeTab','message'));
@@ -376,7 +376,7 @@ class settingController extends Controller
         $request=$request->except('_token');
         $vacation = VacationType::create($request);
         $activeTab=3;
-        $message="تم اضافه نوع اجازه جديد";
+        $message="تم اضافة نوع اجازه جديد";
         return redirect()->route('setting.index',compact('activeTab','message'));
     }
     

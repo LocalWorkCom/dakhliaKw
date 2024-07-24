@@ -8,7 +8,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('permission.index') }}">الصلاحيات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href="#"> اضافه صلاحية</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href="#"> اضافة صلاحية</a></li>
             </ol>
         </nav>
     </div>

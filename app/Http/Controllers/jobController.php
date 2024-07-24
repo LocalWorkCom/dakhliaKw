@@ -45,7 +45,7 @@ class jobController extends Controller
         $requestinput=$request->except('_token');
         $job = job::create($requestinput);
         $activeTab=2;
-        $message="تم اضافه الوظيفه";
+        $message="تم اضافة الوظيفه";
         return redirect()->route('job.index',compact('activeTab','message'));
     }
 

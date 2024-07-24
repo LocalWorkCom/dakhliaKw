@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
             <li class="breadcrumb-item"><a href="#">الموظفين </a></li>
-            <li class="breadcrumb-item active" aria-current="page"> <a href="#"> اضافه موظف</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> <a href="#"> اضافة موظف</a></li>
         </ol>
     </nav>
 </div>

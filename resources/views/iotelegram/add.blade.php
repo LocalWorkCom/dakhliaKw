@@ -9,7 +9,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('iotelegrams.list') }}">الواردات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة </a></li>
             </ol>
         </nav>
     </div>
@@ -64,7 +64,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="date">التاريخ:</label>
+                            <label for="date">التاريخ</label>
                             <input type="date" id="date" name="date" class="form-control" required>
                         </div>
                         <div class="form-group col-md-6">
