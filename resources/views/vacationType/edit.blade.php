@@ -2,14 +2,16 @@
 
 @push('style')
 @endpush
-
+@section('title')
+  تعديل
+@endsection
 @section('content')
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('vacationType.index') }}">أنواع الاجـــــازات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه نوع أجازه </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة نوع أجازه </a></li>
             </ol>
         </nav>
     </div>

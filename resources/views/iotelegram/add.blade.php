@@ -7,17 +7,12 @@
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('iotelegrams.list') }}">الواردات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة </a></li>
             </ol>
         </nav>
     </div>
-    @include('inc.flash')
-    <div class="row ">
-        <div class="container welcome col-11">
-            <p> الــــــــــــواردات </p>
-        </div>
     </div>
     <br>
     <div class="row">
@@ -70,10 +65,6 @@
                         <div class="form-group col-md-6">
                             <label for="from_departement">الجهة المرسلة</label>
 
-                            <!-- <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
-                                        id="extern-department-dev" data-bs-target="#extern-department">
-                                        <i class="fa fa-plus"></i>
-                                    </button> -->
                             <select id="from_departement" name="from_departement" class="form-control" required>
                                 <option value="">اختر الجهة</option>
                                 @foreach ($departments as $item)
@@ -95,36 +86,56 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row" dir="rtl">
-                        <button type="button" class="btn-all mt-3 mx-5" data-bs-toggle="modal"
+
+
+                    <div class="form-row d-flex  mt-1 " dir="rtl">
+                        <div class="form-group">
+                            <label for="files"> اضف ملفات </label>
+                        </div>
+                        <div class="form-group col-md-12 " dir="rtl">
+                            <div class=" fileupload d-inline">
+                                <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control"
+                                    accept="image/jpeg, image/png, application/pdf">
+
+                                <button class="btn-all mx-1" onclick="uploadFiles()" style="color:green;" type="button">
+                                    اضف </button>
+
+                                <div class="space-uploading">
+                                    <ul id="fileList" class="d-flex flex-wrap">
+                                        <!-- Uploaded files will be listed here -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- <label for="files">اضافة ملف</label>
+                                        <div id="fileInputs">
+                                            <div class="file-input mb-3" dir="rtl">
+                                                <input type="file" name="files[]" class="form-control"> -->
+                            <!-- <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button> -->
+                        </div>
+                    </div>
+                    <div class="form-row mb-5" dir="rtl">
+                        <button type="button" class="btn-all  mx-3" data-bs-toggle="modal"
                             data-bs-target="#representative" data-dismiss="modal" id="representative-dev"
                             style="background-color: #FAFBFD; border: none;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
                         </button>
-                        <button type="button" class="btn-all mt-3" data-bs-toggle="modal" id="extern-department-dev"
+                        <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
                             data-bs-target="#extern-department" data-dismiss="modal"
                             style="background-color: #FAFBFD; border: none; display: none;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة جهه جديده
                         </button>
                     </div> <br>
-                    <div class="form-row d-block ">
-                        <div class="form-group col-md-12">
-                            <label for="files">اضافة ملف</label>
-                            <div id="fileInputs">
-                                <div class="file-input mb-3" dir="rtl">
-                                    <input type="file" name="files[]" class="form-control">
-                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row" dir="rtl">
-                        <button type="button" class="btn-all btn-sm mt-2" id="addFile"
-                            style="background-color: #FAFBFD; border: none;"><img
-                                src="{{ asset('frontend/images/add-btn.svg') }}" alt="">إضافة ملف جديد
-                        </button>
 
-                    </div> <br>
+
+                    <!-- <div class="form-row" dir="rtl">
+                    <button type="button" class="btn-all btn-sm mt-2" id="addFile"
+                        style="background-color: #FAFBFD; border: none;"><img src="{{ asset('frontend/images/add-btn.svg') }}"
+                            alt="">إضافة ملف جديد
+                    </button>
+
+
+                </div>  -->
+
                 </div>
                 <div class="container col-10 ">
                     <div class="form-row mt-4 mb-5">
@@ -347,7 +358,7 @@
                     var fileCount = $('#fileInputs').find('.file-input').length;
                     if (fileCount < files_num) {
                         var newInput = '<div class="file-input mb-3">' +
-                            '<input type="file" name="files[]" class="form-control-file" required>' +
+                            '<input type="file" name="files[]" class="form-control" required>' +
                             '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
                             '</div>';
                         $('#fileInputs').append(newInput);

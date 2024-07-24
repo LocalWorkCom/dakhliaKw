@@ -38,7 +38,7 @@
                     <div class="bg-white p-5">
                         <!-- <div>
                                                 <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
-                                                    اضافه جديد</a>
+                                                    اضافة جديد</a>
                                             </div>
                                             <br> -->
 

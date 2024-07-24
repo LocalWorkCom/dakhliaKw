@@ -9,7 +9,7 @@
                 <li class="breadcrumb-item "><a href="{{ route('home') }}">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">الادارات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href="{{ route('departments.create') }}">
-                        اضافه اداره</a></li>
+                        اضافة اداره</a></li>
             </ol>
         </nav>
     </div>

@@ -1,13 +1,13 @@
 @extends('layout.main')
 
 @section('title')
-    عرض
+    التفاصيل
 @endsection
 @section('content')
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('iotelegrams.list') }}">الواردات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض الوارد</a></li>
             </ol>
@@ -34,7 +34,7 @@
                     <tbody>
                         <tr>
                             <th scope="row"style="background: #f5f6fa;">الجهه المرسلة</th>
-                            <td style="background: #f5f6fa;">{{ $iotelegram->external_department->name }}</td>
+                            <td>{{ $iotelegram->external_department->name }}</td>
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">نوع الوارد</th>
@@ -61,7 +61,7 @@
                                     <div class="col-md-11 mb-3 px-5 mt-2 d-flex">
                                         @foreach ($iotelegram->ioFiles as $file)
                                             @if ($file->file_type == 'image')
-                                                <div >
+                                                <div>
 
                                                     <a href="#" class="image-popup" data-toggle="modal"
                                                         data-target="#imageModal" data-image="{{ asset($file->file_name) }}"

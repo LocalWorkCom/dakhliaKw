@@ -17,6 +17,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class settingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     //START government
     //show governments
     public function indexgovernment()
@@ -34,11 +38,14 @@ class settingController extends Controller
     //get data for governments
     public function getAllgovernment()
     {
-        $data = Government::get();
+        $data = Government::orderBy('created_at','desc')->get();
        
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<a class="btn btn-primary btn-sm" href=' . route('government.edit', $row->id) . '>تعديل</a>
-            <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>' ;
+            $name = "'$row->name'";
+            $editButton = '<a class="btn btn-primary btn-sm" onclick="openedit(' . $row->id . ', '.$name.')">تعديل</a>';
+            return $editButton;
+            
+            // <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -46,7 +53,9 @@ class settingController extends Controller
     //add government
     public function addgovernment(Request $request){
         $requestinput=$request->except('_token');
-        $job = Government::create($requestinput);
+        $job = new Government();
+        $job->name=$request->nameadd;
+        $job->save();
         $message="تم اضافه الوظيفه";
         return redirect()->route('government.all',compact('message'));
         //return redirect()->back()->with(compact('activeTab','message'));
@@ -97,12 +106,16 @@ class settingController extends Controller
     //get data for JOB
     public function getAllJob()
     {
-        $data = job::get();
+        $data = job::orderBy('created_at','desc')->get();
        
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<a class="btn btn-primary btn-sm" href=' . route('job.edit', $row->id) . '>تعديل</a>
-            <a class="btn btn-primary btn-sm" href=' . route('job.show', $row->id) . '>التفاصيل</a>
-            <a class="btn btn-primary btn-sm"  onclick="opendelete('.$row->id.')">حذف</a>' ;
+            $name = "'$row->name'";
+            $editButton = '<a class="btn btn-primary btn-sm" onclick="openedit(' . $row->id . ', '.$name.')">تعديل</a>';
+            $deleteButton = '<a class="btn btn-primary btn-sm" onclick="opendelete(' . $row->id . ')">حذف</a>';
+
+            return $editButton . ' ' . $deleteButton;
+            // <a class="btn btn-primary btn-sm" href=' . route('job.show', $row->id) . '>التفاصيل</a>
+
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -110,10 +123,11 @@ class settingController extends Controller
     //add JOB
     public function addJob(Request $request){
         $requestinput=$request->except('_token');
-        $job = job::create($requestinput);
-        $activeTab=2;
+        $job = new job();
+          $job->name=$request->nameadd;
+          $job->save();
         $message="تم اضافه الوظيفه";
-        return redirect()->route('job.index',compact('activeTab','message'));
+        return redirect()->route('job.index',compact('message'));
         //return redirect()->back()->with(compact('activeTab','message'));
     }
     //show JOB
@@ -178,12 +192,16 @@ class settingController extends Controller
     //get data for GRAD
     public function getAllgrads()
     {
-        $data = grade::get();
+        $data = grade::orderBy('created_at','desc')->get();
        
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<a class="btn btn-primary btn-sm" href=' . route('grads.edit', $row->id) . '>تعديل</a>
-            <a class="btn btn-primary btn-sm" href=' . route('grads.show', $row->id) . '>التفاصيل</a>
-            <a class="btn btn-primary btn-sm"  onclick="opendelete('.$row->id.')">حذف</a>' ;
+            $name = "'$row->name'";
+            $editButton = '<a class="btn btn-primary btn-sm" onclick="openedit(' . $row->id . ', '.$name.')">تعديل</a>';
+            $deleteButton = '<a class="btn btn-primary btn-sm" onclick="opendelete(' . $row->id . ')">حذف</a>';
+
+            return $editButton . ' ' . $deleteButton;
+            // <a class="btn btn-primary btn-sm" href=' . route('grads.show', $row->id) . '>التفاصيل</a>
+
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -191,7 +209,9 @@ class settingController extends Controller
     //add GRAD
     public function addgrads(Request $request){
         $requestinput=$request->except('_token');
-        $job = grade::create($requestinput);
+        $job = new grade();
+        $job->name=$request->nameadd;
+        $job->save();
         $message="تم اضافه الوظيفه";
         return redirect()->route('grads.index',compact('message'));
         //return redirect()->back()->with(compact('activeTab','message'));
@@ -258,12 +278,23 @@ class settingController extends Controller
       //get data for JOB
       public function getAllvacationType()
       {
-          $data = VacationType::get();
+          $data = VacationType::orderBy('created_at','desc')->get();
          
+
           return DataTables::of($data)->addColumn('action', function ($row) {
-              return '<a class="btn btn-primary btn-sm" href=' . route('vacationType.edit', $row->id) . '>تعديل</a>
-              <a class="btn btn-primary btn-sm" href=' . route('vacationType.show', $row->id) . '>التفاصيل</a>
-              <a class="btn btn-primary btn-sm"  onclick="opendelete('.$row->id.')">حذف</a>' ;
+            $hiddenIds = [1, 2, 3, 4];
+            $name = "'$row->name'";
+            $editButton = '<a class="btn btn-primary btn-sm" onclick="openedit(' . $row->id . ', '.$name.')">تعديل</a>';
+            if (!in_array($row->id, $hiddenIds)) {
+                $deleteButton = '<a class="btn btn-primary btn-sm" onclick="opendelete(' . $row->id . ')">حذف</a>';
+                return $editButton . ' ' . $deleteButton;
+            }else{
+                return $editButton;
+            }
+            // href="' . route('vacationType.edit', $row->id) . '" 
+
+            //   <a class="btn btn-primary btn-sm" href=' . route('vacationType.show', $row->id) . '>التفاصيل</a>
+
           })
           ->rawColumns(['action'])
           ->make(true);
@@ -271,9 +302,12 @@ class settingController extends Controller
       //add JOB
       public function addvacationType(Request $request){
           $requestinput=$request->except('_token');
-          $job = VacationType::create($requestinput);
+          //dd($request->nameadd);
+          $job = new VacationType();
+          $job->name=$request->nameadd;
+          $job->save();
          
-          $message="تم اضافه الوظيفه";
+          $message="تم اضافة الوظيفه";
           return redirect()->route('vacationType.index',compact('message'));
           //return redirect()->back()->with(compact('activeTab','message'));
       }
@@ -284,9 +318,9 @@ class settingController extends Controller
           return view("vacationType.show" ,compact("data"));
       }
       //edit JOB
-      public function editvacationType($id)
+      public function editvacationType(Request $request)
       {
-          $data = VacationType::findOrFail($id);
+          $data = VacationType::findOrFail($request->id);
           return view("vacationType.edit" ,compact("data"));
       }
        //update JOB
@@ -362,7 +396,7 @@ class settingController extends Controller
         $requestinput=$request->except('_token');
         $grade = grade::create($requestinput);
         $activeTab=1;
-        $message="تم اضافه رتبه عسكريه جديده";
+        $message="تم اضافة رتبه عسكريه جديده";
         return redirect()->route('setting.index',compact('activeTab','message'));
 
         //return redirect()->back()->with(compact('activeTab','message'));
@@ -372,7 +406,7 @@ class settingController extends Controller
         $request=$request->except('_token');
         $vacation = VacationType::create($request);
         $activeTab=3;
-        $message="تم اضافه نوع اجازه جديد";
+        $message="تم اضافة نوع اجازه جديد";
         return redirect()->route('setting.index',compact('activeTab','message'));
     }
     

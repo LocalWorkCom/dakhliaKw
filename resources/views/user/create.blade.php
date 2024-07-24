@@ -6,25 +6,19 @@
 <div class="row col-11" dir="rtl">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
-            <li class="breadcrumb-item"><a href="#">الموظفين </a></li>
-            <li class="breadcrumb-item active" aria-current="page"> <a href="#"> اضافه موظف</a></li>
+            <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+
+                @if (url()->current() == url('/users_create/0'))
+                <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
+
+                @elseif (url()->current() == url('/users_create/1'))
+                <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
+
+                @endif
+            <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة </a></li>
         </ol>
     </nav>
 </div>
-<div class="row ">
-@if (url()->current() == url('/users/0'))
-                <div class="container welcome col-11">
-                    <p>المستخـــــــــــدمين</p>
-                </div>
-            @elseif (url()->current() == url('/employees/1'))
-                <div class="container welcome col-11">
-                    <p>المـــــــــــوظفين</p>
-                </div>
-            @endif
-</div>
-<br>
-
 <div class="row">
     <div class="container  col-11 mt-3 p-0 ">
         <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
@@ -47,7 +41,7 @@
 
 
 
-                <form action="{{ route('user.store') }}" method="post" class="text-right">
+                <form action="{{ route('user.store') }}" method="post" class="text-right" enctype="multipart/form-data">
                     @csrf
 
                     <input type="hidden" name="type" value="{{ $flag }}">
@@ -55,22 +49,28 @@
                       
                         <div class="form-group col-md-5 mx-2 ">
                             <label for="job"> الوظيفة</label>
-                            <input type="text" id="job" name="job" class="form-control" required>
+                            <select class="custom-select custom-select-lg mb-3" name="job" id="job">
+                                <option selected disabled>Open this select menu</option>
+                                @foreach ($job as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            {{-- <input type="text" id="job" name="job" class="form-control" required> --}}
                         </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="nameus"> الاسم</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
+                            <input type="text" id="name" name="name" class="form-control" >
                         </div>
                     </div>
                     <div class="form-row mx-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-2">
                             <label for="military_number">رقم العسكرى</label>
                             <input type="text" id="military_number" name="military_number" class="form-control"
-                                required>
+                                >
                         </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="phone">رقم المحمول</label>
-                            <input type="text" id="phone" name="phone" class="form-control" required>
+                            <input type="text" id="phone" name="phone" class="form-control" >
                         </div>
 
                     </div>
@@ -80,12 +80,12 @@
             <div class="form-row mx-3 d-flex justify-content-center">
                 <div class="form-group col-md-5 mx-2">
                     <label for="filenum">رقم الملف</label>
-                    <input type="text" id="filenum" name="file_number" class="form-control" required>
+                    <input type="text" id="filenum" name="file_number" class="form-control">
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="department">الادارة</label>
                     <select class="custom-select custom-select-lg mb-3" name="department" id="department">
-                        <option selected>Open this select menu</option>
+                        <option selected disabled>Open this select menu</option>
                         @foreach ($alldepartment as $item)
                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
@@ -97,9 +97,9 @@
             @if ($flag == "0")
             <div class="form-row mx-3 d-flex justify-content-center">
                 <div class="form-group col-md-5 mx-2">
-                    <label for="rule_id">الادوار</label>
+                    <label for="rule_id">المهام</label>
                     <select class="custom-select custom-select-lg mb-3" name="rule" id="rule_id">
-                        <option selected>Open this select menu</option>
+                        <option selected disabled>Open this select menu</option>
                         @foreach ($rule as $item)
                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
@@ -107,7 +107,7 @@
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="Civil_number">الباسورد</label>
-                    <input type="text" id="password" name="password" class="form-control" required>
+                    <input type="password" id="password" name="password" class="form-control" >
 
                 </div>
             </div>
@@ -124,7 +124,7 @@
                 <div class="form-group col-md-10 " id="grade" style="display: none;">
                     <label for="grade_id">الرتبة</label>
                     <select class="custom-select custom-select-lg mb-3" name="grade_id" id="grade_id">
-                        <option selected>Open this select menu</option>
+                        <option selected disabled>Open this select menu</option>
                         @foreach ($grade as $item)
                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                         {{-- <option value=""></option> --}}

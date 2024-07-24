@@ -17,8 +17,8 @@ class VacationTypeSeeder extends Seeder
         $types = [
             ['name' => 'اعتيادي', 'active' => 1],
             ['name' => 'مرضي', 'active' => 1],
-            ['name' => 'عامة', 'active' => 1],
-            ['name' => 'عارضة', 'active' => 1],
+            ['name' => 'رسمية', 'active' => 1],
+            ['name' => 'طارئة', 'active' => 1],
         ];
 
         // Insert data into the table

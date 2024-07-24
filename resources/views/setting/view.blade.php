@@ -2,7 +2,9 @@
 
 @push('style')
 @endpush
-
+@section('title')
+الاعدادات
+@endsection
 @section('content')
     <div class="container">
 
@@ -64,7 +66,7 @@
                                     <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
                                         data-bs-target="#add-job" style="color: #0D992C;">
                                         <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                        اضافه وظيفه
+                                        اضافة وظيفه
                                     </button>
                                 </div>
                             </div>
@@ -92,7 +94,7 @@
                                     <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
                                         data-bs-target="#add-type" style="color: #0D992C;">
                                         <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                        اضافه نوع اجازه
+                                        اضافة نوع اجازه
                                     </button>
                                 </div>
                             </div>
@@ -121,7 +123,7 @@
                                     <button type="button" class="wide-btn  " data-bs-toggle="modal"
                                         id="extern-user-dev" data-bs-target="#add-gover" style="color: #0D992C;">
                                         <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                        اضافه محافظه
+                                        اضافة محافظه
                                     </button>
                                 </div>
                             </div>
@@ -165,7 +167,7 @@
 
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="submit" class="btn-blue">اضافه</button>
+                            <button type="submit" class="btn-blue">اضافة</button>
                         </div>
                     </form>
                 </div>
@@ -218,7 +220,7 @@
 
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="submit" class="btn-blue">اضافه</button>
+                            <button type="submit" class="btn-blue">اضافة</button>
                         </div>
                     </form>
                 </div>
@@ -247,7 +249,7 @@
 
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="submit" class="btn-blue">اضافه</button>
+                            <button type="submit" class="btn-blue">اضافة</button>
                         </div>
                     </form>
                 </div>
@@ -276,7 +278,7 @@
 
                         <!-- Save button -->
                         <div class="text-end">
-                            <button type="submit" class="btn-blue">اضافه</button>
+                            <button type="submit" class="btn-blue">اضافة</button>
                         </div>
                     </form>
                 </div>
