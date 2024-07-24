@@ -13,7 +13,7 @@
         </div>
         <div class="form-group">
             <select name="parent_id" id="parent_id" class="form-control">
-                <option value="" {{ is_null($parentDepartment) ? 'selected' : '' }}>اختار القسم</option>
+                <option value="{{$parentDepartment->id}}">اختار القسم</option>
                 @foreach ($departments as $department)
                     <option value="{{ $department->parent_id }}">
                         {{ $department->name }}
