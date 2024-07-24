@@ -52,7 +52,7 @@
                 <div class="form-outline  mt-4">
                     <input type="search" id="" class="form-control" placeholder="بحث" />
                 </div>
-                <select name="#" id="#" class=" mt-4" style="dir:rtl;">
+                <select name="#" id="#" class=" mt-4" style="direction:rtl;">
                     <option value="#"> المستخدميين </option>
                     <option value="{{ route('departments.index') }}"> الادارات </option>
                     
