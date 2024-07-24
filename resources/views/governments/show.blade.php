@@ -12,7 +12,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
             <li class="breadcrumb-item"><a href="{{ route('government.all') }}">المحافظات </a></li>
-            <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه محافظه </a></li>
+            <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة محافظه </a></li>
         </ol>
     </nav>
 </div>

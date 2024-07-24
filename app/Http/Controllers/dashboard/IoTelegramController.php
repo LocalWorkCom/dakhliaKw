@@ -31,8 +31,9 @@ class IoTelegramController extends Controller
     public function getArchives()
     {
         $IoTelegrams = Iotelegram::where('active', 1)->with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+            ->orderBy('created_at', 'desc')
             ->get();
-       
+
         foreach ($IoTelegrams as  $IoTelegram) {
             $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
                 $IoTelegram->internal_department->name :
@@ -47,7 +48,9 @@ class IoTelegramController extends Controller
     public function getIotelegrams()
     {
         $IoTelegrams = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+            ->orderBy('created_at', 'desc')
             ->get();
+
         foreach ($IoTelegrams as  $IoTelegram) {
             $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
                 $IoTelegram->internal_department->name :
@@ -126,7 +129,7 @@ class IoTelegramController extends Controller
     public function show($id)
     {
         //
-        $iotelegram = Iotelegram::find($id);
+        $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
         $representives = Postman::all();
         $recieves = User::all();
         $departments = departements::all();
@@ -145,7 +148,7 @@ class IoTelegramController extends Controller
         $recieves = User::all();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-        $iotelegram = Iotelegram::find($id);
+        $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
 
         return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram', 'external_departments'));
     }

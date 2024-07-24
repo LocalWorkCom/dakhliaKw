@@ -12,7 +12,7 @@
                     <li class="breadcrumb-item "><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
                 @endif
                 <li class="breadcrumb-item"><a href="{{ route('vacations.list', $id) }}">الاجازات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة </a></li>
             </ol>
         </nav>
     </div>

@@ -22,6 +22,7 @@ class VacationController extends Controller
 
             $EmployeeVacations = EmployeeVacation::where('employee_id', $id)
                 ->with('employee', 'vacation_type')
+                ->orderby('id', 'desc')
                 ->get();
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 # code...
@@ -32,7 +33,9 @@ class VacationController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         } else {
-            $EmployeeVacations = EmployeeVacation::with('employee', 'vacation_type')->get();
+            $EmployeeVacations = EmployeeVacation::with('employee', 'vacation_type')
+            ->orderby('id', 'desc')
+            ->get();
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 # code...
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);

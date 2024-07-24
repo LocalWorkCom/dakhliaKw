@@ -92,7 +92,7 @@ class outgoingController extends Controller
         $export = outgoings::find($request->id);
         $export->active=1;
         $export->save();
-        session()->flash('success', 'تم الاضافه الى الارشيف بنجاح.');
+        session()->flash('success', 'تم الاضافة الى الارشيف بنجاح.');
         return redirect()->back();
     }
     public function showArchive(outgoingsDataTable $dataTable, Request $request){
@@ -293,7 +293,7 @@ class outgoingController extends Controller
                 }
             }
         }
-        return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
+        return redirect()->route('Export.index')->with('status', 'تم الاضافة بنجاح');
     }else{
         return redirect()->route('login');
 

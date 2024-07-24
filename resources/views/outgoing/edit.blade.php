@@ -11,7 +11,7 @@
         <li class="breadcrumb-item"><a href="#">الرئيسيه</a></li>
         <li class="breadcrumb-item active"><a href="{{ route('Export.index') }}">الصادرات </a></li>
 
-        <li class="breadcrumb-item active">اضافه الصادر</li>
+        <li class="breadcrumb-item active">اضافة الصادر</li>
 
     </ol>
     
@@ -77,7 +77,7 @@
                             <div class="form-group col-md-6">
                              <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
                                      id="addFile-dev" data-bs-target="#addFile">
-                                     اضافه ملفات
+                                     اضافة ملفات
                              </button>
                              {{-- <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف جديد</button> --}}
  
