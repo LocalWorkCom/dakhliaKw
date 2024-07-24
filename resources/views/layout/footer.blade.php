@@ -141,4 +141,60 @@
           }
         }
       }
+      //  for header collapsing 
+      
+      $(document).ready(function() {
+    $('.navbar-toggler').click(function() {
+      $('.navbar-collapse').toggleClass('show');
+    });
+
+    // Close navbar when clicking outside the menu area
+    $(document).click(function(event) {
+      var clickover = $(event.target);
+      var $navbar = $('.navbar-collapse');
+      var _opened = $navbar.hasClass('show');
+      if (_opened === true && !clickover.hasClass('side-nav')) {
+        $navbar.removeClass('show');
+      }
+    });
+  });
+
+  // for file upload ******
+  function uploadFiles() {
+      const files = document.getElementById('fileInput').files;
+      const fileList = document.getElementById('fileList');
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        // Check if file with the same name already exists in the list
+        let fileExists = false;
+        Array.from(fileList.children).forEach(item => {
+          if (item.dataset.filename === file.name) {
+            fileExists = true;
+          }
+        });
+
+        if (!fileExists) {
+          const listItem = document.createElement('li');
+          listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+          listItem.dataset.filename = file.name; // Store filename as dataset attribute
+
+          const fileName = document.createElement('span');
+          fileName.textContent = file.name;
+
+          const deleteButton = document.createElement('button');
+          deleteButton.className = 'btn btn-danger btn-sm';
+          deleteButton.textContent = 'Delete';
+          deleteButton.onclick = function() {
+            fileList.removeChild(listItem);
+          };
+
+          listItem.appendChild(fileName);
+          listItem.appendChild(deleteButton);
+          fileList.appendChild(listItem);
+        }
+      }
+    }
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
