@@ -29,6 +29,12 @@
                 <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
+                    <div class="form-group col-md-3 mx-2" id="name_dev">
+
+                        <label for="name">اسم الاجازة:</label>
+                        <input type="text" id="name" name="name" class="form-control"
+                            value="{{ $vacation->name }}">
+                    </div>
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-2 "> <label for="vacation_type_id">نوع الاجازة:</label>
 
@@ -133,6 +139,8 @@
                 var value = $('#vacation_type_id option:selected').val();
                 if (value == '3') {
                     $('#reportImage-div').hide();
+                    $('#name_dev').hide();
+
                     $('#date_to').prop('disabled', false);
 
                     $('#employee_id').prop('disabled', true);
@@ -141,6 +149,7 @@
 
                 } else if (value == '4') {
                     $('#reportImage-div').hide();
+                    $('#name_dev').hide();
 
                     $('#date_to').prop('disabled', true);
                     $('#employee_id').prop('disabled', false);
@@ -149,12 +158,14 @@
                 } else if (value == '2') {
                     $('#reportImage-div').show();
                     $('#date_to').prop('disabled', false);
+                    $('#name_dev').show();
 
                     $('#employee_id').prop('disabled', false);
                     $('#employee_id').attr('required', true);
                 } else {
                     $('#reportImage-div').hide();
                     $('#date_to').prop('disabled', false);
+                    $('#name_dev').hide();
 
                     $('#employee_id').prop('disabled', false);
                     $('#employee_id').attr('required', true);
@@ -166,6 +177,7 @@
                     if (value == '3') {
                         $('#reportImage-div').hide();
                         $('#date_to').prop('disabled', false);
+                        $('#name_dev').hide();
 
                         $('#employee_id').prop('disabled', true);
 
@@ -173,6 +185,7 @@
 
                     } else if (value == '4') {
                         $('#reportImage-div').hide();
+                        $('#name_dev').hide();
 
                         $('#date_to').prop('disabled', true);
                         $('#employee_id').prop('disabled', false);
@@ -181,12 +194,14 @@
                     } else if (value == '2') {
                         $('#reportImage-div').show();
                         $('#date_to').prop('disabled', false);
+                        $('#name_dev').show();
 
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
                     } else {
                         $('#reportImage-div').hide();
                         $('#date_to').prop('disabled', false);
+                        $('#name_dev').hide();
 
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);

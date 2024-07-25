@@ -40,6 +40,8 @@
                         <label for="date">التاريخ:</label>
                         <input type="date" id="date" name="date" class="form-control" required>
                     </div>
+
+
                     <div class="form-row pt-4">
                         <div class="form-group col-md-6 ">
                             <label for="representive_id">اختر المندوب </label>
@@ -110,9 +112,9 @@
                                 </div>
                             </div>
                             <!-- <label for="files">اضافة ملف</label>
-                                                <div id="fileInputs">
-                                                    <div class="file-input mb-3" dir="rtl">
-                                                        <input type="file" name="files[]" class="form-control"> -->
+                                                    <div id="fileInputs">
+                                                        <div class="file-input mb-3" dir="rtl">
+                                                            <input type="file" name="files[]" class="form-control"> -->
                             <!-- <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button> -->
                         </div>
                     </div>
@@ -131,13 +133,13 @@
 
 
                     <!-- <div class="form-row" dir="rtl">
-                            <button type="button" class="btn-all btn-sm mt-2" id="addFile"
-                                style="background-color: #FAFBFD; border: none;"><img src="{{ asset('frontend/images/add-btn.svg') }}"
-                                    alt="">إضافة ملف جديد
-                            </button>
+                                <button type="button" class="btn-all btn-sm mt-2" id="addFile"
+                                    style="background-color: #FAFBFD; border: none;"><img src="{{ asset('frontend/images/add-btn.svg') }}"
+                                        alt="">إضافة ملف جديد
+                                </button>
 
 
-                        </div>  -->
+                            </div>  -->
 
                 </div>
                 <div class="container col-10 ">

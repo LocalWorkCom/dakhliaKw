@@ -29,7 +29,13 @@
                 <form action="{{ route('vacation.store', $id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
+                    <div class="form-group col-md-3 mx-2" id="name_dev" hidden>
+
+                        <label for="name">اسم الاجازة:</label>
+                        <input type="text" id="name" name="name" class="form-control" >
+                    </div>
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
+
                         <div class="form-group col-md-5 mx-2 ">
                             <label for="vacation_type_id">نوع الاجازة</label>
                             <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
@@ -38,8 +44,10 @@
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
+
                         </div>
                         <div class="form-group col-md-5 mx-2">
+
                             <label for="employee_id">اسم الموظف</label>
 
 
@@ -76,6 +84,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
             </div>
@@ -109,12 +118,14 @@
                     if (value == '3') {
                         $('#reportImage-div').hide()
                         $('#date_to').prop('disabled', false);
+                        $('#name_dev').hide();
 
                         $('#employee_id').prop('disabled', true);
                         $('#employee_id').removeAttr('required');
 
                     } else if (value == '4') {
                         $('#reportImage-div').hide()
+                        $('#name_dev').hide();
 
                         $('#date_to').prop('disabled', true);
                         if (!id) {
@@ -125,13 +136,17 @@
 
                     } else if (value == '2') {
                         $('#reportImage-div').show();
+                        $('#name_dev').show();
+
                         $('#date_to').prop('disabled', false);
                         if (!id) {
                             $('#employee_id').prop('disabled', false);
                             $('#employee_id').attr('required', true);
                         }
                     } else {
-                        $('#reportImage-div').hide()
+                        $('#reportImage-div').hide();
+                        $('#name_dev').hide();
+
                         $('#date_to').prop('disabled', false);
                         if (!id) {
 

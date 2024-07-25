@@ -123,7 +123,7 @@ class outgoingController extends Controller
 
     public function store(Request $request)
     {
-       // dd($request->all());
+        //dd($request->all());
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
@@ -132,7 +132,7 @@ class outgoingController extends Controller
             'person_to' => 'nullable|exists:export_users,id',
             'date' => 'required|date',
             'department_id' => 'nullable|exists:external_departements,id',
-          //  'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
 
         // // Define custom messages
@@ -142,10 +142,9 @@ class outgoingController extends Controller
             'note.required' => 'عفوا يجب ادخال ملاحظات الصادر',
             'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
-           // 'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
+            'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
         ];
         $validatedData = Validator::make($request->all(), $rules, $messages);
-       // dd($validatedData->fails());
         // // Validate the request
        // $request->validate($rules, $messages);
         if ($validatedData->fails()) {
@@ -156,7 +155,7 @@ class outgoingController extends Controller
                 ->with('person_to', $request->person_to)
                 ->with('date', $request->date)
                 ->with('department_id', $request->department_id)
-               // ->with('files', $request->files)
+                ->with('files', $request->files)
                 ->with('num', $request->num);
         }
         //dd( $request->validate($rules, $messages));
@@ -176,24 +175,25 @@ class outgoingController extends Controller
         $export->save(); 
     
 
-   if( $request->hasFile('files') ){
+        if( $request->hasFile('files') ){
          
-            //if (function_exists('UploadFiles')) {
+            if (function_exists('UploadFiles')) {
                  //  dd('file yes');
                 foreach ($request->file('files') as $file) {
-                    $exfiles=new outgoing_files();
-                    $exfiles->outgoing_id = $export->id;
-                    $exfiles->created_by=auth()->id();//auth auth()->id
-                    $exfiles->updated_by=auth()->id();//auth auth()->id
-                    $exfiles->file_type = ($file->getClientOriginalExtension() == 'pdf')? 'pdf' : 'image';
-                    $exfiles->active =0;
-                    $exfiles->save();
-                    $file_model = outgoing_files::find($exfiles->id);
-                    //UploadFiles($path, 'file_name', 'real_name', $io_file, $file);
-                    UploadFiles('files/export','file_name',  'real_name',$exfiles, $file);
-               // }
+                    $files=new outgoing_files();
+                    $files->outgoing_id = $export->id;
+                    $files->created_by=auth()->id();//auth auth()->id
+                    $files->updated_by=auth()->id();//auth auth()->id
+                    $files->file_type = ($file->getClientOriginalExtension() == 'pdf')? 'pdf' : 'image';
+                    $files->active =0;
+                    $files->save();
+                    $file_model = outgoing_files::find($files->id);
+
+                    UploadFiles('files/export','file_name',  'real_name',$file_model, $file);
+                }
             }
-        }     
+        }
+      
         
         return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }else{
@@ -331,8 +331,8 @@ class outgoingController extends Controller
     {
         $file=outgoing_files::find($id);
        // $download=downloadFile($file->file_name,$file->real_name);
-        $file_path = public_path($file->file_name);
-        $file_name =basename($file->real_name);
+        $file_path = public_path($file->file_name,);
+        $file_name =basename($file->real_name,);
     
         return response()->download($file_path, $file_name);
         //echo 'downloaded';

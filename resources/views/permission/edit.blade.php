@@ -49,9 +49,7 @@
                                 <option value="view" {{ $permissionAction == 'view' ? 'selected' : '' }}>عرض</option>
                                 <option value="edit" {{ $permissionAction == 'edit' ? 'selected' : '' }}>تعديل</option>
                                 <option value="create" {{ $permissionAction == 'create' ? 'selected' : '' }}>اضافة</option>
-                                {{-- <option value="delete" {{ $permissionAction == 'delete' ? 'selected' : '' }}>ازالة</option> --}}
-                                <option value="download"  {{ $permissionAction == 'create' ? 'selected' : '' }}>تحميل</option>
-
+                                <option value="delete" {{ $permissionAction == 'delete' ? 'selected' : '' }}>ازالة</option>
                             </select>
                         </div>
 
