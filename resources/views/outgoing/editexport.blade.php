@@ -27,7 +27,6 @@
                 @include('inc.flash')
                 <form action="{{ route('Export.update', ['id' => $data->id]) }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @method('PUT')
 
                     <div class="form-row mx-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-2">
