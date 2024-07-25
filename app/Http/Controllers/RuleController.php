@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreRuleRequest;
 use App\Http\Requests\UpdateRuleRequest;
+use Illuminate\Support\Facades\Validator;
 
 class RuleController extends Controller
 {
@@ -84,11 +85,40 @@ class RuleController extends Controller
     {
         // dd($request);
         // dd($request);
-        $request->validate([
-            'name' => 'required|string',
+        // $request->validate([
+        //     'name' => 'required|string',
+        //     'permissions_ids' => 'required',
+        //     'department_id' => 'required',
+        // ]);
+
+         $messages = [
+            'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+            'permissions_ids.required' => 'الصلاحية   مطلوب ولا يمكن تركه فارغاً.',
+
+            'department_id.required' => 'الادارة  مطلوب ولا يمكن تركه فارغاً.',
+            // 'name.unique' => 'رقم الهاتف يجب أن يكون نصاً.',
+
+            // Add more custom messages here
+        ];
+        
+        $validatedData = Validator::make($request->all(), [
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                // ValidationRule::unique('permissions', 'guard_name'),
+            ],
             'permissions_ids' => 'required',
             'department_id' => 'required',
-        ]);
+            
+        ], $messages);
+    
+    
+
+    // Handle validation failure
+    if ($validatedData->fails()) {
+        return redirect()->back()->withErrors($validatedData)->withInput();
+    }
 
 
         try {
@@ -184,11 +214,39 @@ class RuleController extends Controller
     {
         // dd($request);
 
-        $request->validate([
-            'name' => 'required|string',
+        // $request->validate([
+        //     'name' => 'required|string',
+        //     'permissions_ids' => 'required',
+        //     // 'department_id' => 'required',
+        // ]);
+        $messages = [
+            'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+            'permissions_ids.required' => 'الصلاحية   مطلوب ولا يمكن تركه فارغاً.',
+
+            'department_id.required' => 'الادارة  مطلوب ولا يمكن تركه فارغاً.',
+            // 'name.unique' => 'رقم الهاتف يجب أن يكون نصاً.',
+
+            // Add more custom messages here
+        ];
+        
+        $validatedData = Validator::make($request->all(), [
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                // ValidationRule::unique('permissions', 'guard_name'),
+            ],
             'permissions_ids' => 'required',
-            // 'department_id' => 'required',
-        ]);
+            'department_id' => 'required',
+            
+        ], $messages);
+    
+    
+
+    // Handle validation failure
+    if ($validatedData->fails()) {
+        return redirect()->back()->withErrors($validatedData)->withInput();
+    }
         try {
             // dd("");
             $permission_ids = implode(",", $request->permissions_ids);
