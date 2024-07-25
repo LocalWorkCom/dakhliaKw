@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white ">
                         <!-- <div>
                                                 <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
                                                     اضافة جديد</a>
@@ -43,14 +43,14 @@
                                             <br> -->
 
                         <div>
-                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>رقم التعريف</th>
                                         <th>الاسم</th>
                                         <th>الهاتف</th>
                                         <th>الرقم العسكري</th>
-                                        <th>العمليات</th>
+                                        <th style="width:150px !important;">العمليات</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -60,6 +60,8 @@
 
                             <script>
                                 $(document).ready(function() {
+                                    $.fn.dataTable.ext.classes.sPageButton = 'btn btn-primary btn-sm'; // Change Pagination Button Class
+
                                     var id = {{ $id }};
                                     $('#users-table').DataTable({
                                         processing: true,
@@ -101,9 +103,9 @@
                                                 vacation = vacation.replace(':id', row.id);
 
                                                 return `
-                                        <a href="` + usershow + `" class="btn btn-primary btn-sm">مشاهدة</a>
-                                        <a href="` + useredit + `" class="btn btn-primary btn-sm">تعديل</a>
-                                        <a href="${vacation}">الاجازات</a>  <br> <hr>
+                                        <a href="` + usershow + `" class="btn btn-sm" style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
+                                        <a href="` + useredit + `" class="btn btn-sm"  style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>
+                                        <a href="${vacation}"  "   class="btn btn-sm" style=" background-color:#864824; "> <i class="fa-solid fa-mug-hot" ></i> </a> 
 
                                         `;
                                             }
@@ -117,13 +119,11 @@
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                             "sZeroRecords": 'نأسف لا توجد نتيجة',
                                             "oPaginate": {
-                                                    "sFirst": "<<", // This is the link to the first page
-                                                    "sPrevious": "<", // This is the link to the previous page
-                                                    "sNext": ">", // This is the link to the next page
-                                                    "sLast": " >>" // This is the link to the last page
+                                                    "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
+                                                    "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
+                                                    "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
+                                                    "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
                                                     }
-
-
                                         },
                                         layout: {
                                             bottomEnd: {
@@ -132,7 +132,7 @@
                                                 }
                                             }
                                         },
-                                         "pagingType": "full_numbers"
+                                         "pagingType": "full_numbers",
                                     });
                                 });
                             </script>

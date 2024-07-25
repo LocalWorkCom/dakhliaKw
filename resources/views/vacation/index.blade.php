@@ -28,11 +28,11 @@
             @include('inc.flash')
 
             <div class="col-lg-12">
-                <div class="bg-white p-5">
+                <div class="bg-white ">
                 </div>
 
 
-                <table id="users-table" class="display table table-bordered table-hover dataTable">
+                <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                     <thead>
                         <tr>
                             <th>الرقم</th>

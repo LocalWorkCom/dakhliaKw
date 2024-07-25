@@ -15,9 +15,9 @@
         </div>
         <div class="form-group">
             <select name="parent_id" id="parent_id" class="form-control">
-                <option value="{{$parentDepartment->id}}">اختار القسم</option>
-                @foreach ($departments as $department)
-                    <option value="{{ $department->parent_id }}">
+                <option value="" {{ is_null($parentDepartment) ? 'selected' : '' }} >اختار القسم</option>
+                @foreach ($subdepartments as $department)
+                    <option value="{{ $department->id }}">
                         {{ $department->name }}
                     </option>
                 @endforeach
@@ -26,4 +26,5 @@
         <button type="submit" class="btn btn-primary">اضافة</button>
     </form>
 </div>
+
 @endsection

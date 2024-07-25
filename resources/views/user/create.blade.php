@@ -19,8 +19,20 @@
         </ol>
     </nav>
 </div>
+<div class="row ">
+        <div class="container welcome col-11">
+            @if (url()->current() == url('/users_create/0'))
+            <p>المستخدمين</p>
+
+            @elseif (url()->current() == url('/users_create/1'))
+            <p>الموظفين</p>
+
+            @endif
+            <!-- <p> المستخدمين </p> -->
+        </div>
+    </div>
 <div class="row">
-    <div class="container  col-11 mt-3 p-0 ">
+    <div class="container  col-11 mt-5 p-0 ">
         <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
 
             @if (session('success'))
@@ -62,16 +74,16 @@
                             <input type="text" id="name" name="name" class="form-control" >
                         </div>
                     </div>
-                    <div class="form-row mx-3 d-flex justify-content-center">
+                    <div class="form-row mx-2 d-flex justify-content-center">
                         @if ($flag == "0")
-                            <div class="form-group col-md-5 mx-2" >
+                            <div class="form-group col-md-10 mx-2" >
                                 <label for="military_number">رقم العسكرى</label>
                                 <input type="text" id="military_number" name="military_number" class="form-control"
                                     >
                             </div>
                         @endif
                         
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-10 mx-2">
                             <label for="phone">رقم المحمول</label>
                             <input type="text" id="phone" name="phone" class="form-control" >
                         </div>

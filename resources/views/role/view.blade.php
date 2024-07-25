@@ -11,7 +11,7 @@
     <section>
         <div class="row">
                 <div class="container welcome col-11">
-                    <p>المــهام</p>
+                    <p>المـــــــهام</p>
                 </div>
         </div>
 
@@ -29,16 +29,16 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white">
                         <div>
-                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>رقم التعريف</th>
                                         <th>الاسم</th>
                                         <th>الصلاحيات</th>
                                         <th>القسم</th>
-                                        <th>العمليات</th>
+                                        <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -77,11 +77,33 @@
                         var ruleshow = '{{ route('rule_show', ':id') }}';
                         ruleshow = ruleshow.replace(':id', row.id);
                         return `
-                            <a href="` + ruleshow + `" class="btn btn-primary btn-sm">مشاهدة</a>
-                            <a href="` + ruleedit + `" class="btn btn-primary btn-sm">تعديل</a>`;
+                            <a href="` + ruleshow + `" class="btn  btn-sm" style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
+                            <a href="` + ruleedit + `" class="btn  btn-sm" style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>`;
                     }
 
-                }]
+                }],
+                "oLanguage": {
+                                            "sSearch": "بحث",
+                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
+                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
+                                            "oPaginate": {
+                                                    "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
+                                                    "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
+                                                    "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
+                                                    "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
+                                                    }
+                                        },
+                                        layout: {
+                                            bottomEnd: {
+                                                paging: {
+                                                    firstLast: false
+                                                }
+                                            }
+                                        },
+                                         "pagingType": "full_numbers"
             });
         });
     </script>

@@ -49,9 +49,9 @@
                         <table id="grade-table" class="display table table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>action</th>
+                                    <th>الرقم</th>
+                                    <th>الاسم</th>
+                                    <th style="width:150px !important;">العمليات</th>
                                 </tr>
                             </thead>
                         </table>
@@ -106,7 +106,8 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>action</th>
+                                        <!-- <th>action</th> -->
+                                        <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -135,7 +136,8 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>action</th>
+                                        <!-- <th>action</th> -->
+                                        <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -381,16 +383,16 @@
                            <div class="form-row" dir="rtl">
                     <button type="button" class="btn-all mt-3" onclick=openedit(${row.id},'${row.name}',1)
                     style="background-color: #FAFBFD; border: none;">
-                  <i class="fa fa-edit"></i> 
+                  <i class="fa fa-edit"></i>
                 </button>
-                </div> 
+                </div>
                       <div class="form-
                       " dir="rtl">
                     <button type="button" class="btn-all mt-3" onclick=opendelete(${row.id},1)
                     style="background-color: #FAFBFD; border: none;">
-                  <i class="fa fa-de"></i> 
+                  <i class="fa fa-de"></i>
                 </button>
-                </div> 
+                </div>
                 `;
                     }
                 }]
@@ -474,15 +476,15 @@
                                <div class="form-row" dir="rtl">
                     <button type="button" class="btn-all mt-3" onclick=openedit(${row.id},'${row.name}',2)
                     style="background-color: #FAFBFD; border: none;">
-                  <i class="fa fa-edit"></i> 
+                  <i class="fa fa-edit"></i>
                 </button>
                 </div>
                    <div class="form-row" dir="rtl">
                     <button type="button" class="btn-all mt-3" onclick=opendelete(${row.id},2)
                     style="background-color: #FAFBFD; border: none;">
-                  <i class="fa fa-delete"></i> 
+                  <i class="fa fa-delete"></i>
                 </button>
-                </div> 
+                </div>
                         `;
                     }
                 }]
@@ -518,15 +520,15 @@
                                <div class="form-row" dir="rtl">
                     <button type="button" class="btn-all mt-3" onclick=openedit(${row.id},'${row.name}',3)
                     style="background-color: #FAFBFD; border: none;">
-                  <i class="fa fa-edit"></i> 
+                  <i class="fa fa-edit"></i>
                 </button>
                 </div>
                    <div class="form-row" dir="rtl">
                     <button type="button" class="btn-all mt-3" onclick=opendelete(${row.id},3)
                     style="background-color: #FAFBFD; border: none;">
-                  <i class="fa fa-delete"></i> 
+                  <i class="fa fa-delete"></i>
                 </button>
-                </div> 
+                </div>
                         `;
                     }
                 }]
@@ -563,15 +565,15 @@
                                <div class="form-row" dir="rtl">
                     <button type="button" class="btn-all mt-3" onclick=openedit(${row.id},'${row.name}',3)
                     style="background-color: #FAFBFD; border: none;">
-                  <i class="fa fa-edit"></i> 
+                  <i class="fa fa-edit"></i>
                 </button>
                 </div>
                    <div class="form-row" dir="rtl">
                     <button type="button" class="btn-all mt-3" onclick=opendelete(${row.id},3)
                     style="background-color: #FAFBFD; border: none;">
-                  <i class="fa fa-delete"></i> 
+                  <i class="fa fa-delete"></i>
                 </button>
-                </div> 
+                </div>
                         `;
                     }
                 }]

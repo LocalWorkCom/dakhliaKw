@@ -31,18 +31,18 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white ">
                         @if (session()->has('message'))
                             <div class="alert alert-info">
                                 {{ session('message') }}
                             </div>
                         @endif
                         <div>
-                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>الاسم</th>
-                                        <th>العمليات</th>
+                                        <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -128,11 +128,11 @@
                 </div>
                 <form id="delete-form" action="{{ route('grads.delete') }}" method="POST">
                     @csrf
-                    <div class="modal-body  d-flex justify-content-center">
-                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الرتبه ؟</h5>
+                    <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
+                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الرتبه  ؟</h5>
 
 
-                        <input type="text" id="id" hidden name="id" class="form-control">
+                        <input type="text" id="id" hidden name="id" class="form-control" dir="rtl">
                     </div>
                     <div class="modal-footer mx-2 d-flex justify-content-center">
                         <div class="text-end">

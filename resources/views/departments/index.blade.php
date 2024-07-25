@@ -15,8 +15,8 @@
 @endsection
     <section>
         <div class="row">
-            <div class="container welcome col-11">
-                <p>الادارات</p>
+        <div class="container welcome col-11">
+                <p> الــــــــــادارات </p>
             </div>
         </div>
 
@@ -35,17 +35,16 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white ">
                         <div>
-                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <table id="users-table" class="display table table-responsive-sm table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>رقم التعريف</th>
                                         <th>الاسم</th>
                                         <th>المدير</th>
-                                        <th>مساعد المدير</th>
                                         <th>الاقسام</th>
                                         <th>الوارد</th>
                                         <th>الصادر</th>
@@ -69,7 +68,6 @@
                 { data: 'id', name: 'id' },
                 { data: 'name', name: 'name' },
                 { data: 'manger', name: 'manger' },  // Ensure 'manager' column exists
-                { data: 'manger_assistance', name: 'manger_assistance' },  // Ensure 'manager_assistant' column exists
                 { data: 'children_count', name: 'children_count' },
                 { data: 'iotelegrams_count', name: 'iotelegrams_count' },
                 { data: 'outgoings_count', name: 'outgoings_count' },
@@ -86,14 +84,57 @@
                     departmentDelete = departmentDelete.replace(':id', row.id);
 
                     return `
-                        <a href="${departmentEdit}" class="btn btn-primary btn-sm">تعديل</a>
-                        <a href="${departmentShow}" class="btn btn-primary btn-sm w-25">مشاهدة</a>
-                        <a href="${departmentDelete}" class="btn btn-primary btn-sm w-25">حذف</a>`;
+                        <a href="${departmentEdit}" class="btn btn-sm" style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>
+                        <a href="${departmentShow}" class="btn btn-sm " style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
+                        <a href="" class="btn btn-sm" style="background-color: #C91D1D;" onclick="event.preventDefault(); deleteDepartment(${row.id});><i class="fa-solid fa-trash"></i></a>
+                        `;
                 }
-            }]
+            }],
+            "oLanguage": {
+                                            "sSearch": "بحث",
+                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
+                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
+                                            "oPaginate": {
+                                                    "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
+                                                    "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
+                                                    "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
+                                                    "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
+                                                    }
+                                        },
+                                        layout: {
+                                            bottomEnd: {
+                                                paging: {
+                                                    firstLast: false
+                                                }
+                                            }
+                                        },
+                                         "pagingType": "full_numbers"
         });
+        
     });
+    function deleteDepartment(id) {
+        console.log(id);
+    if (confirm('هل أنت متأكد من حذف هذا القسم؟')) {
+        $.ajax({
+            url: '/departments/delete/' + id ,
+            type: 'get',
+            
+            success: function(response) {
+                // Handle success, e.g., refresh DataTable, show success message
+                $('#users-table').DataTable().ajax.reload();
+                alert('تم حذف القسم بنجاح');
+            },
+            error: function(xhr) {
+                 console.log(xhr);
+                // Handle error, e.g., show error message
+                // alert('حدث خطأ أثناء حذف القسم');
+            }
+        });
+    }
+}
     </script>
 
 @endsection
-{{-- <a href="` + permissionedit + `" class="btn btn-primary btn-sm">تعديل</a> --}}

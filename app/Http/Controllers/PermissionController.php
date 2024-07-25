@@ -60,10 +60,10 @@ class PermissionController extends Controller
     public function getPermision()
     {
         $data = Permission::all();
-       
+
         return DataTables::of($data)->addColumn('action', function ($row) {
-            
-            return '<button class="btn btn-primary btn-sm">Edit</button>'
+
+            return '<button class="btn  btn-sm" style="background-color: #259240;"> <i class="fa fa-edit"></i> </button>'
                     ;
         })
         ->rawColumns(['action'])
@@ -133,7 +133,7 @@ class PermissionController extends Controller
         $permission = Permission::find($id);
     $models = $this->getAllModels();
     // dd($models);
-    
+
     // Split the name into action and model parts
     $nameParts = explode(' ', $permission->name);
     $permissionAction = $nameParts[0] ?? '';
@@ -152,7 +152,7 @@ class PermissionController extends Controller
     $permission = Permission::find($id);
     $models = $this->getAllModels();
     // dd($models);
-    
+
     // Split the name into action and model parts
     $nameParts = explode(' ', $permission->name);
     $permissionAction = $nameParts[0] ?? '';

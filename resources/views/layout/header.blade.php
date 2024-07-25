@@ -72,28 +72,21 @@
             <i class="fa-solid fa-bars side-nav" ></i>
           </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
+            <ul class="navbar-nav ml-auto" >
+                <li class="nav-item" onclick="makeActive(this)">
                     <a href="{{route('home')}}">
                         <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
                         <h6>الرئيسية</h6>
                     </a>
                 </li>
-                
-                {{-- @can('view User') --}}
-                    <li class="nav-item">
-                        
-                        <a href="{{ route('user.index',0) }}">
-                            <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
-                            <h6>المستخدمين</h6>
-                        </a>
-                    {{-- @else
-                    <a href="{{ route('user.index',0) }}" >
+                <li class="nav-item" onclick="makeActive(this)">
+                    <a href="{{ route('user.index',0) }}">
                         <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
                         <h6>المستخدمين</h6>
-                    </a> --}}
+                    </a>
                 </li>
-                <li class="nav-item btn3">
+
+                <li class="nav-item btn3" onclick="makeActive(this)>
                     <a href="#">
                         <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
                         <h6 class=" btn3" onclick="toggleDropdown3()"> الموظفين <i class="fa-solid fa-angle-down"></i>
@@ -112,38 +105,28 @@
                      <!--    <li style="list-style: inside;">
                             <a href="#">الشيفتات</a>
                         </li> -->
-                        {{-- <li style="list-style: inside;">
+                        <!-- {{-- <li style="list-style: inside;">
                             <a href="#">الاجازات</a>
                         </li> --}}
-                    </ul>
+                    </ul> -->
 
                 </div>
-                {{-- @endcan --}}
-
-                {{-- @can('check.permission:view departements') --}}
-                    <li class="nav-item">
-                        <a href="{{ route('sub_departments.index') }}">
-                            <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
-                            <h6>الاقسام</h6>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('departments.index') }}">
-                            <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                            <h6>الادارات</h6>
-                        </a>
-                    </li>
-                {{-- @endcan --}}
-                
-
-               
-                
 
 
-                
-                
+                <li class="nav-item" onclick="makeActive(this)">
+                    <a href="{{ route('sub_departments.index') }}">
+                        <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
+                        <h6>الاقسام</h6>
+                    </a>
+                </li>
+                <li class="nav-item" onclick="makeActive(this)">
+                    <a href="{{ route('departments.index') }}">
+                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <h6>الادارات</h6>
+                    </a>
+                </li>
 
-                <li class="nav-item">
+                <li class="nav-item" onclick="makeActive(this)">
                     <a href="#">
                         <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
                         <h6 class=" btn4" onclick="toggleDropdown4()"> الاعدادات <i class="fa-solid fa-angle-down"></i>
@@ -175,7 +158,7 @@
                 </div>
     
 
-        <li class="nav-item">
+        <li class="nav-item" onclick="makeActive(this)">
 
             <a href="{{ route('iotelegrams.list') }}">
                 <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
@@ -183,7 +166,7 @@
             </a>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item" onclick="makeActive(this)">
             <a href="{{ route('Export.index') }}">
                 <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
                 <h6>الصادر</h6>

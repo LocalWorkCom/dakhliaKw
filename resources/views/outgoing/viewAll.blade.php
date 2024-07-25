@@ -37,14 +37,14 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white ">
                         @if (session()->has('message'))
                             <div class="alert alert-info">
                                 {{ session('message') }}
                             </div>
                         @endif
                         <div>
-                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>رقم الصادر</th>
@@ -53,7 +53,7 @@
                                         <th>تاريخ الصادر</th>
                                         <th> العسكرى</th>
                                         <th>الاداره الصادر لها</th>
-                                        <th>العمليات</th>
+                                        <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
                             </table>

@@ -34,17 +34,15 @@ class settingController extends Controller
     {
         return view("governments.add");
     }
-     
+
     //get data for governments
     public function getAllgovernment()
     {
         $data = Government::orderBy('created_at','desc')->get();
-       
+
         return DataTables::of($data)->addColumn('action', function ($row) {
-            $name = "'$row->name'";
-            $editButton = '<a class="edit btn  btn-sm" style="background-color: #259240;" onclick="openedit(' . $row->id . ', '.$name.')"><i class="fa fa-edit"></i></a>';
-            return $editButton;
-            
+            return '<a class="btn btn-sm" style="background-color: #259240;" href=' . route('government.edit', $row->id) . '> <i class="fa fa-edit"></i> </a>' ;
+
             // <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>
         })
         ->rawColumns(['action'])
@@ -76,17 +74,17 @@ class settingController extends Controller
      public function updategovernment(Request $request)
      {
         $gover = Government::find($request->id);
-         
+
         if (!$gover) {
             return response()->json(['error' => 'هذه الماحفظه غير موجوده'], 404);
         }
         $gover->name=$request->name;
         $gover->save();
-    
+
         $message='';
         return redirect()->route('government.all',compact('message'));
      }
-    
+
     //END government
 
 //START JOB
@@ -102,18 +100,15 @@ class settingController extends Controller
     {
         return view("jobs.add");
     }
-     
+
     //get data for JOB
     public function getAllJob()
     {
         $data = job::orderBy('created_at','desc')->get();
-       
-        return DataTables::of($data)->addColumn('action', function ($row) {
-            $name = "'$row->name'";
-            $editButton = '<a class="btn btn-primary btn-sm" onclick="openedit(' . $row->id . ', '.$name.')">تعديل</a>';
-            $deleteButton = '<a class="btn btn-primary btn-sm" onclick="opendelete(' . $row->id . ')">حذف</a>';
 
-            return $editButton . ' ' . $deleteButton;
+        return DataTables::of($data)->addColumn('action', function ($row) {
+            return '<a class="btn  btn-sm" style="background-color: #259240;" href=' . route('job.edit', $row->id) . '> <i class="fa fa-edit"></i> </a>
+            <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
             // <a class="btn btn-primary btn-sm" href=' . route('job.show', $row->id) . '>التفاصيل</a>
 
         })
@@ -145,7 +140,7 @@ class settingController extends Controller
      //update JOB
      public function updateJob(Request $request ){
         $job = job::find($request->id);
-        
+
         if (!$job) {
             return response()->json(['error' => 'Grade not found'], 404);
         }
@@ -154,15 +149,15 @@ class settingController extends Controller
         $message='';
         return redirect()->route('job.index',compact('message'));
        // return redirect()->back()->with(compact('activeTab'));
-        
+
     }
-    
+
     //delete JOB
     public function deletejob(Request $request )
     {
 
         $isForeignKeyUsed = DB::table('users')->where('job_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);  
+        //dd($isForeignKeyUsed);
         if( $isForeignKeyUsed ){
             return redirect()->route('job.index')->with(['message' => 'لا يمكن حذف هذه الوظيفه يوجد موظفين لها']);
         }else{
@@ -171,7 +166,7 @@ class settingController extends Controller
             return redirect()->route('job.index')->with(['message' => 'تم حذف الوظيفه']);
 
         }
-       
+
     }
     //END JOB
 
@@ -188,19 +183,16 @@ class settingController extends Controller
     {
         return view("grads.add");
     }
-     
+
     //get data for GRAD
     public function getAllgrads()
     {
         $data = grade::orderBy('created_at','desc')->get();
-       
-        return DataTables::of($data)->addColumn('action', function ($row) {
-            $name = "'$row->name'";
-            $editButton = '<a class="btn btn-primary btn-sm" onclick="openedit(' . $row->id . ', '.$name.')">تعديل</a>';
-            $deleteButton = '<a class="btn btn-primary btn-sm" onclick="opendelete(' . $row->id . ')">حذف</a>';
 
-            return $editButton . ' ' . $deleteButton;
-            // <a class="btn btn-primary btn-sm" href=' . route('grads.show', $row->id) . '>التفاصيل</a>
+        return DataTables::of($data)->addColumn('action', function ($row) {
+            return '<a class="btn  btn-sm" style="background-color: #259240;" href=' . route('grads.edit', $row->id) . '> <i class="fa fa-edit"></i> </a>
+            <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
+            // <a class="btn  btn-sm" href=' . route('grads.show', $row->id) . '>التفاصيل</a>
 
         })
         ->rawColumns(['action'])
@@ -231,7 +223,7 @@ class settingController extends Controller
      //update GRAD
      public function updategrads(Request $request ){
         $job = grade::find($request->id);
-        
+
         if (!$job) {
             return response()->json(['error' => 'Grade not found'], 404);
         }
@@ -240,15 +232,15 @@ class settingController extends Controller
         $message='';
         return redirect()->route('grads.index',compact('message'));
        // return redirect()->back()->with(compact('activeTab'));
-        
+
     }
-    
+
     //delete GRAD
     public function deletegrads(Request $request )
     {
 
         $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);  
+        //dd($isForeignKeyUsed);
         if( $isForeignKeyUsed ){
             return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);
         }else{
@@ -257,7 +249,7 @@ class settingController extends Controller
             return redirect()->route('grads.index')->with(['message' => 'تم حذف الرتبه']);
 
         }
-       
+
     }
     //END GRAD
 
@@ -274,19 +266,20 @@ class settingController extends Controller
       {
           return view("vacationType.add");
       }
-       
+
       //get data for JOB
       public function getAllvacationType()
       {
+          
           $data = VacationType::orderBy('created_at','desc')->get();
          
 
           return DataTables::of($data)->addColumn('action', function ($row) {
             $hiddenIds = [1, 2, 3, 4];
             $name = "'$row->name'";
-            $editButton = '<a class="btn btn-primary btn-sm" onclick="openedit(' . $row->id . ', '.$name.')">تعديل</a>';
+            $editButton = '<a class="btn  btn-sm" style="background-color: #259240;" href=' . route('vacationType.edit', $row->id) . '> <i class="fa fa-edit"></i> </a>';
             if (!in_array($row->id, $hiddenIds)) {
-                $deleteButton = '<a class="btn btn-primary btn-sm" onclick="opendelete(' . $row->id . ')">حذف</a>';
+                $deleteButton = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>';
                 return $editButton . ' ' . $deleteButton;
             }else{
                 return $editButton;
@@ -326,7 +319,7 @@ class settingController extends Controller
        //update JOB
        public function updatevacationType(Request $request ){
           $job = VacationType::find($request->id);
-          
+
           if (!$job) {
               return response()->json(['error' => 'Grade not found'], 404);
           }
@@ -335,24 +328,24 @@ class settingController extends Controller
           $message='تم تعديل الاسم';
           return redirect()->route('vacationType.index',compact('message'));
          // return redirect()->back()->with(compact('activeTab'));
-          
+
       }
-      
+
       //delete JOB
       public function deletevacationType(Request $request )
       {
-  
+
         $isForeignKeyUsed = DB::table('employee_vacations')->where('vacation_type_id', $request->id)->exists();
-          //dd($isForeignKeyUsed);  
+          //dd($isForeignKeyUsed);
           if( $isForeignKeyUsed ){
               return redirect()->route('vacationType.index')->with(['message' => 'لا يمكن حذف هذه نوع الاجازه يوجد موظفين لها']);
           }else{
               $type= VacationType::find($request->id);
               $type->delete();
               return redirect()->route('vacationType.index')->with(['message' => 'تم حذف نوع الاجازه']);
-  
+
           }
-         
+
       }
     //END VACATION TYPE
 
@@ -366,18 +359,18 @@ class settingController extends Controller
     public function getAllGrade()
     {
         $data = grade::get();
-       
+
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
         ->rawColumns(['action'])
         ->make(true);
     }
-   
+
     public function getAllVacation()
     {
         $data = VacationType::get();
-       
+
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>'
                     ;
@@ -386,7 +379,7 @@ class settingController extends Controller
         ->make(true);
     }
 
-   
+
     /**
      * Show the form for creating a new resource.
      */
@@ -409,13 +402,13 @@ class settingController extends Controller
         $message="تم اضافة نوع اجازه جديد";
         return redirect()->route('setting.index',compact('activeTab','message'));
     }
-    
-    
+
+
 
     public function editgrade(Request $request ){
-     
+
        $grade = Grade::find($request->id);
-        
+
         if (!$grade) {
             return response()->json(['error' => 'Grade not found'], 404);
         }
@@ -428,25 +421,25 @@ class settingController extends Controller
 
     public function editVacation(Request $request ){
         $type = VacationType::find($request->id);
-        
+
         if (!$type) {
             return response()->json(['error' => 'Grade not found'], 404);
         }
         $type->name=$request->namegrade;
         $type->save();
-    
+
         $activeTab =$request->tab;
         $message='';
         return redirect()->route('setting.index',compact('activeTab','message'));
     }
-    
+
     public function deleteVacation(Request $request ){
         $isForeignKeyUsed = DB::table('employee_vacations')->where('vacation_type_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);  
+        //dd($isForeignKeyUsed);
         if( $isForeignKeyUsed ){
-           
+
             $message='';
-            
+
 
         }else{
             $type= VacationType::find($request->id);
@@ -460,7 +453,7 @@ class settingController extends Controller
 
     public function deletegrade(Request $request ){
         $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);  
+        //dd($isForeignKeyUsed);
         if( $isForeignKeyUsed ){
             $message='';
 
@@ -468,7 +461,7 @@ class settingController extends Controller
             $type= grade::find($request->id);
             $type->delete();
             $message='';
-    
+
         }
         $activeTab =1;
         return redirect()->route('setting.index',compact('activeTab','message'));
@@ -478,7 +471,7 @@ class settingController extends Controller
     // deletefunction
     // public function deletegovernment(Request $request ){
     //     $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
-    //     //dd($isForeignKeyUsed);  
+    //     //dd($isForeignKeyUsed);
     //     if( $isForeignKeyUsed ){
     //         $message='';
 
@@ -486,13 +479,13 @@ class settingController extends Controller
     //         $type= grade::find($request->id);
     //         $type->delete();
     //         $message='';
-    
+
     //     }
     //     $activeTab =1;
     //     return redirect()->route('setting.index',compact('activeTab','message'));
     //     //return view("setting.view",compact('activeTab','message'));
     // }
-    
+
     /**
      * Store a newly created resource in storage.
      */
