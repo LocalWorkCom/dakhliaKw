@@ -158,7 +158,7 @@ function CheckUploadIoFiles($id)
 }
 function getEmployees()
 {
-    return User::where('flag', 'employee')->get();
+    return User::all();
 }
 function getVactionTypes()
 {

@@ -48,9 +48,9 @@ class IoTelegramController extends Controller
     public function getIotelegrams()
     {
         $IoTelegrams = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+            ->where('active', 1)
             ->orderBy('created_at', 'desc')
             ->get();
-
         foreach ($IoTelegrams as  $IoTelegram) {
             $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
                 $IoTelegram->internal_department->name :
