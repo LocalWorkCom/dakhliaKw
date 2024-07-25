@@ -40,6 +40,7 @@ class UserController extends Controller
     // }
     public function index($id)
     {
+        
         return view('user.view', compact('id'));
     }
 
@@ -274,12 +275,12 @@ class UserController extends Controller
         }
         $user->password = Hash::make($request->password);
         $user->save();
+        Auth::login($user); // Log the user in
 
-        return redirect()->route('home');
+        return redirect()->route('home')->with('success', 'تم إعادة تعيين كلمة المرور بنجاح');
         // return redirect()->route('home')->with('user', auth()->user());
 
     }
-
 
     public function logout(Request $request)
     {
