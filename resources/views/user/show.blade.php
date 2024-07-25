@@ -92,11 +92,14 @@
                         <tr>
                             <th scope="row" >الوظيفة</th>
                                         @foreach ($job as $item)
-                                            <option value="{{ $item->id }}" {{ $user->job == $item->id ? 'selected' : '' }}>
+                                        @if($user->job == $item->id)
+                                           <td >
                                                 {{ $item->name }}
-                                            </option>
+                                            
+                                          </td>
+                                          @endif
                                         @endforeach
-                            </td>
+
                         </tr>
                         
                         <tr>
@@ -131,9 +134,15 @@
                         <tr>
                             <th scope="row" >    الرتبه  </th>
                                 @foreach ($grade as $item)
-                                    <option value="{{ $item->id }}"> 
-                                        <td > {{ $item->name }}</td>
-                                    </option>
+                                    <!--<option value="{{ $item->id }}"> -->
+                                    <!--    <td > {{ $item->name }}</td>-->
+                                    <!--</option>-->
+                                    
+                                    @if($user->	grade_id == $item->id)
+                                           <td >
+                                                {{ $item->name }}
+                                          </td>
+                                    @endif
                                 @endforeach
                         </tr>
                         
