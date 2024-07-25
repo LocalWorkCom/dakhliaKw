@@ -44,13 +44,13 @@
 
                         <div class="form-group col-md-6">
                             <label for="nameus"> الدور</label>
-                            <input type="text" id="name" name="name" class="form-control" >
+                            <input type="text" id="name" name="name" class="form-control" required>
                         </div>
 
                         <div class="form-group col-md-6">
                             <label for="department">الادارة</label>
                             <select class="custom-select custom-select-lg mb-3" name="department_id" id="department_id">
-                                <option selected disabled>Open this select menu</option>
+                                <option selected>Open this select menu</option>
                                 @foreach ($alldepartment as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach

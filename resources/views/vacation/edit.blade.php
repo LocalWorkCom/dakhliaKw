@@ -28,9 +28,17 @@
             <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
                 <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
-
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2 "> <label for="vacation_type_id">نوع الاجازة:</label>
+
+                        <div class="form-group col-md-3 mx-2" id="name_dev" hidden>
+
+                            <label for="name">اسم الاجازة:</label>
+                            <input type="text" id="name" name="name" class="form-control"
+                                value="{{ $vacation->name }}">
+                        </div>
+                    </div>
+                    <div class="form-row mx-3 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-2 "> <label for="vacation_type_id">نوع الاجازة</label>
 
 
                             <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
@@ -56,37 +64,20 @@
 
 
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
-
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="date_from">تاريخ البداية</label>
-                            <input type="date" id="date_from" name="date_from" class="form-control" required
-                                value="{{ $vacation->date_from }}">
-                        </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="date_to">تاريخ النهاية</label>
                             <input type="date" id="date_to" name="date_to" class="form-control"
-                                value="{{ $vacation->date_to }}">
+                                value="{{ $vacation->date_to ? $vacation->date_to : date('Y-m-d') }}">
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-11 mb-3 px-5 mt-2">
-                            <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
-                                data-image="{{ asset($vacation->report_image) }}"
-                                data-title="{{ $vacation->report_image }}">
-                                <img src="{{ asset($vacation->report_image) }}" class="img-thumbnail mx-2"
-                                    alt="{{ $vacation->report_image }}"> <br> <br>
-                                {{-- <a id="downloadButton" href="{{ route('vacation.downlaodfile', ['id' => $vacation->id]) }}"
-                                class="btn-download"><i class="fa fa-download" style="color:green;"></i>
-                                تحميل الملف
-                            </a> --}}
-
-                            </a>
-
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="date_from">تاريخ البداية</label>
+                            <input type="date" id="date_from" name="date_from" class="form-control" required
+                                value="{{ $vacation->date_from ? $vacation->date_from : date('Y-m-d') }}">
                         </div>
 
                     </div>
-                    <div class="form-row mx-2 mt-4" id="reportImage-div">
-                        <div class="form-group col-md-12">
+                    <div class="form-row mx-2 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-10" id="reportImage-div" hidden>
                             <label for="reportImage">تعديل ملف</label>
                             <div id="reportImage">
                                 <div class="file-input mb-3" dir="rtl">
@@ -95,76 +86,69 @@
                             </div>
                         </div>
                     </div>
-            </div>
+                    @if ($vacation->report_image && $vacation->vacation_type_id == 2)
+                        <div class="form-row mx-2 mt-4 d-flex justify-content-center" id="reportImage-div">
+                            <div class="form-group col-md-10 d-flex justify-content-end">
+                                <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
+                                    data-image="{{ asset($vacation->report_image) }}"
+                                    data-title="{{ $vacation->report_image }}">
+                                    <img src="{{ asset($vacation->report_image) }}" class="img-thumbnail mx-2"
+                                        alt="{{ $vacation->report_image }}"> <br> <br>
+                                    {{-- <a id="downloadButton" href="{{ route('vacation.downlaodfile', ['id' => $vacation->id]) }}"
+                                class="btn-download"><i class="fa fa-download" style="color:green;"></i>
+                                تحميل الملف
+                            </a> --}}
 
-            <div class="container  col-10 mt-5 mb-5 ">
-                <div class="form-row col-10 " dir="ltr">
-                    <button type="submit" class="btn-blue">حفظ</button>
-                </div>
+                                </a>
+
+                            </div>
+
+                        </div>
+                    @endif
+
+                    <div class="container  col-10 mt-5 mb-5 ">
+                        <div class="form-row col-10 " dir="ltr">
+                            <button type="submit" class="btn-blue">حفظ</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            </form>
         </div>
-    </div>
-    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <img id="modalImage" src="#" class="img-fluid" alt="صورة">
+        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="modalImage" src="#" class="img-fluid" alt="صورة">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
-    @push('scripts')
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        @push('scripts')
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-        <script>
-            $(document).ready(function() {
+            <script>
+                $(document).ready(function() {
+                    var today = new Date().toISOString().split('T')[0];
 
-                var value = $('#vacation_type_id option:selected').val();
-                if (value == '3') {
-                    $('#reportImage-div').hide();
-                    $('#date_to').prop('disabled', false);
+                    $('#date_from').attr('min', today);
+                    $('#date_to').attr('min', today);
 
-                    $('#employee_id').prop('disabled', true);
-
-                    $('#employee_id').removeAttr('required');
-
-                } else if (value == '4') {
-                    $('#reportImage-div').hide();
-
-                    $('#date_to').prop('disabled', true);
-                    $('#employee_id').prop('disabled', false);
-                    $('#employee_id').attr('required', true);
-
-                } else if (value == '2') {
-                    $('#reportImage-div').show();
-                    $('#date_to').prop('disabled', false);
-
-                    $('#employee_id').prop('disabled', false);
-                    $('#employee_id').attr('required', true);
-                } else {
-                    $('#reportImage-div').hide();
-                    $('#date_to').prop('disabled', false);
-
-                    $('#employee_id').prop('disabled', false);
-                    $('#employee_id').attr('required', true);
-                }
-
-                $('#vacation_type_id').change(function() {
                     var value = $('#vacation_type_id option:selected').val();
-
                     if (value == '3') {
-                        $('#reportImage-div').hide();
+                        $('#name_dev').attr('hidden', false);
+                        $('#reportImage-div').attr('hidden', true);
+
+
                         $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', true);
@@ -172,42 +156,83 @@
                         $('#employee_id').removeAttr('required');
 
                     } else if (value == '4') {
-                        $('#reportImage-div').hide();
+                        $('#name_dev').attr('hidden', true);
+                        $('#reportImage-div').attr('hidden', true);
 
                         $('#date_to').prop('disabled', true);
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
 
                     } else if (value == '2') {
-                        $('#reportImage-div').show();
+
+                        $('#name_dev').attr('hidden', true);
+                        $('#reportImage-div').attr('hidden', false);
+
                         $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
                     } else {
-                        $('#reportImage-div').hide();
+                        $('#reportImage-div').attr('hidden', true);
+                        $('#name_dev').attr('hidden', true);
                         $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
                     }
 
+                    $('#vacation_type_id').change(function() {
+                        var value = $('#vacation_type_id option:selected').val();
+
+                        if (value == '3') {
+                            $('#reportImage-div').hide();
+                            $('#date_to').prop('disabled', false);
+                            $('#name_dev').hide();
+
+                            $('#employee_id').prop('disabled', true);
+
+                            $('#employee_id').removeAttr('required');
+
+                        } else if (value == '4') {
+                            $('#reportImage-div').hide();
+                            $('#name_dev').hide();
+
+                            $('#date_to').prop('disabled', true);
+                            $('#employee_id').prop('disabled', false);
+                            $('#employee_id').attr('required', true);
+
+                        } else if (value == '2') {
+                            $('#reportImage-div').show();
+                            $('#date_to').prop('disabled', false);
+                            $('#name_dev').show();
+
+                            $('#employee_id').prop('disabled', false);
+                            $('#employee_id').attr('required', true);
+                        } else {
+                            $('#reportImage-div').hide();
+                            $('#date_to').prop('disabled', false);
+                            $('#name_dev').hide();
+
+                            $('#employee_id').prop('disabled', false);
+                            $('#employee_id').attr('required', true);
+                        }
+
+
+                    });
+                    $('.image-popup').click(function(event) {
+                        event.preventDefault();
+                        var imageUrl = $(this).data('image');
+                        var imageTitle = $(this).data('title');
+
+                        // Set modal image and title
+                        $('#modalImage').attr('src', imageUrl);
+                        $('#imageModalLabel').text(imageTitle);
+
+                        // Show the modal
+                        $('#imageModal').modal('show');
+                    });
 
                 });
-                $('.image-popup').click(function(event) {
-                    event.preventDefault();
-                    var imageUrl = $(this).data('image');
-                    var imageTitle = $(this).data('title');
-
-                    // Set modal image and title
-                    $('#modalImage').attr('src', imageUrl);
-                    $('#imageModalLabel').text(imageTitle);
-
-                    // Show the modal
-                    $('#imageModal').modal('show');
-                });
-
-            });
-        </script>
-    @endpush
-@endsection
+            </script>
+        @endpush
+    @endsection
