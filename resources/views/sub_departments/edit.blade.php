@@ -15,10 +15,10 @@
         </div>
         <div class="form-group">
             <select name="parent_id" id="parent_id" class="form-control">
-                <option value="{{$parentDepartment->id}}">اختار القسم</option>
-                @foreach ($departments as $department)
-                    <option value="{{ $department->parent_id }}" {{ $department->parent_id == old('parent_id', $department->parent_id) ? 'selected' : '' }}>
-                        {{ $department->name }}
+                <option value="">اختار القسم</option>
+                @foreach ($subdepartments as $dept)
+                    <option value="{{ $dept->id }}" {{ $department->parent_id == $dept->id ? 'selected' : '' }}>
+                        {{ $dept->name }}
                     </option>
                 @endforeach
             </select>

@@ -48,18 +48,18 @@
                     </div>
                 </div>
                 <div class="form-row mx-2 d-flex justify-content-center">
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="manger_assistance"> مساعد المدير</label>
-                        <select name="manger_assistance" class="form-control">
-                            <option value="">اختار مساعد المدير</option>
-                            @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('manger_assistance')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    <!--<div class="form-group col-md-5 mx-2">-->
+                    <!--    <label for="manger_assistance"> مساعد المدير</label>-->
+                    <!--    <select name="manger_assistance" class="form-control">-->
+                    <!--        <option value="">اختار مساعد المدير</option>-->
+                    <!--        @foreach($users as $user)-->
+                    <!--        <option value="{{ $user->id }}">{{ $user->name }}</option>-->
+                    <!--        @endforeach-->
+                    <!--    </select>-->
+                    <!--    @error('manger_assistance')-->
+                    <!--    <div class="alert alert-danger">{{ $message }}</div>-->
+                    <!--    @enderror-->
+                    <!--</div>-->
 
                     <div class="form-group col-md-5 mx-2">
                         <label for="description">الوصف </label>

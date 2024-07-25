@@ -48,23 +48,6 @@
                 </div>
 
                 <div class="form-row mx-2">
-                    <div class="form-group  col-md-12">
-                        <label for="manger_assistance">مساعد المدير </label>
-                        <select name="manger_assistance" class="form-control">
-                            <option value="">اختر مساعد المدير  </option>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ $user->id == old('manger_assistance', $department->manger_assistance) ? 'selected' : '' }}>
-                                    {{ $user->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('manger_assistance')
-                            <div class="alert alert-danger" style="height: 40px;">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-row mx-2">
                     <div class="form-group col-md-12">
                         <label for="description">الوصف </label>
                         <input type="text" name="description" class="form-control"  value="{{ old('description', $department->description) }}">
