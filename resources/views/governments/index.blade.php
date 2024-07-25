@@ -13,7 +13,7 @@
         <div class="row">
 
             <div class="container welcome col-11">
-                <p> المحـــافظات</p>
+                <p> المحــــــافظات</p>
             </div>
         </div>
 
@@ -31,14 +31,14 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white">
 
                         <div>
-                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>الاسم</th>
-                                        <th>العمليات</th>
+                                        <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -194,7 +194,7 @@
                         data: 'name',
                         name: 'name'
                     },
-                    
+
                     {
                         data: 'action',
                         name: 'action',

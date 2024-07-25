@@ -19,8 +19,20 @@
         </ol>
     </nav>
 </div>
+<div class="row ">
+        <div class="container welcome col-11">
+            @if (url()->current() == url('/users_create/0'))
+            <p>المستخدمين</p>
+
+            @elseif (url()->current() == url('/users_create/1'))
+            <p>الموظفين</p>
+
+            @endif
+            <!-- <p> المستخدمين </p> -->
+        </div>
+    </div>
 <div class="row">
-    <div class="container  col-11 mt-3 p-0 ">
+    <div class="container  col-11 mt-5 p-0 ">
         <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
 
             @if (session('success'))

@@ -9,23 +9,36 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-          
+
                         @if ($user->flag == "user")
                         <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
-          
+
                         @elseif ($user->flag == "employee")
                         <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
-          
+
                         @endif
                     <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض </a></li>
                 </ol>
-              
+
             </nav>
         </div>
-        
+        <div class="row ">
+        <div class="container welcome col-11">
+            @if (url()->current() == url('/users_create/0'))
+            <p>المستخدمين</p>
+
+            @elseif (url()->current() == url('/users_create/1'))
+            <p>الموظفين</p>
+
+            @endif
+            <!-- <p> المستخدمين </p> -->
+        </div>
+    </div>
+
+
 
         <div class="row">
-            <div class="container  col-11 mt-3 p-0 ">
+            <div class="container  col-11 mt-4 p-0 ">
 
 
                 @if (session('success'))
@@ -43,6 +56,118 @@
                     </div>
                 @endif
                 {{-- {{ dd($user) }} --}}
+
+<!-- toqa-table-show -->
+
+
+<!-- <div class="form-row mx-3 mb-3">
+                <table class="table table-bordered" dir="rtl">
+                    <tbody>
+                        <tr>
+                            <th scope="row"style="background: #f5f6fa;"> الاسم</th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;"> البريد الالكترونى</th>
+                            <td> </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;"> رقم المحمول </th>
+                            <td> </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">  الوصف </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;"> رقم العسكري</th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">  الوظيفة </th>
+                            <td>   </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">   المسمي الوظيفي </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">   الجنسيه  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    الرقم المدني </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    المؤهل  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    تاريخ الميلاد  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    تاريخ الالتحاق  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    مدة الخدمه  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    الرتبه  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    الرقم المدني </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    الرقم المدني </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    رقم الملف </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    الباسورد  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    المهام  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    يصنف المستخدم ك   </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    الاقدامية  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    الادارة العامة  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    موقع العمل  </th>
+                            <td>  </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">    الصوره  </th>
+                            <td>  </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> -->
+
+
+<!-- enddddddddd of datashow table toqa -->
+
+
+
                 <div class="p-5">
                     <div class="form-row mx-2 mt-4 d-flex flex-row-reverse">
                         <div class="form-group col-md-6">
