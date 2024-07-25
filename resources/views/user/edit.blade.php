@@ -22,6 +22,17 @@
          
       </nav>
   </div>
+  <div class="row ">
+    <div class="container welcome col-11">
+        @if ($user->flag == "user")
+        <p>المستخدمين</p>
+
+        @elseif ($user->flag == "employee")
+        <p>الموظفين</p>
+
+        @endif
+    </div>
+</div>
   
         <div class="row">
           <div class="container  col-11 mt-3 p-0 ">
