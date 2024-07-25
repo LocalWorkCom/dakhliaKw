@@ -28069,3 +28069,23 @@ Stack trace:
 [stacktrace]
 #0 {main}
 "} 
+[2024-07-25 09:47:26] local.ERROR: Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\xampp\htdocs\my work\dakhliaKw\app\helper.php:138) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:138) at D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:148)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-25 09:48:26] local.ERROR: Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\xampp\htdocs\my work\dakhliaKw\app\helper.php:138) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:138) at D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:148)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-25 09:49:27] local.ERROR: Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\xampp\htdocs\my work\dakhliaKw\app\helper.php:138) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:138) at D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:148)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-25 09:50:26] local.ERROR: Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\xampp\htdocs\my work\dakhliaKw\app\helper.php:138) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:138) at D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:148)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-25 09:51:26] local.ERROR: Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\xampp\htdocs\my work\dakhliaKw\app\helper.php:138) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:138) at D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:148)
+[stacktrace]
+#0 {main}
+"} 
