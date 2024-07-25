@@ -125,12 +125,11 @@ class VacationController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $employee_vacation =  EmployeeVacation::find($id);
         $employee_vacation->vacation_type_id = $request->vacation_type_id;
         $employee_vacation->date_from = $request->date_from;
         $employee_vacation->date_to = isset($request->date_to) ? $request->date_to : null;
-        $employee_vacation->employee_id = $request->employee_id;
+        $employee_vacation->employee_id = ($request->employee_id) ? $request->employee_id : null;
         $employee_vacation->created_by = auth()->id();
         $employee_vacation->created_departement = auth()->user()->department_id;
         $employee_vacation->save();
@@ -138,12 +137,14 @@ class VacationController extends Controller
             $file = $request->reportImage;
             // You can modify the UploadFiles function call according to your needs
             $path = 'vacations/employee';
-
             UploadFiles($path, 'report_image', 'report_image_real', $employee_vacation, $file);
         }
         session()->flash('success', 'تم التعديل بنجاح.');
-
-        return redirect()->route('vacations.list');
+        if ($request->employee_id) {
+            return redirect()->route('vacations.list', $request->employee_id);
+        } else {
+            return redirect()->route('vacations.list');
+        }
     }
     public  function delete($id)
     {
