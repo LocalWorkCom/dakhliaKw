@@ -146,7 +146,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('setting/government/update', [settingController::class, 'updategovernment'])->name('government.update')->middleware('check.permission:edit Government');
     Route::get('setting/government/edit/{id}', [settingController::class, 'editgovernment'])->name('government.edit')->middleware('check.permission:edit Government');
     Route::get('setting/government/show/{id}', [settingController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
-    //endgovernment
+   
 
     //start jobs
     Route::get('setting/jobs', [settingController::class, 'getAlljob'])->name('setting.getAlljob')->middleware('check.permission:view job');
