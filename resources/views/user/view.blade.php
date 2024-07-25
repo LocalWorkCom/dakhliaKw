@@ -60,6 +60,8 @@
 
                             <script>
                                 $(document).ready(function() {
+                                    $.fn.dataTable.ext.classes.sPageButton = 'btn btn-primary btn-sm'; // Change Pagination Button Class
+
                                     var id = {{ $id }};
                                     $('#users-table').DataTable({
                                         processing: true,
@@ -117,10 +119,10 @@
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                             "sZeroRecords": 'نأسف لا توجد نتيجة',
                                             "oPaginate": {
-                                                    "sFirst": "<<", // This is the link to the first page
-                                                    "sPrevious": "<", // This is the link to the previous page
-                                                    "sNext": ">", // This is the link to the next page
-                                                    "sLast": " >>" // This is the link to the last page
+                                                    "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
+                                                    "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
+                                                    "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
+                                                    "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
                                                     }
 
 

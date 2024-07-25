@@ -333,6 +333,9 @@ class UserController extends Controller
             'military_number.required' => 'وغير مدخل مسبقا رقم العسكري مطلوب.',
             'phone.required' => 'كلمة المرور مطلوبة.',
             // 'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
+            'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
+                'department.required' => 'القسم  يجب أن يكون نصاً.',
         ];
 
         $validatedData = Validator::make($request->all(), [
@@ -342,11 +345,9 @@ class UserController extends Controller
         ], $messages);
 
 
-                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
-                'department.required' => 'القسم  يجب أن يكون نصاً.',
+                
                 // Add more custom messages here
-            ];
+        
             
             $validatedData = Validator::make($request->all(), [
                 // 'military_number' => [
@@ -359,7 +360,7 @@ class UserController extends Controller
                 'file_number' => 'required|string',
                 'department' => 'required',
             ], $messages);
-        }
+        
         
     
         // Handle validation failure
