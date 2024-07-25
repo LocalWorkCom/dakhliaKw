@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white ">
                         @if (session()->has('message'))
                             <div class="alert alert-info">
                                 {{ session('message') }}
