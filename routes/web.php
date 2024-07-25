@@ -40,31 +40,6 @@ use App\Http\Controllers\HomeController;
 Route::get('/login', function () {
     return view('login');
 });
-
-
-
-//  Auth verfication_code
-Route::middleware(['auth'])->group(function () {
-         
-    Route::get('/',[HomeController::class,'index'])->name('home');
-    
-    // Route::any('/user', [UserController::class, 'index'])->name('user.index');
-    Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index');
-    Route::get('api/users/{id}', [UserController::class, 'getUsers'])->name('api.users');
-    Route::get('/users_create/{id}', [UserController::class, 'create'])->name('user.create');
-    Route::post('/store', [UserController::class, 'store'])->name('user.store');
-    Route::get('/employees/{id}', [UserController::class, 'index'])->name('user.employees');
-    Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
-    Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show');
-    Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update');
-    // getDepartment
-    Route::get('api/department', [DepartmentController::class, 'getDepartment'])->name('api.department');
-
-    Route::get('api/sub_department', [DepartmentController::class, 'getSub_Department'])->name('api.sub_department');
-
-});
-
-
 Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::any('/logout', [UserController::class, 'logout'])->name('logout');
 Route::post('/verfication_code', [UserController::class, 'verfication_code'])->name('verfication_code');
@@ -78,31 +53,9 @@ Route::any('/forget_password2', [UserController::class, 'forget_password2'])->na
 Route::any('/reset_password', [UserController::class, 'reset_password'])->name('reset_password');
 
 
-// view All Models permission
-Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {
-    Route::any('/permission', [PermissionController::class, 'index'])->name('permission.index');
-    Route::get('api/permission', [PermissionController::class, 'getPermision'])->name('api.permission');
-    Route::any('/permission_create', [PermissionController::class, 'create'])->name('permission.create');
+//  Auth verfication_code
+Route::middleware(['auth'])->group(function () {
 
-    Route::any('/rule', [RuleController::class, 'index'])->name('rule.index');
-    Route::any('api/rule', [RuleController::class, 'getRule'])->name('api.rule');
-    Route::any('/rule_create', [RuleController::class, 'create'])->name('rule.create');
-});
-// create All Models permission
-Route::middleware(['auth', 'check.permission:create Permission,create Rule,create departements'])->group(function () {
-    Route::any('/permission_store', [PermissionController::class, 'store'])->name('permission.store');
-    Route::any('/rule_store', [RuleController::class, 'store'])->name('rule.store');
-});
-// edit All Models permission
-Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit departements'])->group(function () {
-    Route::any('/permission_edit/{id}', [PermissionController::class, 'edit'])->name('permissions_edit');
-    Route::any('/permission_show/{id}', [PermissionController::class, 'show'])->name('permissions_show');
-    Route::any('/rule_edit/{id}', [RuleController::class, 'edit'])->name('rule_edit');
-    Route::any('/rule_show/{id}', [RuleController::class, 'show'])->name('rule_show');
-    Route::any('/rule_update/{id}', [RuleController::class, 'update'])->name('rule_update');
-    Route::any('/permission_delete/{id}', [PermissionController::class, 'destroy'])->name('permissions_destroy');
-    // Route::resource('permissions', PermissionController::class);
-    // Route::resource('rules', RuleController::class);
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index')->middleware('check.permission:view User');
     Route::get('api/users/{id}', [UserController::class, 'getUsers'])->name('api.users')->middleware('check.permission:view User');
@@ -271,11 +224,24 @@ Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit depa
     
 });
 
-Route::get('/sub_departments', [DepartmentController::class, 'index_1'])->name('sub_departments.index');
-Route::get('/sub_departments/create', [DepartmentController::class, 'create_1'])->name('sub_departments.create');
-Route::post('/sub_departments', [DepartmentController::class, 'store_1'])->name('sub_departments.store');
-Route::get('/sub_departments/{department}/edit', [DepartmentController::class, 'edit_1'])->name('sub_departments.edit');
-Route::put('/sub_departments/{department}', [DepartmentController::class, 'update_1'])->name('sub_departments.update');
+
+
+
+
+// // view All Models permission
+// Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {
+// });
+// // create All Models permission
+// Route::middleware(['auth', 'check.permission:create Permission,create Rule,create departements'])->group(function () {
+// });
+// // edit All Models permission
+// Route::middleware(['auth', 'check.permission:edit Rule,edit Permission,edit departements'])->group(function () {
+
+//     // Route::resource('permissions', PermissionController::class);
+//     // Route::resource('rules', RuleController::class);
+// });
+
+
 // //permission
 // Route::any('/permission_destroy',[PermissionController::class, 'destroy'])->name('permission.destroy');
 // Route::any('/permission_view',[PermissionController::class, 'show'])->name('permission.view');
@@ -290,18 +256,9 @@ Route::put('/sub_departments/{department}', [DepartmentController::class, 'updat
 
 // department
 // Route::resource('departments', DepartmentController::class);
-Route::post('departments_store', [DepartmentController::class, 'store']);
-Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
-Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
-// Department routes
-Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
 
-Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create');
-Route::get('/departments/show/{department}', [DepartmentController::class, 'show'])->name('departments.show');
-Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
-Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
-Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
-Route::get('departments/delete/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+// Department routes
+
 
 //Start Export routes
 
