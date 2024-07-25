@@ -18,6 +18,11 @@ class HomeController extends Controller
         $outCount=outgoings::count();
         $ioCount=Iotelegram::count();
 
+        // Check if the previous URL matches
+        if (url()->previous() === route('reset_password')) {
+            return redirect()->with('success', 'تم إعادة تعيين كلمة المرور بنجاح');
+        }
+        
         return view('home.index',compact('empCount','depCount','outCount','ioCount'));
 
     }

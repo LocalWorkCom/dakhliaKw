@@ -46,12 +46,14 @@
                        
                                 <div class="form-group col-md-6 ">
                                     <label for="filenum">الصلاحية</label>
-                                    <select class="custom-select custom-select-lg mb-3" name="name" id="name">
-                                        <option selected>Open this select menu</option>
+                                    <select class="custom-select custom-select-lg mb-3" name="name" id="name" >
+                                        <option selected disabled>Open this select menu</option>
                                         <option value="view">عرض</option>
                                         <option value="edit">تعديل</option>
                                         <option value="create">اضافة</option>
                                         {{-- <option value="delete">ازالة</option> --}}
+                                        <option value="download">تحميل</option>
+
                                     </select>
     
                                 </div>
@@ -60,10 +62,10 @@
                             
                             <div class="form-group col-md-6">
                                 <label for="model">القسم</label>
-                                <select class="custom-select custom-select-lg mb-3 " name="model" id="model">
-                                    <option selected>Open this select menu</option>
+                                <select class="custom-select custom-select-lg mb-3 " name="model" id="model" >
+                                    <option selected disabled>Open this select menu</option>
                                     @foreach ($models as $item)
-                                        <option value="{{ $item}}">{{ $item }}</option>
+                                        <option value="{{ $item}}">{{ __('models.' . $item) }}</option>
                                     @endforeach
                                 </select>
                             </div>

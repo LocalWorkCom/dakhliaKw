@@ -1,6 +1,26 @@
+<?php
+@session_start();
+@session_destroy();
+?>
+    
 @extends('layout.main')
+
 @section('content')
 
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if ($success->any())
+        <div class="alert alert-success">
+            <ul>
+                @foreach ($success->all() as $error)
+                    <li>{{ $success }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
   <div class="row ">
       <div class="container welcome col-11">
           <p> مرحـــــــــــــــبا بك </p>

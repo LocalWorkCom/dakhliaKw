@@ -258,7 +258,7 @@ class outgoingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
       
         // Define validation rules
@@ -301,7 +301,7 @@ class outgoingController extends Controller
         $export->date = $request->date;
         $export->person_to = $request->person_to  ?  $request->person_to :null;
         $export->created_by = $user->id;//auth auth()->id
-        $export->active = $request->active;
+        $export->active = $request->active ? $request->active : $export->active;
         $export->updated_by = $user->id;//auth auth()->id
         $export->department_id = $request->department_id;
         $export->created_department =  $user->department_id;

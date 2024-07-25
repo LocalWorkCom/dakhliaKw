@@ -79,13 +79,20 @@
                         <h6>الرئيسية</h6>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('user.index',0) }}">
+                
+                {{-- @can('view User') --}}
+                    <li class="nav-item">
+                        
+                        <a href="{{ route('user.index',0) }}">
+                            <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
+                            <h6>المستخدمين</h6>
+                        </a>
+                    {{-- @else
+                    <a href="{{ route('user.index',0) }}" >
                         <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
                         <h6>المستخدمين</h6>
-                    </a>
+                    </a> --}}
                 </li>
-
                 <li class="nav-item btn3">
                     <a href="#">
                         <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
@@ -111,20 +118,30 @@
                     </ul>
 
                 </div>
+                {{-- @endcan --}}
+
+                {{-- @can('check.permission:view departements') --}}
+                    <li class="nav-item">
+                        <a href="{{ route('sub_departments.index') }}">
+                            <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
+                            <h6>الاقسام</h6>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('departments.index') }}">
+                            <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                            <h6>الادارات</h6>
+                        </a>
+                    </li>
+                {{-- @endcan --}}
+                
+
+               
+                
 
 
-                <li class="nav-item">
-                    <a href="{{ route('sub_departments.index') }}">
-                        <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
-                        <h6>الاقسام</h6>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('departments.index') }}">
-                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                        <h6>الادارات</h6>
-                    </a>
-                </li>
+                
+                
 
                 <li class="nav-item">
                     <a href="#">
