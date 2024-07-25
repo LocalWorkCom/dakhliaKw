@@ -27439,3 +27439,7 @@ Stack trace:
 #29 C:\\xampp\\htdocs\\dakhliaKw\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\xampp\\\\htdocs...')
 #30 {main}
 "} 
+[2024-07-25 09:54:52] local.ERROR: Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\laragon\www\dakhliaKw\app\helper.php:138) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\\laragon\\www\\dakhliaKw\\app\\helper.php:138) at D:\\laragon\\www\\dakhliaKw\\app\\helper.php:148)
+[stacktrace]
+#0 {main}
+"} 
