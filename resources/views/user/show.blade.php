@@ -36,6 +36,7 @@
 
 
 
+
         <div class="row">
             <div class="container  col-11 mt-4 p-0 ">
 
@@ -60,6 +61,7 @@
 
 
     <div class="form-row mx-3 mb-3">
+
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
                         <tr>
@@ -234,11 +236,13 @@
             </div> 
 
 
+
 <!-- enddddddddd of datashow table toqa -->
 
 
 
                 {{-- <div class="p-5">
+
                     <div class="form-row mx-2 mt-4 d-flex flex-row-reverse">
                         <div class="form-group col-md-6">
                             <label for="input1"> الاسم</label>

@@ -25,10 +25,17 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-            <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
-                <form action="{{ route('vacation.store', $id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('vacation.store', $id) }}" method="POST" enctype="multipart/form-data">
+                <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
                     @csrf
+                    <div class="form-row mx-3 mt-4 d-flex justify-content-center">
 
+                        <div class="form-group col-md-10" id="name_dev" hidden>
+
+                            <label for="name">اسم الاجازة</label>
+                            <input type="text" id="name" name="name" class="form-control">
+                        </div>
+                    </div>
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-2 ">
                             <label for="vacation_type_id">نوع الاجازة</label>
@@ -55,20 +62,18 @@
                     </div>
 
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
-
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="date_from">تاريخ البداية</label>
-                            <input type="date" id="date_from" name="date_from" class="form-control" required>
-                        </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="date_to">تاريخ النهاية</label>
                             <input type="date" id="date_to" name="date_to" class="form-control">
                         </div>
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="date_from">تاريخ البداية</label>
+                            <input type="date" id="date_from" name="date_from" class="form-control" required>
+                        </div>
                     </div>
 
-                    <div class="form-row mx-2 mt-4 d-flex justify-content-center" id="reportImage-div"
-                        style="display: none !important">
-                        <div class="form-group col-md-10">
+                    <div class="form-row mx-2 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-10" id="reportImage-div" hidden>
                             <label for="reportImage">اضافة ملف</label>
                             <div id="reportImage">
                                 <div class="file-input mb-3" dir="rtl">
@@ -77,13 +82,13 @@
                             </div>
                         </div>
                     </div>
-
-            </div>
-            <div class="container col-10 mt-5 mb-5 ">
-                <div class="form-row col-10 " dir="ltr">
-                    <button type="submit" class="btn-blue">حفظ</button>
                 </div>
-            </div>
+
+                <div class="container col-10 mt-5 mb-5 ">
+                    <div class="form-row col-10 " dir="ltr">
+                        <button type="submit" class="btn-blue">حفظ</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -107,15 +112,17 @@
                     var value = $('#vacation_type_id option:selected').val();
                     console.log(value);
                     if (value == '3') {
-                        $('#reportImage-div').css('display', 'none !important');
+                        $('#name_dev').attr('hidden', false);
+                        $('#reportImage-div').attr('hidden', true);
+
                         $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', true);
                         $('#employee_id').removeAttr('required');
 
                     } else if (value == '4') {
-                        $('#reportImage-div').css('display', 'none !important');
-
+                        $('#name_dev').attr('hidden', true);
+                        $('#reportImage-div').attr('hidden', true);
                         $('#date_to').prop('disabled', true);
                         if (!id) {
 
@@ -124,14 +131,16 @@
                         }
 
                     } else if (value == '2') {
-                        $('#reportImage-div').css('display', 'block');
+                        $('#name_dev').attr('hidden', true);
+                        $('#reportImage-div').attr('hidden', false);
                         $('#date_to').prop('disabled', false);
                         if (!id) {
                             $('#employee_id').prop('disabled', false);
                             $('#employee_id').attr('required', true);
                         }
                     } else {
-                        $('#reportImage-div').css('display', 'none !important');
+                        $('#reportImage-div').attr('hidden', true);
+                        $('#name_dev').attr('hidden', true);
                         $('#date_to').prop('disabled', false);
                         if (!id) {
 

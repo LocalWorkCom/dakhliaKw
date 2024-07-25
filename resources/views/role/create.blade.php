@@ -1,23 +1,28 @@
 @extends('layout.main')
 @section('content')
 @section('title')
-    اضافة
+
 @endsection
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-    
+
                     <li class="breadcrumb-item"><a href="{{ route('rule.index') }}">المهام</a></li>
-    
+
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
             </ol>
         </nav>
     </div>
- 
-    <div class="row">
-        <div class="container  col-11 mt-3 p-0 ">
 
+    <div class="row">
+                <div class="container welcome col-11">
+                    <p>المـــــــهام</p>
+                </div>
+        </div>
+    <div class="row">
+    <div class="container  col-11 mt-3 p-0 ">
+    <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
 
             @if (session('success'))
                 <div class="alert alert-success">
@@ -40,33 +45,34 @@
                 <form action="{{ route('rule.store') }}" method="post" class="text-right">
                     @csrf
 
-                    <div class="form-row mx-2 mt-4 d-flex flex-row-reverse">
+                    <div class="form-row mx-3 mt-4 d-flex flex-row-reverse">
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-10">
                             <label for="nameus"> الدور</label>
-                            <input type="text" id="name" name="name" class="form-control" >
+                            <input type="text" id="name" name="name" class="form-control" required>
                         </div>
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-10">
                             <label for="department">الادارة</label>
                             <select class="custom-select custom-select-lg mb-3" name="department_id" id="department_id">
-                                <option selected disabled>Open this select menu</option>
+                                <option selected>Open this select menu</option>
                                 @foreach ($alldepartment as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                 
 
-                    <div class="form-row mx-2 mt-4 text-right">
-                        <div class="form-group col-md-12">
+
+                    <div class="form-row mx-2 d-flex justify-content-center text-right">
+                    <div class="form-group col-md-10">
                             <div class="row">
                                 <label for="department" class="col-12">الصلاحية</label>
                                 @foreach ($allPermission as $item)
                                 <div class="col-6 col-md-4 col-lg-3 my-2">
                                     <div class="form-check">
-                                        <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input">
+                                        <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input"
+                                        style="width: 35px; height:35px; margin-left:5px;">
                                         <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}"> {{__('permissions.' . $item->name)}}</label>
                                     </div>
                                 </div>
@@ -74,11 +80,11 @@
                             </div>
                         </div>
                     </div>
-                    
-
+                    </div>
+                    <!-- </div> -->
                     <!-- Save button -->
                     <div class="container col-12 ">
-                        <div class="form-row mt-4 mb-5">
+                    <div class="form-row mt-4 mb-5">
                             <button type="submit" class="btn-blue">حفظ</button>
                         </div>
                     </div>

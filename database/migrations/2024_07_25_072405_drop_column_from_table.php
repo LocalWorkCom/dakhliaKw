@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('departements', function (Blueprint $table) {
-            //
-            $table->dropColumn (['manager_director']);
-            $table->dropColumn (['ass_manager_director']);
-
+        Schema::table('iotelegrams', function (Blueprint $table) {
+            $table->dropColumn('files_num');
         });
     }
 
@@ -24,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('departements', function (Blueprint $table) {
+        Schema::table('iotelegrams', function (Blueprint $table) {
             //
         });
     }

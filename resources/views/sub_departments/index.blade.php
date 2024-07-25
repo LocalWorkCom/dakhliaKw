@@ -14,7 +14,7 @@
     <section>
         <div class="row">
             <div class="container welcome col-11">
-                <p>الاقسام</p>
+                <p>الاقـــــسام</p>
             </div>
         </div>
 
@@ -29,17 +29,17 @@
 
                     </div>
                 </div>
-                
+
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white ">
                         <div>
-                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>رقم التعريف</th>
                                         <th>الاسم</th>
                                         <th>الاقسام</th>
-                                        <th>إجراء</th>
+                                        <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -72,7 +72,7 @@
                     // departmentDelete = departmentDelete.replace(':id', row.id);
 
                     return `
-                        <a href="${sub_departmentsEdit}" class="btn btn-primary btn-sm">تعديل</a>
+                        <a href="${sub_departmentsEdit}" class="btn  btn-sm" style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>
                        `;
                 }
             }]

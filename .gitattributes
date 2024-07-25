@@ -7,14 +7,3 @@
 *.php diff=php
 
 /.github export-ignore
-CHANGELOG.md export-ignore
-.styleci.yml export-ignore
-# PHPStorm and WebStorm
-/.idea export-ignore
-*.iml export-ignore
-
-# VSCode
-/.vscode export-ignore
-
-# Local dev files
-.env.local export-ignore
