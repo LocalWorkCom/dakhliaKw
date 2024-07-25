@@ -92,14 +92,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export/all', [outgoingController::class, 'index'])->name('Export.index')->middleware('check.permission:view outgoings');
         Route::get('/export/{id}/edit', [outgoingController::class, 'edit'])->name('Export.edit')->middleware('check.permission:edit outgoings');
         Route::get('/export/{id}/show', [outgoingController::class, 'show'])->name('Export.show')->middleware('check.permission:view outgoings');
-        Route::put('/export/{Export}', [outgoingController::class, 'update'])->name('Export.update')->middleware('check.permission:edit outgoings');
+        Route::post('/export/{id}', [outgoingController::class, 'update'])->name('Export.update')->middleware('check.permission:edit outgoings');
         Route::get('/export/create', [outgoingController::class, 'create'])->name('Export.create')->middleware('check.permission:create outgoings');
         Route::post('/export', [outgoingController::class, 'store'])->name('Export.store')->middleware('check.permission:edit outgoings');
 
         Route::get('/export/All/Archive', [outgoingController::class, 'getExportInActive'])->name('Export.view.archive')->middleware('check.permission:view outgoings');
         Route::get('exports/get/active', [outgoingController::class, 'getExportActive'])->name('exports.view.all')->middleware('check.permission:view outgoings');
         Route::post('export/archive/add', [outgoingController::class, 'addToArchive'])->name('export.archive.add')->middleware('check.permission:edit outgoings');
-        Route::get('export/AllArchives', [outgoingController::class, 'showArchive'])->name('Export.AllArchive');
+        Route::get('export/AllArchives', [outgoingController::class, 'showArchive'])->name('Export.AllArchive')->middleware('check.permission:view outgoings');
         //external users
         Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users')->middleware('check.permission:view exportuser');
         Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax')->middleware('check.permission:edit exportuser');
@@ -146,7 +146,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('setting/government/update', [settingController::class, 'updategovernment'])->name('government.update')->middleware('check.permission:edit Government');
     Route::get('setting/government/edit/{id}', [settingController::class, 'editgovernment'])->name('government.edit')->middleware('check.permission:edit Government');
     Route::get('setting/government/show/{id}', [settingController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
-   
+    //endgovernment
 
     //start jobs
     Route::get('setting/jobs', [settingController::class, 'getAlljob'])->name('setting.getAlljob')->middleware('check.permission:view job');
@@ -261,19 +261,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 //Start Export routes
-Route::resource('Export', outgoingController::class);
-Route::get('/Export/All/Archive', [outgoingController::class, 'getExportInActive'])->name('Export.view.archive');
-Route::get('exports/get/active', [outgoingController::class, 'getExportActive'])->name('exports.view.all');
-Route::get('Export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files');
-Route::get('Export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files');
-Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax');
-Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users');
-Route::post('export/archive/add', [outgoingController::class, 'addToArchive'])->name('export.archive.add');
-Route::get('export/archive', [outgoingController::class, 'showArchive'])->name('Export.archive.show');
 
-
-Route::post('/testUpload', [outgoingController::class, 'testUpload'])->name('testUpload');
-Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile');
 
 //End Export routes
 //setting start
@@ -303,95 +291,3 @@ Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->n
 // Route::post('government/add', [settingController::class,'addgovernment'])->name('government.add');
 // Route::post('government', [settingController::class,'editgovernment'])->name('government.edit');
 // Route::post('government/delete', [settingController::class,'deletegovernment'])->name('government.delete');
-
-
-//start government
-Route::get('setting/government', [settingController::class, 'getAllgovernment'])->name('setting.getAllgovernment');
-Route::get('setting/government/all', [settingController::class,'indexgovernment'])->name('government.all');
-Route::post('setting/government/add', [settingController::class,'addgovernment'])->name('government.add');
-Route::get('setting/government/create', [settingController::class,'creategovernment'])->name('government.create');
-Route::post('setting/government/update', [settingController::class,'updategovernment'])->name('government.update');
-Route::get('setting/government/edit/{id}', [settingController::class,'editgovernment'])->name('government.edit');
-Route::get('setting/government/show/{id}', [settingController::class,'showgovernment'])->name('government.show');
-//endgovernment
-
-//start jobs
-Route::get('setting/jobs', [settingController::class, 'getAlljob'])->name('setting.getAlljob');
-Route::get('setting/jobs/all', [settingController::class,'indexjob'])->name('job.index');
-Route::post('setting/jobs/add', [settingController::class,'addjob'])->name('job.add');
-//Route::get('setting/jobs/create', [settingController::class,'createjob'])->name('job.create');
-Route::post('setting/jobs/update', [settingController::class,'updatejob'])->name('job.update');
-//Route::get('setting/jobs/edit/{id}', [settingController::class,'editjob'])->name('job.edit');
-Route::get('setting/jobs/show/{id}', [settingController::class,'showjob'])->name('job.show');
-Route::post('setting/jobs/delete', [settingController::class,'deletejob'])->name('job.delete');
-//end jobs
-//start vacation type
-Route::get('setting/vacationType', [settingController::class, 'getAllvacationType'])->name('setting.getAllvacationType');
-Route::get('setting/vacationType/all', [settingController::class,'indexvacationType'])->name('vacationType.index');
-Route::post('setting/vacationType/add', [settingController::class,'addvacationType'])->name('vacationType.add');
-//Route::get('setting/vacationType/create', [settingController::class,'createvacationType'])->name('vacationType.create');
-Route::post('setting/vacationType/update', [settingController::class,'updatevacationType'])->name('vacationType.update');
-//Route::post('setting/vacationType/edit', [settingController::class,'editvacationType'])->name('vacationType.edit');
-Route::get('setting/vacationType/show/{id}', [settingController::class,'showvacationType'])->name('vacationType.show');
-Route::post('setting/vacationType/delete', [settingController::class,'deletevacationType'])->name('vacationType.delete');
-//end vacation type
-//start gards
-Route::get('setting/grads', [settingController::class, 'getAllgrads'])->name('setting.getAllgrads');
-Route::get('setting/grads/all', [settingController::class,'indexgrads'])->name('grads.index');
-Route::post('setting/grads/add', [settingController::class,'addgrads'])->name('grads.add');
-Route::get('setting/grads/create', [settingController::class,'creategrads'])->name('grads.create');
-Route::post('setting/grads/update', [settingController::class,'updategrads'])->name('grads.update');
-Route::get('setting/grads/edit/{id}', [settingController::class,'editgrads'])->name('grads.edit');
-Route::get('setting/grads/show/{id}', [settingController::class,'showgrads'])->name('grads.show');
-Route::post('setting/grads/delete', [settingController::class,'deletegrads'])->name('grads.delete');
-//end grads
-//setting end
-
-
-
-Route::post('postman/ajax', [IoTelegramController::class, 'addPostmanAjax'])->name('postman.ajax');
-Route::get('postmans', [IoTelegramController::class, 'getPostmanAjax'])->name('postman.get');
-Route::post('department/ajax', [IoTelegramController::class, 'addExternalDepartmentAjax'])->name('department.ajax');
-Route::get('external/departments', [IoTelegramController::class, 'getExternalDepartments'])->name('external.departments');
-Route::get('internal/departments', [IoTelegramController::class, 'getDepartments'])->name('internal.departments');
-
-Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('iotelegrams.list');
-Route::get('iotelegrams/get/{id?}', [IoTelegramController::class, 'getIotelegrams'])->name('iotelegrams.get');
-
-Route::get('iotelegram/add', [IoTelegramController::class, 'create'])->name('iotelegrams.add');
-Route::post('iotelegram/store', [IoTelegramController::class, 'store'])->name('iotelegram.store');
-Route::get('iotelegram/edit/{id}', [IoTelegramController::class, 'edit'])->name('iotelegram.edit');
-Route::post('iotelegram/update/{id}', [IoTelegramController::class, 'update'])->name('iotelegram.update');
-Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name('iotelegram.show');
-Route::get('iotelegram/archives', [IoTelegramController::class, 'archives'])->name('iotelegram.archives');
-Route::get('iotelegram/archives/get', [IoTelegramController::class, 'getArchives'])->name('iotelegram.archives.get');
-Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add');
-Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
-
-// Route::resource('setting', SettingsController::class);
-
-
-
-
-Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list');
-Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations');
-Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add');
-Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store');
-Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit');
-Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update');
-Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show');
-Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete');
-Route::get('vacation/downlaod/{id}', [VacationController::class, 'downlaodfile'])->name('vacation.downlaodfile');
-
-
-
-
-
-
-
-
-// Route::resource('postmans', PostmanController::class);
-Route::get('/postmans/create', [PostmanController::class, 'create'])->name('postmans.create');
-Route::post('/postmans', [PostmanController::class, 'store'])->name('postmans.store');
-Route::get('/postmans/{postman}/edit', [PostmanController::class, 'edit'])->name('postmans.edit');
-Route::put('/postmans/{postman}', [PostmanController::class, 'update'])->name('postmans.update');
