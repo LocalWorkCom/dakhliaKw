@@ -74,16 +74,16 @@
                             <input type="text" id="name" name="name" class="form-control" >
                         </div>
                     </div>
-                    <div class="form-row mx-3 d-flex justify-content-center">
+                    <div class="form-row mx-2 d-flex justify-content-center">
                         @if ($flag == "0")
-                            <div class="form-group col-md-5 mx-2" >
+                            <div class="form-group col-md-10 mx-2" >
                                 <label for="military_number">رقم العسكرى</label>
                                 <input type="text" id="military_number" name="military_number" class="form-control"
                                     >
                             </div>
                         @endif
                         
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-10 mx-2">
                             <label for="phone">رقم المحمول</label>
                             <input type="text" id="phone" name="phone" class="form-control" >
                         </div>

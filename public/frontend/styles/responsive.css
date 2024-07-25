@@ -740,6 +740,80 @@
         border-width: 16px;
 
 }
+.wide-btn {
+    height: 40px;
+    font-size: 18px;
+    line-height: 26.78px;
+}
+.btn-all {
+    height: 39px;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 26.78px;
+}
+.btn-all img, .wide-btn img {
+    height: 20px;
+    width: 20px;
+}
+.dataTables_filter input {
+    width: 80%;
+    height: 29px;
+}
+#users-table th, #users-table td {
+    font-size: 15px;
+}
+#users-table tbody td {
+    font-size: 14px !important;
+}
+.form-group input, .form-group textarea, .form-group select {
+    border-radius: 10px !important;
+    height: 28px;
+    font-size: 10px;
+}
+.form-group label {
+    font-family: Almarai;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 7.78px;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 15px;
+}
+.breadcrumb a {
+    padding-right: 8px;
+    font-size: 16px;
+    font-weight: 700;
+}
+#users-table td a {
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 13px !important;
+    justify-content: center !important;
+    padding-block: 8px;
+    margin-inline: 2px;
+    margin-block: 4px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+  
+    font-size: 10px !important;
+}
+.paginate_button {
+    width: 27px;
+    height: 27px;
+    font-size: 11px;
+}
+footer p {
+    font-size: 13px;
+    font-weight: 700;
+}
+footer {
+    height: 36px;
+    padding: 10px;
+}
 }
 @media (max-width: 380px){
     li {
