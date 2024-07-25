@@ -13,12 +13,12 @@
 </div>
 <div class="row ">
     <div class="container welcome col-11">
-        <p> الــــــــــادارات </p>
+        <p> الادارات </p>
     </div>
 </div>
 <section style="direction: rtl;">
     <div class="row">
-        <div class="container c col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11 pt-5 pb-4 px-3">
+        <div class="container  col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11 pt-5 pb-4 px-3">
             <table class="table table-bordered ">
                 <tbody>
                     <tr>
@@ -34,14 +34,18 @@
                         <td> {{ $department->managerAssistant ? $department->managerAssistant->id : 'N/A' }}</td>
                     </tr>
                     @if($department->children->count() > 0)
+                    @foreach($department->children as $child)
                         <tr>
-                            @foreach($department->children as $child)
+                            
                                 <th scope="row"> القسم الفرعي </th>
                                 <td>{{ $child->name }} </td>
-                            @endforeach
+                            
                         </tr>
+                        @endforeach
                     @else
+                    <tr>
                         <td>لا يوجد </td>
+</tr>
                     @endif
 
                 </tbody>

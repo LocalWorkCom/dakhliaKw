@@ -105,7 +105,7 @@ class PermissionController extends Controller
                 'required',
                 'string',
                 'max:255',
-                ValidationRule::unique('permissions', 'guard_name'),
+                // ValidationRule::unique('permissions', 'guard_name'),
             ],
             'name' => 'required|unique:permissions,name',
             

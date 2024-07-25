@@ -33,7 +33,7 @@
     </div>
 <div class="row">
     <div class="container  col-11 mt-5 p-0 ">
-        <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
+        <div class="container col-10 mt-5 mb-4 pb-4" style="border:0.5px solid #C7C7CC;">
 
             @if (session('success'))
             <div class="alert alert-success">

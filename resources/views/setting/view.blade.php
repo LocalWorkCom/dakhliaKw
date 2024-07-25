@@ -159,7 +159,7 @@
                             &times;</button>
                     </div>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                     <form id="saveExternalUser" action="{{ route('grade.add') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -185,7 +185,7 @@
                     <h5 class="modal-title" id="extern-departmentLabel">إضافة مسمى وظيفى </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                     <form id="saveExternalUser" action="{{ route('jobs.add') }}" method="POST">
                         @csrf
 
@@ -212,7 +212,7 @@
                             &times;</button>
                     </div>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                     <form id="saveExternalUser" action="{{ route('jobs.add') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -240,7 +240,7 @@
                             &times;</button>
                     </div>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                     <form id="saveExternalUser" action="{{ route('vacationType.add') }}" method="POST">
                         @csrf
 
@@ -269,7 +269,7 @@
                             &times;</button>
                     </div>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                     <form id="saveExternalUser" action="{{ route('vacationType.add') }}" method="POST">
                         @csrf
 
@@ -299,7 +299,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                     <form class="edit-grade-form" id="edit-form" action="" method="POST">
                         @csrf
                         <div class="form-group">
@@ -333,7 +333,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                     <form class="delete-grade-form" id="delete-form" action="" method="POST">
                         @csrf
                         <div class="form-group">

@@ -24,6 +24,14 @@ border-radius: 10px;
     background-color: rgba(207, 206, 206, 0.788);
     border-radius: 20px;
 }
+.btn-pagination {
+    height: 30px;
+    width: 30px;
+    background-color: rgb(245 248 253);
+    border-radius: 50%;
+    margin-inline: 10px;
+    color: #274373;
+}
 .navbar-nav li h6 {
     font-family: Almarai;
     font-size: 23px;
@@ -775,8 +783,13 @@ background-color: #F4F7FD;
     margin-bottom: 10px;
     text-align: center !important;
     color: #9b9999 !important;
+    
 }
-
+.dataTables_filter label{
+    font-size: 20px;
+    font-weight: 700;
+    color: #032F70;
+}
 .dataTables_wrapper .dataTables_filter {
     float: left !important;
     text-align: right;
