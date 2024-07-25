@@ -45,7 +45,6 @@
                                         <th>رقم التعريف</th>
                                         <th>الاسم</th>
                                         <th>المدير</th>
-                                        <th>مساعد المدير</th>
                                         <th>الاقسام</th>
                                         <th>الوارد</th>
                                         <th>الصادر</th>
@@ -69,7 +68,6 @@
                 { data: 'id', name: 'id' },
                 { data: 'name', name: 'name' },
                 { data: 'manger', name: 'manger' },  // Ensure 'manager' column exists
-                { data: 'manger_assistance', name: 'manger_assistance' },  // Ensure 'manager_assistant' column exists
                 { data: 'children_count', name: 'children_count' },
                 { data: 'iotelegrams_count', name: 'iotelegrams_count' },
                 { data: 'outgoings_count', name: 'outgoings_count' },
@@ -86,14 +84,40 @@
                     departmentDelete = departmentDelete.replace(':id', row.id);
 
                     return `
+<<<<<<< HEAD
+                        <a href="${departmentEdit}" class="btn btn-primary btn-sm">تعديل</a>
+                        <a href="${departmentShow}" class="btn btn-primary btn-sm w-25">مشاهدة</a>
+                        <a href="" class="btn btn-danger btn-sm w-25" onclick="event.preventDefault(); deleteDepartment(${row.id});">حذف</a>`;
+=======
                     <a href="${departmentEdit}" class="btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></a>
                         <a href="${departmentShow}" class="btn  btn-sm w-25" style="background-color: #375A97;"><i class="fa fa-eye"></i></a>
                         <a href="${departmentDelete}" class="btn  btn-sm w-25" style="background-color: #C91D1D;"><i class="fa-solid fa-trash"></i></a>`;
+>>>>>>> 976ce8254f1d139975f72a8080923321c2385800
                 }
             }]
         });
+        
     });
+    function deleteDepartment(id) {
+        console.log(id);
+    if (confirm('هل أنت متأكد من حذف هذا القسم؟')) {
+        $.ajax({
+            url: '/departments/delete/' + id ,
+            type: 'get',
+            
+            success: function(response) {
+                // Handle success, e.g., refresh DataTable, show success message
+                $('#users-table').DataTable().ajax.reload();
+                alert('تم حذف القسم بنجاح');
+            },
+            error: function(xhr) {
+                 console.log(xhr);
+                // Handle error, e.g., show error message
+                // alert('حدث خطأ أثناء حذف القسم');
+            }
+        });
+    }
+}
     </script>
 
 @endsection
-<!-- {{-- <a href="` + permissionedit + `" class="btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i</a> --}} -->

@@ -301,7 +301,7 @@ Route::get('/departments/show/{department}', [DepartmentController::class, 'show
 Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
 Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
 Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
-Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+Route::get('departments/delete/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
 //Start Export routes
 
