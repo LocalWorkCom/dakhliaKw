@@ -23,11 +23,11 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                        <button type="button" class="btn-all  "
+                        {{-- <button type="button" class="btn-all  "
                         onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -58,7 +58,7 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <h5 class="modal-title" id="lable"> أضافه محافظه جديد</h5>
-                        <img src="../images/add-mandob.svg" alt="">
+                       
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
@@ -87,7 +87,7 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <h5 class="modal-title" id="lable"> تعديل اسم المحافظه ؟</h5>
-                        <img src="../images/add-mandob.svg" alt="">
+                       
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>

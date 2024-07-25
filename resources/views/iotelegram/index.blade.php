@@ -44,9 +44,8 @@
                             <th>المندوب</th>
                             <th>الجهة المرسلة</th>
                             <th>الموظف المستلم</th>
-                            <th> عدد الفايلات</th>
                             <th>النوع</th>
-                            <th>الخيارات</th>
+                            <th style="width:150px;">العمليات</th>
                         </tr>
                     </thead>
                 </table>
@@ -81,10 +80,7 @@
                                     data: 'recieved_by.name',
                                     name: 'recieved_by.name'
                                 },
-                                {
-                                    data: 'files_num',
-                                    name: 'files_num'
-                                },
+                          
                                 {
                                     data: 'type',
                                     name: 'type'
@@ -113,11 +109,11 @@
 
                                     // Checking if the vacation start date condition is met
                                     var archiveButton = (row.archives) ?
-                                        `<a href="${archiveUrl}" class="archive btn btn-primary btn-sm" onclick="confirmArchive(event, this)"> <i class="fa fa-archive"></i> </a>` :
-                                        `<a href="${editUrl}" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>`;
+                                        `<a href="${archiveUrl}" class="archive btn  btn-sm" onclick="confirmArchive(event, this)" style="background-color:#c1920c;"> <i class="fa-solid fa-file-arrow-up"></i> </a>` :
+                                        `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></a>`;
 
 
-                                    return `<a href="${showUrl}" class="archive btn btn-info btn-sm"><i class="fa fa-eye"></i></a>${archiveButton}`;
+                                    return `<a href="${showUrl}" class="archive btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>${archiveButton}`;
 
                                 }
 
