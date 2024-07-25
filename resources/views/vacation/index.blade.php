@@ -81,8 +81,8 @@
                             columnDefs: [{
                                 targets: -1,
                                 render: function(data, type, row) {
-                                    // Using route generation correctly in JavaScript
-                                    var editUrl = '{{ route('vacation.edit', ':id') }}';
+                                      // Using route generation correctly in JavaScript
+                                      var editUrl = '{{ route('vacation.edit', ':id') }}';
                                     var showUrl = '{{ route('vacation.show', ':id') }}';
                                     var deleteUrl = '{{ route('vacation.delete', ':id') }}';
 

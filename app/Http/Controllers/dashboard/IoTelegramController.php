@@ -31,8 +31,9 @@ class IoTelegramController extends Controller
     public function getArchives()
     {
         $IoTelegrams = Iotelegram::where('active', 1)->with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+            ->orderBy('created_at', 'desc')
             ->get();
-       
+
         foreach ($IoTelegrams as  $IoTelegram) {
             $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
                 $IoTelegram->internal_department->name :
@@ -47,7 +48,9 @@ class IoTelegramController extends Controller
     public function getIotelegrams()
     {
         $IoTelegrams = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+            ->orderBy('created_at', 'desc')
             ->get();
+
         foreach ($IoTelegrams as  $IoTelegram) {
             $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
                 $IoTelegram->internal_department->name :
@@ -90,7 +93,6 @@ class IoTelegramController extends Controller
         $iotelegram->representive_id = $request->representive_id;
         $iotelegram->date = $request->date;
         $iotelegram->recieved_by = $request->recieved_by;
-        $iotelegram->files_num = $request->files_num;
         $iotelegram->created_by = auth()->id();
         $iotelegram->created_departement = auth()->user()->department_id;
         $iotelegram->save();
@@ -126,7 +128,7 @@ class IoTelegramController extends Controller
     public function show($id)
     {
         //
-        $iotelegram = Iotelegram::find($id);
+        $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
         $representives = Postman::all();
         $recieves = User::all();
         $departments = departements::all();
@@ -145,7 +147,7 @@ class IoTelegramController extends Controller
         $recieves = User::all();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-        $iotelegram = Iotelegram::find($id);
+        $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
 
         return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram', 'external_departments'));
     }
@@ -162,7 +164,6 @@ class IoTelegramController extends Controller
         $iotelegram->representive_id = $request->representive_id;
         $iotelegram->date = $request->date;
         $iotelegram->recieved_by = $request->recieved_by;
-        $iotelegram->files_num = $request->files_num;
         $iotelegram->created_by = auth()->id();
         $iotelegram->created_departement = auth()->user()->department_id;
 
@@ -232,18 +233,36 @@ class IoTelegramController extends Controller
     //external department
     public function addExternalDepartmentAjax(Request $request)
     {
+        $rules = [
+            'desc' => 'nullable',
+            'phone' => 'required|integer',
+            'name' => 'required|string',
+        ];
+    
+        $messages = [
+            'name.string' => 'يجب ان يكون الأسم حروف فقط',
+            'phone.required' =>'يجب ادخال الهاتف',
+            'phone.integer'=>'يجب ان يكون الهاتف ارقام',
+            'name.required' => 'يجب ادخال اسم الشخص',
+        ];
+    
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+    
+        if ($validatedData->fails()) {
+            return response()->json(['success' => false, 'message' => $validatedData->errors()]);
+        }
 
         $ExternalDepartment = new ExternalDepartment();
         $ExternalDepartment->name = $request->name;
         $ExternalDepartment->description = $request->desc;
         $ExternalDepartment->phone = $request->phone;
         $ExternalDepartment->save();
-        return true;
+        return response()->json(['success' => true]);
     }
     //update ajax 
     public function getExternalDepartments()
     {
-        $ExternalDepartments = ExternalDepartment::all();
+        $ExternalDepartments = ExternalDepartment::orderBy('created_at','desc')->get();
         return $ExternalDepartments;
     }
 

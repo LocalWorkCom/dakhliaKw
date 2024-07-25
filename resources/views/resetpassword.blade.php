@@ -1,3 +1,7 @@
+<?php
+@session_start();
+@session_destroy();
+?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -58,7 +62,12 @@
                             </ul>
                         </div>
                     @endif
-                    
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
                     <input type="hidden" name="firstlogin" value="{{ $firstlogin }}">
                     <input type="hidden" name="military_number" value="{{ $military_number }}">
 

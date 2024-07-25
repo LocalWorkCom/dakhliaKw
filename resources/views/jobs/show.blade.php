@@ -11,7 +11,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('job.index') }}">الوظائف </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه وظيفه </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة وظيفه </a></li>
             </ol>
         </nav>
     </div>

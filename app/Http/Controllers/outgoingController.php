@@ -9,6 +9,7 @@ use App\Models\ExternalDepartment;
 use App\Models\outgoing_files;
 use App\Models\outgoings;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -33,6 +34,7 @@ class outgoingController extends Controller
     {
         $data = outgoings::with(['personTo', 'department_External'])
         ->where('outgoings.active', 0)
+        ->orderBy('created_at','desc')
         ->select('outgoings.*');
 
         return DataTables::of($data)->addColumn('action', function ($row) {
@@ -52,6 +54,12 @@ class outgoingController extends Controller
         ->addColumn('department_External_name', function ($row) {
             return $row->department_External->name ?? 'لا يوجد قسم خارجى صادر له'; // Assuming 'name' is the column in external_users
         })
+        ->addColumn('date', function ($row) {
+            return $row->date ?? 'لا يوجد تاريخ'; // Assuming 'name' is the column in external_users
+        })
+        ->addColumn('note', function ($row) {
+            return $row->note ?? 'لا يوجد ملاحظات'; // Assuming 'name' is the column in external_users
+        })
         ->rawColumns(['action'])
         ->make(true);
     }
@@ -60,6 +68,7 @@ class outgoingController extends Controller
 
         $data = outgoings::with(['personTo', 'department_External'])
         ->where('outgoings.active', 1)
+        ->orderBy('created_at','desc')
         ->select('outgoings.*');
 
         return DataTables::of($data)->addColumn('action', function ($row) {
@@ -72,44 +81,72 @@ class outgoingController extends Controller
         ->addColumn('department_External_name', function ($row) {
             return $row->department_External->name ?? 'لا يوجد قسم خارجى صادر له'; // Assuming 'name' is the column in external_users
         })
+        ->addColumn('note', function ($row) {
+            return $row->note ?? 'لا يوجد ملاحظات'; // Assuming 'name' is the column in external_users
+        })
+        ->addColumn('date', function ($row) {
+            return $row->date ?? 'لا يوجد تاريخ'; // Assuming 'name' is the column in external_users
+        })
         ->rawColumns(['action'])
         ->make(true);
     }
-
-    public function showFiles($id){
-
-        return view('outgoing.showfile');
-    }
+    
     public function getExternalUsersAjax()
     {
-        $users = exportuser::all();
+        $users = exportuser::orderBy('created_at','desc')->get();
         return $users;
     }
     public function addToArchive(Request $request){
         $export = outgoings::find($request->id);
         $export->active=1;
         $export->save();
-        session()->flash('success', 'تم الاضافه الى الارشيف بنجاح.');
+        session()->flash('success', 'تم الاضافة الى الارشيف بنجاح.');
         return redirect()->back();
     }
-    public function showArchive(outgoingsDataTable $dataTable, Request $request){
-        $status = $request->get('status', 'inactive'); // Default to 'inactive' if
-        return $dataTable->with('status', $status)->render('outgoing.archiveall');
+    public function showArchive(){
+        return view('outgoing.archiveall');
+        // return $dataTable->with('status', $status)->render('outgoing.archiveall');
 
     }
 
     public function addUaersAjax(Request $request)
-    {
+{
+    $rules = [
+        'military_number' => 'required|integer',
+        'filenum' => 'required|integer',
+        'Civil_number' => 'required|integer',
+        'phoneuser' => 'required|integer',
+        'name' => 'required|string',
+    ];
 
-        $user = new exportuser();
-        $user->military_number = $request->military_number;
-        $user->filenum = $request->filenum;
-        $user->Civil_number = $request->Civil_number;
-        $user->phone = $request->phone;
-        $user->name = $request->name;
-        $user->save();
-        return true;
+    $messages = [
+        'military_number.required' => 'يجب ادخال الرقم العسكرى',
+        'military_number.integer' => 'يجب ان يكون الرقم العسكرى أرقام فقط',
+        'filenum.integer' => 'رقم الملف يجب ان يكون ارقام فقط',
+        'filenum.required' => 'يجب ادخال رقم الملف',
+        'Civil_number.required' => 'يجب ادخال رقم الهويه',
+        'Civil_number.integer' => 'يجب ان يكون رقم الهويه ارقام فقط',
+        'phoneuser.required' => 'يجب ادخال الهاتف',
+        'phoneuser.integer'=>'رقم الهاتف يجب ان يكون أرقام فقط',
+        'name.required' => 'يجب ادخال اسم الشخص',
+    ];
+
+    $validatedData = Validator::make($request->all(), $rules, $messages);
+
+    if ($validatedData->fails()) {
+        return response()->json(['success' => false, 'message' => $validatedData->errors()]);
     }
+
+    $user = new ExportUser();
+    $user->military_number = $request->military_number;
+    $user->filenum = $request->filenum;
+    $user->Civil_number = $request->Civil_number;
+    $user->phone = $request->phoneuser;
+    $user->name = $request->name;
+    $user->save();
+
+    return response()->json(['success' => true]);
+}
     public function create()
     {
 
@@ -120,12 +157,12 @@ class outgoingController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request->all());
+      
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
             'num' => 'required|integer',
-            'note' => 'required|string',
+            'note' => 'nullable|string',
             'person_to' => 'nullable|exists:export_users,id',
             'date' => 'required|date',
             'department_id' => 'nullable|exists:external_departements,id',
@@ -140,10 +177,14 @@ class outgoingController extends Controller
             'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
             'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
-        ];
+            'files.*.file' => 'عفو يوجد مشكله فرفع هذاالملف',
 
+        ];
+        $validatedData = Validator::make($request->all(), $rules, $messages);
         // // Validate the request
-        $request->validate($rules, $messages);
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
         //dd( $request->validate($rules, $messages));
         if(auth()->id()){
             $user = User::find(auth()->id());
@@ -155,7 +196,7 @@ class outgoingController extends Controller
         $export->person_to = $request->person_to  ?  $request->person_to :null;
         $export->created_by = $user->id;//auth auth()->id
         $export->created_department = $user->department_id;
-        $export->active = $request->active;
+        $export->active = $request->active ? $request->active : 0;
         $export->updated_by = $user->id;//auth auth()->id
         $export->department_id = $request->from_departement;
         $export->save();
@@ -194,9 +235,9 @@ class outgoingController extends Controller
     public function show(string $id)
     {
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
-        $users=User::all();
+        $users=$this->getExternalUsersAjax();
         $is_file = outgoing_files::where('outgoing_id', $id)->get();
-
+        //dd($is_file);
         $departments=ExternalDepartment::all();
 
         return view('outgoing.showdetail', compact('data','users','is_file','departments'));
@@ -208,7 +249,7 @@ class outgoingController extends Controller
     public function edit(string $id)
     {
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
-        $users=User::all();
+        $users=$this->getExternalUsersAjax();
         $is_file = outgoing_files::where('outgoing_id', $id)->where('active',0)->get();
         $departments=ExternalDepartment::all();
         return view('outgoing.editexport', compact('data','users','is_file','departments'));
@@ -217,14 +258,14 @@ class outgoingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
 
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
             'num' => 'required|integer',
-            'note' => 'required|string',
+            'note' => 'nullable|string',
             'person_to' => 'nullable|exists:export_users,id',
             'department_id' => 'nullable|exists:external_departements,id',
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
@@ -238,10 +279,17 @@ class outgoingController extends Controller
             'num.integer' => 'عفوا يرجى ادخال ارقام فقط',
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
             'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
+            'files.*.file' => 'عفو يوجد مشكله فرفع هذاالملف',
+
         ];
 
         // // Validate the request
-        $request->validate($rules, $messages);
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+        // // Validate the request
+       // $request->validate($rules, $messages);
+       if ($validatedData->fails()) {
+        return redirect()->back()->withErrors($validatedData)->withInput();
+    }
         //dd(auth()->id());
         if(auth()->id()){
         $user=User::findOrFail(auth()->id());
@@ -253,7 +301,7 @@ class outgoingController extends Controller
         $export->date = $request->date;
         $export->person_to = $request->person_to  ?  $request->person_to :null;
         $export->created_by = $user->id;//auth auth()->id
-        $export->active = $request->active;
+        $export->active = $request->active ? $request->active : $export->active;
         $export->updated_by = $user->id;//auth auth()->id
         $export->department_id = $request->department_id;
         $export->created_department =  $user->department_id;
@@ -279,7 +327,7 @@ class outgoingController extends Controller
                 }
             }
         }
-        return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
+        return redirect()->route('Export.index')->with('status', 'تم الاضافة بنجاح');
     }else{
         return redirect()->route('login');
 

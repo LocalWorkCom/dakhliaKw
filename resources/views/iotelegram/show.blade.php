@@ -34,7 +34,8 @@
                     <tbody>
                         <tr>
                             <th scope="row"style="background: #f5f6fa;">الجهه المرسلة</th>
-                            <td>{{ $iotelegram->external_department->name }}</td>
+                            <td>{{ $iotelegram->type == 'out' ? $iotelegram->external_department->name : $iotelegram->internal_department->name }}
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">نوع الوارد</th>
@@ -57,17 +58,19 @@
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
                             <td>
+                                <?php $count = 0; ?>
                                 <div class="row">
                                     <div class="col-md-11 mb-3 px-5 mt-2 d-flex">
                                         @foreach ($iotelegram->ioFiles as $file)
                                             @if ($file->file_type == 'image')
-                                                <div >
+                                                <div>
 
                                                     <a href="#" class="image-popup" data-toggle="modal"
                                                         data-target="#imageModal" data-image="{{ asset($file->file_name) }}"
                                                         data-title="{{ $file->file_name }}">
                                                         <img src="{{ asset($file->file_name) }}" class="img-thumbnail mx-2"
-                                                            alt="{{ $file->file_name }}"> <br> <br>
+                                                            alt="{{ $file->file_name }}">
+                                                        <br> <br>
                                                         <a id="downloadButton"
                                                             href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
                                                             class="btn-download"><i class="fa fa-download"
@@ -77,8 +80,13 @@
 
                                                     </a>
                                                 </div>
+                                                <?php $count++; ?>
                                             @endif
                                         @endforeach
+                                        @if ($count == 0)
+                                            _______________
+                                        @endif
+
                                     </div>
                                 </div>
                             </td>

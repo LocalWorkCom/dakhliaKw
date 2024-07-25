@@ -48,31 +48,33 @@
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> تاريخ النهاية:</th>
-                            <td>{{ $vacation->date_to }}</td>
+                            <td>{{ $vacation->date_to ? $vacation->date_to : '________________' }}</td>
                         </tr>
-                        <tr>
-                            <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
-                            <td>
-                                <div class="row">
-                                    <div class="col-md-11 mb-3 px-5 mt-2">
-                                        <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
-                                            data-image="{{ asset($vacation->report_image) }}"
-                                            data-title="{{ $vacation->report_image }}">
-                                            <img src="{{ asset($vacation->report_image) }}" class="img-thumbnail mx-2"
-                                                alt="{{ $vacation->report_image }}"> <br> <br>
-                                            <a id="downloadButton"
-                                                href="{{ route('vacation.downlaodfile', ['id' => $vacation->id]) }}"
-                                                class="btn-download"><i class="fa fa-download" style="color:green;"></i>
-                                                تحميل الملف
+                        @if ($vacation->report_image)
+                            <tr>
+                                <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-11 mb-3 px-5 mt-2">
+                                            <a href="#" class="image-popup" data-toggle="modal"
+                                                data-target="#imageModal" data-image="{{ asset($vacation->report_image) }}"
+                                                data-title="{{ $vacation->report_image }}">
+                                                <img src="{{ asset($vacation->report_image) }}" class="img-thumbnail mx-2"
+                                                    alt="{{ $vacation->report_image }}"> <br> <br>
+                                                <a id="downloadButton"
+                                                    href="{{ route('vacation.downlaodfile', ['id' => $vacation->id]) }}"
+                                                    class="btn-download"><i class="fa fa-download" style="color:green;"></i>
+                                                    تحميل الملف
+                                                </a>
+
                                             </a>
 
-                                        </a>
+                                        </div>
 
                                     </div>
-
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        @endif
 
 
 
@@ -84,6 +86,22 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="#" class="img-fluid" alt="صورة">
+            </div>
+        </div>
+    </div>
+</div>
 
 
     @push('scripts')
@@ -114,6 +132,18 @@
 
 
                 });
+                $('.image-popup').click(function(event) {
+                        event.preventDefault();
+                        var imageUrl = $(this).data('image');
+                        var imageTitle = $(this).data('title');
+
+                        // Set modal image and title
+                        $('#modalImage').attr('src', imageUrl);
+                        $('#imageModalLabel').text(imageTitle);
+
+                        // Show the modal
+                        $('#imageModal').modal('show');
+                    });
             });
         </script>
     @endpush

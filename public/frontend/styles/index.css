@@ -69,6 +69,7 @@ li {
     /* width: 200px;
     margin-inline: 10px; */
 }
+
 .nav-item {
     display: inline-block;
     padding: 1px 2px;
@@ -1000,5 +1001,4 @@ select.form-control:not([size]):not([multiple]) {
       width: calc(50% - 10px); /* Adjust width for smaller screens to fit 2 files per row */
     }
   }
-
 

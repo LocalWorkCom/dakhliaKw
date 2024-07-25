@@ -1,3 +1,7 @@
+<?php
+@session_start();
+@session_destroy();
+?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -59,6 +63,12 @@
                             </ul>
                         </div>
                     @endif
+                    @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                     <label for="username" class="login-label">رقم العسكري</label> <br>
                     <input type="text" name="military_number" id="username" class="login-input"> <br>
                     <label for="password" class="login-label">كلمة المرور</label> <br>

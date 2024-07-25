@@ -44,7 +44,6 @@
                             <th>المندوب</th>
                             <th>الجهة المرسلة</th>
                             <th>الموظف المستلم</th>
-                            <th> عدد الفايلات</th>
                             <th>النوع</th>
                             <th style="width:150px;">العمليات</th>
                         </tr>
@@ -81,10 +80,7 @@
                                     data: 'recieved_by.name',
                                     name: 'recieved_by.name'
                                 },
-                                {
-                                    data: 'files_num',
-                                    name: 'files_num'
-                                },
+                          
                                 {
                                     data: 'type',
                                     name: 'type'

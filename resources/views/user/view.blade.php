@@ -38,7 +38,7 @@
                     <div class="bg-white ">
                         <!-- <div>
                                                 <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
-                                                    اضافه جديد</a>
+                                                    اضافة جديد</a>
                                             </div>
                                             <br> -->
 
@@ -108,7 +108,31 @@
                                         `;
                                             }
 
-                                        }]
+                                        }],
+                                        "oLanguage": {
+                                            "sSearch": "بحث",
+                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
+                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
+                                            "oPaginate": {
+                                                    "sFirst": "<<", // This is the link to the first page
+                                                    "sPrevious": "<", // This is the link to the previous page
+                                                    "sNext": ">", // This is the link to the next page
+                                                    "sLast": " >>" // This is the link to the last page
+                                                    }
+
+
+                                        },
+                                        layout: {
+                                            bottomEnd: {
+                                                paging: {
+                                                    firstLast: false
+                                                }
+                                            }
+                                        },
+                                         "pagingType": "full_numbers"
                                     });
                                 });
                             </script>
