@@ -235,18 +235,36 @@ class IoTelegramController extends Controller
     //external department
     public function addExternalDepartmentAjax(Request $request)
     {
+        $rules = [
+            'desc' => 'nullable',
+            'phone' => 'required|integer',
+            'name' => 'required|string',
+        ];
+    
+        $messages = [
+            'name.string' => 'يجب ان يكون الأسم حروف فقط',
+            'phone.required' =>'يجب ادخال الهاتف',
+            'phone.integer'=>'يجب ان يكون الهاتف ارقام',
+            'name.required' => 'يجب ادخال اسم الشخص',
+        ];
+    
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+    
+        if ($validatedData->fails()) {
+            return response()->json(['success' => false, 'message' => $validatedData->errors()]);
+        }
 
         $ExternalDepartment = new ExternalDepartment();
         $ExternalDepartment->name = $request->name;
         $ExternalDepartment->description = $request->desc;
         $ExternalDepartment->phone = $request->phone;
         $ExternalDepartment->save();
-        return true;
+        return response()->json(['success' => true]);
     }
     //update ajax 
     public function getExternalDepartments()
     {
-        $ExternalDepartments = ExternalDepartment::all();
+        $ExternalDepartments = ExternalDepartment::orderBy('created_at','desc')->get();
         return $ExternalDepartments;
     }
 

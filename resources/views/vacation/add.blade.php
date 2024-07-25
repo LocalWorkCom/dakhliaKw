@@ -66,9 +66,8 @@
                         </div>
                     </div>
 
-                    <div class="form-row mx-2 mt-4 d-flex justify-content-center" id="reportImage-div"
-                        style="display: none !important">
-                        <div class="form-group col-md-10">
+                    <div class="form-row mx-2 mt-4 d-flex justify-content-center"  >
+                        <div class="form-group col-md-10" id="reportImage-div" hidden>
                             <label for="reportImage">اضافة ملف</label>
                             <div id="reportImage">
                                 <div class="file-input mb-3" dir="rtl">
@@ -107,15 +106,17 @@
                     var value = $('#vacation_type_id option:selected').val();
                     console.log(value);
                     if (value == '3') {
-                        $('#reportImage-div').css('display', 'none !important');
+                        // $('#reportImage-div').css('display', 'none !important');
+                        $('#reportImage-div').attr('hidden', true);
+
                         $('#date_to').prop('disabled', false);
 
                         $('#employee_id').prop('disabled', true);
                         $('#employee_id').removeAttr('required');
 
                     } else if (value == '4') {
-                        $('#reportImage-div').css('display', 'none !important');
-
+                        // $('#reportImage-div').css('display', 'none !important');
+                        $('#reportImage-div').attr('hidden', true);
                         $('#date_to').prop('disabled', true);
                         if (!id) {
 
@@ -124,14 +125,16 @@
                         }
 
                     } else if (value == '2') {
-                        $('#reportImage-div').css('display', 'block');
+                        // $('#reportImage-div').css('display', 'block');
+                        $('#reportImage-div').attr('hidden', false);
                         $('#date_to').prop('disabled', false);
                         if (!id) {
                             $('#employee_id').prop('disabled', false);
                             $('#employee_id').attr('required', true);
                         }
                     } else {
-                        $('#reportImage-div').css('display', 'none !important');
+                        // $('#reportImage-div').css('display', 'none !important');
+                        $('#reportImage-div').attr('hidden', true);
                         $('#date_to').prop('disabled', false);
                         if (!id) {
 

@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('departements', function (Blueprint $table) {
-            //
-            $table->dropColumn (['manager_director']);
-            $table->dropColumn (['ass_manager_director']);
+        Schema::table('outgoings', function (Blueprint $table) {
+            $table->string('note')->nullable()->default(null)->change();
 
         });
     }
@@ -24,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('departements', function (Blueprint $table) {
-            //
+        Schema::table('outgoings', function (Blueprint $table) {
+            $table->string('note')->default('none')->change();
+
         });
     }
 };
