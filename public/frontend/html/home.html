@@ -206,7 +206,8 @@
             <p>تجديد هوية</p>
             <h3>بشير سالم</h3>
             <button class="order">ordered</button>
-            <img src="path_to_your_image.jpg" alt="img" class="small-img">
+            <img class="ordered-img" src="{{ asset('frontend/images/ordered.svg') }}" alt="img">
+
 
           </div>
      </div>
@@ -371,7 +372,20 @@
       }
     });
   });
+
 </script>
+<script>
+    function makeActive(element) {
+      // Remove active class from all nav items
+      var navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(function(item) {
+        item.classList.remove('active-nav-item');
+      });
+
+      // Add active class to the clicked nav item
+      element.classList.add('active-nav-item');
+    }
+  </script>
 
 </body>
 </html>

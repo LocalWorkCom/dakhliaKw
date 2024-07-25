@@ -34,7 +34,7 @@
   </div>
   <br>
   <div class="row">
-  <div class="container container-not-responsive col-12 mt-3 p-0 col-md-11 col-lg-3 col-s-12">
+  <div class="container container-not-responsive col-11 mt-3 p-0 col-md-11 col-lg-3 col-s-11">
           <div class="header-side d-flex">
               <p>المهام</p>
               <img src="{{ asset('frontend/images/tasks.svg')}}" alt="">
@@ -53,7 +53,7 @@
                   <p>تجديد هوية</p>
                   <h3>بشير سالم</h3>
                   <button class="order">
-                      ordered  
+                      ordered
                   </button>
               </div>
           </div>
@@ -105,12 +105,14 @@
               </div>
           </div>
       </div>
-      <div class="container container-responsive col-xs-12 mt-4 ">
+      <div class="container container-responsive col-xs-11 col-11 mt-4 ">
       <div class="header-side d-flex">
        <p>المهام</p>
        <img src="/images/tasks.svg" alt="">
       </div> <br>
-      <div class="progress blue mt-3">
+
+<div class="resp d-flex justify-content-between align-items-center" dir="rtl">
+  <div class="progress blue mt-3">
        <span class="progress-left">
          <span class="progress-bar"></span>
        </span>
@@ -123,16 +125,13 @@
        <div class="name">
          <p>تجديد هوية</p>
          <h3>بشير سالم</h3>
-        <div class="ordered-btn d-flex">
-        <img class="mt-2" src="{{ asset('frontend/images/ordered.svg') }}" alt=""> 
-         <div class="order">
-      
-         ordered
-         </div>
-        </div>
+         <button class="order">
+           ordered
+         </button>
         </div>
       </div>
-      
+</div>
+
      </div>
   </div>
 
@@ -140,5 +139,4 @@
   </div>
 
 @endsection
-    
-   
+

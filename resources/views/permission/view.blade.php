@@ -28,15 +28,15 @@
                 </div>
 
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white ">
                         <div>
-                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>رقم التعريف</th>
                                         <th>الصلاحية</th>
                                         <th>القسم</th>
-                                        <th>إجراء</th>
+                                        <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -70,11 +70,34 @@
                         var permissiondelete = '{{ route('permissions_destroy', ':id') }}';
                         permissiondelete = permissiondelete.replace(':id', row.id);
                         return `
-                       <a href="` + permissionshow + `" class="btn btn-primary btn-sm w-25">مشاهدة</a>
-                       <a href="` + permissiondelete + `" class="btn btn-primary btn-sm w-25">حذف</a>`;
+                       <a href="` + permissionshow + `" class="btn  btn-sm " style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
+                       <a href="` + permissiondelete + `" class="btn  btn-sm " style="background-color: #C91D1D;"> <i class="fa-solid fa-trash"></i> </a>`;
                     }
 
-                }]
+                }],
+                "oLanguage": {
+                                            "sSearch": "بحث",
+                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
+                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
+                                            "oPaginate": {
+                                                    "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
+                                                    "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
+                                                    "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
+                                                    "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
+                                                    }
+                                        },
+                                        layout: {
+                                            bottomEnd: {
+                                                paging: {
+                                                    firstLast: false
+                                                }
+                                            }
+                                        },
+                                         "pagingType": "full_numbers"
+            
             });
         });
     </script>

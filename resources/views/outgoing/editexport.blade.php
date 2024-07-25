@@ -25,7 +25,7 @@
         <div class="container  col-11 mt-3 p-0 ">
             <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
                 @include('inc.flash')
-                <form action="{{ route('Export.update', ['Export' => $data->id]) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('Export.update', ['id' => $data->id]) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 

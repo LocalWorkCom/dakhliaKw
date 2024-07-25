@@ -33,7 +33,7 @@ class DepartmentController extends Controller
     {
         $data = departements::withCount('iotelegrams')
         ->withCount('outgoings')
-        ->withCount('children')->get();
+        ->withCount('children')->orderBy('id', 'desc')->get();
 
     return DataTables::of($data)
         ->addColumn('action', function ($row) {
@@ -51,7 +51,7 @@ class DepartmentController extends Controller
         ->rawColumns(['action'])
         ->make(true);
     }
-    
+
 
 
     // public function index_1(subDepartmentsDataTable $dataTable)
@@ -72,13 +72,13 @@ class DepartmentController extends Controller
     {
         $data = departements::withCount('children')
         ->where('parent_id', Auth::user()->department_id)
-        ->with(['children'])->get();
+        ->with(['children'])->orderBy('created_at', 'asc')->get();
 
     return DataTables::of($data)
         ->addColumn('action', function ($row) {
-            return '<button class="btn btn-primary btn-sm">Edit</button>';
+            return '<button class="btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></button>';
         })
-       
+
         ->addColumn('children_count', function ($row) { // New column for departments count
             return $row->children_count;
         })
@@ -104,8 +104,9 @@ class DepartmentController extends Controller
         $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
 
         // Get the children of the parent department
-        $departments = $parentDepartment ? $parentDepartment->children : collect();         
-        return view('sub_departments.create', compact('parentDepartment','departments'));
+        $departments = $parentDepartment ? $parentDepartment->children : collect();       
+        $subdepartments = departements::with('children', 'parent')->get();
+        return view('sub_departments.create', compact('parentDepartment','departments','subdepartments'));
     }
     /**
      * Store a newly created resource in storage.
@@ -113,11 +114,10 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        
+
         $request->validate([
             'name' => 'required',
             'manger' => 'required',
-            'manger_assistance' => 'required',
         ]);
          $departements =departements::create($request->all());
           $departements->created_by = Auth::user()->id;
@@ -132,7 +132,7 @@ class DepartmentController extends Controller
     public function store_1(Request $request)
     {
         // dd($request->all());
-        
+
         $request->validate([
         ]);
          $departements =departements::create($request->all());
@@ -140,7 +140,7 @@ class DepartmentController extends Controller
 
           $departements->save();
         //   dd($departements);
-        return redirect()->route('departments.index')->with('success', 'Department created successfully.');
+        return redirect()->route('sub_departments.index')->with('success', 'Department created successfully.');
         // return response()->json($department, 201);
     }
     /**
@@ -166,8 +166,9 @@ class DepartmentController extends Controller
         $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
 
         // Get the children of the parent department
-        $departments = $parentDepartment ? $parentDepartment->children : collect();   
-        return view('sub_departments.edit', compact('department', 'departments' ,'parentDepartment'));
+        $departments = $parentDepartment ? $parentDepartment->children : collect();  
+        $subdepartments = departements::with('children', 'parent')->get();
+        return view('sub_departments.edit', compact('department', 'departments' ,'parentDepartment','subdepartments'));
     }
 
     /**
@@ -189,7 +190,7 @@ class DepartmentController extends Controller
     public function update_1(Request $request, departements $department)
     {
         $request->validate([
-            
+
         ]);
 
         $department->update($request->all());
