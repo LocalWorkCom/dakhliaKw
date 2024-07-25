@@ -43,7 +43,7 @@ class PermissionController extends Controller
             if (class_exists($modelClass) && is_subclass_of($modelClass, 'Illuminate\Database\Eloquent\Model')) {
                 $translatedName = __('models.' . $modelName);
 
-                $models[] = $translatedName;
+                $models[] = $modelName;
             }
         }
 
