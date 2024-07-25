@@ -124,8 +124,6 @@
                                                     "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
                                                     "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
                                                     }
-
-
                                         },
                                         layout: {
                                             bottomEnd: {

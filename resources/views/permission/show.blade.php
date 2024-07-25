@@ -60,7 +60,7 @@
                             <label for="input15">القسم</label>
                             <select id="input15" name="model" class="form-control" placeholder="القسم" disabled>
                                 @foreach ($models as $item)
-                                <option value="{{ $item}}" {{ $permission->guard_name == $item ? 'selected' : '' }}> {{ $item }}</option>
+                                <option value="{{ $item}}" {{ $permission->guard_name == $item ? 'selected' : '' }}> {{ __('models.' . $item)}}</option>
                                 @endforeach
                             </select>
                         </div>

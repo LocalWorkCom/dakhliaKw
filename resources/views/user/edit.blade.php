@@ -8,30 +8,51 @@
 <body> --}}
 <section>
     <div class="row col-11" dir="rtl">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
 
-                @if ($user->flag == "user")
-                <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
+              @if ($user->flag == "user")
+              <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
 
-                @elseif ($user->flag == "employee")
-                <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
+              @elseif ($user->flag == "employee")
+              <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
 
-                @endif
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
-            </ol>
+              @endif
+          <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
+      </ol>
+         
+      </nav>
+  </div>
+  <div class="row ">
+    <div class="container welcome col-11">
+        @if ($user->flag == "user")
+        <p>المستخدمين</p>
 
-        </nav>
+        @elseif ($user->flag == "employee")
+        <p>الموظفين</p>
+
+        @endif
     </div>
-
-    <div class="row ">
-        <div class="container welcome col-11">
-            @if (url()->current() == url('/users_create/0'))
-            <p>المستخدمين</p>
-
-            @elseif (url()->current() == url('/users_create/1'))
-            <p>الموظفين</p>
+</div>
+  
+        <div class="row">
+          <div class="container  col-11 mt-3 p-0 ">
+       
+            
+            @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
 
             @endif
             <!-- <p> المستخدمين </p> -->
