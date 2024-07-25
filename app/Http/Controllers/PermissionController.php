@@ -92,7 +92,7 @@ class PermissionController extends Controller
         // dd($request);
         $messages = [
             'model.required' => 'القسم  مطلوب ولا يمكن تركه فارغاً.',
-            'model.unique' => 'القسم  الذي أدخلته موجود بالفعل.',
+            'name.unique' => 'القسم  الذي أدخلته موجود بالفعل.',
 
             'name.required' => 'الصلاحية  مطلوب ولا يمكن تركه فارغاً.',
             // 'name.unique' => 'رقم الهاتف يجب أن يكون نصاً.',
