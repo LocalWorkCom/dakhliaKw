@@ -30,7 +30,7 @@
                     @csrf
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
 
-                        <div class="form-group col-md-3 mx-2" id="name_dev" hidden>
+                        <div class="form-group col-md-10" id="name_dev" hidden>
 
                             <label for="name">اسم الاجازة:</label>
                             <input type="text" id="name" name="name" class="form-control"

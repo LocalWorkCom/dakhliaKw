@@ -82,12 +82,13 @@
                                 <input type="text" id="military_number" name="military_number" class="form-control"
                                     >
                             </div>
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="phone">رقم المحمول</label>
+                                <input type="text" id="phone" name="phone" class="form-control" >
+                            </div>
                         @endif
                         
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="phone">رقم المحمول</label>
-                            <input type="text" id="phone" name="phone" class="form-control" >
-                        </div>
+                        
 
                     </div>
                    
@@ -169,14 +170,19 @@
                         </div>
                     </div>
                     <div class="form-row mx-2 d-flex justify-content-center">
-                        <div class="form-group col-md-10 ">
+                        <div class="form-group col-md-5 ">
                             <label for="description">وصف</label>
                             <textarea class="form-control" id="description" name="description" placeholder="الوصف"
                                 rows="3"></textarea>
                             {{-- <input type="file" id="image" name="image" class="form-control" required> --}}
 
                         </div>
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="phone">رقم المحمول</label>
+                            <input type="text" id="phone" name="phone" class="form-control" >
+                        </div>
                     </div>
+                    
 
             @endif
 

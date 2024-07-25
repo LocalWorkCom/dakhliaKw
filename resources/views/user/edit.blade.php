@@ -87,14 +87,8 @@
                             </div>
                         </div>
 
-                        <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
-                            <div class="form-group col-md-5 mx-2">
-                                <label for="input6">رقم العسكرى</label>
-                                <input type="text" id="input6" name="military_number" class="form-control"
-                                    placeholder="رقم العسكرى" value="{{ $user->military_number  }}">
-                            </div>
-
-                            <div class="form-group col-md-5 mx-2">
+                        <div class="form-row  mx-2 d-flex justify-content-center flex-row-reverse">
+                            <div class="form-group col-md-10 mx-2">
                                 <label for="input8">الوظيفة</label>
                                 <select class="custom-select custom-select-lg mb-3" name="job" id="job">
                                     <option selected disabled>Open this select menu</option>
