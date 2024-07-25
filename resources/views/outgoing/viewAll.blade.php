@@ -169,10 +169,10 @@
                     "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                     "sZeroRecords": 'نأسف لا توجد نتيجة',
                     "oPaginate": {
-                        "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
-                        "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
-                        "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
-                        "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
+                        "sFirst": "<< &nbsp;", // This is the link to the first page
+                        "sPrevious": "<&nbsp;", // This is the link to the previous page
+                        "sNext": ">&nbsp;", // This is the link to the next page
+                        "sLast": "&nbsp; >>" // This is the link to the last page
                     }
                 },
                 layout: {
