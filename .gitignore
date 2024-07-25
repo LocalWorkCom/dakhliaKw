@@ -8,7 +8,6 @@ node_modules/
 /public/index.php
 /storage/*.key
 /vendor
-vendor/
 /images
 .env
 .htaccess
