@@ -25,14 +25,8 @@
             <form action="{{ route('departments.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="form-row mx-2 mt-4 d-flex justify-content-center">
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="name">اسم الادارة </label>
-                        <input type="text" name="name" class="form-control" value="{{ old('name') }}">
-                        @error('name')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                <div class="form-row mx-3 mt-4 d-flex justify-content-center">
+
                     <div class="form-group col-md-5 mx-2">
                         <label for="manger">المدير</label>
                         <select name="manger" class="form-control">
@@ -46,9 +40,16 @@
                         @enderror
 
                     </div>
+                    <div class="form-group col-md-5 mx-2">
+                        <label for="name">اسم الادارة </label>
+                        <input type="text" name="name" class="form-control" value="{{ old('name') }}">
+                        @error('name')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
                 <div class="form-row mx-2 d-flex justify-content-center">
-                    <div class="form-group col-md-5 mx-2">
+                    <div class="form-group col-md-10 ">
                         <label for="manger_assistance"> مساعد المدير</label>
                         <select name="manger_assistance" class="form-control">
                             <option value="">اختار مساعد المدير</option>
@@ -60,8 +61,9 @@
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    <div class="form-group col-md-5 mx-2">
+                    </div>
+                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-group col-md-10">
                         <label for="description">الوصف </label>
                         <input type="text" name="description" class="form-control" value="{{ old('description') }}">
                         @error('description')
@@ -90,7 +92,7 @@
     </div>
 </main>
 
-<!-- 
+<!--
 <div class="container">
     <h1>Create Department</h1>
     <form action="{{ route('departments.store') }}" method="POST" enctype="multipart/form-data">
@@ -102,7 +104,7 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
-        
+
         <div class="form-group">
             <label for="manger">Manager</label>
             <select name="manger" class="form-control">
@@ -114,7 +116,7 @@
             @error('manager')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
-            
+
         </div>
         <div class="form-group">
             <label for="manger_assistance">Manager Assistant</label>

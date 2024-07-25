@@ -26,7 +26,7 @@ class outgoingController extends Controller
 
     public function index()
     {
-       
+
         return view('outgoing.viewAll');
     }
     public function getExportActive()
@@ -34,16 +34,16 @@ class outgoingController extends Controller
         $data = outgoings::with(['personTo', 'department_External'])
         ->where('outgoings.active', 0)
         ->select('outgoings.*');
-       
+
         return DataTables::of($data)->addColumn('action', function ($row) {
             $fileCount = outgoing_files::where('outgoing_id', $row->id)->count();
             $is_file = $fileCount == 0;
-           $uploadButton = $is_file 
-               ? '<a class="btn btn-primary btn-sm" href=' . route('Export.edit', $row->id) . '>تعديل</a>'
-               : '<a class="btn btn-primary btn-sm" onclick="opendelete('.$row->id.')"> اضف للأرشيف</a>';
+           $uploadButton = $is_file
+               ? '<a class="btn  btn-sm"  style="background-color: #259240;" href=' . route('Export.edit', $row->id) . '> <i class="fa fa-edit"></i> </a>'
+               : '<a class="btn  btn-sm" style="background-color:#c1920c;" onclick="opendelete('.$row->id.')">  <i class="fa-solid fa-file-arrow-up"></i> </a>';
 
             return '
-                   <a class="btn btn-primary btn-sm" href=' . route('Export.show', $row->id) . '>عرض تفاصيل</a>
+                   <a class="btn  btn-sm" style="background-color: #375A97;" href=' . route('Export.show', $row->id) . '> <i class="fa fa-eye"></i> </a>
                     ' . $uploadButton ;
         })
         ->addColumn('person_to_username', function ($row) {
@@ -57,14 +57,14 @@ class outgoingController extends Controller
     }
     public function getExportInActive()
     {
-       
+
         $data = outgoings::with(['personTo', 'department_External'])
         ->where('outgoings.active', 1)
         ->select('outgoings.*');
-       
+
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '
-                   <a class="btn btn-primary btn-sm" href=' . route('Export.show', $row->id) . '">عرض تفاصيل</a>' ;
+                   <a class="btn btn-primary btn-sm"  style="background-color: #375A97;" href=' . route('Export.show', $row->id) . '"> <i class="fa fa-eye"></i></a>' ;
         })
         ->addColumn('person_to_username', function ($row) {
             return $row->personTo->name ?? 'لايوجد شخص صادر له'; // Assuming 'name' is the column in external_users
@@ -75,9 +75,9 @@ class outgoingController extends Controller
         ->rawColumns(['action'])
         ->make(true);
     }
-    
+
     public function showFiles($id){
-        
+
         return view('outgoing.showfile');
     }
     public function getExternalUsersAjax()
@@ -93,14 +93,14 @@ class outgoingController extends Controller
         return redirect()->back();
     }
     public function showArchive(outgoingsDataTable $dataTable, Request $request){
-        $status = $request->get('status', 'inactive'); // Default to 'inactive' if 
+        $status = $request->get('status', 'inactive'); // Default to 'inactive' if
         return $dataTable->with('status', $status)->render('outgoing.archiveall');
 
     }
-    
+
     public function addUaersAjax(Request $request)
     {
-        
+
         $user = new exportuser();
         $user->military_number = $request->military_number;
         $user->filenum = $request->filenum;
@@ -112,7 +112,7 @@ class outgoingController extends Controller
     }
     public function create()
     {
-       
+
         $users=$this->getExternalUsersAjax();
         $departments=ExternalDepartment::all();
         return view('outgoing.add', compact('users','departments'));
@@ -158,11 +158,11 @@ class outgoingController extends Controller
         $export->active = $request->active;
         $export->updated_by = $user->id;//auth auth()->id
         $export->department_id = $request->from_departement;
-        $export->save(); 
-    
+        $export->save();
+
 
         if( $request->hasFile('files') ){
-         
+
             if (function_exists('UploadFiles')) {
                  //  dd('file yes');
                 foreach ($request->file('files') as $file) {
@@ -179,8 +179,8 @@ class outgoingController extends Controller
                 }
             }
         }
-      
-        
+
+
         return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
     }else{
         return redirect()->route('login');
@@ -196,7 +196,7 @@ class outgoingController extends Controller
         $data=outgoings::with(['personTo', 'createdBy', 'updatedBy'])->findOrFail($id);
         $users=User::all();
         $is_file = outgoing_files::where('outgoing_id', $id)->get();
-       
+
         $departments=ExternalDepartment::all();
 
         return view('outgoing.showdetail', compact('data','users','is_file','departments'));
@@ -219,7 +219,7 @@ class outgoingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-      
+
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
@@ -235,7 +235,7 @@ class outgoingController extends Controller
             'nameex.required' => 'عفوا يجب ادخال اسم الصادر',
             'num.required' => 'عفوا يجب ادخال رقم الصادر',
             'note.required' => 'عفوا يجب ادخال ملاحظات الصادر',
-            'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
+            'num.integer' => 'عفوا يرجى ادخال ارقام فقط',
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
             'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
         ];
@@ -245,7 +245,7 @@ class outgoingController extends Controller
         //dd(auth()->id());
         if(auth()->id()){
         $user=User::findOrFail(auth()->id());
-        
+
         $export = outgoings::findOrFail( $id );
         $export->name = $request->nameex;
         $export->num = $request->num;
@@ -258,14 +258,14 @@ class outgoingController extends Controller
         $export->department_id = $request->department_id;
         $export->created_department =  $user->department_id;
 
-        $export->save(); 
-        
+        $export->save();
+
         if( $request->hasFile('files') ){
-         
+
             if (function_exists('UploadFiles')) {
                  //  dd('file yes');
                 foreach ($request->file('files') as $file) {
-                    
+
                     $files=new outgoing_files();
                     $files->outgoing_id = $export->id;
                     $files->created_by=auth()->id();//auth auth()->id
@@ -319,7 +319,7 @@ class outgoingController extends Controller
        // $download=downloadFile($file->file_name,$file->real_name);
         $file_path = public_path($file->file_name,);
         $file_name =basename($file->real_name,);
-    
+
         return response()->download($file_path, $file_name);
         //echo 'downloaded';
     }

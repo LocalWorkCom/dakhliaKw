@@ -55,14 +55,13 @@
                     </div>
 
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
-
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="date_from">تاريخ البداية</label>
-                            <input type="date" id="date_from" name="date_from" class="form-control" required>
-                        </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="date_to">تاريخ النهاية</label>
                             <input type="date" id="date_to" name="date_to" class="form-control">
+                        </div>
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="date_from">تاريخ البداية</label>
+                            <input type="date" id="date_from" name="date_from" class="form-control" required>
                         </div>
                     </div>
 

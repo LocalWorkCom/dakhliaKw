@@ -47,8 +47,8 @@ class UserController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 
-            return '<button class="btn btn-primary btn-sm">Edit</button>
-              <a href="" class="btn btn-primary btn-sm">vacations</a>';
+            return '<button class="btn  btn-sm" style="background-color: #259240;" > <i class="fa fa-edit"></i> </button>
+              <a href="" class="btn  btn-sm" style=" background-color:#864824; " > <i class="fa-solid fa-mug-hot" ></i> </a>';
         })
             ->rawColumns(['action'])
             ->make(true);
@@ -57,8 +57,8 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $messages = [
-            'military_number.required' => 'رقم العسكري مطلوب.',
-            'password.required' => 'كلمة المرور مطلوبة.',
+            'military_number.required' => '  ادخل الرقم العسكري.',
+            'password.required' => '  ادخل كلمة المرور.',
         ];
 
         $validatedData = Validator::make($request->all(), [
@@ -136,7 +136,7 @@ class UserController extends Controller
         $validatedData = Validator::make($request->all(), [
             'verfication_code' => 'required', // Ensure verfication_code field is required
         ], [
-            'verfication_code.required' => 'كود التفعيل مطلوب.',
+            'verfication_code.required' => '  ادخل كود التفعيل.',
         ]);
 
         // Check if validation fails
@@ -179,7 +179,7 @@ class UserController extends Controller
             }
         } else {
             // If verification code does not match, return back with error message and input values
-            return view('verfication_code')->withErrors('الكود خاطئ.')
+            return view('verfication_code')->withErrors('الكود الذي ادخلته غير صحيح.')
                 ->with('code', $code)
                 ->with('military_number', $military_number)
                 ->with('password', $password);
@@ -190,7 +190,7 @@ class UserController extends Controller
     public function forget_password2(Request $request)
     {
         $messages = [
-            'military_number.required' => 'رقم العسكري مطلوب.',
+            'military_number.required' => '  ادخل الرقم العسكري.',
         ];
 
         $validatedData = Validator::make($request->all(), [
@@ -234,8 +234,8 @@ class UserController extends Controller
     public function reset_password(Request $request)
     {
         $messages = [
-            'military_number.required' => 'رقم العسكري مطلوب.',
-            'password.required' => 'كلمة المرور مطلوبة.',
+            'military_number.required' => '  ادخل الرقم العسكري.',
+            'password.required' => '  ادخل كلمة المرور.',
             'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
         ];
 
@@ -308,7 +308,7 @@ class UserController extends Controller
         {
             $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
         }
-        
+
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
@@ -327,7 +327,7 @@ class UserController extends Controller
 
         $messages = [
             'military_number.required' => 'وغير مدخل مسبقا رقم العسكري مطلوب.',
-            'phone.required' => 'كلمة المرور مطلوبة.',
+            'phone.required' => '  ادخل كلمة المرور.',
             // 'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
         ];
 
@@ -383,11 +383,11 @@ class UserController extends Controller
             $newUser->public_administration = $request->department;
             // $newUser->department_id  = $request->department;
             $newUser->save();
-            
+
             if ($request->hasFile('image')) {
                 $file = $request->image;
                 $path = 'users/user_profile';
-    
+
                 UploadFilesWithoutReal($path, 'image', $newUser, $file);
             }
         }

@@ -32,14 +32,14 @@
                 </div>
 
 
-                <table id="users-table" class="display table table-bordered table-hover dataTable">
+                <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                     <thead>
                         <tr>
                             <th>الرقم</th>
                             <th>نوع الاجازة</th>
                             <th>تاريخ البداية</th>
                             <th>تاريخ النهاية</th>
-                            <th>الخيارات</th>
+                            <th style="width:150px !important;">العمليات</th>
                         </tr>
                     </thead>
                 </table>

@@ -47,31 +47,7 @@
 
 
                 <div class="container col-10 mt-4" style="border:0.5px solid #C7C7CC;">
-
                     <div class="form-row pt-4">
-                        <div class="form-group col-md-6 ">
-
-                            <label for="representive_id">اختر المندوب </label>
-                            <select id="representive_id" name="representive_id" class="form-control" required>
-                                <option value="">اختر المندوب</option>
-                                @foreach ($representives as $item)
-                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->representive_id) selected @endif>
-                                        {{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="recieved_by">الموظف المستلم</label>
-                            <select id="recieved_by" name="recieved_by" class="form-control" required>
-                                <option value="">اختر الموظف</option>
-                                @foreach ($recieves as $item)
-                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->recieved_by) selected @endif>
-                                        {{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="date">التاريخ</label>
                             <input type="date" id="date" name="date" class="form-control" required
@@ -99,50 +75,64 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="files_num"> عدد الكتب</label>
+                        <div class="form-group col-md-6 ">
 
-                            <select id="files_num" name="files_num" class="form-control" required>
-                                <option value="">اختر العدد</option>
-
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}" @if ($i == $iotelegram->files_num) selected @endif>
-                                        {{ $i }}</option>
-                                @endfor
+                            <label for="representive_id">اختر المندوب </label>
+                            <select id="representive_id" name="representive_id" class="form-control" required>
+                                <option value="">اختر المندوب</option>
+                                @foreach ($representives as $item)
+                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->representive_id) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="recieved_by">الموظف المستلم</label>
+                            <select id="recieved_by" name="recieved_by" class="form-control" required>
+                                <option value="">اختر الموظف</option>
+                                @foreach ($recieves as $item)
+                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->recieved_by) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="form-row" dir="rtl">
-                        <button type="button" class="btn-all mt-3 mx-5" data-bs-toggle="modal" data-bs-target="#representative"
-                            data-dismiss="modal" id="representative-dev" style="background-color: #FAFBFD; border: none;">
-                            <img
-                                src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
-                        </button>  
-                        <button type="button" class="btn-all mt-3" data-bs-toggle="modal"    id="extern-department-dev" data-bs-target="#extern-department"
-                            data-dismiss="modal"  style="background-color: #FAFBFD; border: none; display: none;">
-                            <img
-                                src="{{ asset('frontend/images/add-btn.svg') }}" alt="">  اضافة جهه جديده 
-                        </button>
-                    </div> <br>
-                   
-                    <div class="form-row d-block ">
-                        <div class="form-group col-md-12">
-                            <label for="files">اضافة ملف</label>
-                            <div id="fileInputs">
-                                <div class="file-input mb-3" dir="rtl">
-                                    <input type="file" name="files[]" class="form-control">
-                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+
+                    <div class="form-row d-flex  mt-1 " dir="rtl">
+                        <div class="form-group">
+                            <label for="files"> اضف ملفات </label>
+                        </div>
+                        <div class="form-group col-md-12 " dir="rtl">
+                            <div class=" fileupload d-inline">
+                                <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control"
+                                    accept="image/jpeg, image/png, application/pdf">
+
+                                <button class="btn-all mx-1" onclick="uploadFiles()" style="color:green;" type="button">
+                                    اضف </button>
+
+                                <div class="space-uploading">
+                                    <ul id="fileList" class="d-flex flex-wrap">
+                                        <!-- Uploaded files will be listed here -->
+                                    </ul>
                                 </div>
                             </div>
+
                         </div>
                     </div>
-                    <div class="form-row" dir="rtl">
-                        <button type="button" class="btn-all btn-sm mt-2" id="addFile"
+                    <div class="form-row mb-5" dir="rtl">
+                        <button type="button" class="btn-all mt-3 mx-5" data-bs-toggle="modal"
+                            data-bs-target="#representative" data-dismiss="modal" id="representative-dev"
                             style="background-color: #FAFBFD; border: none;">
-                            <img src="../images/add-btn.svg" alt=""> إضافة ملف جديد
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
                         </button>
+                        <button type="button" class="btn-all mt-3" data-bs-toggle="modal" id="extern-department-dev"
+                            data-bs-target="#extern-department" data-dismiss="modal"
+                            style="background-color: #FAFBFD; border: none; display: none;">
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة جهه جديده
+                        </button>
+                    </div>
 
-                    </div> <br>
+
                 </div>
 
                 <div class="container col-10 ">
@@ -163,7 +153,7 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <h5 class="modal-title" id="representativeLabel">إضافة مندوب</h5>
-                        <img src="../images/add-mandob.svg" alt="">
+                        <img src="{{ asset('frontend/images/add-mandob.svg') }}" alt="">
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>

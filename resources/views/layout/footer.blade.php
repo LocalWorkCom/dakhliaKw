@@ -109,7 +109,7 @@
           dropdownMenu.style.display = "block";
         }
       }
-    
+
       window.onclick = function(event) {
         if (!event.target.matches('.btn3')) {
           var dropdowns = document.getElementsByClassName("dropdown-menu3");
@@ -120,7 +120,7 @@
             }
           }
         }
-      } 
+      }
       function toggleDropdown4() {
         var dropdownMenu = document.getElementById("dropdownMenu4");
         if (dropdownMenu.style.display === "block") {
@@ -129,7 +129,7 @@
           dropdownMenu.style.display = "block";
         }
       }
-    
+
       window.onclick = function(event) {
         if (!event.target.matches('.btn4')) {
           var dropdowns = document.getElementsByClassName("dropdown-menu4");
@@ -141,8 +141,8 @@
           }
         }
       }
-      //  for header collapsing 
-      
+      //  for header collapsing
+
       $(document).ready(function() {
     $('.navbar-toggler').click(function() {
       $('.navbar-collapse').toggleClass('show');
@@ -196,5 +196,18 @@
         }
       }
     }
+
     </script>
+    <script>
+    function makeActive(element) {
+      // Remove active class from all nav items
+      var navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(function(item) {
+        item.classList.remove('active-nav-item');
+      });
+
+      // Add active class to the clicked nav item
+      element.classList.add('active-nav-item');
+    }
+  </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

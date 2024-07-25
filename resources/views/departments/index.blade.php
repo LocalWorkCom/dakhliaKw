@@ -15,8 +15,8 @@
 @endsection
     <section>
         <div class="row">
-            <div class="container welcome col-11">
-                <p>الادارات</p>
+        <div class="container welcome col-11">
+                <p> الــــــــــادارات </p>
             </div>
         </div>
 
@@ -35,11 +35,11 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-12">
-                    <div class="bg-white p-5">
+                    <div class="bg-white ">
                         <div>
-                            <table id="users-table" class="display table table-bordered table-hover dataTable">
+                            <table id="users-table" class="display table table-responsive-sm table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>رقم التعريف</th>
@@ -86,9 +86,9 @@
                     departmentDelete = departmentDelete.replace(':id', row.id);
 
                     return `
-                        <a href="${departmentEdit}" class="btn btn-primary btn-sm">تعديل</a>
-                        <a href="${departmentShow}" class="btn btn-primary btn-sm w-25">مشاهدة</a>
-                        <a href="${departmentDelete}" class="btn btn-primary btn-sm w-25">حذف</a>`;
+                    <a href="${departmentEdit}" class="btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></a>
+                        <a href="${departmentShow}" class="btn  btn-sm w-25" style="background-color: #375A97;"><i class="fa fa-eye"></i></a>
+                        <a href="${departmentDelete}" class="btn  btn-sm w-25" style="background-color: #C91D1D;"><i class="fa-solid fa-trash"></i></a>`;
                 }
             }]
         });
@@ -96,4 +96,4 @@
     </script>
 
 @endsection
-{{-- <a href="` + permissionedit + `" class="btn btn-primary btn-sm">تعديل</a> --}}
+<!-- {{-- <a href="` + permissionedit + `" class="btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i</a> --}} -->

@@ -36,7 +36,7 @@
                 <div class="bg-white ">
                 </div>
 
-                <table id="users-table" class="display table table-bordered table-hover dataTable">
+                <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                     <thead>
                         <tr>
                             <th>الرقم</th>
@@ -46,7 +46,7 @@
                             <th>الموظف المستلم</th>
                             <th> عدد الفايلات</th>
                             <th>النوع</th>
-                            <th>الخيارات</th>
+                            <th style="width:150px;">العمليات</th>
                         </tr>
                     </thead>
                 </table>
@@ -117,7 +117,7 @@
                                         `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></a>`;
 
 
-                                    return `<a href="${showUrl}" class="archive btn btn-info btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>${archiveButton}`;
+                                    return `<a href="${showUrl}" class="archive btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>${archiveButton}`;
 
                                 }
 

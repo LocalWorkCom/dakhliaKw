@@ -20,11 +20,11 @@ class jobController extends Controller
     public function getAllJob()
     {
         $data = job::get();
-       
+
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<a class="btn btn-primary btn-sm" href=' . route('jobs.edit', $row->id) . '>تعديل</a>
-            <a class="btn btn-primary btn-sm" href=' . route('jobs.show', $row->id) . '>التفاصيل</a>
-            <a class="btn btn-primary btn-sm"  onclick="opendelete('.$row->id.')">حذف</a>' ;
+            return '<a class="btn  btn-sm" style="background-color: #259240;" href=' . route('jobs.edit', $row->id) . '><i class="fa fa-edit"></i></a>
+            <a class="btn  btn-sm"  style="background-color: #375A97;" href=' . route('jobs.show', $row->id) . '> <i class="fa fa-eye"></i> </a>
+            <a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -73,7 +73,7 @@ class jobController extends Controller
     public function update(Request $request, string $id)
     {
         $job = job::find($request->id);
-        
+
         if (!$job) {
             return response()->json(['error' => 'Grade not found'], 404);
         }
@@ -86,10 +86,10 @@ class jobController extends Controller
     {
         dd($request->id);
         $isForeignKeyUsed = DB::table('users')->where('job_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);  
+        //dd($isForeignKeyUsed);
         if( $isForeignKeyUsed ){
             $message='';
-            
+
         }else{
             $type= job::find($request->id);
             $type->delete();
