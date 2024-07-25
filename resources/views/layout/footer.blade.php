@@ -9,7 +9,10 @@
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-
+        function resetModal() {
+                $('#saveExternalDepartment')[0].reset();
+                $('.text-danger').html('');
+            }
         $("#saveExternalDepartment").on("submit", function(e) {
 
             e.preventDefault();
@@ -23,40 +26,52 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
-                    // Handle success response
-                    console.log(response);
-                    $('#from_departement').empty();
-                    $.ajax({
+                    if (response.success) {
+                        // Handle success response
+                        console.log(response);
+                        $('#from_departement').empty();
+                        $.ajax({
 
-                        url: "{{ route('external.departments') }}",
-                        type: 'get',
-                        success: function(response) {
-                            // Handle success response
-                            var selectOptions =
-                                '<option value="">اختر الادارة</option>';
-                            response.forEach(function(department) {
-                                selectOptions += '<option value="' +
-                                    department.id +
-                                    '">' + department.name +
-                                    '</option>';
-                            });
-                            $('#from_departement').html(
-                                selectOptions
-                            ); // Assuming you have a select element with id 'from_departement'
+                            url: "{{ route('external.departments') }}",
+                            type: 'get',
+                            success: function(response) {
+                                // Handle success response
+                                var selectOptions =
+                                    '<option value="">اختر الادارة</option>';
+                                response.forEach(function(department) {
+                                    selectOptions += '<option value="' +
+                                        department.id +
+                                        '">' + department.name +
+                                        '</option>';
+                                });
+                                $('#from_departement').html(
+                                    selectOptions
+                                ); // Assuming you have a select element with id 'from_departement'
 
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error response
-                            console.error(xhr.responseText);
-                        }
-                    });
-                    // Optionally, you can close the modal after successful save
-                    $('#extern-department').modal('hide'); // Changed modal ID
+                            },
+                            // error: function(xhr, status, error) {
+                            //     // Handle error response
+                            //     console.error(xhr.responseText);
+                            // }
+                        });
+                        // Optionally, you can close the modal after successful save
+                        resetModal();
+                        $('#extern-department').modal('hide'); // Changed modal ID
+                    } else {
+                        $.each(response.message, function(key, value) {
+                            $('#' + key + '-error').html(value[0]);
+                        });
+                    }
                 },
                 error: function(xhr, status, error) {
-                    // Handle error response
-                    console.error(xhr.responseText);
-                }
+                        console.error(xhr.responseText);
+                        if (xhr.status == 422) {
+                            var errors = xhr.responseJSON.errors;
+                            $.each(errors, function(key, value) {
+                                $('#' + key + '-error').html(value[0]);
+                            });
+                        }
+                    }
             });
         });
     });

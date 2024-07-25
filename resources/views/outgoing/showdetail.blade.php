@@ -48,7 +48,7 @@
                         </tr>
                         <tr>
                             <th scope="row"> الحالة</th>
-                            <td>{{ $data->active ? 'مفعل' : 'غير مفعل' }}</td>
+                            <td>{{ $data->active == 0 ? 'جديد' : ' أرشيف' }}</td>
                         </tr>
                         <tr>
                             <th scope="row">الملاحظات </th>

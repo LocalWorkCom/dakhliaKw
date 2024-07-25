@@ -55,7 +55,7 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <h5 class="modal-title" id="lable"> أضافه نوع أجازه جديد</h5>
-                        <img src="../images/add-mandob.svg" alt="">
+                       
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
@@ -84,7 +84,7 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <h5 class="modal-title" id="lable"> تعديل اسم الأجازه ؟</h5>
-                        <img src="../images/add-mandob.svg" alt="">
+                     
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>

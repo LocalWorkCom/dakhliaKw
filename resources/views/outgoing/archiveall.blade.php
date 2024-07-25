@@ -60,8 +60,8 @@
                 serverSide: true,
                 ajax: '{{ route('Export.view.archive') }}', // Correct URL concatenation
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'num',
+                        name: 'num'
                     },
                     {
                         data: 'name',

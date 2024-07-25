@@ -130,8 +130,8 @@
                 serverSide: true,
                 ajax: '{{ route('exports.view.all') }}', // Correct URL concatenation
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'num',
+                        name: 'num'
                     },
                     {
                         data: 'name',
