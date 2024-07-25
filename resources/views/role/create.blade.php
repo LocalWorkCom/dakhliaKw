@@ -38,20 +38,21 @@
                     </ul>
                 </div>
             @endif
-            <div class="p-5">
+         
 
 
 
                 <form action="{{ route('rule.store') }}" method="post" class="text-right">
                     @csrf
 
-                    <div class="form-row mx-3 mt-4 d-flex flex-row-reverse">
+                    <div class="form-row mx-2 mt-4 d-flex justify-content-center flex-row-reverse">
 
                         <div class="form-group col-md-10">
                             <label for="nameus"> الدور</label>
                             <input type="text" id="name" name="name" class="form-control" required>
                         </div>
-
+                    </div>
+                        <div class="form-row mx-2 mt-4 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-10">
                             <label for="department">الادارة</label>
                             <select class="custom-select custom-select-lg mb-3" name="department_id" id="department_id">
@@ -61,7 +62,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
+                
 
 
                     <div class="form-row mx-2 d-flex justify-content-center text-right">
@@ -72,8 +73,8 @@
                                 <div class="col-6 col-md-4 col-lg-3 my-2">
                                     <div class="form-check">
                                         <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input"
-                                        style="width: 35px; height:35px; margin-left:5px;">
-                                        <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}"> {{__('permissions.' . $item->name)}}</label>
+                                        style="width: 30px; height:30px; margin-left:1px;  ">
+                                        <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}" style="font-size:20px;"> {{__('permissions.' . $item->name)}}</label>
                                     </div>
                                 </div>
                                 @endforeach
@@ -81,9 +82,10 @@
                         </div>
                     </div>
                     </div>
+                    </div>
                     <!-- </div> -->
                     <!-- Save button -->
-                    <div class="container col-12 ">
+                    <div class="container col-10 ">
                     <div class="form-row mt-4 mb-5">
                             <button type="submit" class="btn-blue">حفظ</button>
                         </div>

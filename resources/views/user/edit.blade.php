@@ -1,11 +1,10 @@
 @extends('layout.main')
-@section('content')
 @section('title')
 تعديل
 @endsection
-{{--
+@section('content')
 
-<body> --}}
+
 <section>
     <div class="row col-11" dir="rtl">
       <nav aria-label="breadcrumb">
@@ -36,27 +35,7 @@
     </div>
 </div>
   
-        <div class="row">
-          <div class="container  col-11 mt-3 p-0 ">
        
-            
-            @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-            @endif
-            @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-
-            @endif
-            <!-- <p> المستخدمين </p> -->
-        </div>
     </div>
 
     <div class="row">
@@ -175,8 +154,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-row mx-3  d-flex justify-content-center flex-row-reverse">
-                            <div class="form-group col-md-5 mx-2">
+                        <div class="form-row mx-2  d-flex justify-content-center flex-row-reverse">
+                            <div class="form-group col-md-10 mx-2">
                                 <label for="input25"> القسم</label>
                                 <select id="input25" name="department_id" class="form-control" placeholder="القسم">
                                     @foreach ($department as $item)
@@ -186,10 +165,11 @@
                                     @endforeach
 
                                 </select>
-                            </div>
+                            </div> </div>
                             @endif
 
-                                <div class="form-group col-md-5 ">
+                            <div class="form-row mx-2 mx-2 d-flex justify-content-center flex-row-reverse">
+                            <div class="form-group col-md-10">
                                     <label for="input13">هل يمكن لهذا لموظف ان يكون مستخدم ؟ </label>
                                     {{-- <span>نعم : اختار مستخدم</span>
                                     <span>/</span>
@@ -206,7 +186,7 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                            </div>
 
                         <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-5 mx-2">
@@ -312,7 +292,7 @@
     </div>
     </div>
     </div>
-
+    </div>
 
 </section>
 

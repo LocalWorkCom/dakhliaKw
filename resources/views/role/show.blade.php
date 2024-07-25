@@ -45,14 +45,14 @@
                 <div class="p-5">
                     {{-- <form action="{{ route('rule_update', $rule_permission->id) }}" method="POST">
                         @csrf --}}
-                        <div class="form-row mx-3 mt-4 d-flex flex-row-reverse">
-
-<div class="form-group col-md-10">
+                        <div class="form-row mx-2 mt-4 d-flex justify-content-center flex-row-reverse">
+                        <div class="form-group col-md-10">
                             <label for="input8">الدور</label>
                             <input type="text" id="input8" name="name" class="form-control" placeholder="الوظيفة"
                                 value="{{ $rule_permission->name }}" disabled>
-                        </div>
+                        </div>    </div>
 
+                        <div class="form-row mx-2 mt-4 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-10">
                             <label for="input25"> القسم</label>
                             <select id="input25" name="department_id" class="form-control" placeholder="القسم" disabled >
@@ -72,9 +72,8 @@
                                         @foreach ($allpermission as $item)
                                             <div class="col-6 col-md-4 col-lg-3 my-2">
                                                 <div class="form-check">
-                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input" disabled
-                                                    style="width: 35px; height:35px; margin-left:5px;">
-                                                    <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.' . $item->name)}}{{ $item->name }}</label>
+                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" style="width: 20px; height:20px; margin-left:1px; " name="permissions_ids[]" class="form-check-input" disabled>
+                                                    <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.' . $item->name)}}</label>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -85,9 +84,8 @@
                                     @foreach ($allpermission as $item)
                                         <div class="col-6 col-md-4 col-lg-3 my-2">
                                             <div class="form-check">
-                                                <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input" {{ in_array($item->id, $hisPermissionIds) ? 'checked' : '' }} disabled
-                                                style="width: 35px; height:35px; margin-left:5px;">
-                                                <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.' . $item->name)}}</label>
+                                                <input type="checkbox"  style="width: 20px; height:20px; margin-left:1px; " id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input" {{ in_array($item->id, $hisPermissionIds) ? 'checked' : '' }} disabled   >
+                                                <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.'.$item->name)}}</label>
                                             </div>
                                         </div>
                                     @endforeach

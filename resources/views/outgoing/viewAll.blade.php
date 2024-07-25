@@ -79,7 +79,7 @@
                 </div>
                 <form id="delete-form" action="{{ route('export.archive.add') }}" method="POST">
                     @csrf
-                    <div class="modal-body  d-flex justify-content-center">
+                    <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                         <h5 class="modal-title " id="deleteModalLabel"> هل تريد أضافه هذا الصادر الى الارشيف ؟</h5>
 
 
