@@ -60,7 +60,7 @@
 
                             <script>
                                 $(document).ready(function() {
-                                    $.fn.dataTable.ext.classes.sPageButton = 'btn btn-primary btn-sm'; // Change Pagination Button Class
+                                    $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
 
                                     var id = {{ $id }};
                                     $('#users-table').DataTable({
