@@ -56,7 +56,7 @@
 
                     <div class="form-row pt-2 mx-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-2 ">
-                            <label for="representive_id">اختر المندوب  </label>
+                            <label for="representive_id">اختر المندوب </label>
                             <select id="representive_id" name="representive_id" class="form-control" required>
                                 <option value="">اختر المندوب</option>
                                 @foreach ($representives as $item)
@@ -74,9 +74,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                     </div>
-                  
+
 
                     <div class="form-row mx-2 d-flex justify-content-center">
                         <div class="form-group  col-md-10 ">
@@ -100,7 +100,7 @@
                     </div>
                     <div class="form-row d-flex  justify-content-center" dir="rtl">
                         <div class="form-group d-flex justify-content-start col-md-10 ">
-                        <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
+                            <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
                                 data-bs-target="#extern-department" data-dismiss="modal"
                                 style="background-color: #FAFBFD; border: none; display: none;">
                                 <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة جهه جديده
@@ -110,7 +110,7 @@
                                 style="background-color: #FAFBFD; border: none;">
                                 <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
                             </button>
-                           
+
                         </div>
                     </div> <br>
 
@@ -145,7 +145,7 @@
 
                         <div class="form-group">
                             <label for="modal-department_id ">الادارة</label>
-                            <select id="modal-department_id" name="modal_department_id" class="form-control">
+                            <select id="modal-department_id" name="modal_department_id" class="form-control" required>
                                 <option value="">اختر الادارة</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -154,15 +154,15 @@
                         </div>
                         <div class="form-group">
                             <label for="name">الاسم</label>
-                            <input type="text" id="name" name="name" class="form-control">
+                            <input type="text" id="name" name="name" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="national_id">رقم الهوية</label>
-                            <input type="text" id="national_id" name="national_id" class="form-control">
+                            <input type="text" id="national_id" name="national_id" class="form-control"required>
                         </div>
                         <div class="form-group">
                             <label for="phone1">رقم الهاتف الاول</label>
-                            <input type="text" id="phone1" name="phone1" class="form-control">
+                            <input type="text" id="phone1" name="phone1" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="phone2">رقم الهاتف الثاني</label>
@@ -194,7 +194,7 @@
 
                         <div class="form-group">
                             <label for="name">الاسم</label>
-                            <input type="text" id="name" name="name" class="form-control">
+                            <input type="text" id="name" name="name" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="desc">الوصف</label>
@@ -202,7 +202,7 @@
                         </div>
                         <div class="form-group">
                             <label for="phone">الهاتف</label>
-                            <input type="text" id="phone" name="phone" class="form-control">
+                            <input type="text" id="phone" name="phone" class="form-control" required>
                         </div>
 
                         <!-- Save button -->
@@ -224,7 +224,17 @@
                 });
                 $(selectId).empty().append(options);
             }
+
+            function resetModal() {
+                $('#saveExternalDepartment')[0].reset();
+                $('.text-danger').html('');
+            }
             $(document).ready(function() {
+                var today = new Date().toISOString().split('T')[0];
+
+
+                $('#date').attr('value', today);
+
                 checkFileCount();
 
                 $("#addRepresentativeForm").on("submit", function(e) {
@@ -251,10 +261,14 @@
 
                                 // Optionally, you can sort options alphabetically
                                 sortSelectOptions('#representive_id');
+                                resetModal();
+
 
                             } else {
                                 // Handle success:false scenario if needed
-                                console.log(response.errors); // Log validation errors if any
+                                $.each(response.message, function(key, value) {
+                                    $('#' + key + '-error').html(value[0]);
+                                });
                             }
                         },
                         error: function(xhr, status, error) {

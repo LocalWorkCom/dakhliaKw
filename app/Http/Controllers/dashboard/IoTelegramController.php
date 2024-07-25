@@ -30,7 +30,7 @@ class IoTelegramController extends Controller
     }
     public function getArchives()
     {
-        $IoTelegrams = Iotelegram::where('active', 1)->with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+        $IoTelegrams = Iotelegram::where('active', 0)->with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -199,20 +199,42 @@ class IoTelegramController extends Controller
     //postman
     public function addPostmanAjax(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $rules = [
             'name' => 'required',
             'phone1' => 'required|unique:postmans,phone1',
             'phone2' => 'unique:postmans,phone2',
             'national_id' => 'required|unique:postmans,national_id',
             'modal_department_id' => 'required',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422); // HTTP 422 Unprocessable Entity
+        ];
+
+        $messages = [
+            'name.string' => 'يجب ان يكون الأسم حروف فقط',
+            'name.required' => 'يجب ادخال اسم الشخص',
+
+            'phone1.required' => 'يجب ادخال الهاتف',
+            'phone1.integer' => 'يجب ان يكون الهاتف ارقام',
+            'phone1.unique' => 'رقم الهاتف 1 موجود بالفعل',
+
+
+            'phone2.required' => 'يجب ادخال الهاتف',
+            'phone2.integer' => 'يجب ان يكون الهاتف ارقام',
+            'phone1.unique' => 'رقم الهاتف 2 موجود بالفعل',
+
+
+            'national_id.required' => 'يجب ادخال رقم الهوية',
+            'national_id.integer' => 'يجب ان يكون رقم الهوية ارقام',
+            'national_id.unique' => 'رقم الهوية موجود بالفعل',
+
+            'modal_department_id.required' => 'يجب ادخال اسم الادارة'
+
+        ];
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+
+        if ($validatedData->fails()) {
+            return response()->json(['success' => false, 'message' => $validatedData->errors()]);
         }
+ 
 
         $Postman = new Postman();
         $Postman->name = $request->name;
@@ -238,16 +260,16 @@ class IoTelegramController extends Controller
             'phone' => 'required|integer',
             'name' => 'required|string',
         ];
-    
+
         $messages = [
             'name.string' => 'يجب ان يكون الأسم حروف فقط',
-            'phone.required' =>'يجب ادخال الهاتف',
-            'phone.integer'=>'يجب ان يكون الهاتف ارقام',
+            'phone.required' => 'يجب ادخال الهاتف',
+            'phone.integer' => 'يجب ان يكون الهاتف ارقام',
             'name.required' => 'يجب ادخال اسم الشخص',
         ];
-    
+
         $validatedData = Validator::make($request->all(), $rules, $messages);
-    
+
         if ($validatedData->fails()) {
             return response()->json(['success' => false, 'message' => $validatedData->errors()]);
         }
@@ -262,7 +284,7 @@ class IoTelegramController extends Controller
     //update ajax 
     public function getExternalDepartments()
     {
-        $ExternalDepartments = ExternalDepartment::orderBy('created_at','desc')->get();
+        $ExternalDepartments = ExternalDepartment::orderBy('created_at', 'desc')->get();
         return $ExternalDepartments;
     }
 

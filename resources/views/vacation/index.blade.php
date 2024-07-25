@@ -81,8 +81,8 @@
                             columnDefs: [{
                                 targets: -1,
                                 render: function(data, type, row) {
-                                      // Using route generation correctly in JavaScript
-                                      var editUrl = '{{ route('vacation.edit', ':id') }}';
+                                    // Using route generation correctly in JavaScript
+                                    var editUrl = '{{ route('vacation.edit', ':id') }}';
                                     var showUrl = '{{ route('vacation.show', ':id') }}';
                                     var deleteUrl = '{{ route('vacation.delete', ':id') }}';
 
@@ -100,7 +100,31 @@
 
                                 }
 
-                            }]
+                            }],
+                            "oLanguage": {
+                                "sSearch": "بحث",
+                                "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                                "sInfoEmpty": 'لا توجد بيانات متاحه',
+                                "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                                "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                                "sZeroRecords": 'نأسف لا توجد نتيجة',
+                                "oPaginate": {
+                                    "sFirst": "<<", // This is the link to the first page
+                                    "sPrevious": "<", // This is the link to the previous page
+                                    "sNext": ">", // This is the link to the next page
+                                    "sLast": " >>" // This is the link to the last page
+                                }
+
+
+                            },
+                            layout: {
+                                bottomEnd: {
+                                    paging: {
+                                        firstLast: false
+                                    }
+                                }
+                            },
+                            "pagingType": "full_numbers"
                         });
                     });
                 </script>

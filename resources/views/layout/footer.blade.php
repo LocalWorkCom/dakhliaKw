@@ -10,9 +10,9 @@
 <script>
     $(document).ready(function() {
         function resetModal() {
-                $('#saveExternalDepartment')[0].reset();
-                $('.text-danger').html('');
-            }
+            $('#saveExternalDepartment')[0].reset();
+            $('.text-danger').html('');
+        }
         $("#saveExternalDepartment").on("submit", function(e) {
 
             e.preventDefault();
@@ -64,14 +64,14 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                        if (xhr.status == 422) {
-                            var errors = xhr.responseJSON.errors;
-                            $.each(errors, function(key, value) {
-                                $('#' + key + '-error').html(value[0]);
-                            });
-                        }
+                    console.error(xhr.responseText);
+                    if (xhr.status == 422) {
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            $('#' + key + '-error').html(value[0]);
+                        });
                     }
+                }
             });
         });
     });

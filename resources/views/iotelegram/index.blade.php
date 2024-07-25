@@ -112,12 +112,35 @@
                                         `<a href="${archiveUrl}" class="archive btn  btn-sm" onclick="confirmArchive(event, this)" style="background-color:#c1920c;"> <i class="fa-solid fa-file-arrow-up"></i> </a>` :
                                         `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></a>`;
 
-
                                     return `<a href="${showUrl}" class="archive btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>${archiveButton}`;
 
                                 }
 
-                            }]
+                            }],
+                            "oLanguage": {
+                                            "sSearch": "بحث",
+                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
+                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
+                                            "oPaginate": {
+                                                    "sFirst": "<<", // This is the link to the first page
+                                                    "sPrevious": "<", // This is the link to the previous page
+                                                    "sNext": ">", // This is the link to the next page
+                                                    "sLast": " >>" // This is the link to the last page
+                                                    }
+
+
+                                        },
+                                        layout: {
+                                            bottomEnd: {
+                                                paging: {
+                                                    firstLast: false
+                                                }
+                                            }
+                                        },
+                                         "pagingType": "full_numbers"
                         });
                     });
                 </script>
