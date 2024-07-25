@@ -28,7 +28,6 @@
                 success: function(response) {
                     if (response.success) {
                         // Handle success response
-                        console.log(response);
                         $('#from_departement').empty();
                         $.ajax({
 
