@@ -93,7 +93,6 @@ class IoTelegramController extends Controller
         $iotelegram->representive_id = $request->representive_id;
         $iotelegram->date = $request->date;
         $iotelegram->recieved_by = $request->recieved_by;
-        $iotelegram->files_num = $request->files_num;
         $iotelegram->created_by = auth()->id();
         $iotelegram->created_departement = auth()->user()->department_id;
         $iotelegram->save();
@@ -165,7 +164,6 @@ class IoTelegramController extends Controller
         $iotelegram->representive_id = $request->representive_id;
         $iotelegram->date = $request->date;
         $iotelegram->recieved_by = $request->recieved_by;
-        $iotelegram->files_num = $request->files_num;
         $iotelegram->created_by = auth()->id();
         $iotelegram->created_departement = auth()->user()->department_id;
 
