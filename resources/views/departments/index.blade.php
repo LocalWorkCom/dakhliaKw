@@ -84,17 +84,34 @@
                     departmentDelete = departmentDelete.replace(':id', row.id);
 
                     return `
-<<<<<<< HEAD
-                        <a href="${departmentEdit}" class="btn btn-primary btn-sm">تعديل</a>
-                        <a href="${departmentShow}" class="btn btn-primary btn-sm w-25">مشاهدة</a>
-                        <a href="" class="btn btn-danger btn-sm w-25" onclick="event.preventDefault(); deleteDepartment(${row.id});">حذف</a>`;
-=======
-                    <a href="${departmentEdit}" class="btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></a>
-                        <a href="${departmentShow}" class="btn  btn-sm w-25" style="background-color: #375A97;"><i class="fa fa-eye"></i></a>
-                        <a href="${departmentDelete}" class="btn  btn-sm w-25" style="background-color: #C91D1D;"><i class="fa-solid fa-trash"></i></a>`;
->>>>>>> 976ce8254f1d139975f72a8080923321c2385800
+                        <a href="${departmentEdit}" class="btn btn-sm" style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>
+                        <a href="${departmentShow}" class="btn btn-sm " style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
+                        <a href="" class="btn btn-sm" style="background-color: #C91D1D;" onclick="event.preventDefault(); deleteDepartment(${row.id});><i class="fa-solid fa-trash"></i></a>
+                        `;
                 }
-            }]
+            }],
+            "oLanguage": {
+                                            "sSearch": "بحث",
+                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
+                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
+                                            "oPaginate": {
+                                                    "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
+                                                    "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
+                                                    "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
+                                                    "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
+                                                    }
+                                        },
+                                        layout: {
+                                            bottomEnd: {
+                                                paging: {
+                                                    firstLast: false
+                                                }
+                                            }
+                                        },
+                                         "pagingType": "full_numbers"
         });
         
     });

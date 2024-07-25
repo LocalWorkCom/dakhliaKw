@@ -105,7 +105,7 @@
                                                 return `
                                         <a href="` + usershow + `" class="btn btn-sm" style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
                                         <a href="` + useredit + `" class="btn btn-sm"  style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>
-                                        <a href="${vacation}"  " class="btn btn-sm" style=" background-color:#864824; "> <i class="fa-solid fa-mug-hot" ></i> </a> 
+                                        <a href="${vacation}"  "   class="btn btn-sm" style=" background-color:#864824; "> <i class="fa-solid fa-mug-hot" ></i> </a> 
 
                                         `;
                                             }
@@ -132,7 +132,7 @@
                                                 }
                                             }
                                         },
-                                         "pagingType": "full_numbers"
+                                         "pagingType": "full_numbers",
                                     });
                                 });
                             </script>

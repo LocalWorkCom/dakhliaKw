@@ -176,7 +176,7 @@
                         </div>
                         <div class="form-group">
                             <label for="desc">الوصف</label>
-                            <input type="text" id="desc" name="desc" class="form-control" required>
+                            <input type="text" id="desc" name="desc" class="form-control">
                             <span class="text-danger span-error" id="desc-error"></span>
 
                         </div>
