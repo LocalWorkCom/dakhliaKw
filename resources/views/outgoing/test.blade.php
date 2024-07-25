@@ -3,10 +3,10 @@
 
 @section('content')
     <div class="container">
-      
+
 <div class="row ">
     <div class="container welcome col-11">
-        <p> الصـــــــــادرات</p>ikhujuk
+        <p> الصـــــــــادرات</p>
     </div>
 </div>
 
@@ -24,8 +24,8 @@
             </div>
         </div>
     </div>
-       
-    
+
+
 
         <div class="row ">
             <div class="mb-3">
@@ -33,7 +33,7 @@
             </div>
             {!! $data->table(['class' => 'table table-responsive table-bordered table-hover dataTable']) !!}
         </div>
-   
+
 
 @endsection
 

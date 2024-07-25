@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Validation\Rule as ValidationRule;
 use App\Models\Rule;
 use App\Models\User;
 // use Illuminate\Validation\Rule;
@@ -21,6 +22,8 @@ use Illuminate\Console\View\Components\Alert;
 use App\helper; // Adjust this namespace as per your helper file location
 use App\Models\job;
 
+
+
 class UserController extends Controller
 {
     /**
@@ -37,6 +40,7 @@ class UserController extends Controller
     // }
     public function index($id)
     {
+        
         return view('user.view', compact('id'));
     }
 
@@ -47,8 +51,8 @@ class UserController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 
-            return '<button class="btn btn-primary btn-sm">Edit</button>
-              <a href="" class="btn btn-primary btn-sm">vacations</a>';
+            return '<button class="btn  btn-sm" style="background-color: #259240;" > <i class="fa fa-edit"></i> </button>
+              <a href="" class="btn  btn-sm" style=" background-color:#864824; " > <i class="fa-solid fa-mug-hot" ></i> </a>';
         })
             ->rawColumns(['action'])
             ->make(true);
@@ -57,8 +61,8 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $messages = [
-            'military_number.required' => 'رقم العسكري مطلوب.',
-            'password.required' => 'كلمة المرور مطلوبة.',
+            'military_number.required' => '  ادخل الرقم العسكري.',
+            'password.required' => '  ادخل كلمة المرور.',
         ];
 
         $validatedData = Validator::make($request->all(), [
@@ -136,7 +140,7 @@ class UserController extends Controller
         $validatedData = Validator::make($request->all(), [
             'verfication_code' => 'required', // Ensure verfication_code field is required
         ], [
-            'verfication_code.required' => 'كود التفعيل مطلوب.',
+            'verfication_code.required' => '  ادخل كود التفعيل.',
         ]);
 
         // Check if validation fails
@@ -179,7 +183,7 @@ class UserController extends Controller
             }
         } else {
             // If verification code does not match, return back with error message and input values
-            return view('verfication_code')->withErrors('الكود خاطئ.')
+            return view('verfication_code')->withErrors('الكود الذي ادخلته غير صحيح.')
                 ->with('code', $code)
                 ->with('military_number', $military_number)
                 ->with('password', $password);
@@ -190,7 +194,7 @@ class UserController extends Controller
     public function forget_password2(Request $request)
     {
         $messages = [
-            'military_number.required' => 'رقم العسكري مطلوب.',
+            'military_number.required' => '  ادخل الرقم العسكري.',
         ];
 
         $validatedData = Validator::make($request->all(), [
@@ -234,8 +238,8 @@ class UserController extends Controller
     public function reset_password(Request $request)
     {
         $messages = [
-            'military_number.required' => 'رقم العسكري مطلوب.',
-            'password.required' => 'كلمة المرور مطلوبة.',
+            'military_number.required' => '  ادخل الرقم العسكري.',
+            'password.required' => '  ادخل كلمة المرور.',
             'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
         ];
 
@@ -271,12 +275,12 @@ class UserController extends Controller
         }
         $user->password = Hash::make($request->password);
         $user->save();
+        Auth::login($user); // Log the user in
 
-        return redirect()->route('home');
+        return redirect()->route('home')->with('success', 'تم إعادة تعيين كلمة المرور بنجاح');
         // return redirect()->route('home')->with('user', auth()->user());
 
     }
-
 
     public function logout(Request $request)
     {
@@ -308,7 +312,7 @@ class UserController extends Controller
         {
             $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
         }
-        
+
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
@@ -325,17 +329,68 @@ class UserController extends Controller
         // dd($request);
         // validation
 
-        $messages = [
-            'military_number.required' => 'وغير مدخل مسبقا رقم العسكري مطلوب.',
-            'phone.required' => 'كلمة المرور مطلوبة.',
-            // 'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
-        ];
+        if($request->type == "0")
+        {
+            $messages = [
+                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
+                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
+                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
 
-        $validatedData = Validator::make($request->all(), [
-            'military_number' => 'required|string|unique:users|max:255',
-            'phone' => 'required|string',
-            // 'password_confirm' => 'same:password',
-        ], $messages);
+                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
+                'rule.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
+                'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
+                'department.required' => 'القسم  يجب أن يكون نصاً.',
+                // Add more custom messages here
+            ];
+            
+            $validatedData = Validator::make($request->all(), [
+                'military_number' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    ValidationRule::unique('users', 'military_number'),
+                ],
+                'phone' => 'required|string',
+                'file_number' => 'required|string',
+                'rule' => 'required',
+                'password' => 'required',
+                'department' => 'required',
+            ], $messages);
+        }
+        else
+        {
+            $messages = [
+                // 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                // 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
+                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
+                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
+
+                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
+                'department.required' => 'القسم  يجب أن يكون نصاً.',
+                // Add more custom messages here
+            ];
+            
+            $validatedData = Validator::make($request->all(), [
+                // 'military_number' => [
+                //     'required',
+                //     'string',
+                //     'max:255',
+                //     ValidationRule::unique('users', 'military_number'),
+                // ],
+                'phone' => 'required|string',
+                'file_number' => 'required|string',
+                'department' => 'required',
+            ], $messages);
+        
+        
+    
+        // Handle validation failure
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
 
 
         // $validatedData = $request->validate([
@@ -383,11 +438,11 @@ class UserController extends Controller
             $newUser->public_administration = $request->department;
             // $newUser->department_id  = $request->department;
             $newUser->save();
-            
+
             if ($request->hasFile('image')) {
                 $file = $request->image;
                 $path = 'users/user_profile';
-    
+
                 UploadFilesWithoutReal($path, 'image', $newUser, $file);
             }
         }
@@ -460,9 +515,77 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = User::find($id);
+        if($user->flag == "user")
+        {
+            $messages = [
+                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
+                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
+
+                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
+                'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
+                'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
+                'department_id.required' => 'القسم  يجب أن يكون نصاً.',
+                'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
+
+                // Add more custom messages here
+            ];
+            
+            $validatedData = Validator::make($request->all(), [
+                'military_number' => [
+                    'required',
+                    'string',
+                    'max:255',
+                ],
+                'phone' => 'required|string',
+                'file_number' => 'required|string',
+                'rule_id' => 'required',
+                'password' => 'required',
+                'department_id' => 'required',
+                'Civil_number' => 'required',
+                
+            ], $messages);
+        }
+        else
+        {
+            $messages = [
+                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
+                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
+
+                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
+                'public_administration.required' => 'القسم  يجب أن يكون نصاً.',
+                'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
+
+                // Add more custom messages here
+            ];
+            
+            $validatedData = Validator::make($request->all(), [
+                'military_number' => [
+                    'required',
+                    'string',
+                    'max:255',
+                ],
+                'phone' => 'required|string',
+                'file_number' => 'required|string',
+                'public_administration' => 'required',
+                'Civil_number' => 'required',
+                
+            ], $messages);
+        }
+        
+    
+        // Handle validation failure
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
+
 
         // dd($request);
-        $user = User::find($id);
+       
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;

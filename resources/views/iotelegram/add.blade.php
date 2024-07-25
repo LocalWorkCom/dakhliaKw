@@ -35,22 +35,14 @@
                     </div>
                 </div>
 
-                <div class="container col-10 mt-4" style="border:0.5px solid #C7C7CC;">
-                    <div class="form-group col-md-6">
-                        <label for="date">التاريخ:</label>
-                        <input type="date" id="date" name="date" class="form-control" required>
-                    </div>
-                    <div class="form-row pt-4">
-                        <div class="form-group col-md-6 ">
-                            <label for="representive_id">اختر المندوب </label>
-                            <select id="representive_id" name="representive_id" class="form-control" required>
-                                <option value="">اختر المندوب</option>
-                                @foreach ($representives as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
+                <div class="container col-10 mt-4 pb-3" style="border:0.5px solid #C7C7CC;">
+                    <div class="form-row mx-3 d-flex justify-content-center mt-5">
+
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="date">التاريخ</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-5 mx-2">
                             <label for="recieved_by">الموظف المستلم</label>
                             <select id="recieved_by" name="recieved_by" class="form-control" required>
                                 <option value="">اختر الموظف</option>
@@ -60,12 +52,19 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="date">التاريخ:</label>
-                            <input type="date" id="date" name="date" class="form-control" required>
+
+
+                    <div class="form-row pt-2 mx-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-2 ">
+                            <label for="representive_id">اختر المندوب  </label>
+                            <select id="representive_id" name="representive_id" class="form-control" required>
+                                <option value="">اختر المندوب</option>
+                                @foreach ($representives as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-5 mx-2">
                             <label for="from_departement">الجهة المرسلة</label>
 
                             <select id="from_departement" name="from_departement" class="form-control" required>
@@ -75,27 +74,15 @@
                                 @endforeach
                             </select>
                         </div>
+                        
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="files_num"> عدد الكتب</label>
+                  
 
-                            <select id="files_num" name="files_num" class="form-control" required>
-                                <option value="">اختر العدد</option>
-
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
+                    <div class="form-row mx-2 d-flex justify-content-center">
+                        <div class="form-group  col-md-10 ">
+                            <label for="files"> اضف ملفات بحد اقصي 10 </label>
                         </div>
-                    </div>
-
-
-                    <div class="form-row d-flex  mt-1 " dir="rtl">
-                        <div class="form-group">
-                            <label for="files"> اضف ملفات </label>
-                        </div>
-                        <div class="form-group col-md-12 " dir="rtl">
+                        <div class="form-group col-md-10 " dir="rtl">
                             <div class=" fileupload d-inline">
                                 <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control"
                                     accept="image/jpeg, image/png, application/pdf">
@@ -109,35 +96,23 @@
                                     </ul>
                                 </div>
                             </div>
-                            <!-- <label for="files">اضافة ملف</label>
-                                                <div id="fileInputs">
-                                                    <div class="file-input mb-3" dir="rtl">
-                                                        <input type="file" name="files[]" class="form-control"> -->
-                            <!-- <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button> -->
                         </div>
                     </div>
-                    <div class="form-row mb-5" dir="rtl">
-                        <button type="button" class="btn-all  mx-3" data-bs-toggle="modal"
-                            data-bs-target="#representative" data-dismiss="modal" id="representative-dev"
-                            style="background-color: #FAFBFD; border: none;">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
-                        </button>
+                    <div class="form-row d-flex  justify-content-center" dir="rtl">
+                        <div class="form-group d-flex justify-content-start col-md-10 ">
                         <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
-                            data-bs-target="#extern-department" data-dismiss="modal"
-                            style="background-color: #FAFBFD; border: none; display: none;">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة جهه جديده
-                        </button>
-                    </div> <br>
-
-
-                    <!-- <div class="form-row" dir="rtl">
-                            <button type="button" class="btn-all btn-sm mt-2" id="addFile"
-                                style="background-color: #FAFBFD; border: none;"><img src="{{ asset('frontend/images/add-btn.svg') }}"
-                                    alt="">إضافة ملف جديد
+                                data-bs-target="#extern-department" data-dismiss="modal"
+                                style="background-color: #FAFBFD; border: none; display: none;">
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة جهه جديده
                             </button>
-
-
-                        </div>  -->
+                            <button type="button" class="btn-all  mx-3" data-bs-toggle="modal"
+                                data-bs-target="#representative" data-dismiss="modal" id="representative-dev"
+                                style="background-color: #FAFBFD; border: none;">
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
+                            </button>
+                           
+                        </div>
+                    </div> <br>
 
                 </div>
                 <div class="container col-10 ">
@@ -242,14 +217,6 @@
 
     @push('scripts')
         <script>
-            $(document).ready(function() {
-
-                var today = new Date().toISOString().split('T')[0];
-                $('#date').attr('min', today);
-
-                $('#date').attr('value', today);
-            });
-
             function sortSelectOptions(selectId) {
                 var options = $(selectId + ' option');
                 options.sort(function(a, b) {

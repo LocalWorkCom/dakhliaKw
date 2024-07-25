@@ -28,18 +28,18 @@
             @include('inc.flash')
 
             <div class="col-lg-12">
-                <div class="bg-white p-5">
+                <div class="bg-white ">
                 </div>
 
 
-                <table id="users-table" class="display table table-bordered table-hover dataTable">
+                <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                     <thead>
                         <tr>
                             <th>الرقم</th>
                             <th>نوع الاجازة</th>
                             <th>تاريخ البداية</th>
                             <th>تاريخ النهاية</th>
-                            <th>الخيارات</th>
+                            <th style="width:150px !important;">العمليات</th>
                         </tr>
                     </thead>
                 </table>
@@ -81,8 +81,8 @@
                             columnDefs: [{
                                 targets: -1,
                                 render: function(data, type, row) {
-                                    // Using route generation correctly in JavaScript
-                                    var editUrl = '{{ route('vacation.edit', ':id') }}';
+                                      // Using route generation correctly in JavaScript
+                                      var editUrl = '{{ route('vacation.edit', ':id') }}';
                                     var showUrl = '{{ route('vacation.show', ':id') }}';
                                     var deleteUrl = '{{ route('vacation.delete', ':id') }}';
 
@@ -92,11 +92,11 @@
 
                                     // Checking if the vacation start date condition is met
                                     var deleteButton = (row.StartVacation) ?
-                                        `<a href="${deleteUrl}" class="delete btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>` :
+                                        `<a href="${deleteUrl}" class="delete btn  btn-sm" style="background-color: #c91d1d;"><i class="fa fa-trash"></i></a>` :
                                         '';
 
 
-                                    return `<a href="${editUrl}" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a><a href="${showUrl}" class="edit btn btn-info btn-sm"><i class="fa fa-eye"></i></a>${deleteButton}`;
+                                    return `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></a><a href="${showUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>${deleteButton}`;
 
                                 }
 

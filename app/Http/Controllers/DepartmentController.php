@@ -51,7 +51,7 @@ class DepartmentController extends Controller
         ->rawColumns(['action'])
         ->make(true);
     }
-    
+
 
 
     // public function index_1(subDepartmentsDataTable $dataTable)
@@ -76,9 +76,9 @@ class DepartmentController extends Controller
 
     return DataTables::of($data)
         ->addColumn('action', function ($row) {
-            return '<button class="btn btn-primary btn-sm">Edit</button>';
+            return '<button class="btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></button>';
         })
-       
+
         ->addColumn('children_count', function ($row) { // New column for departments count
             return $row->children_count;
         })
@@ -114,7 +114,7 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        
+
         $request->validate([
             'name' => 'required',
             'manger' => 'required',
@@ -132,7 +132,7 @@ class DepartmentController extends Controller
     public function store_1(Request $request)
     {
         // dd($request->all());
-        
+
         $request->validate([
         ]);
          $departements =departements::create($request->all());
@@ -190,7 +190,7 @@ class DepartmentController extends Controller
     public function update_1(Request $request, departements $department)
     {
         $request->validate([
-            
+
         ]);
 
         $department->update($request->all());
