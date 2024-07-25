@@ -96,7 +96,6 @@
                                     </ul>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="form-row d-flex  justify-content-center" dir="rtl">
@@ -218,14 +217,6 @@
 
     @push('scripts')
         <script>
-            $(document).ready(function() {
-
-                var today = new Date().toISOString().split('T')[0];
-                $('#date').attr('min', today);
-
-                $('#date').attr('value', today);
-            });
-
             function sortSelectOptions(selectId) {
                 var options = $(selectId + ' option');
                 options.sort(function(a, b) {
