@@ -329,25 +329,49 @@ class UserController extends Controller
         // dd($request);
         // validation
 
-        $messages = [
-            'military_number.required' => 'وغير مدخل مسبقا رقم العسكري مطلوب.',
-            'phone.required' => 'كلمة المرور مطلوبة.',
-            // 'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
-            'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+        if($request->type == "0")
+        {
+            $messages = [
+                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
+                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
+                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
+
+                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
+                'rule.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
+                'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
+                'department.required' => 'القسم  يجب أن يكون نصاً.',
+                // Add more custom messages here
+            ];
+            
+            $validatedData = Validator::make($request->all(), [
+                'military_number' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    ValidationRule::unique('users', 'military_number'),
+                ],
+                'phone' => 'required|string',
+                'file_number' => 'required|string',
+                'rule' => 'required',
+                'password' => 'required',
+                'department' => 'required',
+            ], $messages);
+        }
+        else
+        {
+            $messages = [
+                // 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                // 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
+                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
+                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
+
+                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
                 'department.required' => 'القسم  يجب أن يكون نصاً.',
-        ];
-
-        $validatedData = Validator::make($request->all(), [
-            'military_number' => 'required|string|unique:users|max:255',
-            'phone' => 'required|string',
-            // 'password_confirm' => 'same:password',
-        ], $messages);
-
-
-                
                 // Add more custom messages here
-        
+            ];
             
             $validatedData = Validator::make($request->all(), [
                 // 'military_number' => [
