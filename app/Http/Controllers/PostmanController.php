@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Postman;
 use App\Models\departements;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -38,8 +39,8 @@ class PostmanController extends Controller
             'phone2' => 'nullable|string|max:255|unique:postmans,phone2',
         ]);
 
-        Postman::create($request->all());
-
+        $Postman = Postman::create($request->all());
+        $Postman->created_by = Auth::user()->id;
         return redirect()->route('departments.index')->with('success', 'Postman created successfully.');
     }
 
