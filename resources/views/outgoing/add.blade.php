@@ -334,7 +334,7 @@
                                             $('#select-person-to').html(selectOptions);
                                         },
                                         error: function(xhr, status, error) {
-                                            // console.error(xhr.responseText);
+                                          
                                         }
                                     });
                                     resetModal();
