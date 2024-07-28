@@ -25,7 +25,7 @@
         <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
             <form action="{{ route('postmans.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="form-row mx-md-2 mt-4 d-flex justify-content-center">
+                <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
                     <div class="form-group col-md-5 mx-md-2">
                         <label for="department_id">الادارة التابعه</label>
                         <select name="department_id" class="form-control">
@@ -35,7 +35,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-5 mx-md-3">
+                    <div class="form-group col-md-5 mx-md-2">
                         <label for="name">الاسم</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
                         @error('name')
@@ -43,8 +43,8 @@
                         @enderror
                     </div>
                 </div>
-                <div class="form-row mx-md-2 d-flex justify-content-center">
-                <div class="form-group col-md-5 mx-md-3">
+                <div class="form-row mx-md-3 d-flex justify-content-center">
+                <div class="form-group col-md-5 mx-md-2">
                 <label for="phone2">الهاتف الثانى</label>
                     <input type="phone" class="form-control" id="phone2" name="phone2" value="{{ old('phone2') }}">
                     @error('phone2')
@@ -54,7 +54,7 @@
 
 
                 </div>
-                <div class="form-group col-md-5 mx-md-3">
+                <div class="form-group col-md-5 mx-md-2">
                     <label for="phone1">الهاتف الاول</label>
                     <input type="phone" class="form-control" id="phone1" name="phone1" value="{{ old('phone1') }}">
                     @error('phone1')

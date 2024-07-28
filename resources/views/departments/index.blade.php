@@ -24,7 +24,7 @@
             <div class="container col-11 mt-3 p-0">
                 <div class="row" dir="rtl">
                     <div class="form-group mt-4 mx-md-2 col-12 d-flex">
-                        <button type="button" class="wide-btn mx-md-3"
+                        <button type="button" class="wide-btn mx-3"
                             onclick="window.location.href='{{ route('departments.create') }}'">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة جديد
                         </button>

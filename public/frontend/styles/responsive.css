@@ -3,7 +3,7 @@
         width: 180px;
         margin-inline: 9px;
     } */
-
+/* 
     .nav-item {
         display: inline-block;
         padding: 1px 2px;
@@ -11,6 +11,12 @@
         position: relative;
         padding-inline: 57px;
     }
+} */
+
+.collapse ul {
+    padding-left: 65px;
+    padding-right: 65px;
+}
     #users-table th ,  #users-table td{
         font-size: 20px;
     }
@@ -95,8 +101,8 @@
         padding-left: 10px;
     }
     li img {
-        width: 28px;
-        height: 28px;
+        /* width: 28px;
+        height: 28px; */
         margin-left: 15px;
     }
     .welcome p {
@@ -185,13 +191,13 @@
     /* li {
         width: 135px;
     } */
-    .nav-item {
+    /* .nav-item {
         display: inline-block;
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
     padding-inline: 53px;
-    }
+    } */
     .first-section {
         margin-left: -30px;
     }
@@ -203,8 +209,8 @@
         font-size: 25px;
     }
     li img {
-        width: 25px;
-        height: 25px;
+        /* width: 25px;
+        height: 25px; */
         margin-left: 17px;
     }
     .navbar{
@@ -282,12 +288,16 @@
         height: 160px;
         margin: 0px;
     }
-    .nav-item {
+    /* .nav-item {
         display: inline-block;
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
         padding-inline: 33px;
+    } */
+    .collapse ul {
+        padding-left: 55px;
+        padding-right: 55px;
     }
     .first-section {
         margin-left: -50px;
@@ -385,19 +395,23 @@
     .navbar{
         width: 100%;
     }
+    .collapse ul {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
     /* li {
         width: 123px;
     } */
     .first-section {
         margin-left: -40px;
     }
-    .nav-item {
+    /* .nav-item {
         display: inline-block;
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
         padding-inline: 33px;
-    }
+    } */
     .container-responsive {
         display: none;
     }
@@ -470,6 +484,10 @@
     .container-not-responsive {
         display: none;
     }
+    .collapse ul {
+        padding-left: 55px;
+        padding-right: 55px;
+    }
     .bell {
         margin-right: 15px;
         font-size: 23px;
@@ -477,13 +495,13 @@
     /* li {
         width: 115px;
     } */
-    .nav-item {
+    /* .nav-item {
         display: inline-block;
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
         padding-inline: 59px;
-    }
+    } */
     .second-section input {
         width: 120px;
         height: 35px;
@@ -525,17 +543,20 @@
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
+    }.collapse ul {
+        padding-left: 15px; 
+        padding-right: 15px;
     }
     /* li {
         width: 71px;
     } */
-    .nav-item {
+    /* .nav-item {
         display: inline-block;
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
         padding-inline: 19px;
-    }
+    } */
     .bell {
         margin-right: 15px;
         font-size: 19px;
@@ -551,8 +572,8 @@
     }
 
     li img {
-        width: 22px;
-        height: 22px;
+        /* width: 22px;
+        height: 22px; */
         margin-left: 21px;
     }
     .navbar-nav li h6 {
@@ -688,6 +709,20 @@
     .header-side {
         height: 50px;
     }
+    .header-radio {
+        height: 55px;
+    }
+    input[type="radio"] {
+        height: 15px;
+        width: 20px;
+    }
+    .radio1 label, .radio2 label {
+        font-size: 20px;
+        line-height: 36px;
+    }
+    .dataTables_filter label {
+        font-size: 16px;
+    }
     .name {
         text-align: center;
         padding: 30px;
@@ -749,19 +784,35 @@
 
 }
 .wide-btn {
-    height: 40px;
+    height: 35px;
     font-size: 18px;
     line-height: 26.78px;
 }
 .btn-all {
-    height: 39px;
-    font-size: 19px;
+    height: 35px;
+    font-size: 18px;
     font-weight: 400;
     line-height: 26.78px;
 }
 .btn-all img, .wide-btn img {
     height: 20px;
     width: 20px;
+}
+.img-thumbnail {
+    height: 50px !important;
+    width: 100px !important;
+}
+.btn-download {
+    height: 45px;
+    font-size: 13px;
+    padding-inline: 9px;
+    padding-block: 5px;
+}
+.btn-blue {
+    width: 71px;
+    height: 27px;
+    font-size: 18px;
+    padding-block: 0px;
 }
 .dataTables_filter input {
     width: 100%;
@@ -822,11 +873,7 @@ footer {
     height: 36px;
     padding: 10px;
 }
-.btn-blue {
-    width: 95px;
-    height: 34px;
-    font-size: 21px;
-}
+
 /**************** newphase********************* */
 .moftsh .input-group{
     display: contents;
