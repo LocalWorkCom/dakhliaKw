@@ -55,18 +55,7 @@
                     @csrf
 
                     <input type="hidden" name="type" value="{{ $flag }}">
-                    <div class="form-row mx-3 mt-4 d-flex justify-content-center">
-
-                        <div class="form-group col-md-5 mx-2 ">
-                            <label for="job"> الوظيفة</label>
-                            <select class="custom-select custom-select-lg mb-3" name="job" id="job">
-                                <option selected disabled>اختار من القائمة</option>
-                                @foreach ($job as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                            {{-- <input type="text" id="job" name="job" class="form-control" required> --}}
-                        </div>
+                    <div class="form-row mx-3 mt-4 d-flex justify-content-center"> 
                         @if ($flag == '0')
                             <div class="form-group col-md-5 mx-2">
                                 <label for="nameus"> الاسم</label>
@@ -79,6 +68,16 @@
                                 </select>
                             </div>
                         @else
+                        <div class="form-group col-md-5 mx-2 ">
+                            <label for="job"> الوظيفة</label>
+                            <select class="custom-select custom-select-lg mb-3" name="job" id="job">
+                                <option selected disabled>اختار من القائمة</option>
+                                @foreach ($job as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            {{-- <input type="text" id="job" name="job" class="form-control" required> --}}
+                        </div>
                             <div class="form-group col-md-5 mx-2">
                                 <label for="nameus"> الاسم</label>
                                 <input type="text" id="nameus" name="name" class="form-control"
@@ -86,134 +85,122 @@
                             </div>
                         @endif
                     </div>
-                    <div class="form-row mx-3 d-flex justify-content-center flex-row-reverse">
 
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input2"> البريد الالكتروني</label>
-                            <input type="text" id="input2" name="email" class="form-control"
-                                placeholder=" البريد الالكترونى" >
-                        </div>
 
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input44">الفئة</label>
-                            <div class="form-group col-md-10">
-                                <input type="radio" class="form-check-input" id="male" name="gender" value="male" style="height:20px; width:20px;">
-                                <label class="form-check-label mx-2" for="male">ذكر</label>
-                                
-                                <input type="radio" class="form-check-input" id="female" name="gender" value="female" style="height:20px; width:20px;">
-                                <label class="form-check-label mx-2" for="female">انثى</label>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input44">عسكرى | مدنى</label>
-                            <div class="form-group col-md-10">
-                                <input type="radio" class="form-check-input" id="solder" name="solderORcivil" value="solder" style="height:20px; width:20px;">
-                                <label class="form-check-label mx-2" for="solder">عسكرى</label>
-                                
-                                <input type="radio" class="form-check-input" id="civil" name="solderORcivil" value="civil" style="height:20px; width:20px;">
-                                <label class="form-check-label mx-2" for="civil">مدنى</label>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input44">العنوان 1</label>
-                            <input type="text" id="input44" name="address_1" class="form-control"
-                                placeholder="  العنوان">
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input44">العنوان 2</label>
-                            <input type="text" id="input44" name="address_2" class="form-control"
-                                placeholder="  العنوان">
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input44"> المحافظة</label>
-                            <input type="text" id="input44" name="Provinces" class="form-control"
-                                placeholder="  المحافظة">
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input44"> المنطقة</label>
-                            <input type="text" id="input44" name="region" class="form-control"
-                                placeholder="  المنطقة">
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input4"> رقم الهاتف</label>
-                            <input type="text" id="input4" name="phone" class="form-control"
-                                placeholder=" رقم الهاتف">
-                        </div>
 
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input6">رقم العسكرى</label>
-                            <input type="text" id="input6" name="military_number" class="form-control"
-                                placeholder="رقم العسكرى">
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input66">قطاع </label>
-                            <input type="text" id="input66" name="sector" class="form-control"
-                                placeholder="قطاع ">
-                        </div>
+                   
+            </div>
+            @if ($flag == '0')
+                <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
+                    <div class="form-group col-md-5 mx-2">
+                        <label for="input3"> الباسورد</label>
+                        <input type="password" id="input3" name="password" class="form-control"
+                            placeholder="الباسورد">
                     </div>
+                    <div class="form-group col-md-5 mx-2">
+                        <label for="input7"> المهام</label>
+                        <select id="input7" name="rule_id" class="form-control" placeholder="المهام">
+                            @foreach ($rule as $item)
+                        <option value="{{ $item->id }}">  {{ $item->name }}</option>
+                        @endforeach
 
-                    <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input9"> المسمي الوظيفي</label>
-                            <input type="text" id="input9" name="job_title" class="form-control"
-                                placeholder="المسمي الوظيفي">
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input10">الجنسية</label>
-                            <input type="text" id="input10" name="nationality" class="form-control"
-                                placeholder="الجنسية">
-                        </div>
+
+                        </select>
                     </div>
+                </div>
+            @else
 
-                    <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input11">رقم المدنى</label>
-                            <input type="text" id="input11" name="Civil_number" class="form-control"
-                                placeholder="رقم المدنى">
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input12">رقم الملف</label>
-                            <input type="text" id="input12" name="file_number" class="form-control"
-                                placeholder="رقم الملف">
-                        </div>
+            <div class="form-row mx-3 d-flex justify-content-center flex-row-reverse">
+
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input2"> البريد الالكتروني</label>
+                    <input type="text" id="input2" name="email" class="form-control"
+                        placeholder=" البريد الالكترونى" >
+                </div>
+
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input44">الفئة</label>
+                    <div class="form-group col-md-10">
+                        <input type="radio" class="form-check-input" id="male" name="gender" value="male" style="height:20px; width:20px;">
+                        <label class="form-check-label mx-2" for="male">ذكر</label>
+                        
+                        <input type="radio" class="form-check-input" id="female" name="gender" value="female" style="height:20px; width:20px;">
+                        <label class="form-check-label mx-2" for="female">انثى</label>
                     </div>
+                </div>
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input44">عسكرى | مدنى</label>
+                    <div class="form-group col-md-10">
+                        <input type="radio" class="form-check-input" id="solder" name="solderORcivil" value="solder" style="height:20px; width:20px;">
+                        <label class="form-check-label mx-2" for="solder">عسكرى</label>
+                        
+                        <input type="radio" class="form-check-input" id="civil" name="solderORcivil" value="civil" style="height:20px; width:20px;">
+                        <label class="form-check-label mx-2" for="civil">مدنى</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input44">العنوان 1</label>
+                    <input type="text" id="input44" name="address_1" class="form-control"
+                        placeholder="  العنوان">
+                </div>
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input44">العنوان 2</label>
+                    <input type="text" id="input44" name="address_2" class="form-control"
+                        placeholder="  العنوان">
+                </div>
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input44"> المحافظة</label>
+                    <input type="text" id="input44" name="Provinces" class="form-control"
+                        placeholder="  المحافظة">
+                </div>
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input44"> المنطقة</label>
+                    <input type="text" id="input44" name="region" class="form-control"
+                        placeholder="  المنطقة">
+                </div>
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input4"> رقم الهاتف</label>
+                    <input type="text" id="input4" name="phone" class="form-control"
+                        placeholder=" رقم الهاتف">
+                </div>
 
-                    {{-- @if ($flag == '0')
-                        <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
-                            <div class="form-group col-md-5 mx-2">
-                                <label for="input3"> الباسورد</label>
-                                <input type="password" id="input3" name="password" class="form-control"
-                                    placeholder="الباسورد">
-                            </div>
-                            <div class="form-group col-md-5 mx-2">
-                                <label for="input7"> المهام</label>
-                                <select id="input7" name="rule_id" class="form-control" placeholder="المهام">
-                                    @foreach ($rule as $item)
-                                <option value="{{ $item->id }}">
-                                    {{ $item->name }}</option>
-                                @endforeach
-
-
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row mx-2  d-flex justify-content-center flex-row-reverse">
-                            <div class="form-group col-md-10 mx-2">
-                                <label for="input25"> القسم</label>
-                                <select id="input25" name="department_id" class="form-control"
-                                    placeholder="القسم">
-                                    @foreach ($department as $item)
-                                <option value="{{ $item->id }}"
-                                   > {{ $item->name }}
-                                </option>
-                                @endforeach
-
-                                </select>
-                            </div>
-                        </div>
-                    @endif --}}
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input6">رقم العسكرى</label>
+                    <input type="text" id="input6" name="military_number" class="form-control"
+                        placeholder="رقم العسكرى">
+                </div>
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input66">قطاع </label>
+                    <input type="text" id="input66" name="sector" class="form-control"
+                        placeholder="قطاع ">
+                </div>
             </div>
 
+            <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input9"> المسمي الوظيفي</label>
+                    <input type="text" id="input9" name="job_title" class="form-control"
+                        placeholder="المسمي الوظيفي">
+                </div>
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input10">الجنسية</label>
+                    <input type="text" id="input10" name="nationality" class="form-control"
+                        placeholder="الجنسية">
+                </div>
+            </div>
+
+            <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input11">رقم المدنى</label>
+                    <input type="text" id="input11" name="Civil_number" class="form-control"
+                        placeholder="رقم المدنى">
+                </div>
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input12">رقم الملف</label>
+                    <input type="text" id="input12" name="file_number" class="form-control"
+                        placeholder="رقم الملف">
+                </div>
+            </div>
             <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
                 <div class="form-group col-md-5 mx-2">
                     <label for="input14">الاقدامية</label>
@@ -265,12 +252,6 @@
                         placeholder="تاريخ الالتحاق">
                 </div>
             </div>
-            {{-- <div class="form-group col-md-5 mx-2">
-                                <label for="input21">العمر</label>
-                                <input type="text" id="input21" name="age" class="form-control" placeholder="العمر"
-                                    value="{{ $user->age  }}">
-        </div> --}}
-
             <div class="form-row mx-2 mx-3 d-flex justify-content-center flex-row-reverse">
                 <div class="form-group col-md-5 mx-2">
                     <label for="input22">مدة الخدمة</label>
@@ -288,6 +269,7 @@
                     </select>
                 </div>
             </div>
+
             <div class="form-row mx-2 mx-2 d-flex justify-content-center flex-row-reverse">
                 <div class="form-group col-md-10">
                     <label for="input5"> الوصف</label>
@@ -295,12 +277,15 @@
                         rows="3"></textarea>
                 </div>
             </div>
+
             <div class="form-row mx-2 mx-2 d-flex justify-content-center flex-row-reverse">
                 <div class="form-group col-md-10">
                     <label for="input23">الصورة</label>
                     <input type="file" class="form-control" name="image" id="input23" placeholder="الصورة">
                 </div>
             </div>
+            @endif
+            
 
 
             {{-- <div class="form-row mx-3 d-flex justify-content-center">
