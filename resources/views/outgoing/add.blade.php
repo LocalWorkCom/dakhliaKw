@@ -361,33 +361,5 @@
             });
         </script>
 
-        <script>
-            // $(document).ready(function() {
-            //     $.ajax({
-            //         url: '/getLatest',
-            //         type: 'GET',
-            //         success: function(response) {
-            //             $.ajax({
-            //                 url: '/generateNumber/' + response.counter,
-            //                 type: 'GET',
-            //                 success: function(response) {
-            //                     // Display the formatted number in the #result div
-            //                     console.log('Formatted Number:', response.formattedNumber);
-            //                     let input = document.getElementById('exportnum');
-            //                     input.value = response.formattedNumber;
-            //                     console.log(' Number:', input.value);
-            //                     // $('#exportnum').text('Formatted Number: ' + response.formattedNumber);
-            //                 },
-            //                 error: function(xhr) {
-            //                     console.log('An error occurred:', xhr);
-            //                 }
-            //             });
-            //         },
-            //         error: function(xhr) {
-            //             console.log('An error occurred:', xhr);
-            //         }
-            //     });
-
-            // });
-        </script>
+ 
     @endpush
