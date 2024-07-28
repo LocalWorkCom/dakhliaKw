@@ -81,6 +81,8 @@ class DepartmentController extends Controller
         ->where('parent_id', Auth::user()->department_id)
         ->with(['children'])->orderBy('created_at', 'asc')->get();
 
+        // $data = departements::all();
+
     return DataTables::of($data)
         ->addColumn('action', function ($row) {
             return '<button class="btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></button>';
@@ -100,7 +102,8 @@ class DepartmentController extends Controller
         // dd(Auth::user());
         $users = User::all();
         $departments = departements::with('children', 'parent')->get();
-         return view('departments.create', compact('users','departments'));
+        $employee = User::where('flag', 'employee')->where('department_id', NULL)->get();
+         return view('departments.create', compact('users','departments','employee'));
     }
 
 
@@ -115,12 +118,23 @@ class DepartmentController extends Controller
         $subdepartments = departements::with('children')->get();
         return view('sub_departments.create', compact('parentDepartment','departments','subdepartments','users'));
     }
+
+    public function getEmployeesByDepartment($departmentId)
+    {
+        try {
+            $employees = User::where('department_id', $departmentId)->get();
+            return response()->json($employees);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching employees: ' . $e->getMessage());
+            return response()->json(['error' => 'Error fetching employees'], 500);
+        }
+}
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        // dd($request);
 
         $request->validate([
             'name' => 'required',
@@ -130,6 +144,17 @@ class DepartmentController extends Controller
           $departements->created_by = Auth::user()->id;
 
           $departements->save();
+
+          if($request->has('employess'))
+          {
+            foreach($request->employess as $item)
+            {
+                // dd($item);
+                $user = User::find($item);
+                $user->department_id = $departements->id;
+                $user->save();
+            }
+          }
         //   dd($departements);
         return redirect()->route('departments.index')->with('success', 'Department created successfully.');
         // return response()->json($department, 201);
@@ -138,7 +163,7 @@ class DepartmentController extends Controller
 
     public function store_1(Request $request)
     {
-        // dd($request->all());
+        // dd($request);
 
         $rules = [
             'name' => 'required',
@@ -164,6 +189,17 @@ class DepartmentController extends Controller
           $departements->created_by = Auth::user()->id;
 
           $departements->save();
+
+          if($request->has('employess'))
+          {
+            foreach($request->employess as $item)
+            {
+                // dd($item);
+                $user = User::find($item);
+                $user->department_id = $departements->id;
+                $user->save();
+            }
+          }
         //   dd($departements);
         return redirect()->route('sub_departments.index')->with('success', 'Department created successfully.');
         // return response()->json($department, 201);
