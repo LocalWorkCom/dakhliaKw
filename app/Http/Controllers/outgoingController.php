@@ -156,7 +156,18 @@ class outgoingController extends Controller
 
         $users = $this->getExternalUsersAjax();
         $departments = ExternalDepartment::all();
-        return view('outgoing.add', compact('users', 'departments'));
+        $lastRecord = outgoings::orderBy('id', 'desc')->first();
+        if (isset($lastRecord)) {
+            $record = $lastRecord->num;
+            $parts = explode('-', $record);
+
+            // Get the last part which is '14'
+            $counter = end($parts);
+        } else {
+            $counter = 0;
+        }
+        $num = generateUniqueNumber($counter)['formattedNumber'];
+        return view('outgoing.add', compact('users', 'departments', 'num'));
     }
 
     public function getTheLatestExport()
@@ -173,17 +184,7 @@ class outgoingController extends Controller
         }
         return ['counter' => $counter];
     }
-    public function generateUniqueNumber($counter)
-    {
-        //static $counter = 0 ; // Static variable to keep track of the counter
 
-        $today = Carbon::today();
-        $formattedDate = $today->year . '-' . $today->month . '-' . $today->day;
-        $counter++;  // Increment the counter
-        $formattedNumber = $formattedDate . '.' . $counter;
-
-        return ['formattedNumber' => $formattedNumber, 'counter' => $counter];
-    }
     public function store(Request $request)
     {
         // Define validation rules
