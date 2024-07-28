@@ -4,6 +4,7 @@ use App\Models\EmployeeVacation;
 use App\Models\Io_file;
 use App\Models\User;
 use App\Models\VacationType;
+use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -132,6 +133,17 @@ if (!function_exists('UploadFiles')) {
 
         $model->save();
     }
+}
+function generateUniqueNumber($counter)
+{
+    //static $counter = 0 ; // Static variable to keep track of the counter
+
+    $today = Carbon::today();
+    $formattedDate = $today->year . '-' . $today->month . $today->day;
+    $counter++;  // Increment the counter
+    $formattedNumber = $formattedDate . '-' . $counter;
+
+    return ['formattedNumber' => $formattedNumber, 'counter' => $counter];
 }
 
 
