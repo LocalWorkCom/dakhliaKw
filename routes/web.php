@@ -293,3 +293,4 @@ Route::middleware(['auth'])->group(function () {
 // Route::post('government/add', [settingController::class,'addgovernment'])->name('government.add');
 // Route::post('government', [settingController::class,'editgovernment'])->name('government.edit');
 // Route::post('government/delete', [settingController::class,'deletegovernment'])->name('government.delete');
+Route::get('/employees/by-department/{departmentId}', [DepartmentController::class, 'getEmployeesByDepartment']);

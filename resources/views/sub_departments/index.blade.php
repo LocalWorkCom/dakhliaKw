@@ -84,17 +84,25 @@
 
                         </div>
                         <div class="form-group">
-                            <select name="parent_id" id="parent_id" class="form-control" required>
-                <option value="" {{ is_null($parentDepartment) ? 'selected' : '' }} >اختار الادارة</option>
-                @foreach ($subdepartments as $department)
-                    <option value="{{ $department->id }}">
-                        {{ $department->name }}
-                    </option>
-                @endforeach
-            </select>
+                            <select name="parent_id" id="parent_idd" class="form-control" required>
+                                <option value="" {{ is_null($parentDepartment) ? 'selected' : '' }} >اختار الادارة</option>
+                                @foreach ($subdepartments as $department)
+                                    <option value="{{ $department->id }}">
+                                        {{ $department->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                             <span class="text-danger span-error" id="parent_id-error"></span>
 
                         </div>
+                        <div class="form-group">
+                        <label for="employees">الموظفين </label>
+                        <select name="employess[]" id="employees" class="form-group col-md-12 mx-md-2" multiple>
+                            
+                        </select>
+                       
+                    </div>
+                </div>
                         <!-- Save button -->
                         <div class="text-end">
                             <button type="submit" class="btn-blue">حفظ</button>
@@ -130,7 +138,7 @@
                         </div>
                         <div class="form-group">
                             <label for="manger">المدير</label>
-                            <select name="manger" class="form-control">
+                            <select name="manger" id="manger" class="form-control">
                                 <option value="">اختر المدير </option>
                                 @foreach($users as $user)
                                 <option value="{{ $user->id }}" {{ $user->id == old('manger', $department->manger) ? 'selected' : '' }}>
@@ -292,7 +300,33 @@ function submitedit(){
         // });
 //     });
 // });
-
+$(document).ready(function() {
+        $('#parent_idd').on('change', function() {
+            var departmentId = $(this).val();
+            console.log(departmentId);
+            if (departmentId) {
+                $.ajax({
+                    url: '/employees/by-department/' + departmentId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                    $('#employees').empty();
+                    $('#manger').empty();
+                    $.each(data, function(key, employee) {
+                        $('#employees').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                        $('#manger').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#employees').empty();
+        }
+        });
+    });
     </script>
 
 @endsection
