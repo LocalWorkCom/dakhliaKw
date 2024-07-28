@@ -271,16 +271,17 @@ class IoTelegramController extends Controller
     {
         $rules = [
             'desc' => 'nullable',
-            'phone' => ['required', 'string', 'unique:external_departements,phone', 'regex:/^01\d{9,11}$/'],
+            'phone' => ['required', 'numeric', 'unique:external_departements,phone','regex:/^([0-9\s\-\+\(\)]*)$/','min:10'],
             'name' => 'required|string',
         ];
 
         $messages = [
             'name.string' => 'يجب ان يكون الأسم حروف فقط',
             'phone.required' => 'يجب ادخال الهاتف',
-            'phone.integer' => 'يجب ان يكون الهاتف ارقام',
+            'phone.numeric' => 'يجب ان يكون الهاتف ارقام',
             'phone.unique' => 'عفوا هذا الرقم موجود من قبل',
             'phone.regex' => 'عفوا هذا الهاتف غير صحيح',
+            'phoneuser.min' => 'رقم الهاتف لا يقل عن 10 خانات',
             'name.required' => 'يجب ادخال اسم الشخص',
         ];
 
