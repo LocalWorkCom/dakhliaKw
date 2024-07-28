@@ -111,27 +111,13 @@
                                         @else
                                             لا يوجد ملفات لهذا الصادر
                                         @endif
-                                        </*div>
+                                        </div>
                                 </ul>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
-                        {{-- <tr>
-                            <th>الملفات</th>
-                            <td>
-                                @if (!empty($is_file))
-                                    @foreach ($is_file as $file)
-                                        <embed src="{{ asset($file->file_name) }}" width="100px" height="80px" />
-                                        <a href="{{ route('downlaodfile', $file->id) }}" class="btn btn-info btn-sm"><i
-                                                class="fa fa-download"></i></a>
-                                    @endforeach
-                                @else
-                                    لايوجد ملفات للصادر
-                                @endif
-                            </td>
-
-                        </tr> --}}
+                        
                     </tfoot>
 
                 </table>
