@@ -72,7 +72,7 @@ li img{
      height: 30px; */
      margin-left: 15px;
 }
-.collapse ul{
+.collapse .navbar-nav{
     padding-left: 90px;
     padding-right: 90px;
 }
@@ -155,7 +155,7 @@ ul {
     font-size: 23px;
 }
 #dropdownMenu3 a , #dropdownMenu4 a{
-    color: rgb(134, 133, 133);
+    color: #1C1B1B;
     background-color: #ffffff;
     font-size: 18px;
     text-decoration: none;
@@ -178,14 +178,14 @@ ul {
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
     top: 65px;
-    left: 222px;
-    height: 235px;
-    width: 240px !important;
+    left: 237px;
+    height: 219px;
+    width: 195px !important;
     text-align: center;
     border-radius: 5px;
     padding: 7px;
     overflow-y: auto;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .dropdown-menu4 {
@@ -195,10 +195,10 @@ ul {
     border: 1px solid #ccc;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    top: 76px;
-    left: 460px;
-    height: 130px;
-    width: 150px !important;
+    top: 88px;
+    left: 488px;
+    height: 107px;
+    width: 165px !important;
     text-align: right;
     border-radius: 5px;
     overflow-y: auto;
@@ -212,10 +212,10 @@ ul {
     border: 1px solid #ccc;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    top: 76px;
-    right: 525px;
-    height: 130px;
-    width: 142px !important;
+    top: 88px;
+    right: 541px;
+    height: 107px;
+    width: 160px !important;
     text-align: right;
     border-radius: 5px;
     overflow-y: auto;
