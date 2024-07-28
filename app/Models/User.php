@@ -60,13 +60,21 @@ class User extends Authenticatable
     }
     public function hasPermission($permission)
     {
-        $userPermission = Rule::find(auth()->user()->rule_id);
+        $userPermission = Rule::find(auth()->user()->rule_id);     
         // 1,2,3,4,5
-        foreach ($this->roles as $role) {
-            if ($role->hasPermission($permission)) {
-                return true;
-            }
+        $permission_ids = explode(',', $userPermission->permission_ids);
+        // dd($permission_ids);
+        // Fetch all permissions that the user has access to based on their role
+        $allPermissions = Permission::whereIn('id', $permission_ids)->where('name',$permission)->get();
+        // dd(count($allPermissions));
+        if(count($allPermissions) > 0)
+        {
+            return true;
         }
-        return false;
+        else{
+            return false;
+        }
+
+        
     }
 }

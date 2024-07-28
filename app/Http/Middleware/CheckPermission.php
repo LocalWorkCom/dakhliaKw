@@ -27,7 +27,7 @@ class CheckPermission
         $rule_permission = Rule::find($user->rule_id);
         // dd($rule_permission );
         if (!$rule_permission) {
-            abort(403, 'Unauthorized action.');
+            abort(403, 'لايسمح لك بالدخول الى هذه الصفحة');
         }
 
         $permission_ids = explode(',', $rule_permission->permission_ids);

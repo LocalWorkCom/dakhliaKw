@@ -304,21 +304,24 @@ class UserController extends Controller
         $grade = grade::all();
         $job = job::all();
         // dd($user->department_id);
-        if($user->flag == "user")
+        if($flag == "0")
         {
             $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
         }
         else
         {
-            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+            // $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+            $alldepartment = departements::all();
         }
+
+        $alluser = User::where('department_id',$user->department_id)->get();
         
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
         // $alldepartment = $user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
-        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade','job'));
+        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade','job','alluser'));
     }
 
     /**
@@ -326,17 +329,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+        dd($request);
         // validation
 
         if($request->type == "0")
         {
             $messages = [
+                'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+                'name.string' => 'الاسم  يجب أن يكون نصاً.',
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
                 'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
-
+                
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
                 'rule.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
@@ -352,8 +357,21 @@ class UserController extends Controller
                     'max:255',
                     ValidationRule::unique('users', 'military_number'),
                 ],
+                'Civil_number' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    ValidationRule::unique('users', 'Civil_number'),
+                ],
+                'file_number' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    ValidationRule::unique('users', 'file_number'),
+                ],
+                'name' => 'required|string',
                 'phone' => 'required|string',
-                'file_number' => 'required|string',
+                // 'file_number' => 'required|string',
                 'rule' => 'required',
                 'password' => 'required',
                 'department' => 'required',
@@ -362,28 +380,75 @@ class UserController extends Controller
         else
         {
             $messages = [
-                // 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
-                // 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
+                'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+                'name.string' => 'الاسم  يجب أن يكون نصاً.',
+                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
+                'Civil_number.unique' => 'رقم المدنى الذي أدخلته موجود بالفعل.',
+                'file_number.unique' => 'رقم الملف الذي أدخلته موجود بالفعل.',
+                
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
                 'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
+                'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
                 'department.required' => 'القسم  يجب أن يكون نصاً.',
                 // Add more custom messages here
             ];
-            
-            $validatedData = Validator::make($request->all(), [
-                // 'military_number' => [
-                //     'required',
-                //     'string',
-                //     'max:255',
-                //     ValidationRule::unique('users', 'military_number'),
-                // ],
-                'phone' => 'required|string',
-                'file_number' => 'required|string',
+
+            $rules = [
+                'phone' => [
+                    'required',
+                    'max:255',
+                    'max:6',
+                    ValidationRule::unique('users', 'phone'),
+                ],
+                'name' => 'required|string',
                 'department' => 'required',
-            ], $messages);
+                'Civil_number' => [
+                    ValidationRule::unique('users', 'Civil_number'),
+                ],
+                'file_number' => [
+                    ValidationRule::unique('users', 'file_number'),
+                ],
+                'military_number' => [         
+                    ValidationRule::unique('users', 'military_number'),
+                ],
+            ];
+            if($request->has('solder') && $request->solder =="on")
+            {
+                if ($request->has('military_number')) {
+                    $rules['military_number'] = [
+                        'required',
+                        'string',
+                        'max:255',
+                        ValidationRule::unique('users', 'military_number'),
+                    ];
+                }
+               
+            }
+            
+           
+            if ($request->has('Civil_number')) {
+                $rules['Civil_number'] = [
+                    'required',
+                    'string',
+                    'max:255',
+                    ValidationRule::unique('users', 'Civil_number'),
+                ];
+            }
+            if ($request->has('file_number')) {
+                $rules['file_number'] = [
+                    'required',
+                    'string',
+                    'max:255',
+                    ValidationRule::unique('users', 'file_number'),
+                ];
+            }
+          
+            
+            $validatedData = Validator::make($request->all(), $rules, $messages);
+
         }
         
     
@@ -448,7 +513,16 @@ class UserController extends Controller
         }
 
         $id = $request->type;
-
+        // if($user->flag == "user")
+        // {
+        //     $department = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        // }
+        // else
+        // {
+        //     $department = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        // }
+        // // $department = departements::all();
+        // $hisdepartment = $user->createdDepartments;
 
         // return response()->json($newUser);
         return view('user.view', compact('id'));

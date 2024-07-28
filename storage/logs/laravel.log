@@ -151,3 +151,7 @@
 #46 D:\\Projects\\v2\\dakhliaKw\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('D:\\\\Projects\\\\v2\\\\...')
 #47 {main}
 "} 
+[2024-07-28 12:44:42] local.ERROR: Cannot redeclare UploadFilesWithoutReal() (previously declared in E:\dalia\dakhliaKw\app\helper.php:138) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare UploadFilesWithoutReal() (previously declared in E:\\dalia\\dakhliaKw\\app\\helper.php:138) at E:\\dalia\\dakhliaKw\\app\\helper.php:138)
+[stacktrace]
+#0 {main}
+"} 
