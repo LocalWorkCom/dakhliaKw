@@ -44,19 +44,19 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::any('/logout', [UserController::class, 'logout'])->name('logout');
 Route::post('/verfication_code', [UserController::class, 'verfication_code'])->name('verfication_code');
 Route::post('/resend_code', [UserController::class, 'resend_code'])->name('resend_code');
+Route::any('/reset_password', [UserController::class, 'reset_password'])->name('reset_password');
 
 Route::get('/forget-password', function () {
     return view('forgetpassword');
 })->name('forget_password');
 
 Route::any('/forget_password2', [UserController::class, 'forget_password2'])->name('forget_password2');
-Route::any('/reset_password', [UserController::class, 'reset_password'])->name('reset_password');
+
 
 
 //  Auth verfication_code
 Route::middleware(['auth'])->group(function () {
-
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+    // Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index')->middleware('check.permission:view User');
     Route::get('api/users/{id}', [UserController::class, 'getUsers'])->name('api.users')->middleware('check.permission:view User');
     Route::get('/users_create/{id}', [UserController::class, 'create'])->name('user.create')->middleware('check.permission:create User');
@@ -226,7 +226,9 @@ Route::middleware(['auth'])->group(function () {
     
 });
 
-
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+});
 
 
 

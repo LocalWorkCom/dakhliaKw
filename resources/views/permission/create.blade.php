@@ -120,4 +120,23 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const checkbox = document.getElementById("myCheckbox");
+    const grade = document.getElementById("grade");
+
+    checkbox.addEventListener("change", function() {
+        if (checkbox.checked) {
+            grade.style.display = "block";
+        } else {
+            grade.style.display = "none";
+        }
+
+    });
+});
+</script>
+
+
 @endsection
