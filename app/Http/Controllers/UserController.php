@@ -276,8 +276,9 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
         Auth::login($user); // Log the user in
+        session()->flash('success', 'تم إعادة تعيين كلمة المرور بنجاح');
 
-        return redirect()->route('home')->with('success', 'تم إعادة تعيين كلمة المرور بنجاح');
+        return redirect()->route('home');
         // return redirect()->route('home')->with('user', auth()->user());
 
     }
@@ -704,7 +705,15 @@ class UserController extends Controller
         if ($user->flag == "user") {
             $user->rule_id = $request->rule_id;
             $user->department_id  = $request->department_id;
-            $user->password = Hash::make($request->password);
+            if (!Hash::check($request->password, $user->password)) {
+                $user->password = Hash::make($request->password);
+                $user->save();
+                Auth::logout();
+                session()->flash('success', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى. .');
+
+                return redirect('/login');
+                // with('status', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى.');
+            }
         }
         $user->save();
         // dd($user);

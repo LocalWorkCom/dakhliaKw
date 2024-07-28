@@ -72,17 +72,20 @@ li img{
      height: 30px; */
      margin-left: 15px;
 }
-
+.collapse ul{
+    padding-left: 90px;
+    padding-right: 90px;
+}
 li {
     /* width: 200px;
     margin-inline: 10px; */
 }
 .nav-item {
     display: inline-block;
-    padding: 1px 2px;
+    /* padding: 1px 2px; */
     cursor: pointer;
-    position: relative;
-    padding-inline: 80px;
+    /* /* position: relative; */
+    /* padding-inline: 80px; */ */
 }
 ul {
     list-style-type: none; /* Remove default list styles */
@@ -120,7 +123,7 @@ ul {
 }
 .second-section .btn-2 {
     font-family: Almarai;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     line-height: 22.32px;
     text-align: right;
@@ -930,7 +933,7 @@ padding-block: 5px;
 text-decoration: none !;
 }
 select.form-control:not([size]):not([multiple]) {
-    height: calc(2.25rem + 2px);
+    height: 45px;
     direction: rtl !important;
 }
 

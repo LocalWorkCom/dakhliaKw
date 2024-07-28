@@ -66,6 +66,8 @@
                                         processing: true,
                                         serverSide: true,
                                         ajax: '{{ url('api/users') }}/' + id, // Correct URL concatenation
+                                        bAutoWidth: false, 
+
                                         columns: [{
                                                 data: 'id',
                                                 name: 'id'

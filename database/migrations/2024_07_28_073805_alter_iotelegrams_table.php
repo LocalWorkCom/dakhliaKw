@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('outgoing_num');
             $table->string('outgoing_date');
             $table->string('iotelegram_num');
+            $table->integer('files_num');
             $table->string('user_id')->nullable();
 
         });
