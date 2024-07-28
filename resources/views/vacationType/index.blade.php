@@ -55,7 +55,7 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <h5 class="modal-title" id="lable"> أضافه نوع أجازه جديد</h5>
-                       
+
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
@@ -84,7 +84,7 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <h5 class="modal-title" id="lable"> تعديل اسم الأجازه ؟</h5>
-                     
+
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
@@ -195,6 +195,8 @@
 
         }
         $(document).ready(function() {
+            $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
+
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -210,7 +212,28 @@
                         searchable: false
                     }
                 ],
-
+                "oLanguage": {
+                    "sSearch": "بحث",
+                    "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                    "sInfoEmpty": 'لا توجد بيانات متاحه',
+                    "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                    "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                    "sZeroRecords": 'نأسف لا توجد نتيجة',
+                    "oPaginate": {
+                        "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
+                        "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
+                        "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
+                        "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
+                    }
+                },
+                layout: {
+                    bottomEnd: {
+                        paging: {
+                            firstLast: false
+                        }
+                    }
+                },
+                "pagingType": "full_numbers"
 
             });
 

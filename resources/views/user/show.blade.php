@@ -60,7 +60,7 @@
 <!-- toqa-table-show -->
 
 
-    <div class="form-row mx-3 mb-3">
+    <div class="form-row mx-3 mb-3 pt-5 pt-5">
 
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
@@ -71,85 +71,94 @@
                         </tr>
 
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;"> البريد الالكترونى</th>
-                            <td style="background: #f5f6fa;">{{ $user->email }} </td>
+                            <th scope="row" > البريد الالكترونى</th>
+                            <td >{{ $user->email }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;"> رقم المحمول </th>
-                            <td style="background: #f5f6fa;">
+                            <th scope="row" > رقم المحمول </th>
+                            <td >
                                 {{ $user->phone }}
                              </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">  الوصف </th>
-                            <td style="background: #f5f6fa;"> {{ $user->description }} </td>
+                            <th scope="row" >  الوصف </th>
+                            <td > {{ $user->description }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;"> رقم العسكري</th>
-                            <td style="background: #f5f6fa;"> {{ $user->military_number }} </td>
+                            <th scope="row" > رقم العسكري</th>
+                            <td > {{ $user->military_number }} </td>
                         </tr>
                       
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">الوظيفة</th>
+                            <th scope="row" >الوظيفة</th>
                                         @foreach ($job as $item)
-                                            <option value="{{ $item->id }}" {{ $user->job == $item->id ? 'selected' : '' }}>
+                                        @if($user->job == $item->id)
+                                           <td >
                                                 {{ $item->name }}
-                                            </option>
+                                            
+                                          </td>
+                                          @endif
                                         @endforeach
-                            </td>
+
                         </tr>
                         
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">   المسمي الوظيفي </th>
-                            <td style="background: #f5f6fa;"> {{ $user->job_title }} </td>
+                            <th scope="row" >   المسمي الوظيفي </th>
+                            <td > {{ $user->job_title }} </td>
                         </tr>
 
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">   الجنسيه  </th>
-                            <td style="background: #f5f6fa;"> {{ $user->nationality }} </td>
+                            <th scope="row" >   الجنسيه  </th>
+                            <td > {{ $user->nationality }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    الرقم المدني </th>
-                            <td style="background: #f5f6fa;"> {{ $user->Civil_number }} </td>
+                            <th scope="row" >    الرقم المدني </th>
+                            <td > {{ $user->Civil_number }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    المؤهل  </th>
-                            <td style="background: #f5f6fa;"> {{ $user->qualification }} </td>
+                            <th scope="row" >    المؤهل  </th>
+                            <td > {{ $user->qualification }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    تاريخ الميلاد  </th>
-                            <td style="background: #f5f6fa;"> {{ $user->date_of_birth }} </td>
+                            <th scope="row" >    تاريخ الميلاد  </th>
+                            <td > {{ $user->date_of_birth }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    تاريخ الالتحاق  </th>
-                            <td style="background: #f5f6fa;"> {{ $user->joining_date }} </td>
+                            <th scope="row" >    تاريخ الالتحاق  </th>
+                            <td > {{ $user->joining_date }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    مدة الخدمه  </th>
-                            <td style="background: #f5f6fa;"> {{ $end_of_service }} </td>
+                            <th scope="row" >    مدة الخدمه  </th>
+                            <td > {{ $end_of_service }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    الرتبه  </th>
+                            <th scope="row" >    الرتبه  </th>
                                 @foreach ($grade as $item)
-                                    <option value="{{ $item->id }}"> 
-                                        <td style="background: #f5f6fa;"> {{ $item->name }}</td>
-                                    </option>
+                                    <!--<option value="{{ $item->id }}"> -->
+                                    <!--    <td > {{ $item->name }}</td>-->
+                                    <!--</option>-->
+                                    
+                                    @if($user->	grade_id == $item->id)
+                                           <td >
+                                                {{ $item->name }}
+                                          </td>
+                                    @endif
                                 @endforeach
                         </tr>
                         
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    رقم الملف </th>
-                            <td style="background: #f5f6fa;"> {{ $user->file_number }} </td>
+                            <th scope="row" >    رقم الملف </th>
+                            <td > {{ $user->file_number }} </td>
                         </tr>
 
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    الباسورد  </th>
-                            <td style="background: #f5f6fa;" type="password" name="password" id="password" > {{ $user->password }} </td>
+                            <th scope="row" >    الباسورد  </th>
+                            <td  type="password" name="password" id="password" > {{ $user->password }} </td>
                         </tr>
                         
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">المهام</th>
-                            <td style="background: #f5f6fa;">
+                            <th scope="row" >المهام</th>
+                            <td >
                                 <select id="input7" name="rule_id" class="form-control" placeholder="المهام" disabled>
                                     @foreach ($rule as $item)
                                         <option value="{{ $item->id }}"
@@ -162,21 +171,21 @@
                         </tr>
                         
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    يصنف المستخدم ك   </th>
+                            <th scope="row" >    يصنف المستخدم ك   </th>
                             
                             @if ($user->flag == 'user')
-                                <td style="background: #f5f6fa;"> مستخدم </td>
+                                <td > مستخدم </td>
                             @else
-                                <td style="background: #f5f6fa;"> موظف </td>
+                                <td > موظف </td>
                             @endif
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    الاقدامية  </th>
-                            <td style="background: #f5f6fa;"> {{ $user->seniority }} </td>
+                            <th scope="row" >    الاقدامية  </th>
+                            <td > {{ $user->seniority }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">الإدارة العامة</th>
-                            <td style="background: #f5f6fa;">
+                            <th scope="row" >الإدارة العامة</th>
+                            <td >
                                     <select id="input15" name="public_administration" class="form-control" placeholder="الإدارة العامة" disabled>
                                         @foreach ($department as $item)
                                             <option value="{{ $item->id }}"
@@ -189,13 +198,13 @@
                         </tr>
                          
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">    موقع العمل  </th>
-                            <td style="background: #f5f6fa;"> {{ $user->work_location }} </td>
+                            <th scope="row" >    موقع العمل  </th>
+                            <td > {{ $user->work_location }} </td>
                         </tr>
 
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">الصوره</th>
-                            <td style="background: #f5f6fa;">
+                            <th scope="row" >الصوره</th>
+                            <td >
                                 <div class="row">
                                     <div class="col-md-11 mb-3 px-5 mt-2">
                                         <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
@@ -210,8 +219,8 @@
 
                         
                         {{-- <tr>
-                            <th scope="row" style="background: #f5f6fa;">    الصوره  </th>
-                            <td style="background: #f5f6fa;">
+                            <th scope="row" >    الصوره  </th>
+                            <td >
                                 <div class="row">
                                     <div class="col-md-11 mb-3 px-5 mt-2">
                                         <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"

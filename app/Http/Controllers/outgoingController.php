@@ -73,7 +73,7 @@ class outgoingController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '
-                   <a class="btn btn-primary btn-sm"  style="background-color: #375A97;" href=' . route('Export.show', $row->id) . '"> <i class="fa fa-eye"></i></a>' ;
+                   <a class="btn btn-primary btn-sm"  style="background-color: #375A97;" href=' . route('Export.show', $row->id) . '> <i class="fa fa-eye"></i></a>' ;
         })
         ->addColumn('person_to_username', function ($row) {
             return $row->personTo->name ?? 'لايوجد شخص صادر له'; // Assuming 'name' is the column in external_users
@@ -166,7 +166,7 @@ class outgoingController extends Controller
             'person_to' => 'nullable|exists:export_users,id',
             'date' => 'required|date',
             'department_id' => 'nullable|exists:external_departements,id',
-            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+          //  'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
 
         // // Define custom messages
@@ -177,7 +177,7 @@ class outgoingController extends Controller
             'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
             'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
-            'files.*.file' => 'عفو يوجد مشكله فرفع هذاالملف',
+           // 'files.*.file' => 'عفو يوجد مشكله فرفع هذاالملف',
 
         ];
         $validatedData = Validator::make($request->all(), $rules, $messages);
@@ -204,7 +204,7 @@ class outgoingController extends Controller
 
         if( $request->hasFile('files') ){
 
-            if (function_exists('UploadFiles')) {
+          //  if (function_exists('UploadFiles')) {
                  //  dd('file yes');
                 foreach ($request->file('files') as $file) {
                     $files=new outgoing_files();
@@ -217,7 +217,7 @@ class outgoingController extends Controller
                     $file_model = outgoing_files::find($files->id);
 
                     UploadFiles('files/export','file_name',  'real_name',$file_model, $file);
-                }
+                //}
             }
         }
 
@@ -260,6 +260,7 @@ class outgoingController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //dd($request->all());
 
         // Define validation rules
         $rules = [
@@ -267,7 +268,7 @@ class outgoingController extends Controller
             'num' => 'required|integer',
             'note' => 'nullable|string',
             'person_to' => 'nullable|exists:export_users,id',
-            'department_id' => 'nullable|exists:external_departements,id',
+            'from_departement' => 'nullable|exists:external_departements,id',
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
 
@@ -303,7 +304,7 @@ class outgoingController extends Controller
         $export->created_by = $user->id;//auth auth()->id
         $export->active = $request->active ? $request->active : $export->active;
         $export->updated_by = $user->id;//auth auth()->id
-        $export->department_id = $request->department_id;
+        $export->department_id = $request->from_departement;
         $export->created_department =  $user->department_id;
 
         $export->save();

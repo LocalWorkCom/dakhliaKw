@@ -79,7 +79,7 @@
                 </div>
                 <form id="delete-form" action="{{ route('export.archive.add') }}" method="POST">
                     @csrf
-                    <div class="modal-body  d-flex justify-content-center">
+                    <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                         <h5 class="modal-title " id="deleteModalLabel"> هل تريد أضافه هذا الصادر الى الارشيف ؟</h5>
 
 
@@ -124,6 +124,7 @@
 
         }
         $(document).ready(function() {
+            $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
 
             $('#users-table').DataTable({
                 processing: true,
@@ -160,6 +161,28 @@
                         searchable: false
                     }
                 ],
+                "oLanguage": {
+                    "sSearch": "بحث",
+                    "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                    "sInfoEmpty": 'لا توجد بيانات متاحه',
+                    "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                    "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                    "sZeroRecords": 'نأسف لا توجد نتيجة',
+                    "oPaginate": {
+                        "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
+                        "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
+                        "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
+                        "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
+                    }
+                },
+                layout: {
+                    bottomEnd: {
+                        paging: {
+                            firstLast: false
+                        }
+                    }
+                },
+                "pagingType": "full_numbers"
 
             });
 

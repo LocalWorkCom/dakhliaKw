@@ -51,7 +51,6 @@ class IoTelegramController extends Controller
             ->where('active', 1)
             ->orderBy('created_at', 'desc')
             ->get();
-
         foreach ($IoTelegrams as  $IoTelegram) {
             $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
                 $IoTelegram->internal_department->name :
