@@ -24,30 +24,62 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
             <!-- <div class="row justify-content-center" dir="rtl">
-                            <div class="form-group mt-4  mx-5 col-10 d-flex ">
-                                <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
-                                    data-bs-target="#extern-user" style="color: #0D992C;">
-                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    اضافة شخص خارجى
-                                </button>
+                                    <div class="form-group mt-4  mx-5 col-10 d-flex ">
+                                        <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
+                                            data-bs-target="#extern-user" style="color: #0D992C;">
+                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                            اضافة شخص خارجى
+                                        </button>
 
-                                <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
-                                    data-bs-target="#extern-department" style="color: #0D992C;">
-                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    اضافة أداره خارجيه
-                                </button>
-                            </div>
-                        </div> -->
+                                        <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
+                                            data-bs-target="#extern-department" style="color: #0D992C;">
+                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                            اضافة أداره خارجيه
+                                        </button>
+                                    </div>
+                                </div> -->
             <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
                 @include('inc.flash')
                 <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-row mx-3 d-flex justify-content-center">
+
+                        <div class="form-group col-md-10 mx-2">
+                            <label for="exportnum">رقم الصادر</label>
+                            <input type="text" class="form-control" name="num" id="exportnum" disabled>
+                        </div>
+
+                    </div>
+                    <div class="form-row mx-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-2">
-                            <label for="nameex">العنوان</label>
-                            <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
-                                required>
+                            <label for="date">تاريخ الصادر </label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="active">الحاله</label>
+                            <select id="active" class="form-control" name="active" disabled>
+                                <option value="0" selected>جديد</option>
+                                <option value="1"> أرشيف</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row mx-3 d-flex justify-content-center">
+
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="from_departement">القطاع </label>
+                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                                id="extern-department-dev" data-bs-target="#extern-department">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                            <select id="from_departement" name="from_departement" class="form-control">
+                                <option value="">اختر القطاع</option>
+                                @foreach ($departments as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group col-md-5 mx-2 ">
                             <label for="select-person-to">الموظف المستلم </label>
@@ -62,38 +94,10 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="date">تاريخ الصادر </label>
-                            <input type="date" id="date" name="date" class="form-control" required>
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="exportnum">رقم الصادر</label>
-                            <input type="text" class="form-control" name="num" id="exportnum" required>
-                        </div>
-
-                    </div>
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="active">الحاله</label>
-                            <select id="active" class="form-control" name="active" disabled>
-                                <option value="0" selected>جديد</option>
-                                <option value="1"> أرشيف</option>
-
-                            </select>
-                        </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="from_departement">الجهة المرسلة</label>
-                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
-                                id="extern-department-dev" data-bs-target="#extern-department">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                            <select id="from_departement" name="from_departement" class="form-control">
-                                <option value="">اختر الجهة</option>
-                                @foreach ($departments as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
+                    <div class="form-row mx-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10">
+                            <label for="nameex">العنوان </label>
+                            <textarea class="form-control" name="nameex" id="nameex" rows="3"> </textarea>
                         </div>
                     </div>
                     <div class="form-row mx-2 d-flex justify-content-center">
@@ -102,7 +106,6 @@
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"> </textarea>
                         </div>
                     </div>
-
                     <div class="form-row mx-2 d-flex justify-content-center">
                         <div class="form-group  col-md-10 ">
                             <label for="files"> اضف ملفات بحد اقصي 10 </label>
@@ -127,11 +130,11 @@
                         <div class="form-group d-flex justify-content-start col-md-10 ">
                             <button type="button" class="btn-all  mx-3" data-bs-toggle="modal" id="extern-user-dev"
                                 data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف 
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف
                             </button>
                             <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
                                 data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة  الجهه
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة الجهه
 
                             </button>
                         </div>
@@ -236,7 +239,7 @@
 
                         </div>
                         <div class="form-group">
-                            <label for="Civil_number">رقم الهويه</label>
+                            <label for="Civil_number">رقم المدنى</label>
                             <input type="text" id="Civil_number" name="Civil_number" class="form-control" required>
                             <span class="text-danger span-error" id="Civil_number-error" dir="rtl"></span>
 
@@ -333,6 +336,35 @@
                         }
                     });
                 });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: '/getLatest',
+                    type: 'GET',
+                    success: function(response) {
+                        $.ajax({
+                            url: '/generateNumber/'+response.counter,
+                            type: 'GET',
+                            success: function(response) {
+                                // Display the formatted number in the #result div
+                                console.log('Formatted Number:', response.formattedNumber);
+                                let input = document.getElementById('exportnum');
+                                input.value = response.formattedNumber;
+                                // $('#exportnum').text('Formatted Number: ' + response.formattedNumber);
+                            },
+                            error: function(xhr) {
+                                console.log('An error occurred:', xhr);
+                            }
+                        });
+                    },
+                    error: function(xhr) {
+                        console.log('An error occurred:', xhr);
+                    }
+                });
+
             });
         </script>
     @endpush
