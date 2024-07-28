@@ -28,7 +28,7 @@
             <form action="{{ route('vacation.store', $id) }}" method="POST" enctype="multipart/form-data">
                 <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
                     @csrf
-                    <div class="form-row mx-3 mt-4 d-flex justify-content-center">
+                    <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
 
                         <div class="form-group col-md-10" id="name_dev" hidden>
 
@@ -36,8 +36,8 @@
                             <input type="text" id="name" name="name" class="form-control">
                         </div>
                     </div>
-                    <div class="form-row mx-3 mt-4 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2 ">
+                    <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2 ">
                             <label for="vacation_type_id">نوع الاجازة</label>
                             <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
                                 <option value="">اختر النوع</option>
@@ -46,7 +46,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="employee_id">اسم الموظف</label>
 
 
@@ -61,8 +61,8 @@
                         </div>
                     </div>
 
-                    <div class="form-row mx-3 mt-4 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
+                    <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-md-2">
                             <label for="date_to">تاريخ النهاية</label>
                             <input type="date" id="date_to" name="date_to" class="form-control">
                         </div>
@@ -72,7 +72,7 @@
                         </div>
                     </div>
 
-                    <div class="form-row mx-2 mt-4 d-flex justify-content-center">
+                    <div class="form-row mx-md-2 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-10" id="reportImage-div" hidden>
                             <label for="reportImage">اضافة ملف</label>
                             <div id="reportImage">

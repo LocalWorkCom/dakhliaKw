@@ -4,7 +4,7 @@
 @section('title')
 تفاصيل الصلاحيات
 @endsection
-<section>\
+<section>
 
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
@@ -45,7 +45,7 @@
                 {{-- <form action="" method="POST">
                     @csrf --}}
                 <div class="container col-11 mt-5 p-5 mb-5 " style="border:0.5px solid #C7C7CC;">
-                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group  col-md-10 ">
                             <label for="input1"> الصلاحية</label>
                             <select class="custom-select custom-select-lg mb-3" name="name" disabled>

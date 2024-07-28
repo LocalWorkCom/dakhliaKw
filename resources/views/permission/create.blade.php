@@ -15,7 +15,12 @@
 
     </nav>
 </div>
-
+<div class="row ">
+        <div class="container welcome col-11">
+            <p> الصـــلاحيات </p>
+        </div>
+    </div>
+    <br>
 
 <div class="row">
     <div class="container col-11 mt-3 p-0 ">
@@ -36,15 +41,15 @@
         </div>
         @endif
 
-        <div class="p-5">
+        <div class="">
 
             <form action="{{ route('permission.store') }}" method="post" class="text-right">
                 @csrf
 
-                <div class="container col-10 mt-4 p-5" style="border:0.5px solid #C7C7CC;">
-                  
+                <div class="container col-10 mt-4 p-4" style="border:0.5px solid #C7C7CC;">
 
-                        <div class="form-row mx-2 d-flex justify-content-center">
+
+                        <div class="form-row mx-md-2 d-flex justify-content-center">
                             <div class="form-group  col-md-10 ">
                                 <label for="filenum">الصلاحية</label>
                                 <select class="custom-select custom-select-lg mb-3" name="name" id="name">
@@ -61,7 +66,7 @@
                         </div>
 
 
-                        <div class="form-row mx-2 d-flex justify-content-center">
+                        <div class="form-row mx-md-2 d-flex justify-content-center">
                             <div class="form-group  col-md-10 ">
                                 <label for="model">القسم</label>
                                 <select class="custom-select custom-select-lg mb-3 " name="model" id="model">

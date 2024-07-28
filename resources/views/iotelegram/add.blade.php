@@ -36,13 +36,13 @@
                 </div>
 
                 <div class="container col-10 mt-4 pb-3" style="border:0.5px solid #C7C7CC;">
-                    <div class="form-row mx-3 d-flex justify-content-center mt-5">
+                    <div class="form-row mx-md-3 d-flex justify-content-center mt-5">
 
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="date">التاريخ</label>
                             <input type="date" id="date" name="date" class="form-control" required>
                         </div>
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="recieved_by">الموظف المستلم</label>
                             <select id="recieved_by" name="recieved_by" class="form-control" required>
                                 <option value="">اختر الموظف</option>
@@ -54,8 +54,8 @@
                     </div>
 
 
-                    <div class="form-row pt-2 mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2 ">
+                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2 ">
                             <label for="representive_id">اختر المندوب </label>
                             <select id="representive_id" name="representive_id" class="form-control" required>
                                 <option value="">اختر المندوب</option>
@@ -64,7 +64,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="from_departement">الجهة المرسلة</label>
 
                             <select id="from_departement" name="from_departement" class="form-control" required>
@@ -78,7 +78,7 @@
                     </div>
 
 
-                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group  col-md-10 ">
                             <label for="files"> اضف ملفات بحد اقصي 10 </label>
                         </div>
@@ -87,7 +87,7 @@
                                 <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control"
                                     accept="image/jpeg, image/png, application/pdf">
 
-                                <button class="btn-all mx-1" onclick="uploadFiles()" style="color:green;" type="button">
+                                <button class="btn-all mx-md-1" onclick="uploadFiles()" style="color:green;" type="button">
                                     اضف </button>
 
                                 <div class="space-uploading">
@@ -105,7 +105,7 @@
                                 style="background-color: #FAFBFD; border: none; display: none;">
                                 <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة جهه جديده
                             </button>
-                            <button type="button" class="btn-all  mx-3" data-bs-toggle="modal"
+                            <button type="button" class="btn-all  mx-md-3" data-bs-toggle="modal"
                                 data-bs-target="#representative" data-dismiss="modal" id="representative-dev"
                                 style="background-color: #FAFBFD; border: none;">
                                 <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
