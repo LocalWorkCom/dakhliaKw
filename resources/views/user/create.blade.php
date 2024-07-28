@@ -105,6 +105,16 @@
                             </div>
                         </div>
                         <div class="form-group col-md-5 mx-2">
+                            <label for="input44">عسكرى | مدنى</label>
+                            <div class="form-group col-md-10">
+                                <input type="radio" class="form-check-input" id="solder" name="solderORcivil" value="solder" style="height:20px; width:20px;">
+                                <label class="form-check-label mx-2" for="solder">عسكرى</label>
+                                
+                                <input type="radio" class="form-check-input" id="civil" name="solderORcivil" value="civil" style="height:20px; width:20px;">
+                                <label class="form-check-label mx-2" for="civil">مدنى</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-5 mx-2">
                             <label for="input44">العنوان 1</label>
                             <input type="text" id="input44" name="address_1" class="form-control"
                                 placeholder="  العنوان">
@@ -121,7 +131,7 @@
                         </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="input44"> المنطقة</label>
-                            <input type="text" id="input44" name="area" class="form-control"
+                            <input type="text" id="input44" name="region" class="form-control"
                                 placeholder="  المنطقة">
                         </div>
                         <div class="form-group col-md-5 mx-2">
@@ -134,6 +144,11 @@
                             <label for="input6">رقم العسكرى</label>
                             <input type="text" id="input6" name="military_number" class="form-control"
                                 placeholder="رقم العسكرى">
+                        </div>
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="input66">قطاع </label>
+                            <input type="text" id="input66" name="sector" class="form-control"
+                                placeholder="قطاع ">
                         </div>
                     </div>
 
@@ -259,7 +274,7 @@
             <div class="form-row mx-2 mx-3 d-flex justify-content-center flex-row-reverse">
                 <div class="form-group col-md-5 mx-2">
                     <label for="input22">مدة الخدمة</label>
-                    <input type="date" id="input22" name="end_of_service" class="form-control"
+                    <input type="number" id="input22" name="end_of_service" class="form-control"
                         placeholder="مدة الخدمة ">
                 </div>
 
@@ -267,7 +282,8 @@
                     <label for="input24"> الرتبة</label>
                     <select id="input24" name="grade_id" class="form-control" placeholder="الرتبة">
                         @foreach ($grade as $item)
-                            <option value="{{ $item->id }}"> {{ $item->name }}</option>
+
+                            <option value="{{ $item->id }}" {{ $item->name == "عسكرى" ? 'selected':'' }}> {{ $item->name }}</option>
                         @endforeach
                     </select>
                 </div>

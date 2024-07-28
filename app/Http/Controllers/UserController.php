@@ -385,13 +385,12 @@ class UserController extends Controller
                 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
                 'Civil_number.unique' => 'رقم المدنى الذي أدخلته موجود بالفعل.',
                 'file_number.unique' => 'رقم الملف الذي أدخلته موجود بالفعل.',
-                
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
+                'phone.unique' => 'رقم الهاتف الذي أدخلته موجود بالفعل.',
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
-                'department.required' => 'القسم  يجب أن يكون نصاً.',
+                'department_id.required' => 'القسم  يجب أن يكون نصاً.',
                 // Add more custom messages here
             ];
 
@@ -403,7 +402,7 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'phone'),
                 ],
                 'name' => 'required|string',
-                'department' => 'required',
+                'department_id' => 'required',
                 'Civil_number' => [
                     ValidationRule::unique('users', 'Civil_number'),
                 ],
@@ -414,7 +413,7 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'military_number'),
                 ],
             ];
-            if($request->has('solder') && $request->solder =="on")
+            if($request->has('solderORcivil') && $request->solderORcivil =="solder")
             {
                 if ($request->has('military_number')) {
                     $rules['military_number'] = [
@@ -457,13 +456,6 @@ class UserController extends Controller
         }
 
 
-        // $validatedData = $request->validate([
-        //     'military_number' => 'required|string|unique:users|max:255',
-        //     'phone' => 'required|max:255',
-        //     // 'password' => 'required|string|min:8|confirmed',
-        //     // 'country_code' =>'required',
-        // ]);
-
         if ($request->type == "0") {
             $newUser = new User();
             $newUser->military_number = $request->military_number;
@@ -481,26 +473,39 @@ class UserController extends Controller
             $newUser->password = Hash::make($request->password);
             $newUser->save();
         } else {
+
+
             $newUser = new User();
+            $newUser->name = $request->name;
+            $newUser->email = $request->email;
+            $newUser->type = $request->gender;
+            $newUser->address1 = $request->address_1;
+            $newUser->address2 = $request->address_2;
+            $newUser->Provinces = $request->Provinces;
+            $newUser->sector = $request->sector;
+            $newUser->region = $request->region;
             $newUser->military_number = $request->military_number;
             $newUser->phone = $request->phone;
-            $newUser->country_code = "+20";
-            $newUser->name = $request->name;
+            $newUser->job_title = $request->job_title;
+            $newUser->nationality = $request->nationality;
+            $newUser->Civil_number = $request->Civil_number;
+            $newUser->seniority = $request->seniority;
+            $newUser->department_id = $request->department_id;
+            $newUser->work_location = $request->work_location;
+            $newUser->qualification = $request->qualification;
+            $newUser->date_of_birth = $request->date_of_birth;
+            $newUser->joining_date = $request->joining_date;
+            $newUser->length_of_service = $request->end_of_service;
+            $newUser->description = $request->description;    
             $newUser->file_number = $request->file_number;
+            // 
+            $newUser->employee_type = $request->solderORcivil;
             $newUser->flag = "employee";
-            if ($request->has('solder') && $request->solder == "on") {
-                $newUser->grade_id = $request->grade_id;
-            }
+            $newUser->grade_id = $request->grade_id;
             if($request->has('job'))
             {
                 $newUser->job_id = $request->job;
             }
-            // $newUser->password = NUll;
-            $newUser->description = $request->description;
-            // $newUser->job = $request->job;
-            $newUser->date_of_birth = $request->date_of_birth;
-            $newUser->public_administration = $request->department;
-            // $newUser->department_id  = $request->department;
             $newUser->save();
             
             if ($request->hasFile('image')) {
