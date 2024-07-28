@@ -234,7 +234,7 @@ class IoTelegramController extends Controller
         if ($validatedData->fails()) {
             return response()->json(['success' => false, 'message' => $validatedData->errors()]);
         }
- 
+
 
         $Postman = new Postman();
         $Postman->name = $request->name;
