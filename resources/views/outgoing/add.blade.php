@@ -43,13 +43,13 @@
                 <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="nameex">العنوان</label>
                             <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
                                 required>
                         </div>
-                        <div class="form-group col-md-5 mx-2 ">
+                        <div class="form-group col-md-5 mx-md-2 ">
                             <label for="select-person-to">الموظف المستلم </label>
                             <select id="select-person-to" name="person_to" class="form-control js-example-basic-single">
                                 <option value="" disabled selected> اختر من القائمه</option>
@@ -62,19 +62,19 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="date">تاريخ الصادر </label>
                             <input type="date" id="date" name="date" class="form-control" required>
                         </div>
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="exportnum">رقم الصادر</label>
                             <input type="text" class="form-control" name="num" id="exportnum" required>
                         </div>
 
                     </div>
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="active">الحاله</label>
                             <select id="active" class="form-control" name="active" disabled>
                                 <option value="0" selected>جديد</option>
@@ -82,7 +82,7 @@
 
                             </select>
                         </div>
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="from_departement">الجهة المرسلة</label>
                             <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
                                 id="extern-department-dev" data-bs-target="#extern-department">
@@ -96,14 +96,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group col-md-10">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"> </textarea>
                         </div>
                     </div>
 
-                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group  col-md-10 ">
                             <label for="files"> اضف ملفات بحد اقصي 10 </label>
                         </div>
@@ -125,9 +125,9 @@
                     </div>
                     <div class="form-row d-flex  justify-content-center" dir="rtl">
                         <div class="form-group d-flex justify-content-start col-md-10 ">
-                            <button type="button" class="btn-all  mx-3" data-bs-toggle="modal" id="extern-user-dev"
+                            <button type="button" class="btn-all  mx-md-3" data-bs-toggle="modal" id="extern-user-dev"
                                 data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف 
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف
                             </button>
                             <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
                                 data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
