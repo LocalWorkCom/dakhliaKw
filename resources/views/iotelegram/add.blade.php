@@ -36,37 +36,13 @@
                 </div>
 
                 <div class="container col-10 mt-4 pb-3" style="border:0.5px solid #C7C7CC;">
-                    <div class="form-row mx-3 d-flex justify-content-center mt-5">
+                    <div class="form-row mx-md-3 d-flex justify-content-center mt-5">
 
                         <div class="form-group col-md-5 mx-md-2">
-                            <label for="outgoing_date">تاريخ الصادر</label>
-                            <input type="date" id="outgoing_date" name="outgoing_date" class="form-control" required>
-                        </div>
-                        <div class="form-group col-md-5 mx-md-2">
-                            <label for="outgoing_num">رقم الصادر</label>
-                            <input type="text" id="outgoing_num" name="outgoing_num" class="form-control" disabled
-                                value="{{ $outgoing_num }}">
-                        </div>
-                    </div>
-                    <div class="form-row mx-md-3 d-flex justify-content-center mt-5">
-                        <div class="form-group col-md-5 mx-md-2">
-                            <label for="date">تاريخ الوارد</label>
+                            <label for="date">التاريخ</label>
                             <input type="date" id="date" name="date" class="form-control" required>
                         </div>
-
                         <div class="form-group col-md-5 mx-md-2">
-                            <label for="iotelegram_num">رقم الوارد</label>
-                            <input type="number" id="iotelegram_num" name="iotelegram_num" class="form-control" required
-                                disabled value="{{ $max_num }}">
-                        </div>
-                    </div>
-
-
-                    {{-- check attach by employee or no --}}
-
-                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
-
-                        <div class="form-group col-md-10 mx-md-2">
                             <label for="recieved_by">الموظف المستلم</label>
                             <select id="recieved_by" name="recieved_by" class="form-control" required>
                                 <option value="">اختر الموظف</option>
@@ -76,10 +52,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-md-2 " dir="rtl">
-                            <div class="d-flex justify-content-between">
 
+
+                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2 ">
+                            <div class="d-flex justify-content-between">
                                 <label for="representive_id">اختر المندوب </label>
                                 <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
                                     data-bs-toggle="modal" data-bs-target="#representative" data-dismiss="modal"
@@ -93,15 +70,14 @@
                             </select>
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
-                            <div class="d-flex justify-content-between" dir="rtl">
-
-                                <label for="from_departement">القطاع </label>
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
+                            <div class="d-flex justify-content-between">
+                                <label for="from_departement">الجهة المرسلة</label>
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 "
                                     data-bs-toggle="modal" id="extern-department-dev" data-bs-target="#extern-department"
                                     data-dismiss="modal">
                             </div>
                             <select id="from_departement" name="from_departement" class="form-control" required>
-                                <option value="">اختر القطاع</option>
+                                <option value="">اختر الجهة</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
@@ -109,16 +85,41 @@
                         </div>
 
                     </div>
-                    
-                    <div class="form-row pt-2 pb-2 mx-md-2 d-flex justify-content-center">
+                    <!--***************** new ************** -->
+                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="">رقم الصادر</label>
+                            <input type="text" id="" name="" class="form-control" required>
+                        </div>
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="date">تاريخ الصادر</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+
+                    </div>
+
+                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="">عدد الكتب</label>
+                            <input type="text" id="" name="" class="form-control" required>
+                        </div>
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="date"> رقم الوارد</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+
+                    </div>
+
+                    <div class="form-row  mx-md-2 d-flex justify-content-center">
                         <div class="form-group d-flex col-md-10 mx-md-2" dir="rtl">
                             <input type="checkbox" id="toggleCheckbox">
                             <label for="toggleCheckbox">هل الوارد خاص بموظف ؟</label>
                         </div>
                     </div>
+
                     <div class="form-row  mx-md-2 d-flex justify-content-center">
                         <div class="form-group col-md-10 mx-md-2  hidden" id="identityGroup">
-                            <label class="pb-2" for="identityInput">رقم الهوية أو العسكري</label>
+                            <label for="identityInput">رقم الهوية أو العسكري</label>
                             <select id="active" class="form-control" name="active">
                                 <option value="0" selected>ddd</option>
                                 <option value="1"> dddd</option>
@@ -126,33 +127,19 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
-                        <div class="form-group  col-md-10 ">
-                            <label for="files_num"> عدد الكتب</label>
 
-                            <select id="files_num" name="files_num" class="form-control" required>
-                                <option value="">اختر العدد</option>
+                    <!-- ******* end of neeeeeew ******** -->
 
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10">
+                            <label for="files">اضف ملفات بحد اقصي 10</label>
                         </div>
-                    </div>
-
-                    <div class="form-row mx-2 d-flex justify-content-center">
-                        <div class="form-group  col-md-10 ">
-                            <label for="files"> اضف ملفات بحد اقصي 10 </label>
-                        </div>
-                        <div class="form-group col-md-10 " dir="rtl">
-                            <div class=" fileupload d-inline">
-                                <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control"
-                                    accept="image/jpeg, image/png, application/pdf">
-
-                                <button class="btn-all mx-md-1" onclick="uploadFiles()" style="color:green;"
-                                    type="button">
-                                    اضف </button>
-
+                        <div class="form-group col-md-10" dir="rtl">
+                            <div class="fileupload d-inline">
+                                <div class="d-flex">
+                                    <input id="fileInput" type="file" name="files[]" multiple
+                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg">
+                                </div>
                                 <div class="space-uploading">
                                     <ul id="fileList" class="d-flex flex-wrap">
                                         <!-- Uploaded files will be listed here -->
@@ -161,21 +148,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-row d-flex  justify-content-center" dir="rtl">
-                        <div class="form-group d-flex justify-content-start col-md-10 ">
-                            <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
-                                data-bs-target="#extern-department" data-dismiss="modal"
-                                style="background-color: #FAFBFD; border: none; display: none;">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة جهه جديده
-                            </button>
-                            <button type="button" class="btn-all  mx-3" data-bs-toggle="modal"
-                                data-bs-target="#representative" data-dismiss="modal" id="representative-dev"
-                                style="background-color: #FAFBFD; border: none;">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
-                            </button>
 
-                        </div>
-                    </div> <br>
+                    <!-- <div class="form-row d-flex  justify-content-center" dir="rtl">
+                            <div class="form-group d-flex justify-content-start col-md-10 ">
+                                <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
+                                    data-bs-target="#extern-department" data-dismiss="modal"
+                                    style="background-color: #FAFBFD; border: none; display: none;">
+                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة جهه جديده
+                                </button> -->
+                    <!-- <button type="button" class="btn-all  mx-md-3" data-bs-toggle="modal"
+                                    data-bs-target="#representative" data-dismiss="modal" id="representative-dev"
+                                    style="background-color: #FAFBFD; border: none;">
+                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
+                                </button> -->
+
+                    <!-- </div>
+                        </div> <br> -->
 
                 </div>
                 <div class="container col-10 ">
@@ -186,6 +174,7 @@
             </form>
         </div>
     </div>
+
 
 
     <!-- Modal -->
@@ -218,27 +207,75 @@
                         <div class="form-group">
                             <label for="name">الاسم</label>
                             <input type="text" id="name" name="name" class="form-control" required>
+                            <span class="text-danger span-error" id="name-error"></span>
+
                         </div>
                         <div class="form-group">
                             <label for="national_id">رقم الهوية</label>
                             <input type="text" id="national_id" name="national_id" class="form-control"required>
+                            <span class="text-danger span-error" id="national_id-error"></span>
+
                         </div>
                         <div class="form-group">
                             <label for="phone1">رقم الهاتف الاول</label>
                             <input type="text" id="phone1" name="phone1" class="form-control" required>
+                            <span class="text-danger span-error" id="phone1-error"></span>
+
                         </div>
                         <div class="form-group">
                             <label for="phone2">رقم الهاتف الثاني</label>
                             <input type="text" id="phone2" name="phone2" class="form-control">
+                            <span class="text-danger span-error" id="phone2-error"></span>
+
                         </div>
                         <!-- Save button -->
                         <div class="text-end">
                             <button type="submit" class="btn-blue">حفظ</button>
                         </div>
                     </form>
+
                 </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addRepresentativeForm" action="{{ route('postman.ajax') }}" method="POST">
+                    @csrf
+
+
+                    <div class="form-group">
+                        <label for="modal-department_id ">الادارة</label>
+                        <select id="modal-department_id" name="modal_department_id" class="form-control" required>
+                            <option value="">اختر الادارة</option>
+                            @foreach ($departments as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">الاسم</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="national_id">رقم الهوية</label>
+                        <input type="text" id="national_id" name="national_id" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone1">رقم الهاتف الاول</label>
+                        <input type="text" id="phone1" name="phone1" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone2">رقم الهاتف الثاني</label>
+                        <input type="text" id="phone2" name="phone2" class="form-control">
+                    </div>
+                    <!-- Save button -->
+                    <div class="text-end">
+                        <button type="submit" class="btn-blue">حفظ</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
     </div>
     <div class="modal fade" id="extern-department" tabindex="-1" aria-labelledby="extern-departmentLabel"
         role="dialog" aria-hidden="true">
@@ -258,15 +295,20 @@
                         <div class="form-group">
                             <label for="name">الاسم</label>
                             <input type="text" id="name" name="name" class="form-control" required>
+
                         </div>
                         <div class="form-group">
                             <label for="desc">الوصف</label>
                             <input type="text" id="desc" name="desc" class="form-control">
+
                         </div>
                         <div class="form-group">
                             <label for="phone">الهاتف</label>
                             <input type="text" id="phone" name="phone" class="form-control" required>
+                            <span class="text-danger span-error" id="phone-error"></span>
+
                         </div>
+
 
                         <!-- Save button -->
                         <div class="text-end">
@@ -288,8 +330,10 @@
                 $(selectId).empty().append(options);
             }
 
+
             function resetModal() {
                 $('#saveExternalDepartment')[0].reset();
+                $('#addRepresentativeForm')[0].reset();
                 $('.text-danger').html('');
             }
             $(document).ready(function() {
@@ -297,6 +341,8 @@
 
 
                 $('#outgoing_date').attr('value', today);
+                $('#date').attr('value', today);
+
                 $('#date').attr('value', today);
 
                 checkFileCount();
@@ -350,6 +396,16 @@
                             $('#from_departement').show();
                             $('#from_departement').empty();
                             $.ajax({
+                                $('#checked').click(function() {
+                                    if ($(this).is(':checked')) {
+
+                                        $('#select').show();
+                                    } else {
+                                        $('#select').hide();
+
+                                    }
+
+                                });
 
                                 url: "{{ route('internal.departments') }}",
                                 type: 'get',
@@ -439,18 +495,22 @@
                         $('.remove-file').prop('disabled', true);
                     }
                 }
-                $('#checked').click(function() {
-                    if ($(this).is(':checked')) {
-
-                        $('#select').show();
-                    } else {
-                        $('#select').hide();
-
-                    }
-
-                });
 
             });
+
+            function toggleFormGroup() {
+                const checkbox = document.getElementById('toggleCheckbox');
+                const identityGroup = document.getElementById('identityGroup');
+                if (checkbox.checked) {
+                    identityGroup.classList.remove('hidden');
+                } else {
+                    identityGroup.classList.add('hidden');
+                }
+            }
+
+            document.getElementById('toggleCheckbox').addEventListener('change', toggleFormGroup);
+
+            window.onload = toggleFormGroup;
         </script>
     @endpush
 @endsection

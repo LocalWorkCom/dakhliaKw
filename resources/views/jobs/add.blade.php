@@ -27,7 +27,7 @@
             <form action="{{ route('job.add') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="form-row mx-2 ">
+                <div class="form-row mx-md-2 ">
                     <div class="form-group col-md-12">
                         <label for="name">الاسم</label>
                         <input type="text" class="form-control" name="name" id="name" placeholder="الاسم"
@@ -36,7 +36,7 @@
 
                 </div>
                 <div class="form-row" dir="ltr">
-                    <button class="btn-blue mx-4" type="submit"> اضافة </button>
+                    <button class="btn-blue mx-md-4" type="submit"> اضافة </button>
                 </div>
                 <br>
             </form>

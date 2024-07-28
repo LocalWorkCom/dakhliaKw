@@ -111,6 +111,8 @@ Route::middleware(['auth'])->group(function () {
     //End Export routes
 
 
+        Route::get('generateNumber/{counter}', [outgoingController::class, 'generateUniqueNumber']);
+        Route::get('getLatest', [outgoingController::class, 'getTheLatestExport']);
 
     // getDepartment
     Route::get('api/department', [DepartmentController::class, 'getDepartment'])->name('api.department')->middleware('check.permission:view departements');

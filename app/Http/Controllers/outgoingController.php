@@ -9,6 +9,7 @@ use App\Models\ExternalDepartment;
 use App\Models\outgoing_files;
 use App\Models\outgoings;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,10 +21,7 @@ class outgoingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+
 
     public function index()
     {
@@ -114,22 +112,26 @@ class outgoingController extends Controller
     public function addUaersAjax(Request $request)
     {
         $rules = [
-            'military_number' => 'required|integer',
-            'filenum' => 'required|integer',
-            'Civil_number' => 'required|integer',
-            'phoneuser' => 'required|integer',
+            'military_number' => ['required', 'string', 'unique:export_users,military_number'],
+            'filenum' => ['required', 'string', 'unique:export_users,filenum'],
+            'Civil_number' => ['required', 'string', 'unique:export_users,Civil_number'],
+            'phoneuser' => ['required', 'string', 'unique:export_users,phone', 'regex:/^01\d{9,11}$/'],
             'name' => 'required|string',
         ];
 
         $messages = [
             'military_number.required' => 'يجب ادخال الرقم العسكرى',
-            'military_number.integer' => 'يجب ان يكون الرقم العسكرى أرقام فقط',
-            'filenum.integer' => 'رقم الملف يجب ان يكون ارقام فقط',
+            'military_number.unique' => 'عفوا رقم العسكرى موجود من قبل',
+            'filenum.unique' => 'عفوا رقم الملف موجود من قبل',
+            'military_number.string' => 'يجب ان يكون الرقم العسكرى أرقام فقط',
+            'filenum.string' => 'رقم الملف يجب ان يكون ارقام فقط',
             'filenum.required' => 'يجب ادخال رقم الملف',
-            'Civil_number.required' => 'يجب ادخال رقم الهويه',
-            'Civil_number.integer' => 'يجب ان يكون رقم الهويه ارقام فقط',
+            'Civil_number.required' => 'يجب ادخال رقم المدنى',
+            'Civil_number.unique' => 'عفوا رقم المدنى موجود من قبل',
+            'Civil_number.string' => 'يجب ان يكون رقم المدنى ارقام فقط',
             'phoneuser.required' => 'يجب ادخال الهاتف',
-            'phoneuser.integer' => 'رقم الهاتف يجب ان يكون أرقام فقط',
+            'phoneuser.regex' => 'رقم الهاتف يجب ان يكون أرقام فقط',
+            'phoneuser.unique' => 'هذا الرقم موجود من قبل',
             'name.required' => 'يجب ادخال اسم الشخص',
         ];
 
@@ -157,9 +159,33 @@ class outgoingController extends Controller
         return view('outgoing.add', compact('users', 'departments'));
     }
 
+    public function getTheLatestExport()
+    {
+        $lastRecord = outgoings::orderBy('id', 'desc')->first();
+        if (isset($lastRecord)) {
+            $record = $lastRecord->num;
+            $parts = explode('-', $record);
+
+            // Get the last part which is '14'
+            $counter = end($parts);
+        } else {
+            $counter = 0;
+        }
+        return ['counter' => $counter];
+    }
+    public function generateUniqueNumber($counter)
+    {
+        //static $counter = 0 ; // Static variable to keep track of the counter
+
+        $today = Carbon::today();
+        $formattedDate = $today->year . '-' . $today->month . '-' . $today->day;
+        $counter++;  // Increment the counter
+        $formattedNumber = $formattedDate . '.' . $counter;
+
+        return ['formattedNumber' => $formattedNumber, 'counter' => $counter];
+    }
     public function store(Request $request)
     {
-
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
@@ -168,7 +194,7 @@ class outgoingController extends Controller
             'person_to' => 'nullable|exists:export_users,id',
             'date' => 'required|date',
             'department_id' => 'nullable|exists:external_departements,id',
-            // 'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:20480',
         ];
 
         // // Define custom messages
@@ -179,7 +205,8 @@ class outgoingController extends Controller
             'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
             'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
-            // 'files.*.file' => 'عفو يوجد مشكله فرفع هذاالملف',
+            'files.*.file' => 'عفو يوجد مشكله فرفع هذاالملف',
+            'files.*.max' => 'عفوا حجم الملفات اكبر من المسموح به',
 
         ];
         $validatedData = Validator::make($request->all(), $rules, $messages);
@@ -196,8 +223,8 @@ class outgoingController extends Controller
             $export->note = $request->note;
             $export->date = $request->date;
             $export->person_to = $request->person_to  ?  $request->person_to : null;
-            $export->created_by = $user->id; //auth auth()->id
-            $export->created_department = $user->department_id;
+            $export->created_by = $user->id; //auth $user->id
+            $export->created_department = $user->department_id; //$user->department_id
             $export->active = $request->active ? $request->active : 0;
             $export->updated_by = $user->id; //auth auth()->id
             $export->department_id = $request->from_departement;
@@ -210,24 +237,24 @@ class outgoingController extends Controller
                 foreach ($request->file('files') as $file) {
                     $files = new outgoing_files();
                     $files->outgoing_id = $export->id;
-                    $files->created_by = auth()->id(); //auth auth()->id
-                    $files->updated_by = auth()->id(); //auth auth()->id
+                    $files->created_by = $user->id; //auth auth()->id
+                    $files->updated_by = $user->id; //auth auth()->id
                     $files->file_type = ($file->getClientOriginalExtension() == 'pdf') ? 'pdf' : 'image';
                     $files->active = 0;
                     $files->save();
                     $file_model = outgoing_files::find($files->id);
 
                     UploadFiles('files/export', 'file_name',  'real_name', $file_model, $file);
+                    //}
                 }
+
+
+                return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
+            } else {
+                return redirect()->route('login');
             }
-
-
-            return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
-        } else {
-            return redirect()->route('login');
         }
     }
-
     /**
      * Display the specified resource.
      */
@@ -259,7 +286,8 @@ class outgoingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd($request->all());
+
+
 
         // Define validation rules
         $rules = [
@@ -267,8 +295,9 @@ class outgoingController extends Controller
             'num' => 'required|integer',
             'note' => 'nullable|string',
             'person_to' => 'nullable|exists:export_users,id',
-            'from_departement' => 'nullable|exists:external_departements,id',
-            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'date' => 'required|date',
+            'department_id' => 'nullable|exists:external_departements,id',
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:20480',
         ];
 
         // // Define custom messages
@@ -276,10 +305,11 @@ class outgoingController extends Controller
             'nameex.required' => 'عفوا يجب ادخال اسم الصادر',
             'num.required' => 'عفوا يجب ادخال رقم الصادر',
             'note.required' => 'عفوا يجب ادخال ملاحظات الصادر',
-            'num.integer' => 'عفوا يرجى ادخال ارقام فقط',
+            'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
             'files.*.mimes' => 'يجب ان تكون الملفات من نوع صور او pdfفقط ',
             'files.*.file' => 'عفو يوجد مشكله فرفع هذاالملف',
+            'files.*.max' => 'عفوا حجم الملفات اكبر من المسموح به',
 
         ];
 

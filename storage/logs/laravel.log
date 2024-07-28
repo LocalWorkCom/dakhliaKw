@@ -1,0 +1,8 @@
+[2024-07-28 09:05:20] local.ERROR: Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\xampp\htdocs\my work\dakhliaKw\app\helper.php:138) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:138) at D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:148)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-28 09:29:21] local.ERROR: Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\xampp\htdocs\my work\dakhliaKw\app\helper.php:138) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare UploadFilesWithoutReal() (previously declared in D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:138) at D:\\xampp\\htdocs\\my work\\dakhliaKw\\app\\helper.php:148)
+[stacktrace]
+#0 {main}
+"} 
