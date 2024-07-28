@@ -47,6 +47,7 @@
                                     <tr>
                                         <th>رقم التعريف</th>
                                         <th>الاسم</th>
+                                        <th>القسم</th>
                                         <th>الهاتف</th>
                                         <th>الرقم العسكري</th>
                                         <th style="width:150px !important;">العمليات</th>
@@ -75,6 +76,10 @@
                                             {
                                                 data: 'name',
                                                 name: 'name'
+                                            },
+                                            {
+                                                data: 'department',
+                                                name: 'department'
                                             },
                                             {
                                                 data: 'phone',

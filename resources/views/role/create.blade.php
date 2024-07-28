@@ -55,7 +55,7 @@
                         <div class="form-group col-md-10">
                             <label for="department">الادارة</label>
                             <select class="custom-select custom-select-lg mb-3" name="department_id" id="department_id">
-                                <option selected>Open this select menu</option>
+                                <option selected>اختر من الادارات الاتيه</option>
                                 @foreach ($alldepartment as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
