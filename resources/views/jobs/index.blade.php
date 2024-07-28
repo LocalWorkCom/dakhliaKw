@@ -220,7 +220,8 @@
                 ],
 
                 "oLanguage": {
-                    "sSearch": "بحث",
+                    "sSearch": "",
+                    "sSearchPlaceholder":"بحث",
                     "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
                     "sInfoEmpty": 'لا توجد بيانات متاحه',
                     "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
