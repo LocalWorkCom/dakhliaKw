@@ -176,14 +176,64 @@
 </div>
 
 
-<!-- Modal -->
-<div class="modal fade" id="representative" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header d-flex justify-content-center">
-                <div class="title d-flex flex-row align-items-center">
-                    <h5 class="modal-title" id="representativeLabel">إضافة مندوب</h5>
-                    <img src="{{ asset('frontend/images/add-mandob.svg') }}" alt="">
+
+    <!-- Modal -->
+    <div class="modal fade" id="representative" tabindex="-1" aria-labelledby="representativeLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="representativeLabel">إضافة مندوب</h5>
+                        <img src="{{ asset('frontend/images/add-mandob.svg') }}" alt="">
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addRepresentativeForm" action="{{ route('postman.ajax') }}" method="POST">
+                        @csrf
+
+
+                        <div class="form-group">
+                            <label for="modal-department_id ">الادارة</label>
+                            <select id="modal-department_id" name="modal_department_id" class="form-control" required>
+                                <option value="">اختر الادارة</option>
+                                @foreach ($departments as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">الاسم</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                            <span class="text-danger span-error" id="name-error"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="national_id">رقم الهوية</label>
+                            <input type="text" id="national_id" name="national_id" class="form-control"required>
+                            <span class="text-danger span-error" id="national_id-error"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="phone1">رقم الهاتف الاول</label>
+                            <input type="text" id="phone1" name="phone1" class="form-control" required>
+                            <span class="text-danger span-error" id="phone1-error"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="phone2">رقم الهاتف الثاني</label>
+                            <input type="text" id="phone2" name="phone2" class="form-control">
+                            <span class="text-danger span-error" id="phone2-error"></span>
+
+                        </div>
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn-blue">حفظ</button>
+                        </div>
+                    </form>
+
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                 </button>
@@ -242,18 +292,23 @@
                 <form id="saveExternalDepartment" action="{{ route('department.ajax') }}" method="POST">
                     @csrf
 
-                    <div class="form-group">
-                        <label for="name">الاسم</label>
-                        <input type="text" id="name" name="name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="desc">الوصف</label>
-                        <input type="text" id="desc" name="desc" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">الهاتف</label>
-                        <input type="text" id="phone" name="phone" class="form-control" required>
-                    </div>
+                        <div class="form-group">
+                            <label for="name">الاسم</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="desc">الوصف</label>
+                            <input type="text" id="desc" name="desc" class="form-control">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">الهاتف</label>
+                            <input type="text" id="phone" name="phone" class="form-control" required>
+                            <span class="text-danger span-error" id="phone-error"></span>
+
+                        </div>
+
 
                     <!-- Save button -->
                     <div class="text-end">
@@ -275,12 +330,15 @@ function sortSelectOptions(selectId) {
     $(selectId).empty().append(options);
 }
 
-function resetModal() {
-    $('#saveExternalDepartment')[0].reset();
-    $('.text-danger').html('');
-}
-$(document).ready(function() {
-    var today = new Date().toISOString().split('T')[0];
+
+            function resetModal() {
+                $('#saveExternalDepartment')[0].reset();
+                $('#addRepresentativeForm')[0].reset();
+                $('.text-danger').html('');
+            }
+            $(document).ready(function() {
+                var today = new Date().toISOString().split('T')[0];
+
 
 
     $('#date').attr('value', today);

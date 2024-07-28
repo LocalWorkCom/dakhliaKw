@@ -200,10 +200,10 @@ class IoTelegramController extends Controller
     public function addPostmanAjax(Request $request)
     {
         $rules = [
-            'name' => 'required',
-            'phone1' => 'required|unique:postmans,phone1',
-            'phone2' => 'unique:postmans,phone2',
-            'national_id' => 'required|unique:postmans,national_id',
+            'name' => 'required|string',
+            'phone1' => 'required|unique:postmans,phone1|integer',
+            'phone2' => 'unique:postmans,phone2|integer',
+            'national_id' => 'required|unique:postmans,national_id|integer',
             'modal_department_id' => 'required',
 
         ];
@@ -219,7 +219,7 @@ class IoTelegramController extends Controller
 
             'phone2.required' => 'يجب ادخال الهاتف',
             'phone2.integer' => 'يجب ان يكون الهاتف ارقام',
-            'phone1.unique' => 'رقم الهاتف 2 موجود بالفعل',
+            'phone2.unique' => 'رقم الهاتف 2 موجود بالفعل',
 
 
             'national_id.required' => 'يجب ادخال رقم الهوية',
@@ -257,7 +257,7 @@ class IoTelegramController extends Controller
     {
         $rules = [
             'desc' => 'nullable',
-            'phone' => 'required|integer',
+            'phone' => 'required|unique:external_departements,phone|integer',
             'name' => 'required|string',
         ];
 
@@ -265,6 +265,7 @@ class IoTelegramController extends Controller
             'name.string' => 'يجب ان يكون الأسم حروف فقط',
             'phone.required' => 'يجب ادخال الهاتف',
             'phone.integer' => 'يجب ان يكون الهاتف ارقام',
+            'phone.unique' => 'رقم الهاتف موجود بالفعل',
             'name.required' => 'يجب ادخال اسم الشخص',
         ];
 
