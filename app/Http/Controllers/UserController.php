@@ -314,8 +314,8 @@ class UserController extends Controller
             $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
         }
 
-        $alluser = User::where('department_id',$user->department_id)->get();
-        
+        $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
+        // $speificUsers = User::where('department_id',$user->department_id)->where('flag','employee')->get();
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
@@ -329,52 +329,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
         // validation
 
         if($request->type == "0")
         {
             $messages = [
                 'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
-                'name.string' => 'الاسم  يجب أن يكون نصاً.',
-                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
-                'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
-                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
-                
-                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
-                'rule.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
+                'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
                 'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
-                'department.required' => 'القسم  يجب أن يكون نصاً.',
                 // Add more custom messages here
             ];
             
             $validatedData = Validator::make($request->all(), [
-                'military_number' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    ValidationRule::unique('users', 'military_number'),
-                ],
-                'Civil_number' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    ValidationRule::unique('users', 'Civil_number'),
-                ],
-                'file_number' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    ValidationRule::unique('users', 'file_number'),
-                ],
                 'name' => 'required|string',
-                'phone' => 'required|string',
-                // 'file_number' => 'required|string',
-                'rule' => 'required',
+                'rule_id' => 'required',
                 'password' => 'required',
-                'department' => 'required',
             ], $messages);
         }
         else
@@ -388,6 +358,7 @@ class UserController extends Controller
                 'file_number.unique' => 'رقم الملف الذي أدخلته موجود بالفعل.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
                 'phone.unique' => 'رقم الهاتف الذي أدخلته موجود بالفعل.',
+                'phone.max'=>'رقم الهاتف اقل من 6 اراقام',
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
@@ -398,7 +369,6 @@ class UserController extends Controller
             $rules = [
                 'phone' => [
                     'required',
-                    'max:255',
                     'max:6',
                     ValidationRule::unique('users', 'phone'),
                 ],
@@ -458,20 +428,10 @@ class UserController extends Controller
 
 
         if ($request->type == "0") {
-            $newUser = new User();
-            $newUser->military_number = $request->military_number;
-            $newUser->phone = $request->phone;
-            $newUser->country_code = "+20";
-            $newUser->name = $request->name;
-            $newUser->file_number = $request->file_number;
-            $newUser->flag = "user";
-            $newUser->rule_id = $request->rule;
-            if($request->has('job'))
-            {
-                $newUser->job_id = $request->job;
-            }
-            $newUser->department_id  = $request->department;
+            $newUser = User::find($request->name);
             $newUser->password = Hash::make($request->password);
+            $newUser->flag = "user";
+            $newUser->rule_id = $request->rule_id;   
             $newUser->save();
         } else {
 
