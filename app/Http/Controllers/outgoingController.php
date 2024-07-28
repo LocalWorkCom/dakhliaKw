@@ -290,7 +290,8 @@ class outgoingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd($request->all());
+       
+        
 
         // Define validation rules
         $rules = [
