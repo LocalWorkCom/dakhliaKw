@@ -100,13 +100,13 @@ class DepartmentController extends Controller
     public function create_1()
     {
         // dd(Auth::user());
-        $users = User::all();
+        $users = User::where('flag', 'employee')->get();
         $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
 
         // Get the children of the parent department
         $departments = $parentDepartment ? $parentDepartment->children : collect();       
         $subdepartments = departements::with('children', 'parent')->get();
-        return view('sub_departments.create', compact('parentDepartment','departments','subdepartments'));
+        return view('sub_departments.create', compact('parentDepartment','departments','subdepartments','users'));
     }
     /**
      * Store a newly created resource in storage.
