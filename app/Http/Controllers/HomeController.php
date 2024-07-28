@@ -20,9 +20,9 @@ class HomeController extends Controller
         $ioCount=Iotelegram::count();
 
 
-            if (!Auth::check()) {
-                return redirect()->route('login');
-            }
+            // if (!Auth::check()) {
+            //     return redirect()->route('login');
+            // }
 
         // Check if the previous URL matches
         // if (url()->previous() === route('reset_password')) {

@@ -87,7 +87,7 @@
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
                             <div class="d-flex justify-content-between" dir="rtl">
-                                <label for="from_departement"> الجهة المرسلة</label>
+                                <label for="from_departement"> القطاع </label>
                                 <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
                                     data-bs-toggle="modal" id="extern-department-dev" data-bs-target="#extern-department">
                             </div>
@@ -96,7 +96,7 @@
                                                         <i class="fa fa-plus"></i>
                                                     </button> -->
                             <select id="from_departement" name="from_departement" class="form-control">
-                                <option value="">اختر الجهة</option>
+                                <option value="">اختر القطاع</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
@@ -310,11 +310,6 @@
                 }
                
                 $("#saveExternalUser").on("submit", function(e) {
-                    
-
-
-                        // Allow form submission
-                        return true;
                         e.preventDefault();
                         var formData = $(this).serialize();
                         $.ajax({
@@ -343,7 +338,7 @@
                                         }
                                     });
                                     resetModal();
-                                    $('#extern-user').modal('hide');
+                                  
                                 } else {
                                     $.each(response.message, function(key, value) {
                                         $('#' + key + '-error').html(value[0]);

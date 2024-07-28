@@ -27,8 +27,8 @@
                 <table class="table table-bordered ">
                     <tbody>
                         <tr style="background-color:#f5f6fa;">
-                            <th scope="row">المرسل اليه</th>
-                            <td>{{ $data->person_to ? $data->personTo->name : 'لا يوجد موظف للصادر' }}</td>
+                            <th scope="row"> الموظف المستلم</th>
+                            <td>{{ $data->person_to ? $data->personTo->name : 'لا يوجد موظف مستلم' }}</td>
                         </tr>
                         <tr>
                             <th scope="row">العنوان</th>
@@ -36,7 +36,7 @@
                         </tr>
                         <tr>
                             <th scope="row">اسم القطاع</th>
-                            <td>{{ $data->department_id ? $data->department_External->name : 'لا يوجد قسم خارجى' }}</td>
+                            <td>{{ $data->department_id ? $data->department_External->name : 'لا يوجد قطاع' }}</td>
                         </tr>
                         <tr>
                             <th scope="row">رقم الصادر</th>
