@@ -369,3 +369,11 @@
 [stacktrace]
 #0 {main}
 "} 
+[2024-07-28 12:49:43] local.ERROR: Cannot redeclare generateUniqueNumber() (previously declared in E:\dalia\dakhliaKw\app\helper.php:137) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare generateUniqueNumber() (previously declared in E:\\dalia\\dakhliaKw\\app\\helper.php:137) at E:\\dalia\\dakhliaKw\\app\\helper.php:137)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-28 12:50:43] local.ERROR: Cannot redeclare generateUniqueNumber() (previously declared in E:\dalia\dakhliaKw\app\helper.php:137) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare generateUniqueNumber() (previously declared in E:\\dalia\\dakhliaKw\\app\\helper.php:137) at E:\\dalia\\dakhliaKw\\app\\helper.php:137)
+[stacktrace]
+#0 {main}
+"} 
