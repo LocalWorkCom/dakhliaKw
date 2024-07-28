@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\departements;
 use App\Models\outgoings;
 use App\Models\Iotelegram;
+use App\Models\departements;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -17,6 +18,11 @@ class HomeController extends Controller
         $depCount=departements::count();
         $outCount=outgoings::count();
         $ioCount=Iotelegram::count();
+
+
+            if (!Auth::check()) {
+                return redirect()->route('login');
+            }
 
         // Check if the previous URL matches
         // if (url()->previous() === route('reset_password')) {
