@@ -789,6 +789,9 @@ background-color: #F4F7FD;
     color: #9b9999 !important;
 
 }
+.form-group textarea{
+    height: 60px !important;
+}
 .dataTables_filter label{
     font-size: 20px;
     font-weight: 700;
