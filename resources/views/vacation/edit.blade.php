@@ -11,7 +11,9 @@
                 @if ($id)
                     <li class="breadcrumb-item "><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
                 @endif
-                <li class="breadcrumb-item"><a href="{{ route('vacations.list', $id) }}">الاجازات </a></li>
+                <li class="breadcrumb-item"><a
+                        href="{{ route('vacations.list', $vacation->employee_id ? $vacation->employee_id : '') }}">الاجازات
+                    </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
             </ol>
         </nav>
@@ -28,9 +30,10 @@
             <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
                 <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
+
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
 
-                        <div class="form-group col-md-3 mx-2" id="name_dev" hidden>
+                        <div class="form-group col-md-10" id="name_dev" hidden>
 
                             <label for="name">اسم الاجازة:</label>
                             <input type="text" id="name" name="name" class="form-control"

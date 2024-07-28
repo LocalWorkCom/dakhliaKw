@@ -34,7 +34,7 @@
                     <tbody>
                         @if ($vacation->vacation_type_id == 3)
                             <tr>
-                                <th scope="row"style="background: #f5f6fa;">نوع الاجازة:</th>
+                                <th scope="row"style="background: #f5f6fa;">اسم الاجازة:</th>
                                 <td>{{ $vacation->name }}</td>
                             </tr>
                         @endif
