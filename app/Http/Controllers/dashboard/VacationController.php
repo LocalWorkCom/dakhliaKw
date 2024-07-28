@@ -67,13 +67,18 @@ class VacationController extends Controller
      */
     public function store(Request $request, $id)
     {
+        if ($id == 0) {
+            $employee_id = $request->employee_id;
+        } else {
+            $employee_id = $id;
+        }
 
         $employee_vacation = new EmployeeVacation();
         $employee_vacation->vacation_type_id = $request->vacation_type_id;
         $employee_vacation->name = $request->name;
         $employee_vacation->date_from = $request->date_from;
         $employee_vacation->date_to = isset($request->date_to) ? $request->date_to : null;
-        $employee_vacation->employee_id = $id  && $request->vacation_type_id != 3 ? $id : null;
+        $employee_vacation->employee_id = $employee_id  && $request->vacation_type_id != 3 ? $employee_id : null;
         $employee_vacation->created_by = auth()->id();
         $employee_vacation->created_departement = auth()->user()->department_id;
         $employee_vacation->save();

@@ -29,7 +29,7 @@
             </div>
             <button class="btn2 btn-2 mx-5" style="    border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
                 onclick="toggleDropdown2()">
-                <a class="bell mx-5">
+                <a class="bell mx-md-5">
                     <i class=" fa-regular fa-bell"></i>
                 </a>
             </button>
@@ -55,7 +55,7 @@
                 <select name="#" id="#" class=" mt-4" style="direction:rtl;">
                     <option value="#"> المستخدميين </option>
                     <option value="{{ route('departments.index') }}"> الادارات </option>
-                    
+
                     <option value="#"> الموظفين </option>
                     <option value="{{ route('Export.index') }}"> الصادر </option>
                     <option value="#"> الوارد </option>
@@ -156,19 +156,19 @@
                         </li>
                     </ul>
                 </div>
-    
+
 
         <li class="nav-item" onclick="makeActive(this)">
 
             <a href="{{ route('iotelegrams.list') }}">
-                <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
+            <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
                 <h6>الوارد</h6>
             </a>
         </li>
 
         <li class="nav-item" onclick="makeActive(this)">
             <a href="{{ route('Export.index') }}">
-                <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
+            <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
                 <h6>الصادر</h6>
 
             </a>

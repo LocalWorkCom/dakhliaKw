@@ -38,11 +38,12 @@
             </div>
             @endif
             {{-- {{ dd($models) }} --}}
-            <div class="p-5">
+            <div class="">
                 <form action="" method="POST">
                     @csrf
-                    <div class="form-row mx-2 mt-4 d-flex flex-row-reverse">
-                        <div class="form-group col-md-6">
+                    <div class="container col-10 mt-4 p-4" style="border:0.5px solid #C7C7CC;">
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
+                    <div class="form-group  col-md-10 ">
                             <label for="input1"> الصلاحية</label>
                             <select class="custom-select custom-select-lg mb-3" name="name">
                                 <option selected disabled>اختر الصلاحية</option>
@@ -51,9 +52,10 @@
                                 <option value="create" {{ $permissionAction == 'create' ? 'selected' : '' }}>اضافة</option>
                                 <option value="delete" {{ $permissionAction == 'delete' ? 'selected' : '' }}>ازالة</option>
                             </select>
-                        </div>
+                        </div> </div>
 
-                        <div class="form-group col-md-6">
+                        <div class="form-row mx-md-2 d-flex justify-content-center">
+                        <div class="form-group  col-md-10 ">
                             <label for="input15">القسم</label>
                             <select id="input15" name="model" class="form-control" placeholder="القسم">
                                 @foreach ($models as $item)
@@ -62,12 +64,15 @@
                             </select>
                         </div>
                     </div>
+                    </div>
                     <!-- Save button -->
-                    <div class="container col-12 ">
-                        <div class="form-row mt-4 mb-5">
+                    <div class="container col-10 ">
+                        <div class="form-row mt-5 mb-2">
                             <button type="submit" class="btn-blue">حفظ</button>
                         </div>
                     </div>
+
+                    <br>
                 </form>
             </div>
         </div>
