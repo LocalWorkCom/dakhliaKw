@@ -127,6 +127,7 @@
                         $('#name_dev').attr('hidden', true);
                         $('#reportImage-div').attr('hidden', true);
                         $('#date_to').prop('disabled', true);
+                        $('#date_to').attr('value', today);
                         if (id == 0 || id == '') {
 
                             $('#employee_id').prop('disabled', false);
@@ -146,8 +147,6 @@
                         $('#name_dev').attr('hidden', true);
                         $('#date_to').prop('disabled', false);
                         if (id == 0 || id == '') {
-                            console.log("jkhjb");
-console.log( $('#employee_id').prop('disabled', false));
                             $('#employee_id').prop('disabled', false);
                             $('#employee_id').attr('required', true);
                         }

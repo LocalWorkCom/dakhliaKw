@@ -180,9 +180,66 @@
     const fileList = document.getElementById('fileList');
     const max_num = 10;
 
-    if (files.length === 0) {
-        alert("Please choose files");
-        return;
+        if ($('#files_num').length > 0) {
+            var max_num = $('#files_num').find('option:selected').val();
+            if (!max_num) {
+                alert("please choose file number");
+                return;
+            }
+        } else {
+            max_num = 10;
+        }
+        if (files.length == 0) {
+            alert("please choose files");
+            return;
+
+        }
+
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            // Check if file with the same name already exists in the list
+            let fileExists = false;
+            Array.from(fileList.children).forEach(item => {
+                if (item.dataset.filename === file.name) {
+                    fileExists = true;
+                }
+            });
+            if (files.length > max_num) {
+                alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
+                return;
+
+            }
+            console.log(fileList.children.length);
+            if (fileList.children.length > max_num - 1) {
+                alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
+                return;
+            }
+
+            if (!fileExists) {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                listItem.dataset.filename = file.name; // Store filename as dataset attribute
+
+                const fileName = document.createElement('span');
+                fileName.textContent = file.name;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'btn btn-danger btn-sm';
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = function() {
+                    fileList.removeChild(listItem);
+                };
+
+                listItem.appendChild(fileName);
+                listItem.appendChild(deleteButton);
+                fileList.appendChild(listItem);
+            } else {
+                alert('تنبيه لقد قمت باختيار نفس الملفات مرة اخري !');
+                return;
+            }
+        }
     }
 
     if (fileList.children.length + files.length > max_num) {
