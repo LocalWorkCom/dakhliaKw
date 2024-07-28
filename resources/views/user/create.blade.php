@@ -121,7 +121,7 @@
                 <div class="form-group col-md-5 mx-2">
                     <label for="input44">الفئة</label>
                     <div class="form-group col-md-10">
-                        <input type="radio" class="form-check-input" id="male" name="gender" value="male" style="height:20px; width:20px;">
+                        <input type="radio" class="form-check-input" id="male" name="gender" value="man" style="height:20px; width:20px;">
                         <label class="form-check-label mx-2" for="male">ذكر</label>
                         
                         <input type="radio" class="form-check-input" id="female" name="gender" value="female" style="height:20px; width:20px;">
