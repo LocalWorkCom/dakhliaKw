@@ -40,19 +40,52 @@ class UserController extends Controller
     // }
     public function index($id)
     {
-        
+        // if()
         return view('user.view', compact('id'));
     }
 
     public function getUsers($id)
     {
+       
+        // $flagType = $id == 0 ? 'user' : 'employee';
+        // $perentdepartment = departements::find(Auth()->user()->department_id)->first();
+        // if($perentdepartment->parent_id == Null)
+        // {
+        //     $subdepart =  departements::where('parent_id',$perentdepartment->id)->pluck('id')->toArray();
+        //     $data = User::where('flag', $flagType)->whereIn('department_id' ,$subdepart)->orwhere('department_id' ,$perentdepartment->id)->get();
+        // }
+        // else
+        // {
+        //     $data = User::where('flag', $flagType)->where('department_id' ,$perentdepartment->id)->get();
+        // }
         $flagType = $id == 0 ? 'user' : 'employee';
-        $data = User::where('flag', $flagType)->get();
+        $parentDepartment = Departements::find(Auth()->user()->department_id);
+
+        if (is_null($parentDepartment->parent_id)) {
+            $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();
+            $data = User::where('flag', $flagType)
+            ->where(function ($query) use ($subdepart, $parentDepartment) {
+                $query->whereIn('department_id', $subdepart)
+                      ->orWhere('department_id', $parentDepartment->id);
+            })
+                        // ->whereIn('department_id', $subdepart)
+                        // ->orWhere('department_id', $parentDepartment->id)
+                        ->get();
+        } else {
+            $data = User::where('flag', $flagType)
+                        ->where('department_id', $parentDepartment->id)
+                        ->get();
+        }
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 
             return '<button class="btn btn-primary btn-sm">Edit</button>
               <a href="" class="btn btn-primary btn-sm">vacations</a>';
+        })
+        ->addColumn('department', function ($row) { // New column for departments count
+        
+            $department = departements::where('id', $row->department_id)->pluck('name')->first();
+            return $department;
         })
             ->rawColumns(['action'])
             ->make(true);
