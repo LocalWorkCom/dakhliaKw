@@ -36,7 +36,7 @@
                                 <label for="extern">خارجي</label>
                             </div>
                             <div class="radio2">
-                                <input type="radio" id="intern" name="type" checked value="in" required
+                                <input type="radio" id="intern" name="type" value="in" required
                                     @if ('in' == $iotelegram->type) checked @endif>
                                 <label for="intern">داخلي</label>
                             </div>
@@ -47,17 +47,62 @@
 
 
                 <div class="container col-10 mt-4" style="border:0.5px solid #C7C7CC;">
-                    <div class="form-row pt-4">
-                        <div class="form-group col-md-6">
+                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center  mt-5">
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="outgoing_num">رقم الصادر</label>
+                            <input type="hidden" name="outgoing_num" id="outgoing_num"
+                                value="{{ $iotelegram->outgoing_num }}">
+                            <input type="text" id="outgoing_num_text" name="outgoing_num_text" class="form-control"
+                                value="{{ $iotelegram->outgoing_num }}" disabled>
+                        </div>
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="outgoing_date">تاريخ الصادر</label>
+                            <input type="date" id="outgoing_date" name="outgoing_date" class="form-control" required
+                                value="{{ $iotelegram->outgoing_date }}">
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="date">التاريخ</label>
                             <input type="date" id="date" name="date" class="form-control" required
                                 value="{{ $iotelegram->date }}">
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="from_departement">الجهة المرسلة</label>
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="iotelegram_num"> رقم الوارد</label>
+                            <input type="number" id="iotelegram_num" name="iotelegram_num" class="form-control" disabled
+                                value="{{ $iotelegram->iotelegram_num }}">
+                        </div>
 
+                    </div>
+                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2 " dir="rtl">
+                            <div class="d-flex justify-content-between">
+                                <label for="representive_id">اختر المندوب </label>
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
+                                    data-bs-toggle="modal" data-bs-target="#representative" data-dismiss="modal"
+                                    id="representative-dev">
+                            </div>
+                            <select id="representive_id" name="representive_id" class="form-control" required>
+                                <option value="">اختر المندوب</option>
+                                @foreach ($representives as $item)
+                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->representive_id) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5 mx-md-2 " dir="rtl">
+                            <div class="d-flex justify-content-between">
+                                <label for="from_departement">القطاع </label>
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 "
+                                    style="display: none" data-bs-toggle="modal" id="extern-department-dev"
+                                    data-bs-target="#extern-department" data-dismiss="modal">
+                            </div>
                             <select id="from_departement" name="from_departement" class="form-control" required>
-                                <option value="">اختر الجهة</option>
+                                <option value="">اختر القطاع</option>
                                 @if ($iotelegram->type == 'in')
                                     @foreach ($departments as $item)
                                         <option value="{{ $item->id }}"
@@ -73,20 +118,24 @@
                                 @endif
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6 ">
 
-                            <label for="representive_id">اختر المندوب </label>
-                            <select id="representive_id" name="representive_id" class="form-control" required>
-                                <option value="">اختر المندوب</option>
-                                @foreach ($representives as $item)
-                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->representive_id) selected @endif>
-                                        {{ $item->name }}</option>
-                                @endforeach
+                    </div>
+
+                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
+
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="files_num"> عدد الكتب</label>
+
+                            <select id="files_num" name="files_num" class="form-control" required>
+                                <option value="">اختر العدد</option>
+
+                                @for ($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}" @if ($i == $iotelegram->files_num) selected @endif>
+                                        {{ $i }}</option>
+                                @endfor
                             </select>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="recieved_by">الموظف المستلم</label>
                             <select id="recieved_by" name="recieved_by" class="form-control" required>
                                 <option value="">اختر الموظف</option>
@@ -96,45 +145,52 @@
                                 @endforeach
                             </select>
                         </div>
+
+
                     </div>
 
-                    <div class="form-row d-flex  mt-1 " dir="rtl">
-                        <div class="form-group">
-                            <label for="files"> اضف ملفات </label>
+              
+
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10">
+                            <label for="files">اضف ملفات بحد اقصي 10</label>
                         </div>
-                        <div class="form-group col-md-12 " dir="rtl">
-                            <div class=" fileupload d-inline">
-                                <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control"
-                                    accept="image/jpeg, image/png, application/pdf">
-
-                                <button class="btn-all mx-1" onclick="uploadFiles()" style="color:green;" type="button">
-                                    اضف </button>
-
+                        <div class="form-group col-md-10" dir="rtl">
+                            <div class="fileupload d-inline">
+                                <div class="d-flex">
+                                    <input id="fileInput" type="file" name="files[]" multiple
+                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg">
+                                </div>
                                 <div class="space-uploading">
                                     <ul id="fileList" class="d-flex flex-wrap">
                                         <!-- Uploaded files will be listed here -->
                                     </ul>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                    <div class="form-row mb-5" dir="rtl">
-                        <button type="button" class="btn-all mt-3 mx-5" data-bs-toggle="modal"
-                            data-bs-target="#representative" data-dismiss="modal" id="representative-dev"
-                            style="background-color: #FAFBFD; border: none;">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة مندوب
-                        </button>
-                        <button type="button" class="btn-all mt-3" data-bs-toggle="modal" id="extern-department-dev"
-                            data-bs-target="#extern-department" data-dismiss="modal"
-                            style="background-color: #FAFBFD; border: none; display: none;">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة جهه جديده
-                        </button>
+
+                    <div class="form-row  mx-md-2 d-flex justify-content-center">
+                        <div class="form-group d-flex col-md-10 mx-md-2" dir="rtl">
+                            <input type="checkbox" id="linked_employee" @if ($iotelegram->user_id) checked @endif>
+                            <label for="linked_employee">هل الوارد خاص بموظف ؟</label>
+                        </div>
                     </div>
 
-
+                    <div class="form-row  mx-md-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10 mx-md-2 " id="identityGroup" hidden>
+                            <label for="user_id">رقم الهوية أو العسكري</label>
+                            <select id="user_id" class="form-control" name="user_id">
+                                <option value="" selected>اختر المستخدم</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}" @if ($user->id == $iotelegram->user_id)
+                                        selected
+                                    @endif> {{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                 </div>
-
                 <div class="container col-10 ">
                     <div class="form-row mt-4 mb-5">
                         <button type="submit" class="btn-blue">حفظ</button>
@@ -243,6 +299,7 @@
                 });
                 $(selectId).empty().append(options);
             }
+
             $(document).ready(function() {
                 checkFileCount();
 
@@ -253,6 +310,12 @@
                 } else {
 
                     $('#extern-department-dev').show();
+                }
+                if ($('#linked_employee').is(':checked')) {
+                    $('#identityGroup').attr('hidden', false);
+                } else {
+                    $('#identityGroup').attr('hidden', true);
+
                 }
                 $("#addRepresentativeForm").on("submit", function(e) {
                     e.preventDefault();
@@ -370,6 +433,15 @@
                     } else {
                         alert('لا يمكنك إضافة المزيد من الملفات.');
                     }
+                });
+                $('#linked_employee').click(function() {
+                    if ($(this).is(':checked')) {
+                        $('#identityGroup').attr('hidden', false);
+                    } else {
+                        $('#identityGroup').attr('hidden', true);
+
+                    }
+
                 });
 
                 function checkFileCount() {

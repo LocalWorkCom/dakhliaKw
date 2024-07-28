@@ -51,8 +51,8 @@
                                         <th>الاسم</th>
                                         <th>الملاحظات</th>
                                         <th>تاريخ الصادر</th>
-                                        <th> العسكرى</th>
-                                        <th>الاداره الصادر لها</th>
+                                        <th> المرسل اليه</th>
+                                        <th>القطاع الصادر له </th>
                                         <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -162,7 +162,8 @@
                     }
                 ],
                 "oLanguage": {
-                    "sSearch": "بحث",
+                    "sSearch": "",
+                    "sSearchPlaceholder":"بحث",
                     "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
                     "sInfoEmpty": 'لا توجد بيانات متاحه',
                     "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',

@@ -27,16 +27,16 @@
                 <table class="table table-bordered ">
                     <tbody>
                         <tr style="background-color:#f5f6fa;">
-                            <th scope="row">الراسل</th>
-                            <td>{{ $data->person_to ? $data->personTo->name : 'لا يوجد موظف للصادر' }}</td>
+                            <th scope="row"> الموظف المستلم</th>
+                            <td>{{ $data->person_to ? $data->personTo->name : 'لا يوجد موظف مستلم' }}</td>
                         </tr>
                         <tr>
                             <th scope="row">العنوان</th>
                             <td>{{ $data->name ? $data->name : 'لا يوجد عنوان للصادر' }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">اسم الاداره</th>
-                            <td>{{ $data->department_id ? $data->department_External->name : 'لا يوجد قسم خارجى' }}</td>
+                            <th scope="row">اسم القطاع</th>
+                            <td>{{ $data->department_id ? $data->department_External->name : 'لا يوجد قطاع' }}</td>
                         </tr>
                         <tr>
                             <th scope="row">رقم الصادر</th>
@@ -94,42 +94,30 @@
                             <th scope="row" style="background: #f5f6fa;"> الملفات المرفقة الاخري </th>
                             <td>
                                 <ul class="list-group">
-                            @if (!empty($is_file))
-                                        @foreach ($is_file as $file)
-                                            @if ($file->file_type == 'pdf')
-                                                <div class="col-md-11 mb-3 px-5 mt-3">
-                                                    <a id="downloadButton" href="{{ route('downlaodfile', $file->id) }}"
-                                                        target="_blank" class="btn-download">
-                                                        <i class="fa fa-download" style="color:green; "> </i>
-                                                        {{ basename($file->real_name) }}</a>
+                                    <div class="col-md-11 mb-3 px-5 mt-2 d-flex">
+                                        @if (!empty($is_file))
+                                            @foreach ($is_file as $file)
+                                                @if ($file->file_type == 'pdf')
+                                                    <div>
+                                                        <a id="downloadButton"
+                                                            href="{{ route('downlaodfile', $file->id) }}" target="_blank"
+                                                            class="btn-download">
+                                                            <i class="fa fa-download" style="color:green; "> </i>
+                                                            {{ basename($file->real_name) }}</a>
 
-                                                </div>
-                                            @endif
-                                        @endforeach
-
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            لا يوجد ملفات لهذا الصادر
+                                        @endif
+                                        </div>
                                 </ul>
-                            @else
-                                لا يوجد ملفات لهذا الصادر
-                            @endif
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
-                        {{-- <tr>
-                            <th>الملفات</th>
-                            <td>
-                                @if (!empty($is_file))
-                                    @foreach ($is_file as $file)
-                                        <embed src="{{ asset($file->file_name) }}" width="100px" height="80px" />
-                                        <a href="{{ route('downlaodfile', $file->id) }}" class="btn btn-info btn-sm"><i
-                                                class="fa fa-download"></i></a>
-                                    @endforeach
-                                @else
-                                    لايوجد ملفات للصادر
-                                @endif
-                            </td>
-
-                        </tr> --}}
+                        
                     </tfoot>
 
                 </table>

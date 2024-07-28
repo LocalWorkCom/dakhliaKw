@@ -16,20 +16,20 @@
     <section>
         <div class="row">
         <div class="container welcome col-11">
-                <p> الادارات </p>
+                <p> القطاعات </p>
             </div>
         </div>
 
         <div class="row">
             <div class="container col-11 mt-3 p-0">
                 <div class="row" dir="rtl">
-                    <div class="form-group mt-4 mx-2 col-12 d-flex">
+                    <div class="form-group mt-4 mx-md-2 col-12 d-flex">
                         <button type="button" class="wide-btn mx-3"
                             onclick="window.location.href='{{ route('departments.create') }}'">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة جديد
                         </button>
 
-                        <button type="button" class="wide-btn mx-3"
+                        <button type="button" class="wide-btn mx-md-3"
                             onclick="window.location.href='{{ route('postmans.create') }}'">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة مندوب
                         </button>
@@ -93,7 +93,8 @@
                 }
             }],
             "oLanguage": {
-                                            "sSearch": "بحث",
+                                        "sSearch": "",
+                                        "sSearchPlaceholder":"بحث",
                                             "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
                                             "sInfoEmpty": 'لا توجد بيانات متاحه',
                                             "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
@@ -115,7 +116,7 @@
                                         },
                                          "pagingType": "full_numbers"
         });
-        
+
     });
     function deleteDepartment(id) {
         console.log(id);
@@ -123,7 +124,7 @@
         $.ajax({
             url: '/departments/delete/' + id ,
             type: 'get',
-            
+
             success: function(response) {
                 // Handle success, e.g., refresh DataTable, show success message
                 $('#users-table').DataTable().ajax.reload();

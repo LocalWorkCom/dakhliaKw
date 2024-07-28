@@ -92,11 +92,14 @@
                         <tr>
                             <th scope="row" >الوظيفة</th>
                                         @foreach ($job as $item)
-                                            <option value="{{ $item->id }}" {{ $user->job == $item->id ? 'selected' : '' }}>
+                                        @if($user->job == $item->id)
+                                           <td >
                                                 {{ $item->name }}
-                                            </option>
+                                            
+                                          </td>
+                                          @endif
                                         @endforeach
-                            </td>
+
                         </tr>
                         
                         <tr>
@@ -131,9 +134,15 @@
                         <tr>
                             <th scope="row" >    الرتبه  </th>
                                 @foreach ($grade as $item)
-                                    <option value="{{ $item->id }}"> 
-                                        <td > {{ $item->name }}</td>
-                                    </option>
+                                    <!--<option value="{{ $item->id }}"> -->
+                                    <!--    <td > {{ $item->name }}</td>-->
+                                    <!--</option>-->
+                                    
+                                    @if($user->	grade_id == $item->id)
+                                           <td >
+                                                {{ $item->name }}
+                                          </td>
+                                    @endif
                                 @endforeach
                         </tr>
                         
@@ -193,20 +202,28 @@
                             <td > {{ $user->work_location }} </td>
                         </tr>
 
-                        <tr>
+                        
+
+                            @if($user->image)
+                            <tr>
                             <th scope="row" >الصوره</th>
-                            <td >
-                                <div class="row">
-                                    <div class="col-md-11 mb-3 px-5 mt-2">
-                                        <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
-                                           data-image="{{ asset($user->image) }}" data-title="{{ $user->image }}">
-                                            <img src="{{ asset($user->image) }}" class="img-thumbnail mx-2"
-                                                 alt="{{ $user->image }}">
-                                        </a>
+
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-11 mb-3 px-5 mt-2">
+                                            <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
+                                            data-image="{{ asset($user->image) }}" data-title="{{ $user->image }}">
+                                                <img src="{{ asset($user->image) }}" class="img-thumbnail mx-2"
+                                                    alt="{{ $user->image }}">
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+
+                            @endif
+
+
 
                         
                         {{-- <tr>

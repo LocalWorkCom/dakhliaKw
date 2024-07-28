@@ -6,20 +6,20 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{{ route('home') }}">الرئيسيه</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">الادارات </a></li>
+            <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">القطاعات </a></li>
             <li class="breadcrumb-item active" aria-current="page"> <a href="#">تفاصيل الادارة</a></li>
         </ol>
     </nav>
 </div>
 <div class="row ">
     <div class="container welcome col-11">
-        <p> الادارات </p>
+        <p> القطاعات </p>
     </div>
 </div>
 <section style="direction: rtl;">
     <div class="row">
         <div class="container  col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11 pt-5 pb-4 px-3">
-            <table class="table table-bordered ">
+            <table class="table  table-bordered ">
                 <tbody>
                     <tr>
                         <th scope="row" style="background: #f5f6fa;">اسم الادارة</th>
@@ -27,12 +27,9 @@
                     </tr>
                     <tr>
                         <th scope="row">المدير</th>
-                        <td>{{ $department->manager ? $department->manager->id : 'N/A' }}</td>
+                        <td>{{ $department->manager ? $department->manager->name : 'N/A' }}</td>
                     </tr>
-                    <tr>
-                        <th scope="row"> مساعد المدير</th>
-                        <td> {{ $department->managerAssistant ? $department->managerAssistant->id : 'N/A' }}</td>
-                    </tr>
+                    
                     @if($department->children->count() > 0)
                     @foreach($department->children as $child)
                         <tr>
@@ -44,6 +41,7 @@
                         @endforeach
                     @else
                     <tr>
+                    <th scope="row"> القسم الفرعي </th>
                         <td>لا يوجد </td>
 </tr>
                     @endif

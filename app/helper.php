@@ -4,6 +4,7 @@ use App\Models\EmployeeVacation;
 use App\Models\Io_file;
 use App\Models\User;
 use App\Models\VacationType;
+use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -120,7 +121,7 @@ if (!function_exists('UploadFiles')) {
         $thumbnail = $request;
         $destinationPath = $path;
         $filerealname = $thumbnail->getClientOriginalName();
-        $filename = $model->id.time() . '.' . $thumbnail->getClientOriginalExtension();
+        $filename = $model->id . time() . '.' . $thumbnail->getClientOriginalExtension();
         // $destinationPath = asset($path) . '/' . $filename;
         $thumbnail->move($destinationPath, $filename);
         // $thumbnail->resize(1080, 1080);
@@ -132,6 +133,25 @@ if (!function_exists('UploadFiles')) {
 
         $model->save();
     }
+}
+function generateUniqueNumber($counter)
+{
+   
+    //static $counter = 0 ; // Static variable to keep track of the counter
+    $today = Carbon::today();
+    $year = $today->year;
+    $month = sprintf("%02d", $today->month); // Add leading zero if month is less than 10
+    $day = sprintf("%02d", $today->day); // Add leading zero if day is less than 10
+    
+    $formattedDate = $year . '-' . $month . $day;
+      // Increment the counter
+   
+    $incrementedCounter = str_pad($counter + 1, 4, '0', STR_PAD_LEFT);
+    //dd($incrementedCounter);
+    //$incrementedCounter++;
+    $formattedNumber = $formattedDate . '-' . $incrementedCounter;
+
+    return ['formattedNumber' => $formattedNumber, 'counter' => $counter+1];
 }
 
 

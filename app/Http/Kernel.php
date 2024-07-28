@@ -69,6 +69,9 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // Other middleware entries
         'check.permission' => \App\Http\Middleware\CheckPermission::class,
+       
+        'verified' => \App\Http\Middleware\CheckVerified::class,
+        
     ];
 
 }

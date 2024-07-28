@@ -29,7 +29,7 @@
             </div>
             <button class="btn2 btn-2 mx-5" style="    border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
                 onclick="toggleDropdown2()">
-                <a class="bell mx-5">
+                <a class="bell mx-md-5">
                     <i class=" fa-regular fa-bell"></i>
                 </a>
             </button>
@@ -55,7 +55,7 @@
                 <select name="#" id="#" class=" mt-4" style="direction:rtl;">
                     <option value="#"> المستخدميين </option>
                     <option value="{{ route('departments.index') }}"> الادارات </option>
-                    
+
                     <option value="#"> الموظفين </option>
                     <option value="{{ route('Export.index') }}"> الصادر </option>
                     <option value="#"> الوارد </option>
@@ -72,7 +72,7 @@
             <i class="fa-solid fa-bars side-nav" ></i>
           </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav ml-auto" >
+            <ul class="navbar-nav  d-flex justify-content-between w-100">
                 <li class="nav-item" onclick="makeActive(this)">
                     <a href="{{route('home')}}">
                         <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
@@ -96,16 +96,18 @@
                 </li>
                 <div id="dropdownMenu3" class="dropdown-menu3">
                     <ul>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/emploee.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('user.employees', 1) }}">الموظفين</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('vacations.list') }}">الاجازات</a>
                         </li>
-                     <!--    <li style="list-style: inside;">
+                     <!--    <li >
                             <a href="#">الشيفتات</a>
                         </li> -->
-                        <!-- {{-- <li style="list-style: inside;">
+                        <!-- {{-- <li >
                             <a href="#">الاجازات</a>
                         </li> --}}
                     </ul> -->
@@ -135,40 +137,46 @@
                 </li>
                 <div id="dropdownMenu4" class="dropdown-menu4">
 
-                    <ul>
-                        <li style="list-style: inside;">
+                    <ul >
+                        <li >
+                        <img src="{{ asset('frontend/images/police.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('grads.index') }}">الرتب العسكريه</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/jobs.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('job.index') }}">الوظائف</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/map.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('government.all') }}">المحافظات</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/task.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('rule.index') }}">المهام</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/permission.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('permission.index') }}">الصلاحيات</a>
                         </li>
                     </ul>
                 </div>
-    
+
 
         <li class="nav-item" onclick="makeActive(this)">
 
             <a href="{{ route('iotelegrams.list') }}">
-                <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
+            <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
                 <h6>الوارد</h6>
             </a>
         </li>
 
         <li class="nav-item" onclick="makeActive(this)">
             <a href="{{ route('Export.index') }}">
-                <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
+            <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
                 <h6>الصادر</h6>
 
             </a>

@@ -46,7 +46,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="form-row mx-2">
+                    <div class="form-row mx-md-2">
                         <div class="form-group col-md-6">
                             <label for="nameex">العنوان</label>
                             <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
@@ -99,13 +99,13 @@
                         </div>
                     </div>
 
-                    <div class="form-row mx-2">
+                    <div class="form-row mx-md-2">
                         <div class="form-group col-md-12">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> {{ $data->note }}</textarea>
                         </div>
                     </div>
-                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group  col-md-10 ">
                             <label for="files"> اضف ملفات بحد اقصي 10 </label>
                         </div>

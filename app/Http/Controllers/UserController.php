@@ -40,19 +40,52 @@ class UserController extends Controller
     // }
     public function index($id)
     {
-        
+        // if()
         return view('user.view', compact('id'));
     }
 
     public function getUsers($id)
     {
+       
+        // $flagType = $id == 0 ? 'user' : 'employee';
+        // $perentdepartment = departements::find(Auth()->user()->department_id)->first();
+        // if($perentdepartment->parent_id == Null)
+        // {
+        //     $subdepart =  departements::where('parent_id',$perentdepartment->id)->pluck('id')->toArray();
+        //     $data = User::where('flag', $flagType)->whereIn('department_id' ,$subdepart)->orwhere('department_id' ,$perentdepartment->id)->get();
+        // }
+        // else
+        // {
+        //     $data = User::where('flag', $flagType)->where('department_id' ,$perentdepartment->id)->get();
+        // }
         $flagType = $id == 0 ? 'user' : 'employee';
-        $data = User::where('flag', $flagType)->get();
+        $parentDepartment = Departements::find(Auth()->user()->department_id);
+
+        if (is_null($parentDepartment->parent_id)) {
+            $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();
+            $data = User::where('flag', $flagType)
+            ->where(function ($query) use ($subdepart, $parentDepartment) {
+                $query->whereIn('department_id', $subdepart)
+                      ->orWhere('department_id', $parentDepartment->id);
+            })
+                        // ->whereIn('department_id', $subdepart)
+                        // ->orWhere('department_id', $parentDepartment->id)
+                        ->get();
+        } else {
+            $data = User::where('flag', $flagType)
+                        ->where('department_id', $parentDepartment->id)
+                        ->get();
+        }
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 
             return '<button class="btn btn-primary btn-sm">Edit</button>
               <a href="" class="btn btn-primary btn-sm">vacations</a>';
+        })
+        ->addColumn('department', function ($row) { // New column for departments count
+        
+            $department = departements::where('id', $row->department_id)->pluck('name')->first();
+            return $department;
         })
             ->rawColumns(['action'])
             ->make(true);
@@ -178,6 +211,7 @@ class UserController extends Controller
                 if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code') || url()->previous() == route('verfication_code')) {
                     return view('resetpassword', compact('military_number', 'firstlogin'));
                 } else {
+                    Auth::login($user); // Log the user in
                     return redirect()->route('home');
                 }
             }
@@ -276,8 +310,9 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
         Auth::login($user); // Log the user in
+        session()->flash('success', 'تم إعادة تعيين كلمة المرور بنجاح');
 
-        return redirect()->route('home')->with('success', 'تم إعادة تعيين كلمة المرور بنجاح');
+        return redirect()->route('home');
         // return redirect()->route('home')->with('user', auth()->user());
 
     }
@@ -304,7 +339,7 @@ class UserController extends Controller
         $grade = grade::all();
         $job = job::all();
         // dd($user->department_id);
-        if($user->flag == "user")
+        if($flag == "0")
         {
             $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
         }
@@ -312,13 +347,15 @@ class UserController extends Controller
         {
             $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
         }
-        
+
+        $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
+        // $speificUsers = User::where('department_id',$user->department_id)->where('flag','employee')->get();
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
         // $alldepartment = $user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
-        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade','job'));
+        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade','job','alluser'));
     }
 
     /**
@@ -332,58 +369,89 @@ class UserController extends Controller
         if($request->type == "0")
         {
             $messages = [
-                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
-                'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
-                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
-
-                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
-                'rule.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
+                'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+                'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
                 'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
-                'department.required' => 'القسم  يجب أن يكون نصاً.',
                 // Add more custom messages here
             ];
             
             $validatedData = Validator::make($request->all(), [
-                'military_number' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    ValidationRule::unique('users', 'military_number'),
-                ],
-                'phone' => 'required|string',
-                'file_number' => 'required|string',
-                'rule' => 'required',
+                'name' => 'required|string',
+                'rule_id' => 'required',
                 'password' => 'required',
-                'department' => 'required',
             ], $messages);
         }
         else
         {
             $messages = [
-                // 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
-                // 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
+                'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+                'name.string' => 'الاسم  يجب أن يكون نصاً.',
+                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
+                'Civil_number.unique' => 'رقم المدنى الذي أدخلته موجود بالفعل.',
+                'file_number.unique' => 'رقم الملف الذي أدخلته موجود بالفعل.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
+                'phone.unique' => 'رقم الهاتف الذي أدخلته موجود بالفعل.',
+                'phone.max'=>'رقم الهاتف اقل من 6 اراقام',
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
-                'department.required' => 'القسم  يجب أن يكون نصاً.',
+                'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
+                'department_id.required' => 'القسم  يجب أن يكون نصاً.',
                 // Add more custom messages here
             ];
+
+            $rules = [
+                'phone' => [
+                    'required',
+                    'max:6',
+                    ValidationRule::unique('users', 'phone'),
+                ],
+                'name' => 'required|string',
+                'department_id' => 'required',
+                'Civil_number' => [
+                    ValidationRule::unique('users', 'Civil_number'),
+                ],
+                'file_number' => [
+                    ValidationRule::unique('users', 'file_number'),
+                ],
+                'military_number' => [         
+                    ValidationRule::unique('users', 'military_number'),
+                ],
+            ];
+            if($request->has('solderORcivil') && $request->solderORcivil =="solder")
+            {
+                if ($request->has('military_number')) {
+                    $rules['military_number'] = [
+                        'required',
+                        'string',
+                        'max:255',
+                        ValidationRule::unique('users', 'military_number'),
+                    ];
+                }
+               
+            }
             
-            $validatedData = Validator::make($request->all(), [
-                // 'military_number' => [
-                //     'required',
-                //     'string',
-                //     'max:255',
-                //     ValidationRule::unique('users', 'military_number'),
-                // ],
-                'phone' => 'required|string',
-                'file_number' => 'required|string',
-                'department' => 'required',
-            ], $messages);
+           
+            if ($request->has('Civil_number')) {
+                $rules['Civil_number'] = [
+                    'required',
+                    'string',
+                    'max:255',
+                    ValidationRule::unique('users', 'Civil_number'),
+                ];
+            }
+            if ($request->has('file_number')) {
+                $rules['file_number'] = [
+                    'required',
+                    'string',
+                    'max:255',
+                    ValidationRule::unique('users', 'file_number'),
+                ];
+            }
+          
+            
+            $validatedData = Validator::make($request->all(), $rules, $messages);
+
         }
         
     
@@ -393,50 +461,46 @@ class UserController extends Controller
         }
 
 
-        // $validatedData = $request->validate([
-        //     'military_number' => 'required|string|unique:users|max:255',
-        //     'phone' => 'required|max:255',
-        //     // 'password' => 'required|string|min:8|confirmed',
-        //     // 'country_code' =>'required',
-        // ]);
-
         if ($request->type == "0") {
-            $newUser = new User();
-            $newUser->military_number = $request->military_number;
-            $newUser->phone = $request->phone;
-            $newUser->country_code = "+20";
-            $newUser->name = $request->name;
-            $newUser->file_number = $request->file_number;
-            $newUser->flag = "user";
-            $newUser->rule_id = $request->rule;
-            if($request->has('job'))
-            {
-                $newUser->job_id = $request->job;
-            }
-            $newUser->department_id  = $request->department;
+            $newUser = User::find($request->name);
             $newUser->password = Hash::make($request->password);
+            $newUser->flag = "user";
+            $newUser->rule_id = $request->rule_id;   
             $newUser->save();
         } else {
+
+
             $newUser = new User();
+            $newUser->name = $request->name;
+            $newUser->email = $request->email;
+            $newUser->type = $request->gender;
+            $newUser->address1 = $request->address_1;
+            $newUser->address2 = $request->address_2;
+            $newUser->Provinces = $request->Provinces;
+            $newUser->sector = $request->sector;
+            $newUser->region = $request->region;
             $newUser->military_number = $request->military_number;
             $newUser->phone = $request->phone;
-            $newUser->country_code = "+20";
-            $newUser->name = $request->name;
+            $newUser->job_title = $request->job_title;
+            $newUser->nationality = $request->nationality;
+            $newUser->Civil_number = $request->Civil_number;
+            $newUser->seniority = $request->seniority;
+            $newUser->department_id = $request->department_id;
+            $newUser->work_location = $request->work_location;
+            $newUser->qualification = $request->qualification;
+            $newUser->date_of_birth = $request->date_of_birth;
+            $newUser->joining_date = $request->joining_date;
+            $newUser->length_of_service = $request->end_of_service;
+            $newUser->description = $request->description;    
             $newUser->file_number = $request->file_number;
+            // 
+            $newUser->employee_type = $request->solderORcivil;
             $newUser->flag = "employee";
-            if ($request->has('solder') && $request->solder == "on") {
-                $newUser->grade_id = $request->grade_id;
-            }
+            $newUser->grade_id = $request->grade_id;
             if($request->has('job'))
             {
                 $newUser->job_id = $request->job;
             }
-            // $newUser->password = NUll;
-            $newUser->description = $request->description;
-            // $newUser->job = $request->job;
-            $newUser->date_of_birth = $request->date_of_birth;
-            $newUser->public_administration = $request->department;
-            // $newUser->department_id  = $request->department;
             $newUser->save();
             
             if ($request->hasFile('image')) {
@@ -448,7 +512,16 @@ class UserController extends Controller
         }
 
         $id = $request->type;
-
+        // if($user->flag == "user")
+        // {
+        //     $department = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        // }
+        // else
+        // {
+        //     $department = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        // }
+        // // $department = departements::all();
+        // $hisdepartment = $user->createdDepartments;
 
         // return response()->json($newUser);
         return view('user.view', compact('id'));
@@ -626,7 +699,15 @@ class UserController extends Controller
         if ($user->flag == "user") {
             $user->rule_id = $request->rule_id;
             $user->department_id  = $request->department_id;
-            $user->password = Hash::make($request->password);
+            if (!Hash::check($request->password, $user->password)) {
+                $user->password = Hash::make($request->password);
+                $user->save();
+                Auth::logout();
+                session()->flash('success', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى. .');
+
+                return redirect('/login');
+                // with('status', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى.');
+            }
         }
         $user->save();
         // dd($user);

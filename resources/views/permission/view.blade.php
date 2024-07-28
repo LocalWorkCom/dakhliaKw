@@ -19,7 +19,7 @@
         <div class="row">
             <div class="container col-11 mt-3 p-0">
                 <div class="row" dir="rtl">
-                    <div class="form-group mt-4 mx-2 col-12 d-flex">
+                    <div class="form-group mt-4 mx-md-2 col-12 d-flex">
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('permission.create') }}'">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة جديد
@@ -78,8 +78,9 @@
 
                 }],
                 "oLanguage": {
-                                            "sSearch": "بحث",
-                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                    "sSearch": "",
+                    "sSearchPlaceholder":"بحث",
+                                                                "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
                                             "sInfoEmpty": 'لا توجد بيانات متاحه',
                                             "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
@@ -99,7 +100,7 @@
                                             }
                                         },
                                          "pagingType": "full_numbers"
-            
+
             });
         });
     </script>
