@@ -72,7 +72,11 @@ class IoTelegramController extends Controller
         $recieves = User::all();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments'));
+        
+        $max_num = Iotelegram::max('id') + 1;
+        $outgoing_num = "2024-0724-01";
+
+        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments', 'max_num', 'outgoing_num'));
     }
 
     /**

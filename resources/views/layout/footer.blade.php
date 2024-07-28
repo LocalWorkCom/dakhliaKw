@@ -179,9 +179,15 @@
         const files = document.getElementById('fileInput').files;
         const fileList = document.getElementById('fileList');
 
-
-        max_num = 10;
-
+        if ($('#files_num').length > 0) {
+            var max_num = $('#files_num').find('option:selected').val();
+            if (!max_num) {
+                alert("please choose file number");
+                return;
+            }
+        } else {
+            max_num = 10;
+        }
         if (files.length == 0) {
             alert("please choose files");
             return;

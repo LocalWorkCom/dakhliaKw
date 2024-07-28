@@ -124,7 +124,8 @@
                         $('#name_dev').attr('hidden', true);
                         $('#reportImage-div').attr('hidden', true);
                         $('#date_to').prop('disabled', true);
-                        if (!id) {
+                        $('#date_to').attr('value', today);
+                        if (id == 0 || id == '') {
 
                             $('#employee_id').prop('disabled', false);
                             $('#employee_id').attr('required', true);
@@ -142,8 +143,7 @@
                         $('#reportImage-div').attr('hidden', true);
                         $('#name_dev').attr('hidden', true);
                         $('#date_to').prop('disabled', false);
-                        if (!id) {
-
+                        if (id == 0 || id == '') {
                             $('#employee_id').prop('disabled', false);
                             $('#employee_id').attr('required', true);
                         }
