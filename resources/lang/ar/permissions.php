@@ -11,7 +11,7 @@ return [
 'view Permission'=> ' عرض الصلاحيات' ,
 'edit Permission'=> 'تعديل الصلاحيات' ,
 'view Rule'=> 'عرض المهام',
- 'view departements'=> 'عرص الاقسام' ,
+ 'view departements'=> 'عرض الاقسام' ,
  'edit departements'=> 'تعديل الاقسام',
  'edit Rule'=> 'تعديل المهام' ,
  'view Postman'=> 'عرض المندوب' ,
