@@ -39,10 +39,34 @@
                     <div class="form-row mx-md-3 d-flex justify-content-center mt-5">
 
                         <div class="form-group col-md-5 mx-md-2">
-                            <label for="date">التاريخ</label>
-                            <input type="date" id="date" name="date" class="form-control" required>
+                            <label for="outgoing_date">تاريخ الصادر</label>
+                            <input type="date" id="outgoing_date" name="outgoing_date" class="form-control" required>
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
+                            <label for="outgoing_num">رقم الصادر</label>
+                            <input type="text" id="outgoing_num" name="outgoing_num" class="form-control" disabled
+                                value="{{ $outgoing_num }}">
+                        </div>
+                    </div>
+                    <div class="form-row mx-md-3 d-flex justify-content-center mt-5">
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="date">تاريخ الوارد</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="iotelegram_num">رقم الوارد</label>
+                            <input type="number" id="iotelegram_num" name="iotelegram_num" class="form-control" required
+                                disabled value="{{ $max_num }}">
+                        </div>
+                    </div>
+
+
+                    {{-- check attach by employee or no --}}
+
+                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
+
+                        <div class="form-group col-md-10 mx-md-2">
                             <label for="recieved_by">الموظف المستلم</label>
                             <select id="recieved_by" name="recieved_by" class="form-control" required>
                                 <option value="">اختر الموظف</option>
@@ -52,11 +76,15 @@
                             </select>
                         </div>
                     </div>
-
-
                     <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-md-2 ">
-                            <label for="representive_id">اختر المندوب </label>
+                        <div class="form-group col-md-5 mx-md-2 " dir="rtl">
+                            <div class="d-flex justify-content-between">
+
+                                <label for="representive_id">اختر المندوب </label>
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
+                                    data-bs-toggle="modal" data-bs-target="#representative" data-dismiss="modal"
+                                    id="representative-dev">
+                            </div>
                             <select id="representive_id" name="representive_id" class="form-control" required>
                                 <option value="">اختر المندوب</option>
                                 @foreach ($representives as $item)
@@ -65,10 +93,15 @@
                             </select>
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
-                            <label for="from_departement">الجهة المرسلة</label>
+                            <div class="d-flex justify-content-between" dir="rtl">
 
+                                <label for="from_departement">القطاع </label>
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
+                                    data-bs-toggle="modal" id="extern-department-dev" data-bs-target="#extern-department"
+                                    data-dismiss="modal">
+                            </div>
                             <select id="from_departement" name="from_departement" class="form-control" required>
-                                <option value="">اختر الجهة</option>
+                                <option value="">اختر القطاع</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
@@ -76,7 +109,36 @@
                         </div>
 
                     </div>
+                    
+                    <div class="form-row pt-2 pb-2 mx-md-2 d-flex justify-content-center">
+                        <div class="form-group d-flex col-md-10 mx-md-2" dir="rtl">
+                            <input type="checkbox" id="toggleCheckbox">
+                            <label for="toggleCheckbox">هل الوارد خاص بموظف ؟</label>
+                        </div>
+                    </div>
+                    <div class="form-row  mx-md-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10 mx-md-2  hidden" id="identityGroup">
+                            <label class="pb-2" for="identityInput">رقم الهوية أو العسكري</label>
+                            <select id="active" class="form-control" name="active">
+                                <option value="0" selected>ddd</option>
+                                <option value="1"> dddd</option>
 
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
+                        <div class="form-group  col-md-10 ">
+                            <label for="files_num"> عدد الكتب</label>
+
+                            <select id="files_num" name="files_num" class="form-control" required>
+                                <option value="">اختر العدد</option>
+
+                                @for ($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group  col-md-10 ">
@@ -87,7 +149,8 @@
                                 <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control"
                                     accept="image/jpeg, image/png, application/pdf">
 
-                                <button class="btn-all mx-md-1" onclick="uploadFiles()" style="color:green;" type="button">
+                                <button class="btn-all mx-md-1" onclick="uploadFiles()" style="color:green;"
+                                    type="button">
                                     اضف </button>
 
                                 <div class="space-uploading">
@@ -246,6 +309,7 @@
                 var today = new Date().toISOString().split('T')[0];
 
 
+                $('#outgoing_date').attr('value', today);
                 $('#date').attr('value', today);
 
                 checkFileCount();
@@ -388,6 +452,16 @@
                         $('.remove-file').prop('disabled', true);
                     }
                 }
+                $('#checked').click(function() {
+                    if ($(this).is(':checked')) {
+
+                        $('#select').show();
+                    } else {
+                        $('#select').hide();
+
+                    }
+
+                });
 
             });
         </script>
