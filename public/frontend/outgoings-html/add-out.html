@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <script type="application/javascript" src="../js/bootstrap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Bootstrap-->
+    <link href="../styles/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="../styles/responsive.css">
+</head>
+
+<body>
+
+    <div class="all-nav">
+        <div class="upper-navbar d-flex ">
+        <div class="second-section d-flex mx-md-4 mx-sm-0 col-md-9 col-sm-6">
+        <!-- <button class="btn-2 mx-2">تسجيل خروج
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button> -->
+        <div class="dropdown">
+
+          <button class="btn btn-2  mt-3" onclick="toggleDropdown()">
+             <i class="fa-solid fa-angle-down md-mx-2"></i>
+              اسم المستخدم
+            <i class="fa-solid fa-user md-mx-2 "></i>
+          </button>
+          <div id="dropdownMenu" class="dropdown-menu">
+            <a href="#">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
+
+          </div>
+        </div>
+        <button class="btn2 btn-2 mx-5"  style=" border-inline: 1px solid rgb(41, 41, 41); height: 100%;" onclick="toggleDropdown2()">
+            <i class=" fa-regular fa-bell bell md-mx-5" ></i>
+      </button>
+      <div id="dropdownMenu2" class="dropdown-menu2">
+       <p>notification notification notification notification </p><hr>
+       <p>notification notification notification notification </p><hr>
+       <p>notification notification notification notification </p><hr>
+       <p>notification notification notification notification </p><hr>
+       <p>notification notification notification notification </p><hr>
+
+      </div>
+        <div class="input-group">
+          <button type="button" class="btn  mt-4" data-mdb-ripple-init>
+            <i class="fas fa-search"></i>
+          </button>
+          <div class="form-outline  mt-4" >
+            <input type="search" id="" class="form-control" placeholder="بحث"/>
+          </div>
+          <select name="#" id="#" class=" mt-4">
+            <option value="#"> المستخدميين </option>
+            <option value="#"> الادارات </option>
+            <!-- <option value="#"> التعيينات </option> -->
+            <option value="#"> الموظفين </option>
+            <option value="#"> الصادر </option>
+            <option value="#"> الوارد </option>
+          </select>
+        </div>
+        </div>
+
+        <div class="first-section d-flex mt-1 " >
+            <h2>  الرقابة والتفتيش</h2>
+            <img  class="mt-2" src="/images/logo.svg" alt="">
+        </div>
+            </div>
+
+            <div class="navbar navbar-expand-md mb-4" role="navigation">
+
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars" ></i>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarCollapse">
+                  <ul class="navbar-nav ml-auto">
+
+                      <li class="nav-item" onclick="makeActive(this)">
+                          <img src="/images/exports.svg" alt="logo">
+                          <h6 class="nav-link">الوارد</h6>
+                      </li>
+                      <li class="nav-item" onclick="makeActive(this)">
+                          <img src="/images/imports.svg" alt="logo">
+                          <h6 class="nav-link">الصادر</h6>
+                      </li>
+                      <li class="nav-item" onclick="makeActive(this)">
+                          <img src="/images/employees.svg" alt="logo">
+                          <h6 class="nav-link">الموظفين</h6>
+                      </li>
+                      <!-- <li class="nav-item" onclick="makeActive(this)">
+                          <img src="/images/managements.svg" alt="logo">
+                          <h6 class="nav-link  ">التعيينات</h6>
+                      </li> -->
+                      <li class="nav-item" onclick="makeActive(this)">
+                          <img src="/images/managements.svg" alt="logo">
+                          <h6 class="nav-link">الادارات</h6>
+                      </li>
+                      <li class="nav-item" onclick="makeActive(this)">
+                          <img src="/images/users.svg" alt="logo">
+                          <h6 class="nav-link">المستخدمين</h6>
+                      </li>
+                      <li class="nav-item" onclick="makeActive(this)">
+                          <img src="/images/home.svg" alt="logo">
+                          <h6 class="nav-link">الرئيسية</h6>
+                      </li>
+
+                  </ul>
+
+              </div>
+          </div>
+
+
+    </div>
+
+    <main>
+<div class="row col-11" dir="rtl">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item "><a href="#" >الرئيسيه</a></li>
+          <li class="breadcrumb-item"><a href="{{ route('Export.index') }}">الصادرات </a></li>
+          <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة الصادر</a></li>
+        </ol>
+      </nav>
+</div>
+        <div class="row ">
+            <div class="container welcome col-11">
+                <p> الصــــــــــــادرات </p>
+            </div>
+        </div>
+        <br>
+        <div class="row" >
+            <div class="container  col-11 mt-3 p-0 ">
+<div class="row " dir="rtl">
+    <div class="form-group mt-4  mx-2 col-12 d-flex ">
+        <button type="button" class="wide-btn  " data-bs-toggle="modal"
+        id="extern-user-dev" data-bs-target="#extern-user" style="color: #0D992C;">
+<img src="../images/add-btn.svg" alt="img">
+    اضافة شخص صادر خارجى
+</button>
+
+<button type="button" class="btn-all mx-3 " data-bs-toggle="modal"
+id="extern-department-dev" data-bs-target="#extern-department" style="color: #0D992C;">
+<img src="../images/add-btn.svg" alt="img">
+اضافة أداره خارجيه
+</button>
+   </div>
+</div>
+                <div class="form-row mx-2 ">
+                    <div class="form-group col-md-6">
+                        <label for="nameex">العنوان</label>
+                        <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
+                            required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="select-person-to">person_to </label>
+                        <select id="select-person-to" name="person_to" class="form-control">
+                            <option disabled> اختر من القائمه</option>
+                            <option value="{{ $user->id }}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row mx-2">
+                    <div class="form-group col-md-6">
+                        <label for="date">تاريخ الصادر </label>
+                        <input type="date" id="date" name="date" class="form-control" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="exportnum">رقم الصادر</label>
+                        <input type="text" class="form-control" name="num" id="exportnum" required>
+                    </div>
+
+                </div>
+                <div class="form-row mx-2">
+                    <div class="form-group col-md-6">
+                        <label for="active">الحاله</label>
+                        <select id="active" class="form-control" name="active">
+                            <option value="0">مفعل</option>
+                            <option value="1">غير مفعل</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="from_departement">الجهة المرسلة</label>
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                            id="extern-department-dev" data-bs-target="#extern-department">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <select id="from_departement" name="from_departement" class="form-control">
+                            <option value="">اختر الجهة</option>
+                            @foreach ($departments as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row mx-2">
+                    <div class="form-group col-md-12">
+                        <label for="exampleFormControlTextarea1">ملاحظات </label>
+                        <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"
+                            required> </textarea>
+                    </div>
+                </div>
+
+
+
+        
+
+
+                <div class="form-row mx-2"  dir="rtl">
+                    <div class="form-group d-flex justify-content-between" dir="rtl">
+    
+                             <label for="file-upload" class="custom-file-upload">
+                                <i class="fa-solid fa-upload"></i> 
+                                رفع الملف
+                                 </label>
+                             <input id="file-upload" type="file" style="border: 1px solid rgb(217 214 214); " />
+                     
+                      </div>
+                       <div class="file-btns d-inline ">
+                        <button type="button" class=" btn mx-3" id="addFile">إضافة ملف جديد</button>
+                        <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                    </div>
+                </div>
+                <div class="form-row" dir="rtl">
+                    <button class="btn-all mx-3" type="submit" style="color: #0D992C;"> <img src="../images/add-btn.svg"
+                            alt="img"> اضافة </button>
+                </div>
+                <br>
+            </div>
+
+
+
+        </div>
+
+
+
+        </div>
+    </main>
+    <br> <br> <br> <br>
+    <footer class="my-2">
+        <div class="footer ">
+            <p>جميع الحقوق محفوظه </p>
+        </div>
+    </footer>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-zEYs/p5zCUo7LHibzS2KkETvP3L3PaZGvZLme7w+FVZ+Uk2x/E7l3niFf5XFk6ew" crossorigin="anonymous"></script> -->
+    <script>
+        function toggleDropdown() {
+            var dropdownMenu = document.getElementById("dropdownMenu");
+            if (dropdownMenu.style.display === "block") {
+                dropdownMenu.style.display = "none";
+            } else {
+                dropdownMenu.style.display = "block";
+            }
+        }
+
+        window.onclick = function (event) {
+            if (!event.target.matches('.btn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === "block") {
+                        openDropdown.style.display = "none";
+                    }
+                }
+            }
+        }
+        function toggleDropdown2() {
+            var dropdownMenu = document.getElementById("dropdownMenu2");
+            if (dropdownMenu.style.display === "block") {
+                dropdownMenu.style.display = "none";
+            } else {
+                dropdownMenu.style.display = "block";
+            }
+        }
+
+        window.onclick = function (event) {
+            if (!event.target.matches('.btn2')) {
+                var dropdowns = document.getElementsByClassName("dropdown-menu2");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === "block") {
+                        openDropdown.style.display = "none";
+                    }
+                }
+            }
+        }
+        function makeActive(element) {
+            var navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(function (link) {
+                link.classList.remove('active-page');
+            });
+            var navLink = element.querySelector('.nav-link');
+            navLink.classList.add('active-page');
+        }
+
+
+    </script>
+ <script>
+    $(document).ready(function() {
+
+    $("#saveExternalUser").on("submit", function(e) {
+        e.preventDefault();
+        // Serialize the form data
+        var formData = $(this).serialize(); // Changed to $(this)
+        // Submit AJAX request
+        $.ajax({
+            url: $(this).attr('action'), // Changed to $(this)
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                $('#select-person-to').empty();
+                $.ajax({
+
+                    url: "{{ route('external.users') }}",
+                    type: 'get',
+                    success: function(response) {
+                        // Handle success response
+                        var selectOptions =
+                            '<option value="">اختر الشخص الصادر</option>';
+                        response.forEach(function(department) {
+                            selectOptions += '<option value="' +
+                                department.id +
+                                '">' + department.name +
+                                '</option>';
+                        });
+                        $('#select-person-to').html(
+                            selectOptions
+                        );
+
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                    }
+                });
+                // Optionally, you can close the modal after successful save
+                $('#extern-user').modal('hide'); // Changed modal ID
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error(xhr.responseText);
+            }
+        });
+    });
+    });
+    $(document).ready(function() {
+        let fileInputCount = 1;
+                const maxFileInputs = 9;
+                $('#addFile').click(function() {
+                        var fileCount = $('#fileInputs').find('.file-input').length;
+                        if (fileCount < 10) {
+                            var newInput = '<div class="file-input mb-3">' +
+                                '<input type="file" name="files[]" class="form-control-file" >' +
+                                '<button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>' +
+                                '</div>';
+                            $('#fileInputs').append(newInput);
+                            checkFileCount(); // Update button states
+                        } else {
+                            alert('لا يمكنك إضافة المزيد من الملفات.');
+                        }
+                    });
+
+                    // Remove file input
+                    $(document).on('click', '.remove-file', function() {
+                        $(this).parent('.file-input').remove();
+                        checkFileCount(); // Update button states
+
+                    });
+
+                    function checkFileCount() {
+                        var fileCount = $('#fileInputs').find('.file-input').length;
+                        if (fileCount > 1) {
+                            $('.remove-file').prop('disabled', false);
+                        } else {
+                            $('.remove-file').prop('disabled', true);
+                        }
+                    }
+        });
+
+</script>
+</body>
+
+</html>
