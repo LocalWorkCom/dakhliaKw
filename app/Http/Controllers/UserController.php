@@ -40,7 +40,7 @@ class UserController extends Controller
     // }
     public function index($id)
     {
-        
+
         return view('user.view', compact('id'));
     }
 
@@ -88,26 +88,33 @@ class UserController extends Controller
         if ($user->flag !== 'user') {
             return back()->with('error', 'لا يسمح لك بدخول الهيئة');
         }
-
         $credentials = $request->only('military_number', 'password');
         if (Auth::attempt($credentials)) {
             $set = '123456789';
-            $code = substr(str_shuffle($set), 0, 4);
-
+            $code = substr(str_shuffle('123456789'), 0, 4);
+        
             $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
-
+        
             $response = send_sms_code($msg, $user->phone, $user->country_code);
             $result = json_decode($response, true);
-
+        
+            // Store the code in the session or a temporary table
+            // session(['verfication_code' => $code]);
+        
             if (isset($result['sent']) && $result['sent'] === 'true') {
+                // Redirect to verification view
+                Auth::logout();
+
                 return view('verfication_code', compact('code', 'military_number', 'password'));
             } else {
+                Auth::logout();
                 return back()->with('error', 'سجل الدخول مرة أخرى');
             }
         }
 
         return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
     }
+
 
 
     public function resend_code(Request $request)
@@ -138,26 +145,25 @@ class UserController extends Controller
     {
         // Validate incoming request data
         $validatedData = Validator::make($request->all(), [
-            'verfication_code' => 'required', // Ensure verfication_code field is required
+            'verfication_code' => 'required', // Ensure verification_code field is required
         ], [
             'verfication_code.required' => 'كود التفعيل مطلوب.',
         ]);
-
+    
         // Check if validation fails
         if ($validatedData->fails()) {
             return view('verfication_code')->withErrors($validatedData)
-                ->with('code', $request->code)
-                ->with('military_number', $request->military_number)
-                ->with('password', $request->password);
-        }
-
+            ->with('code', $request->code)
+            ->with('military_number', $request->military_number)
+            ->with('password', $request->password);        }
+    
         $code = $request->code;
         $military_number = $request->military_number;
         $password = $request->password;
 
-        // Check if the provided verification code matches the expected code
+        // Find the user by military number
         if ($request->code === $request->verfication_code) {
-            // Find the user by military number
+    
             $user = User::where('military_number', $request->military_number)->first();
 
             // Save the activation code and password
@@ -178,6 +184,7 @@ class UserController extends Controller
                 if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code') || url()->previous() == route('verfication_code')) {
                     return view('resetpassword', compact('military_number', 'firstlogin'));
                 } else {
+                    Auth::login($user); // Log the user in
                     return redirect()->route('home');
                 }
             }
@@ -189,8 +196,6 @@ class UserController extends Controller
                 ->with('password', $password);
         }
     }
-
-
     public function forget_password2(Request $request)
     {
         $messages = [
@@ -304,21 +309,18 @@ class UserController extends Controller
         $grade = grade::all();
         $job = job::all();
         // dd($user->department_id);
-        if($user->flag == "user")
-        {
-            $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
+        if ($user->flag == "user") {
+            $alldepartment = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+        } else {
+            $alldepartment = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
         }
-        else
-        {
-            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
-        }
-        
+
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
         // $alldepartment = $user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
-        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade','job'));
+        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade', 'job'));
     }
 
     /**
@@ -329,8 +331,7 @@ class UserController extends Controller
         // dd($request);
         // validation
 
-        if($request->type == "0")
-        {
+        if ($request->type == "0") {
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
@@ -344,7 +345,7 @@ class UserController extends Controller
                 'department.required' => 'القسم  يجب أن يكون نصاً.',
                 // Add more custom messages here
             ];
-            
+
             $validatedData = Validator::make($request->all(), [
                 'military_number' => [
                     'required',
@@ -358,9 +359,7 @@ class UserController extends Controller
                 'password' => 'required',
                 'department' => 'required',
             ], $messages);
-        }
-        else
-        {
+        } else {
             $messages = [
                 // 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 // 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
@@ -372,7 +371,7 @@ class UserController extends Controller
                 'department.required' => 'القسم  يجب أن يكون نصاً.',
                 // Add more custom messages here
             ];
-            
+
             $validatedData = Validator::make($request->all(), [
                 // 'military_number' => [
                 //     'required',
@@ -385,8 +384,8 @@ class UserController extends Controller
                 'department' => 'required',
             ], $messages);
         }
-        
-    
+
+
         // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
@@ -409,8 +408,7 @@ class UserController extends Controller
             $newUser->file_number = $request->file_number;
             $newUser->flag = "user";
             $newUser->rule_id = $request->rule;
-            if($request->has('job'))
-            {
+            if ($request->has('job')) {
                 $newUser->job_id = $request->job;
             }
             $newUser->department_id  = $request->department;
@@ -427,8 +425,7 @@ class UserController extends Controller
             if ($request->has('solder') && $request->solder == "on") {
                 $newUser->grade_id = $request->grade_id;
             }
-            if($request->has('job'))
-            {
+            if ($request->has('job')) {
                 $newUser->job_id = $request->job;
             }
             // $newUser->password = NUll;
@@ -438,11 +435,11 @@ class UserController extends Controller
             $newUser->public_administration = $request->department;
             // $newUser->department_id  = $request->department;
             $newUser->save();
-            
+
             if ($request->hasFile('image')) {
                 $file = $request->image;
                 $path = 'users/user_profile';
-    
+
                 UploadFilesWithoutReal($path, 'image', $newUser, $file);
             }
         }
@@ -468,18 +465,14 @@ class UserController extends Controller
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
         $job = job::all();
         // dd($user);
-        if($user->flag == "user")
-        {
-            $department = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
-        }
-        else
-        {
-            $department = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        if ($user->flag == "user") {
+            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+        } else {
+            $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
         }
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
-        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service' ,'job' ));
-
+        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job'));
     }
 
     /**
@@ -497,17 +490,14 @@ class UserController extends Controller
 
         $job = job::all();
         // dd($user);
-        if($user->flag == "user")
-        {
-            $department = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
-        }
-        else
-        {
-            $department = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        if ($user->flag == "user") {
+            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+        } else {
+            $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
         }
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
-        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service' ,'job' ));
+        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job'));
     }
 
     /**
@@ -516,8 +506,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        if($user->flag == "user")
-        {
+        if ($user->flag == "user") {
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
@@ -532,7 +521,7 @@ class UserController extends Controller
 
                 // Add more custom messages here
             ];
-            
+
             $validatedData = Validator::make($request->all(), [
                 'military_number' => [
                     'required',
@@ -545,11 +534,9 @@ class UserController extends Controller
                 'password' => 'required',
                 'department_id' => 'required',
                 'Civil_number' => 'required',
-                
+
             ], $messages);
-        }
-        else
-        {
+        } else {
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
@@ -562,7 +549,7 @@ class UserController extends Controller
 
                 // Add more custom messages here
             ];
-            
+
             $validatedData = Validator::make($request->all(), [
                 'military_number' => [
                     'required',
@@ -573,11 +560,11 @@ class UserController extends Controller
                 'file_number' => 'required|string',
                 'public_administration' => 'required',
                 'Civil_number' => 'required',
-                
+
             ], $messages);
         }
-        
-    
+
+
         // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
@@ -585,14 +572,13 @@ class UserController extends Controller
 
 
         // dd($request);
-       
+
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->description = $request->description;
         $user->military_number = $request->military_number;
-        if($request->has('job'))
-        {
+        if ($request->has('job')) {
             $user->job_id = $request->job;
         }
         // $user->job_id = $request->job;

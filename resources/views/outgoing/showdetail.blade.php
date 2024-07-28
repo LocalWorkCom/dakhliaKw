@@ -94,23 +94,25 @@
                             <th scope="row" style="background: #f5f6fa;"> الملفات المرفقة الاخري </th>
                             <td>
                                 <ul class="list-group">
-                            @if (!empty($is_file))
-                                        @foreach ($is_file as $file)
-                                            @if ($file->file_type == 'pdf')
-                                                <div class="col-md-11 mb-3 px-5 mt-3">
-                                                    <a id="downloadButton" href="{{ route('downlaodfile', $file->id) }}"
-                                                        target="_blank" class="btn-download">
-                                                        <i class="fa fa-download" style="color:green; "> </i>
-                                                        {{ basename($file->real_name) }}</a>
+                                    <div class="col-md-11 mb-3 px-5 mt-2 d-flex">
+                                        @if (!empty($is_file))
+                                            @foreach ($is_file as $file)
+                                                @if ($file->file_type == 'pdf')
+                                                    <div>
+                                                        <a id="downloadButton"
+                                                            href="{{ route('downlaodfile', $file->id) }}" target="_blank"
+                                                            class="btn-download">
+                                                            <i class="fa fa-download" style="color:green; "> </i>
+                                                            {{ basename($file->real_name) }}</a>
 
-                                                </div>
-                                            @endif
-                                        @endforeach
-
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            لا يوجد ملفات لهذا الصادر
+                                        @endif
+                                        </*div>
                                 </ul>
-                            @else
-                                لا يوجد ملفات لهذا الصادر
-                            @endif
                             </td>
                         </tr>
                     </tbody>

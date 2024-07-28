@@ -7,15 +7,15 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="{{ route('home') }}">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">الادارات </a></li>
+                <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">القطاعات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href="{{ route('departments.create') }}">
-                        اضافة اداره</a></li>
+                        اضافة قطاع</a></li>
             </ol>
         </nav>
     </div>
     <div class="row ">
         <div class="container welcome col-11">
-            <p> الادارات </p>
+            <p> القطاعات </p>
         </div>
     </div>
     <br>
@@ -29,7 +29,7 @@
 
                     <div class="form-group col-md-5 mx-md-2">
                         <label for="manger">المدير</label>
-                        <select name="manger" class="form-control ">
+                        <select name="manger" class="form-control " required>
                             <option value="">اختار المدير</option>
                             @foreach($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -41,8 +41,8 @@
 
                     </div>
                     <div class="form-group col-md-5 mx-md-2">
-                        <label for="name">اسم الادارة </label>
-                        <input type="text" name="name" class="form-control" value="{{ old('name') }}">
+                        <label for="name">اسم القطاع </label>
+                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
                         @error('name')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror

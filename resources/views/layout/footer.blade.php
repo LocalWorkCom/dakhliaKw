@@ -175,75 +175,70 @@
     });
 
     // for file upload ******
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-    const files = event.target.files;
-    const fileList = document.getElementById('fileList');
-    const max_num = 10;
+    function uploadFiles() {
+        const files = document.getElementById('fileInput').files;
+        const fileList = document.getElementById('fileList');
 
-    if (files.length === 0) {
-        alert("Please choose files");
-        return;
-    }
+        if ($('#files_num').length > 0) {
+            var max_num = $('#files_num').find('option:selected').val();
+            if (!max_num) {
+                alert("please choose file number");
+                return;
+            }
+        } else {
+            max_num = 10;
+        }
+        if (files.length == 0) {
+            alert("please choose files");
+            return;
 
-    if (fileList.children.length + files.length > max_num) {
-        alert('لا يمكنك إضافة المزيد من الملفات. أكبر عدد ملفات هو ' + max_num);
-        return;
-    }
-
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-
-        // Check if file with the same name already exists in the list
-        let fileExists = Array.from(fileList.children).some(item => item.dataset.filename === file.name);
-        
-        if (fileExists) {
-            alert('تنبيه لقد قمت باختيار نفس الملفات مرة أخرى !');
-            continue; // Skip adding this file
         }
 
-        const listItem = document.createElement('li');
-        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-        listItem.dataset.filename = file.name; // Store filename as dataset attribute
 
-        const fileName = document.createElement('span');
-        fileName.textContent = file.name;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
 
-        const deleteButton = document.createElement('button');
-        deleteButton.className = 'btn btn-danger btn-sm';
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = function() {
-            fileList.removeChild(listItem);
-        };
+            // Check if file with the same name already exists in the list
+            let fileExists = false;
+            Array.from(fileList.children).forEach(item => {
+                if (item.dataset.filename === file.name) {
+                    fileExists = true;
+                }
+            });
+            if (files.length > max_num) {
+                alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
+                return;
 
-        listItem.appendChild(fileName);
-        listItem.appendChild(deleteButton);
-        fileList.appendChild(listItem);
+            }
+            console.log(fileList.children.length);
+            if (fileList.children.length > max_num - 1) {
+                alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
+                return;
+            }
+
+            if (!fileExists) {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                listItem.dataset.filename = file.name; // Store filename as dataset attribute
+
+                const fileName = document.createElement('span');
+                fileName.textContent = file.name;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'btn btn-danger btn-sm';
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = function() {
+                    fileList.removeChild(listItem);
+                };
+
+                listItem.appendChild(fileName);
+                listItem.appendChild(deleteButton);
+                fileList.appendChild(listItem);
+            } else {
+                alert('تنبيه لقد قمت باختيار نفس الملفات مرة اخري !');
+                return;
+            }
+        }
     }
-
-    // Automatically upload files after adding them to the list
-    uploadFiles(files);
-});
-
-function uploadFiles(files) {
-    const formData = new FormData();
-    
-    for (const file of files) {
-        formData.append('files[]', file);
-    }
-
-    // Example of sending the files to the server
-    fetch('/upload', { // Replace '/upload' with your server upload endpoint
-        method: 'POST',
-        body: formData,
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

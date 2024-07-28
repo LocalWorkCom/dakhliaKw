@@ -72,7 +72,11 @@ class IoTelegramController extends Controller
         $recieves = User::all();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments'));
+        
+        $iotelegram_num = Iotelegram::max('id');
+        $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
+        $users = User::where('department_id', auth()->user()->department_id)->get();
+        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments', 'iotelegram_num', 'outgoing_num', 'users'));
     }
 
     /**
@@ -91,7 +95,12 @@ class IoTelegramController extends Controller
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;
         $iotelegram->representive_id = $request->representive_id;
+        $iotelegram->outgoing_num = $request->outgoing_num;
+        $iotelegram->outgoing_date = $request->outgoing_date;
+        $iotelegram->iotelegram_num = $request->iotelegram_num;
         $iotelegram->date = $request->date;
+        $iotelegram->files_num = $request->files_num;
+        $iotelegram->user_id = $request->user_id;
         $iotelegram->recieved_by = $request->recieved_by;
         $iotelegram->created_by = auth()->id();
         $iotelegram->created_departement = auth()->user()->department_id;
@@ -148,8 +157,9 @@ class IoTelegramController extends Controller
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
         $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
+        $users = User::where('department_id', auth()->user()->department_id)->get();
 
-        return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram', 'external_departments'));
+        return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram', 'external_departments', 'users'));
     }
 
     /**
@@ -166,6 +176,10 @@ class IoTelegramController extends Controller
         $iotelegram->recieved_by = $request->recieved_by;
         $iotelegram->created_by = auth()->id();
         $iotelegram->created_departement = auth()->user()->department_id;
+        $iotelegram->outgoing_date = $request->outgoing_date;
+        $iotelegram->date = $request->date;
+        $iotelegram->files_num = $request->files_num;
+        $iotelegram->user_id = $request->user_id;
 
         $iotelegram->save();
         if ($request->hasFile('files')) {
@@ -257,7 +271,7 @@ class IoTelegramController extends Controller
     {
         $rules = [
             'desc' => 'nullable',
-            'phone' => 'required|unique:external_departements,phone|integer',
+            'phone' => ['required', 'string', 'unique:external_departements,phone', 'regex:/^01\d{9,11}$/'],
             'name' => 'required|string',
         ];
 
@@ -265,7 +279,8 @@ class IoTelegramController extends Controller
             'name.string' => 'يجب ان يكون الأسم حروف فقط',
             'phone.required' => 'يجب ادخال الهاتف',
             'phone.integer' => 'يجب ان يكون الهاتف ارقام',
-            'phone.unique' => 'رقم الهاتف موجود بالفعل',
+            'phone.unique' => 'عفوا هذا الرقم موجود من قبل',
+            'phone.regex' => 'عفوا هذا الهاتف غير صحيح',
             'name.required' => 'يجب ادخال اسم الشخص',
         ];
 
