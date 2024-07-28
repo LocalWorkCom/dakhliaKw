@@ -705,14 +705,16 @@ height: 45px;
     justify-content: flex-end;
     padding-right: 20px;
 }
-/*********************** file upload style******************** */
+
+
+.form-group.hidden {
+    display: none;
+}
 
 
 
 
 
-
-/*********************** ******************** */
 
 .header-radio{
     width: 100%;
