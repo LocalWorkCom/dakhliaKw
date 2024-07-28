@@ -27,7 +27,7 @@
 
                 <div class="form-row mx-3 mt-4 d-flex justify-content-center">
 
-                    <div class="form-group col-md-5 mx-md-2">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="manger">المدير</label>
                         <select name="manger" class="form-control ">
                             <option value="">اختار المدير</option>
@@ -40,7 +40,7 @@
                         @enderror
 
                     </div>
-                    <div class="form-group col-md-5 mx-md-2">
+                    <div class="form-group col-md-5 mx-2">
                         <label for="name">اسم الادارة </label>
                         <input type="text" name="name" class="form-control" value="{{ old('name') }}">
                         @error('name')
@@ -62,7 +62,7 @@
                     <!--    @enderror-->
                     <!--</div>-->
 
-                    <div class="form-group col-md-10 mx-md-2">
+                    <div class="form-group col-md-10 mx-2">
                         <label for="description">الوصف </label>
                         <input type="text" name="description" class="form-control" value="{{ old('description') }}">
                         @error('description')

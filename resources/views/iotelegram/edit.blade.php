@@ -36,7 +36,7 @@
                                 <label for="extern">خارجي</label>
                             </div>
                             <div class="radio2">
-                                <input type="radio" id="intern" name="type" value="in" required
+                                <input type="radio" id="intern" name="type" checked value="in" required
                                     @if ('in' == $iotelegram->type) checked @endif>
                                 <label for="intern">داخلي</label>
                             </div>

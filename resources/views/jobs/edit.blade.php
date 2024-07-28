@@ -28,7 +28,7 @@
                 enctype="multipart/form-data">
                 @csrf
 
-                <div class="form-row mx-md-2 ">
+                <div class="form-row mx-2 ">
                     <div class="form-group col-md-12">
                         <label for="name">الاسم</label>
                         <input type="text" class="form-control" value="{{ $data->name }}" name="name" id="name"
@@ -37,7 +37,7 @@
 
                 </div>
                 <div class="form-row" dir="ltr">
-                    <button class="btn-blue mx-md-4" type="submit"> تعديل </button>
+                    <button class="btn-blue mx-4" type="submit"> تعديل </button>
                 </div>
                 <br>
             </form>

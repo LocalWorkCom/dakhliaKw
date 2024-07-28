@@ -166,7 +166,7 @@ class outgoingController extends Controller
             'person_to' => 'nullable|exists:export_users,id',
             'date' => 'required|date',
             'department_id' => 'nullable|exists:external_departements,id',
-          //  'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+           // 'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
 
         // // Define custom messages
@@ -204,7 +204,6 @@ class outgoingController extends Controller
 
         if( $request->hasFile('files') ){
 
-          //  if (function_exists('UploadFiles')) {
                  //  dd('file yes');
                 foreach ($request->file('files') as $file) {
                     $files=new outgoing_files();
@@ -217,7 +216,7 @@ class outgoingController extends Controller
                     $file_model = outgoing_files::find($files->id);
 
                     UploadFiles('files/export','file_name',  'real_name',$file_model, $file);
-                //}
+                
             }
         }
 

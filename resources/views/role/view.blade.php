@@ -56,8 +56,6 @@
     </section>
     <script>
         $(document).ready(function() {
-            $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
-
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
