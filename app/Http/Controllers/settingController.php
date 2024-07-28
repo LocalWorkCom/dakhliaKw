@@ -41,7 +41,8 @@ class settingController extends Controller
         $data = Government::orderBy('created_at','desc')->get();
 
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<a class="btn btn-sm" style="background-color: #259240;" href=' . route('government.edit', $row->id) . '> <i class="fa fa-edit"></i> </a>' ;
+            $name = "'$row->name'";
+            return '<a class="btn btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>' ;
 
             // <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>
         })
@@ -107,7 +108,8 @@ class settingController extends Controller
         $data = job::orderBy('created_at','desc')->get();
 
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<a class="btn  btn-sm" style="background-color: #259240;" href=' . route('job.edit', $row->id) . '> <i class="fa fa-edit"></i> </a>
+            $name = "'$row->name'";
+            return '<a class="btn  btn-sm" style="background-color: #259240;"  onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>
             <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
             // <a class="btn btn-primary btn-sm" href=' . route('job.show', $row->id) . '>التفاصيل</a>
 
@@ -190,7 +192,8 @@ class settingController extends Controller
         $data = grade::orderBy('created_at','desc')->get();
 
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<a class="btn  btn-sm" style="background-color: #259240;" href=' . route('grads.edit', $row->id) . '> <i class="fa fa-edit"></i> </a>
+            $name = "'$row->name'";
+            return '<a class="btn  btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>
             <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
             // <a class="btn  btn-sm" href=' . route('grads.show', $row->id) . '>التفاصيل</a>
 
@@ -277,7 +280,7 @@ class settingController extends Controller
           return DataTables::of($data)->addColumn('action', function ($row) {
             $hiddenIds = [1, 2, 3, 4];
             $name = "'$row->name'";
-            $editButton = '<a class="btn  btn-sm" style="background-color: #259240;" href=' . route('vacationType.edit', $row->id) . '> <i class="fa fa-edit"></i> </a>';
+            $editButton = '<a class="btn  btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>';
             if (!in_array($row->id, $hiddenIds)) {
                 $deleteButton = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>';
                 return $editButton . ' ' . $deleteButton;
