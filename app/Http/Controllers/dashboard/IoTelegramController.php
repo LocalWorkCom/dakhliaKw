@@ -48,9 +48,9 @@ class IoTelegramController extends Controller
     public function getIotelegrams()
     {
         $IoTelegrams = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+            ->where('active', 1)
             ->orderBy('created_at', 'desc')
             ->get();
-
         foreach ($IoTelegrams as  $IoTelegram) {
             $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
                 $IoTelegram->internal_department->name :
@@ -200,10 +200,10 @@ class IoTelegramController extends Controller
     public function addPostmanAjax(Request $request)
     {
         $rules = [
-            'name' => 'required',
-            'phone1' => 'required|unique:postmans,phone1',
-            'phone2' => 'unique:postmans,phone2',
-            'national_id' => 'required|unique:postmans,national_id',
+            'name' => 'required|string',
+            'phone1' => 'required|unique:postmans,phone1|integer',
+            'phone2' => 'unique:postmans,phone2|integer',
+            'national_id' => 'required|unique:postmans,national_id|integer',
             'modal_department_id' => 'required',
 
         ];
@@ -219,7 +219,7 @@ class IoTelegramController extends Controller
 
             'phone2.required' => 'يجب ادخال الهاتف',
             'phone2.integer' => 'يجب ان يكون الهاتف ارقام',
-            'phone1.unique' => 'رقم الهاتف 2 موجود بالفعل',
+            'phone2.unique' => 'رقم الهاتف 2 موجود بالفعل',
 
 
             'national_id.required' => 'يجب ادخال رقم الهوية',
@@ -234,7 +234,7 @@ class IoTelegramController extends Controller
         if ($validatedData->fails()) {
             return response()->json(['success' => false, 'message' => $validatedData->errors()]);
         }
- 
+
 
         $Postman = new Postman();
         $Postman->name = $request->name;

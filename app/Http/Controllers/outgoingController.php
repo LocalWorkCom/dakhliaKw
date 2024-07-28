@@ -186,6 +186,7 @@ class outgoingController extends Controller
     public function store(Request $request)
     {
       
+        dd($request->all());
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
@@ -215,7 +216,7 @@ class outgoingController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         //dd( $request->validate($rules, $messages));
-        // if(auth()->id()){
+        if(auth()->id()){
             $user = User::find(auth()->id());
         $export = new outgoings();
         $export->name = $request->nameex;
@@ -223,39 +224,39 @@ class outgoingController extends Controller
         $export->note = $request->note;
         $export->date = $request->date;
         $export->person_to = $request->person_to  ?  $request->person_to :null;
-        $export->created_by = 1;//auth $user->id
-        $export->created_department = 1;//$user->department_id
+        $export->created_by = $user->id;//auth $user->id
+        $export->created_department = $user->department_id;//$user->department_id
         $export->active = $request->active ? $request->active : 0;
-        $export->updated_by = 1;//auth auth()->id
+        $export->updated_by = $user->id;//auth auth()->id
         $export->department_id = $request->from_departement;
         $export->save();
 
 
         if( $request->hasFile('files') ){
 
-            if (function_exists('UploadFiles')) {
+          //  if (function_exists('UploadFiles')) {
                  //  dd('file yes');
                 foreach ($request->file('files') as $file) {
                     $files=new outgoing_files();
                     $files->outgoing_id = $export->id;
-                    $files->created_by=1;//auth auth()->id
-                    $files->updated_by=1;//auth auth()->id
+                    $files->created_by=$user->id;//auth auth()->id
+                    $files->updated_by=$user->id;//auth auth()->id
                     $files->file_type = ($file->getClientOriginalExtension() == 'pdf')? 'pdf' : 'image';
                     $files->active =0;
                     $files->save();
                     $file_model = outgoing_files::find($files->id);
 
                     UploadFiles('files/export','file_name',  'real_name',$file_model, $file);
-                }
+                //}
             }
         }
 
 
         return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
-    // }else{
-    //     return redirect()->route('login');
+    }else{
+        return redirect()->route('login');
 
-    // }
+    }
     }
 
     /**

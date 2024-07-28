@@ -29,17 +29,20 @@
                     enctype="multipart/form-data">
                     @csrf
 
-                    <div class="form-row mx-3 d-flex justify-content-center">
-
-                        <div class="form-group col-md-10 mx-2">
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="nameex">العنوان</label>
+                            <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان" value="{{ $data->name }}" required>
+                        </div>
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="exportnum">رقم الصادر</label>
                             <input type="text" class="form-control" value="{{ $data->num }}" name="num"
                                 id="exportnum" required>
                         </div>
 
                     </div>
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-md-2">
                             <label for="date">تاريخ الصادر </label>
                             <input type="date" id="date" value="{{ $data->date }}" name="date"
                                 class="form-control" required>
@@ -55,8 +58,8 @@
 
 
                     </div>
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="from_departement">الجهة المرسلة</label>
                             <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
                                 id="extern-department-dev" data-bs-target="#extern-department">
@@ -70,7 +73,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-5 mx-2 ">
+                        <div class="form-group col-md-5 mx-md-2 ">
                             <label for="select-person-to">الموظف المستلم </label>
                             <select id="select-person-to" name="person_to" class="form-control js-example-basic-single">
                                 <option value="" disabled selected> اختر من القائمه</option>
@@ -84,20 +87,14 @@
                         </div>
 
                     </div>
-                    <div class="form-row mx-2 d-flex justify-content-center">
-                        <div class="form-group col-md-10">
-                            <label for="nameex">العنوان</label>
-                            <textarea class="form-control" name="nameex" id="nameex" rows="3"> {{ $data->name }} </textarea>
-                        </div>
-                    </div>
-                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group col-md-10">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"> {{ $data->note }} </textarea>
                         </div>
                     </div>
 
-                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group  col-md-10 ">
                             <label for="files"> اضف ملفات بحد اقصي 10 </label>
                         </div>

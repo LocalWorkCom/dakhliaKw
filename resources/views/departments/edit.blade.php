@@ -14,7 +14,7 @@
     </div>
     <div class="row ">
         <div class="container welcome col-11">
-            <p> الــــــــــادارات </p>
+            <p> الادارات </p>
         </div>
     </div>
     <br>
@@ -22,12 +22,12 @@
 
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-            <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
+            <div class="container col-10 mt-5 mb-5 pb-5 pt-5" style="border:0.5px solid #C7C7CC;">
                 <form action="{{ route('departments.update', $department->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="name">اسم الادارة </label>
                             <input type="text" name="name" class="form-control" value="{{ old('name', $department->name) }}">
                             @error('name')
@@ -35,7 +35,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="manger">المدير</label>
                             <select name="manger" class="form-control">
                                 <option value="">اختر المدير </option>
@@ -48,21 +48,10 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-md-6">
-                        <label for="manger">المدير</label>
-                        <select name="manger" class="form-control">
-                            <option value="">اختر المدير </option>
-                            @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ $user->id == old('manger', $department->manger) ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
-                              @endforeach
-                        </select>
-                    </div>
-                </div>
 
-                <div class="form-row mx-2">
-                    <div class="form-group col-md-12">
+
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
+                    <div class="form-group col-md-10">
                         <label for="description">الوصف </label>
                         <input type="text" name="description" class="form-control"  value="{{ old('description', $department->description) }}">
                         @error('description')
@@ -71,8 +60,8 @@
                         </div>
                     </div>
             </div>
-            < <div class="container col-10 ">
-                <div class="form-row mt-5 mb-5">
+             <div class="container col-10 ">
+                <div class="form-row mt-1 mb-3">
                     <button class="btn-blue " type="submit" dir="rtl">
                         <img class="px-1" src="../images/edit.svg" alt="">تعديل
 
@@ -103,7 +92,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm mt-2" id="addFile">إضافة ملف
+                    <button type="button" class="btn  btn-sm mt-2" id="addFile">إضافة ملف
                         جديد</button>
 
                     <!-- Save button -->
