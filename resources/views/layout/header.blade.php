@@ -161,14 +161,14 @@
         <li class="nav-item" onclick="makeActive(this)">
 
             <a href="{{ route('iotelegrams.list') }}">
-                <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
+            <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
                 <h6>الوارد</h6>
             </a>
         </li>
 
         <li class="nav-item" onclick="makeActive(this)">
             <a href="{{ route('Export.index') }}">
-                <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
+            <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
                 <h6>الصادر</h6>
 
             </a>

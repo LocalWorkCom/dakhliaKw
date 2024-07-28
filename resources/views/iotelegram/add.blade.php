@@ -77,27 +77,24 @@
 
                     </div>
 
-
                     <div class="form-row mx-md-2 d-flex justify-content-center">
-                        <div class="form-group  col-md-10 ">
-                            <label for="files"> اضف ملفات بحد اقصي 10 </label>
-                        </div>
-                        <div class="form-group col-md-10 " dir="rtl">
-                            <div class=" fileupload d-inline">
-                                <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control"
-                                    accept="image/jpeg, image/png, application/pdf">
+    <div class="form-group col-md-10">
+        <label for="files">اضف ملفات بحد اقصي 10</label>
+    </div>
+    <div class="form-group col-md-10" dir="rtl">
+        <div class="fileupload d-inline">
+            <div class="d-flex">
+                <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg">
+            </div>
+            <div class="space-uploading">
+                <ul id="fileList" class="d-flex flex-wrap">
+                    <!-- Uploaded files will be listed here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
-                                <button class="btn-all mx-md-1" onclick="uploadFiles()" style="color:green;" type="button">
-                                    اضف </button>
-
-                                <div class="space-uploading">
-                                    <ul id="fileList" class="d-flex flex-wrap">
-                                        <!-- Uploaded files will be listed here -->
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="form-row d-flex  justify-content-center" dir="rtl">
                         <div class="form-group d-flex justify-content-start col-md-10 ">
                             <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
