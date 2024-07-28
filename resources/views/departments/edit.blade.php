@@ -26,8 +26,8 @@
                 <form action="{{ route('departments.update', $department->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="name">اسم الادارة </label>
                             <input type="text" name="name" class="form-control" value="{{ old('name', $department->name) }}">
                             @error('name')
@@ -35,7 +35,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="manger">المدير</label>
                             <select name="manger" class="form-control">
                                 <option value="">اختر المدير </option>
@@ -50,7 +50,9 @@
                     
           
 
-                    <div class="form-row mx-2 d-flex justify-content-center">
+
+
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
                     <div class="form-group col-md-10">
                         <label for="description">الوصف </label>
                         <input type="text" name="description" class="form-control"  value="{{ old('description', $department->description) }}">

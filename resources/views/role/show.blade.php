@@ -42,17 +42,17 @@
                     </div>
                 @endif
                 {{-- {{ dd($user) }} --}}
-                <div class="p-5">
+
                     {{-- <form action="{{ route('rule_update', $rule_permission->id) }}" method="POST">
                         @csrf --}}
-                        <div class="form-row mx-2 mt-4 d-flex justify-content-center flex-row-reverse">
+                        <div class="form-row mx-md-2 mt-4 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-10">
                             <label for="input8">الدور</label>
                             <input type="text" id="input8" name="name" class="form-control" placeholder="الوظيفة"
                                 value="{{ $rule_permission->name }}" disabled>
                         </div>    </div>
 
-                        <div class="form-row mx-2 mt-4 d-flex justify-content-center flex-row-reverse">
+                        <div class="form-row mx-md-2 mt-4 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-10">
                             <label for="input25"> القسم</label>
                             <select id="input25" name="department_id" class="form-control" placeholder="القسم" disabled >
@@ -64,7 +64,7 @@
                         </div>
                         </div>
 
-                        <div class="form-row mx-2 d-flex justify-content-center text-right">
+                        <div class="form-row mx-md-2 d-flex justify-content-center text-right">
                     <div class="form-group col-md-10">
                                 <div class="row">
                                     <label for="department" class="col-12">الصلاحية</label>
