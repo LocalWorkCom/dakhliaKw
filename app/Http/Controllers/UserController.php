@@ -103,7 +103,7 @@ class UserController extends Controller
         
             if (isset($result['sent']) && $result['sent'] === 'true') {
                 // Redirect to verification view
-                        Auth::logout();
+                Auth::logout();
 
                 return view('verfication_code', compact('code', 'military_number', 'password'));
             } else {
@@ -184,6 +184,7 @@ class UserController extends Controller
                 if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code') || url()->previous() == route('verfication_code')) {
                     return view('resetpassword', compact('military_number', 'firstlogin'));
                 } else {
+                    Auth::login($user); // Log the user in
                     return redirect()->route('home');
                 }
             }
