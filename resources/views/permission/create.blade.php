@@ -53,7 +53,7 @@
                             <div class="form-group  col-md-10 ">
                                 <label for="filenum">الصلاحية</label>
                                 <select class="custom-select custom-select-lg mb-3" name="name" id="name">
-                                    <option selected disabled>Open this select menu</option>
+                                    <option selected disabled>اختر من الصلاحيات الاتيه</option>
                                     <option value="view">عرض</option>
                                     <option value="edit">تعديل</option>
                                     <option value="create">اضافة</option>
@@ -70,7 +70,7 @@
                             <div class="form-group  col-md-10 ">
                                 <label for="model">القسم</label>
                                 <select class="custom-select custom-select-lg mb-3 " name="model" id="model">
-                                    <option selected disabled>Open this select menu</option>
+                                    <option selected disabled>اختر من الاقسام الاتيه   </option>
                                     @foreach ($models as $item)
                                     <option value="{{ $item}}">{{ __('models.' . $item) }}</option>
                                     @endforeach
