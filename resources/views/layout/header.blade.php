@@ -72,7 +72,7 @@
             <i class="fa-solid fa-bars side-nav" ></i>
           </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav ml-auto" >
+            <ul class="navbar-nav  d-flex justify-content-between w-100">
                 <li class="nav-item" onclick="makeActive(this)">
                     <a href="{{route('home')}}">
                         <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
@@ -135,7 +135,7 @@
                 </li>
                 <div id="dropdownMenu4" class="dropdown-menu4">
 
-                    <ul>
+                    <ul >
                         <li style="list-style: inside;">
                             <a href="{{ route('grads.index') }}">الرتب العسكريه</a>
                         </li>

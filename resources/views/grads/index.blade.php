@@ -73,7 +73,8 @@
                         @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
-                            <input type="text" id="nameadd" name="nameadd" class="form-control">
+                            <input type="text" id="nameadd" name="nameadd" class="form-control" required>
+                            <span class="text-danger span-error" id="Civil_number-error" dir="rtl"></span>
 
                         </div>
                         <!-- Save button -->
@@ -194,12 +195,33 @@
             $('#add').modal('show');
         }
 
+        // function confirmAdd() {
+        //     var name = document.getElementById('nameadd').value;
+        //     var form = document.getElementById('add-form');
+
+        //     form.submit();
+
+        // }
+
         function confirmAdd() {
             var name = document.getElementById('nameadd').value;
+
             var form = document.getElementById('add-form');
+            var inputs = form.querySelectorAll('[required]');
+            var valid = true;
 
-            form.submit();
+            inputs.forEach(function(input) {
+                if (!input.value) {
+                    valid = false;
+                    input.style.borderColor = 'red'; // Optional: highlight empty inputs
+                } else {
+                    input.style.borderColor = ''; // Reset border color if input is filled
+                }
+            });
 
+            if (valid) {
+                form.submit();
+            } 
         }
 
         $(document).ready(function() {
@@ -221,8 +243,9 @@
                     }
                 ],
                 "oLanguage": {
-                    "sSearch": "بحث",
-                    "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                    "sSearch": "",
+                    "sSearchPlaceholder":"بحث",
+                                        "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
                     "sInfoEmpty": 'لا توجد بيانات متاحه',
                     "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
                     "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',

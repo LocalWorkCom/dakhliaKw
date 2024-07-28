@@ -8,6 +8,7 @@
 @section('title')
     عرض
 @endsection
+
     <section>
         <div class="row">
             @if (url()->current() == url('/users/0'))
@@ -27,20 +28,18 @@
             <div class="container  col-11 mt-3 p-0 ">
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-5 col-12 d-flex ">
+                        @if (Auth::user()->hasPermission('create User'))
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('user.create', $id) }}'">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
+                        @endif
+                       
                     </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white ">
-                        <!-- <div>
-                                                <a href="{{ route('user.create', $id) }}" class="btn btn-lg bg-primary text-white" dir="rtl">
-                                                    اضافة جديد</a>
-                                            </div>
-                                            <br> -->
 
                         <div>
                             <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
@@ -67,6 +66,8 @@
                                         processing: true,
                                         serverSide: true,
                                         ajax: '{{ url('api/users') }}/' + id, // Correct URL concatenation
+                                        bAutoWidth: false, 
+
                                         columns: [{
                                                 data: 'id',
                                                 name: 'id'
@@ -112,7 +113,8 @@
 
                                         }],
                                         "oLanguage": {
-                                            "sSearch": "بحث",
+                                            "sSearch": "",
+                                            "sSearchPlaceholder":"بحث",
                                             "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
                                             "sInfoEmpty": 'لا توجد بيانات متاحه',
                                             "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',

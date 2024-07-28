@@ -24,19 +24,19 @@
     <section style="direction: rtl;">
         <div class="row">
             <div class="container c col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11 pt-5 pb-4 px-3">
-                <table class="table table-bordered ">
+                <table class="table table-responsive table-bordered ">
                     <tbody>
                         <tr style="background-color:#f5f6fa;">
-                            <th scope="row">الراسل</th>
-                            <td>{{ $data->person_to ? $data->personTo->name : 'لا يوجد موظف للصادر' }}</td>
+                            <th scope="row"> الموظف المستلم</th>
+                            <td>{{ $data->person_to ? $data->personTo->name : 'لا يوجد موظف مستلم' }}</td>
                         </tr>
                         <tr>
                             <th scope="row">العنوان</th>
                             <td>{{ $data->name ? $data->name : 'لا يوجد عنوان للصادر' }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">اسم الاداره</th>
-                            <td>{{ $data->department_id ? $data->department_External->name : 'لا يوجد قسم خارجى' }}</td>
+                            <th scope="row">اسم القطاع</th>
+                            <td>{{ $data->department_id ? $data->department_External->name : 'لا يوجد قطاع' }}</td>
                         </tr>
                         <tr>
                             <th scope="row">رقم الصادر</th>
@@ -111,27 +111,13 @@
                                         @else
                                             لا يوجد ملفات لهذا الصادر
                                         @endif
-                                        </*div>
+                                        </div>
                                 </ul>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
-                        {{-- <tr>
-                            <th>الملفات</th>
-                            <td>
-                                @if (!empty($is_file))
-                                    @foreach ($is_file as $file)
-                                        <embed src="{{ asset($file->file_name) }}" width="100px" height="80px" />
-                                        <a href="{{ route('downlaodfile', $file->id) }}" class="btn btn-info btn-sm"><i
-                                                class="fa fa-download"></i></a>
-                                    @endforeach
-                                @else
-                                    لايوجد ملفات للصادر
-                                @endif
-                            </td>
-
-                        </tr> --}}
+                        
                     </tfoot>
 
                 </table>
