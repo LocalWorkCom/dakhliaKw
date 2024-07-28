@@ -93,8 +93,8 @@ class IoTelegramController extends Controller
         $iotelegram->representive_id = $request->representive_id;
         $iotelegram->date = $request->date;
         $iotelegram->recieved_by = $request->recieved_by;
-        // $iotelegram->created_by = auth()->id();
-        // $iotelegram->created_departement = auth()->user()->department_id;
+        $iotelegram->created_by = auth()->id();
+        $iotelegram->created_departement = auth()->user()->department_id;
         $iotelegram->save();
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
@@ -164,8 +164,8 @@ class IoTelegramController extends Controller
         $iotelegram->representive_id = $request->representive_id;
         $iotelegram->date = $request->date;
         $iotelegram->recieved_by = $request->recieved_by;
-        // $iotelegram->created_by = auth()->id();
-        // $iotelegram->created_departement = auth()->user()->department_id;
+        $iotelegram->created_by = auth()->id();
+        $iotelegram->created_departement = auth()->user()->department_id;
 
         $iotelegram->save();
         if ($request->hasFile('files')) {

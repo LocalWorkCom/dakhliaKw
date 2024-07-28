@@ -79,8 +79,8 @@ class VacationController extends Controller
         $employee_vacation->date_from = $request->date_from;
         $employee_vacation->date_to = isset($request->date_to) ? $request->date_to : null;
         $employee_vacation->employee_id = $employee_id  && $request->vacation_type_id != 3 ? $employee_id : null;
-        // $employee_vacation->created_by = auth()->id();
-        // $employee_vacation->created_departement = auth()->user()->department_id;
+        $employee_vacation->created_by = auth()->id();
+        $employee_vacation->created_departement = auth()->user()->department_id;
         $employee_vacation->save();
 
         if ($request->hasFile('reportImage')) {
@@ -136,8 +136,8 @@ class VacationController extends Controller
         $employee_vacation->date_from = $request->date_from;
         $employee_vacation->date_to = isset($request->date_to) ? $request->date_to : null;
         $employee_vacation->employee_id = ($request->employee_id && $request->vacation_type_id != 3) ? $request->employee_id : null;
-        // $employee_vacation->created_by = auth()->id();
-        // $employee_vacation->created_departement = auth()->user()->department_id;
+        $employee_vacation->created_by = auth()->id();
+        $employee_vacation->created_departement = auth()->user()->department_id;
         $employee_vacation->save();
         if ($request->hasFile('reportImage')) {
             $file = $request->reportImage;
