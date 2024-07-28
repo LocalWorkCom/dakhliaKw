@@ -47,10 +47,10 @@ class outgoingController extends Controller
                     ' . $uploadButton;
         })
             ->addColumn('person_to_username', function ($row) {
-                return $row->personTo->name ?? 'لايوجد شخص صادر له'; // Assuming 'name' is the column in external_users
+                return $row->personTo->name ?? 'لايوجد مرسل اليه  '; // Assuming 'name' is the column in external_users
             })
             ->addColumn('department_External_name', function ($row) {
-                return $row->department_External->name ?? 'لا يوجد قسم خارجى صادر له'; // Assuming 'name' is the column in external_users
+                return $row->department_External->name ?? 'لا يوجد قطاع'; // Assuming 'name' is the column in external_users
             })
             ->addColumn('date', function ($row) {
                 return $row->date ?? 'لا يوجد تاريخ'; // Assuming 'name' is the column in external_users
@@ -74,10 +74,10 @@ class outgoingController extends Controller
                    <a class="btn btn-primary btn-sm"  style="background-color: #375A97;" href=' . route('Export.show', $row->id) . '> <i class="fa fa-eye"></i></a>';
         })
             ->addColumn('person_to_username', function ($row) {
-                return $row->personTo->name ?? 'لايوجد شخص صادر له'; // Assuming 'name' is the column in external_users
+                return $row->personTo->name ?? 'لايوجد مرسل اليه  '; // Assuming 'name' is the column in external_users
             })
             ->addColumn('department_External_name', function ($row) {
-                return $row->department_External->name ?? 'لا يوجد قسم خارجى صادر له'; // Assuming 'name' is the column in external_users
+                return $row->department_External->name ?? 'لا يوجد قطاع'; // Assuming 'name' is the column in external_users
             })
             ->addColumn('note', function ($row) {
                 return $row->note ?? 'لا يوجد ملاحظات'; // Assuming 'name' is the column in external_users
@@ -112,10 +112,10 @@ class outgoingController extends Controller
     public function addUaersAjax(Request $request)
     {
         $rules = [
-            'military_number' => ['required', 'string', 'unique:export_users,military_number'],
-            'filenum' => ['required', 'string', 'unique:export_users,filenum'],
-            'Civil_number' => ['required', 'string', 'unique:export_users,Civil_number'],
-            'phoneuser' => ['required', 'string', 'unique:export_users,phone', 'regex:/^01\d{9,11}$/'],
+            'military_number' => ['required', 'numeric', 'unique:export_users,military_number','regex:/^([0-9\s\-\+\(\)]*)$/'],
+            'filenum' => ['required', 'numeric', 'unique:export_users,filenum','regex:/^([0-9\s\-\+\(\)]*)$/'],
+            'Civil_number' => ['required', 'numeric', 'unique:export_users,Civil_number','regex:/^([0-9\s\-\+\(\)]*)$/'],
+            'phoneuser' => ['required', 'numeric', 'unique:export_users,phone','regex:/^([0-9\s\-\+\(\)]*)$/','min:10'],
             'name' => 'required|string',
         ];
 
@@ -123,15 +123,17 @@ class outgoingController extends Controller
             'military_number.required' => 'يجب ادخال الرقم العسكرى',
             'military_number.unique' => 'عفوا رقم العسكرى موجود من قبل',
             'filenum.unique' => 'عفوا رقم الملف موجود من قبل',
-            'military_number.string' => 'يجب ان يكون الرقم العسكرى أرقام فقط',
-            'filenum.string' => 'رقم الملف يجب ان يكون ارقام فقط',
+            'military_number.numeric' => 'يجب ان يكون الرقم العسكرى أرقام فقط',
+            'filenum.numeric' => 'رقم الملف يجب ان يكون ارقام فقط',
             'filenum.required' => 'يجب ادخال رقم الملف',
             'Civil_number.required' => 'يجب ادخال رقم المدنى',
             'Civil_number.unique' => 'عفوا رقم المدنى موجود من قبل',
-            'Civil_number.string' => 'يجب ان يكون رقم المدنى ارقام فقط',
+            'Civil_number.numeric' => 'يجب ان يكون رقم المدنى ارقام فقط',
             'phoneuser.required' => 'يجب ادخال الهاتف',
+            'phoneuser.min' => 'رقم الهاتف لا يقل عن 10 خانات',
             'phoneuser.regex' => 'رقم الهاتف يجب ان يكون أرقام فقط',
             'phoneuser.unique' => 'هذا الرقم موجود من قبل',
+            'phoneuser.numeric' =>'عفوا رقم الهاتف يجب ان يحتوى على أرقام فقط',
             'name.required' => 'يجب ادخال اسم الشخص',
         ];
 
@@ -157,16 +159,19 @@ class outgoingController extends Controller
         $users = $this->getExternalUsersAjax();
         $departments = ExternalDepartment::all();
         $lastRecord = outgoings::orderBy('id', 'desc')->first();
+        
         if (isset($lastRecord)) {
             $record = $lastRecord->num;
+            
             $parts = explode('-', $record);
-
-            // Get the last part which is '14'
             $counter = end($parts);
+           
         } else {
-            $counter = 0;
+            $counter = 0000;
         }
         $num = generateUniqueNumber($counter)['formattedNumber'];
+        
+        //dd($num);
         return view('outgoing.add', compact('users', 'departments', 'num'));
     }
 
@@ -180,17 +185,18 @@ class outgoingController extends Controller
             // Get the last part which is '14'
             $counter = end($parts);
         } else {
-            $counter = 0;
+            $counter = 0000;
         }
         return ['counter' => $counter];
     }
 
     public function store(Request $request)
     {
+        
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
-            'num' => 'required|integer',
+            'num' => ['required', 'string', 'unique:outgoings,num'],
             'note' => 'nullable|string',
             'person_to' => 'nullable|exists:export_users,id',
             'date' => 'required|date',
@@ -211,6 +217,8 @@ class outgoingController extends Controller
 
         ];
         $validatedData = Validator::make($request->all(), $rules, $messages);
+        //dd($validatedData);
+
         // // Validate the request
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
@@ -230,7 +238,6 @@ class outgoingController extends Controller
             $export->updated_by = $user->id; //auth auth()->id
             $export->department_id = $request->from_departement;
             $export->save();
-
 
             if ($request->hasFile('files')) {
 
@@ -293,7 +300,7 @@ class outgoingController extends Controller
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
-            'num' => 'required|integer',
+            'num' => ['required', 'string'],
             'note' => 'nullable|string',
             'person_to' => 'nullable|exists:export_users,id',
             'date' => 'required|date',

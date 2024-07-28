@@ -11,6 +11,7 @@ use App\Models\Government;
 use App\Models\grade;
 use App\Models\job;
 use App\Models\VacationType;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -51,6 +52,7 @@ class settingController extends Controller
     }
     //add government
     public function addgovernment(Request $request){
+       
         $requestinput=$request->except('_token');
         $job = new Government();
         $job->name=$request->nameadd;
@@ -119,6 +121,18 @@ class settingController extends Controller
     }
     //add JOB
     public function addJob(Request $request){
+        $rules = [
+            'nameadd' => 'required|string',
+        ];
+
+        $messages = [
+            'nameadd.required' => 'يجب ادخال اسم الشخص',
+        ];
+
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+        if ($validatedData->fails()) {
+            return response()->json(['success' => false, 'message' => $validatedData->errors()]);
+        }
         $requestinput=$request->except('_token');
         $job = new job();
           $job->name=$request->nameadd;
@@ -203,6 +217,18 @@ class settingController extends Controller
     }
     //add GRAD
     public function addgrads(Request $request){
+        $rules = [
+            'nameadd' => 'required|string',
+        ];
+
+        $messages = [
+            'nameadd.required' => 'يجب ادخال اسم الشخص',
+        ];
+
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+        if ($validatedData->fails()) {
+            return response()->json(['success' => false, 'message' => $validatedData->errors()]);
+        }
         $requestinput=$request->except('_token');
         $job = new grade();
         $job->name=$request->nameadd;
@@ -297,6 +323,18 @@ class settingController extends Controller
       }
       //add JOB
       public function addvacationType(Request $request){
+        $rules = [
+            'nameadd' => 'required|string',
+        ];
+
+        $messages = [
+            'nameadd.required' => 'يجب ادخال اسم الشخص',
+        ];
+
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+        if ($validatedData->fails()) {
+            return response()->json(['success' => false, 'message' => $validatedData->errors()]);
+        }
           $requestinput=$request->except('_token');
           //dd($request->nameadd);
           $job = new VacationType();

@@ -40,7 +40,7 @@
                                                         </div> -->
             <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
                 @include('inc.flash')
-                <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validation()">
                     @csrf
 
                     <div class="form-row mx-md-2 d-flex justify-content-center">
@@ -70,6 +70,8 @@
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="exportnum">رقم الصادر</label>
                             <input type="text" class="form-control" name="num" value="{{ $num }}"
+                            id="exportnum" hidden>
+                            <input type="text" class="form-control" name="num" value="{{ $num }}"
                                 id="exportnum" disabled>
                         </div>
 
@@ -85,7 +87,7 @@
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
                             <div class="d-flex justify-content-between" dir="rtl">
-                                <label for="from_departement"> الجهة المرسلة</label>
+                                <label for="from_departement"> القطاع </label>
                                 <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
                                     data-bs-toggle="modal" id="extern-department-dev" data-bs-target="#extern-department">
                             </div>
@@ -94,7 +96,7 @@
                                                         <i class="fa fa-plus"></i>
                                                     </button> -->
                             <select id="from_departement" name="from_departement" class="form-control">
-                                <option value="">اختر الجهة</option>
+                                <option value="">اختر القطاع</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
@@ -264,11 +266,6 @@
 
     @push('scripts')
         <script>
-            function validateForm() {
-
-            }
-        </script>
-        <script>
             document.addEventListener('DOMContentLoaded', (event) => {
                 let dateInput = document.getElementById('date');
                 let dateInputValue = dateInput.value;
@@ -296,24 +293,23 @@
             });
         </script>
         <script>
-            $(document).ready(function() {
-                function resetModal() {
-                    $('#saveExternalUser')[0].reset();
-                    $('.text-danger').html('');
-                }
-                $("#saveExternalUser").on("submit", function(e) {
+             function validation(){
                     var personToSelect = document.getElementById('select-person-to');
                     var fromDepartmentSelect = document.getElementById('from_departement');
 
                     // Check if at least one select has a selected value
                     if (personToSelect.value === "" && fromDepartmentSelect.value === "") {
-                        alert('Please select an option from at least one of the dropdowns.');
+                        alert('من فضلك اختر القطاع او الموظف المستلم التابعين الى هذا الصادر');
                         return false; // Prevent form submission
-                    } else {
-
-
-                        // Allow form submission
-                        return true;
+                    } 
+                }
+            $(document).ready(function() {
+                function resetModal() {
+                    $('#saveExternalUser')[0].reset();
+                    $('.text-danger').html('');
+                }
+               
+                $("#saveExternalUser").on("submit", function(e) {
                         e.preventDefault();
                         var formData = $(this).serialize();
                         $.ajax({
@@ -338,11 +334,11 @@
                                             $('#select-person-to').html(selectOptions);
                                         },
                                         error: function(xhr, status, error) {
-                                            // console.error(xhr.responseText);
+                                          
                                         }
                                     });
                                     resetModal();
-                                    $('#extern-user').modal('hide');
+                                  
                                 } else {
                                     $.each(response.message, function(key, value) {
                                         $('#' + key + '-error').html(value[0]);
@@ -360,38 +356,10 @@
                             }
 
                         });
-                    }
+                    
                 });
             });
         </script>
 
-        <script>
-            // $(document).ready(function() {
-            //     $.ajax({
-            //         url: '/getLatest',
-            //         type: 'GET',
-            //         success: function(response) {
-            //             $.ajax({
-            //                 url: '/generateNumber/' + response.counter,
-            //                 type: 'GET',
-            //                 success: function(response) {
-            //                     // Display the formatted number in the #result div
-            //                     console.log('Formatted Number:', response.formattedNumber);
-            //                     let input = document.getElementById('exportnum');
-            //                     input.value = response.formattedNumber;
-            //                     console.log(' Number:', input.value);
-            //                     // $('#exportnum').text('Formatted Number: ' + response.formattedNumber);
-            //                 },
-            //                 error: function(xhr) {
-            //                     console.log('An error occurred:', xhr);
-            //                 }
-            //             });
-            //         },
-            //         error: function(xhr) {
-            //             console.log('An error occurred:', xhr);
-            //         }
-            //     });
-
-            // });
-        </script>
+ 
     @endpush

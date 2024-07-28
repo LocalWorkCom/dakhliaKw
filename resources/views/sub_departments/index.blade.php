@@ -22,8 +22,9 @@
             <div class="container col-11 mt-3 p-0">
                 <div class="row" dir="rtl">
                     <div class="form-group mt-4 mx-2 col-12 d-flex">
-                        <button type="button" class="wide-btn"
-                            onclick="window.location.href='{{ route('sub_departments.create') }}'">
+                        <button type="button" class="wide-btn" data-bs-toggle="modal"
+                            data-bs-target="#Department" data-dismiss="modal" id="representative-dev"
+                            >
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة ادارة
                         </button>
 
@@ -49,6 +50,118 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal ADD-->
+    <div class="modal fade" id="Department" tabindex="-1" aria-labelledby="extern-departmentLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="extern-departmentLabel">إضافة ادارة جديدة</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="Department" action="{{ route('sub_departments.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return submit()">
+                        @csrf
+                        <div class="form-group">
+                            <label for="name">الاسم</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                            <span class="text-danger span-error" id="name-error"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="manger">المدير</label>
+                            <select name="manger" class="form-control " id="manger" required>
+                            <option value="">اختار المدير</option>
+                            @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                            <span class="text-danger span-error" id="manger-error"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <select name="parent_id" id="parent_id" class="form-control" required>
+                <option value="" {{ is_null($parentDepartment) ? 'selected' : '' }} >اختار الادارة</option>
+                @foreach ($subdepartments as $department)
+                    <option value="{{ $department->id }}">
+                        {{ $department->name }}
+                    </option>
+                @endforeach
+            </select>
+                            <span class="text-danger span-error" id="parent_id-error"></span>
+
+                        </div>
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn-blue">حفظ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit-->
+    <div class="modal fade" id="Departmentedit" tabindex="-1" aria-labelledby="extern-departmentLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="extern-departmentLabel">تعديل ادارة</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="Departmentedit" action="{{ route('sub_departments.update', $department->id) }}" method="POST" enctype="multipart/form-data" onsubmit="return submitedit()">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group">
+                            <label for="name">الاسم</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                            value="{{ old('name', $department->name) }}">
+                            <span class="text-danger span-error" id="name-error"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="manger">المدير</label>
+                            <select name="manger" class="form-control">
+                                <option value="">اختر المدير </option>
+                                @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ $user->id == old('manger', $department->manger) ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <span class="text-danger span-error" id="manger-error"></span>
+
+                        </div>
+                        <div class="form-group">
+                        <select name="parent_id" id="parent_id" class="form-control">
+                            <option value="">اختار الادارة</option>
+                            @foreach ($subdepartments as $dept)
+                                <option value="{{ $dept->id }}" {{ $dept->id == old('parent_id', $department->parent_id) ? 'selected' : '' }}>
+                                    {{ $dept->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                            <span class="text-danger span-error" id="parent_id-error"></span>
+
+                        </div>
+                        <!-- Save button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn-blue">حفظ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
     $(document).ready(function() {
         $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
@@ -74,13 +187,15 @@
                     // departmentDelete = departmentDelete.replace(':id', row.id);
 
                     return `
-                        <a href="${sub_departmentsEdit}" class="btn  btn-sm" style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>
+                        <a href="" class="btn  btn-sm" style="background-color: #259240;" data-bs-toggle="modal"
+                            data-bs-target="#Departmentedit" data-dismiss="modal" id="edit-dev"> <i class="fa fa-edit"></i> </a>
                        `;
                 }
             }],
             "oLanguage": {
-                                            "sSearch": "بحث",
-                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                "sSearch": "",
+                "sSearchPlaceholder":"بحث",
+                                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
                                             "sInfoEmpty": 'لا توجد بيانات متاحه',
                                             "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
@@ -102,6 +217,82 @@
                                          "pagingType": "full_numbers"
         });
     });
+
+
+    // modal Add
+function submit(){
+    var name = document.getElementById('name').value;
+    var manger = document.getElementById('manger').value;
+    var parent_id = document.getElementById('parent_id').value;
+            var form = document.getElementById('Department');
+
+            form.submit();
+            resetModal();
+            $('#Department').modal('hide');
+}
+
+
+// modal edit
+function submitedit(){
+    var name = document.getElementById('name').value;
+    var manger = document.getElementById('manger').value;
+    var parent_id = document.getElementById('parent_id').value;
+            var form = document.getElementById('Departmentedit');
+
+            form.submit();
+            resetModal();
+            $('#Departmentedit').modal('hide');
+}
+
+    $(document).ready(function() {
+    function resetModal() {
+        $('#Department')[0].reset();
+        $('.text-danger').html('');
+    }
+    });
+    // $("#Department").on("submit", function(e) {
+    //     e.preventDefault();
+
+    //     // Serialize the form data
+    //     var formData = $(this).serialize();
+    //     formData.submit();
+    //     resetModal();
+    //   $('#Department').modal('hide'); // Ensure this is the correct ID
+        // var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        // // Submit AJAX request
+        // $.ajax({
+        //     url: $(this).attr('action'),
+        //     type: 'POST',
+        //     data: formData,
+        //     headers: {
+        //         'X-CSRF-TOKEN': csrfToken
+        //     },
+        //     success: function(response) {
+        //         console.log('AJAX request successful:', response); // Debug statement
+
+        //         if (response.success) {
+        //             resetModal();
+        //             $('#Department').modal('hide'); // Ensure this is the correct ID
+        //         } else {
+        //             $.each(response.message, function(key, value) {
+        //                 $('#' + key + '-error').html(value[0]);
+        //             });
+        //         }
+        //     },
+        //     error: function(xhr, status, error) {
+        //         console.error('AJAX request error:', xhr.responseText); // Debug statement
+
+        //         if (xhr.status == 422) {
+        //             var errors = xhr.responseJSON.errors;
+        //             $.each(errors, function(key, value) {
+        //                 $('#' + key + '-error').html(value[0]);
+        //             });
+        //         }
+        //     }
+        // });
+//     });
+// });
+
     </script>
 
 @endsection

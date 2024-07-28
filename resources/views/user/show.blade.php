@@ -202,20 +202,28 @@
                             <td > {{ $user->work_location }} </td>
                         </tr>
 
-                        <tr>
+                        
+
+                            @if($user->image)
+                            <tr>
                             <th scope="row" >الصوره</th>
-                            <td >
-                                <div class="row">
-                                    <div class="col-md-11 mb-3 px-5 mt-2">
-                                        <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
-                                           data-image="{{ asset($user->image) }}" data-title="{{ $user->image }}">
-                                            <img src="{{ asset($user->image) }}" class="img-thumbnail mx-2"
-                                                 alt="{{ $user->image }}">
-                                        </a>
+
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-11 mb-3 px-5 mt-2">
+                                            <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
+                                            data-image="{{ asset($user->image) }}" data-title="{{ $user->image }}">
+                                                <img src="{{ asset($user->image) }}" class="img-thumbnail mx-2"
+                                                    alt="{{ $user->image }}">
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+
+                            @endif
+
+
 
                         
                         {{-- <tr>
