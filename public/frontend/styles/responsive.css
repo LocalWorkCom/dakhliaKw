@@ -9,7 +9,7 @@
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
-        padding-inline: 60px;
+        padding-inline: 57px;
     }
     #users-table th ,  #users-table td{
         font-size: 20px;
@@ -190,7 +190,7 @@
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
-        padding-inline: 62px;
+    padding-inline: 53px;
     }
     .first-section {
         margin-left: -30px;
@@ -396,7 +396,7 @@
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
-        padding-inline: 35px;
+        padding-inline: 33px;
     }
     .container-responsive {
         display: none;

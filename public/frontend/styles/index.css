@@ -24,7 +24,6 @@ border-radius: 10px;
     background-color: rgba(207, 206, 206, 0.788);
     border-radius: 20px;
 }
-
 .btn-pagination {
     height: 30px;
     width: 30px;
@@ -705,14 +704,16 @@ height: 45px;
     justify-content: flex-end;
     padding-right: 20px;
 }
-/*********************** file upload style******************** */
+
+
+.form-group.hidden {
+    display: none;
+}
 
 
 
 
 
-
-/*********************** ******************** */
 
 .header-radio{
     width: 100%;
@@ -788,6 +789,9 @@ background-color: #F4F7FD;
     text-align: center !important;
     color: #9b9999 !important;
 
+}
+.form-group textarea{
+    height: 60px !important;
 }
 .dataTables_filter label{
     font-size: 20px;

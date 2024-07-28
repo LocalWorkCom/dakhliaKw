@@ -7,14 +7,14 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="{{ route('home') }}">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">الادارات </a></li>
+                <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">القطاعات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل علي الادارة </a></li>
             </ol>
         </nav>
     </div>
     <div class="row ">
         <div class="container welcome col-11">
-            <p> الادارات </p>
+            <p> القطاعات </p>
         </div>
     </div>
     <br>
@@ -47,6 +47,8 @@
                             </select>
                         </div>
                     </div>
+                    
+          
 
 
 

@@ -25,7 +25,8 @@
         <div class="container  col-11 mt-3 p-0 ">
             <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
                 @include('inc.flash')
-                <form action="{{ route('Export.update', ['id' => $data->id]) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('Export.update', ['id' => $data->id]) }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-row mx-md-3 d-flex justify-content-center">
@@ -35,19 +36,21 @@
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="exportnum">رقم الصادر</label>
-                            <input type="text" class="form-control" value="{{ $data->num }}"  name="num" id="exportnum" required>
+                            <input type="text" class="form-control" value="{{ $data->num }}" name="num"
+                                id="exportnum" required>
                         </div>
 
                     </div>
                     <div class="form-row mx-md-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-md-2">
                             <label for="date">تاريخ الصادر </label>
-                            <input type="date" id="date" value="{{ $data->date }}" name="date" class="form-control" required>
+                            <input type="date" id="date" value="{{ $data->date }}" name="date"
+                                class="form-control" required>
                         </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="active">الحاله</label>
                             <select id="active" class="form-control" name="active" disabled>
-                                <option value="0"  @if ($data->active == 0) selected @endif>جديد</option>
+                                <option value="0" @if ($data->active == 0) selected @endif>جديد</option>
                                 <option value="1" @if ($data->active == 1) selected @endif> أرشيف</option>
 
                             </select>
@@ -65,7 +68,8 @@
                             <select id="from_departement" name="from_departement" class="form-control">
                                 <option value="">اختر الجهة</option>
                                 @foreach ($departments as $item)
-                                    <option value="{{ $item->id }}" @if ($data->department_id == $item->id) selected @endif>{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}" @if ($data->department_id == $item->id) selected @endif>
+                                        {{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -86,7 +90,7 @@
                     <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group col-md-10">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
-                            <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" > {{ $data->note }} </textarea>
+                            <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"> {{ $data->note }} </textarea>
                         </div>
                     </div>
 
@@ -97,8 +101,8 @@
                         <div class="form-group col-md-10 " dir="rtl">
                             <div class=" fileupload d-inline">
                                 <div class="d-flex">
-                                    <input id="fileInput" type="file" name="files[]" multiple
-                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg">
+                                    <input id="fileInput" type="file" name="files[]" multiple class="mb-2 form-control"
+                                        accept=".pdf,.jpg,.png,.jpeg">
                                     <button class="btn-all mx-1" type="button" onclick="uploadFiles()"
                                         style="color:green;"> اضف </button>
                                 </div>
@@ -111,13 +115,13 @@
                         </div>
                     </div>
                     <!-- <div class="form-group col-md-12">
-                                        <label for="files">اضافة ملف</label>
-                                        <div id="fileInputs">
-                                            <div class="file-input mb-3" dir="rtl">
-                                                <input type="file" name="files[]" class="form-control">
-                                                <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
-                                            </div>
-                                        </div> -->
+                                            <label for="files">اضافة ملف</label>
+                                            <div id="fileInputs">
+                                                <div class="file-input mb-3" dir="rtl">
+                                                    <input type="file" name="files[]" class="form-control">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                                </div>
+                                            </div> -->
                     <!-- </div> -->
 
                     <div class="form-row d-flex  justify-content-center" dir="rtl">
@@ -128,30 +132,30 @@
                             </button>
                             <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
                                 data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة  الجهه
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة الجهه
 
                             </button>
                         </div>
 
                     </div><br>
                     <!-- <div class="form-row d-block ">
-                                    <div class="form-group col-md-12">
-                                        <label for="files">اضافة ملف</label>
-                                        <div id="fileInputs">
-                                            <div class="file-input mb-3" dir="rtl">
-                                                <input type="file" name="files[]" class="form-control">
-                                                <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                        <div class="form-group col-md-12">
+                                            <label for="files">اضافة ملف</label>
+                                            <div id="fileInputs">
+                                                <div class="file-input mb-3" dir="rtl">
+                                                    <input type="file" name="files[]" class="form-control">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-row" dir="rtl">
-                                    <button type="button" class="btn-all btn-sm mt-2" id="addFile"
-                                        style="background-color: #FAFBFD; border: none;"><img
-                                            src="{{ asset('frontend/images/add-btn.svg') }}" alt="">إضافة ملف جديد
-                                    </button>
+                                    <div class="form-row" dir="rtl">
+                                        <button type="button" class="btn-all btn-sm mt-2" id="addFile"
+                                            style="background-color: #FAFBFD; border: none;"><img
+                                                src="{{ asset('frontend/images/add-btn.svg') }}" alt="">إضافة ملف جديد
+                                        </button>
 
-                                </div> <br> -->
+                                    </div> <br> -->
             </div>
             <div class="container col-10 mt-5 mb-3 ">
                 <div class="form-row col-10 " dir="ltr">
@@ -251,7 +255,7 @@
 
                         </div>
                         <div class="form-group">
-                            <label for="Civil_number">رقم الهويه</label>
+                            <label for="Civil_number">رقم المدنى</label>
                             <input type="text" id="Civil_number" name="Civil_number" class="form-control" required>
                             <span class="text-danger span-error" id="Civil_number-error" dir="rtl"></span>
 
@@ -284,7 +288,7 @@
             });
         </script>
         <script>
-           $(document).ready(function() {
+            $(document).ready(function() {
                 $(document).ready(function() {
                     $('#fileInput').on('change', function() {
                         if ($(this).val()) {

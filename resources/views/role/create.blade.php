@@ -41,7 +41,6 @@
 
 
 
-
                 <form action="{{ route('rule.store') }}" method="post" class="text-right">
                     @csrf
 

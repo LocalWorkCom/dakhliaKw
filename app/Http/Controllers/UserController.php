@@ -310,8 +310,7 @@ class UserController extends Controller
         }
         else
         {
-            // $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
-            $alldepartment = departements::all();
+            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
         }
 
         $alluser = User::where('department_id',$user->department_id)->get();
