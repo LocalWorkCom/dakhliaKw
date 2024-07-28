@@ -14,7 +14,7 @@
     <section>
         <div class="row">
             <div class="container welcome col-11">
-                <p>الاقـــــسام</p>
+                <p>الادارات</p>
             </div>
         </div>
 
@@ -24,7 +24,7 @@
                     <div class="form-group mt-4 mx-2 col-12 d-flex">
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('sub_departments.create') }}'">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة قسم
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة ادارة
                         </button>
 
                     </div>
@@ -79,8 +79,9 @@
                 }
             }],
             "oLanguage": {
-                                            "sSearch": "بحث",
-                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                "sSearch": "",
+                "sSearchPlaceholder":"بحث",
+                                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
                                             "sInfoEmpty": 'لا توجد بيانات متاحه',
                                             "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',

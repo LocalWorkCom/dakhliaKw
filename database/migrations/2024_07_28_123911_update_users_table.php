@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('iotelegrams', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('outgoing_num');
-            $table->string('outgoing_date');
-            $table->string('iotelegram_num');
-            $table->integer('files_num');
-            $table->string('user_id')->nullable();
+            $table->string('sector')->nullable()->change();   //قطاع 
 
         });
     }
@@ -27,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('iotelegrams', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

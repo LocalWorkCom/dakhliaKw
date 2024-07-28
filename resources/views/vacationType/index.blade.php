@@ -234,8 +234,9 @@
                     }
                 ],
                 "oLanguage": {
-                    "sSearch": "بحث",
-                    "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                    "sSearch": "",
+                    "sSearchPlaceholder":"بحث",
+                                        "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
                     "sInfoEmpty": 'لا توجد بيانات متاحه',
                     "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
                     "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',

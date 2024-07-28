@@ -214,26 +214,26 @@
                                     <label for="input17">المنصب</label>
                                     <input type="text" id="input17" name="position" class="form-control"
                                         placeholder="المنصب" value="{{ $user->position  }}">
-                        </div> --}}
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input18">المؤهل</label>
-                            <input type="text" id="input18" name="qualification" class="form-control"
-                                placeholder="المؤهل" value="{{ $user->qualification  }}">
+                            </div> --}}
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input18">المؤهل</label>
+                                <input type="text" id="input18" name="qualification" class="form-control"
+                                    placeholder="المؤهل" value="{{ $user->qualification  }}">
+                            </div>
                         </div>
-                </div>
 
-                <div class="form-row mx-2 mx-3 d-flex justify-content-center flex-row-reverse">
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="input19">تاريخ الميلاد</label>
-                        <input type="date" id="input19" name="date_of_birth" class="form-control"
-                            placeholder="تاريخ الميلاد" value="{{  $user->date_of_birth  }}">
-                    </div>
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="input20">تاريخ الالتحاق</label>
-                        <input type="date" id="input20" name="joining_date" class="form-control"
-                            placeholder="تاريخ الالتحاق" value="{{ $user->joining_date  }}">
-                    </div>
-                </div>
+                        <div class="form-row mx-2 mx-3 d-flex justify-content-center flex-row-reverse">
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input19">تاريخ الميلاد</label>
+                                <input type="date" id="input19" name="date_of_birth" class="form-control"
+                                    placeholder="تاريخ الميلاد" value="{{  $user->date_of_birth  }}">
+                            </div>
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input20">تاريخ الالتحاق</label>
+                                <input type="date" id="input20" name="joining_date" class="form-control"
+                                    placeholder="تاريخ الالتحاق" value="{{ $user->joining_date  }}">
+                            </div>
+                        </div>
                 {{-- <div class="form-group col-md-5 mx-2">
                                     <label for="input21">العمر</label>
                                     <input type="text" id="input21" name="age" class="form-control" placeholder="العمر"
