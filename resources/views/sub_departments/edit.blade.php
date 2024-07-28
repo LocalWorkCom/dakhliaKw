@@ -45,12 +45,12 @@
 
 <div class="row">
     <div class="container  col-11 mt-3 p-0 ">
-        <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
+        <div class="container col-10 mt-5 mb-5 pb-4 pt-4" style="border:0.5px solid #C7C7CC;">
             <form action="{{ route('sub_departments.update', $department->id) }}" method="POST"
                 enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div class="form-row mx-2 d-flex justify-content-center">
+                <div class="form-row mx-md-2 d-flex justify-content-center">
                     <div class="form-group col-md-10">
                         <label for="name">اسم القسم </label>
                         <input type="text" class="form-control" id="name" name="name"
@@ -58,7 +58,7 @@
                     </div>
                 </div>
 
-                <div class="form-row mx-2 d-flex justify-content-center">
+                <div class="form-row mx-md-2 d-flex justify-content-center">
                     <div class="form-group col-md-10">
                         <select name="parent_id" id="parent_id" class="form-control">
                             <option value="{{$parentDepartment->id}}">اختار القسم</option>

@@ -24,33 +24,33 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
             <!-- <div class="row justify-content-center" dir="rtl">
-                            <div class="form-group mt-4  mx-5 col-10 d-flex ">
-                                <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
-                                    data-bs-target="#extern-user" style="color: #0D992C;">
-                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    اضافة شخص خارجى
-                                </button>
+                                                <div class="form-group mt-4  mx-5 col-10 d-flex ">
+                                                    <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
+                                                        data-bs-target="#extern-user" style="color: #0D992C;">
+                                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                                        اضافة شخص خارجى
+                                                    </button>
 
-                                <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
-                                    data-bs-target="#extern-department" style="color: #0D992C;">
-                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    اضافة أداره خارجيه
-                                </button>
-                            </div>
-                        </div> -->
+                                                    <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
+                                                        data-bs-target="#extern-department" style="color: #0D992C;">
+                                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                                        اضافة أداره خارجيه
+                                                    </button>
+                                                </div>
+                                            </div> -->
             <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
                 @include('inc.flash')
                 <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="nameex">العنوان</label>
-                            <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
-                                required>
-                        </div>
-                        <div class="form-group col-md-5 mx-2 ">
-                            <label for="select-person-to">الموظف المستلم </label>
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
+
+                        <div class="form-group col-md-10 ">
+                            <div class="d-flex justify-content-between" dir="rtl">
+                                <label for="select-person-to"> الموظف المستلم</label>
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
+                                    data-bs-toggle="modal" id="extern-user-dev" data-bs-target="#extern-user">
+                            </div>
                             <select id="select-person-to" name="person_to" class="form-control js-example-basic-single">
                                 <option value="" disabled selected> اختر من القائمه</option>
                                 @foreach ($users as $user)
@@ -62,19 +62,19 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="date">تاريخ الصادر </label>
                             <input type="date" id="date" name="date" class="form-control" required>
                         </div>
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="exportnum">رقم الصادر</label>
-                            <input type="text" class="form-control" name="num" id="exportnum" required>
+                            <input type="text" class="form-control" name="num" value="" id="exportnum" disabled>
                         </div>
 
                     </div>
-                    <div class="form-row mx-3 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-2">
+                    <div class="form-row mx-md-3 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
                             <label for="active">الحاله</label>
                             <select id="active" class="form-control" name="active" disabled>
                                 <option value="0" selected>جديد</option>
@@ -82,12 +82,16 @@
 
                             </select>
                         </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="from_departement">الجهة المرسلة</label>
-                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
-                                id="extern-department-dev" data-bs-target="#extern-department">
-                                <i class="fa fa-plus"></i>
-                            </button>
+                        <div class="form-group col-md-5 mx-md-2">
+                            <div class="d-flex justify-content-between" dir="rtl">
+                                <label for="from_departement"> الجهة المرسلة</label>
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
+                                    data-bs-toggle="modal" id="extern-department-dev" data-bs-target="#extern-department">
+                            </div>
+                            <!-- <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
+                                            id="extern-department-dev" data-bs-target="#extern-department">
+                                            <i class="fa fa-plus"></i>
+                                        </button> -->
                             <select id="from_departement" name="from_departement" class="form-control">
                                 <option value="">اختر الجهة</option>
                                 @foreach ($departments as $item)
@@ -96,24 +100,28 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row mx-2 d-flex justify-content-center">
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10">
+                            <label for="nameex">العنوان</label>
+                            <textarea type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group col-md-10">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"> </textarea>
                         </div>
                     </div>
 
-                    <div class="form-row mx-2 d-flex justify-content-center">
-                        <div class="form-group  col-md-10 ">
-                            <label for="files"> اضف ملفات بحد اقصي 10 </label>
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10">
+                            <label for="files">اضف ملفات بحد اقصي 10</label>
                         </div>
-                        <div class="form-group col-md-10 " dir="rtl">
-                            <div class=" fileupload d-inline">
+                        <div class="form-group col-md-10" dir="rtl">
+                            <div class="fileupload d-inline">
                                 <div class="d-flex">
                                     <input id="fileInput" type="file" name="files[]" multiple
                                         class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg">
-                                    <button class="btn-all mx-1" type="button" onclick="uploadFiles()"
-                                        style="color:green;"> اضف </button>
                                 </div>
                                 <div class="space-uploading">
                                     <ul id="fileList" class="d-flex flex-wrap">
@@ -123,20 +131,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-row d-flex  justify-content-center" dir="rtl">
-                        <div class="form-group d-flex justify-content-start col-md-10 ">
-                            <button type="button" class="btn-all  mx-3" data-bs-toggle="modal" id="extern-user-dev"
-                                data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف 
-                            </button>
-                            <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
-                                data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة  الجهه
 
-                            </button>
-                        </div>
 
-                    </div><br>
+                    <!-- <div class="form-row d-flex  justify-content-center" dir="rtl">
+                                    <div class="form-group d-flex justify-content-start col-md-10 "> -->
+                    <!-- <button type="button" class="btn-all  mx-md-3" data-bs-toggle="modal" id="extern-user-dev"
+                                            data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
+                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف
+                                        </button> -->
+                    <!-- <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
+                                            data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
+                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة الجهه
+
+                                        </button> -->
+                    <!-- </div> -->
+
+                    <!-- </div><br> -->
             </div>
             <div class="container col-10 mt-5 mb-3 ">
                 <div class="form-row col-10 " dir="ltr">
@@ -148,9 +158,7 @@
             </form>
         </div>
     </div>
-    </div>
-    </div>
-    </div>
+
 
 
     {{-- model for add new department --}}
@@ -236,7 +244,7 @@
 
                         </div>
                         <div class="form-group">
-                            <label for="Civil_number">رقم الهويه</label>
+                            <label for="Civil_number">رقم المدنى</label>
                             <input type="text" id="Civil_number" name="Civil_number" class="form-control" required>
                             <span class="text-danger span-error" id="Civil_number-error" dir="rtl"></span>
 
@@ -254,6 +262,11 @@
     @endsection
 
     @push('scripts')
+        <script>
+            function validateForm() {
+
+            }
+        </script>
         <script>
             document.addEventListener('DOMContentLoaded', (event) => {
                 let dateInput = document.getElementById('date');
@@ -288,51 +301,96 @@
                     $('.text-danger').html('');
                 }
                 $("#saveExternalUser").on("submit", function(e) {
-                    e.preventDefault();
-                    var formData = $(this).serialize();
-                    $.ajax({
-                        url: $(this).attr('action'),
-                        type: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            if (response.success) {
-                                $('#select-person-to').empty();
-                                $.ajax({
-                                    url: "{{ route('external.users') }}",
-                                    type: 'GET',
-                                    success: function(response) {
-                                        var selectOptions =
-                                            '<option value="">اختر الشخص الصادر</option>';
-                                        response.forEach(function(user) {
-                                            selectOptions += '<option value="' +
-                                                user.id + '">' + user.name +
-                                                '</option>';
-                                        });
-                                        $('#select-person-to').html(selectOptions);
-                                    },
-                                    error: function(xhr, status, error) {
-                                        // console.error(xhr.responseText);
-                                    }
-                                });
-                                resetModal();
-                                $('#extern-user').modal('hide');
-                            } else {
-                                $.each(response.message, function(key, value) {
-                                    $('#' + key + '-error').html(value[0]);
-                                });
+                    var personToSelect = document.getElementById('select-person-to');
+                    var fromDepartmentSelect = document.getElementById('from_departement');
+
+                    // Check if at least one select has a selected value
+                    if (personToSelect.value === "" && fromDepartmentSelect.value === "") {
+                        alert('Please select an option from at least one of the dropdowns.');
+                        return false; // Prevent form submission
+                    } else {
+
+
+                        // Allow form submission
+                        return true;
+                        e.preventDefault();
+                        var formData = $(this).serialize();
+                        $.ajax({
+                            url: $(this).attr('action'),
+                            type: 'POST',
+                            data: formData,
+                            success: function(response) {
+                                if (response.success) {
+                                    $('#select-person-to').empty();
+                                    $.ajax({
+                                        url: "{{ route('external.users') }}",
+                                        type: 'GET',
+                                        success: function(response) {
+                                            var selectOptions =
+                                                '<option value="">اختر الشخص الصادر</option>';
+                                            response.forEach(function(user) {
+                                                selectOptions +=
+                                                    '<option value="' +
+                                                    user.id + '">' + user.name +
+                                                    '</option>';
+                                            });
+                                            $('#select-person-to').html(selectOptions);
+                                        },
+                                        error: function(xhr, status, error) {
+                                            // console.error(xhr.responseText);
+                                        }
+                                    });
+                                    resetModal();
+                                    $('#extern-user').modal('hide');
+                                } else {
+                                    $.each(response.message, function(key, value) {
+                                        $('#' + key + '-error').html(value[0]);
+                                    });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                // console.error(xhr.responseText);
+                                if (xhr.status == 422) {
+                                    var errors = xhr.responseJSON.errors;
+                                    $.each(errors, function(key, value) {
+                                        $('#' + key + '-error').html(value[0]);
+                                    });
+                                }
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            // console.error(xhr.responseText);
-                            if (xhr.status == 422) {
-                                var errors = xhr.responseJSON.errors;
-                                $.each(errors, function(key, value) {
-                                    $('#' + key + '-error').html(value[0]);
-                                });
-                            }
-                        }
-                    });
+
+                        });
+                    }
                 });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: '/getLatest',
+                    type: 'GET',
+                    success: function(response) {
+                        $.ajax({
+                            url: '/generateNumber/' + response.counter,
+                            type: 'GET',
+                            success: function(response) {
+                                // Display the formatted number in the #result div
+                                console.log('Formatted Number:', response.formattedNumber);
+                                let input = document.getElementById('exportnum');
+                                input.value = response.formattedNumber;
+                                console.log(' Number:', input.value);
+                                // $('#exportnum').text('Formatted Number: ' + response.formattedNumber);
+                            },
+                            error: function(xhr) {
+                                console.log('An error occurred:', xhr);
+                            }
+                        });
+                    },
+                    error: function(xhr) {
+                        console.log('An error occurred:', xhr);
+                    }
+                });
+
             });
         </script>
     @endpush

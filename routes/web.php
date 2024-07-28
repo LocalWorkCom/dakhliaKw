@@ -110,6 +110,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile')->middleware('check.permission:download outgoing_files');
         //End Export routes
 
+        Route::get('generateNumber/{counter}', [outgoingController::class, 'generateUniqueNumber']);
+        Route::get('getLatest', [outgoingController::class, 'getTheLatestExport']);
 
     
     // getDepartment
