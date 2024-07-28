@@ -24,20 +24,20 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
             <!-- <div class="row justify-content-center" dir="rtl">
-                            <div class="form-group mt-4  mx-5 col-10 d-flex ">
-                                <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
-                                    data-bs-target="#extern-user" style="color: #0D992C;">
-                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    اضافة شخص خارجى
-                                </button>
+                                    <div class="form-group mt-4  mx-5 col-10 d-flex ">
+                                        <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
+                                            data-bs-target="#extern-user" style="color: #0D992C;">
+                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                            اضافة شخص خارجى
+                                        </button>
 
-                                <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
-                                    data-bs-target="#extern-department" style="color: #0D992C;">
-                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    اضافة أداره خارجيه
-                                </button>
-                            </div>
-                        </div> -->
+                                        <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
+                                            data-bs-target="#extern-department" style="color: #0D992C;">
+                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                            اضافة أداره خارجيه
+                                        </button>
+                                    </div>
+                                </div> -->
             <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
                 @include('inc.flash')
                 <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data">
@@ -127,11 +127,11 @@
                         <div class="form-group d-flex justify-content-start col-md-10 ">
                             <button type="button" class="btn-all  mx-3" data-bs-toggle="modal" id="extern-user-dev"
                                 data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف 
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف
                             </button>
                             <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
                                 data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة  الجهه
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة الجهه
 
                             </button>
                         </div>
@@ -148,9 +148,7 @@
             </form>
         </div>
     </div>
-    </div>
-    </div>
-    </div>
+
 
 
     {{-- model for add new department --}}

@@ -45,7 +45,7 @@
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">اسم الموظف:</th>
                             <td>
-                                {{ $vacation->employee ? $vacation->employee->name : '____________' }}
+                                {{ $vacation->employee ? $vacation->employee->name : 'عامة' }}
                             </td>
                         </tr>
                         <tr>
@@ -54,9 +54,9 @@
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> تاريخ النهاية:</th>
-                            <td>{{ $vacation->date_to ? $vacation->date_to : '________________' }}</td>
+                            <td>{{ $vacation->date_to ? $vacation->date_to : $vacation->date_from }}</td>
                         </tr>
-                        @if ($vacation->report_image)
+                        @if ($vacation->report_image && $vacation->vacation_type_id == 2)
                             <tr>
                                 <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
                                 <td>

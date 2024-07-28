@@ -27,8 +27,8 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-            <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
-                <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('vacation.update', $vacation->id) }}" method="POST" enctype="multipart/form-data">
+                <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
                     @csrf
 
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
@@ -90,9 +90,9 @@
                         </div>
                     </div>
                     @if ($vacation->report_image && $vacation->vacation_type_id == 2)
-                        <div class="form-row mx-2 mt-4 d-flex justify-content-center" id="reportImage-div">
+                        <div class="form-row mx-2 mt-4 d-flex justify-content-center">
                             <div class="form-group col-md-10 d-flex justify-content-end">
-                                <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
+                                <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal" id="reportImage-div-1"
                                     data-image="{{ asset($vacation->report_image) }}"
                                     data-title="{{ $vacation->report_image }}">
                                     <img src="{{ asset($vacation->report_image) }}" class="img-thumbnail mx-2"
@@ -108,134 +108,152 @@
 
                         </div>
                     @endif
-
-                    <div class="container  col-10 mt-5 mb-5 ">
-                        <div class="form-row col-10 " dir="ltr">
-                            <button type="submit" class="btn-blue">حفظ</button>
-                        </div>
+                </div>
+                <div class="container  col-10 mt-5 mb-5 ">
+                    <div class="form-row col-10 " dir="ltr">
+                        <button type="submit" class="btn-blue">حفظ</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
-        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <img id="modalImage" src="#" class="img-fluid" alt="صورة">
-                    </div>
+    </div>
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="#" class="img-fluid" alt="صورة">
                 </div>
             </div>
         </div>
+    </div>
 
 
-        @push('scripts')
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    @push('scripts')
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-            <script>
-                $(document).ready(function() {
-                    var today = new Date().toISOString().split('T')[0];
+        <script>
+            $(document).ready(function() {
+                var today = new Date().toISOString().split('T')[0];
 
-                    $('#date_from').attr('min', today);
-                    $('#date_to').attr('min', today);
+                $('#date_from').attr('min', today);
+                $('#date_to').attr('min', today);
 
+                var value = $('#vacation_type_id option:selected').val();
+                if (value == '3') {
+                    $('#name_dev').attr('hidden', false);
+                    $('#reportImage-div').attr('hidden', true);
+                    $('#reportImage-div-1').attr('hidden', true);
+
+
+                    $('#date_to').prop('disabled', false);
+
+                    $('#employee_id').prop('disabled', true);
+
+                    $('#employee_id').removeAttr('required');
+
+                } else if (value == '4') {
+                    $('#name_dev').attr('hidden', true);
+                    $('#reportImage-div').attr('hidden', true);
+                    $('#reportImage-div-1').attr('hidden', true);
+
+
+                    $('#date_to').prop('disabled', true);
+                    $('#employee_id').prop('disabled', false);
+                    $('#employee_id').attr('required', true);
+
+                } else if (value == '2') {
+
+                    $('#name_dev').attr('hidden', true);
+                    $('#reportImage-div').attr('hidden', false);
+                    $('#reportImage-div-1').attr('hidden', false);
+
+
+                    $('#date_to').prop('disabled', false);
+
+                    $('#employee_id').prop('disabled', false);
+                    $('#employee_id').attr('required', true);
+                } else {
+                    $('#reportImage-div').attr('hidden', true);
+                    $('#reportImage-div-1').attr('hidden', true);
+
+                    $('#name_dev').attr('hidden', true);
+                    $('#date_to').prop('disabled', false);
+
+                    $('#employee_id').prop('disabled', false);
+                    $('#employee_id').attr('required', true);
+                }
+
+                $('#vacation_type_id').change(function() {
                     var value = $('#vacation_type_id option:selected').val();
-                    if (value == '3') {
-                        $('#name_dev').attr('hidden', false);
-                        $('#reportImage-div').attr('hidden', true);
 
+                    if (value == '3') {
+                        $('#reportImage-div').attr('hidden', true);
+                        $('#reportImage-div-1').attr('hidden', true);
 
                         $('#date_to').prop('disabled', false);
+                        $('#name_dev').hide();
 
                         $('#employee_id').prop('disabled', true);
 
                         $('#employee_id').removeAttr('required');
 
                     } else if (value == '4') {
-                        $('#name_dev').attr('hidden', true);
                         $('#reportImage-div').attr('hidden', true);
+                        $('#reportImage-div-1').attr('hidden', true);
+
+
+                        $('#name_dev').hide();
 
                         $('#date_to').prop('disabled', true);
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
 
                     } else if (value == '2') {
-
-                        $('#name_dev').attr('hidden', true);
                         $('#reportImage-div').attr('hidden', false);
+                        $('#reportImage-div-1').attr('hidden', false);
+
 
                         $('#date_to').prop('disabled', false);
+                        $('#name_dev').show();
 
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
                     } else {
                         $('#reportImage-div').attr('hidden', true);
-                        $('#name_dev').attr('hidden', true);
+                        $('#reportImage-div-1').attr('hidden', true);
+
+
                         $('#date_to').prop('disabled', false);
+                        $('#name_dev').hide();
 
                         $('#employee_id').prop('disabled', false);
                         $('#employee_id').attr('required', true);
                     }
 
-                    $('#vacation_type_id').change(function() {
-                        var value = $('#vacation_type_id option:selected').val();
-
-                        if (value == '3') {
-                            $('#reportImage-div').hide();
-                            $('#date_to').prop('disabled', false);
-                            $('#name_dev').hide();
-
-                            $('#employee_id').prop('disabled', true);
-
-                            $('#employee_id').removeAttr('required');
-
-                        } else if (value == '4') {
-                            $('#reportImage-div').hide();
-                            $('#name_dev').hide();
-
-                            $('#date_to').prop('disabled', true);
-                            $('#employee_id').prop('disabled', false);
-                            $('#employee_id').attr('required', true);
-
-                        } else if (value == '2') {
-                            $('#reportImage-div').show();
-                            $('#date_to').prop('disabled', false);
-                            $('#name_dev').show();
-
-                            $('#employee_id').prop('disabled', false);
-                            $('#employee_id').attr('required', true);
-                        } else {
-                            $('#reportImage-div').hide();
-                            $('#date_to').prop('disabled', false);
-                            $('#name_dev').hide();
-
-                            $('#employee_id').prop('disabled', false);
-                            $('#employee_id').attr('required', true);
-                        }
-
-
-                    });
-                    $('.image-popup').click(function(event) {
-                        event.preventDefault();
-                        var imageUrl = $(this).data('image');
-                        var imageTitle = $(this).data('title');
-
-                        // Set modal image and title
-                        $('#modalImage').attr('src', imageUrl);
-                        $('#imageModalLabel').text(imageTitle);
-
-                        // Show the modal
-                        $('#imageModal').modal('show');
-                    });
 
                 });
-            </script>
-        @endpush
-    @endsection
+                $('.image-popup').click(function(event) {
+                    event.preventDefault();
+                    var imageUrl = $(this).data('image');
+                    var imageTitle = $(this).data('title');
+
+                    // Set modal image and title
+                    $('#modalImage').attr('src', imageUrl);
+                    $('#imageModalLabel').text(imageTitle);
+
+                    // Show the modal
+                    $('#imageModal').modal('show');
+                });
+
+            });
+        </script>
+    @endpush
+@endsection

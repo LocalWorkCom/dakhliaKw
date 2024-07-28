@@ -155,18 +155,26 @@
                         <div class="form-group">
                             <label for="name">الاسم</label>
                             <input type="text" id="name" name="name" class="form-control" required>
+                            <span class="text-danger span-error" id="name-error"></span>
+
                         </div>
                         <div class="form-group">
                             <label for="national_id">رقم الهوية</label>
                             <input type="text" id="national_id" name="national_id" class="form-control"required>
+                            <span class="text-danger span-error" id="national_id-error"></span>
+
                         </div>
                         <div class="form-group">
                             <label for="phone1">رقم الهاتف الاول</label>
                             <input type="text" id="phone1" name="phone1" class="form-control" required>
+                            <span class="text-danger span-error" id="phone1-error"></span>
+
                         </div>
                         <div class="form-group">
                             <label for="phone2">رقم الهاتف الثاني</label>
                             <input type="text" id="phone2" name="phone2" class="form-control">
+                            <span class="text-danger span-error" id="phone2-error"></span>
+
                         </div>
                         <!-- Save button -->
                         <div class="text-end">
@@ -195,14 +203,18 @@
                         <div class="form-group">
                             <label for="name">الاسم</label>
                             <input type="text" id="name" name="name" class="form-control" required>
+
                         </div>
                         <div class="form-group">
                             <label for="desc">الوصف</label>
                             <input type="text" id="desc" name="desc" class="form-control">
+
                         </div>
                         <div class="form-group">
                             <label for="phone">الهاتف</label>
                             <input type="text" id="phone" name="phone" class="form-control" required>
+                            <span class="text-danger span-error" id="phone-error"></span>
+
                         </div>
 
                         <!-- Save button -->
@@ -227,6 +239,7 @@
 
             function resetModal() {
                 $('#saveExternalDepartment')[0].reset();
+                $('#addRepresentativeForm')[0].reset();
                 $('.text-danger').html('');
             }
             $(document).ready(function() {

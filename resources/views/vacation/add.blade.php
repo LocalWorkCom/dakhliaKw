@@ -83,12 +83,12 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="container col-10 mt-5 mb-5 ">
                     <div class="form-row col-10 " dir="ltr">
                         <button type="submit" class="btn-blue">حفظ</button>
                     </div>
                 </div>
+
             </form>
         </div>
     </div>
@@ -111,6 +111,7 @@
                 $('#vacation_type_id').change(function() {
                     var value = $('#vacation_type_id option:selected').val();
                     console.log(value);
+                    console.log(id);
                     if (value == '3') {
                         $('#name_dev').attr('hidden', false);
                         $('#reportImage-div').attr('hidden', true);
@@ -119,12 +120,14 @@
 
                         $('#employee_id').prop('disabled', true);
                         $('#employee_id').removeAttr('required');
+                        $('#mySelect employee_id').prop('selected', false);
+
 
                     } else if (value == '4') {
                         $('#name_dev').attr('hidden', true);
                         $('#reportImage-div').attr('hidden', true);
                         $('#date_to').prop('disabled', true);
-                        if (!id) {
+                        if (id == 0 || id == '') {
 
                             $('#employee_id').prop('disabled', false);
                             $('#employee_id').attr('required', true);
@@ -134,7 +137,7 @@
                         $('#name_dev').attr('hidden', true);
                         $('#reportImage-div').attr('hidden', false);
                         $('#date_to').prop('disabled', false);
-                        if (!id) {
+                        if (id == 0 || id == '') {
                             $('#employee_id').prop('disabled', false);
                             $('#employee_id').attr('required', true);
                         }
@@ -142,8 +145,9 @@
                         $('#reportImage-div').attr('hidden', true);
                         $('#name_dev').attr('hidden', true);
                         $('#date_to').prop('disabled', false);
-                        if (!id) {
-
+                        if (id == 0 || id == '') {
+                            console.log("jkhjb");
+console.log( $('#employee_id').prop('disabled', false));
                             $('#employee_id').prop('disabled', false);
                             $('#employee_id').attr('required', true);
                         }
