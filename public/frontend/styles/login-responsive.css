@@ -3,7 +3,7 @@
     .container {
       max-width: 1300px;
     }
-  
+
   }
   @media (max-width: 1600px){
     .logo {
@@ -14,7 +14,7 @@
         padding-right: 0px;
         margin-bottom: 25px;
     }
-   
+
     .login-input {
         height: 55px;
         margin-bottom: 0px;
@@ -65,7 +65,7 @@
         padding-right: 0px;
         margin-bottom: 10px;
     }
-   
+
     .login-input {
         height: 45px;
         margin-bottom: 0px;
@@ -111,7 +111,7 @@
         height: 350px;
         padding-right: 6px;
     }
-   
+
 }
 @media (max-width: 1200px){
     .logo {
@@ -316,21 +316,21 @@
     }
     .login-h5 {
         margin-top: 0px;
-        padding-left: 42px;
+        padding-left: 55px;
         font-size: 18px;
     }
     .login-p {
         font-size: 18px;
         line-height: 50px;
-        padding-left: 1px;
+        padding-left: 20px;
     }
     .login-label {
-        font-size: 25px;
+        font-size: 20px;
         line-height: 26.78px;
-        margin-left: -1px;
+        margin-left: 22px;
     }
     .login-h2 {
-        padding-left: 83px;
+        padding-left: 95px;
         line-height: 56px;
         font-size: 27px;
     }
@@ -375,11 +375,11 @@
         line-height: 63px;
     }
     .login-label {
-        font-size: 20px;
+        font-size: 19px;
         line-height: 26.78px;
-        margin-left: 3px;
+        margin-left: 10px;
     }
-   
+
     #toggleIcon {
         position: absolute;
         right: 176px;
@@ -390,7 +390,7 @@
         height: 32px;
         width: 303px;
     }
-   
+
      .btn1{
         width: 150px;
         height: 36px;

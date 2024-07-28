@@ -72,7 +72,11 @@ class IoTelegramController extends Controller
         $recieves = User::all();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments'));
+        
+        $max_num = Iotelegram::max('id') + 1;
+        $outgoing_num = "2024-0724-01";
+
+        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments', 'max_num', 'outgoing_num'));
     }
 
     /**
@@ -200,10 +204,10 @@ class IoTelegramController extends Controller
     public function addPostmanAjax(Request $request)
     {
         $rules = [
-            'name' => 'required',
-            'phone1' => 'required|unique:postmans,phone1',
-            'phone2' => 'unique:postmans,phone2',
-            'national_id' => 'required|unique:postmans,national_id',
+            'name' => 'required|string',
+            'phone1' => 'required|unique:postmans,phone1|integer',
+            'phone2' => 'unique:postmans,phone2|integer',
+            'national_id' => 'required|unique:postmans,national_id|integer',
             'modal_department_id' => 'required',
 
         ];
@@ -219,7 +223,7 @@ class IoTelegramController extends Controller
 
             'phone2.required' => 'يجب ادخال الهاتف',
             'phone2.integer' => 'يجب ان يكون الهاتف ارقام',
-            'phone1.unique' => 'رقم الهاتف 2 موجود بالفعل',
+            'phone2.unique' => 'رقم الهاتف 2 موجود بالفعل',
 
 
             'national_id.required' => 'يجب ادخال رقم الهوية',
@@ -234,7 +238,7 @@ class IoTelegramController extends Controller
         if ($validatedData->fails()) {
             return response()->json(['success' => false, 'message' => $validatedData->errors()]);
         }
- 
+
 
         $Postman = new Postman();
         $Postman->name = $request->name;
@@ -257,7 +261,7 @@ class IoTelegramController extends Controller
     {
         $rules = [
             'desc' => 'nullable',
-            'phone' => 'required|integer',
+            'phone' => ['required', 'string', 'unique:external_departements,phone', 'regex:/^01\d{9,11}$/'],
             'name' => 'required|string',
         ];
 
@@ -265,6 +269,8 @@ class IoTelegramController extends Controller
             'name.string' => 'يجب ان يكون الأسم حروف فقط',
             'phone.required' => 'يجب ادخال الهاتف',
             'phone.integer' => 'يجب ان يكون الهاتف ارقام',
+            'phone.unique' => 'عفوا هذا الرقم موجود من قبل',
+            'phone.regex' => 'عفوا هذا الهاتف غير صحيح',
             'name.required' => 'يجب ادخال اسم الشخص',
         ];
 

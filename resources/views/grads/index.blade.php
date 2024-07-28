@@ -23,7 +23,7 @@
             <div class="container  col-11 mt-3 p-0 ">
 
                 <div class="row " dir="rtl">
-                    <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                    <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
                         <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
@@ -203,6 +203,8 @@
         }
 
         $(document).ready(function() {
+            $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
+
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,

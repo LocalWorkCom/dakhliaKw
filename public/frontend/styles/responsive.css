@@ -9,7 +9,7 @@
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
-        padding-inline: 60px;
+        padding-inline: 57px;
     }
     #users-table th ,  #users-table td{
         font-size: 20px;
@@ -190,7 +190,7 @@
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
-        padding-inline: 62px;
+    padding-inline: 53px;
     }
     .first-section {
         margin-left: -30px;
@@ -287,7 +287,7 @@
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
-        padding-inline: 46px;
+        padding-inline: 33px;
     }
     .first-section {
         margin-left: -50px;
@@ -326,7 +326,7 @@
         height: 120px;
         line-height: 141px;
     }
- 
+
     .name h3 {
         font-size: 22px;
         line-height: 40px;
@@ -338,7 +338,7 @@
     .name button {
         width: 110px;
         height: 35px;
-        padding: 6px 27px 10px 27px;
+        padding: 0px 0px 15px 0px;
     }
     .second-section .btn-2 {
         font-size: 15px;
@@ -373,6 +373,13 @@
         border-radius: 5px;
         padding: 7px;
     }
+    footer p {
+        font-size: 18px;
+    }
+    footer {
+        height: 40px;
+        padding: 10px;
+    }
 }
 @media (max-width: 1100px){
     .navbar{
@@ -389,7 +396,7 @@
         padding: 1px 2px;
         cursor: pointer;
         position: relative;
-        padding-inline: 35px;
+        padding-inline: 33px;
     }
     .container-responsive {
         display: none;
@@ -510,7 +517,7 @@
     }
 }
 @media (max-width: 768px){
- 
+
     .first-section {
         margin-left: -33px;
     }
@@ -726,6 +733,7 @@
         line-height: 19.64px;
         padding-right: 15px;
     }
+
     .progress {
         width: 100px;
         height: 101px;
@@ -756,7 +764,7 @@
     width: 20px;
 }
 .dataTables_filter input {
-    width: 80%;
+    width: 100%;
     height: 29px;
 }
 #users-table th, #users-table td {
@@ -798,7 +806,7 @@
     margin-block: 4px;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
-  
+
     font-size: 10px !important;
 }
 .paginate_button {
@@ -814,6 +822,26 @@ footer {
     height: 36px;
     padding: 10px;
 }
+.btn-blue {
+    width: 95px;
+    height: 34px;
+    font-size: 21px;
+}
+/**************** newphase********************* */
+.moftsh .input-group{
+    display: contents;
+    }
+    .moftsh .input-group input  , .moftsh .input-group  button{
+    height: 30px;
+    }
+    .moftsh h3 {
+        font-size: 22px;
+        line-height: 30px;
+    }
+    .moftsh label {
+        font-size: 19px;
+        line-height: 16.78px;
+    }
 }
 @media (max-width: 380px){
     li {

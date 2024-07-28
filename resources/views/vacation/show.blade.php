@@ -34,7 +34,7 @@
                     <tbody>
                         @if ($vacation->vacation_type_id == 3)
                             <tr>
-                                <th scope="row"style="background: #F5F6FA;">نوع الاجازة:</th>
+                                <th scope="row"style="background: #f5f6fa;">اسم الاجازة:</th>
                                 <td>{{ $vacation->name }}</td>
                             </tr>
                         @endif
@@ -45,7 +45,7 @@
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">اسم الموظف:</th>
                             <td>
-                                {{ $vacation->employee ? $vacation->employee->name : '____________' }}
+                                {{ $vacation->employee ? $vacation->employee->name : 'عامة' }}
                             </td>
                         </tr>
                         <tr>
@@ -54,9 +54,9 @@
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> تاريخ النهاية:</th>
-                            <td>{{ $vacation->date_to ? $vacation->date_to : '________________' }}</td>
+                            <td>{{ $vacation->date_to ? $vacation->date_to : $vacation->date_from }}</td>
                         </tr>
-                        @if ($vacation->report_image)
+                        @if ($vacation->report_image && $vacation->vacation_type_id == 2)
                             <tr>
                                 <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
                                 <td>
@@ -93,21 +93,21 @@
         </div>
     </div>
     <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <img id="modalImage" src="#" class="img-fluid" alt="صورة">
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="#" class="img-fluid" alt="صورة">
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
     @push('scripts')
@@ -139,17 +139,17 @@
 
                 });
                 $('.image-popup').click(function(event) {
-                        event.preventDefault();
-                        var imageUrl = $(this).data('image');
-                        var imageTitle = $(this).data('title');
+                    event.preventDefault();
+                    var imageUrl = $(this).data('image');
+                    var imageTitle = $(this).data('title');
 
-                        // Set modal image and title
-                        $('#modalImage').attr('src', imageUrl);
-                        $('#imageModalLabel').text(imageTitle);
+                    // Set modal image and title
+                    $('#modalImage').attr('src', imageUrl);
+                    $('#imageModalLabel').text(imageTitle);
 
-                        // Show the modal
-                        $('#imageModal').modal('show');
-                    });
+                    // Show the modal
+                    $('#imageModal').modal('show');
+                });
             });
         </script>
     @endpush
