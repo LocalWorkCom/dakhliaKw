@@ -24,7 +24,7 @@ class VacationController extends Controller
 
             $EmployeeVacations = EmployeeVacation::where('employee_id', $id)
                 ->with('employee', 'vacation_type')
-                ->orderby('id', 'desc')
+                ->orderby('created_at', 'desc')
                 ->get();
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 # code...
@@ -36,7 +36,7 @@ class VacationController extends Controller
                 ->make(true);
         } else {
             $EmployeeVacations = EmployeeVacation::with('employee', 'vacation_type')
-                ->orderby('id', 'desc')
+                ->orderby('created_at', 'desc')
                 ->get();
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 # code...

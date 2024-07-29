@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostmanController;
 use App\Http\Controllers\settingController;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\qualificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -205,6 +205,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+
     Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add')->middleware('check.permission:create EmployeeVacation');
@@ -217,11 +218,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/employees/by-department/{departmentId}', [DepartmentController::class, 'getEmployeesByDepartment']);
 
 
+
     
 });
 
+//Start qualifications
+Route::resource('setting/qualifications', qualificationController::class);
+Route::get('setting/qualifications/All', [qualificationController::class, 'getqualification'])->name('setting.getAllqualification');
 
-
+//End qualifications
 
 
 // // view All Models permission
