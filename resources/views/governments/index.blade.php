@@ -200,6 +200,7 @@
                     {
                         data: 'action',
                         name: 'action',
+                        sWidth: '100px',
                         orderable: false,
                         searchable: false
                     }
