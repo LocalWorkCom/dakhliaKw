@@ -17,7 +17,7 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-            <form action="{{ route('iotelegram.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('iotelegram.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validation()">
                 @csrf
 
                 <div class="container col-10 mt-5" dir="rtl">
@@ -103,7 +103,7 @@
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="files_num"> عدد الكتب</label>
 
-                            <select id="files_num" name="files_num" class="form-control" required>
+                            <select id="files_num" name="files_num" class="form-control" required onchange="updateFileInput()">
                                 <option value="">اختر العدد</option>
 
                                 @for ($i = 1; $i <= 10; $i++)
@@ -134,7 +134,8 @@
                             <div class="fileupload d-inline">
                                 <div class="d-flex">
                                     <input id="fileInput" type="file" name="files[]" multiple
-                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFiles()">
+                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFils()"
+                                        disabled>
 
                                 </div>
                                 <div class="space-uploading">
@@ -291,7 +292,17 @@
                 });
                 $(selectId).empty().append(options);
             }
-
+            function validation() {
+              
+                var fileNum = document.getElementById('files_num');
+                var files = document.getElementById('fileInput');
+                if (fileNum.value != "" && files.value === "") {
+                    alert('من فضلك أختر الملفات المطلوبه');
+                    return false; // Prevent form submission
+                }
+                // Check if at least one select has a selected value
+            
+            }
 
             function resetModal() {
                 $('#saveExternalDepartment')[0].reset();
