@@ -348,7 +348,8 @@ class UserController extends Controller
             $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
         }
 
-        $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
+        // $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
+        $alluser = User::where('flag','employee')->get();
         // $speificUsers = User::where('department_id',$user->department_id)->where('flag','employee')->get();
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
@@ -396,7 +397,7 @@ class UserController extends Controller
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
-                'department_id.required' => 'القسم  يجب أن يكون نصاً.',
+                // 'department_id.required' => 'القسم  يجب أن يكون نصاً.',
                 // Add more custom messages here
             ];
 
@@ -407,7 +408,7 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'phone'),
                 ],
                 'name' => 'required|string',
-                'department_id' => 'required',
+                // 'department_id' => 'required',
                 'Civil_number' => [
                     ValidationRule::unique('users', 'Civil_number'),
                 ],

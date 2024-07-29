@@ -72,18 +72,9 @@
                             <span class="text-danger span-error" id="name-error"></span>
 
                         </div>
+                       
                         <div class="form-group">
-                            <label for="manger">المدير</label>
-                            <select name="manger" class="form-control " id="manger" required>
-                            <option value="">اختار المدير</option>
-                            @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                            <span class="text-danger span-error" id="manger-error"></span>
-
-                        </div>
-                        <div class="form-group">
+                            <label for="parent_idd">الادارة</label>
                             <select name="parent_id" id="parent_idd" class="form-control" required>
                                 <option value="" {{ is_null($parentDepartment) ? 'selected' : '' }} >اختار الادارة</option>
                                 @foreach ($subdepartments as $department)
@@ -93,6 +84,17 @@
                                 @endforeach
                             </select>
                             <span class="text-danger span-error" id="parent_id-error"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="manger">المدير</label>
+                            <select name="manger" class="form-control " id="manger" required>
+                            <option value="">اختار المدير</option>
+                            @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                            <span class="text-danger span-error" id="manger-error"></span>
 
                         </div>
                         <div class="form-group">
