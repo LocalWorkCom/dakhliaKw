@@ -55,7 +55,8 @@
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="employee_id">اسم الموظف</label>
-                            <select id="employee_id" name="employee_id" class="form-control" required disabled>
+                            <select id="employee_id" name="employee_id" class="form-control" disabled
+                                @if ($vacation->vacation_type_id == 3) required @endif>
                                 <option value="">اختر الموظف</option>
                                 @foreach ($employees as $item)
                                     <option value="{{ $item->id }}" @if ($vacation->employee_id == $item->id) selected @endif>
@@ -93,8 +94,8 @@
                     @if ($vacation->report_image && $vacation->vacation_type_id == 2)
                         <div class="form-row mx-2 mt-4 d-flex justify-content-center">
                             <div class="form-group col-md-10 d-flex justify-content-end">
-                                <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal" id="reportImage-div-1"
-                                    data-image="{{ asset($vacation->report_image) }}"
+                                <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
+                                    id="reportImage-div-1" data-image="{{ asset($vacation->report_image) }}"
                                     data-title="{{ $vacation->report_image }}">
                                     <img src="{{ asset($vacation->report_image) }}" class="img-thumbnail mx-2"
                                         alt="{{ $vacation->report_image }}"> <br> <br>
