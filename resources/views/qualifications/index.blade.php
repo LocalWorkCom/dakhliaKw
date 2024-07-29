@@ -5,7 +5,7 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
 @section('title')
-    أنواع الأجازات
+المؤهلات 
 @endsection
 @section('content')
     <section>
@@ -54,14 +54,14 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> أضافه نوع أجازه جديد</h5>
+                        <h5 class="modal-title" id="lable"> أضافه مؤهل جديد</h5>
 
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="edit-grade-form" id="add-form" action=" " method="POST">
+                    <form class="edit-grade-form" id="add-form" action=" {{ route('qualification.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
@@ -84,14 +84,14 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> تعديل اسم الأجازه ؟</h5>
+                        <h5 class="modal-title" id="lable"> تعديل اسم المؤهل ؟</h5>
 
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="edit-grade-form" id="edit-form" action=" "
+                    <form class="edit-grade-form" id="edit-form" action="{{ route('qualification.update') }} "
                         method="POST">
                         @csrf
                         <div class="form-group">
@@ -120,10 +120,10 @@
                         </button>
                     </div>
                 </div>
-                <form id="delete-form" action="" method="POST">
+                <form id="delete-form" action="{{ route('qualification.delete') }}" method="POST">
                     @csrf
                     <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
-                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الاجازه ؟</h5>
+                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذا المؤهل ؟</h5>
 
 
                         <input type="text" id="id" value="" hidden name="id" class="form-control">
@@ -216,7 +216,7 @@
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('setting.getAllqualification') }}', // Correct URL concatenation
+                ajax: '{{ route('getAllqualification') }}', // Correct URL concatenation
                 columns: [{
                         data: 'name',
                         name: 'name'
@@ -229,7 +229,7 @@
                         searchable: false
                     }
                 ],
-                order: [[1, 'desc']],
+                // order: [[1, 'desc']],
                 "oLanguage": {
                                 "sSearch": "",
                                 "sSearchPlaceholder":"بحث",
