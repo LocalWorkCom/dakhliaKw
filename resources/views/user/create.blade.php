@@ -52,6 +52,8 @@
 
                 <form action="{{ route('user.store') }}" method="post" class="text-right" enctype="multipart/form-data">
                     @csrf
+                    
+                    @if ($flag == '1')
                     <div class="form-row pt-5 pb-3 d-flex justify-content-around flex-row-reverse"
                         style="background-color:#f5f8fd; border-bottom:0.1px solid lightgray;">
                         <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
@@ -81,6 +83,7 @@
                             <label for="input44" class="mx-3">التصنيف</label>
                         </div>
                     </div>
+                    @endif
                     <input type="hidden" name="type" value="{{ $flag }}">
                     <div class="form-row mx-md-2 mt-4 d-flex justify-content-center">
                         @if ($flag == '0')
