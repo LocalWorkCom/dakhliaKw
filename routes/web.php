@@ -66,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit')->middleware('check.permission:edit User');
     Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show')->middleware('check.permission:view User');
     Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update')->middleware('check.permission:edit User');
+    Route::any('/unsigned/{id}', [UserController::class, 'unsigned'])->name('user.unsigned');
 
     // permission
     Route::any('/permission', [PermissionController::class, 'index'])->name('permission.index')->middleware('check.permission:view Permission');
