@@ -101,12 +101,13 @@
                 <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                     <form class="edit-grade-form" id="edit-form" action=" {{ route('grads.update') }}" method="POST">
                         @csrf
-                        <div class="form-group">
+                        <div class="form-row mx-md-2 ">
+                        <div class="form-group col-md-10 ">
                             <label for="name">الاسم</label>
                             <input type="text" id="nameedit" value="" name="name" class="form-control">
                             <input type="text" id="idedit" value="" name="id" hidden class="form-control">
 
-                        </div>
+                        </div> </div>
                         <!-- Save button -->
                         <div class="text-end">
                             <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
@@ -238,6 +239,7 @@
                     {
                         data: 'action',
                         name: 'action',
+                        sWidth: '100px',
                         orderable: false,
                         searchable: false
                     }

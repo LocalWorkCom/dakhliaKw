@@ -224,12 +224,14 @@
                 ajax: '{{ route('setting.getAllvacationType') }}', // Correct URL concatenation
                 columns: [{
                         data: 'name',
+                        sWidth: '50px',
                         name: 'name'
                     },
                     
                     {
                         data: 'action',
                         name: 'action',
+                        sWidth: '100px',
                         orderable: false,
                         searchable: false
                     }

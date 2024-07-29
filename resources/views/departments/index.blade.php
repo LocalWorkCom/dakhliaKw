@@ -67,13 +67,13 @@
             serverSide: true,
             ajax: '{{ url('api/department') }}',
             columns: [
-                { data: 'id', name: 'id' },
+                { data: 'id',  sWidth: '50px', name: 'id' },
                 { data: 'name', name: 'name' },
                 { data: 'manger', name: 'manger' },  // Ensure 'manager' column exists
                 { data: 'children_count', name: 'children_count' },
                 { data: 'iotelegrams_count', name: 'iotelegrams_count' },
                 { data: 'outgoings_count', name: 'outgoings_count' },
-                { data: 'action', name: 'action', orderable: false, searchable: false }
+                { data: 'action', name: 'action',  sWidth: '100px', orderable: false, searchable: false }
             ],
             columnDefs: [{
                 targets: -1,

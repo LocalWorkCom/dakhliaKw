@@ -71,6 +71,7 @@
 
                                         columns: [{
                                                 data: 'id',
+                                                sWidth: '50px',
                                                 name: 'id'
                                             },
                                             {
@@ -92,6 +93,8 @@
                                             {
                                                 data: 'action',
                                                 name: 'action',
+                                                
+                                                sWidth: '200px',
                                                 orderable: false,
                                                 searchable: false
                                             }
@@ -109,9 +112,9 @@
                                                 vacation = vacation.replace(':id', row.id);
 
                                                 return `
-                                        <a href="` + usershow + `" class="btn btn-sm" style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
-                                        <a href="` + useredit + `" class="btn btn-sm"  style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>
-                                        <a href="${vacation}"  "   class="btn btn-sm" style=" background-color:#864824; "> <i class="fa-solid fa-mug-hot" ></i> </a> 
+                                        <a href="` + usershow + `" class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i>عرض </a>
+                                        <a href="` + useredit + `" class="btn btn-sm"  style="background-color: #f7af15;"> <i class="fa fa-edit"></i> تعديل</a>
+                                        <a href="${vacation}"  "   class="btn btn-sm" style=" background-color:#28a39c; "> <i class="fa-solid fa-mug-hot" ></i> الاجازات</a> 
 
                                         `;
                                             }

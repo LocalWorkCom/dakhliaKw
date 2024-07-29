@@ -97,7 +97,7 @@
                         </div>
                         <div class="form-group">
                         <label for="employees">الموظفين </label>
-                        <select name="employess[]" id="employees" class="form-group col-md-12 mx-md-2" multiple>
+                        <select name="employess[]" id="employees" class="form-control" multiple style="    height: 100px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl">
                             
                         </select>
                        
@@ -162,7 +162,7 @@
 
                         </div>
                         <!-- Save button -->
-                        <div class="text-end">
+                        <div class="text-end mx-2 mb-3">
                             <button type="submit" class="btn-blue">حفظ</button>
                         </div>
                     </form>
@@ -179,10 +179,10 @@
             serverSide: true,
             ajax: '{{ url('api/sub_department') }}',
             columns: [
-                { data: 'id', name: 'id' },
+                { data: 'id',sWidth: '50px', name: 'id' },
                 { data: 'name', name: 'name' },
                 { data: 'children_count', name: 'children_count' },
-                { data: 'action', name: 'action', orderable: false, searchable: false }
+                { data: 'action', name: 'action',  sWidth: '100px', orderable: false, searchable: false }
             ],
             columnDefs: [{
                 targets: -1,

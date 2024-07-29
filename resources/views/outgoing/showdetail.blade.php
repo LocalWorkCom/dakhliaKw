@@ -59,11 +59,11 @@
                             <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
                             <td>
                                 <div class="row">
-                                    <div class="col-md-11 mb-3 px-5 mt-2 d-flex">
+                                    <div class="col-md-11 mb-3 px-5 mt-2 d-flex flex-wrap">
                                         @if (!empty($is_file))
                                             @foreach ($is_file as $file)
                                                 @if ($file->file_type == 'image')
-                                                    <div>
+                                                    <div class="pb-4 mx-2">
 
                                                         <a href="#" class="image-popup" data-toggle="modal"
                                                             data-target="#imageModal"
@@ -74,10 +74,10 @@
                                                             <br> <br>
                                                             <a id="downloadButton"
                                                                 href="{{ route('downlaodfile', $file->id) }}"
-                                                                class="btn-download"><i class="fa fa-download"
+                                                                class="btn-download "><i class="fa fa-download"
                                                                     style="color:green;"></i>
                                                                 تحميل الملف
-                                                            </a>
+                                                            </a> 
 
                                                         </a>
                                                     </div>
