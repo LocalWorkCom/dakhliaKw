@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <script type="application/javascript" src="../js/bootstrap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Bootstrap-->
+    <link href="../styles/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="../styles/responsive.css">
+</head>
+
+<body>
+
+    <div class="all-nav">
+        <div class="upper-navbar d-flex ">
+            <div class="second-section d-flex mx-md-4 mx-sm-0 col-md-9 col-sm-6">
+                <!-- <button class="btn-2 mx-2">تسجيل خروج
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button> -->
+                <div class="dropdown">
+
+                    <button class="btn btn-2  mt-3" onclick="toggleDropdown()">
+                        <i class="fa-solid fa-angle-down md-mx-2"></i>
+                        اسم المستخدم
+                        <i class="fa-solid fa-user md-mx-2 "></i>
+                    </button>
+                    <div id="dropdownMenu" class="dropdown-menu">
+                        <a href="#">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
+
+                    </div>
+                </div>
+                <button class="btn2 btn-2 mx-5" style=" border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
+                    onclick="toggleDropdown2()">
+                    <i class=" fa-regular fa-bell bell md-mx-5"></i>
+                </button>
+                <div id="dropdownMenu2" class="dropdown-menu2">
+                    <p>notification notification notification notification </p>
+                    <hr>
+                    <p>notification notification notification notification </p>
+                    <hr>
+                    <p>notification notification notification notification </p>
+                    <hr>
+                    <p>notification notification notification notification </p>
+                    <hr>
+                    <p>notification notification notification notification </p>
+                    <hr>
+
+                </div>
+                <div class="input-group">
+                    <button type="button" class="btn  mt-4" data-mdb-ripple-init>
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="form-outline  mt-4">
+                        <input type="search" id="" class="form-control" placeholder="بحث" />
+                    </div>
+                    <select name="#" id="#" class=" mt-4">
+                        <option value="#"> المستخدميين </option>
+                        <option value="#"> الادارات </option>
+                        <!-- <option value="#"> التعيينات </option> -->
+                        <option value="#"> الموظفين </option>
+                        <option value="#"> الصادر </option>
+                        <option value="#"> الوارد </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="first-section d-flex mt-1 ">
+                <h2> الرقابة والتفتيش</h2>
+                <img class="mt-2" src="/images/logo.svg" alt="">
+            </div>
+        </div>
+
+        <div class="navbar navbar-expand-md mb-4" role="navigation">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item" onclick="makeActive(this)">
+                        <img src="/images/exports.svg" alt="logo">
+                        <h6 class="nav-link">الوارد</h6>
+                    </li>
+                    <li class="nav-item" onclick="makeActive(this)">
+                        <img src="/images/imports.svg" alt="logo">
+                        <h6 class="nav-link">الصادر</h6>
+                    </li>
+                    <li class="nav-item" onclick="makeActive(this)">
+                        <img src="/images/employees.svg" alt="logo">
+                        <h6 class="nav-link">الموظفين</h6>
+                    </li>
+                    <!-- <li class="nav-item" onclick="makeActive(this)">
+                          <img src="/images/managements.svg" alt="logo">
+                          <h6 class="nav-link  ">التعيينات</h6>
+                      </li> -->
+                    <li class="nav-item" onclick="makeActive(this)">
+                        <img src="/images/managements.svg" alt="logo">
+                        <h6 class="nav-link">الادارات</h6>
+                    </li>
+                    <li class="nav-item" onclick="makeActive(this)">
+                        <img src="/images/users.svg" alt="logo">
+                        <h6 class="nav-link">المستخدمين</h6>
+                    </li>
+                    <li class="nav-item" onclick="makeActive(this)">
+                        <img src="/images/home.svg" alt="logo">
+                        <h6 class="nav-link">الرئيسية</h6>
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <main>
+        <div class="row col-11" dir="rtl">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
+                    <li class="breadcrumb-item"><a href="#">الواردات </a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة </a></li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row ">
+            <div class="container welcome col-11">
+                <p> الــــــــــــواردات </p>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="container  col-11 mt-3 p-0 ">
+                <div class="container col-10 mt-5" dir="rtl">
+                    <div class="form-row justify-content-center">
+                        <div class="header-radio d-flex align-items-center justify-content-around">
+                            <div class="radio1 mr-3">
+                                <input type="radio" id="extern" name="type" value="out" required>
+                                <label for="extern">خارجي</label>
+                            </div>
+                            <div class="radio2">
+                                <input type="radio" id="intern" name="type" checked value="in" required>
+                                <label for="intern">داخلي</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container col-10 mt-4" style="border:0.5px solid #C7C7CC;">
+
+                    <div class="form-row pt-4">
+                        <div class="form-group col-md-6 ">
+                            <label for="representive_id">اختر المندوب </label>
+                            <select id="representive_id" name="representive_id" class="form-control" required>
+                                <option value="">اختر المندوب</option>
+                                @foreach ($representives as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="recieved_by">الموظف المستلم</label>
+                            <select id="recieved_by" name="recieved_by" class="form-control" required>
+                                <option value="">اختر الموظف</option>
+                                @foreach ($recieves as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="date">التاريخ:</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="from_departement">الجهة المرسلة</label>
+
+                            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                style="display: none" id="extern-department-dev" data-bs-target="#extern-department">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                            <select id="from_departement" name="from_departement" class="form-control" required>
+                                <option value="">اختر الجهة</option>
+                                @foreach ($departments as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="files_num"> عدد الكتب</label>
+
+                            <select id="files_num" name="files_num" class="form-control" required>
+                                <option value="">اختر العدد</option>
+
+                                @for ($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" dir="rtl">
+                        <button type="button" class="btn-all mt-3" data-bs-toggle="modal"
+                            data-bs-target="#representative" id="representative-dev"
+                            style="background-color: #FAFBFD; border: none;">
+                            <img src="../images/add-btn.svg" alt=""> اضافة مندوب
+                        </button>
+                    </div> <br>
+                    <div class="form-row d-block ">
+                        <div class="form-group col-md-12">
+                            <label for="files">اضافة ملف</label>
+                            <div id="fileInputs">
+                                <div class="file-input mb-3" dir="rtl">
+                                    <input type="file" name="files[]" class="form-control-file">
+                                    <button type="button" class="btn btn-danger btn-sm remove-file">حذف</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row" dir="rtl">
+                        <button type="button" class="btn-all btn-sm mt-2" id="addFile"
+                            style="background-color: #FAFBFD; border: none;"><img src="../images/add-btn.svg"
+                                alt="">إضافة ملف جديد
+                        </button>
+
+                    </div> <br>
+                </div>
+                <div class="container col-10 ">
+                    <div class="form-row mt-4 mb-5">
+                        <button type="submit" class="btn-blue">حفظ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <br> <br> <br> <br>
+    <footer class="my-2">
+        <div class="footer ">
+            <p>جميع الحقوق محفوظه </p>
+        </div>
+    </footer>
+</body>
+
+</html>

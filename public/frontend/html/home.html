@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <script type="application/javascript" src="../js/bootstrap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Bootstrap-->
+    <link href="../styles/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+<link rel="stylesheet" href="../styles/index.css">
+<link rel="stylesheet" href="../styles/responsive.css">
+</head><STYle>
+@media (max-width: 767px) {
+  .navbar-collapse {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Initially off-screen */
+    width: 40%; /* Adjust width as needed */
+    height: 100%;
+    background-color: #ffffff; /* Background color of the navbar */
+    transition: right 0.3s ease; /* Smooth transition animation */
+    z-index: 1000; /* Ensure it's above other content */
+    overflow-y: auto; /* Enable vertical scroll */
+  }
+
+  .navbar-collapse.show {
+    right: 0; /* Show the navbar by bringing it to the screen */
+  }
+
+  .navbar-nav {
+    width: 100%; /* Ensure full width for the list */
+    padding: 20px; /* Adjust padding as needed */
+    text-align: right; /* Right-align the navbar items */
+    display: flex; /* Use flexbox to arrange items */
+    flex-direction: column-reverse; /* Reverse the order of items */
+  }
+
+  .navbar-nav .nav-item {
+    margin-bottom: 10px; /* Adjust spacing between items */
+  }
+
+  .navbar-nav .nav-link {
+    color: #333333; /* Color of the nav links */
+    font-size: 16px; /* Adjust font size as needed */
+    font-weight: bold; /* Adjust font weight as needed */
+  }
+
+  .navbar-nav .nav-item img {
+    width: 24px; /* Adjust image size as needed */
+    margin-right: 10px; /* Adjust spacing between image and text */
+  }
+  .navbar-collapse::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .navbar-collapse::-webkit-scrollbar-track {
+    background: #ffffff; /* Track color */
+  }
+
+  .navbar-collapse::-webkit-scrollbar-thumb {
+    background-color: #b3b1b1; /* Thumb color */
+    border-radius: 10px;
+    height:5px;
+  }
+
+  /* Optional: Handle on hover */
+  .navbar-collapse::-webkit-scrollbar-thumb:hover {
+    background-color: #b3b1b1; /* Hover color */
+  }
+}
+
+</STYle>
+<body>
+
+
+  <div class="all-nav">
+    <div class="upper-navbar d-flex">
+    <div class="second-section d-flex mx-md-4 mx-sm-0 col-md-9 col-sm-6">
+    <!-- <button class="btn-2 mx-2">تسجيل خروج
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+    </button> -->
+    <div class="dropdown">
+
+      <button class="btn btn-2  mt-3" onclick="toggleDropdown()">
+         <i class="fa-solid fa-angle-down md-mx-2"></i>
+          اسم المستخدم
+        <i class="fa-solid fa-user md-mx-2 "></i>
+      </button>
+      <div id="dropdownMenu" class="dropdown-menu">
+        <a href="#">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
+
+      </div>
+    </div>
+    <button class="btn2 btn-2 mx-5"  style=" border-inline: 1px solid rgb(41, 41, 41); height: 100%;" onclick="toggleDropdown2()">
+        <i class=" fa-regular fa-bell bell md-mx-5" ></i>
+  </button>
+  <div id="dropdownMenu2" class="dropdown-menu2">
+   <p>notification notification notification notification </p><hr>
+   <p>notification notification notification notification </p><hr>
+   <p>notification notification notification notification </p><hr>
+   <p>notification notification notification notification </p><hr>
+   <p>notification notification notification notification </p><hr>
+
+  </div>
+    <div class="input-group">
+      <button type="button" class="btn  mt-4" data-mdb-ripple-init>
+        <i class="fas fa-search"></i>
+      </button>
+      <div class="form-outline  mt-4" >
+        <input type="search" id="" class="form-control" placeholder="بحث"/>
+      </div>
+      <select name="#" id="#" class=" mt-4">
+        <option value="#"> المستخدميين </option>
+        <option value="#"> الادارات </option>
+        <!-- <option value="#"> التعيينات </option> -->
+        <option value="#"> الموظفين </option>
+        <option value="#"> الصادر </option>
+        <option value="#"> الوارد </option>
+      </select>
+    </div>
+    </div>
+
+    <div class="first-section d-flex mt-1 " >
+        <h2>  الرقابة والتفتيش</h2>
+        <img  class="mt-2" src="/images/logo.svg" alt="">
+    </div>
+        </div>
+
+        <div class="navbar navbar-expand-md mb-4" role="navigation">
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa-solid fa-bars side-nav" ></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+              <ul class="navbar-nav ml-auto">
+
+                  <li class="nav-item" onclick="makeActive(this)">
+                      <img src="/images/exports.svg" alt="logo">
+                      <h6 class="nav-link">الوارد</h6>
+                  </li>
+                  <li class="nav-item" onclick="makeActive(this)">
+                      <img src="/images/imports.svg" alt="logo">
+                      <h6 class="nav-link">الصادر</h6>
+                  </li>
+                  <li class="nav-item" onclick="makeActive(this)">
+                      <img src="/images/employees.svg" alt="logo">
+                      <h6 class="nav-link">الموظفين</h6>
+                  </li>
+                  <!-- <li class="nav-item" onclick="makeActive(this)">
+                      <img src="/images/managements.svg" alt="logo">
+                      <h6 class="nav-link  ">التعيينات</h6>
+                  </li> -->
+                  <li class="nav-item" onclick="makeActive(this)">
+                      <img src="/images/managements.svg" alt="logo">
+                      <h6 class="nav-link">الادارات</h6>
+                  </li>
+                  <li class="nav-item" onclick="makeActive(this)">
+                      <img src="/images/users.svg" alt="logo">
+                      <h6 class="nav-link">المستخدمين</h6>
+                  </li>
+                  <li class="nav-item" onclick="makeActive(this)">
+                      <img src="/images/home.svg" alt="logo">
+                      <h6 class="nav-link">الرئيسية</h6>
+                  </li>
+
+              </ul>
+
+          </div>
+      </div>
+
+
+</div>
+<main>
+<div class="row ">
+    <div class="container welcome col-11">
+<p > مرحـــــــــــــــبا بك  </p>
+    </div>
+</div>
+<br>
+  <div class="row">
+    <div class="container container-not-responsive col-11 mt-3 p-0 col-md-11 col-lg-3 col-s-11">
+     <div class="header-side d-flex">
+      <p>المهام</p>
+      <img src="/images/tasks.svg" alt="">
+     </div> <br>
+     <div class="progress blue mt-3">
+      <span class="progress-left">
+        <span class="progress-bar"></span>
+      </span>
+      <span class="progress-right">
+          <span class="progress-bar"></span>
+      </span>
+      <div class="progress-value">28/30</div>
+  </div>
+     <div class="footer-side">
+        <div class="name">
+            <p>تجديد هوية</p>
+            <h3>بشير سالم</h3>
+            <button class="order">ordered</button>
+            <img class="ordered-img" src="{{ asset('frontend/images/ordered.svg') }}" alt="img">
+
+
+          </div>
+     </div>
+
+    </div>
+    <div class=" container  col-11 mt-3 col-lg-7 col-md-11 col-s-11 " >
+
+        <div class=" col-12  col-md-11 col-sm-12 d-md-flex   my-4">
+         <div class=" card2 col-md-6 col-12 d-flex col-sm-10 mx-lg-3 mx-md-2 sm-mb-2">
+             <div class="details">
+                 <p>الادارات</p>
+                 <p>25212</p>
+             </div>
+             <div class="icon m-5" style="background-color: #0D992C;">
+                <img src="/images/management-card.svg" alt="">
+                        </div>
+         </div>
+          <div class=" card1 col-md-6 col-12 d-flex col-sm-10 d-flex mx-lg-3 mx-md-2 sm-mb-2">
+         <div class="details">
+             <p>الموظفين</p>
+             <p>98224</p>
+         </div>
+
+         <div class="icon m-5" style="background-color: #E49500;">
+            <img  src="/images/employees-card.svg" alt="">
+            </div>
+             </div>
+
+         </div>
+       <div class="col-12 col-md-11 col-sm-12 d-md-flex ">
+         <div class="card3 col-md-6 col-12 d-flex col-sm-10 d-flex mx-lg-3 mx-md-2 sm-mb-2" >
+             <div class="details">
+                 <p>الصادر</p>
+                 <p>65423</p>
+             </div>
+
+             <div class="icon m-5" style="background-color: #A900E4;">
+                <img src="/images/imports-card.svg" alt="">
+                    </div>
+         </div>
+         <div class="card4 col-md-6 col-12 d-flex col-sm-10 d-flex mx-lg-3 mx-md-2 mb-5 sm-mb-2">
+             <div class="details ">
+                 <p>الوارد</p>
+                 <p>21025</p>
+             </div>
+
+             <div class="icon m-5" style="background-color: #005BE4;">
+                <img src="/images/exports-card.svg" alt="">
+                    </div>
+         </div>
+       </div>
+     </div>
+
+     <div class="container container-responsive col-xs-11 col-11 mt-4 ">
+      <div class="header-side d-flex">
+       <p>المهام</p>
+       <img src="/images/tasks.svg" alt="">
+      </div> <br>
+
+<div class="resp d-flex justify-content-between align-items-center" dir="rtl">
+  <div class="progress blue mt-3">
+       <span class="progress-left">
+         <span class="progress-bar"></span>
+       </span>
+       <span class="progress-right">
+           <span class="progress-bar"></span>
+       </span>
+       <div class="progress-value">28/30</div>
+   </div>
+      <div class="footer-side">
+       <div class="name">
+         <p>تجديد هوية</p>
+         <h3>بشير سالم</h3>
+         <button class="order">
+           ordered
+         </button>
+        </div>
+      </div>
+</div>
+
+     </div>
+
+  </div>
+
+
+</div>
+</main>
+<br> <br> <br> <br>
+<footer class="my-2">
+   <div class="footer ">
+    <p>جميع الحقوق محفوظه </p>
+   </div>
+</footer>
+      <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-zEYs/p5zCUo7LHibzS2KkETvP3L3PaZGvZLme7w+FVZ+Uk2x/E7l3niFf5XFk6ew" crossorigin="anonymous"></script> -->
+      <script>
+      function toggleDropdown() {
+        var dropdownMenu = document.getElementById("dropdownMenu");
+        if (dropdownMenu.style.display === "block") {
+          dropdownMenu.style.display = "none";
+        } else {
+          dropdownMenu.style.display = "block";
+        }
+      }
+
+      window.onclick = function(event) {
+        if (!event.target.matches('.btn')) {
+          var dropdowns = document.getElementsByClassName("dropdown-menu");
+          for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.style.display === "block") {
+              openDropdown.style.display = "none";
+            }
+          }
+        }
+      }
+      function toggleDropdown2() {
+        var dropdownMenu = document.getElementById("dropdownMenu2");
+        if (dropdownMenu.style.display === "block") {
+          dropdownMenu.style.display = "none";
+        } else {
+          dropdownMenu.style.display = "block";
+        }
+      }
+
+      window.onclick = function(event) {
+        if (!event.target.matches('.btn2')) {
+          var dropdowns = document.getElementsByClassName("dropdown-menu2");
+          for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.style.display === "block") {
+              openDropdown.style.display = "none";
+            }
+          }
+        }
+      }
+
+      function makeActive(element) {
+    var navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(function(link) {
+        link.classList.remove('active-page');
+    });
+    var navLink = element.querySelector('.nav-link');
+    navLink.classList.add('active-page');
+}
+
+
+      </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.navbar-toggler').click(function() {
+      $('.navbar-collapse').toggleClass('show');
+    });
+
+    // Close navbar when clicking outside the menu area
+    $(document).click(function(event) {
+      var clickover = $(event.target);
+      var $navbar = $('.navbar-collapse');
+      var _opened = $navbar.hasClass('show');
+      if (_opened === true && !clickover.hasClass('side-nav')) {
+        $navbar.removeClass('show');
+      }
+    });
+  });
+
+</script>
+<script>
+    function makeActive(element) {
+      // Remove active class from all nav items
+      var navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(function(item) {
+        item.classList.remove('active-nav-item');
+      });
+
+      // Add active class to the clicked nav item
+      element.classList.add('active-nav-item');
+    }
+  </script>
+
+</body>
+</html>
