@@ -35,31 +35,55 @@
                         <label for="name">اسم الاجازة</label>
                         <input type="text" id="name" name="name" class="form-control">
                     </div>
-                </div>
-                <div class="form-row mx-md-3 mt-4 d-flex justify-content-center" dir="rtl">
-                    <div class="form-group col-md-5 mx-md-2">
-                        <label for="employee_id" style=" display: flex; justify-content: flex-start;">اسم الموظف</label>
+                    <div class="form-row mx-md-3 mt-4 d-flex justify-content-center" dir="rtl">
+                        <div class="form-group col-md-5 mx-md-2 ">
+                            <label for="vacation_type_id" style=" display: flex; justify-content: flex-start;">نوع
+                                الاجازة</label>
+                            <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
+                                <option value="">اختر النوع</option>
+                                @foreach ($vacation_types as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="employee_id" style=" display: flex; justify-content: flex-start;">اسم الموظف</label>
+                            <select id="employee_id" name="employee_id" class="form-control" required @if ($id) disabled
+                                @endif>
+                                <option value="">اختر الموظف</option>
+                                @foreach ($employees as $item)
+                                <option value="{{ $item->id }}" @if ($id && $id==$item->id) selected @endif>
+                                    {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                      
+                    </div>
+                    {{-- <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="employee_id">اسم الموظف</label>
 
 
-                        <select id="employee_id" name="employee_id" class="form-control" required @if ($id) disabled
-                            @endif>
-                            <option value="">اختر الموظف</option>
-                            @foreach ($employees as $item)
-                            <option value="{{ $item->id }}" @if ($id && $id==$item->id) selected @endif>
-                                {{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-5 mx-md-2 ">
-                        <label for="vacation_type_id" style=" display: flex; justify-content: flex-start;">نوع
-                            الاجازة</label>
-                        <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
-                            <option value="">اختر النوع</option>
-                            @foreach ($vacation_types as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                            <select id="employee_id" name="employee_id" class="form-control" required
+                                @if ($id) disabled @endif>
+                                <option value="">اختر الموظف</option>
+                                @foreach ($employees as $item)
+                                    <option value="{{ $item->id }}" @if ($id && $id == $item->id) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5 mx-md-2 ">
+                            <label for="vacation_type_id">نوع الاجازة</label>
+                            <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
+                                <option value="">اختر النوع</option>
+                                @foreach ($vacation_types as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div> --}}
 
                 </div>
 
@@ -110,49 +134,56 @@ $(document).ready(function() {
     $('#date_to').attr('value', today);
 
 
-    $('#vacation_type_id').change(function() {
-        var value = $('#vacation_type_id option:selected').val();
-        console.log(value);
-        console.log(id);
-        if (value == '3') {
-            $('#name_dev').attr('hidden', false);
-            $('#reportImage-div').attr('hidden', true);
+                $('#vacation_type_id').change(function() {
+                    var value = $('#vacation_type_id option:selected').val();
+
+                    if (value == '3') {
+                        $('#name_dev').attr('hidden', false);
+                        $('#reportImage-div').attr('hidden', true);
 
             $('#date_to').prop('disabled', false);
 
-            $('#employee_id').prop('disabled', true);
-            $('#employee_id').removeAttr('required');
-            $('#mySelect employee_id').prop('selected', false);
+                        $('#employee_id').prop('disabled', true);
+                        $('#employee_id').removeAttr('required');
+                        $('#name').attr('required', true);
+
+                        $('#mySelect employee_id').prop('selected', false);
 
 
-        } else if (value == '4') {
-            $('#name_dev').attr('hidden', true);
-            $('#reportImage-div').attr('hidden', true);
-            $('#date_to').prop('disabled', true);
-            $('#date_to').attr('value', today);
-            if (id == 0 || id == '') {
+                    } else if (value == '4') {
+                        $('#name_dev').attr('hidden', true);
+                        $('#reportImage-div').attr('hidden', true);
+                        $('#date_to').prop('disabled', true);
+                        $('#date_to').attr('value', today);
+                        $('#name').attr('required', false);
+
+                        if (id == 0 || id == '') {
 
                 $('#employee_id').prop('disabled', false);
                 $('#employee_id').attr('required', true);
             }
 
-        } else if (value == '2') {
-            $('#name_dev').attr('hidden', true);
-            $('#reportImage-div').attr('hidden', false);
-            $('#date_to').prop('disabled', false);
-            if (id == 0 || id == '') {
-                $('#employee_id').prop('disabled', false);
-                $('#employee_id').attr('required', true);
-            }
-        } else {
-            $('#reportImage-div').attr('hidden', true);
-            $('#name_dev').attr('hidden', true);
-            $('#date_to').prop('disabled', false);
-            if (id == 0 || id == '') {
-                $('#employee_id').prop('disabled', false);
-                $('#employee_id').attr('required', true);
-            }
-        }
+                    } else if (value == '2') {
+                        $('#name_dev').attr('hidden', true);
+                        $('#reportImage-div').attr('hidden', false);
+                        $('#date_to').prop('disabled', false);
+                        $('#name').attr('required', false);
+
+                        if (id == 0 || id == '') {
+                            $('#employee_id').prop('disabled', false);
+                            $('#employee_id').attr('required', true);
+                        }
+                    } else {
+                        $('#reportImage-div').attr('hidden', true);
+                        $('#name_dev').attr('hidden', true);
+                        $('#date_to').prop('disabled', false);
+                        $('#name').attr('required', false);
+
+                        if (id == 0 || id == '') {
+                            $('#employee_id').prop('disabled', false);
+                            $('#employee_id').attr('required', true);
+                        }
+                    }
 
 
     });

@@ -131,7 +131,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store')->middleware('check.permission:edit departements');
     Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit')->middleware('check.permission:edit departements');
     Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update')->middleware('check.permission:edit departements');
-    Route::delete('departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy')->middleware('check.permission:delete departements');;
+    Route::get('departments/delete/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy')->middleware('check.permission:delete departements');;
     // Route::resource('postmans', PostmanController::class);
     Route::get('/postmans/create', [PostmanController::class, 'create'])->name('postmans.create')->middleware('check.permission:create Postman');
     Route::post('/postmans', [PostmanController::class, 'store'])->name('postmans.store')->middleware('check.permission:edit Postman');
@@ -204,15 +204,15 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list')->middleware('check.permission:view EmployeeVacation');
-    Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations')->middleware('check.permission:view EmployeeVacation');
-    Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add')->middleware('check.permission:create EmployeeVacation');
-    Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store')->middleware('check.permission:edit EmployeeVacation');
-    Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit')->middleware('check.permission:edit EmployeeVacation');
-    Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update')->middleware('check.permission:edit EmployeeVacation');
-    Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show')->middleware('check.permission:view EmployeeVacation');
-    Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete')->middleware('check.permission:delete EmployeeVacation');
-    Route::get('vacation/downlaod/{id}', [VacationController::class, 'downlaodfile'])->name('vacation.downlaodfile')->middleware('check.permission:download EmployeeVacation');
+    Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list');
+    Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations');
+    Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add');
+    Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store');
+    Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit');
+    Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update');
+    Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show');
+    Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete');
+    Route::get('vacation/downlaod/{id}', [VacationController::class, 'downlaodfile'])->name('vacation.downlaodfile');
 
 
 

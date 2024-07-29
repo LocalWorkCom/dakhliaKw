@@ -176,23 +176,23 @@
 
     // for file upload ******
     function uploadFiles() {
+        console.log("uploadFiles");
         const files = document.getElementById('fileInput').files;
         const fileList = document.getElementById('fileList');
-console.log("hnbnbn");
-        if ($('#files_num').length > 0) {
-            var max_num = $('#files_num').find('option:selected').val();
-            if (!max_num) {
-                alert("please choose file number");
-                return;
-            }
-        } else {
-            max_num = 10;
-        }
-        if (files.length == 0) {
-            alert("please choose files");
-            return;
+        // if ($('#files_num').length > 0) {
+        //     var max_num = $('#files_num').find('option:selected').val();
+        //     if (!max_num) {
+        //         alert("please choose file number");
+        //         return;
+        //     }
+        // } else {
+        //     max_num = 10;
+        // }
+        // if (files.length == 0) {
+        //     alert("please choose files");
+        //     return;
 
-        }
+        // }
 
 
         for (let i = 0; i < files.length; i++) {
@@ -205,17 +205,17 @@ console.log("hnbnbn");
                     fileExists = true;
                 }
             });
-            if (files.length > max_num) {
-                alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
-                return;
+            // if (files.length > max_num) {
+            //     alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
+            //     return;
 
-            }
-            console.log(fileList.children.length);
-            if (fileList.children.length > max_num - 1) {
-                alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
-                return;
-            }
-            console.log(fileExists);
+            // }
+            // console.log(fileList.children.length);
+            // if (fileList.children.length > max_num - 1) {
+            //     alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
+            //     return;
+            // }
+            // console.log(fileExists);
 
             if (!fileExists) {
                 const listItem = document.createElement('li');
@@ -236,8 +236,8 @@ console.log("hnbnbn");
                 listItem.appendChild(deleteButton);
                 fileList.appendChild(listItem);
             } else {
-                alert('تنبيه لقد قمت باختيار نفس الملفات مرة اخري !');
-                return;
+                // alert('تنبيه لقد قمت باختيار نفس الملفات مرة اخري !');
+                // return;
             }
         }
     }
