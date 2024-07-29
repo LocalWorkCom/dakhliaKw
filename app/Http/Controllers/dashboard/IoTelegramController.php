@@ -93,14 +93,20 @@ class IoTelegramController extends Controller
                 'files.*' => 'mimes:jpeg,png,pdf|max:2048', // Adjust validation rules as needed
             ]);
         }
+        $iotelegram_num = Iotelegram::max('id');
+        if (!$iotelegram_num) {
+            $iotelegram_num = 1;
+        }
+        $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
+
 
         $iotelegram = new Iotelegram();
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;
         $iotelegram->representive_id = $request->representive_id;
-        $iotelegram->outgoing_num = $request->outgoing_num;
+        $iotelegram->outgoing_num = $outgoing_num;
         $iotelegram->outgoing_date = $request->outgoing_date;
-        $iotelegram->iotelegram_num = $request->iotelegram_num;
+        $iotelegram->iotelegram_num = $iotelegram_num;
         $iotelegram->date = $request->date;
         $iotelegram->files_num = $request->files_num;
         $iotelegram->user_id = $request->user_id;
