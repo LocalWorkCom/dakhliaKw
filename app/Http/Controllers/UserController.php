@@ -47,7 +47,7 @@ class UserController extends Controller
 
     public function getUsers($id)
     {
-       
+
         // $flagType = $id == 0 ? 'user' : 'employee';
         // $perentdepartment = departements::find(Auth()->user()->department_id)->first();
         // if($perentdepartment->parent_id == Null)
@@ -61,33 +61,39 @@ class UserController extends Controller
         // }
         $flagType = $id == 0 ? 'user' : 'employee';
         $parentDepartment = Departements::find(Auth()->user()->department_id);
-
-        if (is_null($parentDepartment->parent_id)) {
-            $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();
+        if (Auth()->user()->rule_id == 2) {
             $data = User::where('flag', $flagType)
-            ->where(function ($query) use ($subdepart, $parentDepartment) {
-                $query->whereIn('department_id', $subdepart)
-                      ->orWhere('department_id', $parentDepartment->id);
-            })
-                        // ->whereIn('department_id', $subdepart)
-                        // ->orWhere('department_id', $parentDepartment->id)
-                        ->get();
+                ->get();
         } else {
-            $data = User::where('flag', $flagType)
-                        ->where('department_id', $parentDepartment->id)
-                        ->get();
+            if (is_null($parentDepartment->parent_id)) {
+                $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();
+                $data = User::where('flag', $flagType)
+                    ->where(function ($query) use ($subdepart, $parentDepartment) {
+                        $query->whereIn('department_id', $subdepart)
+                            ->orWhere('department_id', $parentDepartment->id);
+                    })
+                    // ->whereIn('department_id', $subdepart)
+                    // ->orWhere('department_id', $parentDepartment->id)
+                    ->get();
+            } else {
+                $data = User::where('flag', $flagType)
+                    ->where('department_id', $parentDepartment->id)
+                    ->get();
+            }
         }
+
+
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 
             return '<button class="btn btn-primary btn-sm">Edit</button>
               <a href="" class="btn btn-primary btn-sm">vacations</a>';
         })
-        ->addColumn('department', function ($row) { // New column for departments count
-        
-            $department = departements::where('id', $row->department_id)->pluck('name')->first();
-            return $department;
-        })
+            ->addColumn('department', function ($row) { // New column for departments count
+
+                $department = departements::where('id', $row->department_id)->pluck('name')->first();
+                return $department;
+            })
             ->rawColumns(['action'])
             ->make(true);
     }
@@ -340,24 +346,21 @@ class UserController extends Controller
         $grade = grade::all();
         $job = job::all();
         // dd($user->department_id);
-        if($flag == "0")
-        {
-            $alldepartment = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
-        }
-        else
-        {
-            $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        if ($flag == "0") {
+            $alldepartment = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+        } else {
+            $alldepartment = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
         }
 
         // $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
-        $alluser = User::where('flag','employee')->get();
+        $alluser = User::where('flag', 'employee')->get();
         // $speificUsers = User::where('department_id',$user->department_id)->where('flag','employee')->get();
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
         // $alldepartment = $user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
-        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade','job','alluser'));
+        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade', 'job', 'alluser'));
     }
 
     public function unsigned($id)
@@ -374,7 +377,7 @@ class UserController extends Controller
         $user->department_id  = Null;
         $user->save();
         // $id = 1;
-        
+
         return redirect()->back()->with('success', 'User created successfully.');
     }
 
@@ -386,23 +389,20 @@ class UserController extends Controller
         // dd($request);
         // validation
 
-        if($request->type == "0")
-        {
+        if ($request->type == "0") {
             $messages = [
                 'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
                 'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
                 'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
                 // Add more custom messages here
             ];
-            
+
             $validatedData = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'rule_id' => 'required',
                 'password' => 'required',
             ], $messages);
-        }
-        else
-        {
+        } else {
             $messages = [
                 'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
                 'name.string' => 'الاسم  يجب أن يكون نصاً.',
@@ -412,7 +412,7 @@ class UserController extends Controller
                 'file_number.unique' => 'رقم الملف الذي أدخلته موجود بالفعل.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
                 'phone.unique' => 'رقم الهاتف الذي أدخلته موجود بالفعل.',
-                'phone.max'=>'رقم الهاتف اقل من 6 اراقام',
+                'phone.max' => 'رقم الهاتف اقل من 6 اراقام',
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
@@ -434,12 +434,11 @@ class UserController extends Controller
                 'file_number' => [
                     ValidationRule::unique('users', 'file_number'),
                 ],
-                'military_number' => [         
+                'military_number' => [
                     ValidationRule::unique('users', 'military_number'),
                 ],
             ];
-            if($request->has('solderORcivil') && $request->solderORcivil =="solder")
-            {
+            if ($request->has('solderORcivil') && $request->solderORcivil == "solder") {
                 if ($request->has('military_number')) {
                     $rules['military_number'] = [
                         'required',
@@ -448,10 +447,9 @@ class UserController extends Controller
                         ValidationRule::unique('users', 'military_number'),
                     ];
                 }
-               
             }
-            
-           
+
+
             if ($request->has('Civil_number')) {
                 $rules['Civil_number'] = [
                     'required',
@@ -468,13 +466,12 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'file_number'),
                 ];
             }
-          
-            
-            $validatedData = Validator::make($request->all(), $rules, $messages);
 
+
+            $validatedData = Validator::make($request->all(), $rules, $messages);
         }
-        
-    
+
+
         // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
@@ -485,7 +482,7 @@ class UserController extends Controller
             $newUser = User::find($request->name);
             $newUser->password = Hash::make($request->password);
             $newUser->flag = "user";
-            $newUser->rule_id = $request->rule_id;   
+            $newUser->rule_id = $request->rule_id;
             $newUser->save();
         } else {
 
@@ -511,22 +508,21 @@ class UserController extends Controller
             $newUser->date_of_birth = $request->date_of_birth;
             $newUser->joining_date = $request->joining_date;
             $newUser->length_of_service = $request->end_of_service;
-            $newUser->description = $request->description;    
+            $newUser->description = $request->description;
             $newUser->file_number = $request->file_number;
             // 
             $newUser->employee_type = $request->solderORcivil;
             $newUser->flag = "employee";
             $newUser->grade_id = $request->grade_id;
-            if($request->has('job'))
-            {
+            if ($request->has('job')) {
                 $newUser->job_id = $request->job;
             }
             $newUser->save();
-            
+
             if ($request->hasFile('image')) {
                 $file = $request->image;
                 $path = 'users/user_profile';
-    
+
                 UploadFilesWithoutReal($path, 'image', $newUser, $file);
             }
         }
@@ -561,18 +557,14 @@ class UserController extends Controller
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
         $job = job::all();
         // dd($user);
-        if($user->flag == "user")
-        {
-            $department = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
-        }
-        else
-        {
-            $department = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        if ($user->flag == "user") {
+            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+        } else {
+            $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
         }
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
-        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service' ,'job' ));
-
+        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job'));
     }
 
     /**
@@ -590,17 +582,14 @@ class UserController extends Controller
 
         $job = job::all();
         // dd($user);
-        if($user->flag == "user")
-        {
-            $department = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
-        }
-        else
-        {
-            $department = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
+        if ($user->flag == "user") {
+            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+        } else {
+            $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
         }
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
-        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service' ,'job' ));
+        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job'));
     }
 
     /**
@@ -609,8 +598,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        if($user->flag == "user")
-        {
+        if ($user->flag == "user") {
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
@@ -622,7 +610,7 @@ class UserController extends Controller
 
                 // Add more custom messages here
             ];
-            
+
             $validatedData = Validator::make($request->all(), [
                 'military_number' => [
                     'required',
@@ -634,11 +622,9 @@ class UserController extends Controller
                 'rule_id' => 'required',
                 'password' => 'required',
                 'Civil_number' => 'required',
-                
+
             ], $messages);
-        }
-        else
-        {
+        } else {
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
@@ -649,7 +635,7 @@ class UserController extends Controller
 
                 // Add more custom messages here
             ];
-            
+
             $validatedData = Validator::make($request->all(), [
                 'military_number' => [
                     'required',
@@ -660,11 +646,11 @@ class UserController extends Controller
                 'file_number' => 'required|string',
                 'public_administration' => 'required',
                 'Civil_number' => 'required',
-                
+
             ], $messages);
         }
-        
-    
+
+
         // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
@@ -672,14 +658,13 @@ class UserController extends Controller
 
 
         // dd($request);
-       
+
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->description = $request->description;
         $user->military_number = $request->military_number;
-        if($request->has('job'))
-        {
+        if ($request->has('job')) {
             $user->job_id = $request->job;
         }
         // $user->job_id = $request->job;

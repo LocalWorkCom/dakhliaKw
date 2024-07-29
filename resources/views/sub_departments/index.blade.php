@@ -109,7 +109,7 @@
                     </div>
                         <!-- <div class="form-group">
                         <label for="employees">الموظفين </label>
-                        <select name="employess[]" id="employees" class="form-group col-md-12 mx-md-2" multiple>
+                        <select name="employess[]" id="employees" class="form-control" multiple style="    height: 100px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl">
                             
                         </select>
                        
@@ -164,7 +164,8 @@
 
                         </div>
                         <div class="form-group">
-                            <label for="manger">المدير</label>
+                            <label for="mangers">المدير</label>
+
                             <select name="manger" id="mangers" class="form-control">
                                 <option value="">اختر المدير </option>
                                 @foreach($users as $user)
@@ -188,7 +189,7 @@
                         </div>
                     </div>
                         <!-- Save button -->
-                        <div class="text-end">
+                        <div class="text-end mx-2 mb-3">
                             <button type="submit" class="btn-blue">حفظ</button>
                         </div>
                     </form>
@@ -205,10 +206,10 @@
             serverSide: true,
             ajax: '{{ url('api/sub_department') }}',
             columns: [
-                { data: 'id', name: 'id' },
+                { data: 'id',sWidth: '50px', name: 'id' },
                 { data: 'name', name: 'name' },
                 { data: 'children_count', name: 'children_count' },
-                { data: 'action', name: 'action', orderable: false, searchable: false }
+                { data: 'action', name: 'action',  sWidth: '100px', orderable: false, searchable: false }
             ],
             columnDefs: [{
                 targets: -1,
@@ -336,10 +337,13 @@ $(document).ready(function() {
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
+                        var selectedManager = $('#manger').val();
                     $('#employees').empty();
                     $('#manger').empty();
                     $.each(data, function(key, employee) {
+                        if (employee.id != selectedManager) {
                         $('#employees').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
+                        }
                         $('#manger').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
                     });
                 },
@@ -353,7 +357,14 @@ $(document).ready(function() {
         }
         });
     });
-
+    // $('#manger').on('change', function() {
+    //     var selectedManager = $(this).val();
+    //     $('#employees option').each(function() {
+    //         if ($(this).val() == selectedManager) {
+    //             $(this).remove();
+    //         }
+    //     });
+    // });
 
     // edit modal
     $(document).ready(function() {

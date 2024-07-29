@@ -50,6 +50,9 @@ class DepartmentController extends Controller
         ->addColumn('children_count', function ($row) { // New column for departments count
             return $row->children_count;
         })
+        ->addColumn('manager_name', function ($row) {
+            return $row->manager ? $row->manager->name : 'N/A'; // Display the manager's name
+        })
         ->rawColumns(['action'])
         ->make(true);
     }
@@ -74,6 +77,7 @@ class DepartmentController extends Controller
         // Get the children of the parent department
         $departments = $parentDepartment ? $parentDepartment->children : collect();       
         $subdepartments = departements::with('children')->get();
+
         return view('sub_departments.index', compact('users','subdepartments','departments','parentDepartment'));
     }
     public function getSub_Department()
@@ -122,6 +126,8 @@ class DepartmentController extends Controller
 
     public function getEmployeesByDepartment($departmentId)
     {
+        // $currentEmployees = $department->employees()->pluck('id')->toArray();
+
         try {
             $employees = User::where('department_id', $departmentId)->get();
             return response()->json($employees);
@@ -145,6 +151,10 @@ class DepartmentController extends Controller
           $departements->created_by = Auth::user()->id;
 
           $departements->save();
+
+            $user = User::find($request->manger);
+            $user->department_id = $departements->id;
+            $user->save();
 
           if($request->has('employess'))
           {
@@ -198,6 +208,10 @@ class DepartmentController extends Controller
           $departements->created_by = Auth::user()->id;
 
           $departements->save();
+
+            $user = User::find($request->manger);
+            $user->department_id = $departements->id;
+            $user->save();
 
           if($request->has('employess'))
           {
@@ -274,6 +288,27 @@ class DepartmentController extends Controller
         ]);
 
         $department->update($request->all());
+
+        if($request->has('employess'))
+          {
+            foreach($request->employess as $item)
+            {
+                // dd($item);
+
+                $user = User::find($item);
+
+                $log = DB::table('user_departments')->updateOrInsert([
+                    'user_id' => $user->id,
+                    'department_id' => $departements->id,
+                    'flag' => "1",
+                    'created_at' => now(),
+                ]);
+
+                $user = User::find($item);
+                $user->department_id = $departements->id;
+                $user->save();
+            }
+          }
         return redirect()->route('departments.index')->with('success', 'Department updated successfully.');
         // return response()->json($department);
     }

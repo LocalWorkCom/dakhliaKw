@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Qualifications extends Model
 {
     use HasFactory;
+    protected $table = 'qualifications';
+    public $timestamps = false;
     protected $fillable = [
         'name'
     ];
