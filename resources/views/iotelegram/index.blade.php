@@ -39,12 +39,15 @@
                 <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                     <thead>
                         <tr>
-                            <th>الرقم</th>
-                            <th>التاريخ</th>
+                            <th>رقم الوارد</th>
+                            <th>تاريخ الوارد</th>
+                            <th>رقم الصادر</th>
+                            <th>تاريخ الصادر</th>
                             <th>المندوب</th>
-                            <th>الجهة المرسلة</th>
+                            <th>القطاع</th>
                             <th>الموظف المستلم</th>
                             <th>النوع</th>
+                            <th>عدد الكتب</th>
                             <th style="width:150px;">العمليات</th>
                         </tr>
                     </thead>
@@ -60,9 +63,18 @@
                             processing: true,
                             serverSide: true,
                             ajax: '{{ route('iotelegrams.get') }}', // Correct URL concatenation
-                            columns: [{
-                                    data: 'id',
-                                    name: 'id'
+                            columns: [
+                                {
+                                    data: 'iotelegram_num',
+                                    name: 'iotelegram_num'
+                                },
+                                {
+                                    data: 'outgoing_date',
+                                    name: 'outgoing_date'
+                                },
+                                {
+                                    data: 'outgoing_num',
+                                    name: 'outgoing_num'
                                 },
                                 {
                                     data: 'date',
@@ -79,15 +91,18 @@
                                     name: 'department'
                                 },
                                 {
-                                    data: 'recieved_by.name',
-                                    name: 'recieved_by.name'
+                                    data: 'recieved.name',
+                                    name: 'recieved.name'
                                 },
-                          
+
                                 {
                                     data: 'type',
                                     name: 'type'
                                 },
-
+                                {
+                                    data: 'files_num',
+                                    name: 'files_num'
+                                },
 
                                 {
                                     data: 'action',
@@ -121,29 +136,29 @@
                             }],
                             "oLanguage": {
                                 "sSearch": "",
-                                "sSearchPlaceholder":"بحث",
-                                                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
-                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
-                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
-                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
-                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
-                                            "oPaginate": {
-                                                    "sFirst": "<<", // This is the link to the first page
-                                                    "sPrevious": "<", // This is the link to the previous page
-                                                    "sNext": ">", // This is the link to the next page
-                                                    "sLast": " >>" // This is the link to the last page
-                                                    }
+                                "sSearchPlaceholder": "بحث",
+                                "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                                "sInfoEmpty": 'لا توجد بيانات متاحه',
+                                "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                                "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                                "sZeroRecords": 'نأسف لا توجد نتيجة',
+                                "oPaginate": {
+                                    "sFirst": "<<", // This is the link to the first page
+                                    "sPrevious": "<", // This is the link to the previous page
+                                    "sNext": ">", // This is the link to the next page
+                                    "sLast": " >>" // This is the link to the last page
+                                }
 
 
-                                        },
-                                        layout: {
-                                            bottomEnd: {
-                                                paging: {
-                                                    firstLast: false
-                                                }
-                                            }
-                                        },
-                                         "pagingType": "full_numbers"
+                            },
+                            layout: {
+                                bottomEnd: {
+                                    paging: {
+                                        firstLast: false
+                                    }
+                                }
+                            },
+                            "pagingType": "full_numbers"
                         });
                     });
                 </script>
@@ -155,7 +170,7 @@
 
 @endsection
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         function confirmArchive(event, ele) {

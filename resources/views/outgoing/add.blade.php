@@ -124,7 +124,7 @@
                             <div class="fileupload d-inline">
                                 <div class="d-flex">
                                     <input id="fileInput" type="file" name="files[]" multiple
-                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg">
+                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFiles()">
                                 </div>
                                 <div class="space-uploading">
                                     <ul id="fileList" class="d-flex flex-wrap">
@@ -338,7 +338,8 @@
                                         }
                                     });
                                     resetModal();
-                                  
+                                    $('#extern-user').modal('hide');
+
                                 } else {
                                     $.each(response.message, function(key, value) {
                                         $('#' + key + '-error').html(value[0]);

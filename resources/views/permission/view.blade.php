@@ -56,8 +56,19 @@
                 ajax: '{{ url('api/permission') }}',
                 columns: [
                     { data: 'id', name: 'id' },
+
                     { data: 'name', name: 'name' },
+
+                    // {
+                    //     data: 'guard_name',
+                    //     name: 'guard_name',
+                    //     render: function(data, type, row) {
+                    //         return models[data] || data; // Use translation or fallback to original
+                    //     }
+                    // }
+
                     { data: 'guard_name', name: 'guard_name' },
+
                     { data: 'action', name: 'action', orderable: false, searchable: false }
                 ],
                 columnDefs: [{

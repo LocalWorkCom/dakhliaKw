@@ -25,7 +25,7 @@ class Iotelegram extends Model
     {
         return $this->belongsTo(ExternalDepartment::class, 'from_departement');
     }
-    public function recieved_by()
+    public function recieved()
     {
         return $this->belongsTo(User::class, 'recieved_by');
     }
