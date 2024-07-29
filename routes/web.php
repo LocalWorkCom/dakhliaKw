@@ -179,6 +179,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('setting/grads/show/{id}', [settingController::class, 'showgrads'])->name('grads.show')->middleware('check.permission:view grade');
     Route::post('setting/grads/delete', [settingController::class, 'deletegrads'])->name('grads.delete')->middleware('check.permission:delete grade');
     //end grads
+    //Start qualifications
+    //Route::resource('setting/qualifications', qualificationController::class);
+    Route::get('setting/qualifications/all', [qualificationController::class, 'index'])->name('qualifications.index');
+    Route::get('setting/qualifications/ajax', [qualificationController::class, 'getqualification'])->name('getAllqualification');
+    Route::post('setting/qualifications/create', [qualificationController::class, 'store'])->name('qualification.store');
+    Route::post('setting/qualifications/edit', [qualificationController::class, 'update'])->name('qualification.update');
+    Route::post('setting/qualifications/delete', [qualificationController::class, 'destroy'])->name('qualification.delete');
+
+    //End qualifications
     //setting end
 
 
@@ -205,6 +214,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+
     Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add')->middleware('check.permission:create EmployeeVacation');
@@ -221,11 +231,7 @@ Route::middleware(['auth'])->group(function () {
     
 });
 
-//Start qualifications
-Route::resource('setting/qualifications', qualificationController::class);
-Route::get('setting/qualifications/All', [qualificationController::class, 'getqualification'])->name('setting.getAllqualification');
 
-//End qualifications
 
 
 // // view All Models permission

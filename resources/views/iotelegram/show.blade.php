@@ -84,7 +84,7 @@
                                     <div class="col-md-11 mb-3 px-5 mt-2 d-flex">
                                         @foreach ($iotelegram->ioFiles as $file)
                                             @if ($file->file_type == 'image')
-                                                <div>
+                                                <div class="pb-4 mx-2">
 
                                                     <a href="#" class="image-popup" data-toggle="modal"
                                                         data-target="#imageModal"
