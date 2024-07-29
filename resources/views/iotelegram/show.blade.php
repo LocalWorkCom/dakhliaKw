@@ -33,8 +33,23 @@
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
                         <tr>
-                            <th scope="row"style="background: #f5f6fa;">الجهه المرسلة</th>
-                            <td>{{ $iotelegram->type == 'out' ? $iotelegram->external_department->name : $iotelegram->internal_department->name }}
+                            <th scope="row"style="background: #f5f6fa;">رقم الوارد</th>
+                            <td>{{ $iotelegram->iotelegram_num }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"style="background: #f5f6fa;">تاريخ الوارد</th>
+                            <td>{{ $iotelegram->date }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"style="background: #f5f6fa;">رقم الصادر</th>
+                            <td>{{ $iotelegram->outgoing_num }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"style="background: #f5f6fa;">تاريخ الصادر</th>
+                            <td>{{ $iotelegram->outgoing_date }}
                             </td>
                         </tr>
                         <tr>
@@ -44,16 +59,22 @@
                             </td>
                         </tr>
                         <tr>
+                            <th scope="row"style="background: #f5f6fa;">الجهه المرسلة</th>
+                            <td>{{ $iotelegram->type == 'out' ? $iotelegram->external_department->name : $iotelegram->internal_department->name }}
+                            </td>
+                        </tr>
+
+                        <tr>
                             <th scope="row" style="background: #f5f6fa;">اسم مندوب الجهه المرسلة </th>
                             <td>{{ $iotelegram->representive->name }}</td>
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> الموظف المستلم </th>
-                            <td>{{ $iotelegram->recieved_by }}</td>
+                            <td>{{ $iotelegram->recieved->name }}</td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;"> التاريخ</th>
-                            <td>{{ $iotelegram->date }}</td>
+                            <th scope="row" style="background: #f5f6fa;"> عدد الكتب </th>
+                            <td>{{ $iotelegram->files_num }}</td>
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
@@ -66,7 +87,8 @@
                                                 <div>
 
                                                     <a href="#" class="image-popup" data-toggle="modal"
-                                                        data-target="#imageModal" data-image="{{ asset($file->file_name) }}"
+                                                        data-target="#imageModal"
+                                                        data-image="{{ asset($file->file_name) }}"
                                                         data-title="{{ $file->file_name }}">
                                                         <img src="{{ asset($file->file_name) }}" class="img-thumbnail mx-2"
                                                             alt="{{ $file->file_name }}">

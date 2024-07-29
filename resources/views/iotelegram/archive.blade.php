@@ -40,13 +40,16 @@
                 <table id="users-table" class="display table table-bordered table-hover dataTable">
                     <thead>
                         <tr>
-                            <th>الرقم</th>
-                            <th>التاريخ</th>
+                            <th>رقم الوارد</th>
+                            <th>تاريخ الوارد</th>
+                            <th>رقم الصادر</th>
+                            <th>تاريخ الصادر</th>
                             <th>المندوب</th>
-                            <th>الجهة المرسلة</th>
+                            <th>القطاع</th>
                             <th>الموظف المستلم</th>
                             <th>النوع</th>
-                            <th>الخيارات</th>
+                            <th>عدد الكتب</th>
+                            <th style="width:150px;">العمليات</th>
                         </tr>
                     </thead>
                 </table>
@@ -59,9 +62,18 @@
                             processing: true,
                             serverSide: true,
                             ajax: '{{ route('iotelegram.archives.get') }}', // Correct URL concatenation
-                            columns: [{
-                                    data: 'id',
-                                    name: 'id'
+                            columns: [
+                                {
+                                    data: 'iotelegram_num',
+                                    name: 'iotelegram_num'
+                                },
+                                {
+                                    data: 'outgoing_date',
+                                    name: 'outgoing_date'
+                                },
+                                {
+                                    data: 'outgoing_num',
+                                    name: 'outgoing_num'
                                 },
                                 {
                                     data: 'date',
@@ -78,16 +90,18 @@
                                     name: 'department'
                                 },
                                 {
-                                    data: 'recieved_by.name',
-                                    name: 'recieved_by.name'
+                                    data: 'recieved.name',
+                                    name: 'recieved.name'
                                 },
-                            
+
                                 {
                                     data: 'type',
                                     name: 'type'
                                 },
-
-
+                                {
+                                    data: 'files_num',
+                                    name: 'files_num'
+                                },
                                 {
                                     data: 'action',
                                     name: 'action',
