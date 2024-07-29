@@ -176,6 +176,7 @@
 
     // for file upload ******
     function uploadFiles() {
+        console.log("uploadFiles");
         const files = document.getElementById('fileInput').files;
         const fileList = document.getElementById('fileList');
         // if ($('#files_num').length > 0) {
