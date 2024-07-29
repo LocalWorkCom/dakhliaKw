@@ -5,6 +5,8 @@ namespace App\Http\Controllers\dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\EmployeeVacation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 use Yajra\DataTables\DataTables;
 
 class VacationController extends Controller
@@ -22,7 +24,7 @@ class VacationController extends Controller
 
             $EmployeeVacations = EmployeeVacation::where('employee_id', $id)
                 ->with('employee', 'vacation_type')
-                ->orderby('id', 'desc')
+                ->orderby('created_at', 'desc')
                 ->get();
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 # code...
@@ -34,7 +36,7 @@ class VacationController extends Controller
                 ->make(true);
         } else {
             $EmployeeVacations = EmployeeVacation::with('employee', 'vacation_type')
-                ->orderby('id', 'desc')
+                ->orderby('created_at', 'desc')
                 ->get();
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 # code...
@@ -67,6 +69,29 @@ class VacationController extends Controller
      */
     public function store(Request $request, $id)
     {
+        $rules = [
+            'vacation_type_id' => 'required',
+            'date_from' => 'required|date|before_or_equal:date_to',
+            'date_to' => 'required|date|after_or_equal:date_from',
+
+        ];
+
+        $messages = [
+          
+            'vacation_type_id.required' => 'يجب ادخال اسم الادارة',
+            'date_from.required' => 'يجب ادخال تاريخ البداية',
+            'date_to.required' => 'يجب ادخال تاريخ النهاية',
+            'date_from.before_or_equal' => 'تاريخ البداية يجب ان يكون قبل او يساوي تاريخ النهاية',
+            'date_to.after_or_equal' => 'تاريخ النهاية يجب ان يكون بعد او يساوي تاريخ البداية',
+        ];
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+
+        if ($validatedData->fails()) {
+            session()->flash('errors', $validatedData->errors());
+
+            return redirect()->route('vacations.list', $id);
+        }
+
         if ($id == 0) {
             $employee_id = $request->employee_id;
         } else {
@@ -130,6 +155,29 @@ class VacationController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $rules = [
+            'vacation_type_id' => 'required',
+            'date_from' => 'required|date|before_or_equal:date_to',
+            'date_to' => 'required|date|after_or_equal:date_from',
+
+        ];
+
+        $messages = [
+          
+            'vacation_type_id.required' => 'يجب ادخال نوع الاجازة',
+            'date_from.required' => 'يجب ادخال تاريخ البداية',
+            'date_to.required' => 'يجب ادخال تاريخ النهاية',
+            'date_from.before_or_equal' => 'تاريخ البداية يجب ان يكون قبل او يساوي تاريخ النهاية',
+            'date_to.after_or_equal' => 'تاريخ النهاية يجب ان يكون بعد او يساوي تاريخ البداية',
+        ];
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+
+        if ($validatedData->fails()) {
+            session()->flash('errors', $validatedData->errors());
+
+            return redirect()->route('vacations.list', $id);
+        }
 
         $employee_vacation =  EmployeeVacation::find($id);
         $employee_vacation->vacation_type_id = $request->vacation_type_id;

@@ -1,16 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\departements;
 use App\Models\User;
-use App\DataTables\DepartmentDataTable;
-use App\DataTables\subDepartmentsDataTable;
-
-use App\Http\Requests\StoreDepartmentRequest;
+use App\Models\departements;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\DataTables\DepartmentDataTable;
 use Illuminate\Support\Facades\Validator;
+use App\DataTables\subDepartmentsDataTable;
+use App\Http\Requests\StoreDepartmentRequest;
 
 class DepartmentController extends Controller
 {
@@ -151,6 +152,14 @@ class DepartmentController extends Controller
             {
                 // dd($item);
                 $user = User::find($item);
+
+                $log = DB::table('user_departments')->insert([
+                    'user_id' => $user->id,
+                    'department_id' => $departements->id,
+                    'flag' => "1",
+                    'created_at' => now(),
+                ]);
+                $user = User::find($item);
                 $user->department_id = $departements->id;
                 $user->save();
             }
@@ -195,6 +204,16 @@ class DepartmentController extends Controller
             foreach($request->employess as $item)
             {
                 // dd($item);
+
+                $user = User::find($item);
+
+                $log = DB::table('user_departments')->insert([
+                    'user_id' => $user->id,
+                    'department_id' => $departements->id,
+                    'flag' => "1",
+                    'created_at' => now(),
+                ]);
+
                 $user = User::find($item);
                 $user->department_id = $departements->id;
                 $user->save();

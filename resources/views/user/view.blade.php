@@ -107,12 +107,14 @@
                                                 usershow = usershow.replace(':id', row.id);
                                                 var vacation = '{{ route('vacations.list', ':id') }}';
                                                 vacation = vacation.replace(':id', row.id);
+                                                var unsigned = '{{ route('user.unsigned', ':id') }}';
+                                                unsigned = unsigned.replace(':id', row.id);
 
                                                 return `
                                         <a href="` + usershow + `" class="btn btn-sm" style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
                                         <a href="` + useredit + `" class="btn btn-sm"  style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>
-                                        <a href="${vacation}"  "   class="btn btn-sm" style=" background-color:#864824; "> <i class="fa-solid fa-mug-hot" ></i> </a> 
-
+                                        {{-- <a href="${vacation}"  "   class="btn btn-sm" style=" background-color:#864824; "> <i class="fa-solid fa-mug-hot" ></i> </a> --}}
+                                           <a href="` + unsigned + `"   class="btn btn-sm" style=" background-color:#864824; "> unsigned </a> 
                                         `;
                                             }
 
@@ -126,10 +128,10 @@
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                             "sZeroRecords": 'نأسف لا توجد نتيجة',
                                             "oPaginate": {
-                                                    "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
-                                                    "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
-                                                    "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
-                                                    "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
+                                                    "sFirst": "<< &nbsp;", // This is the link to the first page
+                                                    "sPrevious": "<&nbsp;", // This is the link to the previous page
+                                                    "sNext": ">&nbsp;", // This is the link to the next page
+                                                    "sLast": "&nbsp; >>" // This is the link to the last page
                                                     }
                                         },
                                         layout: {

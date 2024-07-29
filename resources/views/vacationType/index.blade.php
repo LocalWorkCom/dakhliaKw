@@ -126,7 +126,7 @@
                         <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الاجازه ؟</h5>
 
 
-                        <input type="text" id="id" hidden name="id" class="form-control">
+                        <input type="text" id="id" value="" hidden name="id" class="form-control">
                     </div>
                     <div class="modal-footer mx-2 d-flex justify-content-center">
                         <div class="text-end">
@@ -161,6 +161,7 @@
 
         function confirmDelete() {
             var id = document.getElementById('id').value;
+            console.log(id);
             var form = document.getElementById('delete-form');
 
             form.submit();
@@ -226,6 +227,7 @@
                         data: 'name',
                         name: 'name'
                     },
+                    
                     {
                         data: 'action',
                         name: 'action',
@@ -233,29 +235,32 @@
                         searchable: false
                     }
                 ],
+                order: [[1, 'desc']],
                 "oLanguage": {
-                    "sSearch": "",
-                    "sSearchPlaceholder":"بحث",
-                                        "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
-                    "sInfoEmpty": 'لا توجد بيانات متاحه',
-                    "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
-                    "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
-                    "sZeroRecords": 'نأسف لا توجد نتيجة',
-                    "oPaginate": {
-                        "sFirst": "&nbsp;<< &nbsp;", // This is the link to the first page
-                        "sPrevious": "&nbsp;<&nbsp;", // This is the link to the previous page
-                        "sNext": "&nbsp;>&nbsp;", // This is the link to the next page
-                        "sLast": "&nbsp; >> &nbsp;" // This is the link to the last page
-                    }
-                },
-                layout: {
-                    bottomEnd: {
-                        paging: {
-                            firstLast: false
-                        }
-                    }
-                },
-                "pagingType": "full_numbers"
+                                "sSearch": "",
+                                "sSearchPlaceholder":"بحث",
+                                                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
+                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
+                                            "oPaginate": {
+                                                    "sFirst": "<<", // This is the link to the first page
+                                                    "sPrevious": "<", // This is the link to the previous page
+                                                    "sNext": ">", // This is the link to the next page
+                                                    "sLast": " >>" // This is the link to the last page
+                                                    }
+
+
+                                        },
+                                        layout: {
+                                            bottomEnd: {
+                                                paging: {
+                                                    firstLast: false
+                                                }
+                                            }
+                                        },
+                                         "pagingType": "full_numbers"
 
             });
 

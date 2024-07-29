@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostmanController;
 use App\Http\Controllers\settingController;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\qualificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit')->middleware('check.permission:edit User');
     Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show')->middleware('check.permission:view User');
     Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update')->middleware('check.permission:edit User');
+    Route::any('/unsigned/{id}', [UserController::class, 'unsigned'])->name('user.unsigned');
 
     // permission
     Route::any('/permission', [PermissionController::class, 'index'])->name('permission.index')->middleware('check.permission:view Permission');
@@ -110,7 +111,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile')->middleware('check.permission:download outgoing_files');
         //End Export routes
 
-        Route::get('generateNumber/{counter}', [outgoingController::class, 'generateUniqueNumber']);
+ Route::get('generateNumber/{counter}', [outgoingController::class, 'generateUniqueNumber']);
         Route::get('getLatest', [outgoingController::class, 'getTheLatestExport']);
 
     
@@ -174,9 +175,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('setting/grads', [settingController::class, 'getAllgrads'])->name('setting.getAllgrads')->middleware('check.permission:view grade');
     Route::get('setting/grads/all', [settingController::class, 'indexgrads'])->name('grads.index')->middleware('check.permission:view grade');
     Route::post('setting/grads/add', [settingController::class, 'addgrads'])->name('grads.add')->middleware('check.permission:edit grade');
-    // Route::get('setting/grads/create', [settingController::class, 'creategrads'])->name('grads.create');
     Route::post('setting/grads/update', [settingController::class, 'updategrads'])->name('grads.update')->middleware('check.permission:edit grade');
-    // Route::get('setting/grads/edit/{id}', [settingController::class, 'editgrads'])->name('grads.edit')->middleware('check.permission:edit grade');
     Route::get('setting/grads/show/{id}', [settingController::class, 'showgrads'])->name('grads.show')->middleware('check.permission:view grade');
     Route::post('setting/grads/delete', [settingController::class, 'deletegrads'])->name('grads.delete')->middleware('check.permission:delete grade');
     //end grads
@@ -191,15 +190,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('internal/departments', [IoTelegramController::class, 'getDepartments'])->name('internal.departments')->middleware('check.permission:view departements');
     Route::get('iotelegrams', [IoTelegramController::class, 'index'])->name('iotelegrams.list')->middleware('check.permission:view Iotelegram');
     Route::get('iotelegrams/get/{id?}', [IoTelegramController::class, 'getIotelegrams'])->name('iotelegrams.get')->middleware('check.permission:view Iotelegram');
-    Route::get('iotelegram/add', [IoTelegramController::class, 'create'])->name('iotelegrams.add');
-    Route::post('iotelegram/store', [IoTelegramController::class, 'store'])->name('iotelegram.store');
-    Route::get('iotelegram/edit/{id}', [IoTelegramController::class, 'edit'])->name('iotelegram.edit');
-    Route::post('iotelegram/update/{id}', [IoTelegramController::class, 'update'])->name('iotelegram.update');
-    Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name('iotelegram.show');
-    Route::get('iotelegram/archives', [IoTelegramController::class, 'archives'])->name('iotelegram.archives');
-    Route::get('iotelegram/archives/get', [IoTelegramController::class, 'getArchives'])->name('iotelegram.archives.get');
-    Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add');
-    Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile');
+    Route::get('iotelegram/add', [IoTelegramController::class, 'create'])->name('iotelegrams.add')->middleware('check.permission:create Iotelegram');
+    Route::post('iotelegram/store', [IoTelegramController::class, 'store'])->name('iotelegram.store')->middleware('check.permission:edit Iotelegram');
+    Route::get('iotelegram/edit/{id}', [IoTelegramController::class, 'edit'])->name('iotelegram.edit')->middleware('check.permission:edit Iotelegram');
+    Route::post('iotelegram/update/{id}', [IoTelegramController::class, 'update'])->name('iotelegram.update')->middleware('check.permission:edit Iotelegram');
+    Route::get('iotelegram/show/{id}', [IoTelegramController::class, 'show'])->name('iotelegram.show')->middleware('check.permission:view Iotelegram');
+    Route::get('iotelegram/archives', [IoTelegramController::class, 'archives'])->name('iotelegram.archives')->middleware('check.permission:view Iotelegram');
+    Route::get('iotelegram/archives/get', [IoTelegramController::class, 'getArchives'])->name('iotelegram.archives.get')->middleware('check.permission:view Iotelegram');
+    Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add')->middleware('check.permission:create Iotelegram');
+    Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile')->middleware('check.permission:download Iotelegram');
 
     // Route::resource('setting', SettingsController::class);
 
@@ -215,19 +214,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete')->middleware('check.permission:delete EmployeeVacation');
     Route::get('vacation/downlaod/{id}', [VacationController::class, 'downlaodfile'])->name('vacation.downlaodfile')->middleware('check.permission:download EmployeeVacation');
-
-
-
-
-
+    Route::get('/employees/by-department/{departmentId}', [DepartmentController::class, 'getEmployeesByDepartment']);
 
 
 
     
 });
 
+//Start qualifications
+Route::resource('setting/qualifications', qualificationController::class);
+Route::get('setting/qualifications/All', [qualificationController::class, 'getqualification'])->name('setting.getAllqualification');
 
-
+//End qualifications
 
 
 // // view All Models permission
@@ -293,4 +291,3 @@ Route::middleware(['auth'])->group(function () {
 // Route::post('government/add', [settingController::class,'addgovernment'])->name('government.add');
 // Route::post('government', [settingController::class,'editgovernment'])->name('government.edit');
 // Route::post('government/delete', [settingController::class,'deletegovernment'])->name('government.delete');
-Route::get('/employees/by-department/{departmentId}', [DepartmentController::class, 'getEmployeesByDepartment']);

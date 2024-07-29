@@ -21,7 +21,10 @@ class outgoingController extends Controller
     /**
      * Display a listing of the resource.
      */
-
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -208,6 +211,7 @@ class outgoingController extends Controller
         $messages = [
             'nameex.required' => 'عفوا يجب ادخال اسم الصادر',
             'num.required' => 'عفوا يجب ادخال رقم الصادر',
+            'num.unique' => 'عفوا رقم صادر موجود من قبل',
             'note.required' => 'عفوا يجب ادخال ملاحظات الصادر',
             'num.integer' => 'عفوا يجب ان يحتوى رقم الصادر على ارقام فقط',
             'person_to.exists' => 'عفوا هذا المستخدم غير متاح',
@@ -233,7 +237,8 @@ class outgoingController extends Controller
             $export->date = $request->date;
             $export->person_to = $request->person_to  ?  $request->person_to : null;
             $export->created_by = $user->id; //auth $user->id
-            $export->created_department = $user->department_id; //$user->department_id
+            $export->file_num = $request->files_num ?  $request->files_num : null; 
+            $export->created_department = $user->department_id;
             $export->active = $request->active ? $request->active : 0;
             $export->updated_by = $user->id; //auth auth()->id
             $export->department_id = $request->from_departement;
@@ -339,6 +344,7 @@ class outgoingController extends Controller
             $export->date = $request->date;
             $export->person_to = $request->person_to  ?  $request->person_to : null;
             $export->created_by = $user->id; //auth auth()->id
+            $export->file_num = $request->files_num ?  $request->files_num : null; 
             $export->active = $request->active ? $request->active : $export->active;
             $export->updated_by = $user->id; //auth auth()->id
             $export->department_id = $request->from_departement;
