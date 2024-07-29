@@ -131,7 +131,7 @@
                 <div class="form-group col-md-5 mx-2">
                     <label for="input44">عسكرى | مدنى</label>
                     <div class="form-group col-md-10">
-                        <input type="radio" class="form-check-input" id="solder" name="solderORcivil" value="solder" style="height:20px; width:20px;">
+                        <input type="radio" class="form-check-input" id="solder" name="solderORcivil" value="military" style="height:20px; width:20px;">
                         <label class="form-check-label mx-2" for="solder">عسكرى</label>
                         
                         <input type="radio" class="form-check-input" id="civil" name="solderORcivil" value="civil" style="height:20px; width:20px;">
@@ -212,6 +212,8 @@
                     <label for="input15"> القسم </label>
                     <select id="input15" name="department_id" class="form-control"
                         placeholder="القسم">
+                        <option value="{{ NULL }}">
+                            لا يوجد قسم محدد</option>
                         @foreach ($alldepartment as $item)
                                 <option value="{{ $item->id }}">
                                     {{ $item->name }}</option>

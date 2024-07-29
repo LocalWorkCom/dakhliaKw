@@ -396,7 +396,7 @@ class UserController extends Controller
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
-                'department_id.required' => 'القسم  يجب أن يكون نصاً.',
+                // 'department_id.required' => 'القسم  يجب أن يكون نصاً.',
                 // Add more custom messages here
             ];
 
@@ -407,7 +407,7 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'phone'),
                 ],
                 'name' => 'required|string',
-                'department_id' => 'required',
+                // 'department_id' => 'required',
                 'Civil_number' => [
                     ValidationRule::unique('users', 'Civil_number'),
                 ],
