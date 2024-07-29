@@ -69,7 +69,7 @@
             columns: [
                 { data: 'id',  sWidth: '50px', name: 'id' },
                 { data: 'name', name: 'name' },
-                { data: 'manger', name: 'manger' },  // Ensure 'manager' column exists
+                { data: 'manager_name', name: 'manager_name' },  // Ensure 'manager' column exists
                 { data: 'children_count', name: 'children_count' },
                 { data: 'iotelegrams_count', name: 'iotelegrams_count' },
                 { data: 'outgoings_count', name: 'outgoings_count' },
