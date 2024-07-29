@@ -63,8 +63,7 @@
                             processing: true,
                             serverSide: true,
                             ajax: '{{ route('iotelegrams.get') }}', // Correct URL concatenation
-                            columns: [
-                                {
+                            columns: [{
                                     data: 'iotelegram_num',
                                     name: 'iotelegram_num'
                                 },
@@ -110,6 +109,9 @@
                                     orderable: false,
                                     searchable: false
                                 }
+                            ],
+                            order: [
+                                [1, 'desc']
                             ],
                             columnDefs: [{
                                 targets: -1,

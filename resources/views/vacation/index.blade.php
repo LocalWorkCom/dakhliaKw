@@ -80,6 +80,7 @@
                                     searchable: false
                                 }
                             ],
+                            order: [[1, 'desc']],
                             columnDefs: [{
                                 targets: -1,
                                 render: function(data, type, row) {
