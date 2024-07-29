@@ -149,7 +149,7 @@
 
                     </div>
 
-              
+
 
                     <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group col-md-10">
@@ -159,11 +159,10 @@
                             <div class="fileupload d-inline">
                                 <div class="d-flex">
                                     <input id="fileInput" type="file" name="files[]" multiple
-                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg"  onchange="uploadFiles()">
+                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFiles()">
                                 </div>
                                 <div class="space-uploading">
                                     <ul id="fileList" class="d-flex flex-wrap">
-                                        <!-- Uploaded files will be listed here -->
                                     </ul>
                                 </div>
                             </div>
@@ -183,9 +182,8 @@
                             <select id="user_id" class="form-control" name="user_id">
                                 <option value="" selected>اختر المستخدم</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" @if ($user->id == $iotelegram->user_id)
-                                        selected
-                                    @endif> {{ $user->name }}</option>
+                                    <option value="{{ $user->id }}" @if ($user->id == $iotelegram->user_id) selected @endif>
+                                        {{ $user->name }}</option>
                                 @endforeach
                             </select>
                         </div>
