@@ -174,9 +174,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('setting/grads', [settingController::class, 'getAllgrads'])->name('setting.getAllgrads')->middleware('check.permission:view grade');
     Route::get('setting/grads/all', [settingController::class, 'indexgrads'])->name('grads.index')->middleware('check.permission:view grade');
     Route::post('setting/grads/add', [settingController::class, 'addgrads'])->name('grads.add')->middleware('check.permission:edit grade');
-    // Route::get('setting/grads/create', [settingController::class, 'creategrads'])->name('grads.create');
     Route::post('setting/grads/update', [settingController::class, 'updategrads'])->name('grads.update')->middleware('check.permission:edit grade');
-    // Route::get('setting/grads/edit/{id}', [settingController::class, 'editgrads'])->name('grads.edit')->middleware('check.permission:edit grade');
     Route::get('setting/grads/show/{id}', [settingController::class, 'showgrads'])->name('grads.show')->middleware('check.permission:view grade');
     Route::post('setting/grads/delete', [settingController::class, 'deletegrads'])->name('grads.delete')->middleware('check.permission:delete grade');
     //end grads
