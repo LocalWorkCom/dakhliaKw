@@ -178,7 +178,7 @@
     function uploadFiles() {
         const files = document.getElementById('fileInput').files;
         const fileList = document.getElementById('fileList');
-
+console.log("hnbnbn");
         if ($('#files_num').length > 0) {
             var max_num = $('#files_num').find('option:selected').val();
             if (!max_num) {
@@ -215,6 +215,7 @@
                 alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
                 return;
             }
+            console.log(fileExists);
 
             if (!fileExists) {
                 const listItem = document.createElement('li');

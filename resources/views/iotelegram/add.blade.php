@@ -84,9 +84,9 @@
                         <div class="form-group col-md-5 mx-md-2 " dir="rtl">
                             <div class="d-flex justify-content-between">
                                 <label for="from_departement">القطاع </label>
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 " style="display: none"
-                                    data-bs-toggle="modal" id="extern-department-dev" data-bs-target="#extern-department"
-                                    data-dismiss="modal">
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 "
+                                    style="display: none" data-bs-toggle="modal" id="extern-department-dev"
+                                    data-bs-target="#extern-department" data-dismiss="modal">
                             </div>
                             <select id="from_departement" name="from_departement" class="form-control" required>
                                 <option value="">اختر القطاع</option>
@@ -124,7 +124,7 @@
 
                     </div>
 
-          
+
 
                     <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group col-md-10">
@@ -133,8 +133,8 @@
                         <div class="form-group col-md-10" dir="rtl">
                             <div class="fileupload d-inline">
                                 <div class="d-flex">
-                                <input id="fileInput" type="file" name="files[]" multiple
-    class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFiles()">
+                                    <input id="fileInput" type="file" name="files[]" multiple
+                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFiles()">
 
                                 </div>
                                 <div class="space-uploading">
@@ -413,7 +413,7 @@
 
                     }
                 });
-                
+
                 $('#addFile').click(function() {
                     var files_num = $('#files_num option:selected').val();
                     if (files_num == '') {
@@ -459,7 +459,6 @@
                 }
 
             });
-
         </script>
     @endpush
 @endsection

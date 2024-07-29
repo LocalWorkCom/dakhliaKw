@@ -30,7 +30,7 @@ class IoTelegramController extends Controller
     }
     public function getArchives()
     {
-        $IoTelegrams = Iotelegram::where('active', 0)->with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+        $IoTelegrams = Iotelegram::where('active', 0)->with('created_by', 'recieved', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -47,7 +47,7 @@ class IoTelegramController extends Controller
     }
     public function getIotelegrams()
     {
-        $IoTelegrams = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
+        $IoTelegrams = Iotelegram::with('created_by', 'recieved', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')
             ->where('active', 1)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -72,8 +72,11 @@ class IoTelegramController extends Controller
         $recieves = User::all();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-        
+
         $iotelegram_num = Iotelegram::max('id');
+        if (!$iotelegram_num) {
+            $iotelegram_num = 1;
+        }
         $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
         $users = User::where('department_id', auth()->user()->department_id)->get();
         return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments', 'iotelegram_num', 'outgoing_num', 'users'));
@@ -137,7 +140,7 @@ class IoTelegramController extends Controller
     public function show($id)
     {
         //
-        $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
+        $iotelegram = Iotelegram::with('created_by', 'recieved', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
         $representives = Postman::all();
         $recieves = User::all();
         $departments = departements::all();
@@ -156,7 +159,7 @@ class IoTelegramController extends Controller
         $recieves = User::all();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-        $iotelegram = Iotelegram::with('created_by', 'recieved_by', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
+        $iotelegram = Iotelegram::with('created_by', 'recieved', 'representive', 'updated_by', 'created_department', 'internal_department', 'external_department')->find($id);
         $users = User::where('department_id', auth()->user()->department_id)->get();
 
         return view('iotelegram.edit', compact('representives', 'departments', 'recieves', 'iotelegram', 'external_departments', 'users'));
@@ -271,7 +274,7 @@ class IoTelegramController extends Controller
     {
         $rules = [
             'desc' => 'nullable',
-            'phone' => ['required', 'numeric', 'unique:external_departements,phone','regex:/^([0-9\s\-\+\(\)]*)$/','min:10'],
+            'phone' => ['required', 'numeric', 'unique:external_departements,phone', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'name' => 'required|string',
         ];
 
