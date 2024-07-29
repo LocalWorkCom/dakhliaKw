@@ -72,9 +72,10 @@ class IoTelegramController extends Controller
         $recieves = User::all();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-
-        $iotelegram_num = Iotelegram::max('id');
-        if (!$iotelegram_num) {
+        $iotelegram_num = Iotelegram::orderBy('id', 'desc')->first();
+        if ($iotelegram_num) {
+            $iotelegram_num = $iotelegram_num->id;
+        } else {
             $iotelegram_num = 1;
         }
         $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
@@ -93,10 +94,13 @@ class IoTelegramController extends Controller
                 'files.*' => 'mimes:jpeg,png,pdf|max:2048', // Adjust validation rules as needed
             ]);
         }
-        $iotelegram_num = Iotelegram::max('id');
-        if (!$iotelegram_num) {
+        $iotelegram_num = Iotelegram::orderBy('id', 'desc')->first();
+        if ($iotelegram_num) {
+            $iotelegram_num = $iotelegram_num->id;
+        } else {
             $iotelegram_num = 1;
         }
+
         $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
 
 
