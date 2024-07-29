@@ -146,6 +146,10 @@ class DepartmentController extends Controller
 
           $departements->save();
 
+            $user = User::find($request->manger);
+            $user->department_id = $departements->id;
+            $user->save();
+
           if($request->has('employess'))
           {
             foreach($request->employess as $item)
@@ -198,6 +202,10 @@ class DepartmentController extends Controller
           $departements->created_by = Auth::user()->id;
 
           $departements->save();
+
+            $user = User::find($request->manger);
+            $user->department_id = $departements->id;
+            $user->save();
 
           if($request->has('employess'))
           {
