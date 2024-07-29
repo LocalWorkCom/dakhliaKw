@@ -97,13 +97,25 @@
                             <span class="text-danger span-error" id="manger-error"></span>
 
                         </div>
-                        <div class="form-group">
+                        <div class="form-row pt-4 mx-md-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10 ">
+                            <label class="pb-2" for="description">الموظفين (يمكنك اختيار اكثر من واحد)</label>
+                            <select name="employess[]" id="employees" class="form-group col-md-12 " multiple
+                                style="   height: 150px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl">
+                                
+                            </select>
+                            @error('description')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                        <!-- <div class="form-group">
                         <label for="employees">الموظفين </label>
                         <select name="employess[]" id="employees" class="form-group col-md-12 mx-md-2" multiple>
                             
                         </select>
                        
-                    </div>
+                    </div> -->
                 </div>
                         <!-- Save button -->
                         <div class="text-end">
@@ -138,6 +150,19 @@
                             <span class="text-danger span-error" id="name-error"></span>
 
                         </div>
+                        
+                        <div class="form-group">
+                        <select name="parent_id" id="parent_id" class="form-control">
+                            <option value="">اختار الادارة</option>
+                            @foreach ($subdepartments as $dept)
+                                <option value="{{ $dept->id }}" {{ $dept->id == old('parent_id', $department->parent_id) ? 'selected' : '' }}>
+                                    {{ $dept->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                            <span class="text-danger span-error" id="parent_id-error"></span>
+
+                        </div>
                         <div class="form-group">
                             <label for="manger">المدير</label>
                             <select name="manger" id="manger" class="form-control">
@@ -149,18 +174,6 @@
                                 @endforeach
                             </select>
                             <span class="text-danger span-error" id="manger-error"></span>
-
-                        </div>
-                        <div class="form-group">
-                        <select name="parent_id" id="parent_id" class="form-control">
-                            <option value="">اختار الادارة</option>
-                            @foreach ($subdepartments as $dept)
-                                <option value="{{ $dept->id }}" {{ $dept->id == old('parent_id', $department->parent_id) ? 'selected' : '' }}>
-                                    {{ $dept->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                            <span class="text-danger span-error" id="parent_id-error"></span>
 
                         </div>
                         <!-- Save button -->
@@ -315,8 +328,8 @@ $(document).ready(function() {
                     $('#employees').empty();
                     $('#manger').empty();
                     $.each(data, function(key, employee) {
-                        $('#employees').append('<option value="' + employee.id + '">' + employee.name + '</option>');
-                        $('#manger').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                        $('#employees').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
+                        $('#manger').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
                     });
                 },
                 error: function(xhr, status, error) {
