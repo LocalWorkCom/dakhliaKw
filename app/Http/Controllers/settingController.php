@@ -39,7 +39,7 @@ class settingController extends Controller
     //get data for governments
     public function getAllgovernment()
     {
-        $data = Government::orderBy('created_at','desc')->get();
+        $data = Government::orderBy('updated_at','desc')->orderBy('created_at','desc')->get();
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
@@ -107,7 +107,7 @@ class settingController extends Controller
     //get data for JOB
     public function getAllJob()
     {
-        $data = job::orderBy('created_at','desc')->get();
+        $data = job::orderBy('updated_at','desc')->orderBy('created_at','desc')->get();
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
@@ -203,7 +203,7 @@ class settingController extends Controller
     //get data for GRAD
     public function getAllgrads()
     {
-        $data = grade::orderBy('created_at','desc')->get();
+        $data = grade::orderBy('updated_at','desc')->orderBy('created_at','desc')->get();
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
@@ -300,7 +300,7 @@ class settingController extends Controller
       public function getAllvacationType()
       {
           
-          $data = VacationType::orderBy('created_at','desc')->get();
+          $data = VacationType::orderBy('updated_at','desc')->orderBy('created_at','desc')->get();
          
 
           return DataTables::of($data)->addColumn('action', function ($row) {
@@ -313,10 +313,6 @@ class settingController extends Controller
             }else{
                 return $editButton;
             }
-            // href="' . route('vacationType.edit', $row->id) . '" 
-
-            //   <a class="btn btn-primary btn-sm" href=' . route('vacationType.show', $row->id) . '>التفاصيل</a>
-
           })
           ->rawColumns(['action'])
           ->make(true);

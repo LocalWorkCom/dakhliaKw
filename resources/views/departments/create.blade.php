@@ -69,6 +69,17 @@
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="form-group col-md-10 mx-md-2">
+                        <label for="description">الموظفين </label>
+                        <select name="employess[]" id="" class="form-group col-md-12 mx-md-2" multiple>
+                            @foreach($employee as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('description')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 </div>

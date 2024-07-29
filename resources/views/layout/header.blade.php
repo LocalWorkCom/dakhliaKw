@@ -96,16 +96,18 @@
                 </li>
                 <div id="dropdownMenu3" class="dropdown-menu3">
                     <ul>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/emploee.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('user.employees', 1) }}">الموظفين</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('vacations.list') }}">الاجازات</a>
                         </li>
-                     <!--    <li style="list-style: inside;">
+                     <!--    <li >
                             <a href="#">الشيفتات</a>
                         </li> -->
-                        <!-- {{-- <li style="list-style: inside;">
+                        <!-- {{-- <li >
                             <a href="#">الاجازات</a>
                         </li> --}}
                     </ul> -->
@@ -136,22 +138,28 @@
                 <div id="dropdownMenu4" class="dropdown-menu4">
 
                     <ul >
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/police.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('grads.index') }}">الرتب العسكريه</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/jobs.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('job.index') }}">الوظائف</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/map.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('government.all') }}">المحافظات</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/task.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('rule.index') }}">المهام</a>
                         </li>
-                        <li style="list-style: inside;">
+                        <li >
+                        <img src="{{ asset('frontend/images/permission.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('permission.index') }}">الصلاحيات</a>
                         </li>
                     </ul>

@@ -6,25 +6,26 @@
     التفاصيل
 @endsection
 @section('content')
-    <div class="row" style="direction: rtl;">
-        <nav style="--bs-breadcrumb-divider: '>';" class="breadcrumb-nav">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">الرئيسيه</a></li>
-                <li class="breadcrumb-item active"><a href="{{ route('Export.index') }}">الصادرات </a></li>
-                <li class="breadcrumb-item active" aria-current="page">تفاصيل الصادر</li>
-            </ol>
-        </nav>
+<div class="row col-11" dir="rtl">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('Export.index') }}">الصادرات </a></li>
+            <li class="breadcrumb-item active" aria-current="page"> <a href="#"> التفاصيل </a></li>
+        </ol>
+    </nav>
+</div>
+<div class="row ">
+    <div class="container welcome col-11">
+        <p> الصــــــــــــادرات </p>
     </div>
-    <div class="row ">
-        <div class="container welcome col-11">
-            <p> الصـــــــــادرات</p>
-        </div>
-    </div>
+</div>
+<br>
 
     <section style="direction: rtl;">
         <div class="row">
             <div class="container c col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11 pt-5 pb-4 px-3">
-                <table class="table table-responsive table-bordered ">
+                <table class="table table-bordered ">
                     <tbody>
                         <tr style="background-color:#f5f6fa;">
                             <th scope="row"> الموظف المستلم</th>
@@ -131,9 +132,9 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
-                            </button>
+                            </button> --}}
                         </div>
                         <div class="modal-body text-center">
                             <img id="modalImage" src="#" class="img-fluid" alt="صورة">

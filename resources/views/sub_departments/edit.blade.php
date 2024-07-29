@@ -57,6 +57,19 @@
                             value="{{ old('name', $department->name) }}">
                     </div>
                 </div>
+                <div class="form-row mx-md-2 d-flex justify-content-center">
+                    <div class="form-group col-md-10">
+                            <label for="manger">المدير</label>
+                            <select name="manger" class="form-control">
+                                <option value="">اختر المدير </option>
+                                @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ $user->id == old('manger', $department->manger) ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                    </div>
+                    </div>
 
                 <div class="form-row mx-md-2 d-flex justify-content-center">
                     <div class="form-group col-md-10">

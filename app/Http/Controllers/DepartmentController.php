@@ -10,6 +10,7 @@ use App\Http\Requests\StoreDepartmentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class DepartmentController extends Controller
 {
@@ -66,13 +67,21 @@ class DepartmentController extends Controller
     {
         //
         // return $dataTable->render('permission.view');
-        return view('sub_departments.index');
+        $users = User::where('flag', 'employee')->where('department_id', NULL)->get();
+        $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
+
+        // Get the children of the parent department
+        $departments = $parentDepartment ? $parentDepartment->children : collect();       
+        $subdepartments = departements::with('children')->get();
+        return view('sub_departments.index', compact('users','subdepartments','departments','parentDepartment'));
     }
     public function getSub_Department()
     {
         $data = departements::withCount('children')
         ->where('parent_id', Auth::user()->department_id)
         ->with(['children'])->orderBy('created_at', 'asc')->get();
+
+        // $data = departements::all();
 
     return DataTables::of($data)
         ->addColumn('action', function ($row) {
@@ -93,27 +102,39 @@ class DepartmentController extends Controller
         // dd(Auth::user());
         $users = User::all();
         $departments = departements::with('children', 'parent')->get();
-         return view('departments.create', compact('users','departments'));
+        $employee = User::where('flag', 'employee')->where('department_id', NULL)->get();
+         return view('departments.create', compact('users','departments','employee'));
     }
 
 
     public function create_1()
     {
         // dd(Auth::user());
-        $users = User::where('flag', 'employee')->get();
+        $users = User::where('flag', 'employee')->where('department_id', NULL)->get();
         $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
 
         // Get the children of the parent department
         $departments = $parentDepartment ? $parentDepartment->children : collect();       
-        $subdepartments = departements::with('children', 'parent')->get();
+        $subdepartments = departements::with('children')->get();
         return view('sub_departments.create', compact('parentDepartment','departments','subdepartments','users'));
     }
+
+    public function getEmployeesByDepartment($departmentId)
+    {
+        try {
+            $employees = User::where('department_id', $departmentId)->get();
+            return response()->json($employees);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching employees: ' . $e->getMessage());
+            return response()->json(['error' => 'Error fetching employees'], 500);
+        }
+}
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        // dd($request);
 
         $request->validate([
             'name' => 'required',
@@ -123,6 +144,17 @@ class DepartmentController extends Controller
           $departements->created_by = Auth::user()->id;
 
           $departements->save();
+
+          if($request->has('employess'))
+          {
+            foreach($request->employess as $item)
+            {
+                // dd($item);
+                $user = User::find($item);
+                $user->department_id = $departements->id;
+                $user->save();
+            }
+          }
         //   dd($departements);
         return redirect()->route('departments.index')->with('success', 'Department created successfully.');
         // return response()->json($department, 201);
@@ -131,14 +163,43 @@ class DepartmentController extends Controller
 
     public function store_1(Request $request)
     {
-        // dd($request->all());
+        // dd($request);
 
-        $request->validate([
-        ]);
+        $rules = [
+            'name' => 'required',
+            'manger' => 'required',
+            'parent_id' => 'required',
+
+        ];
+
+        $messages = [
+            'name.required' => 'يجب ادخال اسم الادارة',
+
+            'manger.required' => 'يجب ادخال المدير',
+        
+            'parent_id.required' => 'يجب ادخال القطاع',
+           
+        ];
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+
+        if ($validatedData->fails()) {
+            return response()->json(['success' => false, 'message' => $validatedData->errors()]);
+        }
          $departements =departements::create($request->all());
           $departements->created_by = Auth::user()->id;
 
           $departements->save();
+
+          if($request->has('employess'))
+          {
+            foreach($request->employess as $item)
+            {
+                // dd($item);
+                $user = User::find($item);
+                $user->department_id = $departements->id;
+                $user->save();
+            }
+          }
         //   dd($departements);
         return redirect()->route('sub_departments.index')->with('success', 'Department created successfully.');
         // return response()->json($department, 201);
@@ -164,11 +225,11 @@ class DepartmentController extends Controller
     public function edit_1(departements $department)
     {
         $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
-
+        $users = User::where('flag', 'employee')->where('department_id', NULL)->get();
         // Get the children of the parent department
         $departments = $parentDepartment ? $parentDepartment->children : collect();  
         $subdepartments = departements::with('children', 'parent')->get();
-        return view('sub_departments.edit', compact('department', 'departments' ,'parentDepartment','subdepartments'));
+        return view('sub_departments.edit', compact('department', 'departments' ,'parentDepartment','subdepartments','users'));
     }
 
     /**
@@ -183,7 +244,7 @@ class DepartmentController extends Controller
         ]);
 
         $department->update($request->all());
-        return redirect()->route('departments.index')->with('success', 'Department updated successfully.');
+        return redirect()->route('sub_departments.index')->with('success', 'Department updated successfully.');
         // return response()->json($department);
     }
 

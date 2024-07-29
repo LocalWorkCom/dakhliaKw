@@ -133,8 +133,9 @@
                         <div class="form-group col-md-10" dir="rtl">
                             <div class="fileupload d-inline">
                                 <div class="d-flex">
-                                    <input id="fileInput" type="file" name="files[]" multiple
-                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg">
+                                <input id="fileInput" type="file" name="files[]" multiple
+    class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFiles()">
+
                                 </div>
                                 <div class="space-uploading">
                                     <ul id="fileList" class="d-flex flex-wrap">
@@ -412,6 +413,7 @@
 
                     }
                 });
+                
                 $('#addFile').click(function() {
                     var files_num = $('#files_num option:selected').val();
                     if (files_num == '') {
