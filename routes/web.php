@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostmanController;
 use App\Http\Controllers\settingController;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\qualificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit')->middleware('check.permission:edit User');
     Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show')->middleware('check.permission:view User');
     Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update')->middleware('check.permission:edit User');
+    Route::any('/unsigned/{id}', [UserController::class, 'unsigned'])->name('user.unsigned');
 
     // permission
     Route::any('/permission', [PermissionController::class, 'index'])->name('permission.index')->middleware('check.permission:view Permission');
@@ -204,8 +205,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-
-
     Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add')->middleware('check.permission:create EmployeeVacation');
@@ -215,20 +214,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete')->middleware('check.permission:delete EmployeeVacation');
     Route::get('vacation/downlaod/{id}', [VacationController::class, 'downlaodfile'])->name('vacation.downlaodfile')->middleware('check.permission:download EmployeeVacation');
-
-
-
-
-
-
+    Route::get('/employees/by-department/{departmentId}', [DepartmentController::class, 'getEmployeesByDepartment']);
 
 
 
     
 });
 
+//Start qualifications
+Route::resource('setting/qualifications', qualificationController::class);
+Route::get('setting/qualifications/All', [qualificationController::class, 'getqualification'])->name('setting.getAllqualification');
 
-
+//End qualifications
 
 
 // // view All Models permission

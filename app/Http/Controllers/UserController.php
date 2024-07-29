@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use Illuminate\Validation\Rule as ValidationRule;
+use App\Models\job;
 use App\Models\Rule;
 use App\Models\User;
 // use Illuminate\Validation\Rule;
@@ -13,14 +13,15 @@ use App\Models\departements;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\DataTables\UsersDataTable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Console\View\Components\Alert;
+use Illuminate\Validation\Rule as ValidationRule;
 use App\helper; // Adjust this namespace as per your helper file location
-use App\Models\job;
 
 
 
@@ -348,7 +349,8 @@ class UserController extends Controller
             $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
         }
 
-        $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
+        // $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
+        $alluser = User::where('flag','employee')->get();
         // $speificUsers = User::where('department_id',$user->department_id)->where('flag','employee')->get();
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
@@ -356,6 +358,24 @@ class UserController extends Controller
         // $alldepartment = $user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
         return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade','job','alluser'));
+    }
+
+    public function unsigned($id)
+    {
+        //
+        $user = User::find($id);
+        $log = DB::table('user_departments')->insert([
+            'user_id' => $user->id,
+            'department_id' => $user->department_id,
+            'flag' => "0",
+            'created_at' => now(),
+        ]);
+        $user = User::find($id);
+        $user->department_id  = Null;
+        $user->save();
+        $id = "1";
+        
+        return view('user.view', compact('id'));
     }
 
     /**
