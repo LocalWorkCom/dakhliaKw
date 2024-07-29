@@ -337,10 +337,13 @@ $(document).ready(function() {
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
+                        var selectedManager = $('#manger').val();
                     $('#employees').empty();
                     $('#manger').empty();
                     $.each(data, function(key, employee) {
+                        if (employee.id != selectedManager) {
                         $('#employees').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
+                        }
                         $('#manger').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
                     });
                 },
@@ -354,7 +357,14 @@ $(document).ready(function() {
         }
         });
     });
-
+    // $('#manger').on('change', function() {
+    //     var selectedManager = $(this).val();
+    //     $('#employees option').each(function() {
+    //         if ($(this).val() == selectedManager) {
+    //             $(this).remove();
+    //         }
+    //     });
+    // });
 
     // edit modal
     $(document).ready(function() {
