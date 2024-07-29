@@ -373,9 +373,9 @@ class UserController extends Controller
         $user = User::find($id);
         $user->department_id  = Null;
         $user->save();
-        $id = "1";
+        // $id = 1;
         
-        return view('user.view', compact('id'));
+        return redirect()->back()->with('success', 'User created successfully.');
     }
 
     /**
@@ -614,13 +614,10 @@ class UserController extends Controller
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
                 'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
                 'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
-                'department_id.required' => 'القسم  يجب أن يكون نصاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
 
                 // Add more custom messages here
@@ -636,7 +633,6 @@ class UserController extends Controller
                 'file_number' => 'required|string',
                 'rule_id' => 'required',
                 'password' => 'required',
-                'department_id' => 'required',
                 'Civil_number' => 'required',
                 
             ], $messages);
@@ -646,11 +642,9 @@ class UserController extends Controller
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
-                'public_administration.required' => 'القسم  يجب أن يكون نصاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
 
                 // Add more custom messages here
