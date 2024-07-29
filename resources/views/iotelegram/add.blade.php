@@ -134,7 +134,7 @@
                             <div class="fileupload d-inline">
                                 <div class="d-flex">
                                     <input id="fileInput" type="file" name="files[]" multiple
-                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFiles()">
+                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onclick="uploadFiles()">
 
                                 </div>
                                 <div class="space-uploading">
