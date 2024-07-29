@@ -172,14 +172,73 @@
                                     <select id="input13" name="flag" class="form-control">
                                         @if ($user->flag == "user")
                                         <option value="user" selected>مستخدم</option>
-                                        <option value="employee">موظف</option>
+                                        {{-- <option value="employee">موظف</option> --}}
                                         @else
-                                        <option value="user">مستخدم</option>
+                                        {{-- <option value="user">مستخدم</option> --}}
                                         <option value="employee" selected>موظف</option>
                                         @endif
                                     </select>
                                 </div>
                             </div>
+                            </div>
+                        
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input44">الفئة</label>
+                                <div class="form-group col-md-10">
+                                    @if ($user->type == "man")
+                                    <input type="radio" class="form-check-input" id="male" name="gender" value="man" style="height:20px; width:20px;" checked>
+                                    <label class="form-check-label mx-2" for="male">ذكر</label>
+                                    
+                                    <input type="radio" class="form-check-input" id="female" name="gender" value="female" style="height:20px; width:20px;">
+                                    <label class="form-check-label mx-2" for="female">انثى</label>
+                                    @else
+                                    <input type="radio" class="form-check-input" id="male" name="gender" value="man" style="height:20px; width:20px;">
+                                    <label class="form-check-label mx-2" for="male">ذكر</label>
+                                    
+                                    <input type="radio" class="form-check-input" id="female" name="gender" value="female" style="height:20px; width:20px;" checked>
+                                    <label class="form-check-label mx-2" for="female">انثى</label>
+                                    @endif
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input44">عسكرى | مدنى</label>
+                                <div class="form-group col-md-10">
+                                    @if ($user->employee_type == "civil")
+                                    <input type="radio" class="form-check-input" id="solder" name="solderORcivil" value="military" style="height:20px; width:20px;">
+                                    <label class="form-check-label mx-2" for="solder">عسكرى</label>
+                                    
+                                    <input type="radio" class="form-check-input" id="civil" name="solderORcivil" value="civil" style="height:20px; width:20px;" checked>
+                                    <label class="form-check-label mx-2" for="civil">مدنى</label>
+                                    @else
+                                    <input type="radio" class="form-check-input" id="solder" name="solderORcivil" value="military" style="height:20px; width:20px;" checked>
+                                    <label class="form-check-label mx-2" for="solder">عسكرى</label>
+                                    
+                                    <input type="radio" class="form-check-input" id="civil" name="solderORcivil" value="civil" style="height:20px; width:20px;">
+                                    <label class="form-check-label mx-2" for="civil">مدنى</label>
+                                    @endif
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input44">العنوان 1</label>
+                                <input type="text" id="input44" name="address_1" class="form-control"
+                                    placeholder="  العنوان" value="{{ $user->address1 }}">
+                            </div>
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input44">العنوان 2</label>
+                                <input type="text" id="input44" name="address_2" class="form-control"
+                                    placeholder="  العنوان" value="{{ $user->address2 }}">
+                            </div>
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input44"> المحافظة</label>
+                                <input type="text" id="input44" name="Provinces" class="form-control"
+                                    placeholder="  المحافظة" value="{{ $user->Provinces }}">
+                            </div>
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input44"> المنطقة</label>
+                                <input type="text" id="input44" name="region" class="form-control"
+                                    placeholder="  المنطقة" value="{{ $user->region }}">
                             </div>
 
                         <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">

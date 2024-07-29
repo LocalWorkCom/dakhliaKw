@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use Illuminate\Validation\Rule as ValidationRule;
+use App\Models\job;
 use App\Models\Rule;
 use App\Models\User;
 // use Illuminate\Validation\Rule;
@@ -13,14 +13,15 @@ use App\Models\departements;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\DataTables\UsersDataTable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Console\View\Components\Alert;
+use Illuminate\Validation\Rule as ValidationRule;
 use App\helper; // Adjust this namespace as per your helper file location
-use App\Models\job;
 
 
 
@@ -359,6 +360,24 @@ class UserController extends Controller
         return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade','job','alluser'));
     }
 
+    public function unsigned($id)
+    {
+        //
+        $user = User::find($id);
+        $log = DB::table('user_departments')->insert([
+            'user_id' => $user->id,
+            'department_id' => $user->department_id,
+            'flag' => "0",
+            'created_at' => now(),
+        ]);
+        $user = User::find($id);
+        $user->department_id  = Null;
+        $user->save();
+        // $id = 1;
+        
+        return redirect()->back()->with('success', 'User created successfully.');
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -595,13 +614,10 @@ class UserController extends Controller
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
                 'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
                 'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
-                'department_id.required' => 'القسم  يجب أن يكون نصاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
 
                 // Add more custom messages here
@@ -617,7 +633,6 @@ class UserController extends Controller
                 'file_number' => 'required|string',
                 'rule_id' => 'required',
                 'password' => 'required',
-                'department_id' => 'required',
                 'Civil_number' => 'required',
                 
             ], $messages);
@@ -627,11 +642,9 @@ class UserController extends Controller
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-                'phone.string' => 'رقم الهاتف يجب أن يكون نصاً.',
 
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
-                'public_administration.required' => 'القسم  يجب أن يكون نصاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
 
                 // Add more custom messages here
