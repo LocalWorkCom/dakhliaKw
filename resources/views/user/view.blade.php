@@ -112,7 +112,7 @@
                                                 vacation = vacation.replace(':id', row.id);
 
                                                 return `
-                                        <a href="` + usershow + `" class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i>عرض </a>
+                                       <a href="` + usershow + `" class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i>عرض </a>
                                         <a href="` + useredit + `" class="btn btn-sm"  style="background-color: #f7af15;"> <i class="fa fa-edit"></i> تعديل</a>
                                         <a href="${vacation}"  "   class="btn btn-sm" style=" background-color:#28a39c; "> <i class="fa-solid fa-mug-hot" ></i> الاجازات</a> 
 
