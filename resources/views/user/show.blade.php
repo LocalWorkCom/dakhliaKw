@@ -60,9 +60,9 @@
 <!-- toqa-table-show -->
 
 
-    <div class="form-row mx-3 mb-3 pt-5 pt-5">
+    <div class="form-row  mx-3 mb-3 pt-5 pt-5">
 
-                <table class="table table-bordered" dir="rtl">
+                <table class="table  table-bordered" dir="rtl">
                     <tbody>
                         <tr>
                             <th scope="row"style="background: #f5f6fa;"> الاسم</th>
