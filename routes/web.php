@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostmanController;
 use App\Http\Controllers\settingController;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\qualificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -221,8 +221,11 @@ Route::middleware(['auth'])->group(function () {
     
 });
 
+//Start qualifications
+Route::resource('setting/qualifications', qualificationController::class);
+Route::get('setting/qualifications/All', [qualificationController::class, 'getqualification'])->name('setting.getAllqualification');
 
-
+//End qualifications
 
 
 // // view All Models permission

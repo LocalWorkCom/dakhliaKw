@@ -12,7 +12,7 @@
         <div class="row">
 
             <div class="container welcome col-11">
-                <p> أنواع الاجـــــازات</p>
+                <p>المؤهـــلات </p>
             </div>
         </div>
 
@@ -61,7 +61,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="edit-grade-form" id="add-form" action=" {{ route('vacationType.add') }}" method="POST">
+                    <form class="edit-grade-form" id="add-form" action=" " method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
@@ -91,7 +91,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="edit-grade-form" id="edit-form" action=" {{ route('vacationType.update') }}"
+                    <form class="edit-grade-form" id="edit-form" action=" "
                         method="POST">
                         @csrf
                         <div class="form-group">
@@ -120,7 +120,7 @@
                         </button>
                     </div>
                 </div>
-                <form id="delete-form" action="{{ route('vacationType.delete') }}" method="POST">
+                <form id="delete-form" action="" method="POST">
                     @csrf
                     <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
                         <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الاجازه ؟</h5>
@@ -189,13 +189,7 @@
             $('#add').modal('show');
         }
 
-        // function confirmAdd() {
-        //     var name = document.getElementById('nameadd').value;
-        //     var form = document.getElementById('add-form');
-
-        //     form.submit();
-
-        // }
+       
         function confirmAdd() {
             var name = document.getElementById('nameadd').value;
 
@@ -222,7 +216,7 @@
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('setting.getAllvacationType') }}', // Correct URL concatenation
+                ajax: '{{ route('setting.getAllqualification') }}', // Correct URL concatenation
                 columns: [{
                         data: 'name',
                         name: 'name'
