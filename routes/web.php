@@ -205,7 +205,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-
     Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add')->middleware('check.permission:create EmployeeVacation');
