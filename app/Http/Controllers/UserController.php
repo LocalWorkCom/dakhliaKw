@@ -348,7 +348,8 @@ class UserController extends Controller
             $alldepartment = departements::where('id',$user->public_administration)->orwhere('parent_id',$user->public_administration)->get();
         }
 
-        $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
+        // $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
+        $alluser = User::where('flag','employee')->get();
         // $speificUsers = User::where('department_id',$user->department_id)->where('flag','employee')->get();
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
