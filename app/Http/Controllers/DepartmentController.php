@@ -50,6 +50,9 @@ class DepartmentController extends Controller
         ->addColumn('children_count', function ($row) { // New column for departments count
             return $row->children_count;
         })
+        ->addColumn('manager_name', function ($row) {
+            return $row->manager ? $row->manager->name : 'N/A'; // Display the manager's name
+        })
         ->rawColumns(['action'])
         ->make(true);
     }
@@ -72,8 +75,16 @@ class DepartmentController extends Controller
         $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
 
         // Get the children of the parent department
-        $departments = $parentDepartment ? $parentDepartment->children : collect();       
-        $subdepartments = departements::with('children')->get();
+        $departments = $parentDepartment ? $parentDepartment->children : collect();    
+        if(Auth::user()->rule_id == 2)
+        {
+            $subdepartments = departements::with('children')->get();
+        }
+        else
+        {
+            $subdepartments = departements::where('id',Auth::user()->department_id)->with('children')->get();
+        }
+        
         return view('sub_departments.index', compact('users','subdepartments','departments','parentDepartment'));
     }
     public function getSub_Department()

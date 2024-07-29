@@ -42,7 +42,7 @@ class UserController extends Controller
     public function index($id)
     {
         // if()
-        return view('user.view', compact('id'));
+           return view('user.view', compact('id'));
     }
 
     public function getUsers($id)
@@ -59,18 +59,19 @@ class UserController extends Controller
         // {
         //     $data = User::where('flag', $flagType)->where('department_id' ,$perentdepartment->id)->get();
         // }
+       
         $flagType = $id == 0 ? 'user' : 'employee';
         $parentDepartment = Departements::find(Auth()->user()->department_id);
+        
         if (Auth()->user()->rule_id == 2) {
-            $data = User::where('flag', $flagType)
-                ->get();
+            $data = User::where('flag', $flagType)->get();
         } else {
             if (is_null($parentDepartment->parent_id)) {
                 $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();
                 $data = User::where('flag', $flagType)
                     ->where(function ($query) use ($subdepart, $parentDepartment) {
                         $query->whereIn('department_id', $subdepart)
-                            ->orWhere('department_id', $parentDepartment->id);
+                              ->orWhere('department_id', $parentDepartment->id);
                     })
                     // ->whereIn('department_id', $subdepart)
                     // ->orWhere('department_id', $parentDepartment->id)
