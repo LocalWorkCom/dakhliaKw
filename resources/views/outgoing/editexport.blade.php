@@ -26,7 +26,7 @@
             <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
                 @include('inc.flash')
                 <form action="{{ route('Export.update', ['id' => $data->id]) }}" method="POST"
-                    enctype="multipart/form-data">
+                    enctype="multipart/form-data" onsubmit="return validation()">
                     @csrf
     
                         <div class="form-row mx-md-2 d-flex justify-content-center">
@@ -91,6 +91,20 @@
                         </div>
                         <div class="form-row mx-md-2 d-flex justify-content-center">
                             <div class="form-group col-md-10">
+                                <label for="files_num"> عدد الكتب</label>
+    
+                                <select id="files_num" name="files_num" class="form-control" 
+                                    onchange="updateFileInput()">
+                                    <option value="">اختر العدد</option>
+    
+                                    @for ($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row mx-md-2 d-flex justify-content-center">
+                            <div class="form-group col-md-10">
                                 <label for="nameex">العنوان</label>
                                 <textarea type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان" required>{{ $data->name }}</textarea>
                             </div>
@@ -110,7 +124,8 @@
                                 <div class="fileupload d-inline">
                                     <div class="d-flex">
                                         <input id="fileInput" type="file" name="files[]" multiple
-                                            class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFiles()">
+                                            class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFils()"
+                                            disabled>
                                     </div>
                                     <div class="space-uploading">
                                         <ul id="fileList" class="d-flex flex-wrap">
@@ -165,7 +180,7 @@
                     </div>
                 </div>
                 <div class="modal-body">
-                    <form id="saveExternalDepartment" action="{{ route('department.ajax') }}" method="POST">
+                    <form id="saveExternalDepartment" action="{{ route('department.ajax') }}" method="POST" >
                         @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
@@ -333,5 +348,86 @@
                     });
                 });
             });
+
+            function validation() {
+                var personToSelect = document.getElementById('select-person-to');
+                var fromDepartmentSelect = document.getElementById('from_departement');
+                var fileNum = document.getElementById('files_num');
+                var files = document.getElementById('fileInput');
+                if (fileNum.value != "" && files.value === "") {
+                    alert('من فضلك أختر الملفات المطلوبه');
+                    return false; // Prevent form submission
+                }
+                // Check if at least one select has a selected value
+                if (personToSelect.value === "" && fromDepartmentSelect.value === "") {
+                    alert('من فضلك اختر القطاع او الموظف المستلم التابعين الى هذا الصادر');
+                    return false; // Prevent form submission
+                }
+            }
+           
+            function updateFileInput() {
+                var fileInput = document.getElementById('fileInput');
+                var filesNum = document.getElementById('files_num').value;
+
+                if (filesNum) {
+                    fileInput.disabled = false;
+                } else {
+                    fileInput.disabled = true;
+                    document.getElementById('fileList').innerHTML = '';
+                }
+            }
+
+            function uploadFils() {
+                const files = document.getElementById('fileInput').files;
+                const fileList = document.getElementById('fileList');
+                const filesNum = parseInt(document.getElementById('files_num').value);
+
+                if (!filesNum) {
+                    alert("Please choose the number of books first.");
+                    document.getElementById('fileInput').value = '';
+                    return;
+                }
+
+                if (files.length === 0) {
+                    alert("Please choose files.");
+                    return;
+                }
+
+                if (files.length > filesNum) {
+                    alert('لا يمكنك أضافه اكثر من' + filesNum + ' ملف.');
+                    document.getElementById('fileInput').value = '';
+                    return;
+                }
+                if (files.length < filesNum) {
+                    alert('لا يمكن اضافه ملفات أقل من ' + filesNum + ' ملف.');
+                    document.getElementById('fileInput').value = '';
+                    return;
+                }
+
+                fileList.innerHTML = ''; // Clear previous list
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    listItem.dataset.filename = file.name;
+
+                    const fileName = document.createElement('span');
+                    fileName.textContent = file.name;
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'btn btn-danger btn-sm';
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.onclick = function() {
+                        fileList.removeChild(listItem);
+                        document.getElementById('fileInput').value = '';
+                    };
+
+                    listItem.appendChild(fileName);
+                    listItem.appendChild(deleteButton);
+                    fileList.appendChild(listItem);
+                }
+            }
         </script>
     @endpush

@@ -72,18 +72,9 @@
                             <span class="text-danger span-error" id="name-error"></span>
 
                         </div>
+                       
                         <div class="form-group">
-                            <label for="manger">المدير</label>
-                            <select name="manger" class="form-control " id="manger" required>
-                            <option value="">اختار المدير</option>
-                            @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                            <span class="text-danger span-error" id="manger-error"></span>
-
-                        </div>
-                        <div class="form-group">
+                            <label for="parent_idd">الادارة</label>
                             <select name="parent_id" id="parent_idd" class="form-control" required>
                                 <option value="" {{ is_null($parentDepartment) ? 'selected' : '' }} >اختار الادارة</option>
                                 @foreach ($subdepartments as $department)
@@ -96,12 +87,33 @@
 
                         </div>
                         <div class="form-group">
+                            <label for="manger">المدير</label>
+                            <select name="manger" class="form-control " id="manger" required>
+                            <option value="">اختار المدير</option>
+                            @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                            <span class="text-danger span-error" id="manger-error"></span>
+
+                        </div>
+                        <div class="form-row pt-4 mx-md-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10 ">
+                            <label class="pb-2" for="description">الموظفين (يمكنك اختيار اكثر من واحد)</label>
+                            <select name="employess[]" id="employees" class="form-group col-md-12 " multiple
+                                style="   height: 150px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl">
+                                
+                            </select>
+                            
+                        </div>
+                    </div>
+                        <!-- <div class="form-group">
                         <label for="employees">الموظفين </label>
                         <select name="employess[]" id="employees" class="form-control" multiple style="    height: 100px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl">
                             
                         </select>
                        
-                    </div>
+                    </div> -->
                 </div>
                         <!-- Save button -->
                         <div class="text-end">
@@ -136,20 +148,10 @@
                             <span class="text-danger span-error" id="name-error"></span>
 
                         </div>
+                        
                         <div class="form-group">
-                            <label for="manger">المدير</label>
-                            <select name="manger" id="manger" class="form-control">
-                                <option value="">اختر المدير </option>
-                                @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ $user->id == old('manger', $department->manger) ? 'selected' : '' }}>
-                                    {{ $user->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                            <span class="text-danger span-error" id="manger-error"></span>
+                        <label for="parent_id">الادارة</label>
 
-                        </div>
-                        <div class="form-group">
                         <select name="parent_id" id="parent_id" class="form-control">
                             <option value="">اختار الادارة</option>
                             @foreach ($subdepartments as $dept)
@@ -161,6 +163,30 @@
                             <span class="text-danger span-error" id="parent_id-error"></span>
 
                         </div>
+                        <div class="form-group">
+                            <label for="manger">المدير</label>
+                            <select name="manger" id="mangers" class="form-control">
+                                <option value="">اختر المدير </option>
+                                @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ $user->id == old('manger', $department->manger) ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <span class="text-danger span-error" id="manger-error"></span>
+
+                        </div>
+
+                        <div class="form-row pt-4 mx-md-2 d-flex justify-content-center">
+                        <div class="form-group col-md-10 ">
+                            <label class="pb-2" for="description">الموظفين (يمكنك اختيار اكثر من واحد)</label>
+                            <select name="employess[]" id="employeess" class="form-group col-md-12 " multiple
+                                style="   height: 150px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl">
+                                
+                            </select>
+                           
+                        </div>
+                    </div>
                         <!-- Save button -->
                         <div class="text-end mx-2 mb-3">
                             <button type="submit" class="btn-blue">حفظ</button>
@@ -313,8 +339,8 @@ $(document).ready(function() {
                     $('#employees').empty();
                     $('#manger').empty();
                     $.each(data, function(key, employee) {
-                        $('#employees').append('<option value="' + employee.id + '">' + employee.name + '</option>');
-                        $('#manger').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                        $('#employees').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
+                        $('#manger').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
                     });
                 },
                 error: function(xhr, status, error) {
@@ -324,6 +350,36 @@ $(document).ready(function() {
             });
         } else {
             $('#employees').empty();
+        }
+        });
+    });
+
+
+    // edit modal
+    $(document).ready(function() {
+        $('#parent_id').on('change', function() {
+            var departmentId = $(this).val();
+            console.log(departmentId);
+            if (departmentId) {
+                $.ajax({
+                    url: '/employees/by-department/' + departmentId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                    $('#employeess').empty();
+                    $('#mangers').empty();
+                    $.each(data, function(key, employee) {
+                        $('#employeess').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
+                        $('#mangers').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#employeess').empty();
         }
         });
     });

@@ -21,78 +21,74 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-            <div class="container col-10 mt-5 mb-3 pb-5" style="border:0.5px solid #C7C7CC;">
-                <form action="{{ route('departments.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
+        <div class="container col-10 mt-5 mb-3 pb-5" style="border:0.5px solid #C7C7CC;">
+            <form action="{{ route('departments.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-                    <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
+                <div class="form-row mx-3 mt-4 d-flex justify-content-center">
 
-                        <div class="form-group col-md-5 mx-md-2">
-                            <label for="manger">المدير</label>
-                            <select name="manger" class="form-control " required>
-                                <option value="">اختار المدير</option>
-                                @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('manger')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
+                    <div class="form-group col-md-5 mx-md-2">
+                        <label for="manger">المدير</label>
+                        <select name="manger" class="form-control " required>
+                            <option value="">اختار المدير</option>
+                            @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('manger')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
 
-                        </div>
-                        <div class="form-group col-md-5 mx-md-2">
-                            <label for="name">اسم القطاع </label>
-                            <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
-                            @error('name')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
                     </div>
-                    <div class="form-row mx-md-2 d-flex justify-content-center">
-                        <!--<div class="form-group col-md-5 mx-2">-->
-                        <!--    <label for="manger_assistance"> مساعد المدير</label>-->
-                        <!--    <select name="manger_assistance" class="form-control">-->
-                        <!--        <option value="">اختار مساعد المدير</option>-->
-                        <!--        @foreach($users as $user)-->
-                        <!--        <option value="{{ $user->id }}">{{ $user->name }}</option>-->
-                        <!--        @endforeach-->
-                        <!--    </select>-->
-                        <!--    @error('manger_assistance')-->
-                        <!--    <div class="alert alert-danger">{{ $message }}</div>-->
-                        <!--    @enderror-->
-                        <!--</div>-->
-
-                        <div class="form-group col-md-10 ">
-                            <label for="description">الوصف </label>
-                            <input type="text" name="description" class="form-control" value="{{ old('description') }}">
-                            @error('description')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
+                    <div class="form-group col-md-5 mx-md-2">
+                        <label for="name">اسم القطاع </label>
+                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
+                        @error('name')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
-                    <div class="form-row pt-4 mx-md-2 d-flex justify-content-center">
-                        <div class="form-group col-md-10 ">
-                            <label class="pb-2" for="description">الموظفين (يمكنك اختيار اكثر من واحد)</label>
-                            <select name="employess[]" id="" class="form-group col-md-12 " multiple
-                                style="    height: 150px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl">
-                                @foreach($employee as $item)
-                                <option value="{{ $item->id }}" class="pb-2">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('description')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+                </div>
+                <div class="form-row mx-2 d-flex justify-content-center">
+                    <!--<div class="form-group col-md-5 mx-2">-->
+                    <!--    <label for="manger_assistance"> مساعد المدير</label>-->
+                    <!--    <select name="manger_assistance" class="form-control">-->
+                    <!--        <option value="">اختار مساعد المدير</option>-->
+                    <!--        @foreach($users as $user)-->
+                    <!--        <option value="{{ $user->id }}">{{ $user->name }}</option>-->
+                    <!--        @endforeach-->
+                    <!--    </select>-->
+                    <!--    @error('manger_assistance')-->
+                    <!--    <div class="alert alert-danger">{{ $message }}</div>-->
+                    <!--    @enderror-->
+                    <!--</div>-->
 
-            </div>
-            <div class="container col-10 mt-5 mb-3 ">
+                    <div class="form-group col-md-10 mx-md-2">
+                        <label for="description">الوصف </label>
+                        <input type="text" name="description" class="form-control" value="{{ old('description') }}">
+                        @error('description')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-10 mx-md-2">
+                        <label for="description">الموظفين </label>
+                        <select name="employess[]" id="" class="form-group col-md-12 mx-md-2" multiple>
+                            @foreach($employee as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('description')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                </div>
+                <div class="container col-10 mt-5 mb-3 " >
                 <div class="form-row col-10 " dir="ltr">
                     <button class="btn-blue " type="submit">
                         اضافة </button>
-                </div>
-            </div>
-            <br>
+                </div>   </div>
+                <br>
 
             </form>
         </div>
