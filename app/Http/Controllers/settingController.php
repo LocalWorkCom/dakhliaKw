@@ -13,6 +13,7 @@ use App\Models\job;
 use App\Models\VacationType;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -22,71 +23,7 @@ class settingController extends Controller
     {
         $this->middleware('auth');
     }
-    //START government
-    //show governments
-    public function indexgovernment()
-    {
-    return view("governments.index");
-    }
-    //create governments
-    public function creategovernment()
-    {
-        return view("governments.add");
-    }
-
-    //get data for governments
-    public function getAllgovernment()
-    {
-        $data = Government::orderBy('updated_at','desc')->orderBy('created_at','desc')->get();
-
-        return DataTables::of($data)->addColumn('action', function ($row) {
-            $name = "'$row->name'";
-            return '<a class="btn btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>' ;
-
-            // <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>
-        })
-        ->rawColumns(['action'])
-        ->make(true);
-    }
-    //add government
-    public function addgovernment(Request $request){
-       
-        $requestinput=$request->except('_token');
-        $job = new Government();
-        $job->name=$request->nameadd;
-        $job->save();
-        $message="تم اضافه المحافظه";
-        return redirect()->route('government.all',compact('message'));
-        //return redirect()->back()->with(compact('activeTab','message'));
-    }
-    //show government
-    public function showgovernment($id)
-    {
-        $data = Government::findOrFail($id);
-        return view("governments.show" ,compact("data"));
-    }
-    //edit governments
-    public function editgovernment($id)
-    {
-        $data = Government::findOrFail($id);
-        return view("governments.edit" ,compact("data"));
-    }
-     //update governments
-     public function updategovernment(Request $request)
-     {
-        $gover = Government::find($request->id);
-
-        if (!$gover) {
-            return response()->json(['error' => 'هذه الماحفظه غير موجوده'], 404);
-        }
-        $gover->name=$request->name;
-        $gover->save();
-
-        $message='';
-        return redirect()->route('government.all',compact('message'));
-     }
-
-    //END government
+  
 
 //START JOB
     //show JOB
@@ -107,9 +44,16 @@ class settingController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
-            return '<a class="btn  btn-sm" style="background-color: #259240;"  onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>
-            <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
-            // <a class="btn btn-primary btn-sm" href=' . route('job.show', $row->id) . '>التفاصيل</a>
+            if(Auth::user()->hasPermission('edit job')){
+                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
+                
+            }
+            if(Auth::user()->hasPermission('delete job')){
+                $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+                
+            }
+            $uploadButton = $edit_permission . $delete_permission;
+            return $uploadButton;
 
         })
         ->rawColumns(['action'])
@@ -201,8 +145,18 @@ class settingController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
-            return '<a class="btn  btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>
-            <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
+            if(Auth::user()->hasPermission('edit grade')){
+                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
+                
+            }
+            if(Auth::user()->hasPermission('delete grade')){
+                $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+                
+            }
+            $uploadButton = $edit_permission . $delete_permission;
+            return $uploadButton;
+            // return '<a class="btn  btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>
+            // <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
             // <a class="btn  btn-sm" href=' . route('grads.show', $row->id) . '>التفاصيل</a>
 
         })
@@ -299,13 +253,18 @@ class settingController extends Controller
           return DataTables::of($data)->addColumn('action', function ($row) {
             $hiddenIds = [1, 2, 3, 4];
             $name = "'$row->name'";
-            $editButton = '<a class="btn  btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>';
-            if (!in_array($row->id, $hiddenIds)) {
-                $deleteButton = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>';
-                return $editButton . ' ' . $deleteButton;
-            }else{
-                return $editButton;
+            $edit_permission =null;
+            $delete_permission = null;
+            if(Auth::user()->hasPermission('edit VacationType')){
+                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
+            if(Auth::user()->hasPermission('delete VacationType')){
+                if (!in_array($row->id, $hiddenIds)) {
+                    $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';               
+                }
+            }
+            return $edit_permission . $delete_permission;
+           
           })
           ->rawColumns(['action'])
           ->make(true);

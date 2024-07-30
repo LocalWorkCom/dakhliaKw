@@ -11,7 +11,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
 
-                        <li class="breadcrumb-item"><a href="{{ route('rule_update', $rule_permission->id) }}">المهام</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('rule.index') }}">المهام</a></li>
 
                     <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
                 </ol>
@@ -72,17 +72,25 @@
                         <div class="form-group col-md-10">
                                 <div class="row">
                                     <label for="department" class="col-12">الصلاحية</label>
-                                    @if ($rule_permission->name == 'admin')
+
+                                    <div class="col-12 my-2">
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectAll" style="width: 20px; height:20px; margin-left:1px;" class="form-check-input">
+                                            <label class="form-check-label m-1" for="selectAll">Select All</label>
+                                        </div>
+                                    </div>
+
+                                    {{-- @if ($rule_permission->id == 2)
                                         @foreach ($allpermission as $item)
                                             <div class="col-6 col-md-4 col-lg-3 my-2">
                                                 <div class="form-check">
-                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" style="width: 20px; height:20px; margin-left:1px; " name="permissions_ids[]" class="form-check-input" checked>
+                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" style="width: 20px; height:20px; margin-left:1px; " name="permissions_ids[]" class="form-check-input selectPermission">
 
                                                     <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.' . $item->name)}}</label>
                                                 </div>
                                             </div>
                                         @endforeach
-                                    @else
+                                    @else --}}
                                         @php
                                             $hisPermissionIds = $hisPermissions->pluck('id')->toArray();
                                         @endphp
@@ -92,14 +100,14 @@
                                                 <div class="form-check">
                                                     <!-- <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input"
                                                     style="width: 35px; height:35px; margin-left:5px;"> -->
-                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input"
+                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input selectPermission"
                                         style="width: 20px; height:20px; margin-left:1px; " {{ in_array($item->id, $hisPermissionIds) ? 'checked' : '' }} >
                                                     <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.' . $item->name)}}</label>
                                                 </div>
                                             </div>
                                         {{-- @endforeach --}}
                                     @endforeach
-                                    @endif
+                                    {{-- @endif --}}
                                 </div>
                             </div>
                         </div>
@@ -121,6 +129,17 @@
         </div>
 
     </section>
-
+    <script>
+        document.getElementById('selectAll').addEventListener('click', function(event) {
+            var selectAllChecked = event.target.checked;
+            var checkboxes = document.querySelectorAll('.selectPermission');
+        
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAllChecked;
+            });
+        });
+        </script>
+    
 
 @endsection
+

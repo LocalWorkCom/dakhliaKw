@@ -14,4 +14,9 @@ class Government extends Model
     protected $fillable = [
         'name'
     ];
+    public function region()
+    {
+        return $this->hasMany(outgoings::class);
+
+    }
 }

@@ -127,7 +127,6 @@
                     </a>
                 </li>
                 @endif
-
                 @if (Auth::user()->hasPermission('view departements') && Auth::user()->rule_id == 2 )
                 <li class="nav-item" >
                     <a href="{{ route('departments.index') }}">

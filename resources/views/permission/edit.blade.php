@@ -51,6 +51,9 @@
                                 <option value="edit" {{ $permissionAction == 'edit' ? 'selected' : '' }}>تعديل</option>
                                 <option value="create" {{ $permissionAction == 'create' ? 'selected' : '' }}>اضافة</option>
                                 <option value="delete" {{ $permissionAction == 'delete' ? 'selected' : '' }}>ازالة</option>
+                                <option value="download" {{ $permissionAction == 'download' ? 'selected' : '' }}>تحميل</option>
+                                <option value="archive" {{ $permissionAction == 'archive' ? 'selected' : '' }}>ارشفة</option>
+                                <option value="add_archive" {{ $permissionAction == 'add_archive' ? 'selected' : '' }}> اضافة ارشفة</option>
                             </select>
                         </div> </div>
 

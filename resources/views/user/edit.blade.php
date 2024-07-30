@@ -60,6 +60,65 @@
 
                 <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
+
+                    <div class="form-row pt-5 pb-3 d-flex justify-content-around flex-row-reverse"
+                        style="background-color:#f5f8fd; border-bottom:0.1px solid lightgray;">
+                        <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
+                            <div class="radio-btns mx-md-4 ">
+
+                                @if ($user->type == "man")
+                                <input type="radio" class="form-check-input" id="male" name="gender" value="man"
+                                    style="height:20px; width:20px;" checked>
+                                <label class="form-check-label mx-2" for="male">ذكر</label>
+                            </div>
+                            <div class="radio-btns mx-md-4 ">
+                                <input type="radio" class="form-check-input" id="female" name="gender" value="female"
+                                    style="height:20px; width:20px;">
+                                <label class="form-check-label mx-2" for="female">انثى</label>
+                            </div>
+                            @else
+                            <div class="radio-btns mx-md-4 ">
+                                <input type="radio" class="form-check-input" id="male" name="gender" value="man"
+                                    style="height:20px; width:20px;">
+                                <label class="form-check-label mx-2" for="male">ذكر</label>
+                            </div>
+                            <div class="radio-btns mx-md-4 ">
+                                <input type="radio" class="form-check-input" id="female" name="gender" value="female"
+                                    style="height:20px; width:20px;" checked>
+                                <label class="form-check-label mx-2" for="female">انثى</label>
+                            </div>
+                            @endif
+                            <label for="input44">الفئة</label>
+                        </div>
+                        <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
+                           
+                                @if ($user->employee_type == "civil")
+                                <div class="radio-btns mx-md-4 ">
+                                <input type="radio" class="form-check-input" id="solder" name="solderORcivil"
+                                    value="military" style="height:20px; width:20px;">
+                                <label class="form-check-label mx-2" for="solder">عسكرى</label>
+                            </div>
+                            <div class="radio-btns mx-md-4 ">
+                                <input type="radio" class="form-check-input" id="civil" name="solderORcivil"
+                                    value="civil" style="height:20px; width:20px;" checked>
+                                <label class="form-check-label mx-2" for="civil">مدنى</label>
+                            </div>
+                            @else
+                            <div class="radio-btns mx-md-4 ">
+                                <input type="radio" class="form-check-input" id="solder" name="solderORcivil"
+                                    value="military" style="height:20px; width:20px;" checked>
+                                <label class="form-check-label mx-2" for="solder">عسكرى</label>
+                            </div>
+                            <div class="radio-btns mx-md-4 ">
+                                <input type="radio" class="form-check-input" id="civil" name="solderORcivil"
+                                    value="civil" style="height:20px; width:20px;">
+                                <label class="form-check-label mx-2" for="civil">مدنى</label>
+                            </div>
+                            @endif
+                            <label for="input44"> التصنيف</label>
+                        </div>
+                    </div>
+                    <br>
                     <div class="form-row mx-3 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-5 mx-2">
                             <label for="input1"> الاسم</label>
@@ -182,63 +241,7 @@
                         </div>
                     </div>
 
-                    <div class="form-row pt-5 pb-3 d-flex justify-content-around flex-row-reverse"
-                        style="background-color:#f5f8fd; border-bottom:0.1px solid lightgray;">
-                        <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
-                            <div class="radio-btns mx-md-4 ">
-
-                                @if ($user->type == "man")
-                                <input type="radio" class="form-check-input" id="male" name="gender" value="man"
-                                    style="height:20px; width:20px;" checked>
-                                <label class="form-check-label mx-2" for="male">ذكر</label>
-                            </div>
-                            <div class="radio-btns mx-md-4 ">
-                                <input type="radio" class="form-check-input" id="female" name="gender" value="female"
-                                    style="height:20px; width:20px;">
-                                <label class="form-check-label mx-2" for="female">انثى</label>
-                            </div>
-                            @else
-                            <div class="radio-btns mx-md-4 ">
-                                <input type="radio" class="form-check-input" id="male" name="gender" value="man"
-                                    style="height:20px; width:20px;">
-                                <label class="form-check-label mx-2" for="male">ذكر</label>
-                            </div>
-                            <div class="radio-btns mx-md-4 ">
-                                <input type="radio" class="form-check-input" id="female" name="gender" value="female"
-                                    style="height:20px; width:20px;" checked>
-                                <label class="form-check-label mx-2" for="female">انثى</label>
-                            </div>
-                            @endif
-                            <label for="input44">الفئة</label>
-                        </div>
-                        <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
-                           
-                                @if ($user->employee_type == "civil")
-                                <div class="radio-btns mx-md-4 ">
-                                <input type="radio" class="form-check-input" id="solder" name="solderORcivil"
-                                    value="military" style="height:20px; width:20px;">
-                                <label class="form-check-label mx-2" for="solder">عسكرى</label>
-                            </div>
-                            <div class="radio-btns mx-md-4 ">
-                                <input type="radio" class="form-check-input" id="civil" name="solderORcivil"
-                                    value="civil" style="height:20px; width:20px;" checked>
-                                <label class="form-check-label mx-2" for="civil">مدنى</label>
-                            </div>
-                            @else
-                            <div class="radio-btns mx-md-4 ">
-                                <input type="radio" class="form-check-input" id="solder" name="solderORcivil"
-                                    value="military" style="height:20px; width:20px;" checked>
-                                <label class="form-check-label mx-2" for="solder">عسكرى</label>
-                            </div>
-                            <div class="radio-btns mx-md-4 ">
-                                <input type="radio" class="form-check-input" id="civil" name="solderORcivil"
-                                    value="civil" style="height:20px; width:20px;">
-                                <label class="form-check-label mx-2" for="civil">مدنى</label>
-                            </div>
-                            @endif
-                            <label for="input44"> التصنيف</label>
-                        </div>
-                    </div>
+                    
            
             <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
                 <div class="form-group col-md-5 mx-md-2">
