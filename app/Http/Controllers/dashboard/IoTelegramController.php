@@ -74,15 +74,16 @@ class IoTelegramController extends Controller
         $external_departments = ExternalDepartment::all();
         $iotelegram_num = Iotelegram::orderBy('id', 'desc')->first();
         if ($iotelegram_num) {
-            $iotelegram_num = $iotelegram_num->id;
-        } else {
-            $iotelegram_num = 0;
-        }
-        $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
-        $iotelegram_num  = generateUniqueNumber($iotelegram_num)['counter'];
+            $record = $iotelegram_num->iotelegram_num;
 
+            $parts = explode('-', $record);
+            $counter = end($parts);
+        } else {
+            $counter = 0000;
+        }
+        $iotelegram_num = generateUniqueNumber($counter)['formattedNumber'];
         $users = User::where('department_id', auth()->user()->department_id)->get();
-        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments', 'iotelegram_num', 'outgoing_num', 'users'));
+        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments', 'iotelegram_num', 'users'));
     }
 
     /**
@@ -98,21 +99,22 @@ class IoTelegramController extends Controller
         }
         $iotelegram_num = Iotelegram::orderBy('id', 'desc')->first();
         if ($iotelegram_num) {
-            $iotelegram_num = $iotelegram_num->id;
+            $record = $iotelegram_num->iotelegram_num;
+
+            $parts = explode('-', $record);
+            $counter = end($parts);
         } else {
-            $iotelegram_num = 0;
+            $counter = 0000;
         }
 
 
-        $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
-        $iotelegram_num  = generateUniqueNumber($iotelegram_num)['counter'];
-
+        $iotelegram_num = generateUniqueNumber($counter)['formattedNumber'];
 
         $iotelegram = new Iotelegram();
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;
         $iotelegram->representive_id = $request->representive_id;
-        $iotelegram->outgoing_num = $outgoing_num;
+        $iotelegram->outgoing_num = $request->outgoing_num;
         $iotelegram->outgoing_date = $request->outgoing_date;
         $iotelegram->iotelegram_num = $iotelegram_num;
         $iotelegram->date = $request->date;
