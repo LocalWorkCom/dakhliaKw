@@ -136,22 +136,22 @@ if (!function_exists('UploadFiles')) {
 }
 function generateUniqueNumber($counter)
 {
-   
+
     //static $counter = 0 ; // Static variable to keep track of the counter
     $today = Carbon::today();
     $year = $today->year;
     $month = sprintf("%02d", $today->month); // Add leading zero if month is less than 10
     $day = sprintf("%02d", $today->day); // Add leading zero if day is less than 10
-    
+
     $formattedDate = $year . '-' . $month . $day;
-      // Increment the counter
-   
+    // Increment the counter
+
     $incrementedCounter = str_pad($counter + 1, 4, '0', STR_PAD_LEFT);
     //dd($incrementedCounter);
     //$incrementedCounter++;
     $formattedNumber = $formattedDate . '-' . $incrementedCounter;
 
-    return ['formattedNumber' => $formattedNumber, 'counter' => $counter+1];
+    return ['formattedNumber' => $formattedNumber, 'counter' => $counter + 1];
 }
 
 

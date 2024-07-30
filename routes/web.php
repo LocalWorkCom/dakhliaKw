@@ -89,7 +89,6 @@ Route::middleware(['auth'])->group(function () {
 
     // export
     //Start Export routes
-        //Route::resource('Export', outgoingController::class);
         Route::get('/export/all', [outgoingController::class, 'index'])->name('Export.index')->middleware('check.permission:view outgoings');
         Route::get('/export/{id}/edit', [outgoingController::class, 'edit'])->name('Export.edit')->middleware('check.permission:edit outgoings');
         Route::get('/export/{id}/show', [outgoingController::class, 'show'])->name('Export.show')->middleware('check.permission:view outgoings');
@@ -111,81 +110,80 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/downlaodfile/{id}', [outgoingController::class, 'downlaodfile'])->name('downlaodfile')->middleware('check.permission:download outgoing_files');
         //End Export routes
 
- Route::get('generateNumber/{counter}', [outgoingController::class, 'generateUniqueNumber']);
+        Route::get('generateNumber/{counter}', [outgoingController::class, 'generateUniqueNumber']);
         Route::get('getLatest', [outgoingController::class, 'getTheLatestExport']);
 
     
     // getDepartment
-    Route::get('api/department', [DepartmentController::class, 'getDepartment'])->name('api.department')->middleware('check.permission:view departements');
-    Route::get('api/sub_department', [DepartmentController::class, 'getSub_Department'])->name('api.sub_department')->middleware('check.permission:view departements');
-    Route::get('/sub_departments', [DepartmentController::class, 'index_1'])->name('sub_departments.index')->middleware('check.permission:view departements');
-    Route::get('/sub_departments/create', [DepartmentController::class, 'create_1'])->name('sub_departments.create')->middleware('check.permission:create departements');
-    Route::post('/sub_departments', [DepartmentController::class, 'store_1'])->name('sub_departments.store')->middleware('check.permission:edit departements');
-    Route::get('/sub_departments/{department}/edit', [DepartmentController::class, 'edit_1'])->name('sub_departments.edit')->middleware('check.permission:edit departements');
-    Route::put('/sub_departments/{department}', [DepartmentController::class, 'update_1'])->name('sub_departments.update')->middleware('check.permission:edit departements');
-    // Route::post('departments_store', [DepartmentController::class, 'store'])->middleware('check.permission:view departements');
-    // Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
-    // Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
-    Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index')->middleware('check.permission:view departements');
-    Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create')->middleware('check.permission:create departements');
-    Route::get('/departments/show/{department}', [DepartmentController::class, 'show'])->name('departments.show')->middleware('check.permission:view departements');
-    Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store')->middleware('check.permission:edit departements');
-    Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit')->middleware('check.permission:edit departements');
-    Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update')->middleware('check.permission:edit departements');
-    Route::get('departments/delete/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy')->middleware('check.permission:delete departements');;
-    // Route::resource('postmans', PostmanController::class);
-    Route::get('/postmans/create', [PostmanController::class, 'create'])->name('postmans.create')->middleware('check.permission:create Postman');
-    Route::post('/postmans', [PostmanController::class, 'store'])->name('postmans.store')->middleware('check.permission:edit Postman');
-    Route::get('/postmans/{postman}/edit', [PostmanController::class, 'edit'])->name('postmans.edit')->middleware('check.permission:edit Postman');
-    Route::put('/postmans/{postman}', [PostmanController::class, 'update'])->name('postmans.update')->middleware('check.permission:edit Postman');
+        Route::get('api/department', [DepartmentController::class, 'getDepartment'])->name('api.department')->middleware('check.permission:view departements');
+        Route::get('api/sub_department', [DepartmentController::class, 'getSub_Department'])->name('api.sub_department')->middleware('check.permission:view departements');
+        Route::get('/sub_departments', [DepartmentController::class, 'index_1'])->name('sub_departments.index')->middleware('check.permission:view departements');
+        Route::get('/sub_departments/create', [DepartmentController::class, 'create_1'])->name('sub_departments.create')->middleware('check.permission:create departements');
+        Route::post('/sub_departments', [DepartmentController::class, 'store_1'])->name('sub_departments.store')->middleware('check.permission:edit departements');
+        Route::get('/sub_departments/{department}/edit', [DepartmentController::class, 'edit_1'])->name('sub_departments.edit')->middleware('check.permission:edit departements');
+        Route::put('/sub_departments/{department}', [DepartmentController::class, 'update_1'])->name('sub_departments.update')->middleware('check.permission:edit departements');
+        // Route::post('departments_store', [DepartmentController::class, 'store'])->middleware('check.permission:view departements');
+        // Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
+        // Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
+        Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index')->middleware('check.permission:view departements');
+        Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create')->middleware('check.permission:create departements');
+        Route::get('/departments/show/{department}', [DepartmentController::class, 'show'])->name('departments.show')->middleware('check.permission:view departements');
+        Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store')->middleware('check.permission:edit departements');
+        Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit')->middleware('check.permission:edit departements');
+        Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update')->middleware('check.permission:edit departements');
+        Route::get('departments/delete/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy')->middleware('check.permission:delete departements');;
+        // Route::resource('postmans', PostmanController::class);
+        Route::get('/postmans/create', [PostmanController::class, 'create'])->name('postmans.create')->middleware('check.permission:create Postman');
+        Route::post('/postmans', [PostmanController::class, 'store'])->name('postmans.store')->middleware('check.permission:edit Postman');
+        Route::get('/postmans/{postman}/edit', [PostmanController::class, 'edit'])->name('postmans.edit')->middleware('check.permission:edit Postman');
+        Route::put('/postmans/{postman}', [PostmanController::class, 'update'])->name('postmans.update')->middleware('check.permission:edit Postman');
 
    
 
     //start government
-    Route::get('setting/government', [settingController::class, 'getAllgovernment'])->name('setting.getAllgovernment')->middleware('check.permission:view Government');
-    Route::get('setting/government/all', [settingController::class, 'indexgovernment'])->name('government.all')->middleware('check.permission:view Government');
-    Route::post('setting/government/add', [settingController::class, 'addgovernment'])->name('government.add')->middleware('check.permission:edit Government');
-    Route::get('setting/government/create', [settingController::class, 'creategovernment'])->name('government.create')->middleware('check.permission:create Government');
-    Route::post('setting/government/update', [settingController::class, 'updategovernment'])->name('government.update')->middleware('check.permission:edit Government');
-    Route::get('setting/government/edit/{id}', [settingController::class, 'editgovernment'])->name('government.edit')->middleware('check.permission:edit Government');
-    Route::get('setting/government/show/{id}', [settingController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
+        Route::get('setting/government', [settingController::class, 'getAllgovernment'])->name('setting.getAllgovernment')->middleware('check.permission:view Government');
+        Route::get('setting/government/all', [settingController::class, 'indexgovernment'])->name('government.all')->middleware('check.permission:view Government');
+        Route::post('setting/government/add', [settingController::class, 'addgovernment'])->name('government.add')->middleware('check.permission:edit Government');
+        Route::get('setting/government/create', [settingController::class, 'creategovernment'])->name('government.create')->middleware('check.permission:create Government');
+        Route::post('setting/government/update', [settingController::class, 'updategovernment'])->name('government.update')->middleware('check.permission:edit Government');
+        Route::get('setting/government/edit/{id}', [settingController::class, 'editgovernment'])->name('government.edit')->middleware('check.permission:edit Government');
+        Route::get('setting/government/show/{id}', [settingController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
     //endgovernment
 
     //start jobs
-    Route::get('setting/jobs', [settingController::class, 'getAlljob'])->name('setting.getAlljob')->middleware('check.permission:view job');
-    Route::get('setting/jobs/all', [settingController::class, 'indexjob'])->name('job.index')->middleware('check.permission:view job');
-    Route::post('setting/jobs/add', [settingController::class, 'addjob'])->name('job.add')->middleware('check.permission:edit job');
-    //Route::get('setting/jobs/create', [settingController::class,'createjob'])->name('job.create');
-    Route::post('setting/jobs/update', [settingController::class, 'updatejob'])->name('job.update')->middleware('check.permission:edit job');
-    //Route::get('setting/jobs/edit/{id}', [settingController::class,'editjob'])->name('job.edit');
-    Route::get('setting/jobs/show/{id}', [settingController::class, 'showjob'])->name('job.show')->middleware('check.permission:view job');
-    Route::post('setting/jobs/delete', [settingController::class, 'deletejob'])->name('job.delete')->middleware('check.permission:delete job');
+        Route::get('setting/jobs', [settingController::class, 'getAlljob'])->name('setting.getAlljob')->middleware('check.permission:view job');
+        Route::get('setting/jobs/all', [settingController::class, 'indexjob'])->name('job.index')->middleware('check.permission:view job');
+        Route::post('setting/jobs/add', [settingController::class, 'addjob'])->name('job.add')->middleware('check.permission:edit job');
+        //Route::get('setting/jobs/create', [settingController::class,'createjob'])->name('job.create');
+        Route::post('setting/jobs/update', [settingController::class, 'updatejob'])->name('job.update')->middleware('check.permission:edit job');
+        //Route::get('setting/jobs/edit/{id}', [settingController::class,'editjob'])->name('job.edit');
+        Route::get('setting/jobs/show/{id}', [settingController::class, 'showjob'])->name('job.show')->middleware('check.permission:view job');
+        Route::post('setting/jobs/delete', [settingController::class, 'deletejob'])->name('job.delete')->middleware('check.permission:delete job');
     //end jobs
     //start vacation type
-    Route::get('setting/vacationType', [settingController::class, 'getAllvacationType'])->name('setting.getAllvacationType')->middleware('check.permission:view VacationType');
-    Route::get('setting/vacationType/all', [settingController::class, 'indexvacationType'])->name('vacationType.index')->middleware('check.permission:view VacationType');
-    Route::post('setting/vacationType/add', [settingController::class, 'addvacationType'])->name('vacationType.add')->middleware('check.permission:edit VacationType');
-    //Route::get('setting/vacationType/create', [settingController::class,'createvacationType'])->name('vacationType.create');
-    Route::post('setting/vacationType/update', [settingController::class, 'updatevacationType'])->name('vacationType.update')->middleware('check.permission:edit VacationType');
-    //Route::post('setting/vacationType/edit', [settingController::class,'editvacationType'])->name('vacationType.edit');
-    Route::get('setting/vacationType/show/{id}', [settingController::class, 'showvacationType'])->name('vacationType.show')->middleware('check.permission:view VacationType');
-    Route::post('setting/vacationType/delete', [settingController::class, 'deletevacationType'])->name('vacationType.delete')->middleware('check.permission:delete VacationType');
+        Route::get('setting/vacationType', [settingController::class, 'getAllvacationType'])->name('setting.getAllvacationType');
+        Route::get('setting/vacationType/all', [settingController::class, 'indexvacationType'])->name('vacationType.index');
+        Route::post('setting/vacationType/add', [settingController::class, 'addvacationType'])->name('vacationType.add');
+        //Route::get('setting/vacationType/create', [settingController::class,'createvacationType'])->name('vacationType.create');
+        Route::post('setting/vacationType/update', [settingController::class, 'updatevacationType'])->name('vacationType.update');
+        //Route::post('setting/vacationType/edit', [settingController::class,'editvacationType'])->name('vacationType.edit');
+        Route::get('setting/vacationType/show/{id}', [settingController::class, 'showvacationType'])->name('vacationType.show');
+        Route::post('setting/vacationType/delete', [settingController::class, 'deletevacationType'])->name('vacationType.delete');
     //end vacation type
     //start gards
-    Route::get('setting/grads', [settingController::class, 'getAllgrads'])->name('setting.getAllgrads')->middleware('check.permission:view grade');
-    Route::get('setting/grads/all', [settingController::class, 'indexgrads'])->name('grads.index')->middleware('check.permission:view grade');
-    Route::post('setting/grads/add', [settingController::class, 'addgrads'])->name('grads.add')->middleware('check.permission:edit grade');
-    Route::post('setting/grads/update', [settingController::class, 'updategrads'])->name('grads.update')->middleware('check.permission:edit grade');
-    Route::get('setting/grads/show/{id}', [settingController::class, 'showgrads'])->name('grads.show')->middleware('check.permission:view grade');
-    Route::post('setting/grads/delete', [settingController::class, 'deletegrads'])->name('grads.delete')->middleware('check.permission:delete grade');
+        Route::get('setting/grads', [settingController::class, 'getAllgrads'])->name('setting.getAllgrads')->middleware('check.permission:view grade');
+        Route::get('setting/grads/all', [settingController::class, 'indexgrads'])->name('grads.index')->middleware('check.permission:view grade');
+        Route::post('setting/grads/add', [settingController::class, 'addgrads'])->name('grads.add')->middleware('check.permission:edit grade');
+        Route::post('setting/grads/update', [settingController::class, 'updategrads'])->name('grads.update')->middleware('check.permission:edit grade');
+        Route::get('setting/grads/show/{id}', [settingController::class, 'showgrads'])->name('grads.show')->middleware('check.permission:view grade');
+        Route::post('setting/grads/delete', [settingController::class, 'deletegrads'])->name('grads.delete')->middleware('check.permission:delete grade');
     //end grads
-    //Start qualifications
-    //Route::resource('setting/qualifications', qualificationController::class);
-    Route::get('setting/qualifications/all', [qualificationController::class, 'index'])->name('qualifications.index');
-    Route::get('setting/qualifications/ajax', [qualificationController::class, 'getqualification'])->name('getAllqualification');
-    Route::post('setting/qualifications/create', [qualificationController::class, 'store'])->name('qualification.store');
-    Route::post('setting/qualifications/edit', [qualificationController::class, 'update'])->name('qualification.update');
-    Route::post('setting/qualifications/delete', [qualificationController::class, 'destroy'])->name('qualification.delete');
+    //Start qualifications -------- Need middleware for gard
+        Route::get('setting/qualifications/all', [qualificationController::class, 'index'])->name('qualifications.index');
+        Route::get('setting/qualifications/ajax', [qualificationController::class, 'getqualification'])->name('getAllqualification');
+        Route::post('setting/qualifications/create', [qualificationController::class, 'store'])->name('qualification.store');
+        Route::post('setting/qualifications/edit', [qualificationController::class, 'update'])->name('qualification.update');
+        Route::post('setting/qualifications/delete', [qualificationController::class, 'destroy'])->name('qualification.delete');
 
     //End qualifications
     //setting end

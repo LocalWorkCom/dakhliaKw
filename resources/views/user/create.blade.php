@@ -50,8 +50,7 @@
 
                 {{-- {{dd($flag)}} --}}
 
-                <form action="{{ route('user.store') }}" method="post" class="text-right"
-                    enctype="multipart/form-data">
+                <form action="{{ route('user.store') }}" method="post" class="text-right" enctype="multipart/form-data">
                     @csrf
                     
                     @if ($flag == '1')
@@ -131,7 +130,7 @@
                     <label for="input7"> المهام</label>
                     <select id="input7" name="rule_id" class="form-control" placeholder="المهام">
                         @foreach ($rule as $item)
-                        <option value="{{ $item->id }}">  {{ $item->name }}</option>
+                        <option value="{{ $item->id }}"> {{ $item->name }}</option>
                         @endforeach
 
 
@@ -144,8 +143,7 @@
 
                 <div class="form-group col-md-5 mx-2">
                     <label for="input2"> البريد الالكتروني</label>
-                    <input type="text" id="input2" name="email" class="form-control"
-                        placeholder=" البريد الالكترونى" >
+                    <input type="text" id="input2" name="email" class="form-control" placeholder=" البريد الالكترونى">
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="input44"> المحافظة</label>
@@ -161,20 +159,17 @@
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="input44">العنوان 2</label>
-                    <input type="text" id="input44" name="address_2" class="form-control"
-                        placeholder="  العنوان">
+                    <input type="text" id="input44" name="address_2" class="form-control" placeholder="  العنوان">
                 </div>
             </div>
             <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                 <div class="form-group col-md-5 mx-2">
                     <label for="input44"> المنطقة</label>
-                    <input type="text" id="input44" name="region" class="form-control"
-                        placeholder="  المنطقة">
+                    <input type="text" id="input44" name="region" class="form-control" placeholder="  المنطقة">
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="input4"> رقم الهاتف</label>
-                    <input type="text" id="input4" name="phone" class="form-control"
-                        placeholder=" رقم الهاتف">
+                    <input type="text" id="input4" name="phone" class="form-control" placeholder=" رقم الهاتف">
                 </div>
             </div>
             <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
@@ -185,16 +180,14 @@
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="input66">قطاع </label>
-                    <input type="text" id="input66" name="sector" class="form-control"
-                        placeholder="قطاع ">
+                    <input type="text" id="input66" name="sector" class="form-control" placeholder="قطاع ">
                 </div>
             </div>
 
             <div class="form-row  mx-md-3 d-flex justify-content-center flex-row-reverse">
                 <div class="form-group col-md-5 mx-2">
                     <label for="input9"> المسمي الوظيفي</label>
-                    <input type="text" id="input9" name="job_title" class="form-control"
-                        placeholder="المسمي الوظيفي">
+                    <input type="text" id="input9" name="job_title" class="form-control" placeholder="المسمي الوظيفي">
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="input10">الجنسية</label>
@@ -384,7 +377,7 @@
 
 
 </div>
-</div>
+
 
 <div class="container col-10 mt-3 mb-3 ">
     <div class="form-row col-10 " dir="ltr">

@@ -68,124 +68,141 @@
         </div>
     </div>
     <div class="navbar navbar-expand-md mb-4" role="navigation" dir="rtl">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fa-solid fa-bars side-nav" ></i>
-          </button>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa-solid fa-bars side-nav"></i>
+        </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav  d-flex justify-content-between w-100">
-                <li class="nav-item" onclick="makeActive(this)">
+                <li class="nav-item" >
                     <a href="{{route('home')}}">
                         <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
                         <h6>الرئيسية</h6>
                     </a>
                 </li>
-                <li class="nav-item" onclick="makeActive(this)">
+                <li class="nav-item" >
                     <a href="{{ route('user.index',0) }}">
                         <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
                         <h6>المستخدمين</h6>
                     </a>
                 </li>
 
-                <li class="nav-item btn3" onclick="makeActive(this)>
-                    <a href="#">
-                        <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
-                        <h6 class=" btn3" onclick="toggleDropdown3()"> الموظفين <i class="fa-solid fa-angle-down"></i>
-                        </h6>
-                    </a>
-
-                </li>
-                <div id="dropdownMenu3" class="dropdown-menu3">
-                    <ul>
-                        <li >
-                        <img src="{{ asset('frontend/images/emploee.png') }}" alt="logo" style="margin-left: 7px;">
-                            <a href="{{ route('user.employees', 1) }}">الموظفين</a>
-                        </li>
-                        <li >
-                        {{-- <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo" style="margin-left: 7px;">
-                            <a href="{{ route('vacations.list') }}">الاجازات</a>
-                        </li> --}}
-                     <!--    <li >
-                            <a href="#">الشيفتات</a>
-                        </li> -->
-                        <!-- {{-- <li >
-                            <a href="#">الاجازات</a>
-                        </li> --}}
-                    </ul> -->
-
+                <div>
+                    <li class="nav-item btn3" onclick="toggleDropdown3(event)">
+                        <a href="#">
+                            <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
+                            <h6 class="btn3">الموظفين <i class="fa-solid fa-angle-down"></i></h6>
+                        </a>
+                        <!-- قائمة منسدلة -->
+                        <div id="dropdownMenu3" class="dropdown-menu3">
+                            <ul>
+                                <li>
+                                    <img src="{{ asset('frontend/images/employee.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="{{ route('user.employees', 1) }}">الموظفين</a>
+                                </li>
+                                <li>
+                                    {{-- <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo"
+                                    style="margin-left: 7px;">
+                                    <a href="{{ route('vacations.list') }}">الاجازات</a>
+                                    --}}
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                 </div>
 
 
-                <li class="nav-item" onclick="makeActive(this)">
+
+                @php
+                use App\Models\departements;
+                $checksubDepartment = departements::find(Auth::user()->department_id);
+                @endphp
+
+                @if ($checksubDepartment->parent_id == NULL && Auth::user()->hasPermission('view departements'))
+                <li class="nav-item" >
                     <a href="{{ route('sub_departments.index') }}">
                         <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
                         <h6>الاقسام</h6>
                     </a>
                 </li>
-                <li class="nav-item" onclick="makeActive(this)">
+                @endif
+
+                @if (Auth::user()->hasPermission('view departements') && Auth::user()->rule_id == 2 )
+                <li class="nav-item" >
                     <a href="{{ route('departments.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>الادارات</h6>
                     </a>
                 </li>
+                @endif
 
-                <li class="nav-item" onclick="makeActive(this)">
-                    <a href="#">
-                        <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
-                        <h6 class=" btn4" onclick="toggleDropdown4()"> الاعدادات <i class="fa-solid fa-angle-down"></i>
-                        </h6>
+                <div>
+    <li class="nav-item" onclick="toggleDropdown4(event)">
+        <a href="#" >
+            <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
+            <h6 class="btn4">الإعدادات <i class="fa-solid fa-angle-down"></i></h6>
+        </a>
+        <!-- قائمة منسدلة -->
+        <div id="dropdownMenu4" class="dropdown-menu4">
+            <ul>
+                <li>
+                 
+                   <img src="{{ asset('frontend/images/police.svg') }}" alt="logo" style="margin-left: 7px;">
+                   <a href="{{ route('grads.index') }}">الرتب العسكرية</a>
+                 
+                </li>
+                <li>
+                    <img src="{{ asset('frontend/images/jobs.svg') }}" alt="logo" style="margin-left: 7px;">
+                    <a href="{{ route('job.index') }}">الوظائف</a>
+                </li>
+                <li>
+                    <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
+                    <a href="{{ route('government.all') }}">المحافظات</a>
+                </li>
+                <li>
+                    <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo" style="margin-left: 7px;">
+                    <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
+                </li>
+                @if (Auth::user()->hasPermission('view Permission'))
+                <li>
+                    <img src="{{ asset('frontend/images/task.svg') }}" alt="logo" style="margin-left: 7px;">
+                    <a href="{{ route('rule.index') }}">المهام</a>
+                </li>
+                <li>
+                    <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo" style="margin-left: 7px;">
+                    <a href="{{ route('permission.index') }}">الصلاحيات</a>
+                </li>
+                @endif
+            </ul>
+        </div>
+    </li>
+</div>
+
+
+                @if (Auth::user()->hasPermission('view Iotelegram'))
+                <li class="nav-item" >
+
+                    <a href="{{ route('iotelegrams.list') }}">
+                        <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
+                        <h6>الوارد</h6>
                     </a>
                 </li>
-                <div id="dropdownMenu4" class="dropdown-menu4">
+                @endif
 
-                    <ul >
-                        <li >
-                        <img src="{{ asset('frontend/images/police.png') }}" alt="logo" style="margin-left: 7px;">
-                            <a href="{{ route('grads.index') }}">الرتب العسكريه</a>
-                        </li>
-                        <li >
-                        <img src="{{ asset('frontend/images/jobs.png') }}" alt="logo" style="margin-left: 7px;">
-                            <a href="{{ route('job.index') }}">الوظائف</a>
-                        </li>
-                        <li >
-                        <img src="{{ asset('frontend/images/map.png') }}" alt="logo" style="margin-left: 7px;">
-                            <a href="{{ route('government.all') }}">المحافظات</a>
-                        </li>
-                        <li >
-                        <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo" style="margin-left: 7px;">
-                            <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
-                        </li>
-                        <li >
-                        <img src="{{ asset('frontend/images/task.png') }}" alt="logo" style="margin-left: 7px;">
-                            <a href="{{ route('rule.index') }}">المهام</a>
-                        </li>
-                        <li >
-                        <img src="{{ asset('frontend/images/permission.png') }}" alt="logo" style="margin-left: 7px;">
-                            <a href="{{ route('permission.index') }}">الصلاحيات</a>
-                        </li>
-                    </ul>
-                </div>
+                @if (Auth::user()->hasPermission('view outgoings'))
+                <li class="nav-item" >
+                    <a href="{{ route('Export.index') }}">
+                        <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
+                        <h6>الصادر</h6>
 
-
-        <li class="nav-item" onclick="makeActive(this)">
-
-            <a href="{{ route('iotelegrams.list') }}">
-            <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
-                <h6>الوارد</h6>
-            </a>
-        </li>
-
-        <li class="nav-item" onclick="makeActive(this)">
-            <a href="{{ route('Export.index') }}">
-            <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
-                <h6>الصادر</h6>
-
-            </a>
-        </li>
+                    </a>
+                </li>
+                @endif
 
 
 
-
-        </ul>
+            </ul>
+        </div>
     </div>
-</div>
 </div>
