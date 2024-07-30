@@ -164,7 +164,8 @@
 
                         </div>
                         <div class="form-group">
-                            <label for="manger">المدير</label>
+                            <label for="mangers">المدير</label>
+
                             <select name="manger" id="mangers" class="form-control">
                                 <option value="">اختر المدير </option>
                                 @foreach($users as $user)

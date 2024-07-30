@@ -133,6 +133,8 @@ class DepartmentController extends Controller
 
     public function getEmployeesByDepartment($departmentId)
     {
+        // $currentEmployees = $department->employees()->pluck('id')->toArray();
+
         try {
             $employees = User::where('department_id', $departmentId)->get();
             return response()->json($employees);
@@ -293,6 +295,27 @@ class DepartmentController extends Controller
         ]);
 
         $department->update($request->all());
+
+        if($request->has('employess'))
+          {
+            foreach($request->employess as $item)
+            {
+                // dd($item);
+
+                $user = User::find($item);
+
+                $log = DB::table('user_departments')->updateOrInsert([
+                    'user_id' => $user->id,
+                    'department_id' => $departements->id,
+                    'flag' => "1",
+                    'created_at' => now(),
+                ]);
+
+                $user = User::find($item);
+                $user->department_id = $departements->id;
+                $user->save();
+            }
+          }
         return redirect()->route('departments.index')->with('success', 'Department updated successfully.');
         // return response()->json($department);
     }
