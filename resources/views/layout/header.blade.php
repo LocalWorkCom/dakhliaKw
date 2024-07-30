@@ -165,10 +165,10 @@
                         </li>
                         @endif
                         {{-- @if (Auth::user()->hasPermission('view Region')) --}}
-                        <li >
+                        {{-- <li >
                         <img src="{{ asset('frontend/images/map.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('regions.index') }}">المناطق</a>
-                        </li>
+                        </li> --}}
                         {{-- @endif --}}
                         {{-- @if (Auth::user()->hasPermission('view Qualification')) --}}
                         <li >
