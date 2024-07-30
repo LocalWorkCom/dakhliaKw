@@ -249,11 +249,11 @@
                 </div>
             </div>
             <div class="form-row mx-md-3  d-flex justify-content-center flex-row-reverse">
-                <div class="form-group col-md-5 mx-2">
+                {{-- <div class="form-group col-md-5 mx-2">
                     <label for="input22">مدة الخدمة</label>
                     <input type="number" id="input22" name="end_of_service" class="form-control"
                         placeholder="مدة الخدمة ">
-                </div>
+                </div> --}}
                 <div class="form-group col-md-5 mx-2">
                     <label for="input24"> الرتبة</label>
                     <select id="input24" name="grade_id" class="form-control" placeholder="الرتبة">

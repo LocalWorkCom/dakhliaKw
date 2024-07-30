@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Permission;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Rules\UniqueModelName;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -62,14 +63,13 @@ class PermissionController extends Controller
     public function getPermision()
     {
         $data = Permission::all();
-       
+
         return DataTables::of($data)->addColumn('action', function ($row) {
-            
-            return '<button class="btn btn-primary btn-sm">Edit</button>'
-                    ;
+
+            return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
-        ->rawColumns(['action'])
-        ->make(true);
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**
@@ -87,7 +87,7 @@ class PermissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request , PermissionRoleDataTable $dataTable)
+    public function store(Request $request, PermissionRoleDataTable $dataTable)
     {
         // dd($request);
         $messages = [
@@ -99,44 +99,56 @@ class PermissionController extends Controller
 
             // Add more custom messages here
         ];
-        
+       $nameModel = $request->name . " " . $request->model;
+    //    dd($nameModel);
         $validatedData = Validator::make($request->all(), [
             'model' => [
                 'required',
                 'string',
                 'max:255',
-                // ValidationRule::unique('permissions', 'guard_name'),
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueModelName($nameModel),
             ],
             'name' => 'required|unique:permissions,name',
-            
-        ], $messages);
-    
-    
 
-    // Handle validation failure
-    if ($validatedData->fails()) {
-        return redirect()->back()->withErrors($validatedData)->withInput();
-    }
-        
+        ], $messages);
+
+
+
+        // Handle validation failure
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
+
 
         $nameModel = $request->name . " " . $request->model;
+        
 
         try {
-            // dd();
-            // $modelClass = 'App\\Models\\' . $request->model;
-            $modelClass = $request->model;
-            // Create the permission
-            $permission = new Permission();
-            $permission->name = $nameModel;
-            $permission->guard_name = $modelClass;
-            $permission->save();
-// dd($permission);
-            DB::insert('INSERT INTO model_has_permissions (permission_id , model_type ,model_id ) VALUES (?, ?, ?)', [
-                $permission->id,
-                $request->name,
-                $request->model, // or specify your guard name if different
 
-            ]);
+            $existornot = Permission::where('name', $nameModel)->withTrashed()->first();
+           
+
+            if ($existornot) {
+                $existornot->restore();
+                // dd($existornot);
+            } else {
+                // dd();
+                // $modelClass = 'App\\Models\\' . $request->model;
+                $modelClass = $request->model;
+                // Create the permission
+                $permission = new Permission();
+                $permission->name = $nameModel;
+                $permission->guard_name = $modelClass;
+                $permission->save();
+                // dd($permission);
+                DB::insert('INSERT INTO model_has_permissions (permission_id , model_type ,model_id ) VALUES (?, ?, ?)', [
+                    $permission->id,
+                    $request->name,
+                    $request->model, // or specify your guard name if different
+
+                ]);
+            }
             return view('permission.view');
             // return response()->json("ok");
             // dd("sara");
@@ -157,36 +169,36 @@ class PermissionController extends Controller
     {
         //
         $permission = Permission::find($id);
-    $models = $this->getAllModels();
-    // dd($models);
-    
-    // Split the name into action and model parts
-    $nameParts = explode(' ', $permission->name);
-    $permissionAction = $nameParts[0] ?? '';
-    $permissionModel = $nameParts[1] ?? '';
-    // dd($permissionAction);
+        $models = $this->getAllModels();
+        // dd($models);
 
-    return view('permission.show', compact('permission', 'models', 'permissionAction', 'permissionModel'));
+        // Split the name into action and model parts
+        $nameParts = explode(' ', $permission->name);
+        $permissionAction = $nameParts[0] ?? '';
+        $permissionModel = $nameParts[1] ?? '';
+        // dd($permissionAction);
+
+        return view('permission.show', compact('permission', 'models', 'permissionAction', 'permissionModel'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-   public function edit($id)
-{
-    // dd($id);
-    $permission = Permission::find($id);
-    $models = $this->getAllModels();
-    // dd($models);
-    
-    // Split the name into action and model parts
-    $nameParts = explode(' ', $permission->name);
-    $permissionAction = $nameParts[0] ?? '';
-    $permissionModel = $nameParts[1] ?? '';
-    // dd($permissionAction);
+    public function edit($id)
+    {
+        // dd($id);
+        $permission = Permission::find($id);
+        $models = $this->getAllModels();
+        // dd($models);
 
-    return view('permission.edit', compact('permission', 'models', 'permissionAction', 'permissionModel'));
-}
+        // Split the name into action and model parts
+        $nameParts = explode(' ', $permission->name);
+        $permissionAction = $nameParts[0] ?? '';
+        $permissionModel = $nameParts[1] ?? '';
+        // dd($permissionAction);
+
+        return view('permission.edit', compact('permission', 'models', 'permissionAction', 'permissionModel'));
+    }
 
 
     public function update(Request $request, Permission $permission)
@@ -200,7 +212,7 @@ class PermissionController extends Controller
 
             // Add more custom messages here
         ];
-        
+
         $validatedData = Validator::make($request->all(), [
             'model' => [
                 'required',
@@ -209,15 +221,15 @@ class PermissionController extends Controller
                 // ValidationRule::unique('permissions', 'guard_name'),
             ],
             'name' => 'required|unique:permissions,name',
-            
-        ], $messages);
-    
-    
 
-    // Handle validation failure
-    if ($validatedData->fails()) {
-        return redirect()->back()->withErrors($validatedData)->withInput();
-    }
+        ], $messages);
+
+
+
+        // Handle validation failure
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
         $nameModel = $request->name . " " . $request->model;
 
         try {
@@ -251,7 +263,7 @@ class PermissionController extends Controller
     public function destroy($id)
     {
         //
-        $permission =Permission::findOrFail($id);
+        $permission = Permission::findOrFail($id);
         $permission->delete();
         return view('permission.view');
     }

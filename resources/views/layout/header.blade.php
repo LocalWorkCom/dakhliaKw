@@ -126,6 +126,14 @@
                         </a>
                     </li>
                 @endif
+                @if ($checksubDepartment->parent_id != NULL && Auth::user()->hasPermission('view departements'))
+                    <li class="nav-item" onclick="makeActive(this)">
+                        <a href="{{ route('sub_departments.index') }}">
+                            <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
+                            <h6>الاقسام</h6>
+                        </a>
+                    </li>
+                @endif
                 
                 @if (Auth::user()->hasPermission('view departements') && Auth::user()->rule_id == 2 )
                 <li class="nav-item" onclick="makeActive(this)">
