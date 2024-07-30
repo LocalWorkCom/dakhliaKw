@@ -68,10 +68,19 @@
                     <div class="form-group col-md-10">
                             <div class="row">
                                 <label for="department" class="col-12">الصلاحية</label>
+
+                                <div class="col-12 my-2">
+                                    <div class="form-check">
+                                        <input type="checkbox" id="selectAll" style="width: 20px; height:20px; margin-left:1px;" class="form-check-input">
+                                        <label class="form-check-label m-1" for="selectAll">اختار الكل</label>
+                                    </div>
+                                </div>
+
+
                                 @foreach ($allPermission as $item)
                                 <div class="col-6 col-md-4 col-lg-3 my-2">
                                     <div class="form-check">
-                                        <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input"
+                                        <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" name="permissions_ids[]" class="form-check-input selectPermission"
                                         style="width: 30px; height:30px; margin-left:1px;  ">
                                         <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}" style="font-size:20px;"> {{__('permissions.' . $item->name)}}</label>
                                     </div>
@@ -106,6 +115,17 @@
 
 
     </section>
+<script>
+        document.getElementById('selectAll').addEventListener('click', function(event) {
+            var selectAllChecked = event.target.checked;
+            var checkboxes = document.querySelectorAll('.selectPermission');
+        
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAllChecked;
+            });
+        });
+        </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

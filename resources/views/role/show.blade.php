@@ -68,11 +68,11 @@
                     <div class="form-group col-md-10">
                                 <div class="row">
                                     <label for="department" class="col-12">الصلاحية</label>
-                                    @if ($rule_permission->name == 'admin')
+                                    @if ($rule_permission->id == 2)
                                         @foreach ($allpermission as $item)
                                             <div class="col-6 col-md-4 col-lg-3 my-2">
                                                 <div class="form-check">
-                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" style="width: 20px; height:20px; margin-left:1px; " name="permissions_ids[]" class="form-check-input" disabled>
+                                                    <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}" style="width: 20px; height:20px; margin-left:1px; " name="permissions_ids[]" class="form-check-input" checked disabled>
                                                     <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}">{{__('permissions.' . $item->name)}}</label>
                                                 </div>
                                             </div>

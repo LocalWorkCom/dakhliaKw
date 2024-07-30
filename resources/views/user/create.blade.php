@@ -255,34 +255,34 @@
                     </div>
                 </div>
 
-                <div class="form-row mx-md-3  d-flex justify-content-center flex-row-reverse">
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="input19">تاريخ الميلاد</label>
-                        <input type="date" id="input19" name="date_of_birth" class="form-control"
-                            placeholder="تاريخ الميلاد">
-                    </div>
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="input20">تاريخ الالتحاق</label>
-                        <input type="date" id="input20" name="joining_date" class="form-control"
-                            placeholder="تاريخ الالتحاق">
-                    </div>
+            <div class="form-row mx-md-3  d-flex justify-content-center flex-row-reverse">
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input19">تاريخ الميلاد</label>
+                    <input type="date" id="input19" name="date_of_birth" class="form-control"
+                        placeholder="تاريخ الميلاد">
                 </div>
-                <div class="form-row mx-md-3  d-flex justify-content-center flex-row-reverse">
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="input22">مدة الخدمة</label>
-                        <input type="number" id="input22" name="end_of_service" class="form-control"
-                            placeholder="مدة الخدمة ">
-                    </div>
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="input24"> الرتبة</label>
-                        <select id="input24" name="grade_id" class="form-control" placeholder="الرتبة">
-                            @foreach ($grade as $item)
-                                <option value="{{ $item->id }}" {{ $item->name == 'عسكرى' ? 'selected' : '' }}>
-                                    {{ $item->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input20">تاريخ الالتحاق</label>
+                    <input type="date" id="input20" name="joining_date" class="form-control"
+                        placeholder="تاريخ الالتحاق">
+                </div>
+            </div>
+            <div class="form-row mx-md-3  d-flex justify-content-center flex-row-reverse">
+                {{-- <div class="form-group col-md-5 mx-2">
+                    <label for="input22">مدة الخدمة</label>
+                    <input type="number" id="input22" name="end_of_service" class="form-control"
+                        placeholder="مدة الخدمة ">
+                </div> --}}
+                <div class="form-group col-md-5 mx-2">
+                    <label for="input24"> الرتبة</label>
+                    <select id="input24" name="grade_id" class="form-control" placeholder="الرتبة">
+                        @foreach ($grade as $item)
+
+                        <option value="{{ $item->id }}" {{ $item->name == "عسكرى" ? 'selected':'' }}> {{ $item->name }}
+                        </option>
+                        @endforeach
+                    </select>
+
                 </div>
 
                 <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
