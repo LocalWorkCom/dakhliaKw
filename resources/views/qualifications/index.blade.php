@@ -22,15 +22,22 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
+                        {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
                         <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
+                        {{-- @endif --}}
                     </div>
+                    
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white ">
-
+                        @if (session()->has('message'))
+                        <div class="alert alert-info">
+                            {{ session('message') }}
+                        </div>
+                    @endif
                         <div>
                             <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>

@@ -87,21 +87,19 @@
                             </div>
                         </div>
 
-                        <div class="form-row  mx-2 d-flex justify-content-center flex-row-reverse">
+                        <div class="form-row mx-2 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-10 mx-2">
                                 <label for="input8">الوظيفة</label>
-                                <select class="custom-select custom-select-lg mb-3" name="job" id="job">
-                                    <option selected disabled>Open this select menu</option>
+                                <select id="input8" name="job" class="form-control" placeholder="المهام">
                                     @foreach ($job as $item)
-                                    <option value="{{ $item->id }}" {{ $user->job == $item->id ? 'selected' : ''}}>
+                                    <option value="{{ $item->id }}" {{ $user->job_id == $item->id ? 'selected' : ''}}>
                                         {{ $item->name }}
                                     </option>
                                     @endforeach
                                 </select>
-                                {{-- <input type="text" id="input8" name="job" class="form-control"
-                                        placeholder="الوظيفة" value="{{ $user->job }}"> --}}
                             </div>
                         </div>
+                        
 
                         <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-5 mx-2">
@@ -131,11 +129,17 @@
 
                         @if ($user->flag == "user")
                         <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
+
                             <div class="form-group col-md-5 mx-2">
-                                <label for="input3"> الباسورد</label>
-                                <input type="password" id="input3" name="password" class="form-control"
-                                    placeholder="الباسورد">
+                                <label for="input3">الباسورد</label>
+                                <div class="password-container">
+                                    <input type="password" id="input3" name="password" class="form-control" placeholder="الباسورد" >
+                                    <label class="toggle-password" onclick="togglePasswordVisibility()">
+                                        <i id="toggleIcon" class="fa fa-eye"></i>
+                                    </label>
+                                </div>
                             </div>
+
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input7"> المهام</label>
                                 <select id="input7" name="rule_id" class="form-control" placeholder="المهام">
@@ -306,11 +310,13 @@
                         value="{{ $end_of_service }}">
                 </div>
 
+                   
                 <div class="form-group col-md-5 mx-2">
                     <label for="input24"> الرتبة</label>
                     <select id="input24" name="grade_id" class="form-control" placeholder="الرتبة">
                         @foreach ($grade as $item)
-                        <option value="{{ $item->id }}"> {{ $item->name }}</option>
+                        <option value="{{ $item->id }}" {{ $user->grade_id == $item->id ? 'selected' : ''}}>
+                            {{ $item->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -329,6 +335,34 @@
                         value="{{ $user->image }}">
                 </div>
             </div>
+            @if($user->image)
+                <label for="input23">الصورة</label>
+                    <div class="row">
+                        <div class="col-md-11 mb-3 px-5 mt-2">
+                            <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
+                            data-image="{{ asset($user->image) }}" data-title="{{ $user->image }}">
+                                <img src="{{ asset($user->image) }}" class="img-thumbnail mx-2"
+                                    alt="{{ $user->image }}">
+                            </a>
+                        </div>
+                    </div>
+            @endif
+            <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
+                        {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> --}}
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="modalImage" src="#" class="img-fluid" alt="صورة">
+                    </div>
+                </div>
+            </div>
+        </div>
 
         </div>
 
@@ -348,6 +382,35 @@
     </div>
 
 </section>
+<script>
+    function togglePasswordVisibility() {
+        var passwordField = document.getElementById('input3');
+        var toggleIcon = document.getElementById('toggleIcon');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        }
+    }
+    </script>
+  <script>
+    $(document).ready(function() {
+        $('.image-popup').click(function(event) {
+            event.preventDefault();
+            var imageUrl = $(this).data('image');
+            var imageTitle = $(this).data('title');
 
+            // Set modal image and title
+            $('#modalImage').attr('src', imageUrl);
+            $('#imageModalLabel').text(imageTitle);
 
+            // Show the modal
+            $('#imageModal').modal('show');
+        });
+    });
+</script>
 @endsection

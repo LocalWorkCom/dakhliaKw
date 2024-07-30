@@ -13,6 +13,7 @@ use App\Models\job;
 use App\Models\VacationType;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -22,80 +23,12 @@ class settingController extends Controller
     {
         $this->middleware('auth');
     }
-    //START government
-    //show governments
-    public function indexgovernment()
-    {
-        // $activeTab = $request->query('activeTab', 1); // Default to 1 if not present
-        // $message = $request->query('message', '');
-    return view("governments.index");
-    }
-    //create governments
-    public function creategovernment()
-    {
-        return view("governments.add");
-    }
-
-    //get data for governments
-    public function getAllgovernment()
-    {
-        $data = Government::orderBy('updated_at','desc')->orderBy('created_at','desc')->get();
-
-        return DataTables::of($data)->addColumn('action', function ($row) {
-            $name = "'$row->name'";
-            return '<a class="btn btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>' ;
-
-            // <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>
-        })
-        ->rawColumns(['action'])
-        ->make(true);
-    }
-    //add government
-    public function addgovernment(Request $request){
-       
-        $requestinput=$request->except('_token');
-        $job = new Government();
-        $job->name=$request->nameadd;
-        $job->save();
-        $message="تم اضافه الوظيفه";
-        return redirect()->route('government.all',compact('message'));
-        //return redirect()->back()->with(compact('activeTab','message'));
-    }
-    //show government
-    public function showgovernment($id)
-    {
-        $data = Government::findOrFail($id);
-        return view("governments.show" ,compact("data"));
-    }
-    //edit governments
-    public function editgovernment($id)
-    {
-        $data = Government::findOrFail($id);
-        return view("governments.edit" ,compact("data"));
-    }
-     //update governments
-     public function updategovernment(Request $request)
-     {
-        $gover = Government::find($request->id);
-
-        if (!$gover) {
-            return response()->json(['error' => 'هذه الماحفظه غير موجوده'], 404);
-        }
-        $gover->name=$request->name;
-        $gover->save();
-
-        $message='';
-        return redirect()->route('government.all',compact('message'));
-     }
-
-    //END government
+  
 
 //START JOB
     //show JOB
     public function indexjob()
     {
-        // $activeTab = $request->query('activeTab', 1); // Default to 1 if not present
-        // $message = $request->query('message', '');
     return view("jobs.index");
     }
     //create JOB
@@ -111,9 +44,16 @@ class settingController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
-            return '<a class="btn  btn-sm" style="background-color: #259240;"  onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>
-            <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
-            // <a class="btn btn-primary btn-sm" href=' . route('job.show', $row->id) . '>التفاصيل</a>
+            if(Auth::user()->hasPermission('edit job')){
+                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
+                
+            }
+            if(Auth::user()->hasPermission('delete job')){
+                $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+                
+            }
+            $uploadButton = $edit_permission . $delete_permission;
+            return $uploadButton;
 
         })
         ->rawColumns(['action'])
@@ -126,7 +66,7 @@ class settingController extends Controller
         ];
 
         $messages = [
-            'nameadd.required' => 'يجب ادخال اسم الشخص',
+            'nameadd.required' => 'يجب ادخال الوظيفه ',
         ];
 
         $validatedData = Validator::make($request->all(), $rules, $messages);
@@ -190,8 +130,6 @@ class settingController extends Controller
     //show GRAD
     public function indexgrads()
     {
-        // $activeTab = $request->query('activeTab', 1); // Default to 1 if not present
-        // $message = $request->query('message', '');
     return view("grads.index");
     }
     //create GRAD
@@ -207,8 +145,18 @@ class settingController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
-            return '<a class="btn  btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>
-            <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
+            if(Auth::user()->hasPermission('edit grade')){
+                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
+                
+            }
+            if(Auth::user()->hasPermission('delete grade')){
+                $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+                
+            }
+            $uploadButton = $edit_permission . $delete_permission;
+            return $uploadButton;
+            // return '<a class="btn  btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>
+            // <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
             // <a class="btn  btn-sm" href=' . route('grads.show', $row->id) . '>التفاصيل</a>
 
         })
@@ -222,7 +170,7 @@ class settingController extends Controller
         ];
 
         $messages = [
-            'nameadd.required' => 'يجب ادخال اسم الشخص',
+            'nameadd.required' => 'يجب ادخال اسم الرتبه ',
         ];
 
         $validatedData = Validator::make($request->all(), $rules, $messages);
@@ -233,7 +181,7 @@ class settingController extends Controller
         $job = new grade();
         $job->name=$request->nameadd;
         $job->save();
-        $message="تم اضافه الوظيفه";
+        $message="تم اضافه الرتبه";
         return redirect()->route('grads.index',compact('message'));
         //return redirect()->back()->with(compact('activeTab','message'));
     }
@@ -254,11 +202,11 @@ class settingController extends Controller
         $job = grade::find($request->id);
 
         if (!$job) {
-            return response()->json(['error' => 'Grade not found'], 404);
+            return response()->json(['error' => 'عفوا هذه الرتبه غير موجوده'], 404);
         }
         $job->name=$request->name;
         $job->save();
-        $message='';
+        $message='تم تعديل الرتبه';
         return redirect()->route('grads.index',compact('message'));
        // return redirect()->back()->with(compact('activeTab'));
 
@@ -286,9 +234,8 @@ class settingController extends Controller
       //show JOB
       public function indexvacationType()
       {
-          // $activeTab = $request->query('activeTab', 1); // Default to 1 if not present
-          // $message = $request->query('message', '');
-      return view("vacationType.index");
+          
+        return view("vacationType.index");
       }
       //create JOB
       public function createvacationType()
@@ -306,13 +253,18 @@ class settingController extends Controller
           return DataTables::of($data)->addColumn('action', function ($row) {
             $hiddenIds = [1, 2, 3, 4];
             $name = "'$row->name'";
-            $editButton = '<a class="btn  btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>';
-            if (!in_array($row->id, $hiddenIds)) {
-                $deleteButton = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>';
-                return $editButton . ' ' . $deleteButton;
-            }else{
-                return $editButton;
+            $edit_permission =null;
+            $delete_permission = null;
+            if(Auth::user()->hasPermission('edit VacationType')){
+                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
+            if(Auth::user()->hasPermission('delete VacationType')){
+                if (!in_array($row->id, $hiddenIds)) {
+                    $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';               
+                }
+            }
+            return $edit_permission . $delete_permission;
+           
           })
           ->rawColumns(['action'])
           ->make(true);
@@ -324,7 +276,7 @@ class settingController extends Controller
         ];
 
         $messages = [
-            'nameadd.required' => 'يجب ادخال اسم الشخص',
+            'nameadd.required' => 'يجب ادخال نوع الأجازه ',
         ];
 
         $validatedData = Validator::make($request->all(), $rules, $messages);
@@ -337,7 +289,7 @@ class settingController extends Controller
           $job->name=$request->nameadd;
           $job->save();
          
-          $message="تم اضافة الوظيفه";
+          $message="تم اضافة نوع الأجازه";
           return redirect()->route('vacationType.index',compact('message'));
           //return redirect()->back()->with(compact('activeTab','message'));
       }
@@ -358,11 +310,11 @@ class settingController extends Controller
           $job = VacationType::find($request->id);
 
           if (!$job) {
-              return response()->json(['error' => 'Grade not found'], 404);
+              return response()->json(['error' => 'هذه الأجازه غير موجوده'], 404);
           }
           $job->name=$request->name;
           $job->save();
-          $message='تم تعديل الاسم';
+          $message='تم تعديل نوع الأجازه';
           return redirect()->route('vacationType.index',compact('message'));
          // return redirect()->back()->with(compact('activeTab'));
 
@@ -388,140 +340,6 @@ class settingController extends Controller
 
 
 
-
-
-
-
-
-    public function getAllGrade()
-    {
-        $data = grade::get();
-
-        return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<button class="btn btn-primary btn-sm">Edit</button>';
-        })
-        ->rawColumns(['action'])
-        ->make(true);
-    }
-
-    public function getAllVacation()
-    {
-        $data = VacationType::get();
-
-        return DataTables::of($data)->addColumn('action', function ($row) {
-            return '<button class="btn btn-primary btn-sm">Edit</button>'
-                    ;
-        })
-        ->rawColumns(['action'])
-        ->make(true);
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-
-
-    public function addgrade(Request $request){
-        $requestinput=$request->except('_token');
-        $grade = grade::create($requestinput);
-        $activeTab=1;
-        $message="تم اضافة رتبه عسكريه جديده";
-        return redirect()->route('setting.index',compact('activeTab','message'));
-
-        //return redirect()->back()->with(compact('activeTab','message'));
-    }
-
-    public function addVacation(Request $request){
-        $request=$request->except('_token');
-        $vacation = VacationType::create($request);
-        $activeTab=3;
-        $message="تم اضافة نوع اجازه جديد";
-        return redirect()->route('setting.index',compact('activeTab','message'));
-    }
-
-
-
-    public function editgrade(Request $request ){
-
-       $grade = Grade::find($request->id);
-
-        if (!$grade) {
-            return response()->json(['error' => 'Grade not found'], 404);
-        }
-        $grade->name=$request->namegrade;
-        $grade->save();
-        $activeTab =$request->tab;
-        $message='';
-        return redirect()->route('setting.index',compact('activeTab','message'));
-    }
-
-    public function editVacation(Request $request ){
-        $type = VacationType::find($request->id);
-
-        if (!$type) {
-            return response()->json(['error' => 'Grade not found'], 404);
-        }
-        $type->name=$request->namegrade;
-        $type->save();
-
-        $activeTab =$request->tab;
-        $message='';
-        return redirect()->route('setting.index',compact('activeTab','message'));
-    }
-
-    public function deleteVacation(Request $request ){
-        $isForeignKeyUsed = DB::table('employee_vacations')->where('vacation_type_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);
-        if( $isForeignKeyUsed ){
-
-            $message='';
-
-
-        }else{
-            $type= VacationType::find($request->id);
-            $type->delete();
-            $message='';
-
-        }
-        $activeTab =3;
-        return redirect()->route('setting.index',compact('activeTab','message'));
-    }
-
-    public function deletegrade(Request $request ){
-        $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);
-        if( $isForeignKeyUsed ){
-            $message='';
-
-        }else{
-            $type= grade::find($request->id);
-            $type->delete();
-            $message='';
-
-        }
-        $activeTab =1;
-        return redirect()->route('setting.index',compact('activeTab','message'));
-        //return view("setting.view",compact('activeTab','message'));
-    }
-
-    // deletefunction
-    // public function deletegovernment(Request $request ){
-    //     $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
-    //     //dd($isForeignKeyUsed);
-    //     if( $isForeignKeyUsed ){
-    //         $message='';
-
-    //     }else{
-    //         $type= grade::find($request->id);
-    //         $type->delete();
-    //         $message='';
-
-    //     }
-    //     $activeTab =1;
-    //     return redirect()->route('setting.index',compact('activeTab','message'));
-    //     //return view("setting.view",compact('activeTab','message'));
-    // }
 
     /**
      * Store a newly created resource in storage.
