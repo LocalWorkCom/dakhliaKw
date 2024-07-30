@@ -363,6 +363,7 @@
                 ajax: '{{ url('setting/all/grade') }}', // Correct URL concatenation
                 columns: [{
                         data: 'id',
+                        sWidth: '50px',
                         name: 'id'
                     },
                     {
@@ -372,6 +373,7 @@
                     {
                         data: 'action',
                         name: 'action',
+                        sWidth: '100px',
                         orderable: false,
                         searchable: false
                     }

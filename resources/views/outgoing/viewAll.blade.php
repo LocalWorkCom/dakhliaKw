@@ -132,6 +132,7 @@
                 ajax: '{{ route('exports.view.all') }}', // Correct URL concatenation
                 columns: [{
                         data: 'num',
+                        sWidth: '120px',
                         name: 'num'
                     },
                     {
@@ -157,6 +158,7 @@
                     {
                         data: 'action',
                         name: 'action',
+                        sWidth: '100px',
                         orderable: false,
                         searchable: false
                     }

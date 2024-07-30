@@ -65,6 +65,7 @@
                             ajax: '{{ route('iotelegrams.get') }}', // Correct URL concatenation
                             columns: [{
                                     data: 'iotelegram_num',
+                                    sWidth: '120px',
                                     name: 'iotelegram_num'
                                 },
                                 {
@@ -106,6 +107,7 @@
                                 {
                                     data: 'action',
                                     name: 'action',
+                                    sWidth: '100px',
                                     orderable: false,
                                     searchable: false
                                 }

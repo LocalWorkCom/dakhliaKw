@@ -113,20 +113,28 @@
                     </ul> -->
 
                 </div>
+                @php
+                use App\Models\departements;
+                    $checksubDepartment = departements::find(Auth::user()->department_id);
+                @endphp
 
-
-                <li class="nav-item" onclick="makeActive(this)">
-                    <a href="{{ route('sub_departments.index') }}">
-                        <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
-                        <h6>الاقسام</h6>
-                    </a>
-                </li>
+                @if ($checksubDepartment->parent_id == NULL && Auth::user()->hasPermission('view departements'))
+                    <li class="nav-item" onclick="makeActive(this)">
+                        <a href="{{ route('sub_departments.index') }}">
+                            <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
+                            <h6>الاقسام</h6>
+                        </a>
+                    </li>
+                @endif
+                
+                @if (Auth::user()->hasPermission('view departements') && Auth::user()->rule_id == 2 )
                 <li class="nav-item" onclick="makeActive(this)">
                     <a href="{{ route('departments.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                         <h6>الادارات</h6>
                     </a>
                 </li>
+                @endif
 
                 <li class="nav-item" onclick="makeActive(this)">
                     <a href="#">
@@ -154,34 +162,38 @@
                         <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
                         </li>
-                        <li >
+                        @if (Auth::user()->hasPermission('view Permission'))
+                        <li>
                         <img src="{{ asset('frontend/images/task.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('rule.index') }}">المهام</a>
                         </li>
-                        <li >
+                        <li>
                         <img src="{{ asset('frontend/images/permission.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('permission.index') }}">الصلاحيات</a>
                         </li>
+                        @endif
                     </ul>
                 </div>
 
+            @if (Auth::user()->hasPermission('view Iotelegram'))
+                <li class="nav-item" onclick="makeActive(this)">
 
-        <li class="nav-item" onclick="makeActive(this)">
+                    <a href="{{ route('iotelegrams.list') }}">
+                    <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
+                        <h6>الوارد</h6>
+                    </a>
+                </li>
+            @endif
 
-            <a href="{{ route('iotelegrams.list') }}">
-            <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
-                <h6>الوارد</h6>
-            </a>
-        </li>
+            @if (Auth::user()->hasPermission('view outgoings'))
+                <li class="nav-item" onclick="makeActive(this)">
+                    <a href="{{ route('Export.index') }}">
+                    <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
+                        <h6>الصادر</h6>
 
-        <li class="nav-item" onclick="makeActive(this)">
-            <a href="{{ route('Export.index') }}">
-            <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
-                <h6>الصادر</h6>
-
-            </a>
-        </li>
-
+                    </a>
+                </li>
+            @endif
 
 
 

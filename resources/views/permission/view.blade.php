@@ -55,7 +55,7 @@
                 serverSide: true,
                 ajax: '{{ url('api/permission') }}',
                 columns: [
-                    { data: 'id', name: 'id' },
+                    { data: 'id', sWidth: '50px', name: 'id' },
 
                     { data: 'name', name: 'name' },
 
@@ -67,9 +67,9 @@
                     //     }
                     // }
 
-                    { data: 'guard_name', name: 'guard_name' },
+                    { data: 'guard_name',sWidth: '60px', name: 'guard_name' },
 
-                    { data: 'action', name: 'action', orderable: false, searchable: false }
+                    { data: 'action', name: 'action',  sWidth: '100px', orderable: false, searchable: false }
                 ],
                 columnDefs: [{
                     targets: -1,

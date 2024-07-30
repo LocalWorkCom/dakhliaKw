@@ -63,11 +63,11 @@
                 serverSide: true,
                 ajax: '{{ url('api/rule') }}',
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'name', name: 'name' },
+                    { data: 'id', sWidth: '50px', name: 'id' },
+                    { data: 'name', sWidth: '60px',name: 'name' },
                     { data: 'permissions', name: 'permissions' },
-                    { data: 'department', name: 'department' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false }
+                    { data: 'department', sWidth: '60px', name: 'department' },
+                    { data: 'action', name: 'action',  sWidth: '100px', orderable: false, searchable: false }
                 ],
                 columnDefs: [{
                     targets: -1,

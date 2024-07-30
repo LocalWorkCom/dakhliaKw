@@ -29,7 +29,7 @@
                 @csrf
 
                 <div class="form-row mx-md-2 ">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-10 ">
                         <label for="name">الاسم</label>
                         <input type="text" class="form-control" value="{{ $data->name }}" name="name" id="name"
                             placeholder="الاسم" required>
