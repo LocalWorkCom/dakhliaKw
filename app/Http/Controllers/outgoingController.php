@@ -195,7 +195,6 @@ class outgoingController extends Controller
 
     public function store(Request $request)
     {
-        
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',

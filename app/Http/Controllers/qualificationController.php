@@ -126,15 +126,15 @@ class qualificationController extends Controller
      */
     public function destroy(Request $request)
     {
-        // $isForeignKeyUsed = DB::table('users')->where('qualification_id', $request->id)->exists();
-        // //dd($isForeignKeyUsed);
-        // if( $isForeignKeyUsed ){
-        //     return redirect()->route('qualifications.index')->with(['message' => 'لا يمكن حذف هذا المؤهل  يوجد موظفين له']);
-        // }else{
+        $isForeignKeyUsed = DB::table('users')->where('qualification_id', $request->id)->exists();
+        //dd($isForeignKeyUsed);
+        if( $isForeignKeyUsed ){
+            return redirect()->route('qualifications.index')->with(['message' => 'لا يمكن حذف هذا المؤهل  يوجد موظفين له']);
+        }else{
             $type= Qualifications::find($request->id);
             $type->delete();
             return redirect()->route('qualifications.index')->with(['message' => 'تم حذف المؤهل']);
 
-        // }
+        }
     }
 }
