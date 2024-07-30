@@ -175,70 +175,75 @@
     });
 
     // for file upload ******
-    function uploadFiles() {
-        console.log("uploadFiles");
+
+
+    function updateFileInput() {
+        var fileInput = document.getElementById('fileInput');
+        var filesNum = document.getElementById('files_num').value;
+        if (filesNum) {
+            fileInput.disabled = false;
+        } else {
+            fileInput.disabled = true;
+            document.getElementById('fileList').innerHTML = '';
+        }
+    }
+
+    function uploadFils() {
         const files = document.getElementById('fileInput').files;
         const fileList = document.getElementById('fileList');
-        // if ($('#files_num').length > 0) {
-        //     var max_num = $('#files_num').find('option:selected').val();
-        //     if (!max_num) {
-        //         alert("please choose file number");
-        //         return;
-        //     }
-        // } else {
-        //     max_num = 10;
-        // }
-        // if (files.length == 0) {
-        //     alert("please choose files");
-        //     return;
-
-        // }
-
-
+        const filesNum = parseInt(document.getElementById('files_num').value);
+        if (!filesNum) {
+            alert("Please choose the number of books first.");
+            document.getElementById('fileInput').value = '';
+            return;
+        }
+        if (files.length === 0) {
+            //alert("Please choose files.");
+            Swal.fire({
+                icon: 'warning',
+                title: 'خطأ',
+                text: 'من فضلك أختر الملفات المطلوبه',
+            });
+            return;
+        }
+        if (files.length > filesNum) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'خطأ',
+                text: 'لا يمكنك أضافه اكثر من' + filesNum + ' ملف.',
+            });
+            // alert('لا يمكنك أضافه اكثر من' + filesNum + ' ملف.');
+            document.getElementById('fileInput').value = '';
+            return;
+        }
+        if (files.length < filesNum) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'خطأ',
+                text: 'لا يمكن اضافه ملفات أقل من ' + filesNum + ' ملف.',
+            });
+            // alert('لا يمكن اضافه ملفات أقل من ' + filesNum + ' ملف.');
+            document.getElementById('fileInput').value = '';
+            return;
+        }
+        fileList.innerHTML = ''; // Clear previous list
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-
-            // Check if file with the same name already exists in the list
-            let fileExists = false;
-            Array.from(fileList.children).forEach(item => {
-                if (item.dataset.filename === file.name) {
-                    fileExists = true;
-                }
-            });
-            // if (files.length > max_num) {
-            //     alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
-            //     return;
-
-            // }
-            // console.log(fileList.children.length);
-            // if (fileList.children.length > max_num - 1) {
-            //     alert('لا يمكنك إضافة المزيد من الملفات.' + 'اكبر عدد ملفات هو ' + max_num);
-            //     return;
-            // }
-            // console.log(fileExists);
-
-            if (!fileExists) {
-                const listItem = document.createElement('li');
-                listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                listItem.dataset.filename = file.name; // Store filename as dataset attribute
-
-                const fileName = document.createElement('span');
-                fileName.textContent = file.name;
-
-                const deleteButton = document.createElement('button');
-                deleteButton.className = 'btn btn-danger btn-sm';
-                deleteButton.textContent = 'Delete';
-                deleteButton.onclick = function() {
-                    fileList.removeChild(listItem);
-                };
-
-                listItem.appendChild(fileName);
-                listItem.appendChild(deleteButton);
-                fileList.appendChild(listItem);
-            } else {
-                // alert('تنبيه لقد قمت باختيار نفس الملفات مرة اخري !');
-                // return;
-            }
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+            listItem.dataset.filename = file.name;
+            const fileName = document.createElement('span');
+            fileName.textContent = file.name;
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'btn btn-danger btn-sm';
+            deleteButton.textContent = 'Delete';
+            deleteButton.onclick = function() {
+                fileList.removeChild(listItem);
+                document.getElementById('fileInput').value = '';
+            };
+            listItem.appendChild(fileName);
+            listItem.appendChild(deleteButton);
+            fileList.appendChild(listItem);
         }
     }
 </script>

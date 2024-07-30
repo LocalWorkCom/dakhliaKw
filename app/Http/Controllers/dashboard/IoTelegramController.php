@@ -72,12 +72,15 @@ class IoTelegramController extends Controller
         $recieves = User::all();
         $departments = departements::all();
         $external_departments = ExternalDepartment::all();
-
-        $iotelegram_num = Iotelegram::max('id');
-        if (!$iotelegram_num) {
-            $iotelegram_num = 1;
+        $iotelegram_num = Iotelegram::orderBy('id', 'desc')->first();
+        if ($iotelegram_num) {
+            $iotelegram_num = $iotelegram_num->id;
+        } else {
+            $iotelegram_num = 0;
         }
         $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
+        $iotelegram_num  = generateUniqueNumber($iotelegram_num)['counter'];
+
         $users = User::where('department_id', auth()->user()->department_id)->get();
         return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments', 'iotelegram_num', 'outgoing_num', 'users'));
     }
@@ -93,14 +96,25 @@ class IoTelegramController extends Controller
                 'files.*' => 'mimes:jpeg,png,pdf|max:2048', // Adjust validation rules as needed
             ]);
         }
+        $iotelegram_num = Iotelegram::orderBy('id', 'desc')->first();
+        if ($iotelegram_num) {
+            $iotelegram_num = $iotelegram_num->id;
+        } else {
+            $iotelegram_num = 0;
+        }
+
+
+        $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
+        $iotelegram_num  = generateUniqueNumber($iotelegram_num)['counter'];
+
 
         $iotelegram = new Iotelegram();
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;
         $iotelegram->representive_id = $request->representive_id;
-        $iotelegram->outgoing_num = $request->outgoing_num;
+        $iotelegram->outgoing_num = $outgoing_num;
         $iotelegram->outgoing_date = $request->outgoing_date;
-        $iotelegram->iotelegram_num = $request->iotelegram_num;
+        $iotelegram->iotelegram_num = $iotelegram_num;
         $iotelegram->date = $request->date;
         $iotelegram->files_num = $request->files_num;
         $iotelegram->user_id = $request->user_id;
