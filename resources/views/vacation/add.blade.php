@@ -7,7 +7,7 @@
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                <li class="breadcrumb-item "><a href="/">الرئيسية</a></li>
                 @if ($id)
                     <li class="breadcrumb-item "><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
                 @endif
@@ -43,22 +43,22 @@
                             <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
                                 <option value="">اختر النوع</option>
                                 @foreach ($vacation_types as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="employee_id" style=" display: flex; justify-content: flex-start;">اسم الموظف</label>
-                            <select id="employee_id" name="employee_id" class="form-control" required @if ($id) disabled
-                                @endif>
+                            <select id="employee_id" name="employee_id" class="form-control" required
+                                @if ($id) disabled @endif>
                                 <option value="">اختر الموظف</option>
                                 @foreach ($employees as $item)
-                                <option value="{{ $item->id }}" @if ($id && $id==$item->id) selected @endif>
-                                    {{ $item->name }}</option>
+                                    <option value="{{ $item->id }}" @if ($id && $id == $item->id) selected @endif>
+                                        {{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
-                      
+
                     </div>
                     {{-- <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-2">
@@ -88,15 +88,27 @@
 
                     <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-md-2">
-                            <label for="date_to">تاريخ النهاية</label>
-                            <input type="date" id="date_to" name="date_to" class="form-control">
+                            <label for="days_num">عدد الايام</label>
+                            <input type="number" id="days_num" name="days_num" class="form-control">
                         </div>
+                     
                         <div class="form-group col-md-5 mx-2">
                             <label for="date_from">تاريخ البداية</label>
                             <input type="date" id="date_from" name="date_from" class="form-control" required>
                         </div>
                     </div>
-
+                    <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-md-2">
+                            <label for="vacation_type_id" style=" display: flex; justify-content: flex-start;">المحافظة</label>
+                            <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
+                                <option value="">اختر المحافظة</option>
+                                {{-- @foreach ($vacation_types as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach --}}
+                            </select>
+                        </div>
+                     
+                    </div>
                     <div class="form-row mx-md-2 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-10" id="reportImage-div" hidden>
                             <label for="reportImage">اضافة ملف</label>

@@ -101,9 +101,9 @@
                             <a href="{{ route('user.employees', 1) }}">الموظفين</a>
                         </li>
                         <li >
-                        {{-- <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo" style="margin-left: 7px;">
+                        <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo" style="margin-left: 7px;">
                             <a href="{{ route('vacations.list') }}">الاجازات</a>
-                        </li> --}}
+                        </li>
                      <!--    <li >
                             <a href="#">الشيفتات</a>
                         </li> -->

@@ -7,7 +7,7 @@
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                <li class="breadcrumb-item "><a href="/">الرئيسية</a></li>
                 @if ($id)
                     <li class="breadcrumb-item "><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
                 @endif

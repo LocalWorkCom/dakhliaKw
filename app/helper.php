@@ -193,3 +193,62 @@ function CheckStartVacationDate($id)
     }
     return false;
 }
+############################################## Vacation #######################################################################
+function GetEmployeeVacationType($employeeVacation)
+{
+    $introduce = 'مقدمة';
+    $exceeded = 'متجاوزة';
+    $current = 'حالية';
+    $notBegin = 'لم تبدأ بعد';
+    $finished = 'منتهية';
+    $today = date('Y-m-d');
+
+    $startDate = Carbon::parse($employeeVacation->start_date);
+    $daysNumber = $employeeVacation->days_number;
+
+    $expectedEndDate = $startDate->copy()->addDays($daysNumber);
+
+    // Save the calculated end date to  model
+    // $expected_date->toDateString();
+
+    if ($employeeVacation->status == 'Pending') {
+        return $introduce;
+    } else {
+
+        if ($employeeVacation->start_date > $today) {
+            return $notBegin;
+        } else if ($employeeVacation->start_date < $today && $expectedEndDate < $today) {
+            if ($employeeVacation->is_exceeded) {
+                return $exceeded;
+            } else {
+                return $finished;
+            }
+        } else {
+            return $current;
+        }
+    }
+}
+function VacationDaysLeft($employeeVacation)
+{
+    $startDate = $employeeVacation->start_date;
+    $daysNumber = $employeeVacation->days_number;
+    $today = date('Y-m-d');
+
+
+    $startDate = Carbon::parse($employeeVacation->start_date);
+    $daysNumber = $employeeVacation->days_number;
+
+    // Calculate the end date
+    $endDate = $startDate->copy()->addDays($daysNumber);
+
+    // Get today's date
+    $today = Carbon::today();
+
+    // Calculate the number of days left
+    $daysLeft = $today->diffInDays($endDate, false);
+
+    if ($daysLeft < 0) {
+        return -1;
+    }
+    return $daysLeft;
+}
