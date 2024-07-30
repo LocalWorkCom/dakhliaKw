@@ -396,7 +396,13 @@
 
 
 
-        </div>
+</div>
+
+
+<div class="container col-10 mt-3 mb-3 ">
+    <div class="form-row col-10 " dir="ltr">
+        <button class="btn-blue " type="submit">
+            اضافة </button>
     </div>
 
     <div class="container col-10 mt-3 mb-3 ">

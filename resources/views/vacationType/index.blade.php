@@ -66,7 +66,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body mt-3 mb-5">
                     <form class="edit-grade-form" id="add-form" action=" {{ route('vacationType.add') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -96,7 +96,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body mt-3 mb-5">
                     <form class="edit-grade-form" id="edit-form" action=" {{ route('vacationType.update') }}"
                         method="POST">
                         @csrf
