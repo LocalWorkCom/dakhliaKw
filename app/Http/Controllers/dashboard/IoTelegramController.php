@@ -234,34 +234,33 @@ class IoTelegramController extends Controller
     {
         $rules = [
             'name' => 'required|string',
-            'phone1' => 'required|unique:postmans,phone1|integer',
-            'phone2' => 'unique:postmans,phone2|integer',
+            'phone1' => 'required|unique:postmans,phone1|regex:/^[0-9]{8}$/',
+            'phone2' => 'unique:postmans,phone2|regex:/^[0-9]{8}$/',
             'national_id' => 'required|unique:postmans,national_id|integer',
             'modal_department_id' => 'required',
-
         ];
+        
 
         $messages = [
             'name.string' => 'يجب ان يكون الأسم حروف فقط',
             'name.required' => 'يجب ادخال اسم الشخص',
-
+        
             'phone1.required' => 'يجب ادخال الهاتف',
             'phone1.integer' => 'يجب ان يكون الهاتف ارقام',
             'phone1.unique' => 'رقم الهاتف 1 موجود بالفعل',
-
-
-            'phone2.required' => 'يجب ادخال الهاتف',
+            'phone1.regex' => 'يجب أن يكون الهاتف الكويتي مكونًا من 8 أرقام',
+        
             'phone2.integer' => 'يجب ان يكون الهاتف ارقام',
             'phone2.unique' => 'رقم الهاتف 2 موجود بالفعل',
-
-
+            'phone2.regex' => 'يجب أن يكون الهاتف الكويتي مكونًا من 8 أرقام',
+        
             'national_id.required' => 'يجب ادخال رقم الهوية',
             'national_id.integer' => 'يجب ان يكون رقم الهوية ارقام',
             'national_id.unique' => 'رقم الهوية موجود بالفعل',
-
-            'modal_department_id.required' => 'يجب ادخال اسم الادارة'
-
+        
+            'modal_department_id.required' => 'يجب ادخال اسم الادارة',
         ];
+        
         $validatedData = Validator::make($request->all(), $rules, $messages);
 
         if ($validatedData->fails()) {
