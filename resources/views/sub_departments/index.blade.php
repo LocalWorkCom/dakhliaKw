@@ -88,7 +88,7 @@
                         </div>
                         <div class="form-group">
                             <label for="manger">المدير</label>
-                            <select name="manger" class="form-control " id="manger" required>
+                            <select name="manger" class="form-control " id="mangered" required>
                             <option value="">اختار المدير</option>
                             @foreach($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -328,24 +328,44 @@ function submitedit(){
 //     });
 // });
 $(document).ready(function() {
-        $('#parent_idd').on('change', function() {
-            var departmentId = $(this).val();
-            console.log(departmentId);
-            if (departmentId) {
-                $.ajax({
-                    url: '/employees/by-department/' + departmentId,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        var selectedManager = $('#manger').val();
+    $('#parent_idd').on('change', function() {
+        var departmentId = $(this).val();
+        console.log(departmentId);
+
+        if (departmentId) {
+            $.ajax({
+                url: '/employees/by-department/' + departmentId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#mangered').empty();
                     $('#employees').empty();
-                    $('#manger').empty();
                     $.each(data, function(key, employee) {
-                        if (employee.id != selectedManager) {
-                        $('#employees').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
-                        }
-                        $('#manger').append('<option value="' + employee.id + '" class="pb-2">' + employee.name + '</option>');
+                        // if (employee.id != selectedManager) {
+                        //     $('#employees').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                        // }
+                        $('#mangered').append('<option value="' + employee.id + '">' + employee.name + '</option>');
                     });
+
+                    $('#mangered').on('change', function() {
+                        var selectedManager = $(this).val();
+                        console.log(selectedManager);
+                        $('#employees').empty();
+
+                        $.each(data, function(key, employee) {
+                        if (employee.id != selectedManager) {
+                            $('#employees').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                        }
+                        // $('#mangered').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                    });
+                       
+                    });
+                    // var selectedManager = $('#mangered').val();
+                    
+                   
+                    
+
+                    
                 },
                 error: function(xhr, status, error) {
                     console.log('Error:', error);
@@ -353,18 +373,15 @@ $(document).ready(function() {
                 }
             });
         } else {
+            $('#mangered').empty();
             $('#employees').empty();
         }
-        });
     });
-    // $('#manger').on('change', function() {
-    //     var selectedManager = $(this).val();
-    //     $('#employees option').each(function() {
-    //         if ($(this).val() == selectedManager) {
-    //             $(this).remove();
-    //         }
-    //     });
-    // });
+});
+
+
+
+
 
     // edit modal
     $(document).ready(function() {
