@@ -65,9 +65,9 @@
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
                         <tr>
-                            <th scope="row"style="background: #f5f6fa;"> الاسم</th>
+                            <th scope="row"> الاسم</th>
                             
-                            <td style="background: #f5f6fa;">{{$user->name}} </td>
+                            <td >{{$user->name}} </td>
                         </tr>
 
                         <tr>
@@ -151,24 +151,37 @@
                             <td > {{ $user->file_number }} </td>
                         </tr>
 
-                        <tr>
+                        {{-- <tr>
                             <th scope="row" >    الباسورد  </th>
                             <td  type="password" name="password" id="password" > {{ $user->password }} </td>
-                        </tr>
+                        </tr> --}}
                         
                         <tr>
-                            <th scope="row" >المهام</th>
-                            <td >
+                            <th scope="row">المهام</th>
+                            <td>
+                                <!-- Display the selected item name here with a null check -->
+                                @php
+                                    $selectedRule = $rule->firstWhere('id', $user->rule_id);
+                                @endphp
+                        
+                                @if ($selectedRule)
+                                    {{ $selectedRule->name }}
+                                @else
+                                    <!-- Fallback text if no rule is found -->
+                                    لم يتم العثور على المهمة
+                                @endif
+                            </td>
+                            <td style="display: none;">
                                 <select id="input7" name="rule_id" class="form-control" placeholder="المهام" disabled>
                                     @foreach ($rule as $item)
-                                        <option value="{{ $item->id }}"
-                                            {{ $user->rule_id == $item->id ? 'selected' : '' }}>
+                                        <option value="{{ $item->id }}" {{ $user->rule_id == $item->id ? 'selected' : '' }}>
                                             {{ $item->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </td>
                         </tr>
+                        
                         
                         <tr>
                             <th scope="row" >    يصنف المستخدم ك   </th>
@@ -183,26 +196,37 @@
                             <th scope="row" >    الاقدامية  </th>
                             <td > {{ $user->seniority }} </td>
                         </tr>
+
                         <tr>
-                            <th scope="row" >الإدارة العامة</th>
-                            <td >
-                                    <select id="input15" name="public_administration" class="form-control" placeholder="الإدارة العامة" disabled>
-                                        @foreach ($department as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $user->public_administration == $item->id ? 'selected' : '' }}>
-                                                {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                            <th scope="row">الإدارة العامة</th>
+                            <td>
+                                <!-- Display the selected item name here with a null check -->
+                                @php
+                                    $selectedDepartment = $department->firstWhere('id', $user->public_administration);
+                                @endphp
+                        
+                                @if ($selectedDepartment)
+                                    {{ $selectedDepartment->name }}
+                                @else
+                                    <!-- Fallback text if no department is found -->
+                                    لم يتم العثور على الإدارة
+                                @endif
+                            </td>
+                            <td style="display: none;">
+                                <select id="input7" name="public_administration" class="form-control" placeholder="المهام" disabled>
+                                    @foreach ($department as $item)
+                                        <option value="{{ $item->id }}" {{ $user->public_administration == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </td>
                         </tr>
-                         
+                        
                         <tr>
                             <th scope="row" >    موقع العمل  </th>
                             <td > {{ $user->work_location }} </td>
                         </tr>
-
-                        
 
                             @if($user->image)
                             <tr>
