@@ -100,67 +100,72 @@ class UserController extends Controller
     }
 
     public function login(Request $request)
-{
-    $messages = [
-        'military_number.required' => 'رقم العسكري مطلوب.',
-        'password.required' => 'كلمة المرور مطلوبة.',
-    ];
+    {
+        $messages = [
+            'military_number.required' => 'رقم العسكري مطلوب.',
+            'password.required' => 'كلمة المرور مطلوبة.',
+        ];
 
-    $validatedData = Validator::make($request->all(), [
-        'military_number' => 'required|string',
-        'password' => 'required|string',
-    ], $messages);
+        $validatedData = Validator::make($request->all(), [
+            'military_number' => 'required|string',
+            'password' => 'required|string',
+        ], $messages);
 
-    if ($validatedData->fails()) {
-        return back()->withErrors($validatedData)->withInput();
-    }
-
-    $military_number = $request->military_number;
-    $password = $request->password;
-
-    // Check if the user exists
-    $user = User::where('military_number', $military_number)->first();
-
-    if (!$user) {
-        return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
-    }
-
-    // Check if the user has the correct flag
-    if ($user->flag !== 'user') {
-        return back()->with('error', 'لا يسمح لك بدخول الهيئة');
-    }
-
-    $credentials = $request->only('military_number', 'password');
-
-    // Check if the user has logged in within the last two hours
-    $twoHoursAgo = now()->subHours(2);
-
-    if (Auth::attempt($credentials)) {
-        // If the user has logged in within the last two hours, do not set the code
-        if ($user->updated_at >= $twoHoursAgo) {
-            Auth::login($user); // Log the user in
-            return redirect()->route('home');
+        if ($validatedData->fails()) {
+            return back()->withErrors($validatedData)->withInput();
         }
 
-        $set = '123456789';
-        $code = substr(str_shuffle($set), 0, 4);
+        $military_number = $request->military_number;
+        $password = $request->password;
 
-        $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+        // Check if the user exists
+        $user = User::where('military_number', $military_number)->first();
 
-        $response = send_sms_code($msg, $user->phone, $user->country_code);
-        $result = json_decode($response, true);
-
-        if (isset($result['sent']) && $result['sent'] === 'true') {
-            return view('verfication_code', compact('code', 'military_number', 'password'));
-        } else {
-            return back()->with('error', 'سجل الدخول مرة أخرى');
+        if (!$user) {
+            return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
         }
+
+        // Check if the user has the correct flag
+        if ($user->flag !== 'user') {
+            return back()->with('error', 'لا يسمح لك بدخول الهيئة');
+        }
+
+        $credentials = $request->only('military_number', 'password');
+
+        // Check if the user has logged in within the last two hours
+        $twoHoursAgo = now()->subHours(6);
+
+        if (Auth::attempt($credentials)) {
+            // If the user has logged in within the last two hours, do not set the code
+            if ($user->updated_at >= $twoHoursAgo) {
+
+                $firstlogin = 0;
+                if ($user->token == null) {
+                    $firstlogin = 1;
+                    return view('resetpassword', compact('military_number', 'firstlogin'));
+                }
+                
+                Auth::login($user); // Log the user in
+                return redirect()->route('home');
+            }
+
+            $set = '123456789';
+            $code = substr(str_shuffle($set), 0, 4);
+
+            $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+
+            $response = send_sms_code($msg, $user->phone, $user->country_code);
+            $result = json_decode($response, true);
+
+            if (isset($result['sent']) && $result['sent'] === 'true') {
+                return view('verfication_code', compact('code', 'military_number', 'password'));
+            } else {
+                return back()->with('error', 'سجل الدخول مرة أخرى');
+            }
+        }
+
+        return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
     }
-
-    return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
-}
-
-
 
     public function resend_code(Request $request)
     {
@@ -591,7 +596,6 @@ class UserController extends Controller
         $joining_date = Carbon::parse($user->joining_date);
         $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
-
         $job = job::all();
         // dd($user);
         if ($user->flag == "user") {
@@ -610,77 +614,56 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
+
         if ($user->flag == "user") {
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
                 'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
-
-                // Add more custom messages here
             ];
 
             $validatedData = Validator::make($request->all(), [
-                'military_number' => [
-                    'required',
-                    'string',
-                    'max:255',
-                ],
+                'military_number' => 'required|string|max:255',
                 'phone' => 'required|string',
                 'file_number' => 'required|string',
                 'rule_id' => 'required',
                 'password' => 'required',
                 'Civil_number' => 'required',
-
             ], $messages);
         } else {
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-
                 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
-
-                // Add more custom messages here
             ];
 
             $validatedData = Validator::make($request->all(), [
-                'military_number' => [
-                    'required',
-                    'string',
-                    'max:255',
-                ],
+                'military_number' => 'required|string|max:255',
                 'phone' => 'required|string',
                 'file_number' => 'required|string',
                 'public_administration' => 'required',
                 'Civil_number' => 'required',
-
             ], $messages);
         }
-
 
         // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
 
-
-        // dd($request);
-
+        // Update user attributes
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->description = $request->description;
         $user->military_number = $request->military_number;
-        if ($request->has('job')) {
-            $user->job_id = $request->job;
-        }
-        // $user->job_id = $request->job;
         $user->job_title = $request->job_title;
+        $user->job_id = $request->job_id;
         $user->nationality = $request->nationality;
         $user->Civil_number = $request->Civil_number;
         $user->file_number = $request->file_number;
@@ -688,7 +671,6 @@ class UserController extends Controller
         $user->seniority = $request->seniority;
         $user->public_administration = $request->public_administration;
         $user->work_location = $request->work_location;
-        // $user->position = $request->position;
         $user->qualification = $request->qualification;
         $user->date_of_birth = $request->date_of_birth;
         $user->joining_date = $request->joining_date;
@@ -696,44 +678,41 @@ class UserController extends Controller
 
         $joining_dateDate = Carbon::parse($request->input('joining_date'));
         $end_of_serviceDate = Carbon::parse($request->input('end_of_service'));
-        $user->length_of_service =  $end_of_serviceDate->year - $joining_dateDate->year;
+        $user->length_of_service = $end_of_serviceDate->year - $joining_dateDate->year;
+
         if ($request->has('grade_id')) {
             $user->grade_id = $request->grade_id;
         }
+
         if ($request->hasFile('image')) {
             $file = $request->image;
             $path = 'users/user_profile';
-
             UploadFilesWithoutReal($path, 'image', $user, $file);
         }
 
         if ($user->flag == "user") {
             $user->rule_id = $request->rule_id;
-            $user->department_id  = $request->department_id;
-            if (!Hash::check($request->password, $user->password)) {
-                $user->password = Hash::make($request->password);
-                $user->save();
-                Auth::logout();
-                session()->flash('success', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى. .');
+            $user->job_id = $request->job;
+            $user->department_id = $request->department_id;
 
+            if ($request->password && !Hash::check($request->password, $user->password)) {
+                $user->password = Hash::make($request->password);
+                $user->token = null; // Set token to null before saving
+                $user->save();
+
+                Auth::logout();
+                session()->flash('success', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى.');
                 return redirect('/login');
-                // with('status', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى.');
             }
         }
+
         $user->save();
-        // dd($user);
-        if ($user->flag == "user") {
-            $id = "0";
-        } else {
-            $id = "1";
-        }
 
+        $id = $user->flag == "user" ? "0" : "1";
 
-
-        // return response()->json($newUser);
         return view('user.view', compact('id'));
-        // return view('user.edit',compact('user'));
     }
+
 
     /**
      * Remove the specified resource from storage.
