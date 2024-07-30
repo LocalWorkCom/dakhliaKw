@@ -86,9 +86,9 @@
                     departmentDelete = departmentDelete.replace(':id', row.id);
 
                     return `
-                        <a href="${departmentEdit}" class="btn btn-sm" style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>
-                        <a href="${departmentShow}" class="btn btn-sm " style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
-                        <a href="" class="btn btn-sm"  style="background-color: #C91D1D;" onclick="event.preventDefault(); deleteDepartment(${row.id});"><i class="fa-solid fa-trash"></i></a>
+                        <a href="${departmentEdit}" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> </a>
+                        <a href="${departmentShow}"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i> </a>
+                        
                         `;
                 }
             }],

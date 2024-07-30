@@ -25,20 +25,20 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
             <!-- <div class="row justify-content-center" dir="rtl">
-                                                                            <div class="form-group mt-4  mx-5 col-10 d-flex ">
-                                                                                <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
-                                                                                    data-bs-target="#extern-user" style="color: #0D992C;">
-                                                                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                                                                    اضافة شخص خارجى
-                                                                                </button>
+                                                                                    <div class="form-group mt-4  mx-5 col-10 d-flex ">
+                                                                                        <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
+                                                                                            data-bs-target="#extern-user" style="color: #0D992C;">
+                                                                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                                                                            اضافة شخص خارجى
+                                                                                        </button>
 
-                                                                                <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
-                                                                                    data-bs-target="#extern-department" style="color: #0D992C;">
-                                                                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                                                                    اضافة أداره خارجيه
-                                                                                </button>
-                                                                            </div>
-                                                                        </div> -->
+                                                                                        <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
+                                                                                            data-bs-target="#extern-department" style="color: #0D992C;">
+                                                                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                                                                            اضافة أداره خارجيه
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div> -->
             <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
                 @include('inc.flash')
                 <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data"
@@ -50,8 +50,10 @@
                         <div class="form-group col-md-10 ">
                             <div class="d-flex justify-content-between" dir="rtl">
                                 <label for="select-person-to"> الموظف المستلم</label>
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
-                                    data-bs-toggle="modal" id="extern-user-dev" data-bs-target="#extern-user">
+                                @if (Auth::user()->hasPermission('edit exportuser'))
+                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
+                                        data-bs-toggle="modal" id="extern-user-dev" data-bs-target="#extern-user">
+                                @endif
                             </div>
                             <select id="select-person-to" name="person_to" class="form-control js-example-basic-single">
                                 <option value="" disabled selected> اختر من القائمه</option>
@@ -90,13 +92,16 @@
                         <div class="form-group col-md-5 mx-md-2">
                             <div class="d-flex justify-content-between" dir="rtl">
                                 <label for="from_departement"> القطاع </label>
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
-                                    data-bs-toggle="modal" id="extern-department-dev" data-bs-target="#extern-department">
+                                @if (Auth::user()->hasPermission('create ExternalDepartment'))
+                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
+                                        data-bs-toggle="modal" id="extern-department-dev"
+                                        data-bs-target="#extern-department">
+                                @endif
                             </div>
                             <!-- <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
-                                                                        id="extern-department-dev" data-bs-target="#extern-department">
-                                                                        <i class="fa fa-plus"></i>
-                                                                    </button> -->
+                                                                                id="extern-department-dev" data-bs-target="#extern-department">
+                                                                                <i class="fa fa-plus"></i>
+                                                                            </button> -->
                             <select id="from_departement" name="from_departement" class="form-control">
                                 <option value="">اختر القطاع</option>
                                 @foreach ($departments as $item)
@@ -105,23 +110,26 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row mx-md-2 d-flex justify-content-center">
-                        <div class="form-group col-md-10">
-                            <label for="files_num"> عدد الكتب</label>
+                    @if (Auth::user()->hasPermission('edit outgoing_files'))
+                        <div class="form-row mx-md-2 d-flex justify-content-center">
+                            <div class="form-group col-md-10">
+                                <label for="files_num"> عدد الكتب</label>
 
-                            <select id="files_num" name="files_num" class="form-control" onchange="updateFileInput()">
-                                <option value="">اختر العدد</option>
+                                <select id="files_num" name="files_num" class="form-control"
+                                    onchange="updateFileInput()">
+                                    <option value="">اختر العدد</option>
 
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
+                                    @for ($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                     <div class="form-row mx-md-2 d-flex justify-content-center">
                         <div class="form-group col-md-10">
-                            <label for="nameex">العنوان</label>
-                            <textarea type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان" required></textarea>
+                            <label for="nameex">موضوع الصادر</label>
+                            <textarea type="text" class="form-control" name="nameex" id="nameex" placeholder="موضوع الصادر" required></textarea>
                         </div>
                     </div>
                     <div class="form-row mx-md-2 d-flex justify-content-center">
@@ -130,39 +138,39 @@
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"> </textarea>
                         </div>
                     </div>
-
-                    <div class="form-row mx-md-2 d-flex justify-content-center">
-                        <div class="form-group col-md-10">
-                            <label for="files">اضف ملفات بحد اقصي 10</label>
-                        </div>
-                        <div class="form-group col-md-10" dir="rtl">
-                            <div class="fileupload d-inline">
-                                <div class="d-flex">
-                                    <input id="fileInput" type="file" name="files[]" multiple
-                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg" onchange="uploadFils()"
-                                        disabled>
-                                </div>
-                                <div class="space-uploading">
-                                    <ul id="fileList" class="d-flex flex-wrap">
-                                        <!-- Uploaded files will be listed here -->
-                                    </ul>
+                    @if (Auth::user()->hasPermission('edit outgoing_files'))
+                        <div class="form-row mx-md-2 d-flex justify-content-center">
+                            <div class="form-group col-md-10">
+                                <label for="files">اضف ملفات بحد اقصي 10</label>
+                            </div>
+                            <div class="form-group col-md-10" dir="rtl">
+                                <div class="fileupload d-inline">
+                                    <div class="d-flex">
+                                        <input id="fileInput" type="file" name="files[]" multiple
+                                            class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg"
+                                            onchange="uploadFils()" disabled>
+                                    </div>
+                                    <div class="space-uploading">
+                                        <ul id="fileList" class="d-flex flex-wrap">
+                                            <!-- Uploaded files will be listed here -->
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    @endif
 
                     <!-- <div class="form-row d-flex  justify-content-center" dir="rtl">
-                                                                <div class="form-group d-flex justify-content-start col-md-10 "> -->
+                                                                        <div class="form-group d-flex justify-content-start col-md-10 "> -->
                     <!-- <button type="button" class="btn-all  mx-md-3" data-bs-toggle="modal" id="extern-user-dev"
-                                                                        data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
-                                                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف
-                                                                    </button> -->
+                                                                                data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
+                                                                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف
+                                                                            </button> -->
                     <!-- <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
-                                                                        data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
-                                                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة الجهه
+                                                                                data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
+                                                                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة الجهه
 
-                                                                    </button> -->
+                                                                            </button> -->
                     <!-- </div> -->
 
                     <!-- </div><br> -->
@@ -319,8 +327,14 @@
                 if (fileNum.value != "" && files.value === "") {
                     Swal.fire({
                         icon: 'warning',
-                        title: 'خطأ',
+                        title: 'تنبيه',
                         text: 'من فضلك أختر الملفات المطلوبه',
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown animate__slow'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
                     });
                     // alert('من فضلك أختر الملفات المطلوبه');
                     return false; // Prevent form submission
@@ -329,8 +343,14 @@
                 if (personToSelect.value === "" && fromDepartmentSelect.value === "") {
                     Swal.fire({
                         icon: 'warning',
-                        title: 'خطأ',
+                        title: 'تنبيه',
                         text: 'من فضلك اختر القطاع او الموظف المستلم التابعين الى هذا الصادر',
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown animate__slow'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
                     });
                     // alert('من فضلك اختر القطاع او الموظف المستلم التابعين الى هذا الصادر');
                     return false; // Prevent form submission
@@ -393,7 +413,5 @@
 
                 });
             });
-
-       
         </script>
     @endpush

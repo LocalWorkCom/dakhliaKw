@@ -86,9 +86,11 @@
                         <div class="form-group col-md-5 mx-md-2 " dir="rtl">
                             <div class="d-flex justify-content-between">
                                 <label for="representive_id">اختر المندوب </label>
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
-                                    data-bs-toggle="modal" data-bs-target="#representative" data-dismiss="modal"
-                                    id="representative-dev">
+                                @if (Auth::user()->hasPermission('create Postman'))
+                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
+                                        data-bs-toggle="modal" data-bs-target="#representative" data-dismiss="modal"
+                                        id="representative-dev">
+                                @endif
                             </div>
                             <select id="representive_id" name="representive_id" class="form-control" required>
                                 <option value="">اختر المندوب</option>
@@ -101,9 +103,11 @@
                         <div class="form-group col-md-5 mx-md-2 " dir="rtl">
                             <div class="d-flex justify-content-between">
                                 <label for="from_departement">القطاع </label>
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 "
-                                    style="display: none" data-bs-toggle="modal" id="extern-department-dev"
-                                    data-bs-target="#extern-department" data-dismiss="modal">
+                                @if (Auth::user()->hasPermission('create ExternalDepartment'))
+                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 "
+                                        style="display: none" data-bs-toggle="modal" id="extern-department-dev"
+                                        data-bs-target="#extern-department" data-dismiss="modal">
+                                @endif
                             </div>
                             <select id="from_departement" name="from_departement" class="form-control" required>
                                 <option value="">اختر القطاع</option>
@@ -126,25 +130,29 @@
                     </div>
 
                     <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
+                        @if (Auth::user()->hasPermission('create Io_file'))
+                            <div class="form-group col-md-5 mx-md-2">
+                                <label for="files_num"> عدد الكتب</label>
 
-                        <div class="form-group col-md-5 mx-md-2">
-                            <label for="files_num"> عدد الكتب</label>
+                                <select id="files_num" name="files_num" class="form-control"
+                                    onchange="updateFileInput()">
+                                    <option value="">اختر العدد</option>
 
-                            <select id="files_num" name="files_num" class="form-control" onchange="updateFileInput()">
-                                <option value="">اختر العدد</option>
-
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}" @if ($i == $iotelegram->files_num) selected @endif>
-                                        {{ $i }}</option>
-                                @endfor
-                            </select>
-                        </div>
+                                    @for ($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}"
+                                            @if ($i == $iotelegram->files_num) selected @endif>
+                                            {{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        @endif
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="recieved_by">الموظف المستلم</label>
                             <select id="recieved_by" name="recieved_by" class="form-control" required>
                                 <option value="">اختر الموظف</option>
                                 @foreach ($recieves as $item)
-                                    <option value="{{ $item->id }}" @if ($item->id == $iotelegram->recieved_by) selected @endif>
+                                    <option value="{{ $item->id }}"
+                                        @if ($item->id == $iotelegram->recieved_by) selected @endif>
                                         {{ $item->name }}</option>
                                 @endforeach
                             </select>
@@ -154,25 +162,26 @@
                     </div>
 
 
-
-                    <div class="form-row mx-md-2 d-flex justify-content-center">
-                        <div class="form-group col-md-10">
-                            <label for="files">اضف ملفات بحد اقصي 10</label>
-                        </div>
-                        <div class="form-group col-md-10" dir="rtl">
-                            <div class="fileupload d-inline">
-                                <div class="d-flex">
-                                    <input id="fileInput" type="file" name="files[]" multiple
-                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg"onchange="uploadFils()"
-                                        disabled>
-                                </div>
-                                <div class="space-uploading">
-                                    <ul id="fileList" class="d-flex flex-wrap">
-                                    </ul>
+                    @if (Auth::user()->hasPermission('create Io_file'))
+                        <div class="form-row mx-md-2 d-flex justify-content-center">
+                            <div class="form-group col-md-10">
+                                <label for="files">اضف ملفات بحد اقصي 10</label>
+                            </div>
+                            <div class="form-group col-md-10" dir="rtl">
+                                <div class="fileupload d-inline">
+                                    <div class="d-flex">
+                                        <input id="fileInput" type="file" name="files[]" multiple
+                                            class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg"onchange="uploadFils()"
+                                            disabled>
+                                    </div>
+                                    <div class="space-uploading">
+                                        <ul id="fileList" class="d-flex flex-wrap">
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
 
                     <div class="form-row  mx-md-2 d-flex justify-content-center">
                         <div class="form-group d-flex col-md-10 mx-md-2" dir="rtl">
@@ -187,7 +196,8 @@
                             <select id="user_id" class="form-control" name="user_id">
                                 <option value="" selected>اختر المستخدم</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" @if ($user->id == $iotelegram->user_id) selected @endif>
+                                    <option value="{{ $user->id }}"
+                                        @if ($user->id == $iotelegram->user_id) selected @endif>
                                         {{ $user->name }}</option>
                                 @endforeach
                             </select>
@@ -303,6 +313,16 @@
                 return a.text.localeCompare(b.text);
             });
             $(selectId).empty().append(options);
+        }
+
+        function validation() {
+            var fileNum = document.getElementById('files_num');
+            var files = document.getElementById('fileInput');
+            if (fileNum.value != "" && files.value === "") {
+                alert('من فضلك أختر الملفات المطلوبه');
+                return false; // Prevent form submission
+            }
+
         }
 
         $(document).ready(function() {
@@ -463,6 +483,8 @@
                 checkFileCount(); // Update button states
 
             });
+
+
         });
     </script>
 @endpush

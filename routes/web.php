@@ -16,6 +16,7 @@ use App\Http\Controllers\PostmanController;
 use App\Http\Controllers\settingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\qualificationController;
+use App\Http\Controllers\regionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,13 +97,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export/create', [outgoingController::class, 'create'])->name('Export.create')->middleware('check.permission:create outgoings');
         Route::post('/export', [outgoingController::class, 'store'])->name('Export.store')->middleware('check.permission:edit outgoings');
 
-        Route::get('/export/All/Archive', [outgoingController::class, 'getExportInActive'])->name('Export.view.archive')->middleware('check.permission:view outgoings');
+        Route::get('/export/All/Archive', [outgoingController::class, 'getExportInActive'])->name('Export.view.archive')->middleware('check.permission:archive outgoings');
         Route::get('exports/get/active', [outgoingController::class, 'getExportActive'])->name('exports.view.all')->middleware('check.permission:view outgoings');
-        Route::post('export/archive/add', [outgoingController::class, 'addToArchive'])->name('export.archive.add')->middleware('check.permission:edit outgoings');
-        Route::get('export/AllArchives', [outgoingController::class, 'showArchive'])->name('Export.AllArchive')->middleware('check.permission:view outgoings');
+        Route::post('export/archive/add', [outgoingController::class, 'addToArchive'])->name('export.archive.add')->middleware('check.permission:add_archive outgoings');
+        Route::get('export/AllArchives', [outgoingController::class, 'showArchive'])->name('Export.AllArchive')->middleware('check.permission:archive outgoings');
         //external users
-        Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users')->middleware('check.permission:create outgoings');
-        Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax')->middleware('check.permission:create outgoings');
+        Route::get('external/users', [outgoingController::class, 'getExternalUsersAjax'])->name('external.users')->middleware('check.permission:view exportuser');
+        Route::post('exportuser/ajax', [outgoingController::class, 'addUaersAjax'])->name('userexport.ajax')->middleware('check.permission:edit exportuser');
         //outgingfiles
         Route::get('export/{id}/upload', [outgoingController::class, 'uploadFiles'])->name('Export.upload.files')->middleware('check.permission:edit outgoing_files');
         Route::get('export/{id}/vieFiles', [outgoingController::class, 'showFiles'])->name('Export.view.files')->middleware('check.permission:view outgoing_files');
@@ -138,18 +139,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/postmans/{postman}/edit', [PostmanController::class, 'edit'])->name('postmans.edit')->middleware('check.permission:edit Postman');
         Route::put('/postmans/{postman}', [PostmanController::class, 'update'])->name('postmans.update')->middleware('check.permission:edit Postman');
 
-   
-
-    //start government
-        Route::get('setting/government', [settingController::class, 'getAllgovernment'])->name('setting.getAllgovernment')->middleware('check.permission:view Government');
-        Route::get('setting/government/all', [settingController::class, 'indexgovernment'])->name('government.all')->middleware('check.permission:view Government');
-        Route::post('setting/government/add', [settingController::class, 'addgovernment'])->name('government.add')->middleware('check.permission:edit Government');
-        Route::get('setting/government/create', [settingController::class, 'creategovernment'])->name('government.create')->middleware('check.permission:create Government');
-        Route::post('setting/government/update', [settingController::class, 'updategovernment'])->name('government.update')->middleware('check.permission:edit Government');
-        Route::get('setting/government/edit/{id}', [settingController::class, 'editgovernment'])->name('government.edit')->middleware('check.permission:edit Government');
-        Route::get('setting/government/show/{id}', [settingController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
-    //endgovernment
-
     //start jobs
         Route::get('setting/jobs', [settingController::class, 'getAlljob'])->name('setting.getAlljob')->middleware('check.permission:view job');
         Route::get('setting/jobs/all', [settingController::class, 'indexjob'])->name('job.index')->middleware('check.permission:view job');
@@ -161,14 +150,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('setting/jobs/delete', [settingController::class, 'deletejob'])->name('job.delete')->middleware('check.permission:delete job');
     //end jobs
     //start vacation type
-        Route::get('setting/vacationType', [settingController::class, 'getAllvacationType'])->name('setting.getAllvacationType');
-        Route::get('setting/vacationType/all', [settingController::class, 'indexvacationType'])->name('vacationType.index');
-        Route::post('setting/vacationType/add', [settingController::class, 'addvacationType'])->name('vacationType.add');
+        Route::get('setting/vacationType', [settingController::class, 'getAllvacationType'])->name('setting.getAllvacationType')->middleware('check.permission:view VacationType');
+        Route::get('setting/vacationType/all', [settingController::class, 'indexvacationType'])->name('vacationType.index')->middleware('check.permission:view VacationType');
+        Route::post('setting/vacationType/add', [settingController::class, 'addvacationType'])->name('vacationType.add')->middleware('check.permission:create VacationType');
         //Route::get('setting/vacationType/create', [settingController::class,'createvacationType'])->name('vacationType.create');
-        Route::post('setting/vacationType/update', [settingController::class, 'updatevacationType'])->name('vacationType.update');
+        Route::post('setting/vacationType/update', [settingController::class, 'updatevacationType'])->name('vacationType.update')->middleware('check.permission:edit VacationType');
         //Route::post('setting/vacationType/edit', [settingController::class,'editvacationType'])->name('vacationType.edit');
-        Route::get('setting/vacationType/show/{id}', [settingController::class, 'showvacationType'])->name('vacationType.show');
-        Route::post('setting/vacationType/delete', [settingController::class, 'deletevacationType'])->name('vacationType.delete');
+        Route::get('setting/vacationType/show/{id}', [settingController::class, 'showvacationType'])->name('vacationType.show')->middleware('check.permission:view VacationType');
+        Route::post('setting/vacationType/delete', [settingController::class, 'deletevacationType'])->name('vacationType.delete')->middleware('check.permission:delete VacationType');
     //end vacation type
     //start gards
         Route::get('setting/grads', [settingController::class, 'getAllgrads'])->name('setting.getAllgrads')->middleware('check.permission:view grade');
@@ -186,6 +175,24 @@ Route::middleware(['auth'])->group(function () {
         Route::post('setting/qualifications/delete', [qualificationController::class, 'destroy'])->name('qualification.delete');
 
     //End qualifications
+    //start government
+    Route::get('setting/government', [regionsController::class, 'getAllgovernment'])->name('setting.getAllgovernment')->middleware('check.permission:view Government');
+    Route::get('setting/government/all', [regionsController::class, 'indexgovernment'])->name('government.all')->middleware('check.permission:view Government');
+    Route::post('setting/government/add', [regionsController::class, 'addgovernment'])->name('government.add')->middleware('check.permission:edit Government');
+    Route::get('setting/government/create', [regionsController::class, 'creategovernment'])->name('government.create')->middleware('check.permission:create Government');
+    Route::post('setting/government/update', [regionsController::class, 'updategovernment'])->name('government.update')->middleware('check.permission:edit Government');
+    Route::get('setting/government/edit/{id}', [regionsController::class, 'editgovernment'])->name('government.edit')->middleware('check.permission:edit Government');
+    Route::get('setting/government/show/{id}', [regionsController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
+//endgovernment
+    //Start Regions -------- Need middleware for gard
+      Route::get('setting/Regions/all', [regionsController::class, 'index'])->name('regions.index');
+      Route::get('setting/Regions/ajax', [regionsController::class, 'getregions'])->name('getAllregions');
+      Route::get('setting/RegionBygovernment', [regionsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment');
+      Route::post('setting/Regions/create', [regionsController::class, 'store'])->name('regions.store');
+      Route::post('setting/Regions/edit', [regionsController::class, 'update'])->name('regions.update');
+      Route::post('setting/Regions/delete', [regionsController::class, 'destroy'])->name('regions.delete');
+
+    //End Regions
     //setting end
 
 
@@ -207,12 +214,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('iotelegram/archive/{id}', [IoTelegramController::class, 'AddArchive'])->name('iotelegram.archive.add')->middleware('check.permission:add_archive Iotelegram');
     Route::get('iotelegram/downlaod/{id}', [IoTelegramController::class, 'downlaodfile'])->name('iotelegram.downlaodfile')->middleware('check.permission:download Iotelegram');
 
-    // Route::resource('setting', SettingsController::class);
-
-
-
-
-
+    
     Route::get('vacation/list/{id?}', [VacationController::class, 'index'])->name('vacations.list')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add')->middleware('check.permission:create EmployeeVacation');
