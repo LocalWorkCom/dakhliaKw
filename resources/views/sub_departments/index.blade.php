@@ -222,7 +222,7 @@
                     // departmentDelete = departmentDelete.replace(':id', row.id);
 
                     return `
-                        <a href="" class="btn  btn-sm" style="background-color: #259240;" data-bs-toggle="modal"
+                        <a href="" class="btn btn-sm"  style="background-color: #F7AF15;" data-bs-toggle="modal"
                             data-bs-target="#Departmentedit" data-dismiss="modal" id="edit-dev"> <i class="fa fa-edit"></i> </a>
                        `;
                 }
