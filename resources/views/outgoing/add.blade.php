@@ -1,6 +1,7 @@
 @extends('layout.main')
 
 @push('style')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 @endpush
 @section('title')
     أضافه
@@ -24,20 +25,20 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
             <!-- <div class="row justify-content-center" dir="rtl">
-                                                                        <div class="form-group mt-4  mx-5 col-10 d-flex ">
-                                                                            <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
-                                                                                data-bs-target="#extern-user" style="color: #0D992C;">
-                                                                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                                                                اضافة شخص خارجى
-                                                                            </button>
+                                                                                <div class="form-group mt-4  mx-5 col-10 d-flex ">
+                                                                                    <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
+                                                                                        data-bs-target="#extern-user" style="color: #0D992C;">
+                                                                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                                                                        اضافة شخص خارجى
+                                                                                    </button>
 
-                                                                            <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
-                                                                                data-bs-target="#extern-department" style="color: #0D992C;">
-                                                                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                                                                اضافة أداره خارجيه
-                                                                            </button>
-                                                                        </div>
-                                                                    </div> -->
+                                                                                    <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
+                                                                                        data-bs-target="#extern-department" style="color: #0D992C;">
+                                                                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                                                                        اضافة أداره خارجيه
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div> -->
             <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
                 @include('inc.flash')
                 <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data"
@@ -93,9 +94,9 @@
                                     data-bs-toggle="modal" id="extern-department-dev" data-bs-target="#extern-department">
                             </div>
                             <!-- <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
-                                                                    id="extern-department-dev" data-bs-target="#extern-department">
-                                                                    <i class="fa fa-plus"></i>
-                                                                </button> -->
+                                                                            id="extern-department-dev" data-bs-target="#extern-department">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button> -->
                             <select id="from_departement" name="from_departement" class="form-control">
                                 <option value="">اختر القطاع</option>
                                 @foreach ($departments as $item)
@@ -108,8 +109,7 @@
                         <div class="form-group col-md-10">
                             <label for="files_num"> عدد الكتب</label>
 
-                            <select id="files_num" name="files_num" class="form-control" 
-                                onchange="updateFileInput()">
+                            <select id="files_num" name="files_num" class="form-control" onchange="updateFileInput()">
                                 <option value="">اختر العدد</option>
 
                                 @for ($i = 1; $i <= 10; $i++)
@@ -153,16 +153,16 @@
 
 
                     <!-- <div class="form-row d-flex  justify-content-center" dir="rtl">
-                                                            <div class="form-group d-flex justify-content-start col-md-10 "> -->
+                                                                    <div class="form-group d-flex justify-content-start col-md-10 "> -->
                     <!-- <button type="button" class="btn-all  mx-md-3" data-bs-toggle="modal" id="extern-user-dev"
-                                                                    data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
-                                                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف
-                                                                </button> -->
+                                                                            data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
+                                                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف
+                                                                        </button> -->
                     <!-- <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
-                                                                    data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
-                                                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة الجهه
+                                                                            data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
+                                                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة الجهه
 
-                                                                </button> -->
+                                                                        </button> -->
                     <!-- </div> -->
 
                     <!-- </div><br> -->
@@ -281,6 +281,8 @@
     @endsection
 
     @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <script>
             document.addEventListener('DOMContentLoaded', (event) => {
                 let dateInput = document.getElementById('date');
@@ -315,12 +317,34 @@
                 var fileNum = document.getElementById('files_num');
                 var files = document.getElementById('fileInput');
                 if (fileNum.value != "" && files.value === "") {
-                    alert('من فضلك أختر الملفات المطلوبه');
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'تنبيه',
+                        text: 'من فضلك أختر الملفات المطلوبه',
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown animate__slow'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    });
+                    // alert('من فضلك أختر الملفات المطلوبه');
                     return false; // Prevent form submission
                 }
                 // Check if at least one select has a selected value
                 if (personToSelect.value === "" && fromDepartmentSelect.value === "") {
-                    alert('من فضلك اختر القطاع او الموظف المستلم التابعين الى هذا الصادر');
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'تنبيه',
+                        text: 'من فضلك اختر القطاع او الموظف المستلم التابعين الى هذا الصادر',
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown animate__slow'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    });
+                    // alert('من فضلك اختر القطاع او الموظف المستلم التابعين الى هذا الصادر');
                     return false; // Prevent form submission
                 }
             }
@@ -381,7 +405,5 @@
 
                 });
             });
-
-       
         </script>
     @endpush

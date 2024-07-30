@@ -1,6 +1,8 @@
 @extends('layout.main')
 
 @push('style')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 @endpush
 @section('title')
     أضافه
@@ -268,6 +270,8 @@
     @endsection
 
     @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <script>
             document.addEventListener('DOMContentLoaded', (event) => {
                 let dateInput = document.getElementById('date');
@@ -355,79 +359,99 @@
                 var fileNum = document.getElementById('files_num');
                 var files = document.getElementById('fileInput');
                 if (fileNum.value != "" && files.value === "") {
-                    alert('من فضلك أختر الملفات المطلوبه');
-                    return false; // Prevent form submission
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'تنبيه',
+                        text: 'من فضلك أختر الملفات المطلوبه',
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown animate__slow'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    });
+                    return false;
                 }
                 // Check if at least one select has a selected value
                 if (personToSelect.value === "" && fromDepartmentSelect.value === "") {
-                    alert('من فضلك اختر القطاع او الموظف المستلم التابعين الى هذا الصادر');
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'تنبيه',
+                        text: 'من فضلك اختر القطاع او الموظف المستلم التابعين الى هذا الصادر',
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown animate__slow'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    });
                     return false; // Prevent form submission
                 }
             }
            
-            function updateFileInput() {
-                var fileInput = document.getElementById('fileInput');
-                var filesNum = document.getElementById('files_num').value;
+            // function updateFileInput() {
+            //     var fileInput = document.getElementById('fileInput');
+            //     var filesNum = document.getElementById('files_num').value;
 
-                if (filesNum) {
-                    fileInput.disabled = false;
-                } else {
-                    fileInput.disabled = true;
-                    document.getElementById('fileList').innerHTML = '';
-                }
-            }
+            //     if (filesNum) {
+            //         fileInput.disabled = false;
+            //     } else {
+            //         fileInput.disabled = true;
+            //         document.getElementById('fileList').innerHTML = '';
+            //     }
+            // }
 
-            function uploadFils() {
-                const files = document.getElementById('fileInput').files;
-                const fileList = document.getElementById('fileList');
-                const filesNum = parseInt(document.getElementById('files_num').value);
+            // function uploadFils() {
+            //     const files = document.getElementById('fileInput').files;
+            //     const fileList = document.getElementById('fileList');
+            //     const filesNum = parseInt(document.getElementById('files_num').value);
 
-                if (!filesNum) {
-                    alert("Please choose the number of books first.");
-                    document.getElementById('fileInput').value = '';
-                    return;
-                }
+            //     if (!filesNum) {
+            //         alert("Please choose the number of books first.");
+            //         document.getElementById('fileInput').value = '';
+            //         return;
+            //     }
 
-                if (files.length === 0) {
-                    alert("Please choose files.");
-                    return;
-                }
+            //     if (files.length === 0) {
+            //         alert("Please choose files.");
+            //         return;
+            //     }
 
-                if (files.length > filesNum) {
-                    alert('لا يمكنك أضافه اكثر من' + filesNum + ' ملف.');
-                    document.getElementById('fileInput').value = '';
-                    return;
-                }
-                if (files.length < filesNum) {
-                    alert('لا يمكن اضافه ملفات أقل من ' + filesNum + ' ملف.');
-                    document.getElementById('fileInput').value = '';
-                    return;
-                }
+            //     if (files.length > filesNum) {
+            //         alert('لا يمكنك أضافه اكثر من' + filesNum + ' ملف.');
+            //         document.getElementById('fileInput').value = '';
+            //         return;
+            //     }
+            //     if (files.length < filesNum) {
+            //         alert('لا يمكن اضافه ملفات أقل من ' + filesNum + ' ملف.');
+            //         document.getElementById('fileInput').value = '';
+            //         return;
+            //     }
 
-                fileList.innerHTML = ''; // Clear previous list
+            //     fileList.innerHTML = ''; // Clear previous list
 
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
+            //     for (let i = 0; i < files.length; i++) {
+            //         const file = files[i];
 
-                    const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                    listItem.dataset.filename = file.name;
+            //         const listItem = document.createElement('li');
+            //         listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+            //         listItem.dataset.filename = file.name;
 
-                    const fileName = document.createElement('span');
-                    fileName.textContent = file.name;
+            //         const fileName = document.createElement('span');
+            //         fileName.textContent = file.name;
 
-                    const deleteButton = document.createElement('button');
-                    deleteButton.className = 'btn btn-danger btn-sm';
-                    deleteButton.textContent = 'Delete';
-                    deleteButton.onclick = function() {
-                        fileList.removeChild(listItem);
-                        document.getElementById('fileInput').value = '';
-                    };
+            //         const deleteButton = document.createElement('button');
+            //         deleteButton.className = 'btn btn-danger btn-sm';
+            //         deleteButton.textContent = 'Delete';
+            //         deleteButton.onclick = function() {
+            //             fileList.removeChild(listItem);
+            //             document.getElementById('fileInput').value = '';
+            //         };
 
-                    listItem.appendChild(fileName);
-                    listItem.appendChild(deleteButton);
-                    fileList.appendChild(listItem);
-                }
-            }
+            //         listItem.appendChild(fileName);
+            //         listItem.appendChild(deleteButton);
+            //         fileList.appendChild(listItem);
+            //     }
+            // }
         </script>
     @endpush

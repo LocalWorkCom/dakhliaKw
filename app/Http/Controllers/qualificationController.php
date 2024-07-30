@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Qualifications;
+use App\Models\Qualification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +24,7 @@ class qualificationController extends Controller
 
     public function getqualification(){
       
-        $data = Qualifications::orderBy('updated_at','desc')->get();
+        $data = Qualification::orderBy('updated_at','desc')->get();
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
@@ -62,7 +62,7 @@ class qualificationController extends Controller
         if (auth()->id()) {
         $user=User::find(Auth::user()->id);
         $requestinput=$request->except('_token');
-        $quali = new Qualifications();
+        $quali = new Qualification();
           $quali->name=$request->nameadd;
           $quali->created_by=$user->id;
           $quali->save();
@@ -110,7 +110,7 @@ class qualificationController extends Controller
         if (auth()->id()) {
         $user=User::find(Auth::user()->id);
         $requestinput=$request->except('_token');
-        $quali = Qualifications::find($request->id);
+        $quali = Qualification::find($request->id);
           $quali->name=$request->name;
           $quali->created_by=$user->id;
           $quali->save();
@@ -126,15 +126,15 @@ class qualificationController extends Controller
      */
     public function destroy(Request $request)
     {
-        // $isForeignKeyUsed = DB::table('users')->where('qualification_id', $request->id)->exists();
-        // //dd($isForeignKeyUsed);
-        // if( $isForeignKeyUsed ){
-        //     return redirect()->route('qualifications.index')->with(['message' => 'لا يمكن حذف هذا المؤهل  يوجد موظفين له']);
-        // }else{
-            $type= Qualifications::find($request->id);
+        $isForeignKeyUsed = DB::table('users')->where('qualification_id', $request->id)->exists();
+        //dd($isForeignKeyUsed);
+        if( $isForeignKeyUsed ){
+            return redirect()->route('qualifications.index')->with(['message' => 'لا يمكن حذف هذا المؤهل  يوجد موظفين له']);
+        }else{
+            $type= Qualification::find($request->id);
             $type->delete();
             return redirect()->route('qualifications.index')->with(['message' => 'تم حذف المؤهل']);
 
-        // }
+        }
     }
 }

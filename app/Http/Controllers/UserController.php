@@ -100,55 +100,66 @@ class UserController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $messages = [
-            'military_number.required' => 'رقم العسكري مطلوب.',
-            'password.required' => 'كلمة المرور مطلوبة.',
-        ];
+{
+    $messages = [
+        'military_number.required' => 'رقم العسكري مطلوب.',
+        'password.required' => 'كلمة المرور مطلوبة.',
+    ];
 
-        $validatedData = Validator::make($request->all(), [
-            'military_number' => 'required|string',
-            'password' => 'required|string',
-        ], $messages);
+    $validatedData = Validator::make($request->all(), [
+        'military_number' => 'required|string',
+        'password' => 'required|string',
+    ], $messages);
 
-        if ($validatedData->fails()) {
-            return back()->withErrors($validatedData)->withInput();
-        }
-
-        $military_number = $request->military_number;
-        $password = $request->password;
-
-        // Check if the user exists
-        $user = User::where('military_number', $military_number)->first();
-
-        if (!$user) {
-            return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
-        }
-
-        // Check if the user has the correct flag
-        if ($user->flag !== 'user') {
-            return back()->with('error', 'لا يسمح لك بدخول الهيئة');
-        }
-
-        $credentials = $request->only('military_number', 'password');
-        if (Auth::attempt($credentials)) {
-            $set = '123456789';
-            $code = substr(str_shuffle($set), 0, 4);
-
-            $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
-
-            $response = send_sms_code($msg, $user->phone, $user->country_code);
-            $result = json_decode($response, true);
-
-            if (isset($result['sent']) && $result['sent'] === 'true') {
-                return view('verfication_code', compact('code', 'military_number', 'password'));
-            } else {
-                return back()->with('error', 'سجل الدخول مرة أخرى');
-            }
-        }
-
-        return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
+    if ($validatedData->fails()) {
+        return back()->withErrors($validatedData)->withInput();
     }
+
+    $military_number = $request->military_number;
+    $password = $request->password;
+
+    // Check if the user exists
+    $user = User::where('military_number', $military_number)->first();
+
+    if (!$user) {
+        return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
+    }
+
+    // Check if the user has the correct flag
+    if ($user->flag !== 'user') {
+        return back()->with('error', 'لا يسمح لك بدخول الهيئة');
+    }
+
+    $credentials = $request->only('military_number', 'password');
+
+    // Check if the user has logged in within the last two hours
+    $twoHoursAgo = now()->subHours(2);
+
+    if (Auth::attempt($credentials)) {
+        // If the user has logged in within the last two hours, do not set the code
+        if ($user->updated_at >= $twoHoursAgo) {
+            Auth::login($user); // Log the user in
+            return redirect()->route('home');
+        }
+
+        $set = '123456789';
+        $code = substr(str_shuffle($set), 0, 4);
+
+        $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+
+        $response = send_sms_code($msg, $user->phone, $user->country_code);
+        $result = json_decode($response, true);
+
+        if (isset($result['sent']) && $result['sent'] === 'true') {
+            return view('verfication_code', compact('code', 'military_number', 'password'));
+        } else {
+            return back()->with('error', 'سجل الدخول مرة أخرى');
+        }
+    }
+
+    return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
+}
+
 
 
     public function resend_code(Request $request)
