@@ -192,39 +192,57 @@
         const files = document.getElementById('fileInput').files;
         const fileList = document.getElementById('fileList');
         const filesNum = parseInt(document.getElementById('files_num').value);
-        if (!filesNum) {
-            alert("Please choose the number of books first.");
-            document.getElementById('fileInput').value = '';
-            return;
-        }
+        // if (!filesNum) {
+        //     alert("Please choose the number of books first.");
+        //     document.getElementById('fileInput').value = '';
+        //     return false;
+        // }
         if (files.length === 0) {
             //alert("Please choose files.");
             Swal.fire({
                 icon: 'warning',
-                title: 'خطأ',
+                title: 'تنبيه',
                 text: 'من فضلك أختر الملفات المطلوبه',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown animate__slow'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
             });
-            return;
+            return false;
         }
         if (files.length > filesNum) {
             Swal.fire({
                 icon: 'warning',
-                title: 'خطأ',
+                title: 'تنبيه',
                 text: 'لا يمكنك أضافه اكثر من' + filesNum + ' ملف.',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown animate__slow'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
             });
             // alert('لا يمكنك أضافه اكثر من' + filesNum + ' ملف.');
             document.getElementById('fileInput').value = '';
-            return;
+            return false;
         }
         if (files.length < filesNum) {
             Swal.fire({
                 icon: 'warning',
-                title: 'خطأ',
+                title: 'تنبيه',
                 text: 'لا يمكن اضافه ملفات أقل من ' + filesNum + ' ملف.',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown animate__slow'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
             });
             // alert('لا يمكن اضافه ملفات أقل من ' + filesNum + ' ملف.');
             document.getElementById('fileInput').value = '';
-            return;
+            return false;
         }
         fileList.innerHTML = ''; // Clear previous list
         for (let i = 0; i < files.length; i++) {

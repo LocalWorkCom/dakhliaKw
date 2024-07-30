@@ -5,12 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Qualification extends Model
+class Country extends Model
 {
     use HasFactory;
-    protected $table = 'qualifications';
+    protected $table = 'countries';
     public $timestamps = false;
     protected $fillable = [
-        'name'
+        'country_name_ar',
+        'country_name_en',
+        'country_name_fr',
+        'code '
     ];
 }

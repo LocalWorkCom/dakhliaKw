@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Country;
 use App\Models\EmployeeVacation;
 use App\Models\Io_file;
 use App\Models\User;
@@ -183,6 +184,10 @@ function getEmployees()
 function getVactionTypes()
 {
     return VacationType::all();
+}
+function getCountries()
+{
+    return  Country::all();
 }
 
 function CheckStartVacationDate($id)
