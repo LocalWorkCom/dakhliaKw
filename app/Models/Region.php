@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Government extends Model
+class Region extends Model
 {
     use HasFactory;
-    protected $table = 'governments';
+    protected $table = 'regions';
     public $timestamps = false;
 
     protected $fillable = [
         'name'
     ];
-    public function region()
+    
+    public function government()
     {
-        return $this->hasMany(outgoings::class);
-
+        return $this->belongsTo(Government::class, 'government_id ', 'id');
     }
 }

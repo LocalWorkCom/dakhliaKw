@@ -2,6 +2,7 @@
 
 use App\Models\Country;
 use App\Models\EmployeeVacation;
+use App\Models\Government;
 use App\Models\Io_file;
 use App\Models\User;
 use App\Models\VacationType;
@@ -189,7 +190,11 @@ function getCountries()
 {
     return  Country::all();
 }
-
+function getgovernments()
+{
+    
+    return  Government::all();
+}
 function CheckStartVacationDate($id)
 {
     $EmployeeVaction =  EmployeeVacation::find($id);
