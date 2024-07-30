@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use App\Models\EmployeeVacation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -61,7 +62,8 @@ class VacationController extends Controller
         } else {
             $vacation_types = getVactionTypes();
         }
-        return view('vacation.add', compact('employees', 'vacation_types', 'id'));
+        $countries = getCountries();
+        return view('vacation.add', compact('employees', 'vacation_types', 'id', 'countries'));
     }
 
     /**
@@ -73,11 +75,13 @@ class VacationController extends Controller
             'vacation_type_id' => 'required',
             'date_from' => 'required|date|before_or_equal:date_to',
             'date_to' => 'required|date|after_or_equal:date_from',
+            'employee_id' => 'required',
 
         ];
 
         $messages = [
-          
+
+            'employee_id.required' => 'يجب عليك اختيار موظف',
             'vacation_type_id.required' => 'يجب ادخال اسم الادارة',
             'date_from.required' => 'يجب ادخال تاريخ البداية',
             'date_to.required' => 'يجب ادخال تاريخ النهاية',
@@ -100,9 +104,9 @@ class VacationController extends Controller
 
         $employee_vacation = new EmployeeVacation();
         $employee_vacation->vacation_type_id = $request->vacation_type_id;
-        $employee_vacation->name = $request->name;
-        $employee_vacation->date_from = $request->date_from;
-        $employee_vacation->date_to = isset($request->date_to) ? $request->date_to : null;
+        // $employee_vacation->name = $request->name;
+        $employee_vacation->country_id = $request->country_id;
+        // $employee_vacation->date_to = isset($request->date_to) ? $request->date_to : null;
         $employee_vacation->employee_id = $employee_id  && $request->vacation_type_id != 3 ? $employee_id : null;
         $employee_vacation->created_by = auth()->id();
         $employee_vacation->created_departement = auth()->user()->department_id;
@@ -147,7 +151,9 @@ class VacationController extends Controller
         } else {
             $vacation_types = getVactionTypes();
         }
-        return view('vacation.edit', compact('employees', 'vacation', 'vacation_types', 'id'));
+        $countries = getCountries();
+
+        return view('vacation.edit', compact('employees', 'vacation', 'vacation_types', 'id', 'countries'));
     }
 
     /**
@@ -164,7 +170,7 @@ class VacationController extends Controller
         ];
 
         $messages = [
-          
+
             'vacation_type_id.required' => 'يجب ادخال نوع الاجازة',
             'date_from.required' => 'يجب ادخال تاريخ البداية',
             'date_to.required' => 'يجب ادخال تاريخ النهاية',

@@ -81,6 +81,18 @@
                         </div>
 
                     </div>
+                    <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-5 mx-md-md-2">
+                            <label for="vacation_type_id" style=" display: flex; justify-content: flex-start;">المحافظة</label>
+                            <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
+                                <option value="">اختر المحافظة</option>
+                                @foreach ($countries as $item)
+                                    <option value="{{ $item->id }}">{{ $item->country_name_ar }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                     
+                    </div>
                     <div class="form-row mx-md-2 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-10" id="reportImage-div" hidden>
                             <label for="reportImage">تعديل ملف</label>
@@ -125,9 +137,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+          
                 </div>
                 <div class="modal-body text-center">
                     <img id="modalImage" src="#" class="img-fluid" alt="صورة">
@@ -148,100 +158,100 @@
                 $('#date_from').attr('min', today);
                 $('#date_to').attr('min', today);
 
-                var value = $('#vacation_type_id option:selected').val();
-                if (value == '3') {
-                    $('#name_dev').attr('hidden', false);
-                    $('#reportImage-div').attr('hidden', true);
-                    $('#reportImage-div-1').attr('hidden', true);
+                // var value = $('#vacation_type_id option:selected').val();
+                // if (value == '3') {
+                //     $('#name_dev').attr('hidden', false);
+                //     $('#reportImage-div').attr('hidden', true);
+                //     $('#reportImage-div-1').attr('hidden', true);
 
 
-                    $('#date_to').prop('disabled', false);
+                //     $('#date_to').prop('disabled', false);
 
-                    $('#employee_id').prop('disabled', true);
+                //     $('#employee_id').prop('disabled', true);
 
-                    $('#employee_id').removeAttr('required');
+                //     $('#employee_id').removeAttr('required');
 
-                } else if (value == '4') {
-                    $('#name_dev').attr('hidden', true);
-                    $('#reportImage-div').attr('hidden', true);
-                    $('#reportImage-div-1').attr('hidden', true);
-
-
-                    $('#date_to').prop('disabled', true);
-                    $('#employee_id').prop('disabled', false);
-                    $('#employee_id').attr('required', true);
-
-                } else if (value == '2') {
-
-                    $('#name_dev').attr('hidden', true);
-                    $('#reportImage-div').attr('hidden', false);
-                    $('#reportImage-div-1').attr('hidden', false);
+                // } else if (value == '4') {
+                //     $('#name_dev').attr('hidden', true);
+                //     $('#reportImage-div').attr('hidden', true);
+                //     $('#reportImage-div-1').attr('hidden', true);
 
 
-                    $('#date_to').prop('disabled', false);
+                //     $('#date_to').prop('disabled', true);
+                //     $('#employee_id').prop('disabled', false);
+                //     $('#employee_id').attr('required', true);
 
-                    $('#employee_id').prop('disabled', false);
-                    $('#employee_id').attr('required', true);
-                } else {
-                    $('#reportImage-div').attr('hidden', true);
-                    $('#reportImage-div-1').attr('hidden', true);
+                // } else if (value == '2') {
 
-                    $('#name_dev').attr('hidden', true);
-                    $('#date_to').prop('disabled', false);
-
-                    $('#employee_id').prop('disabled', false);
-                    $('#employee_id').attr('required', true);
-                }
-
-                $('#vacation_type_id').change(function() {
-                    var value = $('#vacation_type_id option:selected').val();
-
-                    if (value == '3') {
-                        $('#reportImage-div').attr('hidden', true);
-                        $('#reportImage-div-1').attr('hidden', true);
-
-                        $('#date_to').prop('disabled', false);
-                        $('#name_dev').hide();
-
-                        $('#employee_id').prop('disabled', true);
-
-                        $('#employee_id').removeAttr('required');
-
-                    } else if (value == '4') {
-                        $('#reportImage-div').attr('hidden', true);
-                        $('#reportImage-div-1').attr('hidden', true);
+                //     $('#name_dev').attr('hidden', true);
+                //     $('#reportImage-div').attr('hidden', false);
+                //     $('#reportImage-div-1').attr('hidden', false);
 
 
-                        $('#name_dev').hide();
+                //     $('#date_to').prop('disabled', false);
 
-                        $('#date_to').prop('disabled', true);
-                        $('#employee_id').prop('disabled', false);
-                        $('#employee_id').attr('required', true);
+                //     $('#employee_id').prop('disabled', false);
+                //     $('#employee_id').attr('required', true);
+                // } else {
+                //     $('#reportImage-div').attr('hidden', true);
+                //     $('#reportImage-div-1').attr('hidden', true);
 
-                    } else if (value == '2') {
-                        $('#reportImage-div').attr('hidden', false);
-                        $('#reportImage-div-1').attr('hidden', false);
+                //     $('#name_dev').attr('hidden', true);
+                //     $('#date_to').prop('disabled', false);
+
+                //     $('#employee_id').prop('disabled', false);
+                //     $('#employee_id').attr('required', true);
+                // }
+
+                // $('#vacation_type_id').change(function() {
+                //     var value = $('#vacation_type_id option:selected').val();
+
+                //     if (value == '3') {
+                //         $('#reportImage-div').attr('hidden', true);
+                //         $('#reportImage-div-1').attr('hidden', true);
+
+                //         $('#date_to').prop('disabled', false);
+                //         $('#name_dev').hide();
+
+                //         $('#employee_id').prop('disabled', true);
+
+                //         $('#employee_id').removeAttr('required');
+
+                //     } else if (value == '4') {
+                //         $('#reportImage-div').attr('hidden', true);
+                //         $('#reportImage-div-1').attr('hidden', true);
 
 
-                        $('#date_to').prop('disabled', false);
-                        $('#name_dev').show();
+                //         $('#name_dev').hide();
 
-                        $('#employee_id').prop('disabled', false);
-                        $('#employee_id').attr('required', true);
-                    } else {
-                        $('#reportImage-div').attr('hidden', true);
-                        $('#reportImage-div-1').attr('hidden', true);
+                //         $('#date_to').prop('disabled', true);
+                //         $('#employee_id').prop('disabled', false);
+                //         $('#employee_id').attr('required', true);
 
-
-                        $('#date_to').prop('disabled', false);
-                        $('#name_dev').hide();
-
-                        $('#employee_id').prop('disabled', false);
-                        $('#employee_id').attr('required', true);
-                    }
+                //     } else if (value == '2') {
+                //         $('#reportImage-div').attr('hidden', false);
+                //         $('#reportImage-div-1').attr('hidden', false);
 
 
-                });
+                //         $('#date_to').prop('disabled', false);
+                //         $('#name_dev').show();
+
+                //         $('#employee_id').prop('disabled', false);
+                //         $('#employee_id').attr('required', true);
+                //     } else {
+                //         $('#reportImage-div').attr('hidden', true);
+                //         $('#reportImage-div-1').attr('hidden', true);
+
+
+                //         $('#date_to').prop('disabled', false);
+                //         $('#name_dev').hide();
+
+                //         $('#employee_id').prop('disabled', false);
+                //         $('#employee_id').attr('required', true);
+                //     }
+
+
+                // });
                 $('.image-popup').click(function(event) {
                     event.preventDefault();
                     var imageUrl = $(this).data('image');

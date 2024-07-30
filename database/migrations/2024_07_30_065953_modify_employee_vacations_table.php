@@ -17,7 +17,8 @@ class ModifyEmployeeVacationsTable extends Migration
             // Drop columns
             $table->dropColumn(['name', 'date_from', 'date_to']);
             // Add new columns
-            $table->integer('country_id')->nullable();
+            $table->foreignId('country_id')->nullable()->references('id')->on('countries');
+
             $table->integer('days_number')->default(0);
             $table->date('start_date')->nullable();
             $table->enum('status', ['Approved', 'Rejected', 'Pending'])->default('Pending');

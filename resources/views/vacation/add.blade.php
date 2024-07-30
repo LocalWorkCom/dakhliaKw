@@ -102,9 +102,9 @@
                             <label for="vacation_type_id" style=" display: flex; justify-content: flex-start;">المحافظة</label>
                             <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
                                 <option value="">اختر المحافظة</option>
-                                {{-- @foreach ($vacation_types as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach --}}
+                                @foreach ($countries as $item)
+                                    <option value="{{ $item->id }}">{{ $item->country_name_ar }}</option>
+                                @endforeach
                             </select>
                         </div>
                      
@@ -145,59 +145,59 @@
                 $('#date_to').attr('value', today);
 
 
-                $('#vacation_type_id').change(function() {
-                    var value = $('#vacation_type_id option:selected').val();
+                // $('#vacation_type_id').change(function() {
+                //     var value = $('#vacation_type_id option:selected').val();
 
-                    if (value == '3') {
-                        $('#name_dev').attr('hidden', false);
-                        $('#reportImage-div').attr('hidden', true);
+                //     if (value == '3') {
+                //         $('#name_dev').attr('hidden', false);
+                //         $('#reportImage-div').attr('hidden', true);
 
-                        $('#date_to').prop('disabled', false);
+                //         $('#date_to').prop('disabled', false);
 
-                        $('#employee_id').prop('disabled', true);
-                        $('#employee_id').removeAttr('required');
-                        $('#name').attr('required', true);
+                //         $('#employee_id').prop('disabled', true);
+                //         $('#employee_id').removeAttr('required');
+                //         $('#name').attr('required', true);
 
-                        $('#mySelect employee_id').prop('selected', false);
-
-
-                    } else if (value == '4') {
-                        $('#name_dev').attr('hidden', true);
-                        $('#reportImage-div').attr('hidden', true);
-                        $('#date_to').prop('disabled', true);
-                        $('#date_to').attr('value', today);
-                        $('#name').attr('required', false);
-
-                        if (id == 0 || id == '') {
-
-                            $('#employee_id').prop('disabled', false);
-                            $('#employee_id').attr('required', true);
-                        }
-
-                    } else if (value == '2') {
-                        $('#name_dev').attr('hidden', true);
-                        $('#reportImage-div').attr('hidden', false);
-                        $('#date_to').prop('disabled', false);
-                        $('#name').attr('required', false);
-
-                        if (id == 0 || id == '') {
-                            $('#employee_id').prop('disabled', false);
-                            $('#employee_id').attr('required', true);
-                        }
-                    } else {
-                        $('#reportImage-div').attr('hidden', true);
-                        $('#name_dev').attr('hidden', true);
-                        $('#date_to').prop('disabled', false);
-                        $('#name').attr('required', false);
-
-                        if (id == 0 || id == '') {
-                            $('#employee_id').prop('disabled', false);
-                            $('#employee_id').attr('required', true);
-                        }
-                    }
+                //         $('#mySelect employee_id').prop('selected', false);
 
 
-                });
+                //     } else if (value == '4') {
+                //         $('#name_dev').attr('hidden', true);
+                //         $('#reportImage-div').attr('hidden', true);
+                //         $('#date_to').prop('disabled', true);
+                //         $('#date_to').attr('value', today);
+                //         $('#name').attr('required', false);
+
+                //         if (id == 0 || id == '') {
+
+                //             $('#employee_id').prop('disabled', false);
+                //             $('#employee_id').attr('required', true);
+                //         }
+
+                //     } else if (value == '2') {
+                //         $('#name_dev').attr('hidden', true);
+                //         $('#reportImage-div').attr('hidden', false);
+                //         $('#date_to').prop('disabled', false);
+                //         $('#name').attr('required', false);
+
+                //         if (id == 0 || id == '') {
+                //             $('#employee_id').prop('disabled', false);
+                //             $('#employee_id').attr('required', true);
+                //         }
+                //     } else {
+                //         $('#reportImage-div').attr('hidden', true);
+                //         $('#name_dev').attr('hidden', true);
+                //         $('#date_to').prop('disabled', false);
+                //         $('#name').attr('required', false);
+
+                //         if (id == 0 || id == '') {
+                //             $('#employee_id').prop('disabled', false);
+                //             $('#employee_id').attr('required', true);
+                //         }
+                //     }
+
+
+                // });
             });
         </script>
     @endpush
