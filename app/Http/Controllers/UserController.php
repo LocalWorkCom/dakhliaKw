@@ -100,67 +100,72 @@ class UserController extends Controller
     }
 
     public function login(Request $request)
-{
-    $messages = [
-        'military_number.required' => 'رقم العسكري مطلوب.',
-        'password.required' => 'كلمة المرور مطلوبة.',
-    ];
+    {
+        $messages = [
+            'military_number.required' => 'رقم العسكري مطلوب.',
+            'password.required' => 'كلمة المرور مطلوبة.',
+        ];
 
-    $validatedData = Validator::make($request->all(), [
-        'military_number' => 'required|string',
-        'password' => 'required|string',
-    ], $messages);
+        $validatedData = Validator::make($request->all(), [
+            'military_number' => 'required|string',
+            'password' => 'required|string',
+        ], $messages);
 
-    if ($validatedData->fails()) {
-        return back()->withErrors($validatedData)->withInput();
-    }
-
-    $military_number = $request->military_number;
-    $password = $request->password;
-
-    // Check if the user exists
-    $user = User::where('military_number', $military_number)->first();
-
-    if (!$user) {
-        return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
-    }
-
-    // Check if the user has the correct flag
-    if ($user->flag !== 'user') {
-        return back()->with('error', 'لا يسمح لك بدخول الهيئة');
-    }
-
-    $credentials = $request->only('military_number', 'password');
-
-    // Check if the user has logged in within the last two hours
-    $twoHoursAgo = now()->subHours(2);
-
-    if (Auth::attempt($credentials)) {
-        // If the user has logged in within the last two hours, do not set the code
-        if ($user->updated_at >= $twoHoursAgo) {
-            Auth::login($user); // Log the user in
-            return redirect()->route('home');
+        if ($validatedData->fails()) {
+            return back()->withErrors($validatedData)->withInput();
         }
 
-        $set = '123456789';
-        $code = substr(str_shuffle($set), 0, 4);
+        $military_number = $request->military_number;
+        $password = $request->password;
 
-        $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+        // Check if the user exists
+        $user = User::where('military_number', $military_number)->first();
 
-        $response = send_sms_code($msg, $user->phone, $user->country_code);
-        $result = json_decode($response, true);
-
-        if (isset($result['sent']) && $result['sent'] === 'true') {
-            return view('verfication_code', compact('code', 'military_number', 'password'));
-        } else {
-            return back()->with('error', 'سجل الدخول مرة أخرى');
+        if (!$user) {
+            return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
         }
+
+        // Check if the user has the correct flag
+        if ($user->flag !== 'user') {
+            return back()->with('error', 'لا يسمح لك بدخول الهيئة');
+        }
+
+        $credentials = $request->only('military_number', 'password');
+
+        // Check if the user has logged in within the last two hours
+        $twoHoursAgo = now()->subHours(2);
+
+        if (Auth::attempt($credentials)) {
+            // If the user has logged in within the last two hours, do not set the code
+            if ($user->updated_at >= $twoHoursAgo) {
+
+                $firstlogin = 0;
+                if ($user->token == null) {
+                    $firstlogin = 1;
+                    return view('resetpassword', compact('military_number', 'firstlogin'));
+                }
+                
+                Auth::login($user); // Log the user in
+                return redirect()->route('home');
+            }
+
+            $set = '123456789';
+            $code = substr(str_shuffle($set), 0, 4);
+
+            $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+
+            $response = send_sms_code($msg, $user->phone, $user->country_code);
+            $result = json_decode($response, true);
+
+            if (isset($result['sent']) && $result['sent'] === 'true') {
+                return view('verfication_code', compact('code', 'military_number', 'password'));
+            } else {
+                return back()->with('error', 'سجل الدخول مرة أخرى');
+            }
+        }
+
+        return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
     }
-
-    return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
-}
-
-
 
     public function resend_code(Request $request)
     {
@@ -709,9 +714,11 @@ class UserController extends Controller
 
         if ($user->flag == "user") {
             $user->rule_id = $request->rule_id;
+            $user->job_id = $request->job;
             $user->department_id  = $request->department_id;
             if (!Hash::check($request->password, $user->password)) {
                 $user->password = Hash::make($request->password);
+                $user->token = null; // Set token to null before saving
                 $user->save();
                 Auth::logout();
                 session()->flash('success', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى. .');
