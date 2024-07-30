@@ -72,13 +72,14 @@
                                                             <img src="{{ asset($file->file_name) }}"
                                                                 class="img-thumbnail mx-2" alt="{{ $file->file_name }}">
                                                             <br> <br>
+                                                            @if (Auth::user()->hasPermission('download outgoing_files'))
                                                             <a id="downloadButton"
                                                                 href="{{ route('downlaodfile', $file->id) }}"
                                                                 class="btn-download "><i class="fa fa-download"
                                                                     style="color:green;"></i>
                                                                 تحميل الملف
                                                             </a> 
-
+                                                            @endif
                                                         </a>
                                                     </div>
                                                 @endif
