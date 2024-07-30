@@ -98,7 +98,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
-                <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
+                <div class="modal-body  mt-5 mb-5">
                     <form class="edit-grade-form" id="edit-form" action=" {{ route('grads.update') }}" method="POST">
                         @csrf
                         <div class="form-row mx-md-2 ">
