@@ -28,8 +28,8 @@
                 <div class="form-row mx-3 mt-4 d-flex justify-content-center">
 
                     <div class="form-group col-md-5 mx-md-2">
-                        <label for="manger">المدير</label>
-                        <select name="manger" class="form-control " required>
+                        <label for="mangered">المدير</label>
+                        <select name="manger" id="mangered" class="form-control " required>
                             <option value="">اختار المدير</option>
                             @foreach($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -71,14 +71,12 @@
                     </div>
                     <div class="form-group col-md-10 mx-md-2">
                         <label for="description">الموظفين </label>
-                        <select name="employess[]" id="" class="form-group col-md-12 mx-md-2" multiple>
-                            @foreach($employee as $item)
+                        <select name="employess[]" id="employees" class="form-group col-md-12 mx-md-2" multiple style="height: 150px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl">
+                            <!-- @foreach($employee as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
+                            @endforeach -->
                         </select>
-                        @error('description')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        
                     </div>
                 </div>
 
@@ -166,4 +164,44 @@
         @endforeach
     </ul>
 </div> -->
+
+<script>
+ $(document).ready(function() {
+    // Assuming you have a list of users available in JavaScript
+    var allUsers = @json($employee); // If you pass the users list from Blade to JavaScript
+
+    $('#mangered').on('change', function() {
+        var selectedManager = $(this).val();
+        console.log('Selected Manager:', selectedManager);
+
+        // Clear the employees dropdown
+        $('#employees').empty();
+
+        // Iterate over the users list and add only those who are not the selected manager
+        allUsers.forEach(function(user) {
+            if (user.id != selectedManager) {
+                $('#employees').append('<option value="' + user.id + '">' + user.name + '</option>');
+            }
+        });
+    });
+
+    // Initial population of employees list excluding the selected manager (if any)
+    $('#mangered').trigger('change');
+});
+
+
+// $('#mangered').on('change', function() {
+//                         var selectedManager = $(this).val();
+//                         console.log(selectedManager);
+//                         $('#employees').empty();
+
+//                         $.each(data, function(key, employee) {
+//                         if (employee.id != selectedManager) {
+//                             $('#employees').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+//                         }
+//                         // $('#mangered').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+//                     });
+                       
+//                     });
+    </script>
 @endsection
