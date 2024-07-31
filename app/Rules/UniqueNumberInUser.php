@@ -24,7 +24,16 @@ class UniqueNumberInUser implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         //
-        // dd($this->Number->id);email
+        // dd($this->Number->id);phone
+        if($attribute == "phone")
+        {
+            $exists = DB::table('users')->where('id', '!=', $this->Number->id)
+            ->whereRaw("phone = ?", [$value])
+            ->exists();
+            if ($exists) {
+                $fail('هذا الرقم مستخدم من قبل');
+            }
+        }
         if($attribute == "email")
         {
             $exists = DB::table('users')->where('id', '!=', $this->Number->id)
