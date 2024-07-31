@@ -146,24 +146,38 @@
         <!-- قائمة منسدلة -->
         <div id="dropdownMenu4" class="dropdown-menu4">
             <ul>
+                @if (Auth::user()->hasPermission('view grade'))
                 <li>
                  
                    <img src="{{ asset('frontend/images/police.svg') }}" alt="logo" style="margin-left: 7px;">
                    <a href="{{ route('grads.index') }}">الرتب العسكرية</a>
                  
                 </li>
+                @endif
+                @if (Auth::user()->hasPermission('view job'))
                 <li>
                     <img src="{{ asset('frontend/images/jobs.svg') }}" alt="logo" style="margin-left: 7px;">
                     <a href="{{ route('job.index') }}">الوظائف</a>
                 </li>
+                @endif
+                @if (Auth::user()->hasPermission('view Government'))
                 <li>
                     <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
                     <a href="{{ route('government.all') }}">المحافظات</a>
                 </li>
+                @endif
+                @if (Auth::user()->hasPermission('view Region'))
+                <li>
+                    <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
+                    <a href="{{ route('regions.index',['id' => 0]) }}">المناطق</a>
+                </li>
+                @endif
+                @if (Auth::user()->hasPermission('view VacationType'))
                 <li>
                     <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo" style="margin-left: 7px;">
                     <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
                 </li>
+                @endif
                 @if (Auth::user()->hasPermission('view Permission'))
                 <li>
                     <img src="{{ asset('frontend/images/task.svg') }}" alt="logo" style="margin-left: 7px;">

@@ -20,6 +20,9 @@ return [
  'ExternalDepartment' =>'ادارة خارجيه',
  'Io_file' =>'ملفات الوارد ',
  'Inspector' =>' مفتشين',
-
+ 'Country'=>'الدول',
+ 'Qualification'=>'المؤهلات',
+ 'Region'=>'المناطق',
+ ''=>'',
     // Add more permissions as needed
 ];
