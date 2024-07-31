@@ -30,7 +30,7 @@
                             اضافة جديد
                         </button>
                         @endif
-                            <select name="government-select" id="government-select" class="form-group mx-md-2" onchange="filterRegions()">
+                            <select name="government-select" id="government-select" class="form-group mx-md-2 btn-all" onchange="filterRegions()">
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}" @if($government->id == $id) selected @endif>{{ $government->name }}</option>
