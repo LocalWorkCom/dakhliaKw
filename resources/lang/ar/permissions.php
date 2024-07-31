@@ -61,5 +61,7 @@ return [
     'download EmployeeVacation' => 'تحميل ملف اجازة الموظف',
     'download Io_file' => 'تحميل ملفات الوارد',
     'create Io_file' => 'اضافة ملفات الوارد',
+    'add_archive Iotelegram'=>'ارشفة الوارد',
+    'archive Iotelegram'=>'عرض ارشيف الوارد'
     // Add more permissions as needed
 ];

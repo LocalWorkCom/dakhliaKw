@@ -124,9 +124,9 @@
                     <div class="form-group col-md-5 mx-2">
                         <label for="input3">الباسورد</label>
                         <div class="password-container">
-                            <input type="password" id="input3" name="password" class="form-control" placeholder="الباسورد">
+                            <input type="password" id="input3" name="password" class="form-control" placeholder="الباسورد" style="position: absolute">
                             <label class="toggle-password" onclick="togglePasswordVisibility()">
-                                <i id="toggleIcon" class="fa fa-eye"></i>
+                                <i id="toggleIcon" class="fa fa-eye eye-icon" ></i>
                             </label>
                         </div>
                     </div>
@@ -267,13 +267,13 @@
                         placeholder="تاريخ الالتحاق">
                 </div>
             </div>
-            <div class="form-row mx-md-3  d-flex justify-content-center flex-row-reverse">
+            <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
                 {{-- <div class="form-group col-md-5 mx-2">
                     <label for="input22">مدة الخدمة</label>
                     <input type="number" id="input22" name="end_of_service" class="form-control"
                         placeholder="مدة الخدمة ">
                 </div> --}}
-                <div class="form-group col-md-5 mx-2">
+                <div class="form-group col-md-10 mx-2">
                     <label for="input24"> الرتبة</label>
                     <select id="input24" name="grade_id" class="form-control" placeholder="الرتبة">
                         @foreach ($grade as $item)
@@ -283,7 +283,7 @@
                         @endforeach
                     </select>
 
-                </div>
+                </div>  </div>
 
                 <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-10">
@@ -396,8 +396,9 @@
 
 
 
-        </div>
-    </div>
+</div>
+
+
 
     <div class="container col-10 mt-3 mb-3 ">
         <div class="form-row col-10 " dir="ltr">

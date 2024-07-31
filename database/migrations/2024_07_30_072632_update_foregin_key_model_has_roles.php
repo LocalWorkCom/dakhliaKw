@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::table('model_has_roles', function (Blueprint $table) {
             //
-            $table->dropForeign(['role_id']);
+
+            $foreignKey='model_has_roles_role_id_foreign';
+                if ($this->foreignKeyExists('model_has_roles', $foreignKey)) {
+                    $table->dropForeign([$this->getColumnNameFromForeignKey($foreignKey,'model_has_roles')]);
+                }
+            
+
+          //  $table->dropForeign(['role_id']);
             $table->foreign('role_id')->nullable()->references('id')->on('roles')->onDelete('restrict')->onUpdate('cascade');
             
         });
@@ -28,4 +35,51 @@ return new class extends Migration
             //
         });
     }
+
+    /**
+     * Check if a foreign key exists on a table.
+     *
+     * @param  string  $tableName
+     * @param  string  $foreignKeyName
+     * @return bool
+     */
+    protected function foreignKeyExists($tableName, $foreignKeyName)
+    {
+        // For MySQL
+            //echo $foreignKeyName;
+            return DB::selectOne(
+                "SELECT CONSTRAINT_NAME
+                 FROM information_schema.TABLE_CONSTRAINTS
+                 WHERE TABLE_SCHEMA = DATABASE()
+                 AND TABLE_NAME = ?
+                 AND CONSTRAINT_NAME = ?",
+                [$tableName, $foreignKeyName]
+            ) !== null;
+        
+
+        
+
+      
+
+        return false; // Default false if unsupported DB
+    }
+
+      /**
+     * Extract column name from a foreign key constraint name.
+     *
+     * @param  string  $foreignKeyName
+     * @return string
+     */
+    protected function getColumnNameFromForeignKey($foreignKeyName,$tableName)
+    {
+        // Assuming a naming pattern <table>_<column>_foreign
+        $parts = explode('_foreign', $foreignKeyName);
+        $part = explode($tableName.'_',$parts[0]);//explode('_', $parts);
+       // print_r($parts); 
+        //echo $parts[count($parts) - 3];
+       // print_r($part);
+      //  return $parts[count($parts) - 3]; // Extracts the column name
+      return $part[1];
+    }
+
 };

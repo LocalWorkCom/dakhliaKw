@@ -157,7 +157,7 @@ ul {
 #dropdownMenu3 a , #dropdownMenu4 a{
     color: #1C1B1B;
     background-color: #ffffff;
-    font-size: 18px;
+    font-size:20px;
     text-decoration: none;
     font-weight: 400;
   }
@@ -188,7 +188,7 @@ ul {
     font-size: 18px;
 }
 
-.dropdown-menu4 {
+/* .dropdown-menu4 {
     display: none;
     position: absolute;
     background-color: #fff;
@@ -204,8 +204,9 @@ ul {
     overflow-y: auto;
     padding-inline: 10px;
     font-size: 23px;
-}
-.dropdown-menu3 {
+} */
+ 
+/* .dropdown-menu3 {
     display: none;
     position: absolute;
     background-color: #fff;
@@ -221,16 +222,64 @@ ul {
     overflow-y: auto;
     padding-inline: 10px;
     font-size: 23px;
+} */
+.dropdown-menu4 {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -55px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow-y: auto;
+    padding-inline: 10px;
+    font-size: 23px;
+    height: 200px;
+    width: 200px !important;
+}
+
+.nav-item.active .dropdown-menu4 {
+    display: block; 
+}
+.nav-item {
+    position: relative;
+}
+.dropdown-menu3 {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -45px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    height: 200px;
+    width: 200px !important;
+    text-align: right;
+    padding-inline: 10px;
+    font-size: 27px;
+}
+.dropdown-menu3 li , .dropdown-menu4 li{
+    padding: 8px 12px; 
+    display: flex;
+}
+
+.dropdown-menu3 li a  , .dropdown-menu4 li a {
+    text-decoration: none; 
+    color: black; 
+    display: block; 
+}
+.nav-item.active .dropdown-menu3 {
+    display: block; 
 }
 .second-section .bell i{
 font-size: 24px;
 color: #FFFFFF;
 }
-
 .second-section input{
     width: 500px;
     height: 44px;
-
 }
 .second-section input::placeholder{
 text-align: end;
@@ -877,11 +926,12 @@ table.dataTable.no-footer {
     border: none !important;
     border-radius: 10px !important;
     width: auto !important;
-    height: 33px !important;
+    height: 30px !important;
     font-size: 16px !important;
     justify-content: center !important;
-    padding-block: 8px;
+    padding-block: 3px;
     margin-inline: 2px;
+    margin-block: 4px;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     color: #333 !important;
@@ -1080,4 +1130,10 @@ margin-inline: 30px;
 .body-img-modal p{
 font-size: 24px;
 }
-/* test  */
+.eye-icon{
+position: relative;
+  position: relative;
+  font-size: 19px;
+  top: 12px;
+   right: 500px;
+}

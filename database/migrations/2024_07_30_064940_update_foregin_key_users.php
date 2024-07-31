@@ -16,8 +16,7 @@ return new class extends Migration
 
             $foreignKeys = [
                 'users_rule_id_foreign',
-                'users_created_by_foreign',
-                'users_updated_by_foreign',
+              
                 'users_grade_id_foreign',
                 'users_department_id_foreign',
                 'users_job_id_foreign',
@@ -42,8 +41,8 @@ return new class extends Migration
             
             // Add new foreign key constraints without cascading on delete
             $table->foreign('rule_id')->nullable()->references('id')->on('rules')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('created_by')->nullable()->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('updated_by')->nullable( )->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+          //  $table->foreign('created_by')->nullable()->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+          //  $table->foreign('updated_by')->nullable( )->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
             $table->foreign('grade_id')->nullable()->references('id')->on('grades')->onDelete('restrict')->onUpdate('cascade');  //الرتبه
             $table->foreign('department_id')->nullable()->references('id')->on('departements')->onDelete('restrict')->onUpdate('cascade');  // القسم
             $table->foreign('job_id')->nullable()->references('id')->on('jobs')->onDelete('restrict')->onUpdate('cascade');  // 
@@ -89,7 +88,7 @@ return new class extends Migration
         return false; // Default false if unsupported DB
     }
 
-     /**
+      /**
      * Extract column name from a foreign key constraint name.
      *
      * @param  string  $foreignKeyName

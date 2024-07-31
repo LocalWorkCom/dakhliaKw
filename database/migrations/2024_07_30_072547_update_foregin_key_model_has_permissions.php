@@ -62,10 +62,15 @@ return new class extends Migration
      * @param  string  $foreignKeyName
      * @return string
      */
-    protected function getColumnNameFromForeignKey($foreignKeyName)
+    protected function getColumnNameFromForeignKey($foreignKeyName,$tableName)
     {
         // Assuming a naming pattern <table>_<column>_foreign
-        $parts = explode('_', $foreignKeyName);
-        return $parts[count($parts) - 3]; // Extracts the column name
+        $parts = explode('_foreign', $foreignKeyName);
+        $part = explode($tableName.'_',$parts[0]);//explode('_', $parts);
+       // print_r($parts); 
+        //echo $parts[count($parts) - 3];
+       // print_r($part);
+      //  return $parts[count($parts) - 3]; // Extracts the column name
+      return $part[1];
     }
 };
