@@ -23,21 +23,19 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
-                        {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
+                        @if (Auth::user()->hasPermission('create Region'))
                         <button type="button" class="btn-all  "
                         onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
-                        {{-- @endif --}}
-                            {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
-                            <select name="government" id="government" class="form-group mx-md-2" >
+                        @endif
+                            <select name="government-select" id="government-select" class="form-group mx-md-2" onchange="filterRegions()">
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
-                                    <option value="{{ $government->id }}">{{ $government->name }}</option>
+                                    <option value="{{ $government->id }}" @if($government->id == $id) selected @endif>{{ $government->name }}</option>
                                 @endforeach
                             </select>
-                            {{-- @endif --}}
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -83,21 +81,21 @@
                         @csrf
                         <div class="form-group">
                             <label for="nameadd">الاسم</label>
-                            <input type="text" id="nameadd" name="nameadd" class="form-control">
+                            <input type="text" id="nameadd" name="nameadd" class="form-control" required>
                             @error('nameadd')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <label for="government">المحافظات </label>
-                            <select name="government" id="government" class="form-group col-md-12 mx-md-2" >
+                            <label for="governmentid">المحافظات </label>
+                            <select name="governmentid" id="governmentid" class="form-group col-md-12 mx-md-2" required>
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}">{{ $government->name }}</option>
                                 @endforeach
                             </select>
-                            @error('government')
+                            @error('government-id')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
 
@@ -128,13 +126,13 @@
                         @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
-                            <input type="text" id="nameedit" value="" name="name" class="form-control">
+                            <input type="text" id="nameedit" value="" name="name" class="form-control" required>
                             <input type="text" id="idedit" value="" name="id" hidden class="form-control">
 
                         </div>
                         <div class="form-group">
                             <label for="government">المحافظات</label>
-                            <select name="government" id="government" class="form-group col-md-12 mx-md-2" >
+                            <select name="government" id="government" class="form-group col-md-12 mx-md-2" required>
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}">{{ $government->name }}</option>
@@ -155,7 +153,7 @@
         </div>
     </div>
     {{-- model for delete form --}}
-    {{-- <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -165,7 +163,7 @@
                         </button>
                     </div>
                 </div>
-                <form id="delete-form" action="{{ route('grads.delete') }}" method="POST">
+                <form id="delete-form" action="{{ route('regions.delete') }}" method="POST">
                     @csrf
                     <div class="modal-body  d-flex justify-content-center">
                         <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الرتبه ؟</h5>
@@ -184,7 +182,7 @@
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div>
 @endsection
 @push('scripts')
     <script>
@@ -217,7 +215,7 @@
             var government = document.getElementById('government').value;
             var form = document.getElementById('edit-form');
 
-            form.submit();
+            // form.submit();
 
         }
         function openadd() {
@@ -226,19 +224,26 @@
 
         function confirmAdd() {
             var name = document.getElementById('nameadd').value;
-            var government = document.getElementById('government').value;
+            var government = document.getElementById('governmentid').value;
             var form = document.getElementById('add-form');
 
-            form.submit();
+            // form.submit();
 
         }
+        var table;
         $(document).ready(function() {
             $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
-
-            $('#users-table').DataTable({
+            government_id = $('#government-select').val();
+            console.log(government_id);
+            var table =$('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('getAllregions') }}', // Correct URL concatenation
+                ajax: {
+                url: '{{ route('getAllregions') }}',
+                data: function(d) {
+                d.government_id = $('#government-select').val(); // Add government_id to request
+            }
+            }, // Correct URL concatenation
                 columns: [
                     {
                         data: 'name',
@@ -284,10 +289,19 @@
                                          "pagingType": "full_numbers"
             });
 
-
+            $('#government-select').change(function() {
+        table.ajax.reload(); // Reload DataTable data on dropdown change
+    });
             });
 
-
+            function filterRegions() {
+              var  government_id = $('#government-select').val();
+              
+        if (window.table) {
+            console.log('d');
+            window.table.ajax.reload(); // Reload DataTable with new filter
+        }
+    }
 
     </script>
 @endpush
