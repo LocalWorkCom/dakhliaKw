@@ -117,7 +117,7 @@
                             columnDefs: [{
                                 targets: -1,
                                 render: function(data, type, row) {
-                                    var showIotelegram = "<?php echo Auth::user()->hasPermission('show Iotelegram'); ?>";
+                                    var showIotelegram = "<?php echo Auth::user()->hasPermission('view Iotelegram'); ?>";
                                     var showButton = '';
                                     // Using route generation correctly in JavaScript
                                     var showUrl = '{{ route('iotelegram.show', ':id') }}';

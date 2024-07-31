@@ -65,9 +65,9 @@
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
                         <tr>
-                            <th scope="row"> الاسم</th>
+                            <th scope="row" style="    background-color: #f5f6fa;"> الاسم</th>
                             
-                            <td >{{$user->name}} </td>
+                            <td style="    background-color: #f5f6fa;" >{{$user->name}} </td>
                         </tr>
 
                         <tr>
