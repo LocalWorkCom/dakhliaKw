@@ -31,12 +31,14 @@ class regionsController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
+            $edit_permission=null;
+            $region_permission=null;
             if(Auth::user()->hasPermission('edit Government')){
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
-            // if(Auth::user()->hasPermission('view Region')){
-                $region_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  href="'.route('regions.index').'">  <i class="fa fa-edit"></i> مناطق </a>';
-            // }
+            if(Auth::user()->hasPermission('view Region')){
+                $region_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  href="'.route('regions.index',['id' => $row->id ]).'">  <i class="fa fa-edit"></i> مناطق </a>';
+            }
             return $edit_permission .' '. $region_permission ;
 
             // <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>
@@ -86,33 +88,40 @@ class regionsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-        return view("regions.index");
+        
+        return view("regions.index",compact("id"));
     }
-    public function getregions()
+    public function getregions(Request $request)
     {
-        $data = Region::with('government')
+        $query = Region::with('government')
         ->select('regions.*', 'governments.name as government_name')
         ->join('governments', 'regions.government_id', '=', 'governments.id')
         ->orderBy('regions.updated_at', 'desc')
-        ->orderBy('regions.created_at', 'desc')
-        ->get();
+        ->orderBy('regions.created_at', 'desc');
 
-        return DataTables::of($data)->addColumn('action', function ($row) {
-            $name = "'$row->name'";
-            // if(Auth::user()->hasPermission('edit Region')){
-                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.','.$row->government_id.')">  <i class="fa fa-edit"></i> تعديل </a>';
-            // }
-            return $edit_permission ;
+        if ($request->has('government_id') && $request->government_id) {
+            $query->where('government_id', $request->government_id);
+        }
 
-            // <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>
-        })
-        ->addColumn('government_name', function ($row) {
-            return $row->government_name;
-        })
-        ->rawColumns(['action'])
-        ->make(true);
+    $data = $query->get();
+
+    return DataTables::of($data)->addColumn('action', function ($row) {
+        $name = "'$row->name'";
+        $editPermission = null;
+        if(Auth::user()->hasPermission('edit Region')){
+        $editPermission = '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit('.$row->id.','.$name.','.$row->government_id.')"> <i class="fa fa-edit"></i> تعديل </a>';
+        }
+        // $deletePermission = '<a class="btn btn-sm" style="background-color: #C91D1D;" onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+        return $editPermission ;
+    })
+    ->addColumn('government_name', function ($row) {
+        return $row->government_name;
+    })
+    ->rawColumns(['action'])
+    ->make(true);
+        
     }
     /**
      * Show the form for creating a new resource.
@@ -131,10 +140,11 @@ class regionsController extends Controller
         $requestinput=$request->except('_token');
         $region = new Region();
         $region->name=$request->nameadd;
-        $region->government_id=$request->government;
+        $region->government_id=$request->governmentid;
         $region->save();
         $message="تم اضافه المنطقه";
-        return redirect()->route('regions.index',compact('message'));
+        $id=0;
+        return redirect()->route('regions.index',compact('message' ,'id'));
     }
 
    
@@ -151,7 +161,8 @@ class regionsController extends Controller
         $region->save();
 
         $message='تم التعديل على المنطقه';
-        return redirect()->route('regions.index',compact('message'));
+        $id=0;
+        return redirect()->route('regions.index',compact('message' ,'id'));
     }
 
     /**
@@ -164,9 +175,10 @@ class regionsController extends Controller
         // if( $isForeignKeyUsed ){
         //     return redirect()->route('qualifications.index')->with(['message' => 'لا يمكن حذف هذا المؤهل  يوجد موظفين له']);
         // }else{
-            $type= Region::find($request->id);
-            $type->delete();
-            return redirect()->route('qualifications.index')->with(['message' => 'تم حذف المنطقه']);
+            // $type= Region::find($request->id);
+            // $type->delete();
+            // $id=0;
+            // return redirect()->route('regions.index',compact('message' ,'id'));
 
         // }
     }

@@ -61,5 +61,13 @@ return [
     'download EmployeeVacation' => 'تحميل ملف اجازة الموظف',
     'download Io_file' => 'تحميل ملفات الوارد',
     'create Io_file' => 'اضافة ملفات الوارد',
+    'view Qualification '=> 'عرض المؤهلات',
+    'edit Qualification'=>  'تعديل المؤهلات',
+    'create Qualification'=> 'أضافه المؤهلات',
+    'delete Qualification'=>  'حذف المؤهلات',
+
+    'view Region'=> 'عرض المناطق',
+    'edit Region'=>  'تعديل المناطق',
+    'create Region'=> 'أضافه المناطق',
     // Add more permissions as needed
 ];

@@ -168,11 +168,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('setting/grads/delete', [settingController::class, 'deletegrads'])->name('grads.delete')->middleware('check.permission:delete grade');
     //end grads
     //Start qualifications -------- Need middleware for gard
-        Route::get('setting/qualifications/all', [qualificationController::class, 'index'])->name('qualifications.index');
-        Route::get('setting/qualifications/ajax', [qualificationController::class, 'getqualification'])->name('getAllqualification');
-        Route::post('setting/qualifications/create', [qualificationController::class, 'store'])->name('qualification.store');
-        Route::post('setting/qualifications/edit', [qualificationController::class, 'update'])->name('qualification.update');
-        Route::post('setting/qualifications/delete', [qualificationController::class, 'destroy'])->name('qualification.delete');
+        Route::get('setting/qualifications/all', [qualificationController::class, 'index'])->name('qualifications.index')->middleware('check.permission:view Qualification');
+        Route::get('setting/qualifications/ajax', [qualificationController::class, 'getqualification'])->name('getAllqualification')->middleware('check.permission:view Qualification');
+        Route::post('setting/qualifications/create', [qualificationController::class, 'store'])->name('qualification.store')->middleware('check.permission:view Qualification');
+        Route::post('setting/qualifications/edit', [qualificationController::class, 'update'])->name('qualification.update')->middleware('check.permission:view Qualification');
+        Route::post('setting/qualifications/delete', [qualificationController::class, 'destroy'])->name('qualification.delete')->middleware('check.permission:view Qualification');
 
     //End qualifications
     //start government
@@ -185,12 +185,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('setting/government/show/{id}', [regionsController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
 //endgovernment
     //Start Regions -------- Need middleware for gard
-      Route::get('setting/Regions/all', [regionsController::class, 'index'])->name('regions.index');
-      Route::get('setting/Regions/ajax', [regionsController::class, 'getregions'])->name('getAllregions');
-      Route::get('setting/RegionBygovernment', [regionsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment');
-      Route::post('setting/Regions/create', [regionsController::class, 'store'])->name('regions.store');
-      Route::post('setting/Regions/edit', [regionsController::class, 'update'])->name('regions.update');
-      Route::post('setting/Regions/delete', [regionsController::class, 'destroy'])->name('regions.delete');
+      Route::get('setting/Regions/all/{id}', [regionsController::class, 'index'])->name('regions.index')->middleware('check.permission:view Region');
+      Route::get('setting/Regions/ajax', [regionsController::class, 'getregions'])->name('getAllregions')->middleware('check.permission:view Region');
+      Route::get('setting/RegionBygovernment', [regionsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
+      Route::post('setting/Regions/create', [regionsController::class, 'store'])->name('regions.store')->middleware('check.permission:view Region');
+      Route::post('setting/Regions/edit', [regionsController::class, 'update'])->name('regions.update')->middleware('check.permission:view Region');
+      Route::post('setting/Regions/delete', [regionsController::class, 'destroy'])->name('regions.delete')->middleware('check.permission:view Region');
 
     //End Regions
     //setting end
