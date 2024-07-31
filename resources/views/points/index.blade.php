@@ -6,14 +6,14 @@
 </script>
 @endpush
 @section('title')
-    المناطق
+    النقاط
 @endsection
 @section('content')
     <section>
         <div class="row">
 
             <div class="container welcome col-11">
-                <p> المنـــاطق</p>
+                <p> نقـــاط</p>
             </div>
         </div>
 
@@ -30,12 +30,12 @@
                             اضافة جديد
                         </button>
                         @endif
-                            <select name="government-select" id="government-select" class="form-group mx-md-2" onchange="filterRegions()">
+                            {{-- <select name="government-select" id="government-select" class="form-group mx-md-2" onchange="filterRegions()">
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}" @if($government->id == $id) selected @endif>{{ $government->name }}</option>
                                 @endforeach
-                            </select>
+                            </select> --}}
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -233,16 +233,16 @@
         var table;
         $(document).ready(function() {
             $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
-            government_id = $('#government-select').val();
-            console.log(government_id);
+            // government_id = $('#government-select').val();
+            // console.log(government_id);
             var table =$('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                url: '{{ route('getAllregions') }}',
-                data: function(d) {
-                d.government_id = $('#government-select').val(); // Add government_id to request
-            }
+                url: '{{ route('getAllpoints') }}',
+            //     data: function(d) {
+            //     d.government_id = $('#government-select').val(); // Add government_id to request
+            // }
             }, // Correct URL concatenation
                 columns: [
                     {

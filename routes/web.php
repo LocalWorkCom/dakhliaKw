@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostmanController;
 use App\Http\Controllers\settingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\pointsController;
 use App\Http\Controllers\qualificationController;
 use App\Http\Controllers\regionsController;
+use App\Http\Controllers\sectorsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -170,29 +172,42 @@ Route::middleware(['auth'])->group(function () {
     //Start qualifications -------- Need middleware for gard
         Route::get('setting/qualifications/all', [qualificationController::class, 'index'])->name('qualifications.index')->middleware('check.permission:view Qualification');
         Route::get('setting/qualifications/ajax', [qualificationController::class, 'getqualification'])->name('getAllqualification')->middleware('check.permission:view Qualification');
-        Route::post('setting/qualifications/create', [qualificationController::class, 'store'])->name('qualification.store')->middleware('check.permission:view Qualification');
-        Route::post('setting/qualifications/edit', [qualificationController::class, 'update'])->name('qualification.update')->middleware('check.permission:view Qualification');
-        Route::post('setting/qualifications/delete', [qualificationController::class, 'destroy'])->name('qualification.delete')->middleware('check.permission:view Qualification');
+        Route::post('setting/qualifications/create', [qualificationController::class, 'store'])->name('qualification.store')->middleware('check.permission:create Qualification');
+        Route::post('setting/qualifications/edit', [qualificationController::class, 'update'])->name('qualification.update')->middleware('check.permission:edit Qualification');
+        // Route::post('setting/qualifications/delete', [qualificationController::class, 'destroy'])->name('qualification.delete')->middleware('check.permission:view Qualification');
 
     //End qualifications
     //start government
-    Route::get('setting/government', [regionsController::class, 'getAllgovernment'])->name('setting.getAllgovernment')->middleware('check.permission:view Government');
-    Route::get('setting/government/all', [regionsController::class, 'indexgovernment'])->name('government.all')->middleware('check.permission:view Government');
-    Route::post('setting/government/add', [regionsController::class, 'addgovernment'])->name('government.add')->middleware('check.permission:edit Government');
-    Route::get('setting/government/create', [regionsController::class, 'creategovernment'])->name('government.create')->middleware('check.permission:create Government');
-    Route::post('setting/government/update', [regionsController::class, 'updategovernment'])->name('government.update')->middleware('check.permission:edit Government');
-    Route::get('setting/government/edit/{id}', [regionsController::class, 'editgovernment'])->name('government.edit')->middleware('check.permission:edit Government');
-    Route::get('setting/government/show/{id}', [regionsController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
-//endgovernment
-    //Start Regions -------- Need middleware for gard
-      Route::get('setting/Regions/all/{id}', [regionsController::class, 'index'])->name('regions.index')->middleware('check.permission:view Region');
-      Route::get('setting/Regions/ajax', [regionsController::class, 'getregions'])->name('getAllregions')->middleware('check.permission:view Region');
-      Route::get('setting/RegionBygovernment', [regionsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
-      Route::post('setting/Regions/create', [regionsController::class, 'store'])->name('regions.store')->middleware('check.permission:view Region');
-      Route::post('setting/Regions/edit', [regionsController::class, 'update'])->name('regions.update')->middleware('check.permission:view Region');
-      Route::post('setting/Regions/delete', [regionsController::class, 'destroy'])->name('regions.delete')->middleware('check.permission:view Region');
-
+        Route::get('setting/government', [regionsController::class, 'getAllgovernment'])->name('setting.getAllgovernment')->middleware('check.permission:view Government');
+        Route::get('setting/government/all', [regionsController::class, 'indexgovernment'])->name('government.all')->middleware('check.permission:view Government');
+        Route::post('setting/government/add', [regionsController::class, 'addgovernment'])->name('government.add')->middleware('check.permission:edit Government');
+        Route::get('setting/government/create', [regionsController::class, 'creategovernment'])->name('government.create')->middleware('check.permission:create Government');
+        Route::post('setting/government/update', [regionsController::class, 'updategovernment'])->name('government.update')->middleware('check.permission:edit Government');
+        Route::get('setting/government/edit/{id}', [regionsController::class, 'editgovernment'])->name('government.edit')->middleware('check.permission:edit Government');
+        Route::get('setting/government/show/{id}', [regionsController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
+    //endgovernment
+    //Start Regions 
+        Route::get('setting/Regions/all/{id}', [regionsController::class, 'index'])->name('regions.index')->middleware('check.permission:view Region');
+        Route::get('setting/Regions/ajax', [regionsController::class, 'getregions'])->name('getAllregions')->middleware('check.permission:view Region');
+        Route::get('setting/RegionBygovernment', [regionsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
+        Route::post('setting/Regions/create', [regionsController::class, 'store'])->name('regions.store')->middleware('check.permission:create Region');
+        Route::post('setting/Regions/edit', [regionsController::class, 'update'])->name('regions.update')->middleware('check.permission:edit Region');
+        // Route::post('setting/Regions/delete', [regionsController::class, 'destroy'])->name('regions.delete')->middleware('check.permission:view Region');
     //End Regions
+    //Start sectors 
+        Route::get('sectors/all/{id}', [sectorsController::class, 'index'])->name('sectors.index')->middleware('check.permission:view Sector');
+        Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors')->middleware('check.permission:view Sector');
+        // Route::get('sectors', [sectorsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
+        Route::post('sectors/create', [sectorsController::class, 'store'])->name('sectors.store')->middleware('check.permission:create Sector');
+        Route::post('sectors/edit', [sectorsController::class, 'update'])->name('sectors.update')->middleware('check.permission:edit Sector');
+    //End sectors
+    //Start points 
+        Route::get('points/all/{id}', [pointsController::class, 'index'])->name('points.index')->middleware('check.permission:view Point');
+        Route::get('points/ajax', [pointsController::class, 'getpoints'])->name('getAllpoints')->middleware('check.permission:view Point');
+        // Route::get('points', [pointsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
+        Route::post('points/create', [pointsController::class, 'store'])->name('points.store')->middleware('check.permission:create Point');
+        Route::post('points/edit', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
+    //End points
     //setting end
 
 
