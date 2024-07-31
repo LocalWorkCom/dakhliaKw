@@ -88,8 +88,7 @@ class UserController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 
-            return '<button class="btn btn-primary btn-sm">Edit</button>
-              <a href="" class="btn btn-primary btn-sm">vacations</a>';
+            return $row;
         })
             ->addColumn('department', function ($row) { // New column for departments count
 
