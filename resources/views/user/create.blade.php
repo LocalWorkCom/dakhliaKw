@@ -60,7 +60,7 @@
                             <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
                                 <div class="radio-btns mx-md-4 ">
                                     <input type="radio" class="form-check-input" id="male" name="gender"
-                                        value="man" style="height:20px; width:20px;">
+                                        value="man" style="height:20px; width:20px;" checked>
                                     <label class="form-check-label mx-2" for="male">ذكر</label>
                                 </div>
                                 <div class="radio-btns mx-md-4 ">
@@ -73,13 +73,13 @@
                             <div class="form-group d-flex  justify-content-end col-md-5 mx-2">
                                 <div class="radio-btns mx-md-4 ">
                                     <input type="radio" class="form-check-input" id="solder" name="solderORcivil"
-                                        value="military" style="height:20px; width:20px;">
+                                        value="military" style="height:20px; width:20px;" >
                                     <label class="form-check-label mx-2" for="solder">عسكرى</label>
                                 </div>
                                 <div class="radio-btns mx-md-4">
                                     <input type="radio" class="form-check-input" id="civil" name="solderORcivil"
-                                        value="civil" style="height:20px; width:20px;">
-                                    <label class="form-check-label mx-2" for="civil">مدنى</label>
+                                        value="civil" style="height:20px; width:20px;" checked>
+                                    <label class="form-check-label mx-2" for="civil" >مدنى</label>
                                 </div>
                                 <label for="input44" class="mx-3">التصنيف</label>
                             </div>
