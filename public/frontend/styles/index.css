@@ -1095,18 +1095,18 @@ color: #2A2726;
     width: 96% !important;}
 .moftsh .input-group input , .moftsh .input-group select{
 width: 100%;
-height:50px;
+height:45px;
 background-color: #F8F8F8;
-border-radius: 10px;
+border-radius: 10px !important;
 }
-.moftsh.input-group .note{
+.moftsh .input-group .note{
     width: 100%;
     height:100px;
     background-color: #F8F8F8;
-    border-radius: 10px;
+    border-radius: 10px ;
     }
-.moftsh .button-search {
-    height:50px;
+    .moftsh .button-search {
+        height: 45px;
     }
 .h4-background{
 background-color: #FFE7CB;
@@ -1127,8 +1127,10 @@ height: 100px;
 width: 100px;
 margin-inline: 30px;
 }
-.body-img-modal p{
-font-size: 24px;
+.body-img-modal p {
+    padding-block: 13px;
+    font-size: 24px;
+    font-weight: 700;
 }
 .eye-icon{
 position: relative;
@@ -1136,4 +1138,70 @@ position: relative;
   font-size: 19px;
   top: 12px;
    right: 500px;
+}
+.hidden {
+    display: none;
+}
+
+.btn-back {
+width: 150px;
+height: 45px;
+border-radius: 10px;
+background-color: #FAFBFD;
+font-family: Almarai;
+font-size: 24px;
+font-weight: 400;
+line-height: 26.78px;
+text-align: center;
+border: 0.5px solid #D7D8D9;
+color: #274373;
+}
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+.select-box {
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #dee2e6;
+    ;
+padding-inline: 20px;
+background: #f5f6fa;
+    border-radius: 10px;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.options {
+position: absolute;
+top: 100%;
+left: 0;
+width: 100%;
+max-height: 150px;
+overflow-y: auto;
+border: 0.2px solid rgb(199, 196, 196);
+border-top: none;
+background-color: #ffffff;
+z-index: 1000;
+display: none;
+font-size: 21px;
+text-align: right;
+}
+.option {
+    padding: 10px;
+    cursor: pointer;
+    font-weight: 400;
+}
+.option:hover {
+    background: #f5f6fa;
+}
+.search-box {
+    padding: 10px;
+}
+.search-box input {
+    width: 100%;
+    border: none;
+    padding: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
 }
