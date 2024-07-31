@@ -17,7 +17,7 @@ return new class extends Migration
               
                 'postmans_created_by_foreign',
                 'postmans_updated_by_foreign',
-                'postmans_department_id',
+                'postmans_department_id_foreign',
             ];
 
 
@@ -30,7 +30,7 @@ return new class extends Migration
           /*   $table->dropForeign(['created_by']);
             $table->dropForeign(['updated_by']);
             $table->dropForeign(['department_id']); */
-            $table->foreign('department_id')->nullable()->references('id')->on('departements')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('department_id')->nullable()->references('id')->on('external_departements')->onDelete('restrict')->onUpdate('cascade');
 
             $table->foreign('created_by')->nullable()->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
 

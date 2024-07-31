@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use App\Models\departements;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Rules\UniqueNumberInUser;
 use App\DataTables\UsersDataTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -615,25 +616,25 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        if ($user->flag == "user") {
-            $messages = [
-                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
-                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
-                'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
-                'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
-            ];
+        // if ($user->flag == "user") {
+        //     $messages = [
+        //         'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+        //         'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
+        //         'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+        //         'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
+        //         'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
+        //         'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
+        //     ];
 
-            $validatedData = Validator::make($request->all(), [
-                'military_number' => 'required|string|max:255',
-                'phone' => 'required|string',
-                'file_number' => 'required|string',
-                'rule_id' => 'required',
-                'password' => 'required',
-                'Civil_number' => 'required',
-            ], $messages);
-        } else {
+        //     $validatedData = Validator::make($request->all(), [
+        //         'military_number' => 'required|string|max:255',
+        //         'phone' => 'required|string',
+        //         'file_number' => 'required|string',
+        //         'rule_id' => 'required',
+        //         'password' => 'required',
+        //         'Civil_number' => 'required',
+        //     ], $messages);
+        // } else {
             $messages = [
                 'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
@@ -643,13 +644,34 @@ class UserController extends Controller
             ];
 
             $validatedData = Validator::make($request->all(), [
-                'military_number' => 'required|string|max:255',
+                // 'military_number' => 'required|string|max:255',
+                'military_number' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    // ValidationRule::unique('permissions', 'name'),
+                    new UniqueNumberInUser($user),
+                ],
                 'phone' => 'required|string',
-                'file_number' => 'required|string',
+                // 'file_number' => 'required|string',
+                'file_number' => [
+                    'required',
+                    'string',
+                    // 'max:255',
+                    // ValidationRule::unique('permissions', 'name'),
+                    new UniqueNumberInUser($user),
+                ],
                 'public_administration' => 'required',
-                'Civil_number' => 'required',
+                // 'Civil_number' => 'required',
+                'Civil_number' => [
+                    'required',
+                    // 'string',
+                    // 'max:255',
+                    // ValidationRule::unique('permissions', 'name'),
+                    new UniqueNumberInUser($user),
+                ],
             ], $messages);
-        }
+        // }
 
         // Handle validation failure
         if ($validatedData->fails()) {
@@ -668,6 +690,7 @@ class UserController extends Controller
         $user->Civil_number = $request->Civil_number;
         $user->file_number = $request->file_number;
         $user->flag = $request->flag;
+        $user->job_id = $request->job;
         $user->seniority = $request->seniority;
         $user->public_administration = $request->public_administration;
         $user->work_location = $request->work_location;
@@ -692,7 +715,6 @@ class UserController extends Controller
 
         if ($user->flag == "user") {
             $user->rule_id = $request->rule_id;
-            $user->job_id = $request->job;
             $user->department_id = $request->department_id;
 
             if ($request->password && !Hash::check($request->password, $user->password)) {
