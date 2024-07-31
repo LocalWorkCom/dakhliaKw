@@ -58,9 +58,8 @@
                             @enderror
                         </div>
                     </div>
-                    
-            </div>
-            <div class="form-group col-md-10 mx-md-2">
+                    <div class="form-row mx-md-2 d-flex justify-content-center">
+                    <div class="form-group col-md-10">
                         <label for="employees">الموظفين </label>
                         <select name="employess[]" id="employees" class="form-group col-md-12 mx-md-2" multiple style="height: 150px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl">
                         @foreach($employee as $employe)
@@ -71,6 +70,9 @@
                         </select>
                         
                     </div>
+                    </div>
+            </div>
+            
              <div class="container col-10 ">
                 <div class="form-row mt-1 mb-3">
                     <button class="btn-blue " type="submit" dir="rtl">
