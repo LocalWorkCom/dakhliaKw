@@ -105,7 +105,7 @@
                         @csrf
                         <div class="form-group ">
                             <label for="name">الاسم</label>
-                            <input type="text" id="nameedit" value="" name="name" class="form-control">
+                            <input type="text" id="nameedit" value="" name="name" class="form-control" required>
                             <input type="text" id="idedit" value="" name="id" hidden class="form-control">
 
                         </div> 
@@ -187,9 +187,13 @@
 
         function confirmEdit() {
             var id = document.getElementById('id').value;
+            var name = document.getElementById('nameedit').value;
+            console.log(name);
             var form = document.getElementById('edit-form');
-
-            form.submit();
+            // if(form){
+            //     form.submit();
+            // }
+            
 
         }
 
