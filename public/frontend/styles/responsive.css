@@ -12,6 +12,11 @@
         padding-inline: 57px;
     }
 } */
+.eye-icon {
+    font-size: 19px;
+    top: 12px;
+    right: 350px;
+}
 .dropdown-menu4 , .dropdown-menu3 {
     top: 100%;
     left: -55px;
@@ -226,6 +231,11 @@
         position: relative;
     padding-inline: 53px;
     } */
+    .eye-icon {
+        font-size: 18px;
+        top: 14px;
+        right: 278px;
+    }
     .dropdown-menu4, .dropdown-menu3 {
         top: 100%;
         left: -46px;
@@ -338,6 +348,11 @@
         position: relative;
         padding-inline: 33px;
     } */
+    .eye-icon {
+        font-size: 18px;
+        top: 14px;
+        right: 272px;
+    }
     .dropdown-menu4, .dropdown-menu3 {
         top: 100%;
         left: -40px;
@@ -462,6 +477,11 @@
 @media (max-width: 1100px){
     .navbar{
         width: 100%;
+    }
+    .eye-icon {
+        font-size: 18px;
+        top: 14px;
+        right: 230px;
     }
     .collapse .navbar-nav {
         padding-left: 25px;
@@ -654,6 +674,11 @@
         font-size: 13px;
         font-weight: 400;
     }
+    .eye-icon {
+        font-size: 16px;
+        top: 14px;
+        right: 154px;
+    }
     .dropdown-menu4, .dropdown-menu3 {
         top: 100%;
         left: -31px;
@@ -840,6 +865,11 @@
 .input-group{
     display: none;
 }
+.eye-icon {
+    font-size: 16px;
+    top: 14px;
+    right: 330px;
+}
 .first-section {
     margin-left: 114px;
 }
@@ -884,6 +914,11 @@
     li {
         width: 110px;
         margin-left: 20px;
+    }
+    .eye-icon {
+        font-size: 15px;
+        top: 6px;
+        right: 227px;
     }
     .header-side {
         height: 50px;
@@ -1073,6 +1108,11 @@ footer {
     li {
         width: 113px;
     }
+    .eye-icon {
+        font-size: 13px;
+        top: 8px;
+        right: 190px;
+    }
     .first-section img {
         height: 53px;
         width: 53px;
@@ -1171,6 +1211,11 @@ footer {
 @media (max-width: 340px){
     .details {
         padding: 23px 11px 79px 33px;
+    }
+    .eye-icon {
+        font-size: 13px;
+        top: 8px;
+        right: 149px;
     }
     .container .icon {
         height: 50px;

@@ -52,9 +52,9 @@ class IoTelegramController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         foreach ($IoTelegrams as  $IoTelegram) {
-            $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
-                $IoTelegram->internal_department->name :
-                $IoTelegram->external_department->name;
+            $IoTelegram['department'] = ($IoTelegram->type == 'in')
+                ? ($IoTelegram->internal_department ? $IoTelegram->internal_department->name : '')
+                : ($IoTelegram->external_department ? $IoTelegram->external_department->name : '');
             $IoTelegram['archives'] = CheckUploadIoFiles($IoTelegram->id);
             $IoTelegram['type'] = ($IoTelegram->type == 'in') ? 'داخلي' : 'خارجي';
         }
@@ -239,28 +239,28 @@ class IoTelegramController extends Controller
             'national_id' => 'required|unique:postmans,national_id|integer',
             'modal_department_id' => 'required',
         ];
-        
+
 
         $messages = [
             'name.string' => 'يجب ان يكون الأسم حروف فقط',
             'name.required' => 'يجب ادخال اسم الشخص',
-        
+
             'phone1.required' => 'يجب ادخال الهاتف',
             'phone1.integer' => 'يجب ان يكون الهاتف ارقام',
             'phone1.unique' => 'رقم الهاتف 1 موجود بالفعل',
             'phone1.regex' => 'يجب أن يكون الهاتف الكويتي مكونًا من 8 أرقام',
-        
+
             'phone2.integer' => 'يجب ان يكون الهاتف ارقام',
             'phone2.unique' => 'رقم الهاتف 2 موجود بالفعل',
             'phone2.regex' => 'يجب أن يكون الهاتف الكويتي مكونًا من 8 أرقام',
-        
+
             'national_id.required' => 'يجب ادخال رقم الهوية',
             'national_id.integer' => 'يجب ان يكون رقم الهوية ارقام',
             'national_id.unique' => 'رقم الهوية موجود بالفعل',
-        
+
             'modal_department_id.required' => 'يجب ادخال اسم الادارة',
         ];
-        
+
         $validatedData = Validator::make($request->all(), $rules, $messages);
 
         if ($validatedData->fails()) {
