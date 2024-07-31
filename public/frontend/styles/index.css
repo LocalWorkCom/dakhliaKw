@@ -1130,3 +1130,10 @@ margin-inline: 30px;
 .body-img-modal p{
 font-size: 24px;
 }
+.eye-icon{
+position: relative;
+  position: relative;
+  font-size: 19px;
+  top: 12px;
+   right: 500px;
+}
