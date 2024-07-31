@@ -37,7 +37,7 @@ class regionsController extends Controller
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
             if(Auth::user()->hasPermission('view Region')){
-                $region_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  href="'.route('regions.index',['id' => $row->id ]).'">  <i class="fa fa-edit"></i> مناطق </a>';
+                $region_permission = '<a class="btn btn-sm"  style="background-color: #b77a48;"  href="'.route('regions.index',['id' => $row->id ]).'"> <i class="fa-solid fa-mountain-sun"></i> مناطق </a>';
             }
             return $edit_permission .' '. $region_permission ;
 
