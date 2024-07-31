@@ -452,10 +452,11 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'file_number'),
                 ],
                 'military_number' => [
-                    ValidationRule::unique('users', 'military_number'),
+                   'nullable',
                 ],
             ];
-            if ($request->has('solderORcivil') && $request->solderORcivil == "solder") {
+            if ($request->has('solderORcivil') && $request->solderORcivil == "military") {
+                // dd("dd");
                 if ($request->has('military_number')) {
                     $rules['military_number'] = [
                         'required',
@@ -651,7 +652,14 @@ class UserController extends Controller
                     // ValidationRule::unique('permissions', 'name'),
                     new UniqueNumberInUser($user),
                 ],
-                'phone' => 'required|string',
+                // 'phone' => 'required|string',
+                'phone' => [
+                    'required',
+                    'string',
+                    // 'max:255',
+                    // ValidationRule::unique('permissions', 'name'),
+                    new UniqueNumberInUser($user),
+                ],
                 // 'file_number' => 'required|string',
                 'file_number' => [
                     'required',
