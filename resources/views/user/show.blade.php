@@ -3,159 +3,153 @@
 @section('title')
     تفاصيل المستخدم
 @endsection
-    {{-- <body> --}}
-    <section>
-        <div class="row col-11" dir="rtl">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+{{-- <body> --}}
+<section>
+    <div class="row col-11" dir="rtl">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
 
-                        @if ($user->flag == "user")
-                        <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
+                @if ($user->flag == 'user')
+                    <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
+                @elseif ($user->flag == 'employee')
+                    <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
+                @endif
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض </a></li>
+            </ol>
 
-                        @elseif ($user->flag == "employee")
-                        <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
-
-                        @endif
-                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض </a></li>
-                </ol>
-
-            </nav>
-        </div>
-        <div class="row ">
-            <div class="container welcome col-11">
-                @if ($user->flag == "user")
+        </nav>
+    </div>
+    <div class="row ">
+        <div class="container welcome col-11">
+            @if ($user->flag == 'user')
                 <p>المستخدمين</p>
-
-                @elseif ($user->flag == "employee")
+            @elseif ($user->flag == 'employee')
                 <p>الموظفين</p>
-
-                @endif
-            </div>
+            @endif
         </div>
+    </div>
 
 
 
 
-        <div class="row">
-            <div class="container  col-11 mt-4 p-0 ">
+    <div class="row">
+        <div class="container  col-11 mt-4 p-0 ">
 
 
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                {{-- {{ dd($user) }} --}}
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            {{-- {{ dd($user) }} --}}
 
-<!-- toqa-table-show -->
+            <!-- toqa-table-show -->
 
 
-    <div class="form-row mx-3 mb-3 pt-5 pt-5">
+            <div class="form-row mx-3 mb-3 pt-5 pt-5">
 
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
                         <tr>
-                            <th scope="row"> الاسم</th>
-                            
-                            <td >{{$user->name}} </td>
+                            <th scope="row" style="    background-color: #f5f6fa;"> الاسم</th>
+
+                            <td style="    background-color: #f5f6fa;">{{ $user->name }} </td>
                         </tr>
 
                         <tr>
-                            <th scope="row" > البريد الالكترونى</th>
-                            <td >{{ $user->email }} </td>
+                            <th scope="row"> البريد الالكترونى</th>
+                            <td>{{ $user->email }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" > رقم المحمول </th>
-                            <td >
+                            <th scope="row"> رقم المحمول </th>
+                            <td>
                                 {{ $user->phone }}
-                             </td>
+                            </td>
                         </tr>
                         <tr>
-                            <th scope="row" >  الوصف </th>
-                            <td > {{ $user->description }} </td>
+                            <th scope="row"> الوصف </th>
+                            <td> {{ $user->description }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" > رقم العسكري</th>
-                            <td > {{ $user->military_number }} </td>
-                        </tr>
-                      
-                        <tr>
-                            <th scope="row" >الوظيفة</th>
-                                        @foreach ($job as $item)
-                                        @if($user->job == $item->id)
-                                           <td >
-                                                {{ $item->name }}
-                                            
-                                          </td>
-                                          @endif
-                                        @endforeach
-
-                        </tr>
-                        
-                        <tr>
-                            <th scope="row" >   المسمي الوظيفي </th>
-                            <td > {{ $user->job_title }} </td>
+                            <th scope="row"> رقم العسكري</th>
+                            <td> {{ $user->military_number }} </td>
                         </tr>
 
                         <tr>
-                            <th scope="row" >   الجنسيه  </th>
-                            <td > {{ $user->nationality }} </td>
+                            <th scope="row">الوظيفة</th>
+                            @foreach ($job as $item)
+                                @if ($user->job_id == $item->id)
+                                <td>   {{ $item->name }} </td>
+                                @endif
+                            @endforeach
+
+                        </tr>
+
+
+                        <tr>
+                            <th scope="row"> المسمي الوظيفي </th>
+                            <td> {{ $user->job_title }} </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row"> الجنسيه </th>
+                            <td> {{ $user->nationality }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" >    الرقم المدني </th>
-                            <td > {{ $user->Civil_number }} </td>
+                            <th scope="row"> الرقم المدني </th>
+                            <td> {{ $user->Civil_number }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" >    المؤهل  </th>
-                            <td > {{ $user->qualification }} </td>
+                            <th scope="row"> المؤهل </th>
+                            <td> {{ $user->qualification }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" >    تاريخ الميلاد  </th>
-                            <td > {{ $user->date_of_birth }} </td>
+                            <th scope="row"> تاريخ الميلاد </th>
+                            <td> {{ $user->date_of_birth }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" >    تاريخ الالتحاق  </th>
-                            <td > {{ $user->joining_date }} </td>
+                            <th scope="row"> تاريخ الالتحاق </th>
+                            <td> {{ $user->joining_date }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" >    مدة الخدمه  </th>
-                            <td > {{ $end_of_service }} </td>
+                            <th scope="row"> مدة الخدمه </th>
+                            <td> {{ $end_of_service }} </td>
                         </tr>
                         <tr>
-                            <th scope="row" >    الرتبه  </th>
-                                @foreach ($grade as $item)
-                                    <!--<option value="{{ $item->id }}"> -->
-                                    <!--    <td > {{ $item->name }}</td>-->
-                                    <!--</option>-->
-                                    
-                                    @if($user->	grade_id == $item->id)
-                                           <td >
-                                                {{ $item->name }}
-                                          </td>
-                                    @endif
-                                @endforeach
+                            <th scope="row"> الرتبه </th>
+                            @foreach ($grade as $item)
+                                <!--<option value="{{ $item->id }}"> -->
+                                <!--    <td > {{ $item->name }}</td>-->
+                                <!--</option>-->
+
+                                @if ($user->grade_id == $item->id)
+                                    <td>
+                                        {{ $item->name }}
+                                    </td>
+                                @endif
+                            @endforeach
                         </tr>
-                        
+
                         <tr>
-                            <th scope="row" >    رقم الملف </th>
-                            <td > {{ $user->file_number }} </td>
+                            <th scope="row"> رقم الملف </th>
+                            <td> {{ $user->file_number }} </td>
                         </tr>
 
                         {{-- <tr>
                             <th scope="row" >    الباسورد  </th>
                             <td  type="password" name="password" id="password" > {{ $user->password }} </td>
                         </tr> --}}
-                        
+
                         <tr>
                             <th scope="row">المهام</th>
                             <td>
@@ -163,7 +157,7 @@
                                 @php
                                     $selectedRule = $rule->firstWhere('id', $user->rule_id);
                                 @endphp
-                        
+
                                 @if ($selectedRule)
                                     {{ $selectedRule->name }}
                                 @else
@@ -172,29 +166,31 @@
                                 @endif
                             </td>
                             <td style="display: none;">
-                                <select id="input7" name="rule_id" class="form-control" placeholder="المهام" disabled>
+                                <select id="input7" name="rule_id" class="form-control" placeholder="المهام"
+                                    disabled>
                                     @foreach ($rule as $item)
-                                        <option value="{{ $item->id }}" {{ $user->rule_id == $item->id ? 'selected' : '' }}>
+                                        <option value="{{ $item->id }}"
+                                            {{ $user->rule_id == $item->id ? 'selected' : '' }}>
                                             {{ $item->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </td>
                         </tr>
-                        
-                        
+
+
                         <tr>
-                            <th scope="row" >    يصنف المستخدم ك   </th>
-                            
+                            <th scope="row"> يصنف المستخدم ك </th>
+
                             @if ($user->flag == 'user')
-                                <td > مستخدم </td>
+                                <td> مستخدم </td>
                             @else
-                                <td > موظف </td>
+                                <td> موظف </td>
                             @endif
                         </tr>
                         <tr>
-                            <th scope="row" >    الاقدامية  </th>
-                            <td > {{ $user->seniority }} </td>
+                            <th scope="row"> الاقدامية </th>
+                            <td> {{ $user->seniority }} </td>
                         </tr>
 
                         <tr>
@@ -204,7 +200,7 @@
                                 @php
                                     $selectedDepartment = $department->firstWhere('id', $user->public_administration);
                                 @endphp
-                        
+
                                 @if ($selectedDepartment)
                                     {{ $selectedDepartment->name }}
                                 @else
@@ -213,30 +209,33 @@
                                 @endif
                             </td>
                             <td style="display: none;">
-                                <select id="input7" name="public_administration" class="form-control" placeholder="المهام" disabled>
+                                <select id="input7" name="public_administration" class="form-control"
+                                    placeholder="المهام" disabled>
                                     @foreach ($department as $item)
-                                        <option value="{{ $item->id }}" {{ $user->public_administration == $item->id ? 'selected' : '' }}>
+                                        <option value="{{ $item->id }}"
+                                            {{ $user->public_administration == $item->id ? 'selected' : '' }}>
                                             {{ $item->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </td>
                         </tr>
-                        
+
                         <tr>
-                            <th scope="row" >    موقع العمل  </th>
-                            <td > {{ $user->work_location }} </td>
+                            <th scope="row"> موقع العمل </th>
+                            <td> {{ $user->work_location }} </td>
                         </tr>
 
-                            @if($user->image)
+                        @if ($user->image)
                             <tr>
-                            <th scope="row" >الصوره</th>
+                                <th scope="row">الصوره</th>
 
                                 <td>
                                     <div class="row">
                                         <div class="col-md-11 mb-3 px-5 mt-2">
-                                            <a href="#" class="image-popup" data-toggle="modal" data-target="#imageModal"
-                                            data-image="{{ asset($user->image) }}" data-title="{{ $user->image }}">
+                                            <a href="#" class="image-popup" data-toggle="modal"
+                                                data-target="#imageModal" data-image="{{ asset($user->image) }}"
+                                                data-title="{{ $user->image }}">
                                                 <img src="{{ asset($user->image) }}" class="img-thumbnail mx-2"
                                                     alt="{{ $user->image }}">
                                             </a>
@@ -244,12 +243,11 @@
                                     </div>
                                 </td>
                             </tr>
-
-                            @endif
-
+                        @endif
 
 
-                        
+
+
                         {{-- <tr>
                             <th scope="row" >    الصوره  </th>
                             <td >
@@ -274,15 +272,15 @@
 
                     </tbody>
                 </table>
-            </div> 
+            </div>
 
 
 
-<!-- enddddddddd of datashow table toqa -->
+            <!-- enddddddddd of datashow table toqa -->
 
 
 
-                {{-- <div class="p-5">
+            {{-- <div class="p-5">
 
                     <div class="form-row mx-2 mt-4 d-flex flex-row-reverse">
                         <div class="form-group col-md-6">
@@ -418,7 +416,7 @@
                             <label for="input17">المنصب</label>
                             <input type="text" id="input17" name="position" class="form-control" placeholder="المنصب" value="{{ $user->position  }}">
                         </div> --}}
-                        {{-- <div class="form-group col-md-6">
+            {{-- <div class="form-group col-md-6">
                             <label for="input18">المؤهل</label>
                             <input type="text" id="input18" name="qualification" class="form-control"
                                 placeholder="المؤهل" value="{{ $user->qualification }}" disabled>
@@ -435,11 +433,11 @@
                                 placeholder="تاريخ الالتحاق" value="{{ $user->joining_date }}" disabled>
                         </div> --}}
 
-                        {{-- <div class="form-group col-md-6">
+            {{-- <div class="form-group col-md-6">
                             <label for="input21">العمر</label>
                             <input type="text" id="input21" name="age" class="form-control" placeholder="العمر" value="{{ $user->age  }}">
                         </div> --}}
-                        {{-- <div class="form-group col-md-6">
+            {{-- <div class="form-group col-md-6">
                             <label for="input22">مدة الخدمة</label>
                             <input type="date" id="input22" name="end_of_service" class="form-control"
                                 placeholder="مدة الخدمة " value="{{ $end_of_service }}" disabled>
@@ -464,59 +462,59 @@
                             </div>
 
                         </div> --}}
-                        {{-- <div class="form-group col-md-6">
+            {{-- <div class="form-group col-md-6">
                             <label for="input23">الصورة</label>
                             <input type="file" class="form-control" name="image" id="input23"
                                 placeholder="الصورة" value="{{  }}">
                         </div> --}}
 
-                    {{-- </div> --}}
-                    <!-- Save button -->
+            {{-- </div> --}}
+            <!-- Save button -->
 
-                {{-- </div> --}} 
-            </div>
+            {{-- </div> --}}
         </div>
-        {{-- Modal for Image Popup --}}
-        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
-                        {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    </div>
+    {{-- Modal for Image Popup --}}
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
+                    {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button> --}}
-                    </div>
-                    <div class="modal-body text-center">
-                        <img id="modalImage" src="#" class="img-fluid" alt="صورة">
-                    </div>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="#" class="img-fluid" alt="صورة">
                 </div>
             </div>
         </div>
+    </div>
 
 
 
-    </section>
+</section>
 
 
 @endsection
 @push('scripts')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.image-popup').click(function(event) {
-                event.preventDefault();
-                var imageUrl = $(this).data('image');
-                var imageTitle = $(this).data('title');
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.image-popup').click(function(event) {
+            event.preventDefault();
+            var imageUrl = $(this).data('image');
+            var imageTitle = $(this).data('title');
 
-                // Set modal image and title
-                $('#modalImage').attr('src', imageUrl);
-                $('#imageModalLabel').text(imageTitle);
+            // Set modal image and title
+            $('#modalImage').attr('src', imageUrl);
+            $('#imageModalLabel').text(imageTitle);
 
-                // Show the modal
-                $('#imageModal').modal('show');
-            });
+            // Show the modal
+            $('#imageModal').modal('show');
         });
-    </script>
+    });
+</script>
 @endpush

@@ -123,7 +123,7 @@
                                 render: function(data, type, row) {
                                     var addArchive = "<?php echo Auth::user()->hasPermission('add_archive Iotelegram'); ?>";
                                     var editIotelegram = "<?php echo Auth::user()->hasPermission('edit Iotelegram'); ?>";
-                                    var showIotelegram = "<?php echo Auth::user()->hasPermission('show Iotelegram'); ?>";
+                                    var showIotelegram = "<?php echo Auth::user()->hasPermission('view Iotelegram'); ?>";
 
                                     // Using route generation correctly in JavaScript
                                     var editUrl = '{{ route('iotelegram.edit', ':id') }}';

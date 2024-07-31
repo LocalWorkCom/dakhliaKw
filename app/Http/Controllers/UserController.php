@@ -668,6 +668,7 @@ class UserController extends Controller
         $user->Civil_number = $request->Civil_number;
         $user->file_number = $request->file_number;
         $user->flag = $request->flag;
+        $user->job_id = $request->job;
         $user->seniority = $request->seniority;
         $user->public_administration = $request->public_administration;
         $user->work_location = $request->work_location;
@@ -692,7 +693,6 @@ class UserController extends Controller
 
         if ($user->flag == "user") {
             $user->rule_id = $request->rule_id;
-            $user->job_id = $request->job;
             $user->department_id = $request->department_id;
 
             if ($request->password && !Hash::check($request->password, $user->password)) {
