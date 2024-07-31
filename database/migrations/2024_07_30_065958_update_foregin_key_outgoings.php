@@ -19,8 +19,7 @@ return new class extends Migration
                     'outgoings_person_to_foreign',
                     'outgoings_created_by_foreign',
                     'outgoings_updated_by_foreign',
-                    'outgoings_from_departement_foreign',
-                    'outgoings_department_id',
+                    'outgoings_department_id_foreign',
                 ];
     
     
@@ -34,14 +33,13 @@ return new class extends Migration
            /*  $table->dropForeign(['created_by']);
             $table->dropForeign(['updated_by']);
             $table->dropForeign(['person_to']);
-            $table->dropForeign(['from_departement']);
+           
             $table->dropForeign(['department_id']); */
 
             
-            $table->foreign('from_departement')->nullable()->references('id')->on('departements')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('department_id')->nullable()->references('id')->on('departements')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('department_id')->nullable()->references('id')->on('external_departements')->onDelete('restrict')->onUpdate('cascade');
 
-            $table->foreign('person_to')->nullable()->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('person_to')->nullable()->references('id')->on('export_users')->onDelete('restrict')->onUpdate('cascade');
             $table->foreign('created_by')->nullable()->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
 
             $table->foreign('updated_by')->nullable()->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');

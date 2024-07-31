@@ -45,7 +45,7 @@ return new class extends Migration
             
             // Add new foreign key constraints without cascading on delete
             $table->foreign('from_departement')->nullable()->references('id')->on('departements')->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('representive_id')->nullable()->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('representive_id')->nullable()->references('id')->on('postmans')->onDelete('restrict')->onUpdate('cascade');
 
             $table->foreign('recieved_by')->nullable()->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
 
@@ -80,7 +80,7 @@ return new class extends Migration
     protected function foreignKeyExists($tableName, $foreignKeyName)
     {
         // For MySQL
-            echo $foreignKeyName;
+          //  echo $foreignKeyName;
             return DB::selectOne(
                 "SELECT CONSTRAINT_NAME
                  FROM information_schema.TABLE_CONSTRAINTS
