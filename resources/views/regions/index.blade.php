@@ -81,7 +81,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="nameadd">الاسم</label>
-                            <input type="text" id="nameadd" name="nameadd" class="form-control">
+                            <input type="text" id="nameadd" name="nameadd" class="form-control" required>
                             @error('nameadd')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
@@ -89,7 +89,7 @@
 
                         <div class="form-group">
                             <label for="governmentid">المحافظات </label>
-                            <select name="governmentid" id="governmentid" class="form-group col-md-12 mx-md-2" >
+                            <select name="governmentid" id="governmentid" class="form-group col-md-12 mx-md-2" required>
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}">{{ $government->name }}</option>
@@ -126,13 +126,13 @@
                         @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
-                            <input type="text" id="nameedit" value="" name="name" class="form-control">
+                            <input type="text" id="nameedit" value="" name="name" class="form-control" required>
                             <input type="text" id="idedit" value="" name="id" hidden class="form-control">
 
                         </div>
                         <div class="form-group">
                             <label for="government">المحافظات</label>
-                            <select name="government" id="government" class="form-group col-md-12 mx-md-2" >
+                            <select name="government" id="government" class="form-group col-md-12 mx-md-2" required>
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}">{{ $government->name }}</option>
@@ -215,7 +215,7 @@
             var government = document.getElementById('government').value;
             var form = document.getElementById('edit-form');
 
-            form.submit();
+            // form.submit();
 
         }
         function openadd() {
@@ -227,7 +227,7 @@
             var government = document.getElementById('governmentid').value;
             var form = document.getElementById('add-form');
 
-            form.submit();
+            // form.submit();
 
         }
         var table;
