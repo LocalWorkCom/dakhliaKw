@@ -1103,6 +1103,26 @@ footer {
         font-size: 19px;
         line-height: 16.78px;
     }
+    .moftsh .input-group input {
+        width: 80% !important;
+    }
+    .moftsh label {
+        font-size: 18px;
+        line-height: 16.78px;
+    }
+    .moftsh h3 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+    .btn-blue {
+        width: 86px;
+        height: 27px;
+        font-size: 18px;
+        padding-block: 0px;
+    }
+    .moftsh .form-group h4{
+        font-size: 20px !important;
+    }
 }
 @media (max-width: 380px){
     li {
