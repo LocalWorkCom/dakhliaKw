@@ -28,22 +28,15 @@
             <form action="{{ route('vacation.store', $id) }}" method="POST" enctype="multipart/form-data">
                 <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
                     @csrf
-                    <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
-
-                        <div class="form-group col-md-10" id="name_dev" hidden>
-
-                            <label for="name">اسم الاجازة</label>
-                            <input type="text" id="name" name="name" class="form-control">
-                        </div>
-                    </div>
+                 
                     <div class="form-row mx-md-3 mt-4 d-flex justify-content-center" dir="rtl">
                         <div class="form-group col-md-5 mx-md-2 ">
                             <label for="vacation_type_id" style=" display: flex; justify-content: flex-start;">نوع
                                 الاجازة</label>
                             <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
                                 <option value="">اختر النوع</option>
-                                @foreach ($vacation_types as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @foreach ($vacation_types as $vacation_type)
+                                    <option value="{{ $vacation_type->id }}">{{ $vacation_type->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -60,31 +53,7 @@
                         </div>
 
                     </div>
-                    {{-- <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-md-2">
-                            <label for="employee_id">اسم الموظف</label>
-
-
-                            <select id="employee_id" name="employee_id" class="form-control" required
-                                @if ($id) disabled @endif>
-                                <option value="">اختر الموظف</option>
-                                @foreach ($employees as $item)
-                                    <option value="{{ $item->id }}" @if ($id && $id == $item->id) selected @endif>
-                                        {{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group col-md-5 mx-md-2 ">
-                            <label for="vacation_type_id">نوع الاجازة</label>
-                            <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
-                                <option value="">اختر النوع</option>
-                                @foreach ($vacation_types as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                    </div> --}}
+ 
 
                     <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-md-2">
@@ -93,14 +62,14 @@
                         </div>
                      
                         <div class="form-group col-md-5 mx-2">
-                            <label for="date_from">تاريخ البداية</label>
-                            <input type="date" id="date_from" name="date_from" class="form-control" required>
+                            <label for="start_date">تاريخ البداية</label>
+                            <input type="date" id="start_date" name="start_date" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-md-2">
-                            <label for="vacation_type_id" style=" display: flex; justify-content: flex-start;">المحافظة</label>
-                            <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
+                            <label for="country_id" style=" display: flex; justify-content: flex-start;">المحافظة</label>
+                            <select id="country_id" name="country_id" class="form-control" >
                                 <option value="">اختر المحافظة</option>
                                 @foreach ($countries as $item)
                                     <option value="{{ $item->id }}">{{ $item->country_name_ar }}</option>
@@ -138,11 +107,9 @@
                 var id = "{{ $id }}";
                 // Get today's date
                 var today = new Date().toISOString().split('T')[0];
-                $('#date_from').attr('min', today);
-                $('#date_to').attr('min', today);
+                $('#start_date').attr('min', today);
 
-                $('#date_from').attr('value', today);
-                $('#date_to').attr('value', today);
+                $('#start_date').attr('value', today);
 
 
                 // $('#vacation_type_id').change(function() {

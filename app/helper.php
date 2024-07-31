@@ -202,24 +202,22 @@ function CheckStartVacationDate($id)
 function GetEmployeeVacationType($employeeVacation)
 {
     $introduce = 'مقدمة';
+    $rejected = 'مرفوضة';
     $exceeded = 'متجاوزة';
     $current = 'حالية';
     $notBegin = 'لم تبدأ بعد';
     $finished = 'منتهية';
     $today = date('Y-m-d');
-
-    $startDate = Carbon::parse($employeeVacation->start_date);
-    $daysNumber = $employeeVacation->days_number;
-
-    $expectedEndDate = $startDate->copy()->addDays($daysNumber);
+    $expectedEndDate = ExpectedEndDate($employeeVacation)[0];
 
     // Save the calculated end date to  model
     // $expected_date->toDateString();
 
     if ($employeeVacation->status == 'Pending') {
         return $introduce;
+    } else if ($employeeVacation->status == 'Rejected') {
+        return $rejected;
     } else {
-
         if ($employeeVacation->start_date > $today) {
             return $notBegin;
         } else if ($employeeVacation->start_date < $today && $expectedEndDate < $today) {
@@ -256,4 +254,13 @@ function VacationDaysLeft($employeeVacation)
         return -1;
     }
     return $daysLeft;
+}
+function ExpectedEndDate($employeeVacation)
+{
+    $startDate = Carbon::parse($employeeVacation->start_date);
+    $daysNumber = $employeeVacation->days_number;
+
+    $expectedEndDate = $startDate->copy()->addDays($daysNumber);
+    $workStartdDate = $expectedEndDate->copy()->addDays(1);
+    return [$expectedEndDate->toDateString(), $workStartdDate->toDateString()];
 }

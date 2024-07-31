@@ -35,10 +35,12 @@
                 <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                     <thead>
                         <tr>
-                            <th>الرقم</th>
+                            <th>حالة الاجازة</th>
+                            <th>اسم الموظف</th>
                             <th>نوع الاجازة</th>
                             <th>تاريخ البداية</th>
                             <th>تاريخ النهاية</th>
+                            <th>تاريخ المباشرة</th>
                             <th style="width:150px !important;">العمليات</th>
                         </tr>
                     </thead>
@@ -57,21 +59,29 @@
                             serverSide: true,
                             ajax: '{{ route('employee.vacations', $id) }}', // Correct URL concatenation
                             columns: [{
-                                    data: 'id',
+                                    data: 'VacationStatus',
                                     sWidth: '50px',
-                                    name: 'id'
+                                    name: 'VacationStatus'
+                                },
+                                {
+                                    data: 'employee.name',
+                                    name: 'employee.name'
                                 },
                                 {
                                     data: 'vacation_type.name',
                                     name: 'vacation_type.name'
                                 },
                                 {
-                                    data: 'date_from',
-                                    name: 'date_from'
+                                    data: 'start_date',
+                                    name: 'start_date'
                                 },
                                 {
-                                    data: 'date_to',
-                                    name: 'date_to'
+                                    data: 'EndDate',
+                                    name: 'EndDate'
+                                },
+                                {
+                                    data: 'StartWorkDate',
+                                    name: 'StartWorkDate'
                                 },
 
                                 {
