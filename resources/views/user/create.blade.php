@@ -124,9 +124,9 @@
                     <div class="form-group col-md-5 mx-2">
                         <label for="input3">الباسورد</label>
                         <div class="password-container">
-                            <input type="password" id="input3" name="password" class="form-control" placeholder="الباسورد">
+                            <input type="password" id="input3" name="password" class="form-control" placeholder="الباسورد" style="position: absolute">
                             <label class="toggle-password" onclick="togglePasswordVisibility()">
-                                <i id="toggleIcon" class="fa fa-eye"></i>
+                                <i id="toggleIcon" class="fa fa-eye eye-icon" ></i>
                             </label>
                         </div>
                     </div>
