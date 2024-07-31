@@ -661,6 +661,11 @@ class UserController extends Controller
                     // ValidationRule::unique('permissions', 'name'),
                     new UniqueNumberInUser($user),
                 ],
+                'email' => [
+                    // 'max:255',
+                    // ValidationRule::unique('permissions', 'name'),
+                    new UniqueNumberInUser($user),
+                ],
                 'public_administration' => 'required',
                 // 'Civil_number' => 'required',
                 'Civil_number' => [
