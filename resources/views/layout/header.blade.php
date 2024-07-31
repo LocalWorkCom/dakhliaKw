@@ -170,6 +170,13 @@
                                                 <a href="{{ route('job.index') }}">الوظائف</a>
                                             </li>
                                         @endif
+                                        @if (Auth::user()->hasPermission('view Qualification'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('qualifications.index') }}">المؤهلات</a>
+                                        </li>
+                                    @endif
                                         @if (Auth::user()->hasPermission('view Government'))
                                             <li>
                                                 <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
@@ -177,6 +184,13 @@
                                                 <a href="{{ route('government.all') }}">المحافظات</a>
                                             </li>
                                         @endif
+                                        @if (Auth::user()->hasPermission('view Region'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
+                                        </li>
+                                    @endif
                                         @if (Auth::user()->hasPermission('view VacationType'))
                                             <li>
                                                 <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"

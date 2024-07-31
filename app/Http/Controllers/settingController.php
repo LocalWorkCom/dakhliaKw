@@ -44,6 +44,8 @@ class settingController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
+            $edit_permission= null;
+            $delete_permission=null;
             if(Auth::user()->hasPermission('edit job')){
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
                 
@@ -145,6 +147,8 @@ class settingController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
+            $edit_permission= null;
+            $delete_permission=null;
             if(Auth::user()->hasPermission('edit grade')){
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
                 

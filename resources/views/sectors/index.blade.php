@@ -6,14 +6,14 @@
 </script>
 @endpush
 @section('title')
-    المناطق
+    القطاعات
 @endsection
 @section('content')
     <section>
         <div class="row">
 
             <div class="container welcome col-11">
-                <p> المنـــاطق</p>
+                <p> القطاعـــات</p>
             </div>
         </div>
 
@@ -30,12 +30,12 @@
                             اضافة جديد
                         </button>
                         @endif
-                            <select name="government-select" id="government-select" class="form-group mx-md-2" onchange="filterRegions()">
+                            {{-- <select name="government-select" id="government-select" class="form-group mx-md-2" onchange="filterRegions()">
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}" @if($government->id == $id) selected @endif>{{ $government->name }}</option>
                                 @endforeach
-                            </select>
+                            </select> --}}
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -50,7 +50,7 @@
                                 <thead>
                                     <tr>
                                         <th>الاسم</th>
-                                        <th>المحافظه التابعه لها</th>
+                                        <th>المحافظات التابعه لها</th>
                                         <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -65,12 +65,12 @@
     </section>
 
     {{-- this for add form --}}
-    <div class="modal fade" id="add" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="add" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> أضافه منطقه جديد</h5>
+                        <h5 class="modal-title" id="lable"> أضافه ق جديد</h5>
 
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
@@ -108,9 +108,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- this for edit form --}}
-    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -151,7 +151,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- model for delete form --}}
     {{-- <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -199,50 +199,50 @@
 
         // }
 
-        function openedit(id, name,government) {
-            document.getElementById('nameedit').value = name;
-            document.getElementById('government').value = government;
-            document.getElementById('idedit').value = id;
+        // function openedit(id, name,government) {
+        //     document.getElementById('nameedit').value = name;
+        //     document.getElementById('government').value = government;
+        //     document.getElementById('idedit').value = id;
 
-            $('#edit').modal('show');
+        //     $('#edit').modal('show');
 
 
-        }
+        // }
 
-        function confirmEdit() {
-            var id = document.getElementById('idedit').value;
-            var name = document.getElementById('nameedit').value;
-            var government = document.getElementById('government').value;
-            var form = document.getElementById('edit-form');
+        // function confirmEdit() {
+        //     var id = document.getElementById('idedit').value;
+        //     var name = document.getElementById('nameedit').value;
+        //     var government = document.getElementById('government').value;
+        //     var form = document.getElementById('edit-form');
 
-            // form.submit();
+        //     // form.submit();
 
-        }
-        function openadd() {
-            $('#add').modal('show');
-        }
+        // }
+        // function openadd() {
+        //     $('#add').modal('show');
+        // }
 
-        function confirmAdd() {
-            var name = document.getElementById('nameadd').value;
-            var government = document.getElementById('governmentid').value;
-            var form = document.getElementById('add-form');
+        // function confirmAdd() {
+        //     var name = document.getElementById('nameadd').value;
+        //     var government = document.getElementById('governmentid').value;
+        //     var form = document.getElementById('add-form');
 
-            // form.submit();
+        //     // form.submit();
 
-        }
-        var table;
+        // }
+        // var table;
         $(document).ready(function() {
             $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
-            government_id = $('#government-select').val();
+            // government_id = $('#government-select').val();
             console.log(government_id);
             var table =$('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                url: '{{ route('getAllregions') }}',
-                data: function(d) {
-                d.government_id = $('#government-select').val(); // Add government_id to request
-            }
+                url: '{{ route('getAllsectors') }}',
+            //     data: function(d) {
+            //     d.government_id = $('#government-select').val(); // Add government_id to request
+            // }
             }, // Correct URL concatenation
                 columns: [
                     {
