@@ -27,7 +27,7 @@
 </head>
 
 <body>
-    <!-- <div class="row col-11" dir="rtl">
+    <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="#">الرئيسيه</a></li>
@@ -35,13 +35,13 @@
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> #</a></li>
             </ol>
         </nav>
-    </div> -->
+    </div>
     <div class="row ">
         <div class="container welcome col-11">
 <div class="d-flex justify-content-between">
     <p> المفتــــــشون (7)</p>
 
-    <h2 style="color: #274373;"> مجموعة (أ)</h2>
+    <!-- <h2 style="color: #274373;"> مجموعة (أ)</h2> -->
 </div>
         </div>
     </div>
@@ -49,13 +49,25 @@
 
 <div class="row" >
     <div class="container  col-11 mt-3 p-0 ">
-        <div class="row " dir="rtl">
-            <div class="form-group mt-4  mx-1 col-12 d-flex ">
-                <button class="btn-all px-3" style="color: #274373;">
-                    لم يتم  تحديد مجموعة (2)
+        <div class="row d-flex justify-content-between " dir="rtl">
+            <div class="form-group mt-4 mx-1  d-flex">
+                <button class="btn-all px-3 mx-2" style="color: #274373;">
+                    الكل (7)
                 </button>
-           </div>
+                <button class="btn-all px-3 mx-2" style="color: #274373;">
+                    مفتشون تم توزعهم
+                </button>
+                <button class="btn-all px-3 mx-2" style="color: #274373;">
+                    مفتشون لم يتم توزعهم
+                </button>
+            </div>
+            <div class="form-group mt-4 mx-4  d-flex justify-content-end ">
+                <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;" onclick="window.print()">
+                     <img src="../images/print.svg" alt=""> طباعة
+                </button>
         </div>
+    </div>
+    
         <div class="col-lg-12" dir="rtl">
             <div class="bg-white ">
                 <div>
@@ -70,12 +82,29 @@
                                 <th>المجموعة </th>
                                 <th style="width:150px !important;">العمليات</th>
                             </tr>
+                           
+                            
                         </thead>
                     </table>
 </div>
+</div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.btn-all');
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove 'btn-active' class from all buttons
+            buttons.forEach(btn => btn.classList.remove('btn-active'));
+            
+            // Add 'btn-active' class to the clicked button
+            button.classList.add('btn-active');
+        });
+    });
+});
 
-
+</script>
 </body>
 
 </html>
