@@ -20,6 +20,7 @@ use App\Http\Controllers\qualificationController;
 use App\Http\Controllers\regionsController;
 use App\Http\Controllers\sectorsController;
 use App\Http\Controllers\WorkingTimeController;
+use App\Http\Controllers\GroupsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +94,13 @@ Route::middleware(['auth'])->group(function () {
 
     // working Time
     Route::any('/Working/Time', [WorkingTimeController::class, 'index'])->name('working_time.index');
+    //groups
+    Route::resource('groups', GroupsController::class);
+    Route::any('/groups/all', [GroupsController::class, 'index'])->name('group.view');
+    Route::any('/groups/add', [GroupsController::class, 'store'])->name('group.store');
+    Route::any('/groups/update', [GroupsController::class, 'edit'])->name('group.update');
+    Route::any('/groups/show/{id}', [GroupsController::class, 'show'])->name('group.show');
+    Route::any('/groups/delete', [GroupsController::class, 'delete'])->name('group.delete');
     // export
     //Start Export routes
         Route::get('/export/all', [outgoingController::class, 'index'])->name('Export.index')->middleware('check.permission:view outgoings');
