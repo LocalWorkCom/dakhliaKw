@@ -19,6 +19,7 @@ use App\Http\Controllers\pointsController;
 use App\Http\Controllers\qualificationController;
 use App\Http\Controllers\regionsController;
 use App\Http\Controllers\sectorsController;
+use App\Http\Controllers\InspectorController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\GroupsController;
 
@@ -290,8 +291,13 @@ Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions']
     
 });
 
-
-
+Route::get('api/Inspectors', [InspectorController::class, 'getInspectors'])->name('api.inspector');
+Route::get('/Inspectors', [InspectorController::class, 'index'])->name('inspectors.index');
+Route::get('/Inspectors/create', [InspectorController::class, 'create'])->name('inspectors.create');
+Route::get('/Inspectors/show/{Inspector}', [InspectorController::class, 'show'])->name('inspectors.show');
+Route::post('/Inspectors', [InspectorController::class, 'store'])->name('inspectors.store');
+Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit');
+Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
 
 // // view All Models permission
 // Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {
