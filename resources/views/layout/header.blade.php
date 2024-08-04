@@ -212,6 +212,12 @@
                                                 <a href="{{ route('permission.index') }}">الصلاحيات</a>
                                             </li>
                                         @endif
+                                        <li>
+                                            <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('working_trees.list') }}">نظام العمل</a>
+                                        </li>
+                                    
                                     </ul>
                                 </div>
                                 {{-- @endif --}}
