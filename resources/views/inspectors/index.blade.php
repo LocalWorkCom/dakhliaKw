@@ -38,7 +38,7 @@
             </div>
             <div class="form-group mt-4 mx-4  d-flex justify-content-end ">
                 <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;" onclick="window.print()">
-                     <img src="../images/print.svg" alt=""> طباعة
+                     <img src="{{ asset('frontend/images/print.svg')}}" alt=""> طباعة
                 </button>
         </div>
     </div>
@@ -63,6 +63,27 @@
                     </table>
 </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: transparent; border: none;">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;</button>
+                </button>
+            </div>
+            <div class="modal-body mb-3 mt-3 d-flex justify-content-center">
+                <div class="body-img-modal d-block ">
+                    <img src="{{ asset('frontend/images/ordered.svg')}}" alt="">
+                    <p>تمت الاضافه بنجاح</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 <script>
 
@@ -140,6 +161,16 @@ $(document).ready(function() {
         });
     });
 });
+
+
+// Check if there is a flash message for showing the modal
+document.addEventListener('DOMContentLoaded', function() {
+        @if(session('showModal'))
+            const modal = new bootstrap.Modal(document.getElementById('myModal'));
+            modal.show();
+        @endif
+    });
+
 
 </script>
 @endsection
