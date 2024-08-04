@@ -19,6 +19,8 @@ use App\Http\Controllers\pointsController;
 use App\Http\Controllers\qualificationController;
 use App\Http\Controllers\regionsController;
 use App\Http\Controllers\sectorsController;
+use App\Http\Controllers\WorkingTimeController;
+use App\Http\Controllers\GroupsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +91,25 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/rule_edit/{id}', [RuleController::class, 'edit'])->name('rule_edit')->middleware('check.permission:edit Rule');
     Route::any('/rule_show/{id}', [RuleController::class, 'show'])->name('rule_show')->middleware('check.permission:edit Rule');
     Route::any('/rule_update/{id}', [RuleController::class, 'update'])->name('rule_update')->middleware('check.permission:edit Rule');
+
+    // working Time
+
+        Route::get('/working_time', [WorkingTimeController::class, 'index'])->name('working_time.index');
+        Route::get('/api/working_time', [WorkingTimeController::class, 'getWorkingTime'])->name('api.working_time');
+        Route::post('/working_time/create', [WorkingTimeController::class, 'store'])->name('working_time.store');
+        Route::any('/working_time/edit/{id}', [WorkingTimeController::class, 'edit'])->name('working_time.edit');
+
+        Route::any('/working_time/update', [WorkingTimeController::class, 'update'])->name('working_time.update');
+        Route::any('/working_time/show/{id}', [WorkingTimeController::class, 'show'])->name('working_time.show');
+
+    //groups
+    Route::resource('groups', GroupsController::class);
+    Route::any('/groups/all', [GroupsController::class, 'index'])->name('group.view');
+    Route::any('/groups/add', [GroupsController::class, 'store'])->name('group.store');
+    Route::any('/groups/update', [GroupsController::class, 'edit'])->name('group.update');
+    Route::any('/groups/show/{id}', [GroupsController::class, 'show'])->name('group.show');
+    Route::any('/groups/delete', [GroupsController::class, 'delete'])->name('group.delete');
+    Route::get('/api/groups', [GroupsController::class, 'getgroups'])->name('api.groups');
 
     // export
     //Start Export routes

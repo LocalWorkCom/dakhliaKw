@@ -2,7 +2,7 @@
     <div class="upper-navbar d-flex">
         <div class="second-section d-flex  col-md-10 col-sm-6">
             <div class="dropdown">
-                {{-- @if ($user->login) --}}
+                {{-- @if ($user->login) Test --}}
                 @php
                     $user = auth()->user();
                 @endphp
@@ -163,6 +163,13 @@
                                                 <a href="{{ route('grads.index') }}">الرتب العسكرية</a>
                                             </li>
                                         @endif
+
+                                        <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('working_time.index') }}">فترات العمل </a>
+                                        </li>
+
                                         @if (Auth::user()->hasPermission('view job'))
                                             <li>
                                                 <img src="{{ asset('frontend/images/jobs.svg') }}" alt="logo"
