@@ -22,34 +22,10 @@ class GroupsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function ($row) {
-                return '
-                <button type="button" class="wide-btn" data-bs-toggle="modal" data-bs-target="#edit' . $row->id . '" style="color: #0D992C;">
-                    <i class="fa fa-edit"></i>
-                </button>
-                <div class="modal fade" id="edit' . $row->id . '" tabindex="-1" aria-labelledby="editLabel' . $row->id . '" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editLabel' . $row->id . '">إضافة مجموعة  جديدة</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="saveExternalUser" action="' . route('group.edit', $row->id) . '" method="POST">
-                                    ' . csrf_field() . '
-                                    <div class="mb-3">
-                                        <label for="name">اسم المجموعة</label>
-                                        <input type="text" id="name' . $row->id . '" value="' . $row->name . '" name="name" class="form-control" required>
-                                    </div>
-                                    <div class="text-end">
-                                        <button type="submit" class="btn btn-primary">حفظ</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>';
-            })
+        ->addColumn('action', function ($row) {
+            return '
+               <a href="' . route('group.update', $row->id) . '" class="edit btn btn-info btn-sm"><i class="fa fa-edit"></i></a>';   
+        })
             ->setRowId('id');
     }
 
@@ -88,12 +64,16 @@ class GroupsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            Column::make('id'),
+            Column::make('name'),
+            Column::make('work_time_id'),
+            Column::make('points_inspector'),
+            Column::make('action'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
                 ->addClass('text-center'),
-            Column::make('name'),
         ];
     }
 

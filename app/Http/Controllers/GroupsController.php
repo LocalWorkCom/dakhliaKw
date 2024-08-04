@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Groups;
-use App\Models\WorkTime;
+use App\Models\WorkingTime;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -14,16 +14,29 @@ class GroupsController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = Groups::all();
-            return DataTables::of($data)
-                ->addColumn('action', function($row){
-                    return '<button type="button" class="btn btn-primary edit-btn" data-id="'.$row->id.'">Edit</button>';
-                })
-                ->make(true);
-        }
-        $workTimes = WorkTime::all(); // Fetch all work times from the database
+        // if ($request->ajax()) {
+        //     $data = Groups::all();
+        //     return DataTables::of($data)
+        //         ->addColumn('action', function($row){
+        //             return '<button type="button" class="btn btn-primary edit-btn" data-id="'.$row->id.'">Edit</button>';
+        //         })
+        //         ->make(true);
+        // }
+        $workTimes = WorkingTime::all(); // Fetch all work times from the database
         return view('group.view' , compact('workTimes'));
+    }
+
+    public function getgroups()
+    {
+        $data = Groups::all();
+        // dd($data);
+
+        return DataTables::of($data)->addColumn('action', function ($row) {
+
+            return '<button class="btn btn-primary btn-sm">Edit</button>';
+        })
+        ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**
