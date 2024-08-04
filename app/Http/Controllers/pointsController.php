@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Validator;
 
 class pointsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -68,14 +72,14 @@ class pointsController extends Controller
                 return str_replace(['AM', 'PM'], ['ص', 'م'], $time);
             })
             ->addColumn('action', function ($row) {
-                $edit_permission = null;
-                $show_permission = null;
-                if (Auth::user()->hasPermission('edit Point')) {
+                // $edit_permission = null;
+                // $show_permission = null;
+                // if (Auth::user()->hasPermission('edit Point')) {
                     $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;"  href=' . route('points.edit', $row->id) . '><i class="fa fa-edit"></i> تعديل</a>';
-                }
-                if (Auth::user()->hasPermission('view Point')) {
+                // }
+                // if (Auth::user()->hasPermission('view Point')) {
                     $show_permission = '<a class="btn btn-sm" style="background-color: #274373;"  href=' . route('points.show', $row->id) . '> <i class="fa fa-eye"></i>عرض</a>';
-                }
+                // }
                 return $show_permission . ' ' . $edit_permission;
             })
             ->rawColumns(['action'])

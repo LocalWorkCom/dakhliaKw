@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Validator;
 
 class sectorsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -31,14 +35,14 @@ class sectorsController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($row) {
-                $edit_permission = null;
-                $show_permission = null ;
-                if (Auth::user()->hasPermission('edit Sector')) {
+                // $edit_permission = null;
+                // $show_permission = null ;
+                // if (Auth::user()->hasPermission('edit Sector')) {
                     $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;"  href=' . route('sectors.edit', $row->id) . '><i class="fa fa-edit"></i> تعديل</a>';
-                }
-                if (Auth::user()->hasPermission('view Sector')) {
+                // }
+                // if (Auth::user()->hasPermission('view Sector')) {
                     $show_permission = '<a class="btn btn-sm" style="background-color: #274373;"  href=' . route('sectors.show', $row->id) . '> <i class="fa fa-eye"></i>عرض</a>';
-                }
+                // }
                 return $show_permission.' '.$edit_permission;
             })
             ->addColumn('government_name', function ($row) {
