@@ -65,6 +65,7 @@ class User extends Authenticatable
     public function hasPermission($permission)
     {
         $userPermission = Rule::find(auth()->user()->rule_id);     
+        // dd($permission);
         // 1,2,3,4,5
         $permission_ids = explode(',', $userPermission->permission_ids);
         // dd($permission_ids);
@@ -80,5 +81,10 @@ class User extends Authenticatable
         }
 
         
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(departments::class, 'id'); // Assuming 'department_id' is the foreign key
     }
 }

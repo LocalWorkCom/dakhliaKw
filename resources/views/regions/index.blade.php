@@ -30,7 +30,7 @@
                             اضافة جديد
                         </button>
                         @endif
-                            <select name="government-select" id="government-select" class="form-group mx-md-2" onchange="filterRegions()">
+                            <select name="government-select" id="government-select" class="form-group mx-md-2 btn-all " onchange="filterRegions()" style="text-align: center; color:#ff8f00;">
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}" @if($government->id == $id) selected @endif>{{ $government->name }}</option>
@@ -153,7 +153,7 @@
         </div>
     </div>
     {{-- model for delete form --}}
-    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -182,7 +182,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 @push('scripts')
     <script>
