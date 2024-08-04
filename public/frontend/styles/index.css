@@ -1247,7 +1247,7 @@ text-align: right;
 .moftsh .form-outline  {
     width: 90% !important;
 }
-.form-outline input {
+.moftsh .form-outline input {
     width: 90% !important;
     height: 44px !important;
 }
