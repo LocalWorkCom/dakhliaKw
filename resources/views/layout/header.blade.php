@@ -118,7 +118,7 @@
                     $checksubDepartment = departements::find(Auth::user()->department_id);
                 @endphp
 
-                @if ($checksubDepartment->parent_id == null && Auth::user()->hasPermission('view departements'))
+                @if (Auth::user()->hasPermission('view departements'))
                     <li class="nav-item">
                         <a href="{{ route('sub_departments.index') }}">
                             <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
