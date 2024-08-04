@@ -135,6 +135,7 @@
                     <div class="form-group col-md-5 mx-2">
                         <label for="input7"> المهام</label>
                         <select id="input7" name="rule_id" class="form-control" placeholder="المهام">
+                            <option selected disabled>اختار من القائمة</option>
                             @foreach ($rule as $item)
                                 <option value="{{ $item->id }}"> {{ $item->name }}</option>
                             @endforeach
