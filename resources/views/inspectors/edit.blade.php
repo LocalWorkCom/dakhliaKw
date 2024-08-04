@@ -15,7 +15,7 @@
     <div class="row" dir="rtl">
 
         <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
-            <h3 class="pt-3  px-md-5  px-3 "> اضافة مفتش</h3>
+            <h3 class="pt-3  px-md-5  px-3 "> تعديل مفتش</h3>
             <div class="form-row mx-2 mb-2 pb-4">
                 <label class="px-md-5 px-3 col-12 " for=""> الرقم المدني / رقم الهوية</label>
                 <div class="input-group px-md-5 px-3 pt-3">
@@ -103,7 +103,7 @@
                 <div class="form-row d-flex justify-content-end mt-4 mb-3">
 
                     <button type="submit" class="btn-blue">
-                        <img src="../images/white-add.svg" alt="img" height="20px" width="20px"> اضافة
+                        <img src="../images/white-add.svg" alt="img" height="20px" width="20px"> تعديل
                     </button>
                 </div>
             </div>
@@ -184,27 +184,33 @@
         });
     });
 
-    document.getElementById('inspector-form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+    // document.getElementById('inspector-form').addEventListener('submit', function(event) {
+    //     event.preventDefault(); // Prevent the default form submission
 
-        fetch(this.action, {
-            method: this.method,
-            body: new FormData(this),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Show the success modal
-                const modal = new bootstrap.Modal(document.getElementById('myModal'));
-                modal.show();
-            } else {
-                // Handle errors
-                console.error('Form submission error:', data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-        });
+    //     fetch(this.action, {
+    //         method: this.method,
+    //         body: new FormData(this)
+    //     })
+    //     .then(data => {
+    //         // Handle success
+    //         if (data.success) {
+    //             // Show the success modal
+    //             const modal = new bootstrap.Modal(document.getElementById('myModal'));
+    //             modal.show();
+    //         } else {
+    //             // Handle errors in the JSON response
+    //             const modal = new bootstrap.Modal(document.getElementById('myModal'));
+    //             modal.show();
+    //         }
+    //     })
+       
+    // });
+ // Check if there is a flash message for showing the modal
+ document.addEventListener('DOMContentLoaded', function() {
+        @if(session('showModal'))
+            const modal = new bootstrap.Modal(document.getElementById('myModal'));
+            modal.show();
+        @endif
     });
 </script>
 

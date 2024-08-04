@@ -73,16 +73,18 @@ class InspectorController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function update(Request $request, Inspector $inspector)
+    public function update(Request $request, $id)
     {
+        
         $request->validate([
             
         ]);
-
+        $inspector = Inspector::find($id);
         $inspector->update($request->only(['position', 'name', 'phone', 'type']));
-
-        return redirect()->route('inspectors.index')
-                         ->with('success', 'Inspector updated successfully.');
+        // $inspector->save();
+        // dd($inspector->id);
+        return redirect()->back()
+                         ->with('success', 'Inspector updated successfully.')->with('showModal', true);
     }
 
     /**
