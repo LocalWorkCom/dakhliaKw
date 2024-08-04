@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="../styles/index.css">
     <link rel="stylesheet" href="../styles/responsive.css">
 </head>
-
+ 
 <body>
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
@@ -44,16 +44,28 @@
     <br>
     <div class="row" dir="rtl">
         <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
-            <h3 class="pt-3  px-md-5 px-3 "> اضافة مفتش</h3>
+            <h3 class="pt-3  px-md-5  px-3 "> اضافة مفتش</h3>
             <div class="form-row mx-2 mb-2 pb-4">
-                <label class="px-md-5 px-3 col-12 " for=""> الرقم المدني </label>
-                <div class="input-group  px-md-5 px-3 pt-3">
-
-                    <input type="search" id="" class="form-control" placeholder="بحث" style="background-color: #F8F8F8;"/>
-
-                    <button type="button" class="btn button-search" data-mdb-ripple-init>
-                        <i class="fas fa-search"></i>
-                    </button>
+                <label class="px-md-5 px-3 col-12 " for=""> الرقم المدني / رقم الهوية</label>
+                <div class="input-group px-md-5 px-3 pt-3">
+                    <div class="select-wrapper">
+                        <div class="select-box d-flex justify-content-between" id="select-box" >
+                            <p> الرقم المدني / رقم الهوية</p>
+                            <i class="fa-solid fa-angle-down" style="color: #a3a1a1;"></i>
+                            </div>
+                        <div class="options" id="options">
+                            <div class="search-box">
+                                <input type="text" id="search-input" placeholder="ابحث هنا ....." style="width: 100% !important;">
+                            </div>
+                            <div class="option" data-value="1">نقطة 1</div>
+                            <div class="option" data-value="2">نقطة 2</div>
+                            <div class="option" data-value="3">نقطة 3</div>
+                           
+                        </div>
+                    </div>
+                </div>
+            
+             
 
                 </div>
             </div>
@@ -64,25 +76,23 @@
 
     <div class="container moftsh col-11 mt-5 p-0 pb-3 ">
         <h3 class="pt-3  px-md-5 px-3 "> عرض النتائج </h3>
-        <div class="form-row mx-2 mb-2 pb-4">
+        <div class="form-row  mx-md-5 mx-1 mb-2 pb-4">
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;">الاسم</th>
+                            <th scope="row" style="background: #f5f6fa;">الرتبه</th>
                             <td style="background: #f5f6fa;">####</td>
                           </tr>
+                        <tr>
+                            <th scope="row" >الاسم</th>
+                            <td >####</td>
+                          </tr>
+                     
                       <tr>
-                        <th scope="row">الرتبه</th>
-                        <td>####</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">الاقدمية </th>
+                        <th scope="row">رقم الهاتف </th>
                         <td>###</td>
                       </tr>
-                      <tr>
-                        <th scope="row">  المجموعة </th>
-                        <td>####</td>
-                      </tr>
+                   
 
                     </tbody>
                   </table>
@@ -91,27 +101,14 @@
 
 <div class="container moftsh col-11 mt-5 p-0 pb-2 mb-3" >
     <h3 class="pt-3  px-md-5 px-3 ">  اختر المفتش </h3>
-    <div class="form-row mx-2 mb-2 d-block justify-content-start" dir="rtl">
+    <div class="form-row mx-md-5 mx-2 mb-2 d-block justify-content-start" dir="rtl">
 <div class="form-group d-flex" >
     <div class="radio-btn  d-flex">
         <input type="radio" id="intern" name="type" checked value="in" required>
         <label for="intern">مفتش</label>
     </div>
 </div>
-<div class="form-group d-flex  ">
-    <div class="radio-btn d-flex">
-        <input type="radio" id="intern" name="type2" checked value="in" required>
-        <label for="intern">قطاع 1</label>
-    </div>
-    <div class="radio-btn d-flex mx-5">
-        <input type="radio" id="intern" name="type2" checked value="in" required>
-        <label for="intern">قطاع 2</label>
-    </div>
-    <div class="radio-btn  d-flex">
-        <input type="radio" id="intern" name="type2" checked value="in" required>
-        <label for="intern">قطاع 3</label>
-    </div>
-</div>
+
 <div class="form-group d-flex">
     <div class="radio-btn  d-flex">
         <input type="radio" id="intern" name="type" checked value="in" required>
@@ -140,7 +137,7 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header" style="background-color: transparent; border: none;">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;</button>
         </button>
         </div>
@@ -154,7 +151,41 @@
       </div>
     </div>
   </div>
+  <script>
+    const selectBox = document.getElementById('select-box');
+    const options = document.getElementById('options');
+    const searchInput = document.getElementById('search-input');
+    const optionElements = document.querySelectorAll('.option');
 
+    selectBox.addEventListener('click', function() {
+        options.style.display = options.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.select-wrapper')) {
+            options.style.display = 'none';
+        }
+    });
+
+    optionElements.forEach(option => {
+        option.addEventListener('click', function() {
+            selectBox.textContent = this.textContent;
+            selectBox.dataset.value = this.dataset.value;
+            options.style.display = 'none';
+        });
+    });
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        optionElements.forEach(option => {
+            if (option.textContent.toLowerCase().includes(searchTerm)) {
+                option.style.display = 'block';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

@@ -283,12 +283,15 @@
 
                             {{-- {{dd($department)}} --}}
                             <div class="form-group col-md-5 mx-2">
-                                <label for="input15"> الادارة العامة</label>
+                                <label for="input15"> القسم </label>
                                 <select id="input15" name="public_administration" class="form-control"
-                                    placeholder="الادارة العامة">
+
+                                        placeholder="الادارة العامة">
                                     @if ($user->department_id == null)
                                     <option selected  disabled>اختار من القائمة</option>
                                     @endif
+
+
                                     @foreach ($department as $item)
                                         <option value="{{ $item->id }}"
                                             {{ $user->department_id == $item->id ? 'selected' : '' }}>
@@ -337,11 +340,11 @@
     </div> --}}
 
                         <div class="form-row mx-2 mx-3 d-flex justify-content-center flex-row-reverse">
-                            <div class="form-group col-md-5 mx-2">
+                            {{-- <div class="form-group col-md-5 mx-2">
                                 <label for="input22">مدة الخدمة</label>
                                 <input type="date" id="input22" name="end_of_service" class="form-control"
                                     placeholder="مدة الخدمة " value="{{ $end_of_service }}">
-                            </div>
+                            </div> --}}
 
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input24"> الرتبة</label>
