@@ -191,6 +191,20 @@
                                             <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
                                         </li>
                                     @endif
+                                    @if (Auth::user()->hasPermission('view Sector'))
+                                    <li>
+                                        <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                            style="margin-left: 7px;">
+                                        <a href="{{ route('sectors.index') }}">القطاعات</a>
+                                    </li>
+                                @endif
+                                @if (Auth::user()->hasPermission('view Point'))
+                                <li>
+                                    <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="{{ route('points.index') }}">النقاط</a>
+                                </li>
+                            @endif
                                         @if (Auth::user()->hasPermission('view VacationType'))
                                             <li>
                                                 <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"

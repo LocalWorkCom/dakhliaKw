@@ -1085,6 +1085,14 @@ select.form-control:not([size]):not([multiple]) {
     text-align: right;
 color: #2A2726;
 }
+.moftsh2 label{
+    font-family: Almarai;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 26.78px;
+    text-align: right;
+color: #2A2726; width: 100%;
+}
 .moftsh .input-group input {
     width: 96% !important;}
 .moftsh .input-group input , .moftsh .input-group select{
