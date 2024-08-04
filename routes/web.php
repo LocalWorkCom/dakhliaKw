@@ -256,7 +256,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('working_tree/add', [WorkingTreeController::class, 'create'])->name('working_tree.add');
     Route::post('working_tree/store', [WorkingTreeController::class, 'store'])->name('working_tree.store');
     Route::get('working_tree/edit/{id}', [WorkingTreeController::class, 'edit'])->name('working_tree.edit');
-    Route::post('working_tree/update', [WorkingTreeController::class, 'update'])->name('working_tree.update');
+    Route::post('working_tree/update/{id}', [WorkingTreeController::class, 'update'])->name('working_tree.update');
     Route::get('working_tree/show/{id}', [WorkingTreeController::class, 'show'])->name('working_tree.show');
 });
 

@@ -17,7 +17,8 @@
         <div class="container  col-11 mt-3 p-0 ">
             <div class="row " dir="rtl">
                 <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                    <button type="button" class="wide-btn" onclick="window.location.href='{{ route('working_tree.add') }}'">
+                    <button type="button" class="wide-btn"
+                        onclick="window.location.href='{{ route('working_tree.add') }}'">
                         <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         اضافة جديد
                     </button>
@@ -63,15 +64,13 @@
                                     name: 'name'
                                 },
                                 {
-                                    data: 'name',
-                                    name: 'name'
+                                    data: 'working_days_num',
+                                    name: 'working_days_num'
                                 },
                                 {
-                                    data: 'name',
-                                    name: 'name'
+                                    data: 'holiday_days_num',
+                                    name: 'holiday_days_num'
                                 },
-                            
-
                                 {
                                     data: 'action',
                                     name: 'action',
@@ -86,7 +85,7 @@
                             columnDefs: [{
                                 targets: -1,
                                 render: function(data, type, row) {
-                                  
+
                                     // Using route generation correctly in JavaScript
                                     var editUrl = '{{ route('working_tree.edit', ':id') }}';
                                     var showUrl = '{{ route('working_tree.show', ':id') }}';
@@ -95,18 +94,16 @@
                                     showUrl = showUrl.replace(':id', row.id);
                                     var editButton = '';
                                     var showButton = '';
-                                   
-                                    if (editVacation) {
+
                                         editButton =
                                             `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i> تعديل</a>`;
-                                    }
-                                    if (showVacation) {
+                                    
                                         showButton =
                                             `<a href="${showUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
-                                    }
+                                    
                                     // Checking if the vacation start date condition is met
 
-                                    return `${editButton}${showButton}${deleteButton}`;
+                                    return `${editButton}${showButton}`;
 
                                 }
 

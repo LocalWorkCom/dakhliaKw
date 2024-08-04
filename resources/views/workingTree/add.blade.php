@@ -3,6 +3,7 @@
 @section('title')
     اضافة
 @endsection
+
 @section('content')
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
@@ -20,121 +21,93 @@
         </div>
     </div>
     <br>
-    <div class="row">
+    <div class="row" dir="rtl">
         <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
             <h3 class="pt-3  px-md-5 px-3 "> من فضلك ادخل البيانات </h3>
-            <form action="{{ route('workingTree.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('working_tree.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="form-row mx-2 mb-2 ">
+                <div class="form-row mx-2 mb-2">
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
-                        <label class="pb-3" for=""> اسم نظام العمل </label>
-                        <input type="text" id="" class="form-control" placeholder=" الجهراء" />
+                        <label class="pb-3" for="name">اسم نظام العمل</label>
+                        <input type="text" id="name" name="name" class="form-control"
+                            placeholder="ادخل نظام العمل" />
                     </div>
                 </div>
                 <div class="form-row mx-2 mb-2">
-                    <div class="input-group moftsh px-md-5 px-3 pt-3 col-6 holidays">
-                        <label class="pb-3" for="holidays">عدد ايام العمل</label>
-                        <select name="holidays" id="holidays" style="border: 0.2px solid rgb(199, 196, 196);">
+                    <div class="input-group moftsh px-md-5 px-3 pt-3 col-6 workings">
+                        <label class="pb-3" for="working_days_num">عدد ايام العمل</label>
+                        <select name="working_days_num" id="working_days_num" style="border: 0.2px solid rgb(199, 196, 196);">
                             <option value="">اختر</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
+                            @for ($i = 1; $i < 30; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
                         </select>
                     </div>
+                    
                     <div class="input-group moftsh px-md-5 px-3 pt-3 col-6">
-                        <label class="pb-3" for="work-days">عدد ايام الاجازات </label>
-                        <select name="work-days" id="work-days" style="border: 0.2px solid rgb(199, 196, 196);">
+                        <label class="pb-3" for="holiday_days_num">عدد ايام الاجازات</label>
+                        <select name="holiday_days_num" id="holiday_days_num" style="border: 0.2px solid rgb(199, 196, 196);">
                             <option value="">اختر</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
+                            @for ($i = 1; $i <= 30; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
                         </select>
                     </div>
+                </div>
+                <div id="selected-values-container"></div>
 
-                </div>
-                <div class="form-row mx-2 mb-2 holidays-1" style="display: none;">
-                    <div class="input-group moftsh px-md-5 px-3 pt-3">
-                        <label class="pb-3" for="holiday1"> اليوم الاول</label>
-                        <select name="holiday1" id="holiday1" style="border: 0.2px solid rgb(199, 196, 196);">
-                            <option value="">اختر الفترة</option>
-                            <option value="2-4">2-4</option>
-                            <option value="3-5">3-5</option>
-                            <option value="4-7">4-7</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row mx-2 mb-2 holidays-2" style="display: none;">
-                    <div class="input-group moftsh px-md-5 px-3 pt-3">
-                        <label class="pb-3" for="holiday2">اليوم الثاني</label>
-                        <select name="holiday2" id="holiday2" style="border: 0.2px solid rgb(199, 196, 196);">
-                            <option value="">اختر الفترة</option>
-                            <option value="2-4">2-4</option>
-                            <option value="3-5">3-5</option>
-                            <option value="4-7">4-7</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row mx-2 mb-2 holidays-3" style="display: none;">
-                    <div class="input-group moftsh px-md-5 px-3 pt-3">
-                        <label class="pb-3" for="holiday3">اليوم الثالث</label>
-                        <select name="holiday3" id="holiday3" style="border: 0.2px solid rgb(199, 196, 196);">
-                            <option value="">اختر الفترة</option>
-                            <option value="2-4">2-4</option>
-                            <option value="3-5">3-5</option>
-                            <option value="4-7">4-7</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row mx-2 mb-2 holidays-4" style="display: none;">
-                    <div class="input-group moftsh px-md-5 px-3 pt-3">
-                        <label class="pb-3" for="holiday4">اليوم الرابع</label>
-                        <select name="holiday4" id="holiday4" style="border: 0.2px solid rgb(199, 196, 196);">
-                            <option value="">اختر الفترة</option>
-                            <option value="2-4">2-4</option>
-                            <option value="3-5">3-5</option>
-                            <option value="4-7">4-7</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="container col-11 ">
+                <div class="container col-11">
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
-
-                        <button type="submit" class="btn-blue"><img src="../images/white-add.svg" alt="img"
-                                height="20px" width="20px"> اضافة</button>
+                        <button type="submit" class="btn-blue"><img src="{{ asset('frontend/images/white-add.svg') }}"
+                                alt="img" height="20px" width="20px"> اضافة</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 
-
+    <!-- Template Div -->
+    <div class="form-row mx-2 mb-2 holidays-template" style="display: none;">
+        <div class="input-group moftsh px-md-5 px-3 pt-3">
+            <label class="pb-3" for="holiday-template"></label>
+            <select name="holiday-template" id="holiday-template" style="border: 0.2px solid rgb(199, 196, 196);">
+                <option value="">اختر الفترة</option>
+                @foreach ($WorkingTimes as $item)
+                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
 
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                const holidaysSelect = document.getElementById('holidays');
-                holidaysSelect.addEventListener('change', () => {
-                    const selectedValue = parseInt(holidaysSelect.value, 10);
-                    const holidaySections = document.querySelectorAll(
-                        '.holidays-1, .holidays-2, .holidays-3, .holidays-4');
-                    holidaySections.forEach(section => {
-                        section.style.display = 'none';
-                    });
+                const workingsSelect = document.getElementById('working_days_num');
+                workingsSelect.addEventListener('change', () => {
+                    const selectedValue = parseInt(workingsSelect.value, 10);
+                    const selectedValuesContainer = document.getElementById('selected-values-container');
+                    const templateDiv = document.querySelector('.holidays-template');
+                    selectedValuesContainer.innerHTML = '';
 
-                    if (selectedValue >= 1) {
-                        document.querySelector('.holidays-1').style.display = 'block';
-                    }
-                    if (selectedValue >= 2) {
-                        document.querySelector('.holidays-2').style.display = 'block';
-                    }
-                    if (selectedValue >= 3) {
-                        document.querySelector('.holidays-3').style.display = 'block';
-                    }
-                    if (selectedValue >= 4) {
-                        document.querySelector('.holidays-4').style.display = 'block';
+                    for (let i = 1; i <= selectedValue; i++) {
+                        // Clone the template div
+                        const newDiv = templateDiv.cloneNode(true);
+                        newDiv.style.display = 'block';
+                        newDiv.classList.remove('holidays-template');
+
+                        // Update the label and select attributes
+                        const label = newDiv.querySelector('label');
+                        const select = newDiv.querySelector('select');
+
+                        label.setAttribute('for', `holiday${i}`);
+                        label.textContent = `اليوم ${i}`;
+
+                        select.setAttribute('name', `holiday${i}`);
+                        select.setAttribute('id', `holiday${i}`);
+
+                        // Append the new div to the container
+                        selectedValuesContainer.appendChild(newDiv);
                     }
                 });
             });

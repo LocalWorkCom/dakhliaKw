@@ -11,7 +11,7 @@ class WorkingTree extends Model
     protected $table = "working_trees";
 
 
-    public function WorkingTreeTimes()
+    public function workingTreeTimes()
     {
         return $this->hasMany(WorkingTreeTime::class , 'working_tree_id');
     }
