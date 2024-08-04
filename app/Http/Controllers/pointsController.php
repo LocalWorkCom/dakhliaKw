@@ -153,6 +153,14 @@ class pointsController extends Controller
     {
         $data = Point::findOrFail($id);
 
+        // Format 'from' and 'to' fields
+        $data->formatted_from = Carbon::createFromFormat('H:i:s', $data->from)->format('h:i A');
+        $data->formatted_to = Carbon::createFromFormat('H:i:s', $data->to)->format('h:i A');
+    
+        // Replace AM/PM with ص/م
+        $data->formatted_from = str_replace(['AM', 'PM'], ['ص', 'م'], $data->formatted_from);
+        $data->formatted_to = str_replace(['AM', 'PM'], ['ص', 'م'], $data->formatted_to);
+    
         return view('points.showdetails', compact('data'));
     }
 

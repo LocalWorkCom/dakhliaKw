@@ -211,7 +211,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('points/create', [pointsController::class, 'create'])->name('points.create')->middleware('check.permission:create Point');
         Route::post('points/add', [pointsController::class, 'store'])->name('points.store')->middleware('check.permission:create Point');
         Route::get('points/edit/{id}', [pointsController::class, 'edit'])->name('points.edit')->middleware('check.permission:edit Point');
-        Route::post('points/show/{id}', [pointsController::class, 'shhow'])->name('points.show')->middleware('check.permission:view Point');
+        Route::get('points/show/{id}', [pointsController::class, 'show'])->name('points.show')->middleware('check.permission:view Point');
 
         Route::post('points/update', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
