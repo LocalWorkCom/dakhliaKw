@@ -574,12 +574,13 @@ class UserController extends Controller
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
         $job = job::all();
         // dd($user);
-        if ($user->flag == "user") {
-            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
-        } else {
-            $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
-        }
+        // if ($user->flag == "user") {
+        //     $department = departements::where('id', $user->department_id)->get();
+        // } else {
+        //     $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
+        // }
         // $department = departements::all();
+        $department = departements::where('id', $user->department_id)->first();
         $hisdepartment = $user->createdDepartments;
         return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job'));
     }
@@ -598,10 +599,10 @@ class UserController extends Controller
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
         $job = job::all();
         // dd($user);
-        if ($user->flag == "user") {
-            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+        if ($user->department_id == "NULL") {
+            $department = departements::all();
         } else {
-            $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
+            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
         }
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;

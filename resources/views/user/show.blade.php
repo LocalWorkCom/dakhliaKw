@@ -197,23 +197,21 @@
                             <th scope="row">الإدارة العامة</th>
                             <td>
                                 <!-- Display the selected item name here with a null check -->
-                                @php
-                                    $selectedDepartment = $department->firstWhere('id', $user->public_administration);
-                                @endphp
+                               
 
-                                @if ($selectedDepartment)
-                                    {{ $selectedDepartment->name }}
+                                @if ($department)
+                                    {{ $department->name }}
                                 @else
                                     <!-- Fallback text if no department is found -->
-                                    لم يتم العثور على الإدارة
+                                    لا يوجد ادارة  محددة
                                 @endif
                             </td>
                             <td style="display: none;">
                                 <select id="input7" name="public_administration" class="form-control"
                                     placeholder="المهام" disabled>
-                                    @foreach ($department as $item)
+                                    @foreach ($rule as $item)
                                         <option value="{{ $item->id }}"
-                                            {{ $user->public_administration == $item->id ? 'selected' : '' }}>
+                                            {{ $user->rule_id == $item->id ? 'selected' : '' }}>
                                             {{ $item->name }}
                                         </option>
                                     @endforeach
