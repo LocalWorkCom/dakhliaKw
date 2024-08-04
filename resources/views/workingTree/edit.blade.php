@@ -24,7 +24,8 @@
     <div class="row" dir="rtl">
         <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
             <h3 class="pt-3  px-md-5 px-3 "> من فضلك ادخل البيانات </h3>
-            <form action="{{ route('working_tree.update', $workingTree->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('working_tree.update', $workingTree->id) }}" method="POST"
+                enctype="multipart/form-data">
                 @csrf
 
                 <div class="form-row mx-2 mb-2">
@@ -68,8 +69,13 @@
                                     style="border: 0.2px solid rgb(199, 196, 196);">
                                     <option value="">اختر الفترة</option>
                                     @foreach ($workingTimes as $item)
-                                        <option value="{{ $item->id }}"
-                                            @if ($workingTree->workingTreeTimes->contains('working_time_id', $item->id)) selected @endif>
+                                        @php
+                                            // Check if the working time ID is present for the current day
+                                            $isSelected =
+                                                $workingTree->workingTreeTimes->firstWhere('day_num', $i)
+                                                    ?->working_time_id === $item->id;
+                                        @endphp
+                                        <option value="{{ $item->id }}"  @if ($isSelected) selected @endif>
                                             {{ $item->name }}
                                     @endforeach
                                 </select>

@@ -1,45 +1,74 @@
 @extends('layout.main')
 
-@push('style')
-@endpush
 @section('title')
-  التفاصيل
+    اضافة
 @endsection
 @section('content')
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('job.index') }}">أنواع الاجـــــازات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة نوع أجازه </a></li>
+                <li class="breadcrumb-item"><a href="{{ route('vacations.list') }}">نظام العمل </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href="">عرض</a></li>
             </ol>
         </nav>
     </div>
     <div class="row ">
         <div class="container welcome col-11">
-            <p> أنواع الاجـــــازات </p>
+            <p> نظام العمــــل </p>
         </div>
     </div>
     <br>
-    <section style="direction: rtl;">
-        <div class="row">
-            <div class="container col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11">
-                <table class="table table-bordered ">
-                    <tbody>
-                        <tr style="background-color:#f5f6fa;">
-                            <th scope="row">الاسم</th>
-                            <td>{{ $data->name }}</td>
-                        </tr>
+    <div class="row">
+        <div class="container  col-11 mt-3 p-0 ">
+            <div class="row " dir="rtl">
+                <div class="form-group mt-4  mx-2 col-12 d-flex ">
 
-                    </tbody>
-
-                </table>
-
+                </div>
             </div>
 
 
-    </section>
-@endsection
 
-@push('scripts')
-@endpush
+            <div class="form-row mx-2 ">
+                <table class="table table-bordered" dir="rtl">
+                    <tbody>
+
+                        <tr>
+                            <th scope="row"style="background: #f5f6fa;">نوع الاجازة:</th>
+                            <td>{{ $vacation->vacation_type->name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">اسم الموظف:</th>
+                            <td>
+                                {{ $vacation->employee ? $vacation->employee->name : 'عامة' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;">تاريخ البداية:</th>
+                            <td>{{ $vacation->date_from }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;"> تاريخ النهاية:</th>
+                            <td>{{ $vacation->date_to ? $vacation->date_to : $vacation->date_from }}</td>
+                        </tr>
+
+
+
+                    </tbody>
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+
+            });
+        </script>
+    @endpush
+@endsection
