@@ -156,26 +156,6 @@
             }
         }
     }
-    function toggleDropdown5() {
-        var dropdownMenu = document.getElementById("dropdownMenu5");
-        if (dropdownMenu.style.display === "block") {
-            dropdownMenu.style.display = "none";
-        } else {
-            dropdownMenu.style.display = "block";
-        }
-    }
-
-    window.onclick = function(event) {
-        if (!event.target.matches('.btn5')) {
-            var dropdowns = document.getElementsByClassName("dropdown-menu5");
-            for (var i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.style.display === "block") {
-                    openDropdown.style.display = "none";
-                }
-            }
-        }
-    }
     //  for header collapsing 
 
     $(document).ready(function() {
