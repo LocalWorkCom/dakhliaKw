@@ -26,7 +26,7 @@ class UniqueModelName implements ValidationRule
     {
        
         $exists = DB::table('permissions')
-            ->whereRaw("CONCAT(name) = ?", [$this->model])
+            ->whereRaw("CONCAT(name) = ?", [$this->model])->whereNull('deleted_at')
             ->exists();
             // dd($exists);
         if ($exists) {

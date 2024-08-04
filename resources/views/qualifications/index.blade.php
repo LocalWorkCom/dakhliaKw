@@ -117,7 +117,7 @@
         </div>
     </div>
     {{-- model for delete form --}}
-    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -146,7 +146,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 @push('scripts')
     <script>

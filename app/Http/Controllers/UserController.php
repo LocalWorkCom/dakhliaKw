@@ -88,8 +88,7 @@ class UserController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 
-            return '<button class="btn btn-primary btn-sm">Edit</button>
-              <a href="" class="btn btn-primary btn-sm">vacations</a>';
+            return $row;
         })
             ->addColumn('department', function ($row) { // New column for departments count
 
@@ -453,10 +452,11 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'file_number'),
                 ],
                 'military_number' => [
-                    ValidationRule::unique('users', 'military_number'),
+                   'nullable',
                 ],
             ];
-            if ($request->has('solderORcivil') && $request->solderORcivil == "solder") {
+            if ($request->has('solderORcivil') && $request->solderORcivil == "military") {
+                // dd("dd");
                 if ($request->has('military_number')) {
                     $rules['military_number'] = [
                         'required',
@@ -575,12 +575,13 @@ class UserController extends Controller
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
         $job = job::all();
         // dd($user);
-        if ($user->flag == "user") {
-            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
-        } else {
-            $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
-        }
+        // if ($user->flag == "user") {
+        //     $department = departements::where('id', $user->department_id)->get();
+        // } else {
+        //     $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
+        // }
         // $department = departements::all();
+        $department = departements::where('id', $user->department_id)->first();
         $hisdepartment = $user->createdDepartments;
         return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job'));
     }
@@ -599,10 +600,10 @@ class UserController extends Controller
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
         $job = job::all();
         // dd($user);
-        if ($user->flag == "user") {
-            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+        if ($user->department_id == "NULL") {
+            $department = departements::all();
         } else {
-            $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
+            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
         }
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
@@ -652,7 +653,14 @@ class UserController extends Controller
                     // ValidationRule::unique('permissions', 'name'),
                     new UniqueNumberInUser($user),
                 ],
-                'phone' => 'required|string',
+                // 'phone' => 'required|string',
+                'phone' => [
+                    'required',
+                    'string',
+                    // 'max:255',
+                    // ValidationRule::unique('permissions', 'name'),
+                    new UniqueNumberInUser($user),
+                ],
                 // 'file_number' => 'required|string',
                 'file_number' => [
                     'required',

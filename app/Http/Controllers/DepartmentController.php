@@ -112,9 +112,9 @@ class DepartmentController extends Controller
     public function create()
     {
         // dd(Auth::user());
-        $users = User::all();
+        $users = User::where('department_id', NULL)->get();
         $departments = departements::with('children', 'parent')->get();
-        $employee = User::where('flag', 'employee')->where('department_id', NULL)->get();
+        $employee = User::where('department_id', NULL)->get();
          return view('departments.create', compact('users','departments','employee'));
     }
 
@@ -122,7 +122,7 @@ class DepartmentController extends Controller
     public function create_1()
     {
         // dd(Auth::user());
-        $users = User::where('flag', 'employee')->where('department_id', NULL)->get();
+        $users = User::where('department_id', NULL)->get();
         $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
 
         // Get the children of the parent department
@@ -170,15 +170,12 @@ class DepartmentController extends Controller
                 // dd($item);
                 $user = User::find($item);
 
-                $log = DB::table('user_departments')->insert([
-                    'user_id' => $user->id,
-                    'department_id' => $departements->id,
-                    'flag' => "1",
-                    'created_at' => now(),
-                ]);
-                $user = User::find($item);
-                $user->department_id = $departements->id;
-                $user->save();
+                if ($user) {
+                    $user->department_id = $departements->id;
+                    $user->save();
+                    // dd($user);
+                }
+              
             }
           }
         //   dd($departements);
@@ -227,17 +224,11 @@ class DepartmentController extends Controller
                 // dd($item);
 
                 $user = User::find($item);
-
-                $log = DB::table('user_departments')->insert([
-                    'user_id' => $user->id,
-                    'department_id' => $departements->id,
-                    'flag' => "1",
-                    'created_at' => now(),
-                ]);
-
-                $user = User::find($item);
-                $user->department_id = $departements->id;
-                $user->save();
+                if ($user) {
+                    $user->department_id = $departements->id;
+                    $user->save();
+                    // dd($user);
+                }
             }
           }
         //   dd($departements);
@@ -259,7 +250,9 @@ class DepartmentController extends Controller
     public function edit(departements $department)
     {
         $users = User::all();
-        return view('departments.edit', compact('department', 'users'));
+        $employee = User::where('department_id', $department->id)->orwhere('department_id', NULL)->get();
+        // dd($employee);
+        return view('departments.edit', compact('department', 'users','employee'));
     }
 
     public function edit_1(departements $department)
@@ -277,14 +270,29 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, departements $department)
     {
+        // dd($request);
         $request->validate([
             'name' => 'required',
             'manger' => 'required',
-            'manger_assistance' => 'required',
         ]);
 
-        $department->update($request->all());
-        return redirect()->route('sub_departments.index')->with('success', 'Department updated successfully.');
+        // Update the department details
+    $department->update($request->only(['name', 'manager','description']));
+
+    // Check if employees data is provided
+    if ($request->has('employess')) {
+        foreach ($request->employess as $item) {
+            $user = User::find($item);
+            
+            if ($user) {
+                $user->department_id = $department->id;
+                $user->save();
+                // dd($user);
+            }
+        }
+    }
+    
+        return redirect()->route('departments.index')->with('success', 'Department updated successfully.');
         // return response()->json($department);
     }
 
@@ -304,19 +312,14 @@ class DepartmentController extends Controller
 
                 $user = User::find($item);
 
-                $log = DB::table('user_departments')->updateOrInsert([
-                    'user_id' => $user->id,
-                    'department_id' => $departements->id,
-                    'flag' => "1",
-                    'created_at' => now(),
-                ]);
-
-                $user = User::find($item);
-                $user->department_id = $departements->id;
-                $user->save();
+                if ($user) {
+                    $user->department_id = $department->id;
+                    $user->save();
+                    // dd($user);
+                }
             }
           }
-        return redirect()->route('departments.index')->with('success', 'Department updated successfully.');
+        return redirect()->route('sub_departments.index')->with('success', 'Department updated successfully.');
         // return response()->json($department);
     }
     /**
