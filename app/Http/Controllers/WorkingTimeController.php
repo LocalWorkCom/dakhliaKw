@@ -85,9 +85,15 @@ class WorkingTimeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(WorkingTime $workingTime)
+    public function show($id)
     {
-        //
+        $workingTime = WorkingTime::find($id);
+        // dd($workingTime);
+        if ($workingTime) {
+            return response()->json(['success' => true, 'data' => $workingTime]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Record not found'], 404);
+        }
     }
 
     /**
@@ -108,30 +114,29 @@ class WorkingTimeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        dd($request);
+        // dd($request);
         $messages = [
-            'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
-            'start_time.required' => 'بداية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
-            'end_time.required' => 'نهاية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
+            'name_edit.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+            'start_time_edit.required' => 'بداية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
+            'end_time_edit.required' => 'نهاية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
         ];
         $validatedData = Validator::make($request->all(), [
-            'name' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            'name_edit' => 'required',
+            'start_time_edit' => 'required',
+            'end_time_edit' => 'required',
         ], $messages);
         // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         try {
-
-            $WorkingTime =WorkingTime ::find($id);
-            $WorkingTime->name = $request->name;
-            $WorkingTime->start_time = $request->start_time;
-            $WorkingTime->end_time = $request->end_time;
-            $WorkingTime->save();
+            $WorkingTimeitem = WorkingTime::findOrFail($request->id_edit);
+            $WorkingTimeitem->name = $request->name_edit;
+            $WorkingTimeitem->start_time = $request->start_time_edit;
+            $WorkingTimeitem->end_time = $request->end_time_edit;
+            $WorkingTimeitem->save();
             // Dynamically create model instance based on the model class string
             return view('working_time.index')->with('success', 'Permission created successfully.');
         } catch (\Exception $e) {

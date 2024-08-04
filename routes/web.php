@@ -96,8 +96,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/api/working_time', [WorkingTimeController::class, 'getWorkingTime'])->name('api.working_time');
         Route::post('/working_time/create', [WorkingTimeController::class, 'store'])->name('working_time.store');
         Route::any('/working_time/edit/{id}', [WorkingTimeController::class, 'edit'])->name('working_time.edit');
-        Route::post('/working_time/update/{id}', [WorkingTimeController::class, 'update'])->name('working_time.update');
-
+        Route::any('/working_time/update', [WorkingTimeController::class, 'update'])->name('working_time.update');
+        Route::any('/working_time/show/{id}', [WorkingTimeController::class, 'show'])->name('working_time.show');
 
     // export
     //Start Export routes

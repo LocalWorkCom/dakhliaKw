@@ -86,6 +86,8 @@
                                     targets: -1,
                                     render: function(data, type, row) {
                                         return `
+                                            <a href="#" class="btn btn-sm " style="background-color: #274373;" onclick="openViewModal('${row.id}', '${row.name}')"> <i class="fa fa-eye"></i>عرض  </a>
+
                                             <a href="#" class="btn btn-sm" style="background-color: #F7AF15;" onclick="openEditModal('${row.id}', '${row.name}')"> <i class="fa fa-edit"></i> تعديل </a>
                                         `;
                                     }
@@ -190,8 +192,10 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('working_time.update',"id") }}" method="post">
+                                <form action="{{ route('working_time.update') }}" method="post">
                                     @csrf
+                                    @method('PUT')
+                                    <input type="hidden" id="id_edit" name="id_edit">
                                     <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
                                         <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                                             <div class="form-group mt-4 mb-3">
@@ -201,23 +205,24 @@
                                                     class="form-control" placeholder="مجموعة أ" required>
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label class="d-flex justify-content-start pb-2" for="start_time_edit">
+                                                <label class="d-flex justify-content-start pb-2"
+                                                    for="start_time_edit">
                                                     بداية فترة العمل</label>
                                                 <input type="time" id="start_time_edit" name="start_time_edit"
                                                     class="form-control" required>
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label class="d-flex justify-content-start pb-2" for="end_time_edit"> نهاية
+                                                <label class="d-flex justify-content-start pb-2" for="end_time_edit">
+                                                    نهاية
                                                     فترة العمل</label>
                                                 <input type="time" id="end_time_edit" name="end_time_edit"
                                                     class="form-control" required>
                                             </div>
                                             <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                                 <button type="submit" class="btn-all mx-2 p-2"
-                                                    style="background-color: #274373; color: #ffffff;"
-                                                    id="openSecondModalBtn">
+                                                    style="background-color: #274373; color: #ffffff;" id="">
                                                     <img src="{{ asset('frontend/images/white-add.svg') }}"
-                                                        alt="img"> اضافة
+                                                        alt="img"> تعديل
                                                 </button>
                                                 <button type="button" class="btn-all p-2"
                                                     style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
@@ -230,18 +235,87 @@
                                     </div>
                                 </form>
                                 <!-- Second Modal Body (Initially Hidden) -->
-                                <div id="secondModalBody" class="d-none">
+                                {{-- <div id="secondModalBody" class="d-none">
                                     <div class="body-img-modal d-block mb-4">
                                         <img src="{{ asset('frontend/images/ordered.svg') }}" alt="">
                                         <p>تمت الاضافه بنجاح</p>
                                     </div>
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- view Form Modal -->
+                <div class="modal fade" id="view" tabindex="-1" aria-labelledby="representativeLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header d-flex justify-content-center">
+                                <div class="title d-flex flex-row align-items-center ">
+                                    <h5 class="modal-title"> عرض فترة </h5>
                                 </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
+                                    <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
+                                        <div class="form-group mt-4 mb-3">
+                                            <label class="d-flex justify-content-start pt-3 pb-2" for="name_show">
+                                                اسم الفتره</label>
+                                            <input type="text" id="name_show" name="name_show"
+                                                class="form-control" placeholder="مجموعة أ"  disabled>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label class="d-flex justify-content-start pb-2" for="start_time_show">
+                                                بداية فترة العمل</label>
+                                            <input type="time" id="start_time_show" name="start_time_show"
+                                                class="form-control" disabled>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label class="d-flex justify-content-start pb-2" for="end_time_show">
+                                                نهاية
+                                                فترة العمل</label>
+                                            <input type="time" id="end_time_show" name="end_time_show"
+                                                class="form-control" disabled>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <script>
+                    function openViewModal(id, name) {
+                        $.ajax({
+                            url: '/working_time/show/' + id,
+                            method: 'GET',
+                            success: function(response) {
+                                if (response.success) {
+                                    var data = response.data;
+                                    // Populate modal fields with data
+                                    document.getElementById('name_show').value = data.name;
+                                    document.getElementById('start_time_show').value = data.start_time;
+                                    document.getElementById('end_time_show').value = data.end_time;
+                                    // document.getElementById('id_show').value = data.id;
+                                    $('#view').modal('show');
+                                } else {
+                                    alert(response.message);
+                                }
+                            },
+                            error: function() {
+                                alert('Error retrieving data');
+                            }
+                        });
+                    }
+
                     function openEditModal(id, name) {
 
 
@@ -255,6 +329,7 @@
                                     document.getElementById('name_edit').value = data.name;
                                     document.getElementById('start_time_edit').value = data.start_time;
                                     document.getElementById('end_time_edit').value = data.end_time;
+                                    document.getElementById('id_edit').value = data.id;
                                     $('#edit').modal('show');
                                 } else {
                                     alert(response.message);
