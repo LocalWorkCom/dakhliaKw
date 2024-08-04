@@ -71,7 +71,7 @@
                             <td>{{ $user->email }} </td>
                         </tr>
                         <tr>
-                            <th scope="row"> رقم المحمول </th>
+                            <th scope="row"> رقم الهاتف </th>
                             <td>
                                 {{ $user->phone }}
                             </td>
