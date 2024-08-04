@@ -12,6 +12,10 @@ class Sector extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name','government_id','region_id','sector_id','google_map','lat','long','note'
+        'name','government_id'
     ];
+    public function government()
+    {
+        return $this->belongsTo(Government::class, 'government_id ', 'id');
+    }
 }
