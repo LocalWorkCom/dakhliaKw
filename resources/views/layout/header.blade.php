@@ -2,7 +2,7 @@
     <div class="upper-navbar d-flex">
         <div class="second-section d-flex  col-md-10 col-sm-6">
             <div class="dropdown">
-                {{-- @if ($user->login) --}}
+                {{-- @if ($user->login) Test --}}
                 @php
                     $user = auth()->user();
                 @endphp
