@@ -77,8 +77,8 @@
                                                 name: 'name'
                                             },
                                             {
-                                                data: 'work_time_id',
-                                                name: 'work_time_id'
+                                                data: 'working_time.name',
+                                                name: 'working_time.name'
                                             },
                                             {
                                                 data: 'points_inspector',
@@ -346,7 +346,6 @@
         }
 
         function openEditModal(id, name) {
-
 
             $.ajax({
                 url: '/groups/edit/' + id,

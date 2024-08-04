@@ -29,7 +29,7 @@ class GroupsController extends Controller
 
     public function getgroups()
     {
-        $data = Groups::all();
+        $data = Groups::with('working_time')->get();
         // dd($data);
 
         return DataTables::of($data)->addColumn('action', function ($row) {
@@ -93,7 +93,7 @@ class GroupsController extends Controller
     public function show($group)
     {
         // dd($group);
-        $group = Group::find($group);
+        $group = Groups::find($group);
         $working_time = WorkingTime::find($group->work_time_id);
 
         $data =
@@ -115,7 +115,7 @@ class GroupsController extends Controller
      */
     public function edit($group)
     {
-        $group = Group::find($group);
+        $group = Groups::find($group);
         $working_time = WorkingTime::find($group->work_time_id);
 
 
@@ -142,7 +142,7 @@ class GroupsController extends Controller
             // Add other validation rules as needed
         ]);
 
-        $group = Group::find($request->id_edit);
+        $group = Groups::find($request->id_edit);
         $group->name = $request->name_edit;
         $group->points_inspector = $request->points_inspector_edit;
         $group->work_time_id = $request->work_time_id_edit;
