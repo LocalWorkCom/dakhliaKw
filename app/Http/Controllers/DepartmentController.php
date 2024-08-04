@@ -277,7 +277,7 @@ class DepartmentController extends Controller
         ]);
 
         // Update the department details
-    $department->update($request->only(['name', 'manager']));
+    $department->update($request->only(['name', 'manager','description']));
 
     // Check if employees data is provided
     if ($request->has('employess')) {
