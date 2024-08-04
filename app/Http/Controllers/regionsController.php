@@ -123,6 +123,19 @@ class regionsController extends Controller
     ->make(true);
         
     }
+    public function getGovernorates($sector)
+    {
+        // Fetch governorates based on the selected sector
+        $governorates = Government::where('sector_id', $sector)->get();
+        return response()->json($governorates);
+    }
+
+    public function getRegionofgovernment($governorate)
+    {
+        // Fetch regions based on the selected governorate
+        $regions = Region::where('government_id', $governorate)->get();
+        return response()->json($regions);
+    }
     /**
      * Show the form for creating a new resource.
      */

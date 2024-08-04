@@ -34,7 +34,7 @@ class pointsController extends Controller
     }
     public function create()
     {
-        //
+        return view("points.create");
     }
 
     /**
