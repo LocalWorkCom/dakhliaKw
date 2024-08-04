@@ -93,6 +93,13 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/rule_update/{id}', [RuleController::class, 'update'])->name('rule_update')->middleware('check.permission:edit Rule');
 
     // working Time
+
+        Route::get('/working_time', [WorkingTimeController::class, 'index'])->name('working_time.index');
+        Route::get('/api/working_time', [WorkingTimeController::class, 'getWorkingTime'])->name('api.working_time');
+        Route::post('/working_time/create', [WorkingTimeController::class, 'store'])->name('working_time.store');
+        Route::any('/working_time/edit/{id}', [WorkingTimeController::class, 'edit'])->name('working_time.edit');
+        Route::post('/working_time/update/{id}', [WorkingTimeController::class, 'update'])->name('working_time.update');
+
     Route::any('/Working/Time', [WorkingTimeController::class, 'index'])->name('working_time.index');
     //groups
     Route::resource('groups', GroupsController::class);
@@ -101,6 +108,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/groups/update', [GroupsController::class, 'edit'])->name('group.update');
     Route::any('/groups/show/{id}', [GroupsController::class, 'show'])->name('group.show');
     Route::any('/groups/delete', [GroupsController::class, 'delete'])->name('group.delete');
+
     // export
     //Start Export routes
         Route::get('/export/all', [outgoingController::class, 'index'])->name('Export.index')->middleware('check.permission:view outgoings');

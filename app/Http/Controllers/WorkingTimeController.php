@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\WorkingTime;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreWorkingTimeRequest;
 use App\Http\Requests\UpdateWorkingTimeRequest;
 
@@ -14,7 +17,23 @@ class WorkingTimeController extends Controller
     public function index()
     {
         //
+
+        return view('working_time.index');
     }
+
+    public function getWorkingTime()
+    {
+        $data = WorkingTime::all();
+        // dd($data);
+
+        return DataTables::of($data)->addColumn('action', function ($row) {
+
+            return '<button class="btn btn-primary btn-sm">Edit</button>';
+        })
+        ->rawColumns(['action'])
+            ->make(true);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -27,9 +46,40 @@ class WorkingTimeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreWorkingTimeRequest $request)
+    public function store(Request $request)
     {
         //
+        // dd($request);
+
+        $messages = [
+            'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+            'start_time.required' => 'بداية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
+            'end_time.required' => 'نهاية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
+
+        ];
+        $validatedData = Validator::make($request->all(), [
+            'name' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+
+        ], $messages);
+
+        // Handle validation failure
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
+        try {
+
+            $WorkingTime = new WorkingTime();
+            $WorkingTime->name = $request->name;
+            $WorkingTime->start_time = $request->start_time;
+            $WorkingTime->end_time = $request->end_time;
+            $WorkingTime->save();
+            // Dynamically create model instance based on the model class string
+            return view('working_time.index')->with('success', 'Permission created successfully.');
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
     /**
@@ -43,17 +93,50 @@ class WorkingTimeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(WorkingTime $workingTime)
+    public function edit($id)
     {
-        //
+
+        $workingTime = WorkingTime::find($id);
+        if ($workingTime) {
+            return response()->json(['success' => true, 'data' => $workingTime]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Record not found'], 404);
+        }
+        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateWorkingTimeRequest $request, WorkingTime $workingTime)
+    public function update(Request $request, $id)
     {
-        //
+        dd($request);
+        $messages = [
+            'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+            'start_time.required' => 'بداية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
+            'end_time.required' => 'نهاية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
+        ];
+        $validatedData = Validator::make($request->all(), [
+            'name' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+        ], $messages);
+        // Handle validation failure
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
+        try {
+
+            $WorkingTime =WorkingTime ::find($id);
+            $WorkingTime->name = $request->name;
+            $WorkingTime->start_time = $request->start_time;
+            $WorkingTime->end_time = $request->end_time;
+            $WorkingTime->save();
+            // Dynamically create model instance based on the model class string
+            return view('working_time.index')->with('success', 'Permission created successfully.');
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
     /**
