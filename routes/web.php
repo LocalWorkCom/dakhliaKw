@@ -109,6 +109,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/groups/update', [GroupsController::class, 'edit'])->name('group.update');
     Route::any('/groups/show/{id}', [GroupsController::class, 'show'])->name('group.show');
     Route::any('/groups/delete', [GroupsController::class, 'delete'])->name('group.delete');
+    Route::get('/api/groups', [GroupsController::class, 'getgroups'])->name('api.groups');
 
     // export
     //Start Export routes
