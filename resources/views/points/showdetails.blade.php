@@ -11,7 +11,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('points.index') }}"> نقاط الوزاره </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a> أضافه</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a> تفاصيل</a></li>
             </ol>
         </nav>
     </div>
@@ -78,7 +78,7 @@
                         <tr>
                             <th scope="row"> رابط جوجل ماب </th>
                             <td>
-                               {{$data->google_map}}
+                               {{$data->google_map ? $data->google_map : 'لا يوجد رابط جوجل ماب'}}
                             </td>
                             {{-- <td>{{ $data->name ? $data->name : 'لا يوجد عنوان للصادر' }}</td> --}}
                         </tr>
@@ -86,7 +86,7 @@
                         <tr>
                             <th scope="row">الملاحظات</th>
                             <td>
-                               {{ $data->note }}
+                               {{ $data->note  ? $data->note : 'لا يوجد ملاحظات' }}
                             </td>
                         </tr>
 

@@ -11,7 +11,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('points.index') }}"> نقاط الوزاره </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a> أضافه</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a> تعديل</a></li>
             </ol>
         </nav>
     </div>
