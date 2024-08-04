@@ -12,10 +12,21 @@ class Sector extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name','government_id'
+        'name',
+        'governments_IDs',
+        'created_by',
+        'updated_by',
+    ];
+
+    protected $casts = [
+        'governments_IDs' => 'array', // Automatically cast the attribute to an array
     ];
     public function government()
     {
         return $this->belongsTo(Government::class, 'government_id ', 'id');
+    }
+    public function points()
+    {
+        return $this->hasMany(Point::class);
     }
 }
