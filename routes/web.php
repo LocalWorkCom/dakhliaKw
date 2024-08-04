@@ -19,6 +19,7 @@ use App\Http\Controllers\pointsController;
 use App\Http\Controllers\qualificationController;
 use App\Http\Controllers\regionsController;
 use App\Http\Controllers\sectorsController;
+use App\Http\Controllers\WorkingTimeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +91,8 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/rule_show/{id}', [RuleController::class, 'show'])->name('rule_show')->middleware('check.permission:edit Rule');
     Route::any('/rule_update/{id}', [RuleController::class, 'update'])->name('rule_update')->middleware('check.permission:edit Rule');
 
+    // working Time
+    Route::any('/Working/Time', [WorkingTimeController::class, 'index'])->name('working_time.index');
     // export
     //Start Export routes
         Route::get('/export/all', [outgoingController::class, 'index'])->name('Export.index')->middleware('check.permission:view outgoings');
