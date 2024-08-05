@@ -183,6 +183,8 @@
 
                         <li class="nav-item" onclick="toggleDropdown4(event)">
 
+                                       
+
                             <a href="#">
                                 <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
                                 <h6 class="btn4">الإعدادات <i class="fa-solid fa-angle-down"></i></h6>
@@ -198,6 +200,11 @@
                                             <a href="{{ route('grads.index') }}">الرتب العسكرية</a>
                                         </li>
                                     @endif
+                                     {{-- <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('working_time.index') }}">فترات العمل </a>
+                                        </li> --}}
 
                                     @if (Auth::user()->hasPermission('view job'))
                                         <li>
