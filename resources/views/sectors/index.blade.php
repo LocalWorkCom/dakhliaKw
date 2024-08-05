@@ -38,7 +38,7 @@
                         </div>
                     @endif
                         <div>
-                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
+                            <table id="users-table" class="display grid-container table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>الاسم</th>
@@ -56,6 +56,29 @@
         </div>
 @endsection
 @push('scripts')
+<script>
+    function printGrid() {
+        // Get the grid content by ID, class, or other selector
+        var gridContent = document.querySelector('.grid-container').innerHTML;
+
+        // Create a new window
+        var printWindow = window.open('', '', 'height=600,width=800');
+
+        // Write the grid content to the new window
+        printWindow.document.write('<html><head><title>Print Grid</title>');
+        printWindow.document.write('<link rel="stylesheet" href="{{ asset('path/to/your/styles.css') }}" type="text/css" />');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(gridContent);
+        printWindow.document.write('</body></html>');
+
+        // Close the document to finish the writing process
+        printWindow.document.close();
+
+        // Print the content
+        printWindow.print();
+    }
+</script>
+
     <script>
       
         $(document).ready(function() {

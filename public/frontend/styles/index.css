@@ -1250,7 +1250,10 @@ text-align: right;
         left: 0;
         top: 0;
     }
-   
+    #users-table th:last-child,
+    #users-table td:last-child {
+        display: none;
+    }
 }
 .d-none {
     display: none !important;
@@ -1288,4 +1291,8 @@ font-weight: 700;
 line-height: 36px;
 text-align: right;
 
+}
+.modal-body label{
+    text-align: right;
+    display: flex;
 }
