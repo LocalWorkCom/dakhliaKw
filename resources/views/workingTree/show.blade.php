@@ -33,7 +33,7 @@
 
                         <tr>
                             <th scope="row"style="background: #f5f6fa;"> اسم النظام:</th>
-                            <td>{{ $WorkingTree->name }}</td>
+                            <td colspan="5">{{ $WorkingTree->name }}</td>
                         </tr>
 
                         <tr>
