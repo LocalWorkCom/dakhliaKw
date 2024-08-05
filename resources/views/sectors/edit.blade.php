@@ -10,7 +10,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('sectors.index') }}">القطاعات</a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة قطاع</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل القطاع</a></li>
             </ol>
         </nav>
     </div>
@@ -20,7 +20,7 @@
         </div>
     </div> --}}
     <br>
-    <form class="edit-grade-form" id="Qta3-form" action=" {{ route('sectors.store') }}" method="POST">
+    <form class="edit-grade-form" id="Qta3-form" action=" {{ route('sectors.update') }}" method="POST">
         @csrf
         <div class="row" dir="rtl">
             <div id="first-container" class="container moftsh col-11 mt-3 p-0 pb-3">
@@ -28,7 +28,7 @@
                     <h3 class="pt-3 px-md-5 px-3">اضف قطاع</h3>
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="name">ادخل اسم القطاع</label>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="قطاع واحد" required/>
+                        <input type="text" id="name" name="name" class="form-control" value="{{ $data->name }}" placeholder="قطاع واحد" required/>
                         <span class="text-danger span-error" id="name-error"></span>
 
                     </div>
@@ -50,14 +50,16 @@
                     </div>
                 </div>
                 <div class="form-row col-11 mb-2 mt-3 mx-md-2">
-                    @foreach (getgovernments() as $government)
-                        <div class="form-group col-3 d-flex mx-md-4">
-                            <input type="checkbox" name="governmentIDS[]" value="{{ $government->id }}" id="governmentIDS">
-                            <label for="governmentIDS">{{ $government->name }}</label>
-                        </div>
-                    @endforeach
-                    
-
+                
+                @foreach (getgovernments() as $government)
+                    <div class="form-group col-3 d-flex mx-md-4">
+                        <input type="checkbox" name="governmentIDS[]" value="{{ $government->id }}"
+                            @if(isset($checkedGovernments[$government->id])) checked @endif
+                            id="governmentIDS_{{ $government->id }}">
+                        <label for="governmentIDS_{{ $government->id }}">{{ $government->name }}</label>
+                    </div>
+                @endforeach
+                    <input type="hidden" name="id" value="{{ $data->id }}">
                 </div>
                 <span class="text-danger span-error" id="governmentIDS-error"></span>
                 <div class="container col-11">
@@ -92,34 +94,41 @@
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var nameInput = document.getElementById('name');
-        var nextButton = document.getElementById('next-button');
-        var nameError = document.getElementById('name-error');
+   document.addEventListener('DOMContentLoaded', function () {
+    var nameInput = document.getElementById('name');
+    var nextButton = document.getElementById('next-button');
+    var nameError = document.getElementById('name-error');
+    
+    // Function to validate the input
+    function validateInput() {
+        if (nameInput.value.trim() === '') {
+            nextButton.disabled = true;
+            nameError.textContent = 'يرجى إدخال اسم القطاع';
+        } else {
+            nextButton.disabled = false;
+            nameError.textContent = ''; // Clear any previous error message
+        }
+    }
 
-        nameInput.addEventListener('input', function() {
-            if (nameInput.value.trim() !== '') {
-                nextButton.disabled = false;
-            } else {
-                nextButton.disabled = true;
-            }
-        });
+    // Check input validity on input event
+    nameInput.addEventListener('input', validateInput);
 
-        nextButton.addEventListener('click', function() {
-            if (nameInput.value.trim() === '') {
-                nameError.textContent = 'يرجى إدخال اسم القطاع';
-            } else {
-                nameError.textContent = ''; // Clear any previous error message
-                document.getElementById('first-container').classList.add('hidden');
-                document.getElementById('second-container').classList.remove('hidden');
-            }
-        });
-
-        document.getElementById('back-button').addEventListener('click', function() {
-            document.getElementById('second-container').classList.add('hidden');
-            document.getElementById('first-container').classList.remove('hidden');
-        });
+    // Check input validity on next button click
+    nextButton.addEventListener('click', function() {
+        validateInput(); // Validate input before proceeding
+        if (nameInput.value.trim() !== '') {
+            document.getElementById('first-container').classList.add('hidden');
+            document.getElementById('second-container').classList.remove('hidden');
+        }
     });
+
+    // Back button functionality
+    document.getElementById('back-button').addEventListener('click', function() {
+        document.getElementById('second-container').classList.add('hidden');
+        document.getElementById('first-container').classList.remove('hidden');
+    });
+});
+
 </script>
 
 @endpush

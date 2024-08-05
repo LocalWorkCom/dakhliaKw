@@ -154,7 +154,7 @@ ul {
     padding-inline: 45px;
     font-size: 23px;
 }
-#dropdownMenu3 a , #dropdownMenu4 a{
+#dropdownMenu3 a , #dropdownMenu4 a , #dropdownMenu5 a{
     color: #1C1B1B;
     background-color: #ffffff;
     font-size:20px;
@@ -238,8 +238,30 @@ ul {
     height: 200px;
     width: 200px !important;
 }
+.dropdown-menu5 {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -55px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow-y: auto;
+    padding-inline: 10px;
+    font-size: 23px;
+    height: 200px;
+    width: 200px !important;
+}
+
+.nav-item.active .dropdown-menu5 {
+    display: block; 
+}
 
 .nav-item.active .dropdown-menu4 {
+    display: block; 
+}
+.nav-item.active .dropdown-menu3 {
     display: block; 
 }
 .nav-item {
@@ -260,19 +282,18 @@ ul {
     padding-inline: 10px;
     font-size: 27px;
 }
-.dropdown-menu3 li , .dropdown-menu4 li{
+.dropdown-menu3 li , .dropdown-menu4 li , .dropdown-menu5 li{
     padding: 8px 12px; 
     display: flex;
 }
 
-.dropdown-menu3 li a  , .dropdown-menu4 li a {
+.dropdown-menu3 li a  , .dropdown-menu4 li a , .dropdown-menu5 li a{
     text-decoration: none; 
     color: black; 
     display: block; 
 }
-.nav-item.active .dropdown-menu3 {
-    display: block; 
-}
+
+
 .second-section .bell i{
 font-size: 24px;
 color: #FFFFFF;
@@ -1084,6 +1105,15 @@ select.form-control:not([size]):not([multiple]) {
     line-height: 26.78px;
     text-align: right;
 color: #2A2726;
+/* width: 100%; */
+}
+.moftsh2 label{
+    font-family: Almarai;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 26.78px;
+    text-align: right;
+color: #2A2726; width: 100%;
 }
 .moftsh .input-group input {
     width: 96% !important;}

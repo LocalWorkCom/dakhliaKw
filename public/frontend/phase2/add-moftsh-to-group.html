@@ -40,8 +40,8 @@
     <div class="row ">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
-                <p>اضافة المفتشون 
-                <p></p>
+                <p> مفتشون المجموعة (أ) 
+           
 
                 <!-- <div class="second mx-4">
                     <button class="btn-all px-3 mx-2" style="color: #274373;">
@@ -63,7 +63,7 @@
     </style>
     <div class="row" dir="rtl">
         <div class="container moftsh col-11 mt-3 pt-3 pb-3 ">
-            <h3 class="pt-3 px-md-5 px-3"> من فضلك قم باضافة المفتشون</h3>
+            <h3 class="pt-3 px-md-5 px-3">من فضلك قم باضافة  المفتشون الى فريق</h3>
             <div class="input-group mx-2">
                 <div class="form-outline mt-4">
                     <input type="search" id="" class="form-control mx-4" placeholder="بحث"
@@ -77,7 +77,7 @@
 
             <div class="select-boxes mt-5 mx-4 col-10" dir="rtl">
                 <div class="check-one d-flex justify-content-start">
-                    <input type="checkbox" class="toggle-radio-buttons mx-2" id="checkbox1">
+                    <input type="radio" class="toggle-radio-buttons mx-2" id="checkbox1" name="radio">
                     <label for="checkbox1">محمد أحمد</label>
                 </div>
                 <div class="radio-buttons" id="radio-buttons1">
@@ -95,7 +95,7 @@
             
             <div class="select-boxes mt-4 mx-4 col-10" dir="rtl">
                 <div class="check-one d-flex justify-content-start">
-                    <input type="checkbox" class="toggle-radio-buttons mx-2" id="checkbox2">
+                    <input type="radio" class="toggle-radio-buttons mx-2" id="checkbox2" name="radio">
                     <label for="checkbox2">محمد أحمد</label>
                 </div>
                 <div class="radio-buttons" id="radio-buttons2">
@@ -116,20 +116,34 @@
                 </div>
             
             
-            
-            <script>
-                // JavaScript to handle checkbox and radio button visibility
-                document.querySelectorAll('.toggle-radio-buttons').forEach(function(checkbox) {
-                    checkbox.addEventListener('change', function() {
-                        // Find the associated radio-buttons div
-                        const radioButtonsId = 'radio-buttons' + this.id.replace('checkbox', '');
-                        const radioButtons = document.getElementById(radioButtonsId);
-                        if (radioButtons) {
-                            radioButtons.style.display = this.checked ? 'block' : 'none';
-                        }
+                <script>
+                    // JavaScript to handle checkbox and radio button visibility
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Initially hide all radio buttons
+                        document.querySelectorAll('.radio-buttons').forEach(function(radioButtons) {
+                            radioButtons.style.display = 'none';
+                        });
+                
+                        // Add change event listener to each checkbox
+                        document.querySelectorAll('.toggle-radio-buttons').forEach(function(checkbox) {
+                            checkbox.addEventListener('change', function() {
+                                // Hide all radio buttons
+                                document.querySelectorAll('.radio-buttons').forEach(function(radioButtons) {
+                                    radioButtons.style.display = 'none';
+                                });
+                
+                                // Show the radio buttons related to the checked checkbox
+                                if (this.checked) {
+                                    const radioButtonsId = 'radio-buttons' + this.id.replace('checkbox', '');
+                                    const radioButtons = document.getElementById(radioButtonsId);
+                                    if (radioButtons) {
+                                        radioButtons.style.display = 'block';
+                                    }
+                                }
+                            });
+                        });
                     });
-                });
-            </script>
+                </script>
             
 </body>
 
