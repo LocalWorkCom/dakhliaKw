@@ -123,7 +123,7 @@
                                 <li>
                                     <img src="{{ asset('frontend/images/inspectors.svg') }}" alt="logo"
                                         style="margin-left: 7px;">
-                                    <a href="#">المفتشون</a>
+                                    <a href="{{ route('inspectors.index') }}">المفتشون</a>
                                 </li>
                                 <li>
                                     <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo"
