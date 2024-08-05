@@ -44,7 +44,9 @@
         </div>
     </div>
     
-        <div class="col-lg-12" >
+
+        <div class="col-lg-12">
+
             <div class="bg-white ">
                 <div>
                     <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
