@@ -41,11 +41,10 @@
             </div>
         @endif
 
-        <div class="col-lg-12" dir="rtl">
+        <div class="col-lg-12" >
             <div class="bg-white ">
                 <div>
-                    <table id="users-table"
-                        class="display table table-responsive-sm  table-bordered table-hover dataTable">
+                    <table  id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                         <thead>
                             <tr>
                                 <th>رقم التسلسلي</th>
@@ -136,7 +135,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('working_time.store') }}" method="post">
+                                <form id="createForm" action="{{ route('working_time.store') }}" method="post">
                                     @csrf
                                     <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
                                         <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
@@ -201,7 +200,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('working_time.update') }}" method="post">
+                                <form  id="editForm" action="{{ route('working_time.update') }}" method="post">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" id="id_edit" name="id_edit">
@@ -359,28 +358,96 @@
                     }
 
                     document.addEventListener('DOMContentLoaded', function() {
-                        var openSecondModalBtn = document.getElementById('openSecondModalBtn');
-                        var firstModalBody = document.getElementById('firstModalBody');
-                        var secondModalBody = document.getElementById('secondModalBody');
+                    var createForm = document.getElementById('createForm');
+                    var openSecondModalBtn = document.getElementById('openSecondModalBtn');
+                    var firstModalBody = document.getElementById('firstModalBody');
+                    var secondModalBody = document.getElementById('secondModalBody');
 
-                        openSecondModalBtn.addEventListener('click', function() {
+                    createForm.addEventListener('submit', function(event) {
+                        event.preventDefault();
+                        
+                        var isValid = createForm.checkValidity();
+                        if (isValid) {
+                            // Perform AJAX form submission if needed
+                            // $.ajax({
+                            //     type: createForm.method,
+                            //     url: createForm.action,
+                            //     data: $(createForm).serialize(),
+                            //     success: function(response) {
+                            //         // Handle the response
+                            //     }
+                            // });
+
+                            // Switch modal content on successful validation
                             firstModalBody.classList.add('d-none');
                             secondModalBody.classList.remove('d-none');
-                        });
-                        
+                        } else {
+                            // Show validation errors
+                            createForm.reportValidity();
+                        }
                     });
+
+                    openSecondModalBtn1.addEventListener('click', function(event) {
+                        event.preventDefault();
+
+                        var isValid = createForm.checkValidity();
+                        if (isValid) {
+                            // Switch modal content on successful validation
+                            firstModalBody.classList.add('d-none');
+                            secondModalBody.classList.remove('d-none');
+                        } else {
+                            // Show validation errors
+                            createForm.reportValidity();
+                        }
+                    });
+                });
+
+                </script>
+                <script>
                     document.addEventListener('DOMContentLoaded', function() {
+                    var createForm = document.getElementById('editForm');
+                    var openSecondModalBtn1 = document.getElementById('openSecondModalBtn1');
+                    var firstModalBody1 = document.getElementById('firstModalBody1');
+                    var secondModalBody1 = document.getElementById('secondModalBody1');
+
+                    createForm.addEventListener('submit', function(event) {
+                        event.preventDefault();
                         
+                        var isValid = createForm.checkValidity();
+                        if (isValid) {
+                            // Perform AJAX form submission if needed
+                            // $.ajax({
+                            //     type: createForm.method,
+                            //     url: createForm.action,
+                            //     data: $(createForm).serialize(),
+                            //     success: function(response) {
+                            //         // Handle the response
+                            //     }
+                            // });
 
-                        var openSecondModalBtn1 = document.getElementById('openSecondModalBtn1');
-                        var firstModalBody1 = document.getElementById('firstModalBody1');
-                        var secondModalBody1 = document.getElementById('secondModalBody1');
-
-                        openSecondModalBtn1.addEventListener('click', function() {
+                            // Switch modal content on successful validation
                             firstModalBody1.classList.add('d-none');
                             secondModalBody1.classList.remove('d-none');
-                        });
+                        } else {
+                            // Show validation errors
+                            createForm.reportValidity();
+                        }
                     });
+
+                    openSecondModalBtn1.addEventListener('click', function(event) {
+                        event.preventDefault();
+
+                        var isValid = createForm.checkValidity();
+                        if (isValid) {
+                            // Switch modal content on successful validation
+                            firstModalBody1.classList.add('d-none');
+                            secondModalBody1.classList.remove('d-none');
+                        } else {
+                            // Show validation errors
+                            createForm.reportValidity();
+                        }
+                    });
+                });
                 </script>
             </div>
         </div>

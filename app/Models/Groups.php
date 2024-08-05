@@ -19,4 +19,8 @@ class Groups extends Model
     {
         return $this->belongsTo(WorkingTime::class,'work_time_id');
     }
+    public function inspector()
+    {
+        return $this->belongsTo(Inspector::class, 'id'); 
+    }
 }
