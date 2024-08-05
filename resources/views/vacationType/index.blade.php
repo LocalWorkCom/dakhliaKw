@@ -152,6 +152,7 @@
         $(document).ready(function() {
             function closeModal() {
                 $('#delete').modal('hide');
+                
             }
 
             $('#closeButton').on('click', function() {

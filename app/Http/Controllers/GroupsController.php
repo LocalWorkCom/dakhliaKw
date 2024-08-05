@@ -56,7 +56,10 @@ class GroupsController extends Controller
 
         // Handle validation failure
         if ($validatedData->fails()) {
+            // session()->flash('errors', $validatedData->errors());
             return redirect()->back()->withErrors($validatedData)->withInput()->with('showModal', true);
+
+            // return redirect()->back();
         }
 
         try {
@@ -65,14 +68,17 @@ class GroupsController extends Controller
             $group->work_time_id = $request->work_time_id;
             $group->points_inspector = $request->points_inspector;
             $group->save();
+            session()->flash('success', 'تم اضافه مجموعة بنجاح.');
 
-            return redirect()->route('group.view')->with('success', 'Group created successfully.');
+            return redirect()->route('group.view');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred while creating the group. Please try again.')->withInput();
+            session()->flash('error',  'An error occurred while creating the group. Please try again');
+
+            return redirect()->back();
         }
     }
 
-  
+
     /**
      * Show the form for creating a new resource.
      */
@@ -150,21 +156,40 @@ class GroupsController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request)
-    {
-        $request->validate([
-            'name_edit' => 'required|string|max:255',
-            // Add other validation rules as needed
-        ]);
+{
+    $messages = [
+        'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+        'work_time_id_edit.required' => 'فترة العمل مطلوبة ولا يمكن تركها فارغة.',
+        'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
+    ];
 
-        $group = Groups::find($request->id_edit);
-        $group->name = $request->name_edit;
-        $group->points_inspector = $request->points_inspector_edit;
-        $group->work_time_id = $request->work_time_id_edit;
-        $group->save();
+    $validatedData = Validator::make($request->all(), [
+        'name_edit' => 'required',
+        'work_time_id_edit' => 'required',
+        'points_inspector_edit' => 'required',
+    ], $messages);
 
+    // // Handle validation failure
+    // if ($validatedData->fails()) {
+    //     return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
+    // }
+    if ($validatedData->fails()) {
+        // session()->flash('errors', $validatedData->errors());
+        return redirect()->back()->withErrors($validatedData)->withInput()->with('editModal', true);
 
-        return redirect()->route('group.view')->with('message', 'Group updated successfully');
+        // return redirect()->back();
     }
+    $group = Groups::find($request->id_edit);
+    $group->name = $request->name_edit;
+    $group->points_inspector = $request->points_inspector_edit;
+    $group->work_time_id = $request->work_time_id_edit;
+    $group->save();
+    session()->flash('success', 'تم تعديل مجموعة بنجاح.');
+
+        return redirect()->back();
+
+}
+
 
     /**
      * Remove the specified resource from storage.
