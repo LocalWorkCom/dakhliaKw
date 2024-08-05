@@ -27,13 +27,13 @@
         <div class="row d-flex justify-content-between " dir="rtl">
             <div class="form-group moftsh mt-4  mx-4  d-flex">
                 <p class="filter "> تصفية حسب:</p>
-                <button class="btn-all px-3 mx-2" style="color: #274373;">
-                    الكل (7)
+                <button class="btn-all px-3 mx-2 btn-filter" data-filter="all" style="color: #274373;">
+                    الكل ({{\App\Models\Inspector::count()}})
                 </button>
-                <button class="btn-all px-3 mx-2" style="color: #274373;">
+                <button class="btn-all px-3 mx-2 btn-filter" data-filter="assigned" style="color: #274373;">
                     مفتشون تم توزعهم
                 </button>
-                <button class="btn-all px-3 mx-2" style="color: #274373;">
+                <button class="btn-all px-3 mx-2 btn-filter" data-filter="unassigned" style="color: #274373;">
                     مفتشون لم يتم توزعهم
                 </button>
             </div>
@@ -135,10 +135,23 @@
 $(document).ready(function() {
     $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
   
+    var filter = 'all'; // Default filter
+
     const table = $('#users-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ url('api/Inspectors') }}',
+        ajax: {
+            url: '{{ url('api/Inspectors') }}',
+            dataSrc: function(json) {
+                // Filter data based on the selected filter
+                if (filter === 'assigned') {
+                    return json.data.filter(item => item.group_id != null && String(item.group_id).trim() !== "");
+                } else if (filter === 'unassigned') {
+                    return json.data.filter(item => !item.group_id || (typeof item.group_id === 'string' && item.group_id.trim() === ""));
+                }
+                return json.data; // 'all' or default case
+            }
+        },
         columns: [
             { data: 'id', sWidth: '50px', name: 'id' },
             { data: 'position', name: 'position' },
@@ -200,23 +213,51 @@ $(document).ready(function() {
         },
         "pagingType": "full_numbers"
     });
-});
 
+
+// Filter button click event listeners
+$('.btn-filter').click(function() {
+        filter = $(this).data('filter'); // Update the filter based on the clicked button
+        
+        // Remove 'btn-active' class from all buttons and add to the clicked one
+        $('.btn-filter').removeClass('btn-active');
+        $(this).addClass('btn-active');
+
+            table.ajax.reload(); // Reload data with the new filter
+        });
+
+    //     $.fn.dataTable.ext.search.push(
+    //     function(settings, data, dataIndex) {
+    //         console.log();
+    //         var filter = $('.btn-filter.btn-active').data('filter');
+    //         var groupId = data[4]; // use data for the group_id column
+
+    //         if (filter === 'all') {
+    //             return true; // Show all records
+    //         } else if (filter === 'assigned' && groupId !== null && groupId !== "") {
+    //             return true; // Show only assigned inspectors
+    //         } else if (filter === 'unassigned' && (groupId === null || groupId === "")) {
+    //             return true; // Show only unassigned inspectors
+    //         }
+    //         return false; // Otherwise, don't show the record
+    //     }
+    // );
+    });
 
 // Add button click event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.btn-all');
+// document.addEventListener('DOMContentLoaded', () => {
+//     const buttons = document.querySelectorAll('.btn-all');
     
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove 'btn-active' class from all buttons
-            buttons.forEach(btn => btn.classList.remove('btn-active'));
+//     buttons.forEach(button => {
+//         button.addEventListener('click', () => {
+//             // Remove 'btn-active' class from all buttons
+//             buttons.forEach(btn => btn.classList.remove('btn-active'));
             
-            // Add 'btn-active' class to the clicked button
-            button.classList.add('btn-active');
-        });
-    });
-});
+//             // Add 'btn-active' class to the clicked button
+//             button.classList.add('btn-active');
+//         });
+//     });
+// });
 
 </script>
 @endsection
