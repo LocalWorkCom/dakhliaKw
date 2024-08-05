@@ -19,6 +19,7 @@
             <p> القطــــاعات </p>
         </div>
     </div> --}}
+    {{-- {{ dd($governments) }} --}}
     <br>
     <form class="edit-grade-form" id="Qta3-form" action=" {{ route('sectors.store') }}" method="POST">
         @csrf
