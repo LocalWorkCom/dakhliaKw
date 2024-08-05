@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('Seniority')->nullable();
             $table->string('position')->nullable();
             $table->string('Id_number')->nullable();
-            $table->foreignId('group_id')->nullable()->references('id')->on('groups')->onDelete('cascade');
+            $table->foreignId('group_id')->nullable()->references('id')->on('groups')->onDelete('restrict');
             $table->timestamps();
         });
     }

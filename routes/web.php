@@ -104,10 +104,11 @@ Route::middleware(['auth'])->group(function () {
         Route::any('/working_time/show/{id}', [WorkingTimeController::class, 'show'])->name('working_time.show');
 
     //groups
-    Route::resource('groups', GroupsController::class);
-    Route::any('/groups/all', [GroupsController::class, 'index'])->name('group.view');
+    // Route::resource('groups', GroupsController::class);
+    Route::any('/groups', [GroupsController::class, 'index'])->name('group.view');
     Route::any('/groups/add', [GroupsController::class, 'store'])->name('group.store');
-    Route::any('/groups/update', [GroupsController::class, 'edit'])->name('group.update');
+    Route::any('/groups/update', [GroupsController::class, 'update'])->name('group.update');
+    Route::any('/groups/edit/{id}', [GroupsController::class, 'edit'])->name('group.edit');
     Route::any('/groups/show/{id}', [GroupsController::class, 'show'])->name('group.show');
     Route::any('/groups/delete', [GroupsController::class, 'delete'])->name('group.delete');
     Route::get('/api/groups', [GroupsController::class, 'getgroups'])->name('api.groups');
