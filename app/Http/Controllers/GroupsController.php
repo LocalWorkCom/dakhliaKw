@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\Groups;
+use App\Models\Inspector;
 use App\Models\WorkingTime;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -21,6 +22,7 @@ class GroupsController extends Controller
     public function index()
     {
         $workTimes = WorkingTime::all();
+        // $inspector = Inspector::where('group_id',$id)->get();
         // dd($workTimes);
         return view('group.view', compact('workTimes'));
     }

@@ -39,10 +39,10 @@
                     </div>
                 </div>
                 @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
                 <div class="col-lg-12">
                     <div class="bg-white">
                         <div>
@@ -99,7 +99,8 @@
                                                  <a href="#" class="btn btn-sm " style="background-color: #274373;" onclick="openViewModal('${row.id}', '${row.name}')"> <i class="fa fa-eye"></i>عرض  </a>
                                                  <a href="#" class="btn btn-sm" style="background-color: #F7AF15;" onclick="openEditModal('${row.id}', '${row.name}')"> <i class="fa fa-edit"></i> تعديل </a>
 
-                                               
+                                                <a href="#" class="btn btn-sm" style="background-color: #F7AF15;" onclick="openTeamModal('${row.id}', '${row.name}')"> <i class="fa fa-edit"></i> فرق </a>
+
                                                 `;
                                             }
                                         }],
@@ -132,7 +133,8 @@
     </section>
 
     <!-- Add Form Modal -->
-    <div class="modal fade" id="myModal1" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="padding-left: 0px;" dir="rtl">
+    <div class="modal fade" id="myModal1" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="padding-left: 0px;" dir="rtl">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -144,54 +146,64 @@
                 </div>
                 <div class="modal-body">
                     <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
-                    <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
-                    <form id="add-form" action="{{ route('group.store') }}" method="POST">
-                        @csrf
-                        <div class="form-group mt-4 mb-3">
-                            <label for="nameadd"  class="d-flex justify-content-start pt-3 pb-2">ادخل اسم المجموعة</label>
-                            <input type="text" id="nameadd" name="name" class="form-control" placeholder="مجموعة أ" value="{{ old('name') }}" required>
-                            @if ($errors->has('name'))
-                                <span class="text-danger">{{ $errors->first('name') }}</span>
-                            @endif
-                        </div>
-                        <div class="form-group mt-4 mb-3">
-                            <label for="work_time_id"  class="d-flex justify-content-start pt-3 pb-2">اختر نظام العمل</label>
-                            <select class="form-control" name="work_time_id" id="work_time_id">
-                                <option selected disabled>اختار من القائمة</option>
-                                @foreach ($workTimes as $workTime)
-                                    <option value="{{ $workTime->id }}" {{ old('work_time_id') == $workTime->id ? 'selected' : '' }}>{{ $workTime->name }}</option>
-                                @endforeach
-                            </select>
-                            @if ($errors->has('work_time_id'))
-                                <span class="text-danger">{{ $errors->first('work_time_id') }}</span>
-                            @endif
-                        </div>
-                        <div class="form-group mt-4 mb-3">
-                            <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد نقاط التفتيش</label>
-                            <input type="number" id="points_inspector" name="points_inspector" class="form-control" placeholder="4" value="{{ old('points_inspector') }}" required>
-                            @if ($errors->has('points_inspector'))
-                                <span class="text-danger">{{ $errors->first('points_inspector') }}</span>
-                            @endif
-                        </div>
-                        <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                            <button type="submit" class="btn-all mx-2 p-2" style="background-color: #274373; color: #ffffff;">
-                                <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
-                            </button>
-                            <button type="button" class="btn-all p-2" style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);" data-bs-dismiss="modal" aria-label="Close">
-                                <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
-                            </button>
-                        </div>
-                        @if (session('success'))
-                            <div class="alert alert-success mt-2">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                        @if (session('error'))
-                            <div class="alert alert-danger mt-2">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-                        {{-- @if ($errors->any())
+                        <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
+                            <form id="add-form" action="{{ route('group.store') }}" method="POST">
+                                @csrf
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="nameadd" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
+                                        المجموعة</label>
+                                    <input type="text" id="nameadd" name="name" class="form-control"
+                                        placeholder="مجموعة أ" value="{{ old('name') }}" required>
+                                    @if ($errors->has('name'))
+                                        <span class="text-danger">{{ $errors->first('name') }}</span>
+                                    @endif
+                                </div>
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="work_time_id" class="d-flex justify-content-start pt-3 pb-2">اختر نظام
+                                        العمل</label>
+                                    <select class="form-control" name="work_time_id" id="work_time_id">
+                                        <option selected disabled>اختار من القائمة</option>
+                                        @foreach ($workTimes as $workTime)
+                                            <option value="{{ $workTime->id }}"
+                                                {{ old('work_time_id') == $workTime->id ? 'selected' : '' }}>
+                                                {{ $workTime->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('work_time_id'))
+                                        <span class="text-danger">{{ $errors->first('work_time_id') }}</span>
+                                    @endif
+                                </div>
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد نقاط
+                                        التفتيش</label>
+                                    <input type="number" id="points_inspector" name="points_inspector" class="form-control"
+                                        placeholder="4" value="{{ old('points_inspector') }}" required>
+                                    @if ($errors->has('points_inspector'))
+                                        <span class="text-danger">{{ $errors->first('points_inspector') }}</span>
+                                    @endif
+                                </div>
+                                <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
+                                    <button type="submit" class="btn-all mx-2 p-2"
+                                        style="background-color: #274373; color: #ffffff;">
+                                        <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
+                                    </button>
+                                    <button type="button" class="btn-all p-2"
+                                        style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                                        data-bs-dismiss="modal" aria-label="Close">
+                                        <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
+                                    </button>
+                                </div>
+                                @if (session('success'))
+                                    <div class="alert alert-success mt-2">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+                                @if (session('error'))
+                                    <div class="alert alert-danger mt-2">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
+                                {{-- @if ($errors->any())
                             <div class="alert alert-danger mt-2">
                                 <ul>
                                     @foreach ($errors->all() as $error)
@@ -200,8 +212,8 @@
                                 </ul>
                             </div>
                         @endif --}}
-                    </form>
-                    </div>
+                            </form>
+                        </div>
                     </div>
                     <!-- Second Modal Body (Initially Hidden) -->
                     <div id="secondModalBody" class="d-none">
@@ -214,18 +226,19 @@
             </div>
         </div>
     </div>
-    
+
     <script>
-        @if(session('showModal'))
+        @if (session('showModal'))
             $(document).ready(function() {
                 $('#myModal1').modal('show');
             });
         @endif
     </script>
-    
-    
+
+
     <!-- view Form Modal -->
-    <div class="modal fade" id="view" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true" style="padding-left: 0px;" dir="rtl">
+    <div class="modal fade" id="view" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true"
+        style="padding-left: 0px;" dir="rtl">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -271,7 +284,8 @@
     </div>
 
     <!-- Edit Modal -->
-    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="padding-left: 0px;" dir="rtl">
+    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="padding-left: 0px;" dir="rtl">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -284,41 +298,93 @@
                 <div class="modal-body">
                     <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
                         <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
-                    <form id="add-form" action="{{ route('group.update') }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" id="id_edit" name="id_edit">
-                        <div class="form-group mt-4 mb-3">
-                            <label for="name_edit" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم المجموعة</label>
-                            <input type="text" id="name_edit" name="name_edit" class="form-control"
-                                placeholder="مجموعة أ" required>
+                            <form id="add-form" action="{{ route('group.update') }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" id="id_edit" name="id_edit">
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="name_edit" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
+                                        المجموعة</label>
+                                    <input type="text" id="name_edit" name="name_edit" class="form-control"
+                                        placeholder="مجموعة أ" required>
+                                </div>
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر
+                                        نظام العمل</label>
+                                    <select class="form-control" name="work_time_id_edit" id="work_time_id_edit">
+                                        <option selected disabled>اختار من القائمة</option>
+                                        @foreach ($workTimes as $workTime)
+                                            <option value="{{ $workTime->id }}">{{ $workTime->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
+                                        نقاط التفتيش</label>
+                                    <input type="number" id="points_inspector_edit" name="points_inspector_edit"
+                                        class="form-control" placeholder="4" required>
+                                </div>
+                                <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
+                                    <button type="submit" class="btn-all mx-2 p-2"
+                                        style="background-color: #274373; color: #ffffff;">
+                                        <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
+                                    </button>
+                                    <button type="button" class="btn-all p-2"
+                                        style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                                        data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
+                                        <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group mt-4 mb-3">
-                            <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر نظام العمل</label>
-                            <select class="form-control" name="work_time_id_edit" id="work_time_id_edit">
-                                <option selected disabled>اختار من القائمة</option>
-                                @foreach ($workTimes as $workTime)
-                                    <option value="{{ $workTime->id }}">{{ $workTime->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group mt-4 mb-3">
-                            <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد نقاط التفتيش</label>
-                            <input type="number" id="points_inspector_edit" name="points_inspector_edit"
-                                class="form-control" placeholder="4" required>
-                        </div>
-                        <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                            <button type="submit" class="btn-all mx-2 p-2"
-                                style="background-color: #274373; color: #ffffff;">
-                                <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
-                            </button>
-                            <button type="button" class="btn-all p-2"
-                                style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
-                                data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
-                                <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
-                            </button>
-                        </div>
-                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Modal -->
+    <div class="modal fade" id="team" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="padding-left: 0px;" dir="rtl">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
+                        <h5 class="modal-title"> اضافة فريق لمجموعة</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
+                        <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
+                            <form  action="{{ route('groupTeam.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="group_id" id="group_id">
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="groupTeam_name" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
+                                        الفريق</label>
+                                    <input type="text" id="groupTeam_name" name="groupTeam_name" class="form-control"
+                                        placeholder="فريق أ" required>
+                                </div>
+
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="groupTeam_inspector" class="d-flex justify-content-start pt-3 pb-2">اختر
+                                        الاعضاء</label>
+                                    <div id="permissions-container"></div>
+                                </div>
+                                <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
+                                    <button type="submit" class="btn-all mx-2 p-2"
+                                        style="background-color: #274373; color: #ffffff;">
+                                        <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> الاضافة
+                                    </button>
+                                    <button type="button" class="btn-all p-2"
+                                        style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                                        data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
+                                        <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -431,15 +497,65 @@
 
 
         }
-        document.addEventListener('DOMContentLoaded', function() {
-                        var openSecondModalBtn = document.getElementById('openSecondModalBtn');
-                        var firstModalBody = document.getElementById('firstModalBody');
-                        var secondModalBody = document.getElementById('secondModalBody');
 
-                        openSecondModalBtn.addEventListener('click', function() {
-                            firstModalBody.classList.add('d-none');
-                            secondModalBody.classList.remove('d-none');
+
+
+        function openTeamModal(id) {
+            $.ajax({
+                url: '/groupTeam/team/' + id,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        var data = response.data;
+                        console.log("dd", data);
+                        document.getElementById('group_id').value = id;
+                        // Empty the container
+                        $('#permissions-container').empty();
+
+                        // Generate checkboxes
+                        data.forEach(function(item) {
+                    var checkbox = $('<div class="form-check"></div>');
+                    var input = $('<input>')
+                        .attr({
+                            type: 'checkbox',
+                            id: 'exampleCheck' + item.id,
+                            value: item.id,
+                            name: 'inspectors_ids[]',
+                            class: 'form-check-input selectPermission',
+                            style: 'width: 25px; height: 25px; margin-left: 1px;'
                         });
-                    });
+                    var label = $('<label>')
+                        .attr({
+                            class: 'form-check-label m-1',
+                            for: 'exampleCheck' + item.id
+                        })
+                        .css('font-size', '20px')
+                        .text(item.name); // or use translation if needed
+
+                    checkbox.append(input).append(label);
+                    $('#permissions-container').append(checkbox);
+                });
+
+                        // Show the modal
+                        $('#team').modal('show');
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function() {
+                    alert('Error retrieving data');
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var openSecondModalBtn = document.getElementById('openSecondModalBtn');
+            var firstModalBody = document.getElementById('firstModalBody');
+            var secondModalBody = document.getElementById('secondModalBody');
+
+            openSecondModalBtn.addEventListener('click', function() {
+                firstModalBody.classList.add('d-none');
+                secondModalBody.classList.remove('d-none');
+            });
+        });
     </script>
 @endpush
