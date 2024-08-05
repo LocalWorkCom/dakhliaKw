@@ -17,13 +17,13 @@ return new class extends Migration
             $table->unsignedBigInteger('working_tree_id');
             $table->unsignedBigInteger('working_time_id');
             $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('created_department')->nullable();
+            $table->unsignedBigInteger('created_departement')->nullable();
 
             // Foreign keys
             $table->foreign('working_tree_id')->references('id')->on('working_trees');
             $table->foreign('working_time_id')->references('id')->on('working_times');
             $table->foreign('created_by')->references('id')->on('users');
-            $table->foreign('created_department')->references('id')->on('departements');
+            $table->foreign('created_departement')->references('id')->on('departements');
 
             $table->timestamps();
         });

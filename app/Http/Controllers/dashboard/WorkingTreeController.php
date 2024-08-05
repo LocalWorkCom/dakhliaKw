@@ -38,6 +38,30 @@ class WorkingTreeController extends Controller
     }
     public function store(Request $request)
     {
+        $rules = [
+
+            'name' => 'required|string',
+            'working_days_num' => 'required|integer|min:1',
+            'holiday_days_num' => 'required|integer|min:0',
+        ];
+
+        $messages = [
+
+            'name.required' => 'يجب ادخال اسم الادارة',
+            'name.string' => 'يجب ادخال اسم الادارة',
+            'working_days_num.required' => 'يجب ادخال عدد ايام العمل',
+            'working_days_num.integer' => 'يجب ادخال رقم في عدد ايام العمل',
+            'holiday_days_num.required' => 'يجب ادخال عدد ايام الاجازات',
+            'holiday_days_num.integer' => 'يجب ادخال رقم في عدد ايام الاجازات',
+
+        ];
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+
+        if ($validatedData->fails()) {
+            session()->flash('errors', $validatedData->errors());
+
+            return redirect()->route('working_trees.list');
+        }
         $WorkingTree = new WorkingTree;
         $WorkingTree->name = $request->name;
         $WorkingTree->working_days_num = $request->working_days_num;
@@ -86,7 +110,7 @@ class WorkingTreeController extends Controller
                 $WorkingTreeTime->created_by = auth()->id();
                 $WorkingTreeTime->created_departement = auth()->user()->department_id;
                 $WorkingTreeTime->save();
-            }else{
+            } else {
                 $checkTimeExist->working_time_id = $request->$holiday;
                 $checkTimeExist->working_tree_id = $id;
                 $checkTimeExist->day_num = $i;
@@ -102,7 +126,7 @@ class WorkingTreeController extends Controller
     public function show($id)
     {
         $WorkingTree = WorkingTree::find($id);
-        
+
 
         return view('workingTree.show', compact('WorkingTree'));
     }
