@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\Groups;
+
+use App\Models\Inspector;
+use App\Models\WorkingTime;
+
 use App\Models\WorkingTree;
+
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -32,11 +37,69 @@ class GroupsController extends Controller
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
-            ->rawColumns(['action'])
+            ->addColumn('points_inspector', function ($row) {
+                $count = Inspector::where('group_id', $row->id)->count();
+
+                if ($count == 0) {
+                    $btn = '<a class="btn btn-sm"  style="background-color: #F7AF15;" href=' . route('group.groupcreateInspectors', $row->id) . '> ' . $count . '</a>';
+                } else {
+                    $btn = '<a class="btn btn-sm"  style="    background-color: #274373; padding-inline: 15px" href=' . route('group.groupcreateInspectors', $row->id) . '> ' . $count . '</a>';
+                }
+                return  $btn;
+            })
+            ->rawColumns(['action', 'points_inspector'])
             ->make(true);
     }
 
 
+    public function groupCreateInspectors($id)
+    {
+        $inspectors = Inspector::whereNull('group_id')->get();
+        $inspectorsIngroup = Inspector::where('group_id', $id)->get();
+        return view('group.inspector', compact('inspectors', 'inspectorsIngroup', 'id'));
+    }
+    public function groupAddInspectors(Request $request, $id)
+    {
+        if (isset($request->inspectorein)) {
+
+            $allExist  = Inspector::where('group_id', $id)->pluck('id');
+            foreach ($allExist as $row_id) {
+                if (!in_array($row_id, $request->inspectorein)) {
+                    $inspector = Inspector::findOrFail($row_id);
+                    $inspector->group_id = null;
+                    $inspector->save();
+                }
+            }
+        }
+        if (isset($request->inspectorein)) {
+
+            foreach ($request->inspectorein as $row_id) {
+
+                $inspector = Inspector::findOrFail($row_id);
+                $inspector->group_id = $id;
+                $inspector->save();
+            }
+        } else {
+
+            $inspectorsCheck = Inspector::where('group_id', $id)->get();
+            if ($inspectorsCheck->count()) {
+
+                foreach ($inspectorsCheck as $inspector) {
+                    $inspector->group_id = null;
+                    $inspector->save();
+                }
+            }
+        }
+        if (isset($request->inspectore)) {
+
+            foreach ($request->inspectore as $row_id) {
+                $inspector = Inspector::findOrFail($row_id);
+                $inspector->group_id = $id;
+                $inspector->save();
+            }
+        }
+        return redirect()->route('group.view')->with('success', 'تم اضافه مفتشين بنجاح.');
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -188,8 +251,6 @@ class GroupsController extends Controller
     
             return redirect()->back();
     }
-
-
 
     /**
      * Remove the specified resource from storage.
