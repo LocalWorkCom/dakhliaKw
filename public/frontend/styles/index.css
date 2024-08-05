@@ -1289,3 +1289,7 @@ line-height: 36px;
 text-align: right;
 
 }
+.modal-body label{
+    text-align: right;
+    display: flex;
+}
