@@ -20,7 +20,13 @@ class InspectorController extends Controller
         // $inspectors = Inspector::all();
         return view('inspectors.index');
     }
-
+    public function addToGroup(Request $request)
+    {
+       $inspuctor = Inspector::findOrFail($request->id);
+       $inspuctor->group_id = $request->group_id;
+       $inspuctor->save();
+       return redirect()->route('inspectors.index')->with('success', 'Inspector created successfully.')->with('showModal', true);
+    }
 
     public function getInspectors()
     {
@@ -39,7 +45,8 @@ class InspectorController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::get();
+         return view('inspectors.create', compact('users'));
     }
 
     /**
@@ -47,15 +54,25 @@ class InspectorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            
+        ]);
+         $inspector =Inspector::create($request->all());
+
+          $inspector->save();
+
+        //   dd($departements);
+        return redirect()->route('inspectors.index')->with('success', 'Inspector created successfully.')->with('showModal', true);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $inspector = Inspector::findOrFail($id);
+        $users = User::get();
+        return view('inspectors.show', compact('inspector','users'));
     }
 
     /**

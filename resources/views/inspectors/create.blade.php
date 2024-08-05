@@ -9,9 +9,8 @@
     </div>
 </div>
 <br>
-<form id="inspector-form" action="{{ route('inspectors.update', $inspector->id) }}" method="POST" enctype="multipart/form-data">
+<form id="inspector-form" action="{{ route('inspectors.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    @method('PUT')
     <div class="row" dir="rtl">
 
         <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
@@ -103,7 +102,7 @@
                 <div class="form-row d-flex justify-content-end mt-4 mb-3">
 
                     <button type="submit" class="btn-blue">
-                        <img src="{{ asset('frontend/images/white-add.svg')}}" alt="img" height="20px" width="20px"> تعديل
+                        <img src="{{ asset('frontend/images/white-add.svg')}}" alt="img" height="20px" width="20px"> اضافة
                     </button>
                 </div>
             </div>

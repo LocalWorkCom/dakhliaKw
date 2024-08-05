@@ -111,6 +111,34 @@
                     </li>
                 </div>
 
+                <div>
+                    <li class="nav-item btn5" onclick="toggleDropdown5(event)">
+                        <a href="#">
+                            <img src="{{ asset('frontend/images/moftsheen.svg') }}" alt="logo">
+                            <h6 class="btn5"> التفتيش<i class="fa-solid fa-angle-down"></i></h6>
+                        </a>
+                    
+                        <div id="dropdownMenu5" class="dropdown-menu5">
+                            <ul>
+                                <li>
+                                <img src="{{ asset('frontend/images/inspectors.svg') }}" alt="logo"
+                                    style="margin-left: 7px;">
+                                    <a href="#">المفتشون</a>
+                                </li>
+                                <li>
+                                <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="{{ route('group.view') }}"> المجموعات</a>
+                                </li>
+                                <li>
+                                <img src="{{ asset('frontend/images/w-tree.svg') }}" alt="logo"
+                                    style="margin-left: 7px;">
+                                    <a href="{{ route('working_time.index') }}">نظام العمل</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </div>
 
 
                 @php
@@ -233,6 +261,11 @@
                                                 <a href="{{ route('permission.index') }}">الصلاحيات</a>
                                             </li>
                                         @endif
+                                        <li>
+                                                <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"
+                                                    style="margin-left: 7px;">
+                                                <a href="{{ route('inspectors.index') }}">المفتشون</a>
+                                            </li>
                                     </ul>
                                 </div>
                                 {{-- @endif --}}
