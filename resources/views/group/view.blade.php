@@ -158,7 +158,7 @@
                                     @endif
                                 </div>
                                 <div class="form-group mt-4 mb-3">
-                                    <label for="work_time_id" class="d-flex justify-content-start pt-3 pb-2">اختر فترة
+                                    <label for="work_time_id" class="d-flex justify-content-start pt-3 pb-2">اختر نظام
                                         العمل</label>
                                     <select class="form-control" name="work_time_id" id="work_time_id">
                                         <option selected disabled>اختار من القائمة</option>
@@ -301,7 +301,7 @@
                                 @endif
                             </div>
                             <div class="form-group mt-4 mb-3">
-                                <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر فترة العمل</label>
+                                <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر نظام العمل</label>
                                 <select class="form-control" name="work_time_id_edit" id="work_time_id_edit">
                                     <option selected disabled>اختار من القائمة</option>
                                     @foreach ($workTimes as $workTime)

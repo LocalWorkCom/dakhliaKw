@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\Groups;
-use App\Models\WorkingTime;
+use App\Models\WorkingTree;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -20,7 +20,7 @@ class GroupsController extends Controller
 
     public function index()
     {
-        $workTimes = WorkingTime::all();
+        $workTimes = WorkingTree::all();
         // dd($workTimes);
         return view('group.view', compact('workTimes'));
     }
@@ -114,7 +114,7 @@ class GroupsController extends Controller
     {
         // dd($group);
         $group = Groups::find($group);
-        $working_time = WorkingTime::find($group->work_time_id);
+        $working_time = WorkingTree::find($group->work_time_id);
 
         $data =
             [
@@ -136,7 +136,7 @@ class GroupsController extends Controller
     public function edit($group)
     {
         $group = Groups::find($group);
-        $working_time = WorkingTime::find($group->work_time_id);
+        $working_time = WorkingTree::find($group->work_time_id);
 
 
         $data =

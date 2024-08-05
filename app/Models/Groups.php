@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Models\WorkingTime;
+use App\Models\WorkingTree;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +17,6 @@ class Groups extends Model
 
     public function working_time()
     {
-        return $this->belongsTo(WorkingTime::class,'work_time_id');
+        return $this->belongsTo(WorkingTree::class,'work_time_id');
     }
 }
