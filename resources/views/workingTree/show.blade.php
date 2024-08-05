@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('vacations.list') }}">نظام العمل </a></li>
+                <li class="breadcrumb-item"><a href="{{ route('working_trees.list') }}">نظام العمل </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href="">عرض</a></li>
             </ol>
         </nav>
@@ -27,31 +27,39 @@
                 </div>
             </div>
 
-
-
             <div class="form-row mx-2 ">
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
 
                         <tr>
-                            <th scope="row"style="background: #f5f6fa;">نوع الاجازة:</th>
-                            <td>{{ $vacation->vacation_type->name }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="background: #f5f6fa;">اسم الموظف:</th>
-                            <td>
-                                {{ $vacation->employee ? $vacation->employee->name : 'عامة' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="background: #f5f6fa;">تاريخ البداية:</th>
-                            <td>{{ $vacation->date_from }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="background: #f5f6fa;"> تاريخ النهاية:</th>
-                            <td>{{ $vacation->date_to ? $vacation->date_to : $vacation->date_from }}</td>
+                            <th scope="row"style="background: #f5f6fa;"> اسم النظام:</th>
+                            <td>{{ $WorkingTree->name }}</td>
                         </tr>
 
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;"> عدد ايام الاجازات:</th>
+                            <td>{{ $WorkingTree->holiday_days_num }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;"> عدد ايام العمل:</th>
+                            <td>
+                                {{ $WorkingTree->working_days_num }}
+                            </td>
+                        </tr>
+                        @if (isset($WorkingTree->workingTreeTimes))
+                            @foreach ($WorkingTree->workingTreeTimes as $item)
+                                <tr>
+                                    <th scope="row" style="background: #f5f6fa;">ترتيب اليوم</th>
+                                    <th>اليوم {{ $item->day_num }}</th>
+                                    <th scope="row" style="background: #f5f6fa;">اسم الفترة</th>
+                                    <td>{{ $item->workingTime->name }}</td>
+                                    <th scope="row" style="background: #f5f6fa;">وقت البداية</th>
+                                    <td>{{ $item->workingTime->start_time }}</td>
+                                    <th scope="row" style="background: #f5f6fa;">وقت النهاية</th>
+                                    <td>{{ $item->workingTime->end_time }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
 
 
                     </tbody>

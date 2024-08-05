@@ -14,4 +14,8 @@ class WorkingTreeTime extends Model
     {
         return $this->belongsTo(WorkingTree::class, 'working_tree_id'); 
     }
+    public function workingTime()
+    {
+        return $this->belongsTo(WorkingTime::class, 'working_time_id'); 
+    }
 }

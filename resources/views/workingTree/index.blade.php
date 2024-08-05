@@ -3,7 +3,7 @@
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
-@section('title', 'الاجازات')
+@section('title', 'نظام العمل')
 
 @section('content')
 

@@ -38,11 +38,11 @@
                         </button>
                     </div>
                 </div>
-                @if (session()->has('message'))
-                    <div class="alert alert-info">
-                        {{ session('message') }}
-                    </div>
-                @endif
+                @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
                 <div class="col-lg-12">
                     <div class="bg-white">
                         <div>
@@ -152,12 +152,13 @@
                         </div>
                         <div class="mb-3">
                             <label for="work_time_id">اختر نظام العمل</label>
+                            {{-- {{dd($workTimes)}}; --}}
                             <select class="form-control" name="work_time_id" id="work_time_id">
                                 <option selected disabled>اختار من القائمة</option>
                                 @foreach ($workTimes as $workTime)
                                     <option value="{{ $workTime->id }}">{{ $workTime->name }}</option>
                                 @endforeach
-                            </select>
+                            </select>                                                    
                         </div>
                         <div class="mb-3">
                             <label for="points_inspector">عدد نقاط التفتيش</label>
@@ -176,6 +177,13 @@
                             </button>
                         </div>
                     </form>
+                    <!-- Second Modal Body (Initially Hidden) -->
+                    <div id="secondModalBody" class="d-none">
+                        <div class="body-img-modal d-block mb-4">
+                            <img src="{{ asset('frontend/images/ordered.svg') }}" alt="">
+                            <p>تمت الاضافه بنجاح</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -226,7 +234,7 @@
         </div>
     </div>
 
-    <!-- Add Edit Modal -->
+    <!-- Edit Modal -->
     <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -383,5 +391,15 @@
 
 
         }
+        document.addEventListener('DOMContentLoaded', function() {
+                        var openSecondModalBtn = document.getElementById('openSecondModalBtn');
+                        var firstModalBody = document.getElementById('firstModalBody');
+                        var secondModalBody = document.getElementById('secondModalBody');
+
+                        openSecondModalBtn.addEventListener('click', function() {
+                            firstModalBody.classList.add('d-none');
+                            secondModalBody.classList.remove('d-none');
+                        });
+                    });
     </script>
 @endpush
