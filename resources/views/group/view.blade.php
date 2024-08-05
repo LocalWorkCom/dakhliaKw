@@ -53,7 +53,9 @@
                                         <th>رقم التسلسلي</th>
                                         <th>اسم المجموعة</th>
                                         <th>نظام العمل</th>
+                                        <th>عدد الفرق</th>
                                         <th>عدد المفتشيين</th>
+                                        <th>نقاط التفتيش </th>
                                         <th style="width:150px !important;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -81,6 +83,15 @@
                                                 name: 'working_time.name'
                                             },
                                             {
+                                                data: 'num_team',
+                                                name: 'num_team'
+                                            },
+                                            {
+                                                data: 'num_inspectors',
+                                                name: 'num_inspectors'
+                                            },
+                                            
+                                            {
                                                 data: 'points_inspector',
                                                 name: 'points_inspector'
                                             },
@@ -99,7 +110,7 @@
                                                  <a href="#" class="btn btn-sm " style="background-color: #274373;" onclick="openViewModal('${row.id}', '${row.name}')"> <i class="fa fa-eye"></i>عرض  </a>
                                                  <a href="#" class="btn btn-sm" style="background-color: #F7AF15;" onclick="openEditModal('${row.id}', '${row.name}')"> <i class="fa fa-edit"></i> تعديل </a>
 
-                                                <a href="#" class="btn btn-sm" style="background-color: #F7AF15;" onclick="openTeamModal('${row.id}', '${row.name}')"> <i class="fa fa-edit"></i> فرق </a>
+                                                <a href="#" class="btn btn-sm" style="background-color: #274373 ;" onclick="openTeamModal('${row.id}', '${row.name}')"> <i class="fa fa-add"></i> فريق </a>
 
                                                 `;
                                             }
