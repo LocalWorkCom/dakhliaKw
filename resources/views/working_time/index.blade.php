@@ -31,6 +31,15 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <div class="col-lg-12" dir="rtl">
             <div class="bg-white ">
@@ -135,7 +144,7 @@
                                                 <label class="d-flex justify-content-start pt-3 pb-2" for="name">
                                                     اسم الفتره</label>
                                                 <input type="text" id="name" name="name" class="form-control"
-                                                    placeholder="مجموعة أ" required>
+                                                    placeholder="اسم الفتره" required>
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label class="d-flex justify-content-start pb-2" for="start_time"> بداية
@@ -196,13 +205,13 @@
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" id="id_edit" name="id_edit">
-                                    <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
+                                    <div id="firstModalBody1" class="mb-3 mt-3 d-flex justify-content-center">
                                         <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                                             <div class="form-group mt-4 mb-3">
                                                 <label class="d-flex justify-content-start pt-3 pb-2" for="name_edit">
                                                     اسم الفتره</label>
                                                 <input type="text" id="name_edit" name="name_edit"
-                                                    class="form-control" placeholder="مجموعة أ" required>
+                                                    class="form-control" placeholder="اسم الفتره" required>
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label class="d-flex justify-content-start pb-2"
@@ -220,7 +229,7 @@
                                             </div>
                                             <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                                 <button type="submit" class="btn-all mx-2 p-2"
-                                                    style="background-color: #274373; color: #ffffff;" id="">
+                                                    style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn1">
                                                     <img src="{{ asset('frontend/images/white-add.svg') }}"
                                                         alt="img"> تعديل
                                                 </button>
@@ -235,12 +244,12 @@
                                     </div>
                                 </form>
                                 <!-- Second Modal Body (Initially Hidden) -->
-                                {{-- <div id="secondModalBody" class="d-none">
+                                <div id="secondModalBody1" class="d-none">
                                     <div class="body-img-modal d-block mb-4">
                                         <img src="{{ asset('frontend/images/ordered.svg') }}" alt="">
-                                        <p>تمت الاضافه بنجاح</p>
+                                        <p>تمت التعديل بنجاح</p>
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -261,13 +270,13 @@
                             </div>
                             <div class="modal-body">
 
-                                <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
+                                <div id="" class="mb-3 mt-3 d-flex justify-content-center">
                                     <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                                         <div class="form-group mt-4 mb-3">
                                             <label class="d-flex justify-content-start pt-3 pb-2" for="name_show">
                                                 اسم الفتره</label>
                                             <input type="text" id="name_show" name="name_show"
-                                                class="form-control" placeholder="مجموعة أ"  disabled>
+                                                class="form-control" placeholder="اسم الفتره"  disabled>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label class="d-flex justify-content-start pb-2" for="start_time_show">
@@ -357,6 +366,19 @@
                         openSecondModalBtn.addEventListener('click', function() {
                             firstModalBody.classList.add('d-none');
                             secondModalBody.classList.remove('d-none');
+                        });
+                        
+                    });
+                    document.addEventListener('DOMContentLoaded', function() {
+                        
+
+                        var openSecondModalBtn1 = document.getElementById('openSecondModalBtn1');
+                        var firstModalBody1 = document.getElementById('firstModalBody1');
+                        var secondModalBody1 = document.getElementById('secondModalBody1');
+
+                        openSecondModalBtn1.addEventListener('click', function() {
+                            firstModalBody1.classList.add('d-none');
+                            secondModalBody1.classList.remove('d-none');
                         });
                     });
                 </script>
