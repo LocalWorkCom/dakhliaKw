@@ -4,6 +4,7 @@ use App\Models\Country;
 use App\Models\EmployeeVacation;
 use App\Models\Government;
 use App\Models\Io_file;
+use App\Models\Sector;
 use App\Models\User;
 use App\Models\VacationType;
 use Carbon\Carbon;
@@ -194,6 +195,11 @@ function getgovernments()
 {
     
     return  Government::all();
+}
+function getsectores()
+{
+    
+    return  Sector::all();
 }
 function CheckStartVacationDate($id)
 {

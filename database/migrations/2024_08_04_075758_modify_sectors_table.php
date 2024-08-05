@@ -23,7 +23,8 @@ return new class extends Migration
         // Create the new sectors table
         Schema::create('sectors', function (Blueprint $table) {
             $table->id();
-            $table->json('departments_IDs'); // Use json to store array data
+            $table->string('name');
+            $table->json('governments_IDs'); // Use json to store array data
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();

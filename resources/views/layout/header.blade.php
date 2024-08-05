@@ -2,7 +2,7 @@
     <div class="upper-navbar d-flex">
         <div class="second-section d-flex  col-md-10 col-sm-6">
             <div class="dropdown">
-                {{-- @if ($user->login) --}}
+                {{-- @if ($user->login) Test --}}
                 @php
                     $user = auth()->user();
                 @endphp
@@ -219,13 +219,27 @@
                                                 <a href="{{ route('government.all') }}">المحافظات</a>
                                             </li>
                                         @endif
-                                        @if (Auth::user()->hasPermission('view Region'))
+                                        {{-- @if (Auth::user()->hasPermission('view Region')) --}}
                                         <li>
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
                                                 style="margin-left: 7px;">
                                             <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
                                         </li>
-                                    @endif
+                                    {{-- @endif --}}
+                                    {{-- @if (Auth::user()->hasPermission('view Sector')) --}}
+                                    <li>
+                                        <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                            style="margin-left: 7px;">
+                                        <a href="{{ route('sectors.index') }}">القطاعات</a>
+                                    </li>
+                                {{-- @endif --}}
+                                {{-- @if (Auth::user()->hasPermission('view Point')) --}}
+                                <li>
+                                    <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="{{ route('points.index') }}">النقاط</a>
+                                </li>
+                            {{-- @endif --}}
                                         @if (Auth::user()->hasPermission('view VacationType'))
                                             <li>
                                                 <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
@@ -247,6 +261,11 @@
                                                 <a href="{{ route('permission.index') }}">الصلاحيات</a>
                                             </li>
                                         @endif
+                                        <li>
+                                                <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"
+                                                    style="margin-left: 7px;">
+                                                <a href="{{ route('inspectors.index') }}">المفتشون</a>
+                                            </li>
                                     </ul>
                                 </div>
                                 {{-- @endif --}}
