@@ -262,10 +262,17 @@
                                             </li>
                                         @endif
                                         <li>
+                                            <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('working_trees.list') }}">نظام العمل</a>
+                                        </li>
+                                    
+
                                                 <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"
                                                     style="margin-left: 7px;">
                                                 <a href="{{ route('inspectors.index') }}">المفتشون</a>
                                             </li>
+
                                     </ul>
                                 </div>
                                 {{-- @endif --}}
