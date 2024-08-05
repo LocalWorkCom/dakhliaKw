@@ -307,9 +307,7 @@
                                         المجموعة</label>
                                     <input type="text" id="name_edit" name="name_edit" class="form-control"
                                         placeholder="مجموعة أ" value="{{ old('name_edit') }}" required>
-                                    @if ($errors->has('name_edit'))
-                                        <span class="text-danger">{{ $errors->first('name_edit') }}</span>
-                                    @endif
+                                    
                                 </div>
                                 <div class="form-group mt-4 mb-3">
                                     <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر
@@ -322,9 +320,7 @@
                                                 {{ $workTime->name }}</option>
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('work_time_id_edit'))
-                                        <span class="text-danger">{{ $errors->first('work_time_id_edit') }}</span>
-                                    @endif
+                                    
                                 </div>
                                 <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
@@ -332,9 +328,7 @@
                                     <input type="number" id="points_inspector_edit" name="points_inspector_edit"
                                         class="form-control" placeholder="4" value="{{ old('points_inspector_edit') }}"
                                         required>
-                                    @if ($errors->has('points_inspector_edit'))
-                                        <span class="text-danger">{{ $errors->first('points_inspector_edit') }}</span>
-                                    @endif
+                                    
                                 </div>
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 p-2"
@@ -355,24 +349,6 @@
         </div>
     </div>
 
-    <!-- JavaScript to handle modal display -->
-    <script>
-        @if (session('editeModal'))
-            $(document).ready(function() {
-                $('#edit').modal('show');
-            });
-        @endif
-    </script>
-
-
-    <!-- JavaScript to handle modal display -->
-    <script>
-        @if (session('editeModal'))
-            $(document).ready(function() {
-                $('#edit').modal('show');
-            });
-        @endif
-    </script>
 @endsection
 
 @push('scripts')
@@ -413,7 +389,7 @@
                 $('#myModal1').modal('show');
             }
         });
-    </script> --}}
+    </> --}}
     <script>
         function openViewModal(id, name) {
             // console.log("id", id);
