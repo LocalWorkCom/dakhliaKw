@@ -55,15 +55,13 @@
                                 <th>رقم الهوية </th>
                                 <th>المجموعة </th>
                                 <th>رقم الهاتف </th>
-                                <th style="width:150px !important;">العمليات</th>
+                                <th class="action" style="width:150px !important;">العمليات</th>
                             </tr>
                            
                             
                         </thead>
                     </table>
 </div>
-</div>
-
 <!-- Add Form Modal -->
 <div class="modal fade" id="myModal1" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -124,13 +122,16 @@
         </div>
     </div>
 </div>
+</div>
+
+
 
 
 <script>
 
 $(document).ready(function() {
     $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
-
+  
     const table = $('#users-table').DataTable({
         processing: true,
         serverSide: true,
@@ -188,6 +189,7 @@ $(document).ready(function() {
             }
         },
         layout: {
+        
             bottomEnd: {
                 paging: {
                     firstLast: false
@@ -217,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 @endsection
 @push('scripts')
+
 <script>
     $(document).ready(function() {
         $('#add-form').on('submit', function(event) {
