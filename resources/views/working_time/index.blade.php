@@ -41,11 +41,10 @@
             </div>
         @endif
 
-        <div class="col-lg-12" dir="rtl">
+        <div class="col-lg-12" >
             <div class="bg-white ">
                 <div>
-                    <table id="users-table"
-                        class="display table table-responsive-sm  table-bordered table-hover dataTable">
+                    <table  id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                         <thead>
                             <tr>
                                 <th>رقم التسلسلي</th>
