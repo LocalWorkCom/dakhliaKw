@@ -33,16 +33,16 @@
 
                         <tr>
                             <th scope="row"style="background: #f5f6fa;"> اسم النظام:</th>
-                            <td>{{ $WorkingTree->name }}</td>
+                            <td colspan="7">{{ $WorkingTree->name }}</td>
                         </tr>
 
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> عدد ايام الاجازات:</th>
-                            <td>{{ $WorkingTree->holiday_days_num }}</td>
+                            <td colspan="7">{{ $WorkingTree->holiday_days_num }}</td>
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> عدد ايام العمل:</th>
-                            <td>
+                            <td colspan="7">
                                 {{ $WorkingTree->working_days_num }}
                             </td>
                         </tr>
