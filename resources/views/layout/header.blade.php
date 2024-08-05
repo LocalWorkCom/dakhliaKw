@@ -130,11 +130,19 @@
                                         style="margin-left: 7px;">
                                     <a href="{{ route('group.view') }}"> المجموعات</a>
                                 </li>
+
                                 <li>
-                                    <img src="{{ asset('frontend/images/w-tree.svg') }}" alt="logo"
+                                    <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
                                         style="margin-left: 7px;">
-                                    <a href="{{ route('working_time.index') }}">نظام العمل</a>
+                                    <a href="{{ route('working_time.index') }}">فترات العمل </a>
                                 </li>
+                                <li>
+                                    <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="{{ route('working_trees.list') }}">نظام العمل</a>
+                                </li>
+
+
                             </ul>
                         </div>
                     </li>
@@ -190,12 +198,6 @@
                                             <a href="{{ route('grads.index') }}">الرتب العسكرية</a>
                                         </li>
                                     @endif
-
-                                    <li>
-                                        <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
-                                            style="margin-left: 7px;">
-                                        <a href="{{ route('working_time.index') }}">فترات العمل </a>
-                                    </li>
 
                                     @if (Auth::user()->hasPermission('view job'))
                                         <li>
@@ -267,11 +269,7 @@
                                             style="margin-left: 7px;">
                                         <a href="{{ route('inspectors.index') }}">المفتشون</a>
                                     </li>
-                                    <li>
-                                        <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
-                                            style="margin-left: 7px;">
-                                        <a href="{{ route('working_trees.list') }}">نظام العمل</a>
-                                    </li>
+
 
                                 </ul>
                             </div>
