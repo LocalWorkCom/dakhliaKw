@@ -3,6 +3,7 @@
 use App\Models\Country;
 use App\Models\EmployeeVacation;
 use App\Models\Government;
+use App\Models\Groups;
 use App\Models\Io_file;
 use App\Models\Sector;
 use App\Models\User;
@@ -200,6 +201,11 @@ function getsectores()
 {
     
     return  Sector::all();
+}
+function getgroups()
+{
+    
+    return  Groups::all();
 }
 function CheckStartVacationDate($id)
 {

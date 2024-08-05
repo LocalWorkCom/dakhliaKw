@@ -20,7 +20,13 @@ class InspectorController extends Controller
         // $inspectors = Inspector::all();
         return view('inspectors.index');
     }
-
+    public function addToGroup(Request $request)
+    {
+       $inspuctor = Inspector::findOrFail($request->id);
+       $inspuctor->group_id = $request->group_id;
+       $inspuctor->save();
+       return redirect()->route('inspectors.index')->with('success', 'Inspector created successfully.')->with('showModal', true);
+    }
 
     public function getInspectors()
     {

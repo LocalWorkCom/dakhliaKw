@@ -64,7 +64,48 @@
 </div>
 </div>
 
-
+<!-- Add Form Modal -->
+<div class="modal fade" id="myModal1" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <div class="title d-flex flex-row align-items-center">
+                    <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
+                    <h5 class="modal-title"> اضافة مجموعة</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-form" action="{{ route('inspectors.addToGroup') }}" method="POST">
+                    @csrf
+                  
+                    <div class="mb-3">
+                        <label for="group_id">اختر المجموعه </label>
+                        <select class="form-control" name="group_id" id="group_id" required>
+                            <option selected disabled>اختار من القائمة</option>
+                            @foreach (getgroups() as $group)
+                                <option value="{{ $group->id }}">{{ $group->name }}</option>
+                            @endforeach
+                        </select>
+                        <span class="text-danger span-error" id="group_id-error"></span>
+                        <input type="hidden" name="id" id="id" value="">
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn-all mx-2 p-2"
+                            style="background-color: #274373; color: #ffffff;">
+                            <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
+                        </button>
+                        <button type="button" class="btn-all p-2"
+                            style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                            data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
+                            <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -88,67 +129,78 @@
 <script>
 
 $(document).ready(function() {
-        $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
+    $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
 
-        $('#users-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: '{{ url('api/Inspectors') }}',
-            columns: [
-                { data: 'id',  sWidth: '50px', name: 'id' },
-                { data: 'position', name: 'position' },
-                { data: 'name', name: 'name' },
-                { data: 'Id_number', name: 'Id_number' },  // Ensure 'manager' column exists
-                { data: 'group_id', name: 'group_id' },
-                { data: 'phone', name: 'phone' },
-                
-                { data: 'action', name: 'action',  sWidth: '100px', orderable: false, searchable: false }
-            ],
-            columnDefs: [{
-                targets: -1,
-                render: function(data, type, row) {
-                    var departmentEdit = '{{ route('inspectors.edit', ':id') }}';
-                    departmentEdit = departmentEdit.replace(':id', row.id);
-                    var departmentShow = '{{ route('inspectors.show', ':id') }}';
-                    departmentShow = departmentShow.replace(':id', row.id);
-                   
+    const table = $('#users-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('api/Inspectors') }}',
+        columns: [
+            { data: 'id', sWidth: '50px', name: 'id' },
+            { data: 'position', name: 'position' },
+            { data: 'name', name: 'name' },
+            { data: 'Id_number', name: 'Id_number' },
+            { data: 'group_id', name: 'group_id' },
+            { data: 'phone', name: 'phone' },
+            { data: 'action', name: 'action', sWidth: '100px', orderable: false, searchable: false }
+        ],
+        columnDefs: [{
+            targets: -1,
+            render: function(data, type, row) {
+                var departmentEdit = '{{ route('inspectors.edit', ':id') }}'.replace(':id', row.id);
+                var departmentShow = '{{ route('inspectors.show', ':id') }}'.replace(':id', row.id);
+                var btn_add = '';
 
-                    return `
-                        <a href="${departmentEdit}" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> </a>
-                        <a href="${departmentShow}"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i> </a>
-                        
-                        `;
+                if (row.group_id == null) {
+                    var addToGroup = '{{ route('inspectors.addToGroup', ':id') }}'.replace(':id', row.id);
+                    btn_add = `
+                        <a class="btn btn-sm" id="updateValueButton" style="background-color: #274373;" 
+                           onclick="openAddModal(${row.id})" data-bs-toggle="modal" 
+                           data-bs-target="#myModal1">
+                           <i class="fa fa-plus"></i>
+                        </a>`;
                 }
-            }],
-            "oLanguage": {
-                                        "sSearch": "",
-                                        "sSearchPlaceholder":"بحث",
-                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
-                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
-                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
-                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
-                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
-                                            "oPaginate": {
-                                                    "sFirst": "<< &nbsp;", // This is the link to the first page
-                                                    "sPrevious": "<&nbsp;", // This is the link to the previous page
-                                                    "sNext": ">&nbsp;", // This is the link to the next page
-                                                    "sLast": "&nbsp; >>" // This is the link to the last page
-                                                    }
-                                        },
-                                        layout: {
-                                            bottomEnd: {
-                                                paging: {
-                                                    firstLast: false
-                                                }
-                                            }
-                                        },
-                                         "pagingType": "full_numbers"
-        });
 
+                return `
+                    <a href="${departmentEdit}" class="btn btn-sm" style="background-color: #F7AF15;">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <a href="${departmentShow}" class="btn btn-sm" style="background-color: #274373;">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                    ${btn_add}
+                `;
+            }
+        }],
+        "oLanguage": {
+            "sSearch": "",
+            "sSearchPlaceholder": "بحث",
+            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+            "sInfoEmpty": 'لا توجد بيانات متاحه',
+            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+            "sZeroRecords": 'نأسف لا توجد نتيجة',
+            "oPaginate": {
+                "sFirst": "<< &nbsp;", // This is the link to the first page
+                "sPrevious": "<&nbsp;", // This is the link to the previous page
+                "sNext": ">&nbsp;", // This is the link to the next page
+                "sLast": "&nbsp; >>" // This is the link to the last page
+            }
+        },
+        layout: {
+            bottomEnd: {
+                paging: {
+                    firstLast: false
+                }
+            }
+        },
+        "pagingType": "full_numbers"
     });
+});
 
 
-    document.addEventListener('DOMContentLoaded', () => {
+// Add button click event listeners
+document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.btn-all');
     
     buttons.forEach(button => {
@@ -162,15 +214,30 @@ $(document).ready(function() {
     });
 });
 
-
-// Check if there is a flash message for showing the modal
-document.addEventListener('DOMContentLoaded', function() {
-        @if(session('showModal'))
-            const modal = new bootstrap.Modal(document.getElementById('myModal'));
-            modal.show();
-        @endif
-    });
-
-
 </script>
 @endsection
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#add-form').on('submit', function(event) {
+            const groupId = $('#group_id').val();
+            const errorSpan = $('#group_id-error'); // Get the error span element
+            errorSpan.text(''); // Clear any existing error message
+
+            if (!groupId) {
+                event.preventDefault(); 
+                errorSpan.text('يرجى اختيار مجموعة قبل الإضافة.'); // Set the error message
+
+                return false; 
+            }
+        });
+    });
+
+function openAddModal(id) {
+    $('#myModal1').modal('show');
+    document.getElementById('id').value = id;
+}
+
+  
+</script>
+@endpush
