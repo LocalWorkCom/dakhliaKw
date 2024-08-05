@@ -118,6 +118,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::any('/groups/delete', [GroupsController::class, 'delete'])->name('group.delete');
     Route::get('/api/groups', [GroupsController::class, 'getgroups'])->name('api.groups');
+    Route::get('/group/create/Inspectors/{id}', [GroupsController::class, 'groupCreateInspectors'])->name('group.groupcreateInspectors');
+    Route::post('/group/add/Inspectors/{id}', [GroupsController::class, 'groupAddInspectors'])->name('group.groupAddInspectors');
 
     // export
     //Start Export routes
