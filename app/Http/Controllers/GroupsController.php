@@ -43,48 +43,36 @@ class GroupsController extends Controller
     public function store(Request $request)
     {
         $messages = [
-            'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
-            'work_time_id.required' => ' فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
-            'points_inspector.required' => 'نقاط  التفتيش   مطلوب ولا يمكن تركه فارغاً.',
-
+            'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+            'work_time_id.required' => 'فترة العمل مطلوبة ولا يمكن تركها فارغة.',
+            'points_inspector.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
         ];
+
         $validatedData = Validator::make($request->all(), [
             'name' => 'required',
             'work_time_id' => 'required',
             'points_inspector' => 'required',
-
         ], $messages);
 
         // Handle validation failure
         if ($validatedData->fails()) {
-            return redirect()->back()->withErrors($validatedData)->withInput();
+            return redirect()->back()->withErrors($validatedData)->withInput()->with('showModal', true);
         }
-        try {
 
+        try {
             $group = new Groups();
             $group->name = $request->name;
             $group->work_time_id = $request->work_time_id;
             $group->points_inspector = $request->points_inspector;
             $group->save();
-            // Dynamically create model instance based on the model class string
+
             return redirect()->route('group.view')->with('success', 'Group created successfully.');
         } catch (\Exception $e) {
-            return response()->json($e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while creating the group. Please try again.')->withInput();
         }
-        // $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'work_time_id' => 'required|string|max:255',
-        //     'points_inspector' => 'required|integer',
-        // ]);
-
-        // Groups::create([
-        //     'name' => $request->name,
-        //     'work_time_id' => $request->work_time_id,
-        //     'points_inspector' => $request->points_inspector,
-        // ]);
-
-        // return redirect()->route('group.view')->with('message', 'Group created successfully');
     }
+
+  
     /**
      * Show the form for creating a new resource.
      */
