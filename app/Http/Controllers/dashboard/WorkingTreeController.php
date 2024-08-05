@@ -60,7 +60,7 @@ class WorkingTreeController extends Controller
         if ($validatedData->fails()) {
             session()->flash('errors', $validatedData->errors());
 
-            return redirect()->route('working_trees.list');
+            return redirect()->back();
         }
         $WorkingTree = new WorkingTree;
         $WorkingTree->name = $request->name;
@@ -91,6 +91,30 @@ class WorkingTreeController extends Controller
     }
     public function update(Request $request, $id)
     {
+        $rules = [
+
+            'name' => 'required|string',
+            'working_days_num' => 'required|integer|min:1',
+            'holiday_days_num' => 'required|integer|min:0',
+        ];
+
+        $messages = [
+
+            'name.required' => 'يجب ادخال اسم الادارة',
+            'name.string' => 'يجب ادخال اسم الادارة',
+            'working_days_num.required' => 'يجب ادخال عدد ايام العمل',
+            'working_days_num.integer' => 'يجب ادخال رقم في عدد ايام العمل',
+            'holiday_days_num.required' => 'يجب ادخال عدد ايام الاجازات',
+            'holiday_days_num.integer' => 'يجب ادخال رقم في عدد ايام الاجازات',
+
+        ];
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+
+        if ($validatedData->fails()) {
+            session()->flash('errors', $validatedData->errors());
+
+            return redirect()->back();
+        }
         $WorkingTree =  WorkingTree::find($id);
         $WorkingTree->name = $request->name;
         $WorkingTree->working_days_num = $request->working_days_num;
