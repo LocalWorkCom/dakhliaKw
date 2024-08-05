@@ -102,6 +102,7 @@ class WorkingTreeController extends Controller
     public function show($id)
     {
         $WorkingTree = WorkingTree::find($id);
+        
 
         return view('workingTree.show', compact('WorkingTree'));
     }
