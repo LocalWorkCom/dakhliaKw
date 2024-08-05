@@ -123,7 +123,7 @@
                                 <li>
                                     <img src="{{ asset('frontend/images/inspectors.svg') }}" alt="logo"
                                         style="margin-left: 7px;">
-                                    <a href="#">المفتشون</a>
+                                    <a href="{{ route('inspectors.index') }}">المفتشون</a>
                                 </li>
                                 <li>
                                     <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo"
@@ -179,9 +179,10 @@
                         Auth::user()->hasPermission('view Permission'))
                     <div>
 
-                        {{--  --}}
+                
 
                         <li class="nav-item" onclick="toggleDropdown4(event)">
+
 
                             <a href="#">
                                 <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
@@ -198,7 +199,7 @@
                                             <a href="{{ route('grads.index') }}">الرتب العسكرية</a>
                                         </li>
                                     @endif
-
+                                    
                                     @if (Auth::user()->hasPermission('view job'))
                                         <li>
                                             <img src="{{ asset('frontend/images/jobs.svg') }}" alt="logo"
@@ -264,11 +265,11 @@
                                     @endif
 
 
-                                    <li>
+                                    {{-- <li>
                                         <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"
                                             style="margin-left: 7px;">
                                         <a href="{{ route('inspectors.index') }}">المفتشون</a>
-                                    </li>
+                                    </li> --}}
 
 
                                 </ul>
