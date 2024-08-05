@@ -19,7 +19,7 @@ class GroupTeamController extends Controller
     public function index()
     {
         //
-        // return view()
+        return view('groupteam.show');
     }
     public function getGroupTeam()
     {
@@ -27,7 +27,6 @@ class GroupTeamController extends Controller
         // dd($data);
 
         return DataTables::of($data)->addColumn('action', function ($row) {
-
             return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
             ->rawColumns(['action'])
@@ -111,9 +110,28 @@ class GroupTeamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(GroupTeam $groupTeam)
+    public function show($id)
     {
-        //
+        $team = GroupTeam::find($id);
+        $inspectors = Inspector::where('group_id',$team->group_id)->get();
+        $inspectorGroups = collect();
+        foreach ($inspectors as $inspector) {
+            $groupTeams = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->get();
+            $groupTeamIds = $groupTeams->pluck('id','name')->toArray();
+
+            $inspectorGroups->push([
+                'inspector_id' => $inspector,
+                'group_team_ids' => $groupTeamIds
+            ]);
+            
+            
+        }
+
+        $allteams = GroupTeam::where('group_id',$team->group_id)->get();
+
+        // dd($inspectorGroups);
+
+        return view('groupteam.edit',compact('team' ,'inspectorGroups','allteams'));
     }
 
     /**
