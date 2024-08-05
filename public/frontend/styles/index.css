@@ -267,7 +267,7 @@ ul {
 .nav-item {
     position: relative;
 }
-.dropdown-menu3 {
+/* .dropdown-menu3 {
     display: none;
     position: absolute;
     top: 100%;
@@ -281,7 +281,7 @@ ul {
     text-align: right;
     padding-inline: 10px;
     font-size: 27px;
-}
+} */
 .dropdown-menu3 li , .dropdown-menu4 li , .dropdown-menu5 li{
     padding: 8px 12px; 
     display: flex;

@@ -88,27 +88,27 @@
 
                 <div>
                     <li class="nav-item btn3" onclick="toggleDropdown3(event)">
-                        <a href="#">
+                        <a href="{{ route('user.employees', 1) }}">
                             <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
-                            <h6 class="btn3">الموظفين <i class="fa-solid fa-angle-down"></i></h6>
+                            <h6 class="btn3">الموظفين </h6>
                         </a>
                         <!-- قائمة منسدلة -->
-                        <div id="dropdownMenu3" class="dropdown-menu3">
+                        {{-- <div id="dropdownMenu3" class="dropdown-menu3">
                             <ul>
                                 <li>
                                     <img src="{{ asset('frontend/images/employee.svg') }}" alt="logo"
                                         style="margin-left: 7px;">
                                     <a href="{{ route('user.employees', 1) }}">الموظفين</a>
                                 </li>
-                                <li>
+                                <li> --}}
                                     {{-- <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo"
                                     style="margin-left: 7px;">
                                     <a href="{{ route('vacations.list') }}">الاجازات</a>
                                     --}}
-                                </li>
+                                {{-- </li>
                             </ul>
                         </div>
-                    </li>
+                    </li> --}}
                 </div>
 
                 <div>
