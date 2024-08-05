@@ -66,7 +66,7 @@ class GroupsController extends Controller
             $group->points_inspector = $request->points_inspector;
             $group->save();
 
-            return redirect()->route('group.view')->with('success', 'Group created successfully.');
+            return redirect()->route('group.view')->with('success', 'تم اضافه مجموعة بنجاح.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred while creating the group. Please try again.')->withInput();
         }
@@ -175,7 +175,7 @@ class GroupsController extends Controller
     $group->points_inspector = $request->points_inspector_edit;
     $group->work_time_id = $request->work_time_id_edit;
     $group->save();
-        return redirect()->route('group.view')->with('message', 'Group updated successfully');
+        return redirect()->route('group.view')->with('message', 'تم تعديل مجموعة بنجاح');
 
 }
 
