@@ -155,20 +155,19 @@ $(document).ready(function() {
                 if (row.group_id == null) {
                     var addToGroup = '{{ route('inspectors.addToGroup', ':id') }}'.replace(':id', row.id);
                     btn_add = `
-                        <a class="btn btn-sm" id="updateValueButton" style="background-color: #274373;" 
+                        <a class="btn btn-sm" id="updateValueButton" style="background-color: green;" 
                            onclick="openAddModal(${row.id})" data-bs-toggle="modal" 
                            data-bs-target="#myModal1">
-                           <i class="fa fa-plus"></i>
+                           <i class="fa fa-plus"></i> أضافه
                         </a>`;
                 }
 
                 return `
-                    <a href="${departmentEdit}" class="btn btn-sm" style="background-color: #F7AF15;">
-                        <i class="fa fa-edit"></i>
+                    <a href="${departmentEdit}" class="btn btn-sm"  style="background-color: #F7AF15;">
+                        <i class="fa fa-edit"></i> تعديل 
                     </a>
-                    <a href="${departmentShow}" class="btn btn-sm" style="background-color: #274373;">
-                        <i class="fa fa-eye"></i>
-                    </a>
+                    <a href="${departmentShow}" class="btn btn-sm " style="background-color: #274373;">
+                       <i class="fa fa-eye"></i>عرض</a>
                     ${btn_add}
                 `;
             }
