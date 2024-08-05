@@ -223,6 +223,17 @@
                     </div>
                 </div>
             </div>
+              <!-- Second Modal Body (Initially Hidden) -->
+              <div id="secondModalBody" class="d-none">
+                                    <div class="body-img-modal d-block mb-4">
+                                        <img src="../images/ordered.svg" alt="">
+                                        <p>تمت الاضافه بنجاح</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
 
@@ -466,4 +477,21 @@
             });
         });
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get elements
+        var openSecondModalBtn = document.getElementById('openSecondModalBtn');
+        var firstModalBody = document.getElementById('firstModalBody');
+        var secondModalBody = document.getElementById('secondModalBody');
+
+        // Add click event listener
+        openSecondModalBtn.addEventListener('click', function () {
+            // Hide the first modal body
+            firstModalBody.classList.add('d-none');
+
+            // Show the second modal body
+            secondModalBody.classList.remove('d-none');
+        });
+    });
+</script>
 @endpush
