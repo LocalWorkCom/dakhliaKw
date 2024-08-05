@@ -72,7 +72,7 @@ class GroupsController extends Controller
         }
     }
 
-  
+
     /**
      * Show the form for creating a new resource.
      */
@@ -150,21 +150,49 @@ class GroupsController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request)
-    {
-        $request->validate([
-            'name_edit' => 'required|string|max:255',
-            // Add other validation rules as needed
-        ]);
-       
-        $group = Groups::find($request->id_edit);
-        $group->name = $request->name_edit;
-        $group->points_inspector = $request->points_inspector_edit;
-        $group->work_time_id = $request->work_time_id_edit;
-        $group->save();
+{
+    $messages = [
+        'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+        'work_time_id_edit.required' => 'فترة العمل مطلوبة ولا يمكن تركها فارغة.',
+        'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
+    ];
 
+    $validatedData = Validator::make($request->all(), [
+        'name_edit' => 'required',
+        'work_time_id_edit' => 'required',
+        'points_inspector_edit' => 'required',
+    ], $messages);
 
-        return redirect()->route('group.view')->with('message', 'Group updated successfully');
+    // Handle validation failure
+    if ($validatedData->fails()) {
+        return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
     }
+
+    $group = Groups::find($request->id_edit);
+
+    // Check if there are changes
+    $hasChanges = false;
+    if ($group->name != $request->name_edit) {
+        $group->name = $request->name_edit;
+        $hasChanges = true;
+    }
+    if ($group->work_time_id != $request->work_time_id_edit) {
+        $group->work_time_id = $request->work_time_id_edit;
+        $hasChanges = true;
+    }
+    if ($group->points_inspector != $request->points_inspector_edit) {
+        $group->points_inspector = $request->points_inspector_edit;
+        $hasChanges = true;
+    }
+
+    if ($hasChanges) {
+        $group->save();
+        return redirect()->route('group.view')->with('message', 'Group updated successfully.');
+    } else {
+        return redirect()->back()->with('message', 'No changes were made.')->withInput()->with('editeModal', true);
+    }
+}
+
 
     /**
      * Remove the specified resource from storage.
