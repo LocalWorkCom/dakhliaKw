@@ -155,7 +155,7 @@ class GroupsController extends Controller
             'name_edit' => 'required|string|max:255',
             // Add other validation rules as needed
         ]);
-
+       
         $group = Groups::find($request->id_edit);
         $group->name = $request->name_edit;
         $group->points_inspector = $request->points_inspector_edit;

@@ -149,7 +149,7 @@
                         @csrf
                         <div class="form-group mt-4 mb-3">
                             <label for="nameadd"  class="d-flex justify-content-start pt-3 pb-2">ادخل اسم المجموعة</label>
-                            <input type="text" id="nameadd" name="name" class="form-control" placeholder="مجموعة أ" value="{{ old('name') }}" required>
+                            <input type="text" id="nameadd" name="name" class="form-control" placeholder="مجموعة أ" value="{{ old('name') }}" >
                             @if ($errors->has('name'))
                                 <span class="text-danger">{{ $errors->first('name') }}</span>
                             @endif
@@ -168,7 +168,7 @@
                         </div>
                         <div class="form-group mt-4 mb-3">
                             <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد نقاط التفتيش</label>
-                            <input type="number" id="points_inspector" name="points_inspector" class="form-control" placeholder="4" value="{{ old('points_inspector') }}" required>
+                            <input type="number" id="points_inspector" name="points_inspector" class="form-control" placeholder="4" value="{{ old('points_inspector') }}" >
                             @if ($errors->has('points_inspector'))
                                 <span class="text-danger">{{ $errors->first('points_inspector') }}</span>
                             @endif
