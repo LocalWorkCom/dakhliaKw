@@ -41,7 +41,7 @@
             </div>
         @endif
 
-        <div class="col-lg-12" >
+        <div class="col-lg-12">
             <div class="bg-white ">
                 <div>
                     <table  id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
@@ -95,7 +95,6 @@
                                     render: function(data, type, row) {
                                         return `
                                             <a href="#" class="btn btn-sm " style="background-color: #274373;" onclick="openViewModal('${row.id}', '${row.name}')"> <i class="fa fa-eye"></i>عرض  </a>
-
                                             <a href="#" class="btn btn-sm" style="background-color: #F7AF15;" onclick="openEditModal('${row.id}', '${row.name}')"> <i class="fa fa-edit"></i> تعديل </a>
                                         `;
                                     }
@@ -115,6 +114,7 @@
                                         sLast: "&nbsp; >>"
                                     }
                                 },
+
                                 pagingType: "full_numbers"
                             });
                         });
@@ -123,7 +123,7 @@
 
                 <!-- Create Form Modal -->
                 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                    aria-hidden="true">
+                    aria-hidden="true" >
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header d-flex justify-content-center">
@@ -134,7 +134,7 @@
                                     &times;
                                 </button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body" dir="rtl">
                                 <form id="createForm" action="{{ route('working_time.store') }}" method="post">
                                     @csrf
                                     <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
@@ -160,7 +160,7 @@
                                             <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                                 <button type="submit" class="btn-all mx-2 p-2"
                                                     style="background-color: #274373; color: #ffffff;"
-                                                    id="openSecondModalBtn">
+                                                    id="openSecondModalBtncreate">
                                                     <img src="{{ asset('frontend/images/white-add.svg') }}"
                                                         alt="img"> اضافة
                                                 </button>
@@ -175,7 +175,7 @@
                                     </div>
                                 </form>
                                 <!-- Second Modal Body (Initially Hidden) -->
-                                <div id="secondModalBody" class="d-none">
+                                <div id="secondModalBodycreate" class="d-none">
                                     <div class="body-img-modal d-block mb-4">
                                         <img src="{{ asset('frontend/images/ordered.svg') }}" alt="">
                                         <p>تمت الاضافه بنجاح</p>
@@ -187,56 +187,40 @@
                 </div>
 
                 <!-- Edit Form Modal -->
-                <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header d-flex justify-content-center">
                                 <div class="title d-flex flex-row align-items-center ">
-                                    <h5 class="modal-title"> تعديل فترة </h5>
+                                    <h5 class="modal-title">تعديل فترة</h5>
                                 </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                    &times;
-                                </button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                             </div>
-                            <div class="modal-body">
-                                <form  id="editForm" action="{{ route('working_time.update') }}" method="post">
+                            <div class="modal-body" dir="rtl">
+                                <form id="editForm" action="{{ route('working_time.update') }}" method="post">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" id="id_edit" name="id_edit">
                                     <div id="firstModalBody1" class="mb-3 mt-3 d-flex justify-content-center">
                                         <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                                             <div class="form-group mt-4 mb-3">
-                                                <label class="d-flex justify-content-start pt-3 pb-2" for="name_edit">
-                                                    اسم الفتره</label>
-                                                <input type="text" id="name_edit" name="name_edit"
-                                                    class="form-control" placeholder="اسم الفتره" required>
+                                                <label class="d-flex justify-content-start pt-3 pb-2" for="name_edit">اسم الفتره</label>
+                                                <input type="text" id="name_edit" name="name_edit" class="form-control" placeholder="اسم الفتره" required>
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label class="d-flex justify-content-start pb-2"
-                                                    for="start_time_edit">
-                                                    بداية فترة العمل</label>
-                                                <input type="time" id="start_time_edit" name="start_time_edit"
-                                                    class="form-control" required>
+                                                <label class="d-flex justify-content-start pb-2" for="start_time_edit">بداية فترة العمل</label>
+                                                <input type="time" id="start_time_edit" name="start_time_edit" class="form-control" required>
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label class="d-flex justify-content-start pb-2" for="end_time_edit">
-                                                    نهاية
-                                                    فترة العمل</label>
-                                                <input type="time" id="end_time_edit" name="end_time_edit"
-                                                    class="form-control" required>
+                                                <label class="d-flex justify-content-start pb-2" for="end_time_edit">نهاية فترة العمل</label>
+                                                <input type="time" id="end_time_edit" name="end_time_edit" class="form-control" required>
                                             </div>
                                             <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                                <button type="submit" class="btn-all mx-2 p-2"
-                                                    style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn1">
-                                                    <img src="{{ asset('frontend/images/white-add.svg') }}"
-                                                        alt="img"> تعديل
+                                                <button type="submit" class="btn-all mx-2 p-2" style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn1">
+                                                    <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
                                                 </button>
-                                                <button type="button" class="btn-all p-2"
-                                                    style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
-                                                    data-bs-dismiss="modal" aria-label="Close">
-                                                    <img src="{{ asset('frontend/images/red-close.svg') }}"
-                                                        alt="img"> الغاء
+                                                <button type="button" class="btn-all p-2" style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);" data-bs-dismiss="modal" aria-label="Close">
+                                                    <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
                                                 </button>
                                             </div>
                                         </div>
@@ -253,12 +237,12 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- view Form Modal -->
                 <div class="modal fade" id="view" tabindex="-1" aria-labelledby="representativeLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
+                        <div class="modal-content" dir="rtl">
                             <div class="modal-header d-flex justify-content-center">
                                 <div class="title d-flex flex-row align-items-center ">
                                     <h5 class="modal-title"> عرض فترة </h5>
@@ -275,7 +259,7 @@
                                             <label class="d-flex justify-content-start pt-3 pb-2" for="name_show">
                                                 اسم الفتره</label>
                                             <input type="text" id="name_show" name="name_show"
-                                                class="form-control" placeholder="اسم الفتره"  disabled>
+                                                class="form-control" placeholder="اسم الفتره" disabled>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label class="d-flex justify-content-start pb-2" for="start_time_show">
@@ -358,96 +342,127 @@
                     }
 
                     document.addEventListener('DOMContentLoaded', function() {
-                    var createForm = document.getElementById('createForm');
-                    var openSecondModalBtn = document.getElementById('openSecondModalBtn');
-                    var firstModalBody = document.getElementById('firstModalBody');
-                    var secondModalBody = document.getElementById('secondModalBody');
+                        var createForm = document.getElementById('createForm');
+                        var openSecondModalBtn = document.getElementById('openSecondModalBtncreate');
+                        var firstModalBody = document.getElementById('firstModalBody');
+                        var secondModalBodycreate = document.getElementById('secondModalBodycreate');
 
-                    createForm.addEventListener('submit', function(event) {
-                        event.preventDefault();
-                        
-                        var isValid = createForm.checkValidity();
-                        if (isValid) {
-                            // Perform AJAX form submission if needed
-                            // $.ajax({
-                            //     type: createForm.method,
-                            //     url: createForm.action,
-                            //     data: $(createForm).serialize(),
-                            //     success: function(response) {
-                            //         // Handle the response
-                            //     }
-                            // });
+                        createForm.addEventListener('submit', function(event) {
+                            event.preventDefault();
+                            console.log('Form submitted');
 
-                            // Switch modal content on successful validation
-                            firstModalBody.classList.add('d-none');
-                            secondModalBody.classList.remove('d-none');
-                        } else {
-                            // Show validation errors
-                            createForm.reportValidity();
-                        }
+                            var isValid1 = createForm.checkValidity();
+                            if (isValid1) {
+                                console.log('Form is valid');
+
+                                // Perform AJAX form submission
+                                $.ajax({
+                                    type: createForm.method,
+                                    url: createForm.action,
+                                    data: $(createForm).serialize(),
+                                    success: function(response) {
+                                        console.log('AJAX success');
+                                        // Handle the response
+                                        // Optionally, reload the page
+                                        firstModalBody.classList.add('d-none');
+                                secondModalBodycreate.classList.remove('d-none');
+                                        window.location.reload();
+                                        
+                                    },
+                                    error: function(error) {
+                                        console.error('AJAX error', error);
+                                    }
+                                });
+
+                                // Switch modal content on successful validation
+                                firstModalBody.classList.add('d-none');
+                                secondModalBodycreate.classList.remove('d-none');
+                            } else {
+                                // Show validation errors
+                                createForm.reportValidity();
+                            }
+                        });
+
+                        // openSecondModalBtn.addEventListener('click', function(event) {
+                        //     event.preventDefault();
+                        //     console.log('Second modal button clicked');
+
+                        //     var isValid = createForm.checkValidity();
+                        //     if (isValid) {
+                        //         console.log('Form is valid for second modal');
+
+                        //         // Switch modal content on successful validation
+                        //         firstModalBody.classList.add('d-none');
+                        //         secondModalBodycreate.classList.remove('d-none');
+                        //     } else {
+                        //         // Show validation errors
+                        //         createForm.reportValidity();
+                        //     }
+                        // });
                     });
-
-                    openSecondModalBtn1.addEventListener('click', function(event) {
-                        event.preventDefault();
-
-                        var isValid = createForm.checkValidity();
-                        if (isValid) {
-                            // Switch modal content on successful validation
-                            firstModalBody.classList.add('d-none');
-                            secondModalBody.classList.remove('d-none');
-                        } else {
-                            // Show validation errors
-                            createForm.reportValidity();
-                        }
-                    });
-                });
-
                 </script>
+             
+
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
-                    var createForm = document.getElementById('editForm');
-                    var openSecondModalBtn1 = document.getElementById('openSecondModalBtn1');
-                    var firstModalBody1 = document.getElementById('firstModalBody1');
-                    var secondModalBody1 = document.getElementById('secondModalBody1');
+                        var editForm = document.getElementById('editForm');
+                        var openSecondModalBtn1 = document.getElementById('openSecondModalBtn1');
+                        var firstModalBody1 = document.getElementById('firstModalBody1');
+                        var secondModalBody1 = document.getElementById('secondModalBody1');
 
-                    createForm.addEventListener('submit', function(event) {
-                        event.preventDefault();
-                        
-                        var isValid = createForm.checkValidity();
-                        if (isValid) {
-                            // Perform AJAX form submission if needed
-                            // $.ajax({
-                            //     type: createForm.method,
-                            //     url: createForm.action,
-                            //     data: $(createForm).serialize(),
-                            //     success: function(response) {
-                            //         // Handle the response
-                            //     }
-                            // });
+                        editForm.addEventListener('submit', function(event) {
+                            event.preventDefault();
+                            console.log('Form submitted');
 
-                            // Switch modal content on successful validation
-                            firstModalBody1.classList.add('d-none');
-                            secondModalBody1.classList.remove('d-none');
-                        } else {
-                            // Show validation errors
-                            createForm.reportValidity();
-                        }
+                            var isValid1 = editForm.checkValidity();
+                            if (isValid1) {
+                                console.log('Form is valid');
+
+                                // Perform AJAX form submission
+                                $.ajax({
+                                    type: editForm.method,
+                                    url: editForm.action,
+                                    data: $(editForm).serialize(),
+                                    success: function(response) {
+                                        console.log('AJAX success');
+                                        // Handle the response
+                                        // Optionally, reload the page
+                                        firstModalBody1.classList.add('d-none');
+                                       secondModalBody1.classList.remove('d-none');
+                                        window.location.reload();
+                                        
+                                    },
+                                    error: function(error) {
+                                        console.error('AJAX error', error);
+                                    }
+                                });
+
+                                // Switch modal content on successful validation
+                                // firstModalBody1.classList.add('d-none');
+                                // secondModalBody1.classList.remove('d-none');
+                            } else {
+                                // Show validation errors
+                                editForm.reportValidity();
+                            }
+                        });
+
+                        // openSecondModalBtn1.addEventListener('click', function(event) {
+                        //     event.preventDefault();
+                        //     console.log('Second modal button clicked');
+
+                        //     var isValid = editForm.checkValidity();
+                        //     if (isValid) {
+                        //         console.log('Form is valid for second modal');
+
+                        //         // Switch modal content on successful validation
+                        //         firstModalBody1.classList.add('d-none');
+                        //         secondModalBody1.classList.remove('d-none');
+                        //     } else {
+                        //         // Show validation errors
+                        //         editForm.reportValidity();
+                        //     }
+                        // });
                     });
-
-                    openSecondModalBtn1.addEventListener('click', function(event) {
-                        event.preventDefault();
-
-                        var isValid = createForm.checkValidity();
-                        if (isValid) {
-                            // Switch modal content on successful validation
-                            firstModalBody1.classList.add('d-none');
-                            secondModalBody1.classList.remove('d-none');
-                        } else {
-                            // Show validation errors
-                            createForm.reportValidity();
-                        }
-                    });
-                });
                 </script>
             </div>
         </div>

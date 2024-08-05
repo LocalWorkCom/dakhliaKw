@@ -30,14 +30,14 @@
                 <div class="form-row mx-2 mb-2">
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="name">اسم نظام العمل</label>
-                        <input type="text" id="name" name="name" class="form-control"
+                        <input type="text" id="name" name="name" class="form-control" required
                             placeholder="ادخل نظام العمل" />
                     </div>
                 </div>
                 <div class="form-row mx-2 mb-2">
                     <div class="input-group moftsh px-md-5 px-3 pt-3 col-6 workings">
                         <label class="pb-3" for="working_days_num">عدد ايام العمل</label>
-                        <select name="working_days_num" id="working_days_num" style="border: 0.2px solid rgb(199, 196, 196);">
+                        <select name="working_days_num" id="working_days_num" style="border: 0.2px solid rgb(199, 196, 196);" required>
                             <option value="">اختر</option>
                             @for ($i = 1; $i < 30; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
@@ -47,7 +47,7 @@
                     
                     <div class="input-group moftsh px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="holiday_days_num">عدد ايام الاجازات</label>
-                        <select name="holiday_days_num" id="holiday_days_num" style="border: 0.2px solid rgb(199, 196, 196);">
+                        <select name="holiday_days_num" id="holiday_days_num" style="border: 0.2px solid rgb(199, 196, 196);" required>
                             <option value="">اختر</option>
                             @for ($i = 1; $i <= 30; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
@@ -71,7 +71,7 @@
     <div class="form-row mx-2 mb-2 holidays-template" style="display: none;">
         <div class="input-group moftsh px-md-5 px-3 pt-3">
             <label class="pb-3" for="holiday-template"></label>
-            <select name="holiday-template" id="holiday-template" style="border: 0.2px solid rgb(199, 196, 196);">
+            <select name="holiday-template" id="holiday-template" style="border: 0.2px solid rgb(199, 196, 196);" required>
                 <option value="">اختر الفترة</option>
                 @foreach ($WorkingTimes as $item)
                     <option value="{{ $item->id }}">{{ $item->name }}</option>

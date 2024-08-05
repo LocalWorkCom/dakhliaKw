@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\Groups;
+
 use App\Models\Inspector;
 use App\Models\WorkingTime;
+
+use App\Models\WorkingTree;
+
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -21,7 +25,7 @@ class GroupsController extends Controller
 
     public function index()
     {
-        $workTimes = WorkingTime::all();
+        $workTimes = WorkingTree::all();
         // dd($workTimes);
         return view('group.view', compact('workTimes'));
     }
@@ -115,7 +119,10 @@ class GroupsController extends Controller
 
         // Handle validation failure
         if ($validatedData->fails()) {
+            // session()->flash('errors', $validatedData->errors());
             return redirect()->back()->withErrors($validatedData)->withInput()->with('showModal', true);
+
+            // return redirect()->back();
         }
 
         try {
@@ -124,10 +131,13 @@ class GroupsController extends Controller
             $group->work_time_id = $request->work_time_id;
             $group->points_inspector = $request->points_inspector;
             $group->save();
+            session()->flash('success', 'تم اضافه مجموعة بنجاح.');
 
-            return redirect()->route('group.view')->with('success', 'تم اضافه مجموعة بنجاح.');
+            return redirect()->route('group.view');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred while creating the group. Please try again.')->withInput();
+            session()->flash('error',  'An error occurred while creating the group. Please try again');
+
+            return redirect()->back();
         }
     }
 
@@ -167,7 +177,7 @@ class GroupsController extends Controller
     {
         // dd($group);
         $group = Groups::find($group);
-        $working_time = WorkingTime::find($group->work_time_id);
+        $working_time = WorkingTree::find($group->work_time_id);
 
         $data =
             [
@@ -189,7 +199,7 @@ class GroupsController extends Controller
     public function edit($group)
     {
         $group = Groups::find($group);
-        $working_time = WorkingTime::find($group->work_time_id);
+        $working_time = WorkingTree::find($group->work_time_id);
 
 
         $data =
@@ -210,33 +220,42 @@ class GroupsController extends Controller
      */
     public function update(Request $request)
     {
+        dd($request)
         $messages = [
             'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'work_time_id_edit.required' => 'فترة العمل مطلوبة ولا يمكن تركها فارغة.',
             'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
         ];
-
         $validatedData = Validator::make($request->all(), [
             'name_edit' => 'required',
             'work_time_id_edit' => 'required',
             'points_inspector_edit' => 'required',
         ], $messages);
-
-        // // Handle validation failure
-        // if ($validatedData->fails()) {
-        //     return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
-        // }
         if ($validatedData->fails()) {
-            return redirect()->back()->withErrors($validatedData)->withInput();
+            return redirect()->back()->withErrors($validatedData)->withInput()->with('editModal', true);
         }
         $group = Groups::find($request->id_edit);
-        $group->name = $request->name_edit;
-        $group->points_inspector = $request->points_inspector_edit;
-        $group->work_time_id = $request->work_time_id_edit;
-        $group->save();
-        return redirect()->route('group.view')->with('message', 'تم تعديل مجموعة بنجاح');
+        $hasChanges = false;
+        if ($group->name !== $request->name_edit) {
+            $group->name = $request->name_edit;
+            $hasChanges = true;
+        }
+        if ($group->work_time_id !== $request->work_time_id_edit) {
+            $group->work_time_id = $request->work_time_id_edit;
+            $hasChanges = true;
+        }
+        if ($group->points_inspector !== $request->points_inspector_edit) {
+            $group->points_inspector = $request->points_inspector_edit;
+            $hasChanges = true;
+        }
+        if ($hasChanges) {
+            $group->save();
+            session()->flash('success', 'تم تعديل مجموعة بنجاح.');
+        } else {
+            session()->flash('message', 'لم يتم التعديل.');
+        }
+        return redirect()->back()->with('editModal', true);
     }
-
 
     /**
      * Remove the specified resource from storage.
