@@ -1250,7 +1250,10 @@ text-align: right;
         left: 0;
         top: 0;
     }
-   
+    #users-table th:last-child,
+    #users-table td:last-child {
+        display: none;
+    }
 }
 .d-none {
     display: none !important;
