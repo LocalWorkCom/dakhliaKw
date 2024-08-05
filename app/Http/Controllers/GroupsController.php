@@ -156,39 +156,49 @@ class GroupsController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request)
-{
-    $messages = [
-        'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
-        'work_time_id_edit.required' => 'فترة العمل مطلوبة ولا يمكن تركها فارغة.',
-        'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
-    ];
+    {
+        $messages = [
+            'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+            'work_time_id_edit.required' => 'فترة العمل مطلوبة ولا يمكن تركها فارغة.',
+            'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
+        ];
 
-    $validatedData = Validator::make($request->all(), [
-        'name_edit' => 'required',
-        'work_time_id_edit' => 'required',
-        'points_inspector_edit' => 'required',
-    ], $messages);
+        $validatedData = Validator::make($request->all(), [
+            'name_edit' => 'required',
+            'work_time_id_edit' => 'required',
+            'points_inspector_edit' => 'required',
+        ], $messages);
 
-    // // Handle validation failure
-    // if ($validatedData->fails()) {
-    //     return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
-    // }
-    if ($validatedData->fails()) {
-        // session()->flash('errors', $validatedData->errors());
-        return redirect()->back()->withErrors($validatedData)->withInput()->with('editModal', true);
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput()->with('editModal', true);
+        }
 
-        // return redirect()->back();
+        $group = Groups::find($request->id_edit);
+        $hasChanges = false;
+
+        if ($group->name !== $request->name_edit) {
+            $group->name = $request->name_edit;
+            $hasChanges = true;
+        }
+        if ($group->work_time_id !== $request->work_time_id_edit) {
+            $group->work_time_id = $request->work_time_id_edit;
+            $hasChanges = true;
+        }
+        if ($group->points_inspector !== $request->points_inspector_edit) {
+            $group->points_inspector = $request->points_inspector_edit;
+            $hasChanges = true;
+        }
+
+        if ($hasChanges) {
+            $group->save();
+            session()->flash('success', 'تم تعديل مجموعة بنجاح.');
+        } else {
+            session()->flash('message', 'لم يتم التعديل.');
+        }
+
+        return redirect()->back()->with('editModal', true);
     }
-    $group = Groups::find($request->id_edit);
-    $group->name = $request->name_edit;
-    $group->points_inspector = $request->points_inspector_edit;
-    $group->work_time_id = $request->work_time_id_edit;
-    $group->save();
-    session()->flash('success', 'تم تعديل مجموعة بنجاح.');
 
-        return redirect()->back();
-
-}
 
 
     /**
