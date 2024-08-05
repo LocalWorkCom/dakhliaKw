@@ -158,7 +158,7 @@
                                     @endif
                                 </div>
                                 <div class="form-group mt-4 mb-3">
-                                    <label for="work_time_id" class="d-flex justify-content-start pt-3 pb-2">اختر نظام
+                                    <label for="work_time_id" class="d-flex justify-content-start pt-3 pb-2">اختر فترة
                                         العمل</label>
                                     <select class="form-control" name="work_time_id" id="work_time_id">
                                         <option selected disabled>اختار من القائمة</option>
@@ -285,89 +285,89 @@
 
     <!-- Edit Modal -->
     <!-- Your modal HTML -->
-    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="padding-left: 0px;" dir="rtl">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header d-flex justify-content-center">
-                    <div class="title d-flex flex-row align-items-center">
-                        <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
-                        <h5 class="modal-title"> تعديل مجموعة</h5>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+    <!-- Modal HTML -->
+<div class="modal fade" id="edit" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="padding-left: 0px;" dir="rtl">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <div class="title d-flex flex-row align-items-center">
+                    <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
+                    <h5 class="modal-title"> تعديل مجموعة</h5>
                 </div>
-                <div class="modal-body">
-                    <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
-                        <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
-                            <form id="add-form" action="{{ route('group.update') }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <input type="hidden" id="id_edit" name="id_edit">
-                                <div class="form-group mt-4 mb-3">
-                                    <label for="name_edit" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
-                                        المجموعة</label>
-                                    <input type="text" id="name_edit" name="name_edit" class="form-control"
-                                        placeholder="مجموعة أ" value="{{ old('name_edit') }}">
-                                    @if ($errors->has('name_edit'))
-                                        <span class="text-danger">{{ $errors->first('name_edit') }}</span>
-                                    @endif
-                                </div>
-                                <div class="form-group mt-4 mb-3">
-                                    <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر
-                                        نظام العمل</label>
-                                    <select class="form-control" name="work_time_id_edit" id="work_time_id_edit">
-                                        <option selected disabled>اختار من القائمة</option>
-                                        @foreach ($workTimes as $workTime)
-                                            <option value="{{ $workTime->id }}"
-                                                {{ old('work_time_id_edit') == $workTime->id ? 'selected' : '' }}>
-                                                {{ $workTime->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('work_time_id_edit'))
-                                        <span class="text-danger">{{ $errors->first('work_time_id_edit') }}</span>
-                                    @endif
-                                </div>
-                                <div class="form-group mt-4 mb-3">
-                                    <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
-                                        نقاط التفتيش</label>
-                                    <input type="number" id="points_inspector_edit" name="points_inspector_edit"
-                                        class="form-control" placeholder="4" value="{{ old('points_inspector_edit') }}">
-                                    @if ($errors->has('points_inspector_edit'))
-                                        <span class="text-danger">{{ $errors->first('points_inspector_edit') }}</span>
-                                    @endif
-                                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
+                    <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form id="add-form" action="{{ route('group.update') }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" id="id_edit" name="id_edit">
+                            <div class="form-group mt-4 mb-3">
+                                <label for="name_edit" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم المجموعة</label>
+                                <input type="text" id="name_edit" name="name_edit" class="form-control"
+                                    placeholder="مجموعة أ" value="{{ old('name_edit') }}">
+                                @if ($errors->has('name_edit'))
+                                    <span class="text-danger">{{ $errors->first('name_edit') }}</span>
+                                @endif
+                            </div>
+                            <div class="form-group mt-4 mb-3">
+                                <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر فترة العمل</label>
+                                <select class="form-control" name="work_time_id_edit" id="work_time_id_edit">
+                                    <option selected disabled>اختار من القائمة</option>
+                                    @foreach ($workTimes as $workTime)
+                                        <option value="{{ $workTime->id }}" {{ old('work_time_id_edit') == $workTime->id ? 'selected' : '' }}>
+                                            {{ $workTime->name }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('work_time_id_edit'))
+                                    <span class="text-danger">{{ $errors->first('work_time_id_edit') }}</span>
+                                @endif
+                            </div>
+                            <div class="form-group mt-4 mb-3">
+                                <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد نقاط التفتيش</label>
+                                <input type="number" id="points_inspector_edit" name="points_inspector_edit"
+                                    class="form-control" placeholder="4" value="{{ old('points_inspector_edit') }}">
+                                @if ($errors->has('points_inspector_edit'))
+                                    <span class="text-danger">{{ $errors->first('points_inspector_edit') }}</span>
+                                @endif
+                            </div>
 
-                                <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                    <button type="submit" class="btn-all mx-2 p-2"
-                                        style="background-color: #274373; color: #ffffff;">
-                                        <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
-                                    </button>
-                                    <button type="button" class="btn-all p-2"
-                                        style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
-                                        data-bs-dismiss="modal" aria-label="Close">
-                                        <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
-                                    </button>
-                                </div>
+                            <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
+                                <button type="submit" class="btn-all mx-2 p-2"
+                                    style="background-color: #274373; color: #ffffff;">
+                                    <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
+                                </button>
+                                <button type="button" class="btn-all p-2"
+                                    style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                                    data-bs-dismiss="modal" aria-label="Close">
+                                    <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
+                                </button>
+                            </div>
 
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        @if (session('editModal'))
-            // function resetModal() {
-            //         $('#myModal1')[0].reset();
-            //     }
-            $(document).ready(function() {
-                $('#edit').modal('show');
+<!-- JavaScript to handle modal display -->
+<script>
+    @if (session('editModal'))
+        $(document).ready(function() {
+            $('#edit').modal('show');
+        });
+    @endif
 
-            });
-        @endif
-    </script>
+    @if (session('message'))
+        $(document).ready(function() {
+            alert('{{ session('message') }}');
+        });
+    @endif
+</script>
+
 @endsection
 
 @push('scripts')
