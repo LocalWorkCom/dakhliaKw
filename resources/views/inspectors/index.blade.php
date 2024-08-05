@@ -15,7 +15,10 @@
         <div class="container welcome col-11">
 <div class="d-flex justify-content-between">
     <p> المفتــــــشون ({{\App\Models\Inspector::count()}})</p>
-
+    <button class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;"><a href="{{ route('inspectors.create') }}">
+        اضافة مفتش
+        <img src="{{ asset('frontend/images/add-mandob.svg')}}" alt=""></a>
+    </button>
     <!-- <h2 style="color: #274373;"> مجموعة (أ)</h2> -->
 </div>
         </div>
@@ -25,14 +28,15 @@
 <div class="row" >
     <div class="container  col-11 mt-3 p-0 ">
         <div class="row d-flex justify-content-between " dir="rtl">
-            <div class="form-group mt-4 mx-1  d-flex">
-                <button class="btn-all px-3 mx-2" style="color: #274373;">
-                    الكل (7)
+            <div class="form-group moftsh mt-4  mx-4  d-flex">
+                <p class="filter "> تصفية حسب:</p>
+                <button class="btn-all px-3 mx-2 btn-filter" data-filter="all" style="color: #274373;">
+                    الكل ({{\App\Models\Inspector::count()}})
                 </button>
-                <button class="btn-all px-3 mx-2" style="color: #274373;">
+                <button class="btn-all px-3 mx-2 btn-filter" data-filter="assigned" style="color: #274373;">
                     مفتشون تم توزعهم
                 </button>
-                <button class="btn-all px-3 mx-2" style="color: #274373;">
+                <button class="btn-all px-3 mx-2 btn-filter" data-filter="unassigned" style="color: #274373;">
                     مفتشون لم يتم توزعهم
                 </button>
             </div>
@@ -43,7 +47,9 @@
         </div>
     </div>
     
+
         <div class="col-lg-12">
+
             <div class="bg-white ">
                 <div>
                     <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
@@ -132,10 +138,23 @@
 $(document).ready(function() {
     $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
   
+    var filter = 'all'; // Default filter
+
     const table = $('#users-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ url('api/Inspectors') }}',
+        ajax: {
+            url: '{{ url('api/Inspectors') }}',
+            dataSrc: function(json) {
+                // Filter data based on the selected filter
+                if (filter === 'assigned') {
+                    return json.data.filter(item => item.group_id != null && String(item.group_id).trim() !== "");
+                } else if (filter === 'unassigned') {
+                    return json.data.filter(item => !item.group_id || (typeof item.group_id === 'string' && item.group_id.trim() === ""));
+                }
+                return json.data; // 'all' or default case
+            }
+        },
         columns: [
             { data: 'id', sWidth: '50px', name: 'id' },
             { data: 'position', name: 'position' },
@@ -155,20 +174,19 @@ $(document).ready(function() {
                 if (row.group_id == null) {
                     var addToGroup = '{{ route('inspectors.addToGroup', ':id') }}'.replace(':id', row.id);
                     btn_add = `
-                        <a class="btn btn-sm" id="updateValueButton" style="background-color: #274373;" 
+                        <a class="btn btn-sm" id="updateValueButton" style="background-color: green;" 
                            onclick="openAddModal(${row.id})" data-bs-toggle="modal" 
                            data-bs-target="#myModal1">
-                           <i class="fa fa-plus"></i>
+                           <i class="fa fa-plus"></i> أضافه
                         </a>`;
                 }
 
                 return `
-                    <a href="${departmentEdit}" class="btn btn-sm" style="background-color: #F7AF15;">
-                        <i class="fa fa-edit"></i>
+                    <a href="${departmentEdit}" class="btn btn-sm"  style="background-color: #F7AF15;">
+                        <i class="fa fa-edit"></i> تعديل 
                     </a>
-                    <a href="${departmentShow}" class="btn btn-sm" style="background-color: #274373;">
-                        <i class="fa fa-eye"></i>
-                    </a>
+                    <a href="${departmentShow}" class="btn btn-sm " style="background-color: #274373;">
+                       <i class="fa fa-eye"></i>عرض</a>
                     ${btn_add}
                 `;
             }
@@ -198,23 +216,51 @@ $(document).ready(function() {
         },
         "pagingType": "full_numbers"
     });
-});
 
+
+// Filter button click event listeners
+$('.btn-filter').click(function() {
+        filter = $(this).data('filter'); // Update the filter based on the clicked button
+        
+        // Remove 'btn-active' class from all buttons and add to the clicked one
+        $('.btn-filter').removeClass('btn-active');
+        $(this).addClass('btn-active');
+
+            table.ajax.reload(); // Reload data with the new filter
+        });
+
+    //     $.fn.dataTable.ext.search.push(
+    //     function(settings, data, dataIndex) {
+    //         console.log();
+    //         var filter = $('.btn-filter.btn-active').data('filter');
+    //         var groupId = data[4]; // use data for the group_id column
+
+    //         if (filter === 'all') {
+    //             return true; // Show all records
+    //         } else if (filter === 'assigned' && groupId !== null && groupId !== "") {
+    //             return true; // Show only assigned inspectors
+    //         } else if (filter === 'unassigned' && (groupId === null || groupId === "")) {
+    //             return true; // Show only unassigned inspectors
+    //         }
+    //         return false; // Otherwise, don't show the record
+    //     }
+    // );
+    });
 
 // Add button click event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.btn-all');
+// document.addEventListener('DOMContentLoaded', () => {
+//     const buttons = document.querySelectorAll('.btn-all');
     
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove 'btn-active' class from all buttons
-            buttons.forEach(btn => btn.classList.remove('btn-active'));
+//     buttons.forEach(button => {
+//         button.addEventListener('click', () => {
+//             // Remove 'btn-active' class from all buttons
+//             buttons.forEach(btn => btn.classList.remove('btn-active'));
             
-            // Add 'btn-active' class to the clicked button
-            button.classList.add('btn-active');
-        });
-    });
-});
+//             // Add 'btn-active' class to the clicked button
+//             button.classList.add('btn-active');
+//         });
+//     });
+// });
 
 </script>
 @endsection

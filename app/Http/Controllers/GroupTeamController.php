@@ -30,7 +30,7 @@ class GroupTeamController extends Controller
 
             return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
-        ->rawColumns(['action'])
+            ->rawColumns(['action'])
             ->make(true);
     }
 
@@ -68,14 +68,14 @@ class GroupTeamController extends Controller
         try {
             $inspector_ids = implode(",", $request->inspectors_ids);
 
+
             $grouptemItem = new GroupTeam();
             $grouptemItem->name = $request->groupTeam_name;
             $grouptemItem->group_id = $request->group_id;
             $grouptemItem->inspector_ids = $inspector_ids;
             $grouptemItem->save();
             $workTimes = WorkingTime::all();
-            // Dynamically create model instance based on the model class string
-            // return "ok";
+
             return view('group.view', compact('workTimes'))->with('success', 'تم الاضافة بنجاح');
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
@@ -84,13 +84,22 @@ class GroupTeamController extends Controller
 
     public function team($id)
     {
-        // $group = Groups::find($group);
-        // $working_time = WorkingTime::find($group->work_time_id);
-        $inspector = Inspector::where('group_id',$id)->get();
+        $arrayInspector = [];
+        $inspector = Inspector::where('group_id', $id)->get();
+        foreach ($inspector as $item) {
+            $check = GroupTeam::where('group_id', $id)
+                ->whereRaw('find_in_set(?, inspector_ids)', [$item->id])
+                ->exists();
+                if (!$check) {
+                    $arrayInspector[] = $item;
+                }
+                
+        }
+
+        // At this point, $arrayInspector contains the inspectors that do not exist in the inspector_ids column of GroupTeam
+        $data = $arrayInspector;
 
 
-        $data = $inspector;
-            
         // dd($group);
         if ($inspector) {
             return response()->json(['success' => true, 'data' => $data]);

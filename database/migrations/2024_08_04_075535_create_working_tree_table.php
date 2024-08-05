@@ -16,11 +16,11 @@ return new class extends Migration
             $table->integer('working_days_num');
             $table->integer('holiday_days_num');
             $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('created_department')->nullable();
+            $table->unsignedBigInteger('created_departement')->nullable();
 
-            // Ensure that the created_by and created_department columns are defined as unsignedBigInteger
+            // Ensure that the created_by and created_departement columns are defined as unsignedBigInteger
             $table->foreign('created_by')->references('id')->on('users');
-            $table->foreign('created_department')->references('id')->on('departements');
+            $table->foreign('created_departement')->references('id')->on('departements');
 
 
             $table->timestamps();
