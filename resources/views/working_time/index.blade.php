@@ -124,7 +124,7 @@
 
                 <!-- Create Form Modal -->
                 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                    aria-hidden="true">
+                    aria-hidden="true" >
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header d-flex justify-content-center">
@@ -135,7 +135,7 @@
                                     &times;
                                 </button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body" dir="rtl">
                                 <form id="createForm" action="{{ route('working_time.store') }}" method="post">
                                     @csrf
                                     <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
@@ -188,73 +188,6 @@
                 </div>
 
                 <!-- Edit Form Modal -->
-                {{-- <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header d-flex justify-content-center">
-                                <div class="title d-flex flex-row align-items-center ">
-                                    <h5 class="modal-title"> تعديل فترة </h5>
-                                </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                    &times;
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editForm" action="{{ route('working_time.update') }}" method="post">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" id="id_edit" name="id_edit">
-                                    <div id="firstModalBody1" class="mb-3 mt-3 d-flex justify-content-center">
-                                        <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
-                                            <div class="form-group mt-4 mb-3">
-                                                <label class="d-flex justify-content-start pt-3 pb-2" for="name_edit">
-                                                    اسم الفتره</label>
-                                                <input type="text" id="name_edit" name="name_edit"
-                                                    class="form-control" placeholder="اسم الفتره" required>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label class="d-flex justify-content-start pb-2"
-                                                    for="start_time_edit">
-                                                    بداية فترة العمل</label>
-                                                <input type="time" id="start_time_edit" name="start_time_edit"
-                                                    class="form-control" required>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label class="d-flex justify-content-start pb-2" for="end_time_edit">
-                                                    نهاية
-                                                    فترة العمل</label>
-                                                <input type="time" id="end_time_edit" name="end_time_edit"
-                                                    class="form-control" required>
-                                            </div>
-                                            <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                                <button type="submit" class="btn-all mx-2 p-2"
-                                                    style="background-color: #274373; color: #ffffff;"
-                                                    id="openSecondModalBtn1">
-                                                    <img src="{{ asset('frontend/images/white-add.svg') }}"
-                                                        alt="img"> تعديل
-                                                </button>
-                                                <button type="button" class="btn-all p-2"
-                                                    style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
-                                                    data-bs-dismiss="modal" aria-label="Close">
-                                                    <img src="{{ asset('frontend/images/red-close.svg') }}"
-                                                        alt="img"> الغاء
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <!-- Second Modal Body (Initially Hidden) -->
-                                <div id="secondModalBody1" class="d-none">
-                                    <div class="body-img-modal d-block mb-4">
-                                        <img src="{{ asset('frontend/images/ordered.svg') }}" alt="">
-                                        <p>تمت التعديل بنجاح</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
                 <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -264,7 +197,7 @@
                                 </div>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body" dir="rtl">
                                 <form id="editForm" action="{{ route('working_time.update') }}" method="post">
                                     @csrf
                                     @method('PUT')
@@ -310,7 +243,7 @@
                 <div class="modal fade" id="view" tabindex="-1" aria-labelledby="representativeLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
+                        <div class="modal-content" dir="rtl">
                             <div class="modal-header d-flex justify-content-center">
                                 <div class="title d-flex flex-row align-items-center ">
                                     <h5 class="modal-title"> عرض فترة </h5>
