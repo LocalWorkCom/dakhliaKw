@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Group;
 use App\Models\Groups;
-
 use App\Models\Inspector;
 use App\Models\WorkingTime;
 
@@ -25,6 +23,8 @@ class GroupsController extends Controller
 
     public function index()
     {
+        // $workTimes = WorkingTime::all();
+        // $inspector = Inspector::where('group_id',$id)->get();
         $workTimes = WorkingTree::all();
         // dd($workTimes);
         return view('group.view', compact('workTimes'));

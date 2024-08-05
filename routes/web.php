@@ -22,6 +22,7 @@ use App\Http\Controllers\sectorsController;
 use App\Http\Controllers\InspectorController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\GroupsController;
+use App\Http\Controllers\GroupTeamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,7 +110,12 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/groups/add', [GroupsController::class, 'store'])->name('group.store');
     Route::any('/groups/update', [GroupsController::class, 'update'])->name('group.update');
     Route::any('/groups/edit/{id}', [GroupsController::class, 'edit'])->name('group.edit');
+
+    Route::any('/groupTeam/team/{id}', [GroupTeamController::class, 'team'])->name('groupTeam.team');
+    Route::any('/groupTeam/store', [GroupTeamController::class, 'store'])->name('groupTeam.store');
+
     Route::any('/groups/show/{id}', [GroupsController::class, 'show'])->name('group.show');
+
     Route::any('/groups/delete', [GroupsController::class, 'delete'])->name('group.delete');
     Route::get('/api/groups', [GroupsController::class, 'getgroups'])->name('api.groups');
     Route::get('/group/create/Inspectors/{id}', [GroupsController::class, 'groupCreateInspectors'])->name('group.groupcreateInspectors');
