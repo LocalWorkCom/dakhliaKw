@@ -47,6 +47,9 @@
     <form class="edit-grade-form" id="add-form" action="{{ route('group.groupAddInspectors',$id) }}"  method="POST">
         @csrf
         <div class="select-boxes mt-5 mx-4 col-10" dir="rtl">
+            {{-- @isset($inspectors )&&  @isset( $inspectorsIngroup)
+                لا يوجد مفتشين متاحين
+            @endisset --}}
             @foreach ($inspectors as $inspector)
             <div class="check-one d-flex justify-content-start">
                 <input type="checkbox" class="toggle-radio-buttons mx-2" value="{{ $inspector->id }}" id="inspector_{{ $inspector->id }}" name="inspectore[]">
