@@ -2,7 +2,7 @@
     <div class="upper-navbar d-flex">
         <div class="second-section d-flex  col-md-10 col-sm-6">
             <div class="dropdown">
-                {{-- @if ($user->login) --}}
+                {{-- @if ($user->login) Test --}}
                 @php
                     $user = auth()->user();
                 @endphp
@@ -111,6 +111,42 @@
                     </li>
                 </div>
 
+                <div>
+                    <li class="nav-item btn5" onclick="toggleDropdown5(event)">
+                        <a href="#">
+                            <img src="{{ asset('frontend/images/moftsheen.svg') }}" alt="logo">
+                            <h6 class="btn5"> التفتيش<i class="fa-solid fa-angle-down"></i></h6>
+                        </a>
+
+                        <div id="dropdownMenu5" class="dropdown-menu5">
+                            <ul>
+                                <li>
+                                    <img src="{{ asset('frontend/images/inspectors.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="#">المفتشون</a>
+                                </li>
+                                <li>
+                                    <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="{{ route('group.view') }}"> المجموعات</a>
+                                </li>
+
+                                <li>
+                                    <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="{{ route('working_time.index') }}">فترات العمل </a>
+                                </li>
+                                <li>
+                                    <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="{{ route('working_trees.list') }}">نظام العمل</a>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                    </li>
+                </div>
 
 
                 @php
@@ -135,98 +171,121 @@
                         </a>
                     </li>
                 @endif
-                @if ((
-                    Auth::user()->hasPermission('view job') || 
-                    Auth::user()->hasPermission('view VacationType') ||
-                    Auth::user()->hasPermission('view grade') ||
-                    Auth::user()->hasPermission('view Government') ||
-                    Auth::user()->hasPermission('view Rule') ||
-                    Auth::user()->hasPermission('view Permission')))
-                <div>
-                   
+                @if (Auth::user()->hasPermission('view job') ||
+                        Auth::user()->hasPermission('view VacationType') ||
+                        Auth::user()->hasPermission('view grade') ||
+                        Auth::user()->hasPermission('view Government') ||
+                        Auth::user()->hasPermission('view Rule') ||
+                        Auth::user()->hasPermission('view Permission'))
+                    <div>
+
                         {{--  --}}
 
-                            <li class="nav-item" onclick="toggleDropdown4(event)">
-                                
-                                <a href="#">
-                                    <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
-                                    <h6 class="btn4">الإعدادات <i class="fa-solid fa-angle-down"></i></h6>
-                                </a>
-                                
-                                <!-- قائمة منسدلة -->
-                                <div id="dropdownMenu4" class="dropdown-menu4">
-                                    <ul>
-                                        @if (Auth::user()->hasPermission('view grade'))
-                                            <li>
-                                                <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"
-                                                    style="margin-left: 7px;">
-                                                <a href="{{ route('grads.index') }}">الرتب العسكرية</a>
-                                            </li>
-                                        @endif
+                        <li class="nav-item" onclick="toggleDropdown4(event)">
 
-                                        {{-- <li>
+                                       
+
+                            <a href="#">
+                                <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
+                                <h6 class="btn4">الإعدادات <i class="fa-solid fa-angle-down"></i></h6>
+                            </a>
+
+                            <!-- قائمة منسدلة -->
+                            <div id="dropdownMenu4" class="dropdown-menu4">
+                                <ul>
+                                    @if (Auth::user()->hasPermission('view grade'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('grads.index') }}">الرتب العسكرية</a>
+                                        </li>
+                                    @endif
+                                     {{-- <li>
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
                                                 style="margin-left: 7px;">
                                             <a href="{{ route('working_time.index') }}">فترات العمل </a>
                                         </li> --}}
 
-                                        @if (Auth::user()->hasPermission('view job'))
-                                            <li>
-                                                <img src="{{ asset('frontend/images/jobs.svg') }}" alt="logo"
-                                                    style="margin-left: 7px;">
-                                                <a href="{{ route('job.index') }}">الوظائف</a>
-                                            </li>
-                                        @endif
-                                        @if (Auth::user()->hasPermission('view Qualification'))
+                                    @if (Auth::user()->hasPermission('view job'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/jobs.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('job.index') }}">الوظائف</a>
+                                        </li>
+                                    @endif
+                                    @if (Auth::user()->hasPermission('view Qualification'))
                                         <li>
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
                                                 style="margin-left: 7px;">
                                             <a href="{{ route('qualifications.index') }}">المؤهلات</a>
                                         </li>
                                     @endif
-                                        @if (Auth::user()->hasPermission('view Government'))
-                                            <li>
-                                                <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
-                                                    style="margin-left: 7px;">
-                                                <a href="{{ route('government.all') }}">المحافظات</a>
-                                            </li>
-                                        @endif
-                                        @if (Auth::user()->hasPermission('view Region'))
+                                    @if (Auth::user()->hasPermission('view Government'))
                                         <li>
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
                                                 style="margin-left: 7px;">
-                                            <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
+                                            <a href="{{ route('government.all') }}">المحافظات</a>
                                         </li>
                                     @endif
-                                        @if (Auth::user()->hasPermission('view VacationType'))
-                                            <li>
-                                                <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
-                                                    style="margin-left: 7px;">
-                                                <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
-                                            </li>
-                                        @endif
-                                        @if (Auth::user()->hasPermission('view Rule'))
-                                            <li>
-                                                <img src="{{ asset('frontend/images/task.svg') }}" alt="logo"
-                                                    style="margin-left: 7px;">
-                                                <a href="{{ route('rule.index') }}">المهام</a>
-                                            </li>
-                                        @endif
-                                        @if (Auth::user()->hasPermission('view Permission'))
-                                            <li>
-                                                <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
-                                                    style="margin-left: 7px;">
-                                                <a href="{{ route('permission.index') }}">الصلاحيات</a>
-                                            </li>
-                                        @endif
-                                    </ul>
-                                </div>
-                                {{-- @endif --}}
-                            </li>
+                                    {{-- @if (Auth::user()->hasPermission('view Region')) --}}
+                                    <li>
+                                        <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                            style="margin-left: 7px;">
+                                        <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
+                                    </li>
+                                    {{-- @endif --}}
+                                    {{-- @if (Auth::user()->hasPermission('view Sector')) --}}
+                                    <li>
+                                        <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                            style="margin-left: 7px;">
+                                        <a href="{{ route('sectors.index') }}">القطاعات</a>
+                                    </li>
+                                    {{-- @endif --}}
+                                    {{-- @if (Auth::user()->hasPermission('view Point')) --}}
+                                    <li>
+                                        <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                            style="margin-left: 7px;">
+                                        <a href="{{ route('points.index') }}">النقاط</a>
+                                    </li>
+                                    {{-- @endif --}}
+                                    @if (Auth::user()->hasPermission('view VacationType'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
+                                        </li>
+                                    @endif
+                                    @if (Auth::user()->hasPermission('view Rule'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/task.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('rule.index') }}">المهام</a>
+                                        </li>
+                                    @endif
+                                    @if (Auth::user()->hasPermission('view Permission'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('permission.index') }}">الصلاحيات</a>
+                                        </li>
+                                    @endif
+
+
+                                    <li>
+                                        <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"
+                                            style="margin-left: 7px;">
+                                        <a href="{{ route('inspectors.index') }}">المفتشون</a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                            {{-- @endif --}}
+                        </li>
 
                         {{-- --}}
 
-                </div>
+                    </div>
                 @endif
 
                 @if (Auth::user()->hasPermission('view Iotelegram'))

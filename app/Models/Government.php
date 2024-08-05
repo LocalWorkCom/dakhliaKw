@@ -19,4 +19,8 @@ class Government extends Model
         return $this->hasMany(outgoings::class);
 
     }
+    public function points()
+    {
+        return $this->hasMany(Point::class);
+    }
 }
