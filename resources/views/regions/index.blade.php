@@ -23,13 +23,13 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
-                        @if (Auth::user()->hasPermission('create Region'))
+                        {{-- @if (Auth::user()->hasPermission('create Region')) --}}
                         <button type="button" class="btn-all  "
                         onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
-                        @endif
+                        {{-- @endif --}}
                             <select name="government-select" id="government-select" class="form-group mx-md-2 btn-all " onchange="filterRegions()" style="text-align: center; color:#ff8f00;">
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
