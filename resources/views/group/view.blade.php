@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 @if (session('success'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-success mt-2">
                         {{ session('success') }}
                     </div>
                 @endif
@@ -192,25 +192,13 @@
                                         <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
                                     </button>
                                 </div>
-                                @if (session('success'))
+                                {{-- @if (session('success'))
                                     <div class="alert alert-success mt-2">
                                         {{ session('success') }}
                                     </div>
-                                @endif
-                                @if (session('error'))
-                                    <div class="alert alert-danger mt-2">
-                                        {{ session('error') }}
-                                    </div>
-                                @endif
-                                {{-- @if ($errors->any())
-                            <div class="alert alert-danger mt-2">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif --}}
+                                @endif --}}
+
+
                             </form>
                         </div>
                     </div>
@@ -228,8 +216,10 @@
 
     <script>
         @if (session('showModal'))
+
             $(document).ready(function() {
                 $('#myModal1').modal('show');
+
             });
         @endif
     </script>
@@ -306,8 +296,10 @@
                                     <label for="name_edit" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
                                         المجموعة</label>
                                     <input type="text" id="name_edit" name="name_edit" class="form-control"
-                                        placeholder="مجموعة أ" value="{{ old('name_edit') }}" required>
-                                    
+                                        placeholder="مجموعة أ" value="{{ old('name_edit') }}">
+                                    @if ($errors->has('name_edit'))
+                                        <span class="text-danger">{{ $errors->first('name_edit') }}</span>
+                                    @endif
                                 </div>
                                 <div class="form-group mt-4 mb-3">
                                     <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر
@@ -320,16 +312,20 @@
                                                 {{ $workTime->name }}</option>
                                         @endforeach
                                     </select>
-                                    
+                                    @if ($errors->has('work_time_id_edit'))
+                                        <span class="text-danger">{{ $errors->first('work_time_id_edit') }}</span>
+                                    @endif
                                 </div>
                                 <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
                                         نقاط التفتيش</label>
                                     <input type="number" id="points_inspector_edit" name="points_inspector_edit"
-                                        class="form-control" placeholder="4" value="{{ old('points_inspector_edit') }}"
-                                        required>
-                                    
+                                        class="form-control" placeholder="4" value="{{ old('points_inspector_edit') }}">
+                                    @if ($errors->has('points_inspector_edit'))
+                                        <span class="text-danger">{{ $errors->first('points_inspector_edit') }}</span>
+                                    @endif
                                 </div>
+
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;">
@@ -341,6 +337,7 @@
                                         <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
                                     </button>
                                 </div>
+
                             </form>
                         </div>
                     </div>
@@ -349,6 +346,17 @@
         </div>
     </div>
 
+    <script>
+        @if (session('editModal'))
+            // function resetModal() {
+            //         $('#myModal1')[0].reset();
+            //     }
+            $(document).ready(function() {
+                $('#edit').modal('show');
+
+            });
+        @endif
+    </script>
 @endsection
 
 @push('scripts')
