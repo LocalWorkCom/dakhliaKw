@@ -28,9 +28,9 @@
                             اضافة جديد
                         </button>
                         @endif
-                               <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;" onclick="window.print()">
+                               {{-- <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;" onclick="window.print()">
                      <img src="{{ asset('frontend/images/print.svg')}}" alt=""> طباعة
-                </button>
+                </button> --}}
                     </div>
                 </div>
                 <div class="col-lg-12">
