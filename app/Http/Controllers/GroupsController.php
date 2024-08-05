@@ -163,34 +163,20 @@ class GroupsController extends Controller
         'points_inspector_edit' => 'required',
     ], $messages);
 
-    // Handle validation failure
+    // // Handle validation failure
+    // if ($validatedData->fails()) {
+    //     return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
+    // }
     if ($validatedData->fails()) {
-        return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
+        return redirect()->back()->withErrors($validatedData)->withInput();
     }
-
     $group = Groups::find($request->id_edit);
+    $group->name = $request->name_edit;
+    $group->points_inspector = $request->points_inspector_edit;
+    $group->work_time_id = $request->work_time_id_edit;
+    $group->save();
+        return redirect()->route('group.view')->with('message', 'Group updated successfully');
 
-    // Check if there are changes
-    $hasChanges = false;
-    if ($group->name != $request->name_edit) {
-        $group->name = $request->name_edit;
-        $hasChanges = true;
-    }
-    if ($group->work_time_id != $request->work_time_id_edit) {
-        $group->work_time_id = $request->work_time_id_edit;
-        $hasChanges = true;
-    }
-    if ($group->points_inspector != $request->points_inspector_edit) {
-        $group->points_inspector = $request->points_inspector_edit;
-        $hasChanges = true;
-    }
-
-    if ($hasChanges) {
-        $group->save();
-        return redirect()->route('group.view')->with('message', 'Group updated successfully.');
-    } else {
-        return redirect()->back()->with('message', 'No changes were made.')->withInput()->with('editeModal', true);
-    }
 }
 
 
