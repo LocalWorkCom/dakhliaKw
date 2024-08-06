@@ -61,6 +61,7 @@
                                     <option value="download">تحميل</option>
                                     <option value="archive">ارشفة</option>
                                     <option value="add_archive"> اضافة ارشفة</option>
+                                    <option value="add_employee"> اضافة موظف</option>
                                 </select>
 
                             </div>

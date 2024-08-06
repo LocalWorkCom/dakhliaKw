@@ -97,6 +97,11 @@ class User extends Authenticatable
         return $this->belongsTo(departements::class, 'id'); // Assuming 'department_id' is the foreign key
     }
 
+
+    public function rule()
+    {
+        return $this->belongsTo(Rule::class);
+    }
     public function grade()
     {
         return $this->belongsTo(grade::class, 'grade_id'); // Assuming 'grade_id' is the foreign key
@@ -104,6 +109,6 @@ class User extends Authenticatable
 
     public function inspectors()
     {
-        return $this->hasMany(Inspector::class);
+        return $this->belongsTo(grade::class, 'id'); // Assuming 'grade_id' is the foreign key
     }
 }
