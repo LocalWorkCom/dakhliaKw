@@ -259,21 +259,6 @@ $('.btn-filter').click(function() {
     // );
     });
 
-// Add button click event listeners
-// document.addEventListener('DOMContentLoaded', () => {
-//     const buttons = document.querySelectorAll('.btn-all');
-    
-//     buttons.forEach(button => {
-//         button.addEventListener('click', () => {
-//             // Remove 'btn-active' class from all buttons
-//             buttons.forEach(btn => btn.classList.remove('btn-active'));
-            
-//             // Add 'btn-active' class to the clicked button
-//             button.classList.add('btn-active');
-//         });
-//     });
-// });
-
 </script>
 @endsection
 @push('scripts')
