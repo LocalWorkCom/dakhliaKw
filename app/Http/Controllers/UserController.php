@@ -440,12 +440,13 @@ class UserController extends Controller
             $rules = [
                 'phone' => [
                     'required',
-                    'max:6',
+                    'max:8',
                     ValidationRule::unique('users', 'phone'),
                 ],
                 'name' => 'required|string',
                 // 'department_id' => 'required',
                 'Civil_number' => [
+                    'max:12',
                     ValidationRule::unique('users', 'Civil_number'),
                 ],
                 'file_number' => [

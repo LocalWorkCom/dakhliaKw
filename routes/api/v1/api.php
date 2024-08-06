@@ -18,8 +18,6 @@ use App\Http\Controllers\DepartmentController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('departments_store', [DepartmentController::class, 'store']);
-Route::put('departments_update/{department}', [DepartmentController::class, 'update']);
-Route::delete('departments_delete/{department}', [DepartmentController::class, 'destroy']);
-Route::get('departments/{department}', [DepartmentController::class, 'show']);
+Route::post('/login', 'App\Http\Controllers\Api\UserController@login');
+
 
