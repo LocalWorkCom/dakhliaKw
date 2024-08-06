@@ -49,39 +49,51 @@ class UserController extends Controller
     public function getUsers($id)
     {
 
-        // $flagType = $id == 0 ? 'user' : 'employee';
-        // $perentdepartment = departements::find(Auth()->user()->department_id)->first();
-        // if($perentdepartment->parent_id == Null)
-        // {
-        //     $subdepart =  departements::where('parent_id',$perentdepartment->id)->pluck('id')->toArray();
-        //     $data = User::where('flag', $flagType)->whereIn('department_id' ,$subdepart)->orwhere('department_id' ,$perentdepartment->id)->get();
-        // }
-        // else
-        // {
-        //     $data = User::where('flag', $flagType)->where('department_id' ,$perentdepartment->id)->get();
-        // }
+        
        
         $flagType = $id == 0 ? 'user' : 'employee';
         $parentDepartment = Departements::find(Auth()->user()->department_id);
-        // dd(Auth::user()->rule->name);
+       
         if(Auth::user()->rule->name == "localworkadmin")
         {
-            //
             $data = User::where('flag', $flagType)->get();
         }
-        
-        elseif (Auth::user()->rule->name == "superadmin") {
-            // dd("ss");
-
-            $data = User::where('flag', $flagType)
+        if (Auth::user()->rule->name == "superadmin") {
+            
+            if($flagType == 'employee')
+            {
+                $data = User::where('flag', $flagType)->get(); 
+            }
+            else
+            {
+                 $data = User::where('flag', $flagType)
             ->whereHas('rule', function ($query) {
                 $query->where('hidden', false);
             })->get();
+            }
+           
+            
+            
+
            
         } else {
             if (is_null($parentDepartment->parent_id)) {
                 $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();
-                $data = User::where('flag', $flagType)
+                
+                if($flagType == 'employee')
+            {
+                 $data = User::where('flag', $flagType)
+                    ->where(function ($query) use ($subdepart, $parentDepartment) {
+                        $query->whereIn('department_id', $subdepart)
+                              ->orWhere('department_id', $parentDepartment->id);
+                    })
+                    // ->whereIn('department_id', $subdepart)
+                    // ->orWhere('department_id', $parentDepartment->id)
+                    ->get();
+            }
+            else
+            {
+                 $data = User::where('flag', $flagType)
                     ->where(function ($query) use ($subdepart, $parentDepartment) {
                         $query->whereIn('department_id', $subdepart)
                               ->orWhere('department_id', $parentDepartment->id);
@@ -91,14 +103,26 @@ class UserController extends Controller
                     // ->whereIn('department_id', $subdepart)
                     // ->orWhere('department_id', $parentDepartment->id)
                     ->get();
+            }
+            
+               
                     
             } else {
+                if($flagType == 'employee')
+            {
+               $data = User::where('flag', $flagType)
+                    ->where('department_id', $parentDepartment->id)
+                    ->get();
+            }
+            else
+            {
                 $data = User::where('flag', $flagType)
                     ->where('department_id', $parentDepartment->id)
                     ->whereHas('rule', function ($query) {
                         $query->where('hidden', false);
                     })
                     ->get();
+            }
             }
         }
 
