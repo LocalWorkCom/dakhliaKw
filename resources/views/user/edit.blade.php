@@ -201,8 +201,12 @@
                                     <option  disabled>اختار من القائمة</option>
 
                                     @foreach ($rule as $item)
-                                    <option value="{{ $item->id }}" {{ $user->rule_id == $item->id ? 'selected' : ''}}>
-                                        {{ $item->name }}</option>
+                                    if($item->name != "localworkadmin")
+                                    {
+                                        <option value="{{ $item->id }}" {{ $user->rule_id == $item->id  ? 'selected' : ''}}>
+                                            {{ $item->name }}</option>
+                                    }
+                                    
                                     @endforeach
 
 
