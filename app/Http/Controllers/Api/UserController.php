@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -22,10 +25,11 @@ class UserController extends Controller
         $validatedData = Validator::make($request->all(), [
             'military_number' => 'required|string',
             'password' => 'required|string',
+             'device_token' => 'min:2'
         ], $messages);
 
         if ($validatedData->fails()) {
-            return $this->respondError('Validation Error.', $validator->errors(), 400);
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
 
         $military_number = $request->military_number;
@@ -61,7 +65,7 @@ class UserController extends Controller
                 $success['token'] = $user->createToken('MyApp')->accessToken;
                 $user->image=$user->image;
                 $success['user'] = $user->only(['id', 'firstname', 'email', 'lastname', 'phone', 'country_code', 'code','image']);
-              return $this->respondSuccess($success, trans('message.User login successfully.'));
+              return $this->respondSuccess($success, 'User login successfully.');
 
             }
 

@@ -122,8 +122,7 @@
                 <div class="container col-11 ">
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
 
-                        <button type="submit" class="btn-blue"><img src="../images/white-add.svg" alt="img"
-                                height="20px" width="20px"> اضافة</button>
+                        <button type="submit" class="btn-blue"><img src="{{ asset('frontend/images/white-add.svg') }}" alt="img" height="20px" width="20px"> اضافة</button>
                     </div>
                 </div>
             </div>

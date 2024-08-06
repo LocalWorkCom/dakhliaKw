@@ -68,6 +68,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                <div class="container pt-4 pb-4" style="border: 0.2px solid rgb(166, 165, 165);">
                     <form class="edit-grade-form" id="add-form" action=" {{ route('government.add') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -80,6 +81,7 @@
                             <button type="submit" class="btn-blue" onclick="confirmAdd()">اضافه</button>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -97,6 +99,7 @@
                     </button>
                 </div>
                 <div class="modal-body mt-3 mb-5">
+                <div class="container pt-4 pb-4" style="border: 0.2px solid rgb(166, 165, 165);">
                     <form class="edit-grade-form" id="edit-form" action=" {{ route('government.update') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -110,6 +113,7 @@
                             <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
                         </div>
                     </form>
+                </div>
                 </div>
             </div>
         </div>

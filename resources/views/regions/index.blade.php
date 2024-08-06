@@ -13,7 +13,15 @@
         <div class="row">
 
             <div class="container welcome col-11">
+            <div class="d-flex justify-content-between">
                 <p> المنـــاطق</p>
+                {{-- @if (Auth::user()->hasPermission('create Region')) --}}
+                        <button type="button" class="btn-all  "
+                        onclick="openadd()" style="color: #0D992C;">
+                            اضافة منطقة جديدة<img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        </button>
+                        {{-- @endif --}}
+            </div>
             </div>
         </div>
 
@@ -23,20 +31,23 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
-                        {{-- @if (Auth::user()->hasPermission('create Region')) --}}
+                        <!-- {{-- @if (Auth::user()->hasPermission('create Region')) --}}
                         <button type="button" class="btn-all  "
                         onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
-                        {{-- @endif --}}
-                            <select name="government-select" id="government-select" class="form-group mx-md-2 btn-all " onchange="filterRegions()" style="text-align: center; color:#ff8f00;">
+                        {{-- @endif --}} -->
+                        <div class="form-group moftsh  mx-3  d-flex">
+                        <h4 style="    line-height: 1.8;" >     التصنيف حسب المحافظة :</h4>
+                            <select name="government-select" id="government-select" class="form-group mx-md-2 btn-all " onchange="filterRegions()"
+                             style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}" @if($government->id == $id) selected @endif>{{ $government->name }}</option>
                                 @endforeach
                             </select>
-                    </div>
+                    </div></div>
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white">
@@ -77,6 +88,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                <div class="container pt-4 pb-4" style="border: 0.2px solid rgb(166, 165, 165);">
                     <form class="edit-grade-form" id="add-form" action=" {{ route('regions.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -89,7 +101,7 @@
 
                         <div class="form-group">
                             <label for="governmentid">المحافظات </label>
-                            <select name="governmentid" id="governmentid" class="form-group col-md-12 mx-md-2" required>
+                            <select name="governmentid" id="governmentid" class="form-group col-md-12 " required>
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}">{{ $government->name }}</option>
@@ -105,6 +117,7 @@
                             <button type="submit" class="btn-blue" onclick="confirmAdd()">اضافه</button>
                         </div>
                     </form>
+                </div>
                 </div>
             </div>
         </div>
@@ -122,6 +135,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                <div class="container pt-4 pb-4" style="border: 0.2px solid rgb(166, 165, 165);">
                     <form class="edit-grade-form" id="edit-form" action=" {{ route('regions.update') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -132,7 +146,7 @@
                         </div>
                         <div class="form-group">
                             <label for="government">المحافظات</label>
-                            <select name="government" id="government" class="form-group col-md-12 mx-md-2" required>
+                            <select name="government" id="government" class="form-group col-md-12 " required>
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}">{{ $government->name }}</option>
@@ -148,6 +162,7 @@
                             <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
                         </div>
                     </form>
+                </div>
                 </div>
             </div>
         </div>
