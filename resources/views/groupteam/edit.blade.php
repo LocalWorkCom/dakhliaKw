@@ -36,7 +36,7 @@
 
         <div class="container moftsh col-11 mt-3 pt-3 pb-3 ">
             <h3 class="pt-3 px-md-5 px-3"> من فضلك قم باضافة المفتشون الى لفريق</h3>
-            <div class="input-group mx-2">
+            {{-- <div class="input-group mx-2">
                 <div class="form-outline mt-4">
                     <input type="search" id="" class="form-control mx-4" placeholder="بحث"
                         style="width: 100% !important; border-radius: 0px !important;" />
@@ -45,13 +45,13 @@
                     <i class="fas fa-search"></i>
                 </button>
 
-            </div>
+            </div> --}}
             <form class="edit-grade-form" id="" action="{{ route('groupTeam.update', $id) }}" method="POST">
                 @csrf
 
 
-                <div class="form-group col-md-5 mx-2">
-                    <label for="name"> الاسم</label>
+                <div class="form-group col-md-11 mx-4">
+                    <label for="name" style="display: flex;    flex-direction: column-reverse;"> الاسم</label>
                     <input type="text" id="name" name="name" class="form-control" placeholder="الاسم"
                         value="{{ $team->name }}">
                 </div>
