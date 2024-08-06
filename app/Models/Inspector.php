@@ -19,7 +19,5 @@ class Inspector extends Model
         return $this->belongsTo(Groups::class);
     }
 
-   
-    
     
 }

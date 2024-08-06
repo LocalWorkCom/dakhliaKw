@@ -45,7 +45,9 @@ class InspectorController extends Controller
      */
     public function create()
     {
-        $users = User::get();
+        $departmentId = Auth::user()->department_id;
+        $users = User::where('department_id', $departmentId)->with('grade')->get();
+        // dd($users);
          return view('inspectors.create', compact('users'));
     }
 
