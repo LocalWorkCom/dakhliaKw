@@ -15,22 +15,28 @@
     <section>
         <div class="row">
             <div class="container welcome col-11">
+            <div class="d-flex justify-content-between">
                 <p> المجــــــــموعات</p>
+                <button class="btn-all px-3" style="color: #274373;" onclick="openAddModal()" data-bs-toggle="modal"
+                            data-bs-target="#myModal1">
+                            اضافة مجموعة جديده 
+                            <img src="{{ asset('frontend/images/group-add.svg') }}" alt="">
+                        </button>
             </div>
         </div>
-
+        </div>
         <br>
         <div class="row">
             <div class="container col-11 mt-3 p-0">
-                <div class="row d-flex justify-content-between" dir="rtl">
-                    <div class="form-group mt-4 mx-3 d-flex">
+                <div class="row d-flex justify-content-between" dir="ltr">
+                    <!-- <div class="form-group mt-4 mx-3 d-flex">
                         <button class="btn-all px-3" style="color: #274373;" onclick="openAddModal()" data-bs-toggle="modal"
                             data-bs-target="#myModal1">
                             <img src="{{ asset('frontend/images/group-add.svg') }}" alt="">
                             اضافة مجموعة جديده
                         </button>
 
-                    </div>
+                    </div> -->
                     <div class="form-group mt-4 mx-3 d-flex justify-content-end">
                         <button class="btn-all px-3" style="color: #FFFFFF; background-color: #274373;"
                             onclick="window.print()">
