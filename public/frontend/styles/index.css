@@ -860,14 +860,16 @@ background-color: #F4F7FD;
 }
 /* /* ******************** data table style ************* */
 .dataTables_filter input {
-    width: 37%;
-    border-radius: 20px;
+    width: 42%;
+    border-radius: 10px;
     border: 1.5px solid #cfc8c8;
-    height: 35px;
+    height: 38px;
     margin-bottom: 10px;
     text-align: center !important;
     color: #9b9999 !important;
-
+}
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 0em !important;
 }
 .form-group textarea{
     height: 60px !important;

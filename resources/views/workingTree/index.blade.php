@@ -9,21 +9,24 @@
 
     <div class="row ">
         <div class="container welcome col-11">
+        <div class="d-flex justify-content-between">
             <p> نظام العمــــــــــل </p>
+            <button type="button" class="wide-btn" style="color:#259240;"
+                        onclick="window.location.href='{{ route('working_tree.add') }}'">
+                     
+                        اضافة جديد   <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                    </button>
+        </div>
         </div>
     </div>
     <br>
     <div class="row">
-        <div class="container  col-11 mt-3 p-0 ">
-            <div class="row " dir="rtl">
+        <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
+            <!-- <div class="row " dir="rtl">
                 <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                    <button type="button" class="wide-btn"
-                        onclick="window.location.href='{{ route('working_tree.add') }}'">
-                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                        اضافة جديد
-                    </button>
+                  
                 </div>
-            </div>
+            </div> -->
             @include('inc.flash')
 
             <div class="col-lg-12">
