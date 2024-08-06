@@ -12,23 +12,31 @@
         <div class="row">
 
             <div class="container welcome col-11">
+            <div class="d-flex justify-content-between">
                 <p> القطاعـــات</p>
-            </div>
+                {{-- @if (Auth::user()->hasPermission('create Sector')) --}}
+                        <button type="button" class="btn-all  "
+                        onclick="window.location.href='{{ route('sectors.create') }}'" style="color: #0D992C;">
+                           
+                            اضافة قطاع جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        </button>
+                        {{-- @endif --}}
+            </div> </div>
         </div>
 
         <br>
         <div class="row">
-            <div class="container  col-11 mt-3 p-0 ">
+            <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
                 <div class="row " dir="rtl">
-                    <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
+                    <!-- <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
                         {{-- @if (Auth::user()->hasPermission('create Sector')) --}}
                         <button type="button" class="btn-all  "
                         onclick="window.location.href='{{ route('sectors.create') }}'" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                            اضافة جديد
+                            اضافة قطاع جديد
                         </button>
                         {{-- @endif --}}
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white">

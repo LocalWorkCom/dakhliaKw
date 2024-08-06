@@ -14,7 +14,7 @@
             <button type="button" class="wide-btn" style="color:#259240;"
                         onclick="window.location.href='{{ route('working_tree.add') }}'">
                      
-                        اضافة جديد   <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        اضافة نظام عمل جديد   <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
         </div>
         </div>
