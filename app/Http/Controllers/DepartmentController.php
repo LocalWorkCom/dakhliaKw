@@ -27,15 +27,30 @@ class DepartmentController extends Controller
     // }
     public function index()
     {
-        //
-        // return $dataTable->render('permission.view');
-        return view('departments.index');
+        $users = User::where('flag', 'employee')->where('department_id', NULL)->get();
+        $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
+
+        // Get the children of the parent department
+        $departments = $parentDepartment ? $parentDepartment->children : collect();    
+        if(Auth::user()->rule_id == 2)
+        {
+            $subdepartments = departements::with('children')->get();
+        }
+        else
+        {
+            $subdepartments = departements::where('id',Auth::user()->department_id)->with('children')->get();
+        }
+
+        return view('departments.index' , compact('users','subdepartments','departments','parentDepartment'));
     }
     public function getDepartment()
     {
         $data = departements::withCount('iotelegrams')
         ->withCount('outgoings')
-        ->withCount('children')->orderBy('id', 'desc')->get();
+        ->withCount('children')
+        ->where('parent_id', Auth::user()->department_id)
+        ->with(['children'])
+        ->orderBy('id', 'desc')->get();
 
     return DataTables::of($data)
         ->addColumn('action', function ($row) {

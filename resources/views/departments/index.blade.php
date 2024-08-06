@@ -17,7 +17,7 @@
         <div class="row">
         <div class="container welcome col-11">
         <div class="d-flex justify-content-between">
-                <p> القطاعات </p>
+                <p> الادارات </p>
                 <div class="form-group">
                 <button type="button" class="wide-btn "
                             onclick="window.location.href='{{ route('departments.create') }}'">
