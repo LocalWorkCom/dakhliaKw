@@ -16,24 +16,28 @@
     <section>
         <div class="row">
         <div class="container welcome col-11">
+        <div class="d-flex justify-content-between">
                 <p> القطاعات </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="container col-11 mt-3 p-0">
-                <div class="row" dir="rtl">
-                    <div class="form-group mt-4 mx-md-2 col-12 d-flex">
-                        <button type="button" class="wide-btn mx-3"
+                <div class="form-group">
+                <button type="button" class="wide-btn "
                             onclick="window.location.href='{{ route('departments.create') }}'">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة جديد
                         </button>
 
-                        <button type="button" class="wide-btn mx-md-3"
+                        <button type="button" class="wide-btn mx-md-3 mx-1"
                             onclick="window.location.href='{{ route('postmans.create') }}'">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة مندوب
                         </button>
-                    </div>
+                        </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
+                <div class="row" dir="rtl">
+                    
+                      
+                 
                 </div>
 
                 <div class="col-lg-12">
@@ -86,8 +90,9 @@
                     departmentDelete = departmentDelete.replace(':id', row.id);
 
                     return `
-                        <a href="${departmentEdit}" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> </a>
-                        <a href="${departmentShow}"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i> </a>
+                    <a href="${departmentShow}"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i> عرض</a>
+                        <a href="${departmentEdit}" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i>تعديل  </a>
+                        
                         
                         `;
                 }

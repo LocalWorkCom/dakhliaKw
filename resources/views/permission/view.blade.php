@@ -12,20 +12,26 @@
     <section>
         <div class="row">
             <div class="container welcome col-11">
+            <div class="d-flex justify-content-between">
                 <p>الصـــلاحيات</p>
+                   <button type="button" class="wide-btn"
+                            onclick="window.location.href='{{ route('permission.create') }}'" style="color:#259240;">
+                             اضافة صلاحية جديدة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        </button>
+            </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="container col-11 mt-3 p-0">
-                <div class="row" dir="rtl">
+        <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
+                <!-- <div class="row" dir="rtl">
                     <div class="form-group mt-4 mx-md-2 col-12 d-flex">
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('permission.create') }}'">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة جديد
                         </button>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="col-lg-12">
                     <div class="bg-white ">
@@ -83,8 +89,8 @@
                         var permissiondelete = '{{ route('permissions_destroy', ':id') }}';
                         permissiondelete = permissiondelete.replace(':id', row.id);
                         return `
-                       <a href="` + permissionshow + `" class="btn  btn-sm " style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
-                       <a href="` + permissiondelete + `" class="btn  btn-sm " style="background-color: #C91D1D;"> <i class="fa-solid fa-trash"></i> </a>`;
+                       <a href="` + permissionshow + `" class="btn  btn-sm " style="background-color: #375A97;"> <i class="fa fa-eye"></i> عرض</a>
+                       <a href="` + permissiondelete + `" class="btn  btn-sm " style="background-color: #C91D1D;"> <i class="fa-solid fa-trash"></i>حذف </a>`;
                     }
 
                 }],

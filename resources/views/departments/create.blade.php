@@ -71,7 +71,10 @@
                     </div>
                     <div class="form-group col-md-10 mx-md-2">
                         <label for="description">الموظفين </label>
-                        <select name="employess[]" id="" class="form-group col-md-12 mx-md-2" multiple dir="rtl">
+                        <select name="employess[]" id="" class="form-group col-md-12 " multiple dir="rtl" style=" height: 150px;
+    font-size: 18px;
+    border: 0.2px solid lightgray;
+} overflow-y: auto;">
                             @foreach($employee as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach -->
