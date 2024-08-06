@@ -23,7 +23,7 @@ use App\Http\Controllers\InspectorController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\GroupTeamController;
-use App\Http\Controllers\violationController;
+use App\Http\Controllers\ViolationTypesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -309,11 +309,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions']);
 
     //Start Violation
-    Route::get('setting/violation/all', [violationController::class, 'index'])->name('violations.index');
-    Route::get('setting/violation/ajax', [violationController::class, 'getviolations'])->name('violations.getAllviolations');
-    Route::post('setting/violation/add', [violationController::class, 'store'])->name('violations.store');
-    Route::get('setting/violation/show/{id}', [violationController::class, 'show'])->name('violations.show');
-    Route::post('setting/violation/update', [violationController::class, 'update'])->name('violations.update');
+    Route::get('setting/violation/all', [ViolationTypesController::class, 'index'])->name('violations.index');
+    Route::get('setting/violation/ajax', [ViolationTypesController::class, 'getviolations'])->name('violations.getAllviolations');
+    Route::post('setting/violation/add', [ViolationTypesController::class, 'store'])->name('violations.store');
+    Route::get('setting/violation/show/{id}', [ViolationTypesController::class, 'show'])->name('violations.show');
+    Route::post('setting/violation/update', [ViolationTypesController::class, 'update'])->name('violations.update');
     //End Violation
     //setting end
 

@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Violation extends Model
+class ViolationTypes extends Model
 {
     use HasFactory;
-    protected $table = 'violations';
+    protected $table = 'violation_type';
     public $timestamps = false;
 
     protected $fillable = ['name','type_id']; 

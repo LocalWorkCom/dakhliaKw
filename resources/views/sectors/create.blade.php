@@ -51,12 +51,17 @@
                     </div>
                 </div>
                 <div class="form-row col-11 mb-2 mt-3 mx-md-2">
-                    @foreach (getgovernments() as $government)
-                        <div class="form-group col-3 d-flex mx-md-4">
-                            <input type="checkbox" name="governmentIDS[]" value="{{ $government->id }}" id="governmentIDS">
-                            <label for="governmentIDS">{{ $government->name }}</label>
-                        </div>
-                    @endforeach
+                    @if($governments)
+                    @foreach ($governments as $government)
+                    <div class="form-group col-3 d-flex mx-md-4">
+                        <input type="checkbox" name="governmentIDS[]" value="{{ $government->id }}" id="governmentIDS">
+                        <label for="governmentIDS">{{ $government->name }}</label>
+                    </div>
+                @endforeach 
+                    @else
+                    عفوا لا يوجد 
+                    @endif
+                   
                     
 
                 </div>

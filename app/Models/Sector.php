@@ -23,7 +23,7 @@ class Sector extends Model
     ];
     public function government()
     {
-        return $this->belongsTo(Government::class, 'government_id ', 'id');
+        return $this->belongsTo(Government::class, 'governments_IDs', 'id');
     }
     public function points()
     {
