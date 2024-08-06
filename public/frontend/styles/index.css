@@ -1205,6 +1205,7 @@ background: #f5f6fa;
     font-size: 20px;
     justify-content: center;
     align-items: center;
+    direction: rtl;
 }
 .options {
 position: absolute;
