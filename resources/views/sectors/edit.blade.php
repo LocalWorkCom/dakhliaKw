@@ -23,7 +23,7 @@
     <form class="edit-grade-form" id="Qta3-form" action=" {{ route('sectors.update') }}" method="POST">
         @csrf
         <div class="row" dir="rtl">
-            <div id="first-container" class="container moftsh col-11 mt-3 p-0 pb-3">
+            <div id="first-container" class="container moftsh col-11 mt-1 p-0 pb-3">
                 <div class="form-row mx-2 mb-2">
                     <h3 class="pt-3 px-md-5 px-3">اضف قطاع</h3>
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
