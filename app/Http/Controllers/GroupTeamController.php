@@ -157,7 +157,9 @@ class GroupTeamController extends Controller
      */
     public function show($id)
     {
-        
+        $data = GroupTeam::where('id', $id)->get();
+        // dd($data);
+        return view('groupteam.showdetails',compact('data'));
     }
 
     /**
