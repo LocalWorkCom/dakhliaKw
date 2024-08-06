@@ -30,7 +30,7 @@ class violationController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($row) {
-                $name = "'$row->name'";
+                $name ="$row->name";
                 $typesJson = json_encode($row->type_id); // Ensure this is an array
 $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit(' . $row->id . ', \'' . $name. '\', \'' . htmlspecialchars($typesJson, ENT_QUOTES, 'UTF-8') . '\')"><i class="fa fa-edit"></i> تعديل</a>';
 
