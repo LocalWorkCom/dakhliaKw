@@ -23,12 +23,12 @@
                             نقل مفتشين <img src="{{ asset('frontend/images/change.svg') }}" class="mx-1">
                         </a>
                     </button>
-                    <button class="btn-all px-3 mx-2" style="color: #259240;">
+                    {{-- <button class="btn-all px-3 mx-2" style="color: #259240;">
                         <a href="{{ route('group.groupcreateInspectors', $id) }}" style="color: #259240">
 
                             اضافة مفتش جديد <img src="{{ asset('frontend/images/add-green.svg') }}" class="mx-1">
                         </a>
-                    </button>
+                    </button> --}}
                     <button class="btn-all px-3 mx-2" style="color: #259240;" data-bs-toggle="modal"
                         data-bs-target="#myModal1">
                         اضافة فريق <img src="{{ asset('frontend/images/green-group.svg') }}" class="mx-1">
