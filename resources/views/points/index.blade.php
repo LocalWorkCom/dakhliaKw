@@ -23,13 +23,13 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
-                        @if (Auth::user()->hasPermission('create Point'))
+                        {{-- @if (Auth::user()->hasPermission('create Point')) --}}
                         <button type="button" class="btn-all  "
                         onclick="window.location.href='{{ route('points.create') }}'" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
-                        @endif
+                        {{-- @endif --}}
                     </div>
                 </div>
                 <div class="col-lg-12">

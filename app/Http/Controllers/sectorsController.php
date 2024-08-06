@@ -55,7 +55,8 @@ class sectorsController extends Controller
 
     public function create()
     {
-        return view('sectors.create');
+        $governments=Sector::select('governments_IDs')->get();
+        return view('sectors.create',compact('governments'));
     }
 
     /**

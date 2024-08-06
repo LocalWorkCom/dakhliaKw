@@ -40,7 +40,7 @@
     <div class="row ">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
-                <p>اضافة المفتشون 
+                <p>اضافة المفتشون
                 <p></p>
 
                 <!-- <div class="second mx-4">
@@ -91,8 +91,8 @@
                     </div>
                 </div>
             </div>
-            
-            
+
+
             <div class="select-boxes mt-4 mx-4 col-10" dir="rtl">
                 <div class="check-one d-flex justify-content-start">
                     <input type="checkbox" class="toggle-radio-buttons mx-2" id="checkbox2">
@@ -107,20 +107,21 @@
                         <input type="radio" id="radio6" name="options2" value="option3">
                         <label class="mx-4" for="radio6">مجموعه 3</label>
                     </div>
-                </div></div>
-                <div class="container col-11 ">
-                    <div class="form-row d-flex justify-content-end mt-4 mb-3">
-    
-                        <button type="submit" class="btn-blue">حفظ</button>
-                    </div>
                 </div>
-            
-            
-            
+            </div>
+            <div class="container col-11 ">
+                <div class="form-row d-flex justify-content-end mt-4 mb-3">
+
+                    <button type="submit" class="btn-blue">حفظ</button>
+                </div>
+            </div>
+
+
+
             <script>
                 // JavaScript to handle checkbox and radio button visibility
-                document.querySelectorAll('.toggle-radio-buttons').forEach(function(checkbox) {
-                    checkbox.addEventListener('change', function() {
+                document.querySelectorAll('.toggle-radio-buttons').forEach(function (checkbox) {
+                    checkbox.addEventListener('change', function () {
                         // Find the associated radio-buttons div
                         const radioButtonsId = 'radio-buttons' + this.id.replace('checkbox', '');
                         const radioButtons = document.getElementById(radioButtonsId);
@@ -130,7 +131,7 @@
                     });
                 });
             </script>
-            
+
 </body>
 
 </html>

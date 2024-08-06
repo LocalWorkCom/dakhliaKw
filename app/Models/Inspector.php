@@ -14,5 +14,12 @@ class Inspector extends Model
 
     protected $primaryKey = 'id';
     protected $fillable = ['name', 'phone', 'position', 'Id_number', 'group_id' ,'type'];
+    public function group()
+    {
+        return $this->belongsTo(Groups::class);
+    }
 
+   
+    
+    
 }

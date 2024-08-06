@@ -88,27 +88,27 @@
 
                 <div>
                     <li class="nav-item btn3" onclick="toggleDropdown3(event)">
-                        <a href="#">
+                        <a href="{{ route('user.employees', 1) }}">
                             <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
-                            <h6 class="btn3">الموظفين <i class="fa-solid fa-angle-down"></i></h6>
+                            <h6 class="btn3">الموظفين </h6>
                         </a>
                         <!-- قائمة منسدلة -->
-                        <div id="dropdownMenu3" class="dropdown-menu3">
-                            <ul>
-                                <li>
+                        {{-- <div id="dropdownMenu3" class="dropdown-menu3">
+                            <ul> --}}
+                                {{-- <li>
                                     <img src="{{ asset('frontend/images/employee.svg') }}" alt="logo"
                                         style="margin-left: 7px;">
                                     <a href="{{ route('user.employees', 1) }}">الموظفين</a>
                                 </li>
-                                <li>
+                                <li> --}}
                                     {{-- <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo"
                                     style="margin-left: 7px;">
                                     <a href="{{ route('vacations.list') }}">الاجازات</a>
                                     --}}
-                                </li>
+                                {{-- </li>
                             </ul>
                         </div>
-                    </li>
+                    </li> --}}
                 </div>
 
                 <div>
@@ -131,16 +131,7 @@
                                     <a href="{{ route('group.view') }}"> المجموعات</a>
                                 </li>
 
-                                <li>
-                                    <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
-                                        style="margin-left: 7px;">
-                                    <a href="{{ route('working_time.index') }}">فترات العمل </a>
-                                </li>
-                                <li>
-                                    <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
-                                        style="margin-left: 7px;">
-                                    <a href="{{ route('working_trees.list') }}">نظام العمل</a>
-                                </li>
+                             
 
 
                             </ul>
@@ -155,12 +146,12 @@
                 @endphp
 
                 @if (Auth::user()->hasPermission('view departements'))
-                <li class="nav-item">
+              <!--   <li class="nav-item">
                     <a href="{{ route('sub_departments.index') }}">
                         <img src="{{ asset('frontend/images/departments.svg') }}" alt="logo">
                         <h6>الاقسام</h6>
                     </a>
-                </li>
+                </li> -->
                 @endif
 
                 @if (Auth::user()->hasPermission('view departements') && Auth::user()->rule_id == 2)
@@ -237,9 +228,6 @@
                                             <a href="{{ route('sectors.index') }}">القطاعات</a>
                                         </li>
                                         {{-- @endif --}}
-                                    </div>
-                                    <div class="col-6">
-                                       
                                         {{-- @if (Auth::user()->hasPermission('view Point')) --}}
                                         <li>
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
@@ -247,6 +235,10 @@
                                             <a href="{{ route('points.index') }}">النقاط</a>
                                         </li>
                                         {{-- @endif --}}
+                                    </div>
+                                    <div class="col-6">
+                                       
+                                      
                                         @if (Auth::user()->hasPermission('view VacationType'))
                                         <li>
                                             <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
@@ -268,7 +260,16 @@
                                             <a href="{{ route('permission.index') }}">الصلاحيات</a>
                                         </li>
                                         @endif
-
+                                        <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('working_time.index') }}">فترات العمل </a>
+                                        </li>
+                                        <li>
+                                            <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('working_trees.list') }}">نظام العمل</a>
+                                        </li>
 
                                         {{-- <li>
                                         <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"

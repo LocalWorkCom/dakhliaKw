@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('groups', function (Blueprint $table) {
+        Schema::create('group_teams', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('work_time_id')->nullable();
-            // Add the foreign key constraint
-            $table->foreign('work_time_id')->references('id')->on('working_trees')->onDelete('restrict');
-            $table->integer('points_inspector');
+            $table->foreignId('group_id')->nullable()->references('id')->on('groups')->onDelete('restrict');
+            $table->text('inspector_ids')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('groups');
+        Schema::dropIfExists('group_teams');
     }
 };

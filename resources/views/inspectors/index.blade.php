@@ -15,7 +15,10 @@
         <div class="container welcome col-11">
 <div class="d-flex justify-content-between">
     <p> المفتــــــشون ({{\App\Models\Inspector::count()}})</p>
-
+    <button class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;"><a href="{{ route('inspectors.create') }}">
+        اضافة مفتش
+        <img src="{{ asset('frontend/images/add-mandob.svg')}}" alt=""></a>
+    </button>
     <!-- <h2 style="color: #274373;"> مجموعة (أ)</h2> -->
 </div>
         </div>
@@ -25,14 +28,15 @@
 <div class="row" >
     <div class="container  col-11 mt-3 p-0 ">
         <div class="row d-flex justify-content-between " dir="rtl">
-            <div class="form-group mt-4 mx-1  d-flex">
-                <button class="btn-all px-3 mx-2" style="color: #274373;">
-                    الكل (7)
+            <div class="form-group moftsh mt-4  mx-4  d-flex">
+                <p class="filter "> تصفية حسب:</p>
+                <button class="btn-all px-3 mx-2 btn-filter" data-filter="all" style="color: #274373;">
+                    الكل ({{\App\Models\Inspector::count()}})
                 </button>
-                <button class="btn-all px-3 mx-2" style="color: #274373;">
+                <button class="btn-all px-3 mx-2 btn-filter" data-filter="assigned" style="color: #274373;">
                     مفتشون تم توزعهم
                 </button>
-                <button class="btn-all px-3 mx-2" style="color: #274373;">
+                <button class="btn-all px-3 mx-2 btn-filter" data-filter="unassigned" style="color: #274373;">
                     مفتشون لم يتم توزعهم
                 </button>
             </div>
@@ -43,7 +47,9 @@
         </div>
     </div>
     
-        <div class="col-lg-12" dir="rtl">
+
+        <div class="col-lg-12">
+
             <div class="bg-white ">
                 <div>
                     <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
@@ -68,17 +74,19 @@
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-center">
                 <div class="title d-flex flex-row align-items-center">
-                    <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
                     <h5 class="modal-title"> اضافة مجموعة</h5>
+                    <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
+                   
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body mt-3 mb-3">
+                <div class="container pt-5 pb-2" style="border: 0.2px solid rgb(166, 165, 165);">
                 <form id="add-form" action="{{ route('inspectors.addToGroup') }}" method="POST">
                     @csrf
                   
                     <div class="mb-3">
-                        <label for="group_id">اختر المجموعه </label>
+                        <label for="group_id" style="    justify-content: flex-end;">اختر المجموعه </label>
                         <select class="form-control" name="group_id" id="group_id" required>
                             <option selected disabled>اختار من القائمة</option>
                             @foreach (getgroups() as $group)
@@ -88,19 +96,21 @@
                         <span class="text-danger span-error" id="group_id-error"></span>
                         <input type="hidden" name="id" id="id" value="">
                     </div>
-                    <div class="text-end">
+                    <div class="text-end pt-3">
+                        <button type="button" class="btn-all p-2 "
+                        style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                        data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
+                        <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
+                    </button>
                         <button type="submit" class="btn-all mx-2 p-2"
                             style="background-color: #274373; color: #ffffff;">
                             <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
                         </button>
-                        <button type="button" class="btn-all p-2"
-                            style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
-                            data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
-                            <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
-                        </button>
+                       
                     </div>
                 </form>
             </div>
+        </div>
         </div>
     </div>
 </div>
@@ -132,10 +142,23 @@
 $(document).ready(function() {
     $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
   
+    var filter = 'all'; // Default filter
+
     const table = $('#users-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ url('api/Inspectors') }}',
+        ajax: {
+            url: '{{ url('api/Inspectors') }}',
+            dataSrc: function(json) {
+                // Filter data based on the selected filter
+                if (filter === 'assigned') {
+                    return json.data.filter(item => item.group_id != null && String(item.group_id).trim() !== "");
+                } else if (filter === 'unassigned') {
+                    return json.data.filter(item => !item.group_id || (typeof item.group_id === 'string' && item.group_id.trim() === ""));
+                }
+                return json.data; // 'all' or default case
+            }
+        },
         columns: [
             { data: 'id', sWidth: '50px', name: 'id' },
             { data: 'position', name: 'position' },
@@ -143,7 +166,7 @@ $(document).ready(function() {
             { data: 'Id_number', name: 'Id_number' },
             { data: 'group_id', name: 'group_id' },
             { data: 'phone', name: 'phone' },
-            { data: 'action', name: 'action', sWidth: '100px', orderable: false, searchable: false }
+            { data: 'action', name: 'action', sWidth: '200px', orderable: false, searchable: false }
         ],
         columnDefs: [{
             targets: -1,
@@ -156,9 +179,17 @@ $(document).ready(function() {
                     var addToGroup = '{{ route('inspectors.addToGroup', ':id') }}'.replace(':id', row.id);
                     btn_add = `
                         <a class="btn btn-sm" id="updateValueButton" style="background-color: green;" 
-                           onclick="openAddModal(${row.id})" data-bs-toggle="modal" 
+                           onclick="openAddModal(${row.id},0)" data-bs-toggle="modal" 
                            data-bs-target="#myModal1">
                            <i class="fa fa-plus"></i> أضافه
+                        </a>`;
+                }else{
+                    var addToGroup = '{{ route('inspectors.addToGroup', ':id') }}'.replace(':id', row.id);
+                    btn_add = `
+                        <a class="btn btn-sm" id="updateValueButton" style="background-color: #7e7d7c;" 
+                           onclick="openAddModal(${row.id} , ${row.group_id})" data-bs-toggle="modal" 
+                           data-bs-target="#myModal1">
+                           <i class="fa fa-edit"></i> تعديل مجموعه
                         </a>`;
                 }
 
@@ -197,23 +228,51 @@ $(document).ready(function() {
         },
         "pagingType": "full_numbers"
     });
-});
 
+
+// Filter button click event listeners
+$('.btn-filter').click(function() {
+        filter = $(this).data('filter'); // Update the filter based on the clicked button
+        
+        // Remove 'btn-active' class from all buttons and add to the clicked one
+        $('.btn-filter').removeClass('btn-active');
+        $(this).addClass('btn-active');
+
+            table.ajax.reload(); // Reload data with the new filter
+        });
+
+    //     $.fn.dataTable.ext.search.push(
+    //     function(settings, data, dataIndex) {
+    //         console.log();
+    //         var filter = $('.btn-filter.btn-active').data('filter');
+    //         var groupId = data[4]; // use data for the group_id column
+
+    //         if (filter === 'all') {
+    //             return true; // Show all records
+    //         } else if (filter === 'assigned' && groupId !== null && groupId !== "") {
+    //             return true; // Show only assigned inspectors
+    //         } else if (filter === 'unassigned' && (groupId === null || groupId === "")) {
+    //             return true; // Show only unassigned inspectors
+    //         }
+    //         return false; // Otherwise, don't show the record
+    //     }
+    // );
+    });
 
 // Add button click event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.btn-all');
+// document.addEventListener('DOMContentLoaded', () => {
+//     const buttons = document.querySelectorAll('.btn-all');
     
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove 'btn-active' class from all buttons
-            buttons.forEach(btn => btn.classList.remove('btn-active'));
+//     buttons.forEach(button => {
+//         button.addEventListener('click', () => {
+//             // Remove 'btn-active' class from all buttons
+//             buttons.forEach(btn => btn.classList.remove('btn-active'));
             
-            // Add 'btn-active' class to the clicked button
-            button.classList.add('btn-active');
-        });
-    });
-});
+//             // Add 'btn-active' class to the clicked button
+//             button.classList.add('btn-active');
+//         });
+//     });
+// });
 
 </script>
 @endsection
@@ -235,11 +294,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-function openAddModal(id) {
+function openAddModal(id,idGroup) {
     $('#myModal1').modal('show');
     document.getElementById('id').value = id;
+    document.getElementById('group_id').value = idGroup;
+
 }
 
-  
+// $(document).ready(function() {
+//     // Function to set the value of the select element
+//     function setSelectValue(id) {
+//         $('#group_id').val(id);
+//     }
+
+//     // Example: Set the select element to the group with ID 2
+//     setSelectValue(2); // Replace 2 with the desired ID
+// });
+</script>
 </script>
 @endpush
