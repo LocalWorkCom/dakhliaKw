@@ -23,6 +23,7 @@ use App\Http\Controllers\InspectorController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\GroupTeamController;
+use App\Http\Controllers\violationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -265,8 +266,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::post('points/edit', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
-    Route::get('/get-governorates/{sector}', [regionsController::class, 'getGovernorates']);
-    Route::get('/get-regions/{governorate}', [regionsController::class, 'getRegions']);
+  
 
     Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index');
     Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors');
@@ -303,8 +303,15 @@ Route::middleware(['auth'])->group(function () {
         // Route::post('points/update', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
     Route::get('/get-governorates/{sector}', [pointsController::class, 'getGovernorates']);
-Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions']);
+    Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions']);
 
+    //Start Violation
+    Route::get('setting/violation/all', [violationController::class, 'index'])->name('violations.index');
+    Route::get('setting/violation/ajax', [violationController::class, 'getviolations'])->name('violations.getAllviolations');
+    Route::post('setting/violation/add', [violationController::class, 'store'])->name('violations.store');
+    Route::get('setting/violation/show/{id}', [violationController::class, 'show'])->name('violations.show');
+    Route::post('setting/violation/update', [violationController::class, 'update'])->name('violations.update');
+    //End Violation
     //setting end
 
 
