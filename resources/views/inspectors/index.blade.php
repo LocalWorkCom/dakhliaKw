@@ -34,10 +34,10 @@
                     الكل ({{\App\Models\Inspector::count()}})
                 </button>
                 <button class="btn-all px-3 mx-2 btn-filter" data-filter="assigned" style="color: #274373;">
-                    مفتشون تم توزعهم
+                    مفتشون تم توزعهم ({{ $assignedInspectors }})
                 </button>
                 <button class="btn-all px-3 mx-2 btn-filter" data-filter="unassigned" style="color: #274373;">
-                    مفتشون لم يتم توزعهم
+                    مفتشون لم يتم توزعهم ({{ $unassignedInspectors }})
                 </button>
             </div>
             <div class="form-group mt-4 mx-4  d-flex justify-content-end ">

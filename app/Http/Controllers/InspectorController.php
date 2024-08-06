@@ -18,7 +18,9 @@ class InspectorController extends Controller
     public function index()
     {
         // $inspectors = Inspector::all();
-        return view('inspectors.index');
+        $assignedInspectors = Inspector::whereNotNull('group_id')->count();
+    $unassignedInspectors = Inspector::whereNull('group_id')->count();
+        return view('inspectors.index' , compact('assignedInspectors', 'unassignedInspectors'));
     }
     public function addToGroup(Request $request)
     {
