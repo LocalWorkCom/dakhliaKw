@@ -86,7 +86,7 @@
 
                 <div class="container col-11">
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
-                        <button type="submit" class="btn-blue"><img src="{{ asset('frontend/images/white-edit.svg') }}"
+                        <button type="submit" class="btn-blue"><img src="{{ asset('frontend/images/edit.svg') }}"
                                 alt="img" height="20px" width="20px"> تعديل</button>
                     </div>
                 </div>

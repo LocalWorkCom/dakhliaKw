@@ -10,21 +10,28 @@
 
 <div class="row ">
     <div class="container welcome col-11">
+    <div class="d-flex justify-content-between">
         <p> فترة العمل</p>
+        <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
+                   
+                    اضافة فترة <img src="{{ asset('frontend/images/time.svg') }}" alt="">
+                </button>
+    </div>
+   
     </div>
 </div>
 <br>
 
 <div class="row">
-    <div class="container  col-11 mt-3 p-0 ">
-        <div class="row d-flex justify-content-between " dir="rtl">
+    <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
+        <!-- <div class="row d-flex justify-content-between " dir="rtl">
             <div class="form-group mt-4 mx-3  d-flex">
                 <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
                     <img src="{{ asset('frontend/images/time.svg') }}" alt="">
                     اضافة فترة
                 </button>
             </div>
-        </div>
+        </div> -->
 
         @if (session('success'))
             <div class="alert alert-success">
