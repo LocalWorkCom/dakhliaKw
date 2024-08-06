@@ -5,7 +5,6 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
 @push('style')
-
 @endpush
 @section('title')
     أنواع المخالفات
@@ -82,9 +81,12 @@
                                 <div class="form-group mt-4 mb-3">
                                     <label class="d-flex justify-content-start pt-3 pb-2" for="name"> اسم
                                         المخالفه</label>
-                                    <input type="text" id="name" name="name" class="form-control"
+                                    <input type="text" id="nameadd" name="nameadd" class="form-control"
                                         placeholder="اسم المخالفه" required>
-
+                                    @if ($errors->has('nameadd'))
+                                        <span class="text-danger span-error" id="nameadd-error"
+                                            dir="rtl">{{ $errors->first('nameadd') }}</span>
+                                    @endif
                                 </div>
 
                                 <div class="form-group  mb-3">
@@ -97,6 +99,7 @@
                                             <div class="search-box">
                                                 <input type="text" id="search-input" placeholder="ابحث هنا ....."
                                                     style="width: 100% !important;">
+
                                             </div>
                                             @foreach (getDepartments() as $department)
                                                 <div class="option">
@@ -109,12 +112,16 @@
 
                                         </div>
                                     </div>
+                                    @if ($errors->has('types'))
+                                        <span class="text-danger span-error" id="types-error"
+                                            dir="rtl">{{ $errors->first('types') }}</span>
+                                    @endif
                                     <div id="selected-values" class="mt-2"></div>
                                 </div>
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn">
-                                        <img src= "{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
+                                        <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
                                     </button>
                                     <button type="button" class="btn-all p-2"
                                         style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
@@ -158,19 +165,19 @@
                                 <div class="form-group mt-4 mb-3">
                                     <label class="d-flex justify-content-start pt-3 pb-2" for="nameedit">اسم
                                         المخالفه</label>
-                                    <input type="text" id="nameedit" name="name" class="form-control"
+                                    <input type="text" id="nameedit" name="nameedit" class="form-control"
                                         placeholder="اسم المخالفه" required>
                                 </div>
                                 <div class="form-group  mb-3">
-                                    <label class="d-flex justify-content-start pb-2" for="types"> 
+                                    <label class="d-flex justify-content-start pb-2" for="types">
                                         الاداره الخاصه بالمخالفه</label>
-                                        <select class="w-100 px-2" name="types[]" id="types" multiple style="border: 0.2px solid rgb(199, 196, 196);">
-                                            @foreach (getDepartments() as $department)
-                                            
-                                                <option value="{{ $department->id }}" > {{ $department->name }}</option>
-                                            @endforeach
-                                           
-                                        </select>
+                                    <select class="w-100 px-2" name="types[]" id="types" multiple
+                                        style="border: 0.2px solid rgb(199, 196, 196);" required>
+                                        @foreach (getDepartments() as $department)
+                                            <option value="{{ $department->id }}"> {{ $department->name }}</option>
+                                        @endforeach
+
+                                    </select>
 
                                 </div>
                                 {{-- <div class="form-group mb-3">
@@ -187,15 +194,15 @@
                                             @foreach (getDepartments() as $department)
                                                 <div class="option">
                                                     <input type="checkbox" id="option{{ $department->id }}"
-                                                        value="{{ $department->id }}" name="types[]">
-                                                    <label for="option{{ $department->id }}"> {{ $department->name }}
-                                                    </label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                    <div id="selected-values" class="mt-2"></div>
-                                </div> --}}
+                            value="{{ $department->id }}" name="types[]">
+                            <label for="option{{ $department->id }}"> {{ $department->name }}
+                            </label>
+                        </div>
+                        @endforeach
+                    </div>
+            </div>
+            <div id="selected-values" class="mt-2"></div>
+        </div> --}}
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn">
@@ -220,138 +227,46 @@
             </div>
         </div>
     </div>
-
-
-    {{-- <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-flex justify-content-center">
-                    <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> تعديل اسم الأجازه ؟</h5>
-
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
-                    </button>
-                </div>
-                <div class="modal-body mt-3 mb-5">
-                    <form class="edit-grade-form" id="edit-form" action=" {{ route('vacationType.update') }}"
-                        method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <label for="name">الاسم</label>
-                            <input type="text" id="nameedit" value="" name="name" class="form-control"
-                                required>
-                            <input type="text" id="idedit" value="" name="id" hidden
-                                class="form-control">
-
-                        </div>
-                        <!-- Save button -->
-                        <div class="text-end">
-                            <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    {{-- model for delete form --}}
-    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-flex justify-content-center">
-                    <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="deleteModalLabel"> !تنبــــــيه</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
-                        </button>
-                    </div>
-                </div>
-                <form id="delete-form" action="{{ route('vacationType.delete') }}" method="POST">
-                    @csrf
-                    <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
-                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الاجازه ؟</h5>
-
-
-                        <input type="text" id="id" value="" hidden name="id" class="form-control">
-                    </div>
-                    <div class="modal-footer mx-2 d-flex justify-content-center">
-                        <div class="text-end">
-                            <button type="button" class="btn-blue" id="closeButton">لا</button>
-                        </div>
-                        <div class="text-end">
-                            <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            function closeModal() {
-                $('#delete').modal('hide');
+        function openedit(id, name, types) {
+            document.getElementById('nameedit').value = name;
+            document.getElementById('idedit').value = id;
 
+            // Ensure types is an array
+            if (typeof types === 'string') {
+                try {
+                    types = JSON.parse(types);
+                } catch (e) {
+                    console.error('Error parsing types:', e);
+                    types = [];
+                }
             }
 
-            $('#closeButton').on('click', function() {
-                closeModal();
-            });
-        });
-    </script>
-    <script>
-        function opendelete(id) {
-            document.getElementById('id').value = id;
-            $('#delete').modal('show');
+            console.log('Types:', types); // Debugging
+
+            let select = document.getElementById('types');
+            let options = select.options;
+
+            // Clear previous selections
+            for (let i = 0; i < options.length; i++) {
+                options[i].selected = false;
+            }
+
+            // Set new selections
+            for (let i = 0; i < options.length; i++) {
+                let optionValue = parseInt(options[i].value);
+                console.log('Option value (parsed):', optionValue); // Debugging
+
+                if (types.includes(optionValue)) {
+                    options[i].selected = true;
+                    console.log('Option selected:', options[i].value); // Debugging
+                }
+            }
+
+            $('#edit').modal('show');
         }
-
-        function confirmDelete() {
-            var id = document.getElementById('id').value;
-            console.log(id);
-            var form = document.getElementById('delete-form');
-
-            form.submit();
-
-        }
-
-        function openedit(id, name, types) {
-    document.getElementById('nameedit').value = name;
-    document.getElementById('idedit').value = id;
-
-    // Ensure types is an array
-    if (typeof types === 'string') {
-        try {
-            types = JSON.parse(types);
-        } catch (e) {
-            console.error('Error parsing types:', e);
-            types = [];
-        }
-    }
-
-    console.log('Types:', types); // Debugging
-
-    let select = document.getElementById('types');
-    let options = select.options;
-
-    // Clear previous selections
-    for (let i = 0; i < options.length; i++) {
-        options[i].selected = false;
-    }
-
-    // Set new selections
-    for (let i = 0; i < options.length; i++) {
-        console.log('Option value:', options[i].value); // Debugging
-        if (types.includes(parseInt(options[i].value))) {
-            options[i].selected = true;
-            console.log('Option value:', options[i].value); // Debugging
-
-        }
-    }
-
-    $('#edit').modal('show');
-}
-
-
 
         function confirmEdit() {
             var id = document.getElementById('id').value;
@@ -360,42 +275,15 @@
             var form = document.getElementById('edit-form');
 
             // form.submit();
-
         }
 
         function openadd() {
             $('#add').modal('show');
         }
 
-        // function confirmAdd() {
-        //     var name = document.getElementById('nameadd').value;
-        //     var form = document.getElementById('add-form');
 
-        //     form.submit();
-
-        // }
-        function confirmAdd() {
-            var name = document.getElementById('nameadd').value;
-
-            var form = document.getElementById('add-form');
-            var inputs = form.querySelectorAll('[required]');
-            var valid = true;
-
-            inputs.forEach(function(input) {
-                if (!input.value) {
-                    valid = false;
-                    input.style.borderColor = 'red'; // Optional: highlight empty inputs
-                } else {
-                    input.style.borderColor = ''; // Reset border color if input is filled
-                }
-            });
-
-            if (valid) {
-                form.submit();
-            }
-        }
         $(document).ready(function() {
-    
+
 
             $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
 
@@ -459,23 +347,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get elements
-            var openSecondModalBtn = document.getElementById('openSecondModalBtn');
-            var firstModalBody = document.getElementById('firstModalBody');
-            var secondModalBody = document.getElementById('secondModalBody');
-
-            // Add click event listener
-            openSecondModalBtn.addEventListener('click', function() {
-                // Hide the first modal body
-                firstModalBody.classList.add('d-none');
-
-                // Show the second modal body
-                secondModalBody.classList.remove('d-none');
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
             const selectBox = document.getElementById('select-box');
             const options = document.getElementById('options');
             const searchInput = document.getElementById('search-input');
@@ -504,6 +375,48 @@
                     checkbox.parentElement.style.display = optionLabel.includes(searchTerm) ?
                         'block' : 'none';
                 });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('add-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                var name = document.getElementById('nameadd').value;
+                var checkboxes = document.querySelectorAll('input[name="types[]"]');
+                var typesSelected = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+                var form = document.getElementById('add-form');
+                var inputs = form.querySelectorAll('[required]');
+                var valid = true;
+
+                // Clear previous error messages and styles
+                inputs.forEach(function(input) {
+                    input.style.borderColor = ''; // Reset border color
+                });
+                document.getElementById('select-box').style.borderColor = ''; // Reset border color
+
+                // Validate required inputs
+                inputs.forEach(function(input) {
+                    if (!input.value) {
+                        valid = false;
+                        input.style.borderColor = 'red'; // Highlight empty inputs
+                        alert('من فضلك ادخل اسم نوع الشكوى');
+                    }
+                });
+
+                // Validate checkboxes
+                if (!typesSelected) {
+                    valid = false;
+                    document.getElementById('select-box').style.borderColor =
+                        'red'; // Highlight empty inputs
+                    alert('من فضلك اختر الأداره الخاصه بالشكوى');
+                }
+
+                // If all validations pass, submit the form
+                if (valid) {
+                    this.submit();
+                }
             });
         });
     </script>

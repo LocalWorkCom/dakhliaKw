@@ -214,20 +214,12 @@
                                             <a href="{{ route('government.all') }}">المحافظات</a>
                                         </li>
                                         @endif
-                                        {{-- @if (Auth::user()->hasPermission('view Region')) --}}
                                         <li>
-                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                            <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
                                                 style="margin-left: 7px;">
-                                            <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
+                                            <a href="{{ route('violations.index') }}">أنواع المخالفات</a>
                                         </li>
-                                        {{-- @endif --}}
-                                        {{-- @if (Auth::user()->hasPermission('view Sector')) --}}
-                                        <li>
-                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
-                                                style="margin-left: 7px;">
-                                            <a href="{{ route('sectors.index') }}">القطاعات</a>
-                                        </li>
-                                        {{-- @endif --}}
+                                      
                                         {{-- @if (Auth::user()->hasPermission('view Point')) --}}
                                         <li>
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
@@ -246,6 +238,9 @@
                                             <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
                                         </li>
                                         @endif
+                                        <!-- @if (Auth::user()->hasPermission('view VacationType')) -->
+                                       
+                                        <!-- @endif -->
                                         @if (Auth::user()->hasPermission('view Rule'))
                                         <li>
                                             <img src="{{ asset('frontend/images/task.svg') }}" alt="logo"
@@ -276,7 +271,20 @@
                                         style="margin-left: 7px;">
                                         <a href="{{ route('inspectors.index') }}">المفتشون</a>
                     </li> --}}
-
+                    {{-- @if (Auth::user()->hasPermission('view Region')) --}}
+                                        <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
+                                        </li>
+                                        {{-- @endif --}}
+                                        {{-- @if (Auth::user()->hasPermission('view Sector')) --}}
+                                        <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('sectors.index') }}">القطاعات</a>
+                                        </li>
+                                        {{-- @endif --}}
                 </div>
         </div>
 

@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class GroupTeam extends Model
 {
     use HasFactory;
+    public function group()
+    {
+
+        return $this->belongsTo(Groups::class, 'group_id');
+    }
 }

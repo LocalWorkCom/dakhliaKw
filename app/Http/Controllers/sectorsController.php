@@ -55,8 +55,19 @@ class sectorsController extends Controller
 
     public function create()
     {
-        $governments=Sector::select('governments_IDs')->get();
-        return view('sectors.create',compact('governments'));
+        $associatedGovernmentIds = Sector::query()
+        ->pluck('governments_IDs')
+        ->flatten()
+        ->unique()
+        ->toArray();
+
+    // Get governments that are not associated with any sector
+    $unassociatedGovernments = Government::query()
+        ->whereNotIn('id', $associatedGovernmentIds)
+        ->get();
+        return view('sectors.create', ['governments' => $unassociatedGovernments]);
+
+                // return view('sectors.create',compact('governments'));
     }
 
     /**
