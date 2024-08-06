@@ -101,7 +101,7 @@ class User extends Authenticatable
     public function rule()
     {
         return $this->belongsTo(Rule::class);
-
+    }
     public function grade()
     {
         return $this->belongsTo(grade::class, 'id'); // Assuming 'grade_id' is the foreign key
