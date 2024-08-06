@@ -33,10 +33,10 @@ class qualificationController extends Controller
             if(Auth::user()->hasPermission('edit Government')){
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
-            if(Auth::user()->hasPermission('edit Government')){
-                $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';
-            }
-            return $edit_permission . ' '.$delete_permission;
+            // if(Auth::user()->hasPermission('edit Government')){
+            //     $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+            // }
+            return $edit_permission ;
             // return '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>
             //  <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>' ;
         })

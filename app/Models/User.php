@@ -84,13 +84,13 @@ class User extends Authenticatable
     }
     public function createdViolations()
     {
-        return $this->hasMany(Violation::class, 'created_by');
+        return $this->hasMany(ViolationTypes::class, 'created_by');
     }
 
     // Relationship with Violation for updated violations
     public function updatedViolations()
     {
-        return $this->hasMany(Violation::class, 'updated_by');
+        return $this->hasMany(ViolationTypes::class, 'updated_by');
     }
     public function department()
     {
