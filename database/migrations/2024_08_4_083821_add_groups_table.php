@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('work_time_id')->nullable();
             // Add the foreign key constraint
-            $table->foreign('work_time_id')->references('id')->on('working_times')->onDelete('set null');
+            $table->foreign('work_time_id')->references('id')->on('working_trees')->onDelete('restrict');
             $table->integer('points_inspector');
             $table->timestamps();
         });
