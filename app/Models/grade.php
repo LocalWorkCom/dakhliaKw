@@ -17,7 +17,7 @@ class grade extends Model
 
     public function grades()
     {
-        return $this->hasMany(User::class , 'grade_id');
+        return $this->hasMany(User::class , 'id');
     }
 
 }
