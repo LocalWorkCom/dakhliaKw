@@ -158,13 +158,13 @@
                 </li> -->
                 @endif
 
-                @if (Auth::user()->hasPermission('view departements') && Auth::user()->rule_id == 2)
-                    <li class="nav-item">
-                        <a href="{{ route('departments.index') }}">
-                            <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
-                            <h6>الادارات</h6>
-                        </a>
-                    </li>
+                @if (Auth::user()->hasPermission('view departements'))
+                <li class="nav-item">
+                    <a href="{{ route('departments.index') }}">
+                        <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                        <h6>الادارات</h6>
+                    </a>
+                </li>
                 @endif
                 @if (Auth::user()->hasPermission('view job') ||
                         Auth::user()->hasPermission('view VacationType') ||
@@ -197,32 +197,78 @@
                                                 </li>
                                             @endif
 
-                                            @if (Auth::user()->hasPermission('view job'))
-                                                <li>
-                                                    <img src="{{ asset('frontend/images/jobs.svg') }}" alt="logo"
-                                                        style="margin-left: 7px;">
-                                                    <a href="{{ route('job.index') }}">الوظائف</a>
-                                                </li>
-                                            @endif
-                                            @if (Auth::user()->hasPermission('view Qualification'))
-                                                <li>
-                                                    <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                        alt="logo" style="margin-left: 7px;">
-                                                    <a href="{{ route('qualifications.index') }}">المؤهلات</a>
-                                                </li>
-                                            @endif
-                                            @if (Auth::user()->hasPermission('view Government'))
-                                                <li>
-                                                    <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                        alt="logo" style="margin-left: 7px;">
-                                                    <a href="{{ route('government.all') }}">المحافظات</a>
-                                                </li>
-                                            @endif
-                                            <li>
-                                                <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
-                                                    style="margin-left: 7px;">
-                                                <a href="{{ route('violations.index') }}">أنواع المخالفات</a>
-                                            </li>
+                                        @if (Auth::user()->hasPermission('view job'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/jobs.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('job.index') }}">الوظائف</a>
+                                        </li>
+                                        @endif
+                                        @if (Auth::user()->hasPermission('view Qualification'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('qualifications.index') }}">المؤهلات</a>
+                                        </li>
+                                        @endif
+                                        @if (Auth::user()->hasPermission('view Government'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('government.all') }}">المحافظات</a>
+                                        </li>
+                                        @endif
+                                        <li>
+                                            <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('violations.index') }}">أنواع المخالفات</a>
+                                        </li>
+                                      
+                                        @if (Auth::user()->hasPermission('view Point'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('points.index') }}">النقاط</a>
+                                        </li>
+                                        @endif
+                                    </div>
+                                    <div class="col-6">
+                                       
+                                      
+                                        @if (Auth::user()->hasPermission('view VacationType'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
+                                        </li>
+                                        @endif
+                                        <!-- @if (Auth::user()->hasPermission('view VacationType')) -->
+                                       
+                                        <!-- @endif -->
+                                        @if (Auth::user()->hasPermission('view Rule'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/task.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('rule.index') }}">المهام</a>
+                                        </li>
+                                        @endif
+                                        @if (Auth::user()->hasPermission('view Permission'))
+                                        <li>
+                                            <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('permission.index') }}">الصلاحيات</a>
+                                        </li>
+                                        @endif
+                                        <li>
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('working_time.index') }}">فترات العمل </a>
+                                        </li>
+                                        <li>
+                                            <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('working_trees.list') }}">نظام العمل</a>
+                                        </li>
 
                                             {{-- @if (Auth::user()->hasPermission('view Point')) --}}
                                             <li>
@@ -242,11 +288,9 @@
                                                     <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
                                                 </li>
                                             @endif
-                                            <!-- @if (Auth::user()->hasPermission('view VacationType'))
--->
+                                            <!-- @if (Auth::user()->hasPermission('view VacationType')) -->
 
-                                            <!--
-@endif -->
+                                            <!-- @endif -->
                                             @if (Auth::user()->hasPermission('view Rule'))
                                                 <li>
                                                     <img src="{{ asset('frontend/images/task.svg') }}" alt="logo"
