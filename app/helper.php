@@ -10,6 +10,7 @@ use App\Models\Sector;
 use App\Models\User;
 use App\Models\VacationType;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -173,6 +174,16 @@ function UploadFilesWithoutReal($path, $image, $model, $request)
     $model->save();
 }
 
+ function showUserDepartment()
+{
+    // Retrieve the authenticated user
+    $user = Auth::user();
+
+    // Access the department name
+    $departmentName = $user->department->name;
+
+    return $departmentName;
+}
 function CheckUploadIoFiles($id)
 {
     $count = Io_file::where('iotelegram_id', $id)->count();

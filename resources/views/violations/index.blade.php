@@ -89,7 +89,7 @@
                         <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                             <div class="form-group mt-4 mb-3">
                                 <label class="d-flex justify-content-start pt-3 pb-2" for="name" 
-                                style="display:flex ; flex-direction:column-reverse;"> اسم
+                                style="display:flex; flex-direction:column-reverse;"> اسم
                                     المخالفه</label>
                                 <input type="text" id="name" name="name" class="form-control" placeholder="اسم المخالفه"
                                     required>

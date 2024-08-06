@@ -65,6 +65,7 @@ class sectorsController extends Controller
     $unassociatedGovernments = Government::query()
         ->whereNotIn('id', $associatedGovernmentIds)
         ->get();
+        
         return view('sectors.create', ['governments' => $unassociatedGovernments]);
 
                 // return view('sectors.create',compact('governments'));
