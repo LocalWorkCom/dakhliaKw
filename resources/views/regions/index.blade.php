@@ -13,7 +13,15 @@
         <div class="row">
 
             <div class="container welcome col-11">
+            <div class="d-flex justify-content-between">
                 <p> المنـــاطق</p>
+                {{-- @if (Auth::user()->hasPermission('create Region')) --}}
+                        <button type="button" class="btn-all  "
+                        onclick="openadd()" style="color: #0D992C;">
+                            اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        </button>
+                        {{-- @endif --}}
+            </div>
             </div>
         </div>
 
@@ -23,20 +31,23 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
-                        {{-- @if (Auth::user()->hasPermission('create Region')) --}}
+                        <!-- {{-- @if (Auth::user()->hasPermission('create Region')) --}}
                         <button type="button" class="btn-all  "
                         onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
-                        {{-- @endif --}}
-                            <select name="government-select" id="government-select" class="form-group mx-md-2 btn-all " onchange="filterRegions()" style="text-align: center; color:#ff8f00;">
+                        {{-- @endif --}} -->
+                        <div class="form-group moftsh  mx-3  d-flex">
+                        <h4 style="    line-height: 1.8;" >   اختر المحافظة للتصنيف :</h4>
+                            <select name="government-select" id="government-select" class="form-group mx-md-2 btn-all " onchange="filterRegions()"
+                             style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}" @if($government->id == $id) selected @endif>{{ $government->name }}</option>
                                 @endforeach
                             </select>
-                    </div>
+                    </div></div>
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white">
