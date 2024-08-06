@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Group;
 use App\Models\Groups;
-
+use App\Models\GroupTeam;
 use App\Models\Inspector;
 use App\Models\WorkingTime;
 
@@ -25,6 +24,8 @@ class GroupsController extends Controller
 
     public function index()
     {
+        // $workTimes = WorkingTime::all();
+        // $inspector = Inspector::where('group_id',$id)->get();
         $workTimes = WorkingTree::all();
         // dd($workTimes);
         return view('group.view', compact('workTimes'));
@@ -37,7 +38,7 @@ class GroupsController extends Controller
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
-            ->addColumn('points_inspector', function ($row) {
+            ->addColumn('num_inspectors', function ($row) {
                 $count = Inspector::where('group_id', $row->id)->count();
 
                 if ($count == 0) {
@@ -47,7 +48,17 @@ class GroupsController extends Controller
                 }
                 return  $btn;
             })
-            ->rawColumns(['action', 'points_inspector'])
+            ->addColumn('num_team', function ($row) {
+                $count = GroupTeam::where('group_id', $row->id)->count();
+                if ($count == 0) {
+                    $btn = '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openTeamModal('.$row->id.', \'\')"> ' . $count . '</a>';
+                } else {
+                  
+                    $btn = '<a class="btn btn-sm"  style="background-color: #274373; padding-inline: 15px" href=' . route('groupTeam.index') . '> ' . $count . '</a>';
+                }
+                return  $btn;
+            })
+            ->rawColumns(['action', 'num_inspectors','num_team'])
             ->make(true);
     }
 

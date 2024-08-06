@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Country;
+use App\Models\departements;
 use App\Models\EmployeeVacation;
 use App\Models\Government;
 use App\Models\Groups;
@@ -183,6 +184,10 @@ function CheckUploadIoFiles($id)
 function getEmployees()
 {
     return User::all();
+}
+function getDepartments()
+{
+    return departements::all();
 }
 function getVactionTypes()
 {

@@ -22,6 +22,8 @@ use App\Http\Controllers\sectorsController;
 use App\Http\Controllers\InspectorController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\GroupsController;
+use App\Http\Controllers\GroupTeamController;
+use App\Http\Controllers\violationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,7 +111,15 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/groups/add', [GroupsController::class, 'store'])->name('group.store');
     Route::any('/groups/update', [GroupsController::class, 'update'])->name('group.update');
     Route::any('/groups/edit/{id}', [GroupsController::class, 'edit'])->name('group.edit');
+
+    Route::any('/groupTeam/team/{id}', [GroupTeamController::class, 'team'])->name('groupTeam.team');
+    Route::any('/groupTeam/store', [GroupTeamController::class, 'store'])->name('groupTeam.store');
+    Route::any('/groupTeam/show', [GroupTeamController::class, 'index'])->name('groupTeam.index');
+    Route::get('/api/groupTeam', [GroupTeamController::class, 'getGroupTeam'])->name('api.getGroupTeam');
+    Route::any('/groupTeam/edit/{id}', [GroupTeamController::class, 'show'])->name('groupTeam.show');
+
     Route::any('/groups/show/{id}', [GroupsController::class, 'show'])->name('group.show');
+
     Route::any('/groups/delete', [GroupsController::class, 'delete'])->name('group.delete');
     Route::get('/api/groups', [GroupsController::class, 'getgroups'])->name('api.groups');
     Route::get('/group/create/Inspectors/{id}', [GroupsController::class, 'groupCreateInspectors'])->name('group.groupcreateInspectors');
@@ -256,8 +266,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::post('points/edit', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
-    Route::get('/get-governorates/{sector}', [regionsController::class, 'getGovernorates']);
-    Route::get('/get-regions/{governorate}', [regionsController::class, 'getRegions']);
+  
 
     Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index');
     Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors');
@@ -294,8 +303,15 @@ Route::middleware(['auth'])->group(function () {
         // Route::post('points/update', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
     Route::get('/get-governorates/{sector}', [pointsController::class, 'getGovernorates']);
-Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions']);
+    Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions']);
 
+    //Start Violation
+    Route::get('setting/violation/all', [violationController::class, 'index'])->name('violations.index');
+    Route::get('setting/violation/ajax', [violationController::class, 'getviolations'])->name('violations.getAllviolations');
+    Route::post('setting/violation/add', [violationController::class, 'store'])->name('violations.store');
+    Route::get('setting/violation/show/{id}', [violationController::class, 'show'])->name('violations.show');
+    Route::post('setting/violation/update', [violationController::class, 'update'])->name('violations.update');
+    //End Violation
     //setting end
 
 
