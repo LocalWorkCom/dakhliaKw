@@ -86,36 +86,36 @@
 @push('scripts')
 
 <script>
-    // $(document).ready(function() {
-    //     // Function to check if any checkbox is selected
-    //     function checkIfAnyCheckboxSelected() {
-    //         return $('input[name="inspectore[]"]:checked').length > 0 || $('input[name="inspectorein[]"]:checked').length > 0;
-    //     }
+    $(document).ready(function() {
+        // Function to check if any checkbox is selected
+        function checkIfAnyCheckboxSelected() {
+            return $('input[name="inspectore[]"]:checked').length > 0 || $('input[name="inspectorein[]"]:checked').length > 0;
+        }
     
-    //     // Disable submit button initially if no checkbox is checked
-    //     $('#btn-submit').prop('disabled', !checkIfAnyCheckboxSelected());
+        // Disable submit button initially if no checkbox is checked
+        $('#btn-submit').prop('disabled', !checkIfAnyCheckboxSelected());
     
-    //     // Add change event listener to checkboxes
-    //     $('input[name="inspectore[]"], input[name="inspectorein[]"]').on('change', function() {
-    //         console.log(!checkIfAnyCheckboxSelected()); // Prevent form submission
+        // Add change event listener to checkboxes
+        $('input[name="inspectore[]"], input[name="inspectorein[]"]').on('change', function() {
+            console.log(!checkIfAnyCheckboxSelected()); // Prevent form submission
 
-    //         $('#btn-submit').prop('disabled', !checkIfAnyCheckboxSelected());
-    //         if(!checkIfAnyCheckboxSelected() ){
-    //             $('#inspectore-error').text('من فضلك اختر مفتش واحد على الأقل .');
+            $('#btn-submit').prop('disabled', !checkIfAnyCheckboxSelected());
+            if(!checkIfAnyCheckboxSelected() ){
+                $('#inspectore-error').text('من فضلك اختر مفتش واحد على الأقل .');
 
-    //         }else{
-    //             $('#inspectore-error').text(''); // Clear error message on change
+            }else{
+                $('#inspectore-error').text(''); // Clear error message on change
 
-    //         }
-    //     });
+            }
+        });    
     
-    //     // Form submit event
-    //     $('#add-form').on('submit', function(event) {
-    //         if (!checkIfAnyCheckboxSelected()) {
-    //             event.preventDefault();
-    //             $('#inspectore-error').text('من فضلك اختر مفتش واحد على الأقل .');
-    //         }
-    //     });
-    // });
+        // Form submit event
+        $('#add-form').on('submit', function(event) {
+            if (!checkIfAnyCheckboxSelected()) {
+                event.preventDefault();
+                $('#inspectore-error').text('من فضلك اختر مفتش واحد على الأقل .');
+            }
+        });
+    });
     </script>
 @endpush

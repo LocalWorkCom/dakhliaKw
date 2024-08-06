@@ -71,4 +71,8 @@ class departements extends Model
         return $this->hasMany(departements::class, 'parent_id')->with('children');
 
     }
+    public function violations()
+    {
+        return $this->hasMany(Violation::class);
+    }
 }
