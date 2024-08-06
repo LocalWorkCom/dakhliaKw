@@ -15,7 +15,7 @@
         <div class="container welcome col-11">
 <div class="d-flex justify-content-between">
     <p> المفتــــــشون ({{\App\Models\Inspector::count()}})</p>
-    <button class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;"><a href="{{ route('inspectors.create') }}">
+    <button class="btn-all-2 mt-1 px-3 mx-3" ><a href="{{ route('inspectors.create') }}" style="color: #274373;">
         اضافة مفتش
         <img src="{{ asset('frontend/images/add-mandob.svg')}}" alt=""></a>
     </button>

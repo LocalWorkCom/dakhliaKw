@@ -339,14 +339,14 @@
                                         value="{{ $user->age  }}">
     </div> --}}
 
-                        <div class="form-row mx-2 mx-3 d-flex justify-content-center flex-row-reverse">
+                        <div class="form-row mx-2 mx-2 d-flex justify-content-center flex-row-reverse">
                             {{-- <div class="form-group col-md-5 mx-2">
                                 <label for="input22">مدة الخدمة</label>
                                 <input type="date" id="input22" name="end_of_service" class="form-control"
                                     placeholder="مدة الخدمة " value="{{ $end_of_service }}">
                             </div> --}}
 
-                            <div class="form-group col-md-5 mx-2">
+                            <div class="form-group col-md-10 mx-2">
                                 <label for="input24"> الرتبة</label>
                                 <select id="input24" name="grade_id" class="form-control" placeholder="الرتبة">
                                     @if ($user->grade_id == null)
