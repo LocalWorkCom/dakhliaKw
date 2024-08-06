@@ -227,7 +227,7 @@ ul {
     display: none;
     position: absolute;
     top: 100%;
-    left: -55px;
+    left: -140px;
     background-color: white;
     border: 1px solid #ccc;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -236,7 +236,7 @@ ul {
     padding-inline: 10px;
     font-size: 23px;
     height: 200px;
-    width: 200px !important;
+    width: 395px !important;
 }
 .dropdown-menu5 {
     display: none;
