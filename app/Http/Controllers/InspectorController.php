@@ -18,7 +18,9 @@ class InspectorController extends Controller
     public function index()
     {
         // $inspectors = Inspector::all();
-        return view('inspectors.index');
+        $assignedInspectors = Inspector::whereNotNull('group_id')->count();
+    $unassignedInspectors = Inspector::whereNull('group_id')->count();
+        return view('inspectors.index' , compact('assignedInspectors', 'unassignedInspectors'));
     }
     public function addToGroup(Request $request)
     {
@@ -30,7 +32,7 @@ class InspectorController extends Controller
 
     public function getInspectors()
     {
-        $data = Inspector::orderBy('id', 'desc')->get();
+        $data = Inspector::with('user')->orderBy('id', 'desc')->get();
 
         return DataTables::of($data)
         ->addColumn('action', function ($row) {
@@ -84,7 +86,9 @@ class InspectorController extends Controller
     {
         $inspector = Inspector::find($id);
         // dd($inspector);
-        $users = User::get();
+        $departmentId = Auth::user()->department_id;
+        $users = User::where('department_id', $departmentId)->with('grade')->get();
+
         return view('inspectors.edit', compact('inspector','users'));
     }
 

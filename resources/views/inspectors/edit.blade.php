@@ -33,7 +33,7 @@
                                      data-id="{{ $user->id }}" 
                                      data-name="{{ $user->name }}"
                                      data-phone="{{ $user->phone }}" 
-                                     data-grade_id="{{ $user->grade_id }}">
+                                     data-grade_id="{{ $user->grade->name }}">
                                     {{ $user->name }}
                                 </div>
                             @endforeach
