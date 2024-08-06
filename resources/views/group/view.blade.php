@@ -90,7 +90,7 @@
                                                 data: 'num_inspectors',
                                                 name: 'num_inspectors'
                                             },
-                                            
+
                                             {
                                                 data: 'points_inspector',
                                                 name: 'points_inspector'
@@ -110,7 +110,6 @@
                                                  <a href="#" class="btn btn-sm " style="background-color: #274373;" onclick="openViewModal('${row.id}', '${row.name}')"> <i class="fa fa-eye"></i>عرض  </a>
                                                  <a href="#" class="btn btn-sm" style="background-color: #F7AF15;" onclick="openEditModal('${row.id}', '${row.name}')"> <i class="fa fa-edit"></i> تعديل </a>
 
-                                                <a href="#" class="btn btn-sm" style="background-color: #274373 ;" onclick="openTeamModal('${row.id}', '${row.name}')"> <i class="fa fa-add"></i> فريق </a>
 
                                                 `;
                                             }
@@ -223,18 +222,18 @@
                     </div>
                 </div>
             </div>
-              <!-- Second Modal Body (Initially Hidden) -->
-              <div id="secondModalBody" class="d-none">
-                                    <div class="body-img-modal d-block mb-4">
-                                        <img src="../images/ordered.svg" alt="">
-                                        <p>تمت الاضافه بنجاح</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Second Modal Body (Initially Hidden) -->
+            <div id="secondModalBody" class="d-none">
+                <div class="body-img-modal d-block mb-4">
+                    <img src="../images/ordered.svg" alt="">
+                    <p>تمت الاضافه بنجاح</p>
                 </div>
+            </div>
         </div>
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
 
     <script>
@@ -295,137 +294,134 @@
     </div>
 
     <!-- Edit Modal -->
-    <!-- Your modal HTML -->
-    <!-- Modal HTML -->
-<div class="modal fade" id="edit" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="padding-left: 0px;" dir="rtl">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header d-flex justify-content-center">
-                <div class="title d-flex flex-row align-items-center">
-                    <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
-                    <h5 class="modal-title"> تعديل مجموعة</h5>
+    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="padding-left: 0px;" dir="rtl">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
+                        <h5 class="modal-title"> تعديل مجموعة</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
-                    <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
-                        <form id="add-form" action="{{ route('group.update') }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" id="id_edit" name="id_edit">
-                            <div class="form-group mt-4 mb-3">
-                                <label for="name_edit" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم المجموعة</label>
-                                <input type="text" id="name_edit" name="name_edit" class="form-control"
-                                    placeholder="مجموعة أ" value="{{ old('name_edit') }}">
-                                @if ($errors->has('name_edit'))
-                                    <span class="text-danger">{{ $errors->first('name_edit') }}</span>
-                                @endif
-                            </div>
-                            <div class="form-group mt-4 mb-3">
-                                <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر نظام العمل</label>
-                                <select class="form-control" name="work_time_id_edit" id="work_time_id_edit">
-                                    <option selected disabled>اختار من القائمة</option>
-                                    @foreach ($workTimes as $workTime)
-                                        <option value="{{ $workTime->id }}" {{ old('work_time_id_edit') == $workTime->id ? 'selected' : '' }}>
-                                            {{ $workTime->name }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('work_time_id_edit'))
-                                    <span class="text-danger">{{ $errors->first('work_time_id_edit') }}</span>
-                                @endif
-                            </div>
-                            <div class="form-group mt-4 mb-3">
-                                <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد نقاط التفتيش</label>
-                                <input type="number" id="points_inspector_edit" name="points_inspector_edit"
-                                    class="form-control" placeholder="4" value="{{ old('points_inspector_edit') }}">
-                                @if ($errors->has('points_inspector_edit'))
-                                    <span class="text-danger">{{ $errors->first('points_inspector_edit') }}</span>
-                                @endif
-                            </div>
+                <div class="modal-body">
+                    <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
+                        <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
+                            <form id="add-form" action="{{ route('group.update') }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" id="id_edit" name="id_edit">
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="name_edit" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
+                                        المجموعة</label>
+                                    <input type="text" id="name_edit" name="name_edit" class="form-control"
+                                        placeholder="مجموعة أ" value="{{ old('name_edit') }}">
+                                    @if ($errors->has('name_edit'))
+                                        <span class="text-danger">{{ $errors->first('name_edit') }}</span>
+                                    @endif
+                                </div>
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر
+                                        نظام العمل</label>
+                                    <select class="form-control" name="work_time_id_edit" id="work_time_id_edit">
+                                        <option selected disabled>اختار من القائمة</option>
+                                        @foreach ($workTimes as $workTime)
+                                            <option value="{{ $workTime->id }}"
+                                                {{ old('work_time_id_edit') == $workTime->id ? 'selected' : '' }}>
+                                                {{ $workTime->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('work_time_id_edit'))
+                                        <span class="text-danger">{{ $errors->first('work_time_id_edit') }}</span>
+                                    @endif
+                                </div>
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
+                                        نقاط التفتيش</label>
+                                    <input type="number" id="points_inspector_edit" name="points_inspector_edit"
+                                        class="form-control" placeholder="4" value="{{ old('points_inspector_edit') }}">
+                                    @if ($errors->has('points_inspector_edit'))
+                                        <span class="text-danger">{{ $errors->first('points_inspector_edit') }}</span>
+                                    @endif
+                                </div>
 
-                            <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                <button type="submit" class="btn-all mx-2 p-2"
-                                    style="background-color: #274373; color: #ffffff;">
-                                    <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
-                                </button>
-                                <button type="button" class="btn-all p-2"
-                                    style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
-                                    data-bs-dismiss="modal" aria-label="Close">
-                                    <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
-                                </button>
-                            </div>
+                                <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
+                                    <button type="submit" class="btn-all mx-2 p-2"
+                                        style="background-color: #274373; color: #ffffff;">
+                                        <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
+                                    </button>
+                                    <button type="button" class="btn-all p-2"
+                                        style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                                        data-bs-dismiss="modal" aria-label="Close">
+                                        <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
+                                    </button>
+                                </div>
 
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Team Modal -->
-<div class="modal fade" id="team" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-style="padding-left: 0px;" dir="rtl">
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-header d-flex justify-content-center">
-            <div class="title d-flex flex-row align-items-center">
-                <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
-                <h5 class="modal-title"> اضافة فريق لمجموعة</h5>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
-                <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
-                    <form  action="{{ route('groupTeam.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="group_id" id="group_id">
-                        <div class="form-group mt-4 mb-3">
-                            <label for="groupTeam_name" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
-                                الفريق</label>
-                            <input type="text" id="groupTeam_name" name="groupTeam_name" class="form-control"
-                                placeholder="فريق أ" required>
-                        </div>
+    <!-- Team Modal -->
+    {{-- <div class="modal fade" id="team" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="padding-left: 0px;" dir="rtl">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
+                        <h5 class="modal-title"> اضافة فريق لمجموعة</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
+                        <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
+                            <form action="{{ route('groupTeam.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="group_id" id="group_id">
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="groupTeam_name" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
+                                        الفريق</label>
+                                    <input type="text" id="groupTeam_name" name="groupTeam_name" class="form-control"
+                                        placeholder="فريق أ" required>
+                                </div>
 
-                        <div class="form-group mt-4 mb-3">
-                            <label for="groupTeam_inspector" class="d-flex justify-content-start pt-3 pb-2">اختر
-                                الاعضاء</label>
-                            <div id="permissions-container"></div>
+                                <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
+                                    <button type="submit" class="btn-all mx-2 p-2"
+                                        style="background-color: #274373; color: #ffffff;">
+                                        <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> الاضافة
+                                    </button>
+                                    <button type="button" class="btn-all p-2"
+                                        style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                                        data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
+                                        <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                            <button type="submit" class="btn-all mx-2 p-2"
-                                style="background-color: #274373; color: #ffffff;">
-                                <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> الاضافة
-                            </button>
-                            <button type="button" class="btn-all p-2"
-                                style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
-                                data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
-                                <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-</div>
-<!-- JavaScript to handle modal display -->
-<script>
-    @if (session('editModal'))
-        $(document).ready(function() {
-            $('#edit').modal('show');
-        });
-    @endif
+    </div> --}}
+    <!-- JavaScript to handle modal display -->
+    <script>
+        @if (session('editModal'))
+            $(document).ready(function() {
+                $('#edit').modal('show');
+            });
+        @endif
 
-    @if (session('message'))
-        $(document).ready(function() {
-            alert('{{ session('message') }}');
-        });
-    @endif
-</script>
-
+        @if (session('message'))
+            $(document).ready(function() {
+                alert('{{ session('message') }}');
+            });
+        @endif
+    </script>
 @endsection
 
 @push('scripts')
@@ -549,27 +545,27 @@ style="padding-left: 0px;" dir="rtl">
 
                         // Generate checkboxes
                         data.forEach(function(item) {
-                    var checkbox = $('<div class="form-check"></div>');
-                    var input = $('<input>')
-                        .attr({
-                            type: 'checkbox',
-                            id: 'exampleCheck' + item.id,
-                            value: item.id,
-                            name: 'inspectors_ids[]',
-                            class: 'form-check-input selectPermission',
-                            style: 'width: 25px; height: 25px; margin-left: 1px;'
-                        });
-                    var label = $('<label>')
-                        .attr({
-                            class: 'form-check-label m-1',
-                            for: 'exampleCheck' + item.id
-                        })
-                        .css('font-size', '20px')
-                        .text(item.name); // or use translation if needed
+                            var checkbox = $('<div class="form-check"></div>');
+                            var input = $('<input>')
+                                .attr({
+                                    type: 'checkbox',
+                                    id: 'exampleCheck' + item.id,
+                                    value: item.id,
+                                    name: 'inspectors_ids[]',
+                                    class: 'form-check-input selectPermission',
+                                    style: 'width: 25px; height: 25px; margin-left: 1px;'
+                                });
+                            var label = $('<label>')
+                                .attr({
+                                    class: 'form-check-label m-1',
+                                    for: 'exampleCheck' + item.id
+                                })
+                                .css('font-size', '20px')
+                                .text(item.name); // or use translation if needed
 
-                    checkbox.append(input).append(label);
-                    $('#permissions-container').append(checkbox);
-                });
+                            checkbox.append(input).append(label);
+                            $('#permissions-container').append(checkbox);
+                        });
 
                         // Show the modal
                         $('#team').modal('show');
@@ -594,20 +590,20 @@ style="padding-left: 0px;" dir="rtl">
         // });
     </script>
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get elements
-        var openSecondModalBtn = document.getElementById('openSecondModalBtn');
-        var firstModalBody = document.getElementById('firstModalBody');
-        var secondModalBody = document.getElementById('secondModalBody');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get elements
+            var openSecondModalBtn = document.getElementById('openSecondModalBtn');
+            var firstModalBody = document.getElementById('firstModalBody');
+            var secondModalBody = document.getElementById('secondModalBody');
 
-        // Add click event listener
-        openSecondModalBtn.addEventListener('click', function () {
-            // Hide the first modal body
-            firstModalBody.classList.add('d-none');
+            // Add click event listener
+            openSecondModalBtn.addEventListener('click', function() {
+                // Hide the first modal body
+                firstModalBody.classList.add('d-none');
 
-            // Show the second modal body
-            secondModalBody.classList.remove('d-none');
+                // Show the second modal body
+                secondModalBody.classList.remove('d-none');
+            });
         });
-    });
-</script>
+    </script>
 @endpush
