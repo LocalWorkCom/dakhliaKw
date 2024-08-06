@@ -180,7 +180,7 @@ function UploadFilesWithoutReal($path, $image, $model, $request)
     $user = Auth::user();
 
     // Access the department name
-    $departmentName = $user->department->name;
+    $departmentName = $user->department->name? $user->department->name : '';
 
     return $departmentName;
 }

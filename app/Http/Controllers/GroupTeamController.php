@@ -155,9 +155,9 @@ class GroupTeamController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function show(GroupTeam $groupTeam)
+    public function show($id)
     {
-        //
+        
     }
 
     /**

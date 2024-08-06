@@ -270,58 +270,11 @@
                                             <a href="{{ route('working_trees.list') }}">نظام العمل</a>
                                         </li>
 
-                                            {{-- @if (Auth::user()->hasPermission('view Point')) --}}
-                                            <li>
-                                                <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('points.index') }}">النقاط</a>
-                                            </li>
-                                            {{-- @endif --}}
-                                        </div>
-                                        <div class="col-6">
+                                       
+                                      
 
 
-                                            @if (Auth::user()->hasPermission('view VacationType'))
-                                                <li>
-                                                    <img src="{{ asset('frontend/images/holidays.svg') }}"
-                                                        alt="logo" style="margin-left: 7px;">
-                                                    <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
-                                                </li>
-                                            @endif
-                                            <!-- @if (Auth::user()->hasPermission('view VacationType')) -->
-
-                                            <!-- @endif -->
-                                            @if (Auth::user()->hasPermission('view Rule'))
-                                                <li>
-                                                    <img src="{{ asset('frontend/images/task.svg') }}" alt="logo"
-                                                        style="margin-left: 7px;">
-                                                    <a href="{{ route('rule.index') }}">المهام</a>
-                                                </li>
-                                            @endif
-                                            @if (Auth::user()->hasPermission('view Permission'))
-                                                <li>
-                                                    <img src="{{ asset('frontend/images/permission.svg') }}"
-                                                        alt="logo" style="margin-left: 7px;">
-                                                    <a href="{{ route('permission.index') }}">الصلاحيات</a>
-                                                </li>
-                                            @endif
-                                            <li>
-                                                <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('working_time.index') }}">فترات العمل </a>
-                                            </li>
-                                            <li>
-                                                <img src="{{ asset('frontend/images/permission.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('working_trees.list') }}">نظام العمل</a>
-                                            </li>
-
-                                            {{-- <li>
-                                        <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"
-                                        style="margin-left: 7px;">
-                                        <a href="{{ route('inspectors.index') }}">المفتشون</a>
-                    </li> --}}
-                                            {{-- @if (Auth::user()->hasPermission('view Region')) --}}
+                                           
                                             <li>
                                                 <img src="{{ asset('frontend/images/governorates.svg') }}"
                                                     alt="logo" style="margin-left: 7px;">

@@ -115,6 +115,8 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/groupTeam/team/{id}', [GroupTeamController::class, 'team'])->name('groupTeam.team');
     Route::any('/groupTeam/store/{id}', [GroupTeamController::class, 'store'])->name('groupTeam.store');
     Route::any('/groupTeam/show/{id}', [GroupTeamController::class, 'index'])->name('groupTeam.index');
+    Route::any('/groupTeam/showdetails/{id}', [GroupTeamController::class, 'show'])->name('groupTeam.show');
+
     Route::get('/api/groupTeam/{id}', [GroupTeamController::class, 'getGroupTeam'])->name('api.getGroupTeam');
     Route::any('/groupTeam/edit/{id}', [GroupTeamController::class, 'edit'])->name('groupTeam.edit');
     Route::any('/groupTeam/update/{id}', [GroupTeamController::class, 'update'])->name('groupTeam.update');
