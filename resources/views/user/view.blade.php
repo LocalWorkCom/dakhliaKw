@@ -27,16 +27,29 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
             <div class="row " dir="rtl">
-                <div class="form-group mt-4  mx-5 col-12 d-flex ">
-                    @if (Auth::user()->hasPermission('create User'))
-                        <button type="button" class="wide-btn"
-                            onclick="window.location.href='{{ route('user.create', $id) }}'">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                            اضافة جديد
-                        </button>
-                    @endif
-
-                </div>
+                @if (url()->current() == url('/users/0'))
+                    <div class="form-group mt-4  mx-5 col-12 d-flex ">
+                        @if (Auth::user()->hasPermission('create User'))
+                            <button type="button" class="wide-btn"
+                                onclick="window.location.href='{{ route('user.create', $id) }}'">
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                اضافة جديد
+                            </button>
+                        @endif
+                    </div>
+                @elseif (url()->current() == url('/employees/1'))
+                    <div class="form-group mt-4  mx-5 col-12 d-flex ">
+                        @if (Auth::user()->hasPermission('add_employee User'))
+                            <button type="button" class="wide-btn"
+                                onclick="window.location.href='{{ route('user.create', $id) }}'">
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                اضافة جديد
+                            </button>
+                        @endif
+                    </div>
+                @endif
+                
+                
             </div>
             <div class="col-lg-12">
                 <div class="bg-white ">

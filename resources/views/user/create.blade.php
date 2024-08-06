@@ -89,12 +89,12 @@
                     <div class="form-row mx-md-2 mt-4 d-flex justify-content-center">
                         @if ($flag == '0')
                             <div class="form-group col-md-10 mx-2">
-                                <label for="nameus"> الاسم</label>
+                                <label for="nameus"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> الاسم</label>
                                 {{-- <input type="text" id="nameus" name="name" class="form-control" placeholder="الاسم"> --}}
                                 <select class="custom-select custom-select-lg mb-3" name="name" id="nameus">
                                     <option selected disabled>اختار من القائمة</option>
                                     @foreach ($alluser as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        <option value="{{ $item->id }}" {{ old('name') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -105,14 +105,14 @@
                         <select class="custom-select custom-select-lg mb-3" name="job" id="job">
                             <option selected disabled>اختار من القائمة</option>
                             @foreach ($job as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                <option value="{{ $item->id }}" {{ old('job') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
                             @endforeach
                         </select>
                         {{-- <input type="text" id="job" name="job" class="form-control" required> --}}
                     </div>
                     <div class="form-group col-md-5 mx-2">
-                        <label for="nameus"> الاسم</label>
-                        <input type="text" id="nameus" name="name" class="form-control" placeholder="الاسم">
+                        <label for="nameus"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> الاسم</label>
+                        <input type="text" id="nameus" name="name" class="form-control" placeholder="الاسم" value="{{ old('name') }}">
                     </div>
                     @endif
             </div>
@@ -122,7 +122,7 @@
             @if ($flag == '0')
                 <div class="form-row  mx-md-3 d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
-                        <label for="input3">الباسورد</label>
+                        <label for="input3"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> الباسورد</label>
                         <div class="password-container">
                             <input type="password" id="input3" name="password" class="form-control" placeholder="الباسورد" style="position: absolute">
                             <label class="toggle-password" onclick="togglePasswordVisibility()">
@@ -133,11 +133,11 @@
 
 
                     <div class="form-group col-md-5 mx-2">
-                        <label for="input7"> المهام</label>
+                        <label for="input7"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> المهام</label>
                         <select id="input7" name="rule_id" class="form-control" placeholder="المهام">
                             <option selected disabled>اختار من القائمة</option>
                             @foreach ($rule as $item)
-                                <option value="{{ $item->id }}"> {{ $item->name }}</option>
+                                <option value="{{ $item->id }}" {{ old('name') == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
                             @endforeach
 
 
@@ -150,12 +150,12 @@
                     <div class="form-group col-md-5 mx-2">
                         <label for="input2"> البريد الالكتروني</label>
                         <input type="text" id="input2" name="email" class="form-control"
-                            placeholder=" البريد الالكترونى">
+                            placeholder=" البريد الالكترونى" value="{{ old('email') }}">
                     </div>
                     <div class="form-group col-md-5 mx-2">
                         <label for="input44"> المحافظة</label>
                         <input type="text" id="input44" name="Provinces" class="form-control"
-                            placeholder="  المحافظة">
+                            placeholder="  المحافظة" value="{{ old('Provinces') }}">
                     </div>
 
                 </div>
@@ -164,36 +164,36 @@
                     <div class="form-group col-md-5 mx-2">
                         <label for="input44">العنوان 1</label>
                         <input type="text" id="input44" name="address_1" class="form-control"
-                            placeholder="  العنوان">
+                            placeholder="  العنوان" value="{{ old('address_1') }}">
                     </div>
                     <div class="form-group col-md-5 mx-2">
                         <label for="input44">العنوان 2</label>
                         <input type="text" id="input44" name="address_2" class="form-control"
-                            placeholder="  العنوان">
+                            placeholder="  العنوان" value="{{ old('address_2') }}">
                     </div>
                 </div>
                 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
                         <label for="input44"> المنطقة</label>
                         <input type="text" id="input44" name="region" class="form-control"
-                            placeholder="  المنطقة">
+                            placeholder="  المنطقة" value="{{ old('region') }}">
                     </div>
                     <div class="form-group col-md-5 mx-2">
-                        <label for="input4"> رقم الهاتف</label>
+                        <label for="input4"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم الهاتف</label>
                         <input type="text" id="input4" name="phone" class="form-control"
-                            placeholder=" رقم الهاتف">
+                            placeholder=" رقم الهاتف" value="{{ old('phone') }}">
                     </div>
                 </div>
                 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
-                        <label for="input6">رقم العسكرى</label>
+                        <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم العسكرى</label>
                         <input type="text" id="input6" name="military_number" class="form-control"
-                            placeholder="رقم العسكرى">
+                            placeholder="رقم العسكرى" value="{{ old('military_number') }}" >
                     </div>
                     <div class="form-group col-md-5 mx-2">
                         <label for="input66">قطاع </label>
                         <input type="text" id="input66" name="sector" class="form-control"
-                            placeholder="قطاع ">
+                            placeholder="قطاع " value="{{ old('sector') }}" >
                     </div>
                 </div>
 
@@ -201,41 +201,43 @@
                     <div class="form-group col-md-5 mx-2">
                         <label for="input9"> المسمي الوظيفي</label>
                         <input type="text" id="input9" name="job_title" class="form-control"
-                            placeholder="المسمي الوظيفي">
+                            placeholder="المسمي الوظيفي" value="{{ old('job_title') }}">
                     </div>
                     <div class="form-group col-md-5 mx-2">
                         <label for="input10">الجنسية</label>
                         <input type="text" id="input10" name="nationality" class="form-control"
-                            placeholder="الجنسية">
+                            placeholder="الجنسية" value="{{ old('nationality') }}">
                     </div>
                 </div>
 
                 <div class="form-row  mx-md-3 d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
-                        <label for="input11">رقم المدنى</label>
+                        <label for="input11"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم المدنى</label>
                         <input type="text" id="input11" name="Civil_number" class="form-control"
-                            placeholder="رقم المدنى">
+                            placeholder="رقم المدنى" value="{{ old('Civil_number') }}">
                     </div>
                     <div class="form-group col-md-5 mx-2">
-                        <label for="input12">رقم الملف</label>
+                        <label for="input12"><i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>
+                            رقم الملف
+                             </label>
                         <input type="text" id="input12" name="file_number" class="form-control"
-                            placeholder="رقم الملف">
+                            placeholder="رقم الملف" value="{{ old('file_number') }}">
                     </div>
                 </div>
                 <div class="form-row  mx-md-3 d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
                         <label for="input14">الاقدامية</label>
                         <input type="text" id="input14" name="seniority" class="form-control"
-                            placeholder="الاقدامية">
+                            placeholder="الاقدامية" value="{{ old('seniority') }}">
                     </div>
 
                     <div class="form-group col-md-5 mx-2">
-                        <label for="input15"> القسم </label>
+                        <label for="input15"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  القسم </label>
                         <select id="input15" name="department_id" class="form-control" placeholder="القسم">
                             <option value="{{ null }}" selected>
                                 لا يوجد قسم محدد</option>
                             @foreach ($alldepartment as $item)
-                                <option value="{{ $item->id }}">
+                                <option value="{{ $item->id }}" {{ old('department_id') == $item->id ? 'selected' : '' }}>
                                     {{ $item->name }}</option>
                             @endforeach
 
@@ -247,12 +249,12 @@
                     <div class="form-group col-md-5 mx-2">
                         <label for="input16">موقع العمل</label>
                         <input type="text" id="input16" name="work_location" class="form-control"
-                            placeholder="موقع العمل">
+                            placeholder="موقع العمل" value="{{ old('work_location') }}">
                     </div>
                     <div class="form-group col-md-5 mx-2">
                         <label for="input18">المؤهل</label>
                         <input type="text" id="input18" name="qualification" class="form-control"
-                            placeholder="المؤهل">
+                            placeholder="المؤهل" value="{{ old('qualification') }}">
                     </div>
                 </div>
 
@@ -260,12 +262,12 @@
                 <div class="form-group col-md-5 mx-2">
                     <label for="input19">تاريخ الميلاد</label>
                     <input type="date" id="input19" name="date_of_birth" class="form-control"
-                        placeholder="تاريخ الميلاد">
+                        placeholder="تاريخ الميلاد" value="{{ old('date_of_birth') }}">
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="input20">تاريخ الالتحاق</label>
                     <input type="date" id="input20" name="joining_date" class="form-control"
-                        placeholder="تاريخ الالتحاق">
+                        placeholder="تاريخ الالتحاق" value="{{ old('joining_date') }}">
                 </div>
             </div>
             <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
@@ -279,7 +281,7 @@
                     <select id="input24" name="grade_id" class="form-control" placeholder="الرتبة">
                         @foreach ($grade as $item)
 
-                        <option value="{{ $item->id }}" {{ $item->name == "عسكرى" ? 'selected':'' }}> {{ $item->name }}
+                        <option value="{{ $item->id }}" {{ $item->name == "عسكرى" ? 'selected':'' }}  {{ old('grade_id') == $item->id ? 'selected' : '' }}> {{ $item->name }}
                         </option>
                         @endforeach
                     </select>
@@ -290,7 +292,7 @@
                     <div class="form-group col-md-10">
                         <label for="input5"> الوصف</label>
                         <textarea type="text" id="input5" name="description" class="form-control" placeholder="الوصف"
-                            rows="3"></textarea>
+                            rows="3" value="{{ old('description') }}"></textarea>
                     </div>
                 </div>
 

@@ -154,7 +154,7 @@
                 </li> -->
                 @endif
 
-                @if (Auth::user()->hasPermission('view departements') && Auth::user()->rule_id == 2)
+                @if (Auth::user()->hasPermission('view departements'))
                 <li class="nav-item">
                     <a href="{{ route('departments.index') }}">
                         <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
@@ -220,13 +220,13 @@
                                             <a href="{{ route('violations.index') }}">أنواع المخالفات</a>
                                         </li>
                                       
-                                        {{-- @if (Auth::user()->hasPermission('view Point')) --}}
+                                        @if (Auth::user()->hasPermission('view Point'))
                                         <li>
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
                                                 style="margin-left: 7px;">
                                             <a href="{{ route('points.index') }}">النقاط</a>
                                         </li>
-                                        {{-- @endif --}}
+                                        @endif
                                     </div>
                                     <div class="col-6">
                                        
