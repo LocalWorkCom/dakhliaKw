@@ -19,5 +19,8 @@ class Inspector extends Model
         return $this->belongsTo(Groups::class);
     }
 
-    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

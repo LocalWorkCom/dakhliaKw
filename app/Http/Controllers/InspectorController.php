@@ -30,7 +30,7 @@ class InspectorController extends Controller
 
     public function getInspectors()
     {
-        $data = Inspector::orderBy('id', 'desc')->get();
+        $data = Inspector::with('user')->orderBy('id', 'desc')->get();
 
         return DataTables::of($data)
         ->addColumn('action', function ($row) {
@@ -84,7 +84,9 @@ class InspectorController extends Controller
     {
         $inspector = Inspector::find($id);
         // dd($inspector);
-        $users = User::get();
+        $departmentId = Auth::user()->department_id;
+        $users = User::where('department_id', $departmentId)->with('grade')->get();
+
         return view('inspectors.edit', compact('inspector','users'));
     }
 
