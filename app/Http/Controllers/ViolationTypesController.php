@@ -113,6 +113,7 @@ class ViolationTypesController extends Controller
     public function update(Request $request)
     {
       
+        dd($request);
     $request->validate([
         'nameedit' => 'required|string|max:255',
         'types' => 'array'

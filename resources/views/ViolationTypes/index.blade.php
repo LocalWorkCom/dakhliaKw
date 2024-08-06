@@ -5,6 +5,12 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
 @push('style')
+<style>
+.selected-option {
+    background-color: yellow; /* Change this to your desired color */
+}
+</style>
+
 @endpush
 @section('title')
     أنواع المخالفات
@@ -251,17 +257,22 @@
 
             // Clear previous selections
             for (let i = 0; i < options.length; i++) {
-                options[i].selected = false;
+                options[i].selected = true;
             }
-
+            console.log('options:', options);
             // Set new selections
             for (let i = 0; i < options.length; i++) {
-                let optionValue = parseInt(options[i].value);
+                
+                // let optionValue = parseInt(options[i].value);
+                let optionValue = options[i].value;
+                // console.log('options:', options);
                 console.log('Option value (parsed):', optionValue); // Debugging
 
                 if (types.includes(optionValue)) {
                     options[i].selected = true;
-                    console.log('Option selected:', options[i].value); // Debugging
+                    options[i].setAttribute('selected', 'selected');
+                    options[i].classList.add('selected-option');
+                    console.log('Option selected:', options[i]); // Debugging
                 }
             }
 
