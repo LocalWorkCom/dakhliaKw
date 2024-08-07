@@ -61,23 +61,28 @@ class GroupTeamController extends Controller
      */
     public function store(Request $request, $id)
     {
-      
+        $messages = [
+            'groupTeam_name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+        ];
+
+        // Validate the request input
+        $request->validate([
+            'groupTeam_name' => 'required|string|max:255',
+        ], $messages);
+
         try {
-            // $inspector_ids = implode(",", $request->inspectors_ids);
-
-
             $grouptemItem = new GroupTeam();
             $grouptemItem->name = $request->groupTeam_name;
             $grouptemItem->group_id = $id;
-            // $grouptemItem->inspector_ids = $inspector_ids;
             $grouptemItem->save();
 
             return redirect()->back()->with('success', 'تم الاضافة بنجاح');
-            // return view('group.view', compact('workTimes'))->with('success', 'تم الاضافة بنجاح');
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }
     }
+
+
 
     public function team($id)
     {
@@ -157,7 +162,6 @@ class GroupTeamController extends Controller
      */
     public function show($id)
     {
-        
     }
 
     /**
@@ -165,34 +169,68 @@ class GroupTeamController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Custom validation messages
+        $messages = [
+            'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+        ];
+
+        // Validate the request input
+        $request->validate([
+            'name' => 'required|string',
+        ], $messages);
         $team = GroupTeam::find($id);
-        $inspector_ids = '';
-        if (isset($request->inspectors_ids)) {
+        $newName = $request->name;
+        $newInspectors = $request->inspectors_ids;
+        if (!$newInspectors) {
+            $newInspectors = $team->inspector_ids;
+        }
+        $oldInspectorIds = explode(',', $team->inspector_ids);
+        $changeArr = array_diff($newInspectors, $oldInspectorIds);
+        if (empty($changeArr)) {
+            $changeArr = false;
+        }
+        $hasChanges = $team->name !== $newName || $changeArr;
 
-            $inspector_ids = implode(",", $request->inspectors_ids);
-            foreach ($request->inspectors_ids as $index => $value) {
+        if (!$hasChanges) {
+            return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.']);
+        }
 
-                $check = GroupTeam::where('group_id', $team->group_id)
-                    ->whereRaw('find_in_set(?, inspector_ids)', [$value]);
-                if ($check->clone()->exists()) {
+        if ($team) {
+            // Update the team name
+            $team->name = $newName;
 
-                    $old =   GroupTeam::find($check->clone()->first()->id);
-                    $oldInspectorIds = explode(',', $old->inspector_ids);
-                    $updatedOldInspectorIds = array_diff($oldInspectorIds, [$value]);
-                    $old->inspector_ids = implode(',', $updatedOldInspectorIds);
-                    $old->save();
-                }
+            // Clear inspector_ids if the name is updated
+            if ($request->has('name')) {
+                $team->inspector_ids = '';
             }
-            foreach ($request->inspectors_ids as $key) {
-                $inspector = Inspector::find($key);
-                $inspector->group_id = $team->group_id;
-                $inspector->save();
+
+            // Save the changes
+            $team->save();
+
+            // If inspector_ids are provided in the request
+            if ($request->has('inspectors_ids')) {
+                $inspector_ids = implode(",", $request->inspectors_ids);
+                // foreach ($request->inspectors_ids as $index => $value) {
+                //     $check = GroupTeam::where('group_id', $team->group_id)
+                //         ->whereRaw('find_in_set(?, inspector_ids)', [$value]);
+
+                //     if ($check->clone()->exists()) {
+                //         $old = GroupTeam::find($check->clone()->first()->id);
+                //         $oldInspectorIds = explode(',', $old->inspector_ids);
+                //         $updatedOldInspectorIds = array_diff($oldInspectorIds, [$value]);
+                //         $old->inspector_ids = implode(',', $updatedOldInspectorIds);
+                //         $old->save();
+                //     }
+                // }
+
+                $team->inspector_ids = $inspector_ids;
+                $team->save();
             }
         }
-        $team->inspector_ids = $inspector_ids;
-        $team->save();
+
         return redirect()->route('groupTeam.index', $team->group_id)->with('success', 'تم التعديل بنجاح');
     }
+
     public function updateTransfer(Request $request, $group_id)
     {
         // Get the inspectors' IDs and team IDs from the request
@@ -254,9 +292,8 @@ class GroupTeamController extends Controller
             $groupTeams = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->get();
             $GroupTeamGets = GroupTeam::where('group_id', $group_id)->get();
             foreach ($GroupTeamGets as $GroupTeamGet) {
-                $inspectorIds= explode(',', $GroupTeamGet->inspector_ids);
+                $inspectorIds = explode(',', $GroupTeamGet->inspector_ids);
                 $selectedInspectors = array_merge($selectedInspectors, $inspectorIds);
-
             }
             $groupTeamIds = $groupTeams->pluck('id', 'name')->toArray();
 
