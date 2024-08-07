@@ -152,9 +152,9 @@ $(document).ready(function() {
             dataSrc: function(json) {
                 // Filter data based on the selected filter
                 if (filter === 'assigned') {
-                    return json.data.filter(item => item.group_id != null && String(item.group_id).trim() !== "");
+                    return json.data.filter(item => item.group_id != 'لا يوجد مجموعه للمفتش' && String(item.group_id).trim() !== "");
                 } else if (filter === 'unassigned') {
-                    return json.data.filter(item => !item.group_id || (typeof item.group_id === 'string' && item.group_id.trim() === ""));
+                    return json.data.filter(item => !item.group_id || ( item.group_id === 'لا يوجد مجموعه للمفتش'));
                 }
                 return json.data; // 'all' or default case
             }
@@ -279,11 +279,14 @@ $('.btn-filter').click(function() {
         });
     });
 
-function openAddModal(id,idGroup) {
+    function openAddModal(id, idGroup) {
+        
     $('#myModal1').modal('show');
     document.getElementById('id').value = id;
-    document.getElementById('group_id').value = idGroup;
 
+    console.log(id);
+    // Set the selected value for group_id
+    document.getElementById('group_id').value = idGroup;
 }
 
 // $(document).ready(function() {

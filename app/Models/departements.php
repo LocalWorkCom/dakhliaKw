@@ -75,4 +75,15 @@ class departements extends Model
     {
         return $this->hasMany(ViolationTypes::class);
     }
+    public function getAllChildren()
+    {
+        $children = collect([]);
+
+        foreach ($this->children as $child) {
+            $children->push($child);
+            $children = $children->merge($child->getAllChildren());
+        }
+
+        return $children;
+    }
 }
