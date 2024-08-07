@@ -197,32 +197,36 @@ class GroupTeamController extends Controller
         $newInspectors = $request->inspectors_ids ? (array) $request->inspectors_ids : [];
         $oldInspectorIds = $team->inspector_ids ? explode(',', $team->inspector_ids) : [];
 
+        // Ensure all IDs are strings for comparison
+        $newInspectors = array_map('strval', $newInspectors);
+        $oldInspectorIds = array_map('strval', $oldInspectorIds);
+
         $changeArr = array_diff($newInspectors, $oldInspectorIds);
 
-        if (empty($changeArr) && $team->name === $newName) {
+        // Also check for removed inspector IDs
+        $removedArr = array_diff($oldInspectorIds, $newInspectors);
+
+        if (empty($changeArr) && empty($removedArr) && $team->name === $newName) {
             return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.']);
         }
 
         // Update the team name
         $team->name = $newName;
 
-        // Clear inspector_ids if the name is updated
-        if ($request->has('name')) {
+        // Update inspector_ids if provided
+        if (!empty($newInspectors)) {
+            $team->inspector_ids = implode(",", $newInspectors);
+        } else {
+            // If no inspectors are provided, clear the inspector_ids
             $team->inspector_ids = '';
         }
 
         // Save the changes
         $team->save();
 
-        // If inspector_ids are provided in the request
-        if ($request->has('inspectors_ids')) {
-            $inspector_ids = implode(",", $newInspectors);
-            $team->inspector_ids = $inspector_ids;
-            $team->save();
-        }
-
         return redirect()->route('groupTeam.index', $team->group_id)->with('success', 'تم التعديل بنجاح');
     }
+
     // public function update(Request $request, $id)
     // {
     //     // Custom validation messages
@@ -342,7 +346,7 @@ class GroupTeamController extends Controller
     {
         $selectedInspectors = [];
 
-        $inspectors = Inspector::where('group_id', $group_id)->get();
+        $inspectors = Inspector::with('user')->where('group_id', $group_id)->get();
         $inspectorGroups = collect();
         foreach ($inspectors as $inspector) {
             $groupTeams = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->get();
