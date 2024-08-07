@@ -144,11 +144,11 @@
                 </div>
 
 
-                @php
+                {{-- @php
                     use App\Models\departements;
                     $checksubDepartment = departements::find(Auth::user()->department_id);
-                @endphp
-
+                @endphp --}}
+{{-- 
                 @if (Auth::user()->hasPermission('view departements'))
                     <!--   <li class="nav-item">
                     <a href="{{ route('sub_departments.index') }}">
@@ -156,7 +156,7 @@
                         <h6>الاقسام</h6>
                     </a>
                 </li> -->
-                @endif
+                @endif --}}
 
                 @if (Auth::user()->hasPermission('view departements'))
                 <li class="nav-item">

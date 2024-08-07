@@ -65,6 +65,7 @@ class GroupTeamController extends Controller
             'groupTeam_name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
         ];
 
+
         // Validate the request input
         $request->validate([
             'groupTeam_name' => 'required|string|max:255',
@@ -162,6 +163,13 @@ class GroupTeamController extends Controller
      */
     public function show($id)
     {
+
+        $team = GroupTeam::find($id);
+        $inspectorIds = explode(',', $team->inspector_ids);
+        $inspectors = Inspector::whereIn('id', $inspectorIds)->get();
+        $group_id = $team->group_id;
+
+        return view('groupteam.showdetails', compact('team', 'inspectors', 'group_id'));
     }
 
     /**
