@@ -54,7 +54,7 @@
 <div class="form-group col-md-10">
                             <label for="input8">الدور</label>
                             <input type="text" id="input8" name="name" class="form-control" placeholder="الوظيفة"
-                                value="{{ $rule_permission->name }}">
+                                value="{{ $rule_permission->name }}" dir="rtl">
                         </div>
                         </div>
                         <div class="form-row mx-md-2 mt-4 d-flex justify-content-center flex-row-reverse">
