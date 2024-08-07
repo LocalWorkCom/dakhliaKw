@@ -1,11 +1,15 @@
 @extends('layout.main')
 
 @section('content')
-    <div class="row ">
-        <div class="container welcome col-11">
-            <p> المفتــــــشون </p>
-        </div>
-    </div>
+<div class="row col-11" dir="rtl">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('inspectors.index') }}">المفتشون</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة مفتش</a></li>
+        </ol>
+    </nav>
+</div>
     <br>
     <form id="inspector-form" action="{{ route('inspectors.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -30,7 +34,7 @@
                                     <div class="option" data-id="{{ $user->id }}" data-name="{{ $user->name }}"
                                         data-phone="{{ $user->phone }}"
                                         data-grade_id="{{ $user->grade ? $user->grade->name : '' }}">
-                                        {{ $user->name }}
+                                        {{ $user->name }} ( رقم الهويه:{{ $user->Civil_number }})
                                     </div>
                                 @endforeach
 
@@ -52,6 +56,13 @@
             <div class="form-row  mx-md-5 mx-1 mb-2 pb-4">
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
+                        {{-- <tr>
+                            <th scope="row" style="background: #f5f6fa;">id</th>
+                            <td style="background: #f5f6fa;" id="user-id">####</td>
+                        </tr> --}}
+                        <input type="hidden" name="user_id" id="hidden-id">
+                        
+
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">الرتبه</th>
                             <td style="background: #f5f6fa;" id="user-grade_id">####</td>
@@ -133,7 +144,11 @@
         const searchInput = document.getElementById('search-input');
         const optionElements = document.querySelectorAll('.option');
         const userPosition = document.getElementById('user-grade_id');
+
         const hiddenPosition = document.getElementById('hidden-position');
+
+        const userId = document.getElementById('hidden-id');
+        const userId_number = document.getElementById('hidden-id');
 
         const userName = document.getElementById('user-name');
         const hiddenName = document.getElementById('hidden-name');
@@ -157,6 +172,9 @@
                 selectBox.dataset.value = this.dataset.id;
 
                 // Update user details
+                userId.textContent = this.dataset.id;
+                userId.value = this.dataset.id;
+
                 userPosition.textContent = this.dataset.grade_id;
                 hiddenPosition.value = this.dataset.grade_id;
                 userName.textContent = this.dataset.name;

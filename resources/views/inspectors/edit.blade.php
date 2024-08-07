@@ -19,9 +19,11 @@
             <div class="form-row mx-2 mb-2 pb-4">
                 <label class="px-md-5 px-3 col-12 " for=""> الرقم المدني / رقم الهوية</label>
                 <div class="input-group px-md-5 px-3 pt-3">
-                    <div class="select-wrapper">
-                        <div class="select-box d-flex justify-content-between" id="select-box">
-                            <p> الرقم المدني / رقم الهوية</p>
+                    <input name="Id_number" disabled value="{{ $inspector->Id_number}}" disabled type="text" id="search-input" placeholder="ابحث هنا ....." style="width: 100% !important;">
+
+                    {{-- <div class="select-wrapper">
+                        <div class="select-box d-flex justify-content-between " disable id="select-box">
+                            <p> {{ $inspector->name }}</p>
                             <i class="fa-solid fa-angle-down" style="color: #a3a1a1;"></i>
                         </div>
                         <div class="options" id="options">
@@ -29,17 +31,17 @@
                                 <input name="Id_number" type="text" id="search-input" dir="rtl" placeholder="ابحث هنا ....." style="width: 100% !important;">
                             </div>
                             @foreach($users as $user)
-                            <div class="option" 
+                              <div class="option" 
                                      data-id="{{ $user->id }}" 
                                      data-name="{{ $user->name }}"
                                      data-phone="{{ $user->phone }}" 
-                                     data-grade_id="{{ $user->grade->name }}">
+                                     data-grade_id="{{ $user->grade ? $user->grade->name : '' }}">
                                     {{ $user->name }}
-                                </div>
+                                </div> 
                             @endforeach
 
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
 
 
@@ -51,26 +53,31 @@
 
     <!--********** الجزأده مش هيظهر غير بعد ما يعمل سيرش********** -->
 
-    <div class="container moftsh col-11 mt-5 p-0 pb-3 " id="user-details-section" style="display: none;">
+    <div class="container moftsh col-11 mt-5 p-0 pb-3 " id="user-details-section" >
         <h3 class="pt-3  px-md-5 px-3 "> عرض النتائج </h3>
         <div class="form-row  mx-md-5 mx-1 mb-2 pb-4">
             <table class="table table-bordered" dir="rtl">
             <tbody>
                     <tr>
                         <th scope="row" style="background: #f5f6fa;">الرتبه</th>
-                        <td style="background: #f5f6fa;" id="user-grade_id">####</td>
+                        <td style="background: #f5f6fa;" id="user-grade_id">
+                            {{  $inspector->position != '' ? $inspector->position :'لا يوجد رتبه'  }}
+                        </td>
                     </tr>
-                    <input type="hidden" name="position" id="hidden-position">
+                    <input type="hidden" name="id" value="{{  $inspector->id }}" id="hidden-position">
+
+                    <input type="hidden" name="position" value="{{  $inspector->position }}" id="hidden-position">
                     <tr>
                         <th scope="row">الاسم</th>
-                        <td id="user-name">####</td>
+                        <td id="user-name">{{ $inspector->name != ' '? $inspector->name :'لايوجد اسم' }}</td>
                     </tr>
-                    <input type="hidden" name="name" id="hidden-name">
+                    <input type="hidden" name="name" value="{{ $inspector->name }}" id="hidden-name">
                     <tr>
                         <th scope="row">رقم الهاتف</th>
-                        <td id="user-phone">###</td>
+                        <td id="user-phone">
+                            {{  $inspector->phone != '' ? $inspector->phone :'لا يوجد هاتف'  }}</td>
                     </tr>
-                    <input type="hidden" name="phone" id="hidden-phone">
+                    <input type="hidden" name="phone" value="{{ $inspector->phone }}" id="hidden-phone">
                 </tbody>
             </table>
         </div>
@@ -81,20 +88,26 @@
         <div class="form-row mx-md-5 mx-2 mb-2 d-block justify-content-start" dir="rtl">
             <div class="form-group d-flex">
                 <div class="radio-btn  d-flex">
-                    <input type="radio" id="intern" name="type" checked value="in" required>
+                    <input type="radio" id="intern" name="type" @if ($inspector->type == 'in')
+                        checked
+                    @endif value="in" required>
                     <label for="intern">مفتش</label>
                 </div>
             </div>
 
             <div class="form-group d-flex">
                 <div class="radio-btn  d-flex">
-                    <input type="radio" id="intern" name="type" checked value="trainee" required>
+                    <input type="radio" id="intern" name="type"  @if ($inspector->type == 'trainee')
+                    checked
+                @endif value="trainee" required>
                     <label for="intern">مفتش متدرب</label>
                 </div>
             </div>
             <div class="form-group d-flex">
                 <div class="radio-btn  d-flex">
-                    <input type="radio" id="intern" name="type" checked value="Buildings" required>
+                    <input type="radio" id="intern" name="type"  @if ($inspector->type == 'Buildings')
+                    checked
+                @endif value="Buildings" required>
                     <label for="intern">مفتش مباني </label>
                 </div>
             </div>
@@ -144,7 +157,7 @@
     const userDetailsSection = document.getElementById('user-details-section');
 
     selectBox.addEventListener('click', function() {
-        options.style.display = options.style.display === 'block' ? 'none' : 'block';
+        options.style.display = 'block' ;
     });
 
     document.addEventListener('click', function(event) {

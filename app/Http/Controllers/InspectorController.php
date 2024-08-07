@@ -32,9 +32,18 @@ class InspectorController extends Controller
 
     public function getInspectors()
     {
-        $data = Inspector::with('user')->orderBy('id', 'desc')->get();
-
+        $userDepartmentId = Auth::user()->department_id;
+        $data = Inspector::with('user')
+        ->whereHas('user', function ($query) use ($userDepartmentId) {
+            $query->where('department_id', $userDepartmentId);
+        })
+        ->orderBy('id', 'desc')
+        ->get();
+       
         return DataTables::of($data)
+        ->addColumn('group_id', function ($row) {
+           return $row->group_id ? $row->group->name : 'لا يوجد مجموعه للمفتش';
+        })
         ->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
@@ -47,9 +56,14 @@ class InspectorController extends Controller
      */
     public function create()
     {
-        $departmentId = Auth::user()->department_id;
-        $users = User::where('department_id', $departmentId)->with('grade')->get();
-        // dd($users);
+       
+        $departmentId=auth()->user()->department_id;
+        $inspectorUserIds = Inspector::pluck('user_id')->toArray();
+
+        $users = User::where('flag', 'employee')
+            ->where('department_id', $departmentId)
+            ->whereNotIn('id', $inspectorUserIds)
+            ->get();
          return view('inspectors.create', compact('users'));
     }
 
@@ -58,17 +72,30 @@ class InspectorController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
+        
         $request->validate([
             
         ]);
-         $inspector =Inspector::create($request->all());
+        $user=User::findOrFail($request->user_id);
+         $inspector =new Inspector();
+         $inspector->name=$request->name;
+         $inspector->phone=$request->phone;
+
+         $inspector->type=$request->type;
+
+         $inspector->position=$request->position;
+
+         $inspector->user_id =$request->user_id;
+         $inspector->Id_number=$user->Civil_number;
+
 
           $inspector->save();
 
         //   dd($departements);
         return redirect()->route('inspectors.index')->with('success', 'Inspector created successfully.')->with('showModal', true);
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -86,8 +113,8 @@ class InspectorController extends Controller
     {
         $inspector = Inspector::find($id);
         // dd($inspector);
-        $departmentId = Auth::user()->department_id;
-        $users = User::where('department_id', $departmentId)->with('grade')->get();
+        $departmentId = Auth::user()->department_id ? Auth::user()->department_id :null;
+        $users = User::where('id', $inspector->id)->with('grade')->get();
 
         return view('inspectors.edit', compact('inspector','users'));
     }
@@ -106,7 +133,7 @@ class InspectorController extends Controller
         $inspector->update($request->only(['position', 'name', 'phone', 'type']));
         // $inspector->save();
         // dd($inspector->id);
-        return redirect()->back()
+        return redirect()->route('inspectors.index')
                          ->with('success', 'Inspector updated successfully.')->with('showModal', true);
     }
 
