@@ -184,7 +184,20 @@ class UserController extends Controller
                 $firstlogin = 0;
                 if ($user->token == null) {
                     $firstlogin = 1;
-                    return view('resetpassword', compact('military_number', 'firstlogin'));
+                                $set = '123456789';
+            $code = substr(str_shuffle($set), 0, 4);
+
+            $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+
+            $response = send_sms_code($msg, $user->phone, $user->country_code);
+            $result = json_decode($response, true);
+
+            if (isset($result['sent']) && $result['sent'] === 'true') {
+                return view('verfication_code', compact('code', 'military_number', 'password'));
+            } else {
+                return back()->with('error', 'سجل الدخول مرة أخرى');
+            }
+                   // return view('resetpassword', compact('military_number', 'firstlogin'));
                 }
                 
                 Auth::login($user); // Log the user in
