@@ -43,86 +43,68 @@ class UserController extends Controller
     public function index($id)
     {
         // if()
-           return view('user.view', compact('id'));
+        return view('user.view', compact('id'));
     }
 
     public function getUsers($id)
     {
 
-        
-       
+
+
         $flagType = $id == 0 ? 'user' : 'employee';
         $parentDepartment = Departements::find(Auth()->user()->department_id);
-       
-        if(Auth::user()->rule->name == "localworkadmin")
-        {
+
+        if (Auth::user()->rule->name == "localworkadmin") {
             $data = User::where('flag', $flagType)->get();
         }
         if (Auth::user()->rule->name == "superadmin") {
-            
-            if($flagType == 'employee')
-            {
-                $data = User::where('flag', $flagType)->get(); 
-            }
-            else
-            {
-                 $data = User::where('flag', $flagType)
-            ->whereHas('rule', function ($query) {
-                $query->where('hidden', false);
-            })->get();
-            }
-           
-            
-            
 
-           
+            if ($flagType == 'employee') {
+                $data = User::where('flag', $flagType)->get();
+            } else {
+                $data = User::where('flag', $flagType)
+                    ->whereHas('rule', function ($query) {
+                        $query->where('hidden', false);
+                    })->get();
+            }
         } else {
             if (is_null($parentDepartment->parent_id)) {
                 $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();
-                
-                if($flagType == 'employee')
-            {
-                 $data = User::where('flag', $flagType)
-                    ->where(function ($query) use ($subdepart, $parentDepartment) {
-                        $query->whereIn('department_id', $subdepart)
-                              ->orWhere('department_id', $parentDepartment->id);
-                    })
-                    // ->whereIn('department_id', $subdepart)
-                    // ->orWhere('department_id', $parentDepartment->id)
-                    ->get();
-            }
-            else
-            {
-                 $data = User::where('flag', $flagType)
-                    ->where(function ($query) use ($subdepart, $parentDepartment) {
-                        $query->whereIn('department_id', $subdepart)
-                              ->orWhere('department_id', $parentDepartment->id);
-                    })->whereHas('rule', function ($query) {
-                        $query->where('hidden', false);
-                    })
-                    // ->whereIn('department_id', $subdepart)
-                    // ->orWhere('department_id', $parentDepartment->id)
-                    ->get();
-            }
-            
-               
-                    
+
+                if ($flagType == 'employee') {
+                    $data = User::where('flag', $flagType)
+                        ->where(function ($query) use ($subdepart, $parentDepartment) {
+                            $query->whereIn('department_id', $subdepart)
+                                ->orWhere('department_id', $parentDepartment->id);
+                        })
+                        // ->whereIn('department_id', $subdepart)
+                        // ->orWhere('department_id', $parentDepartment->id)
+                        ->get();
+                } else {
+                    $data = User::where('flag', $flagType)
+                        ->where(function ($query) use ($subdepart, $parentDepartment) {
+                            $query->whereIn('department_id', $subdepart)
+                                ->orWhere('department_id', $parentDepartment->id);
+                        })->whereHas('rule', function ($query) {
+                            $query->where('hidden', false);
+                        })
+                        // ->whereIn('department_id', $subdepart)
+                        // ->orWhere('department_id', $parentDepartment->id)
+                        ->get();
+                }
             } else {
-                if($flagType == 'employee')
-            {
-               $data = User::where('flag', $flagType)
-                    ->where('department_id', $parentDepartment->id)
-                    ->get();
-            }
-            else
-            {
-                $data = User::where('flag', $flagType)
-                    ->where('department_id', $parentDepartment->id)
-                    ->whereHas('rule', function ($query) {
-                        $query->where('hidden', false);
-                    })
-                    ->get();
-            }
+                if ($flagType == 'employee') {
+                    $data = User::where('flag', $flagType)
+                        ->where('department_id', $parentDepartment->id)
+                        ->get();
+                } else {
+                    $data = User::where('flag', $flagType)
+                        ->where('department_id', $parentDepartment->id)
+                        ->whereHas('rule', function ($query) {
+                            $query->where('hidden', false);
+                        })
+                        ->get();
+                }
             }
         }
 
@@ -141,87 +123,148 @@ class UserController extends Controller
             ->make(true);
     }
 
+    // public function login(Request $request)
+    // {
+    //     $messages = [
+    //         'military_number.required' => 'رقم العسكري مطلوب.',
+    //         'password.required' => 'كلمة المرور مطلوبة.',
+    //     ];
+
+    //     $validatedData = Validator::make($request->all(), [
+    //         'military_number' => 'required|string',
+    //         'password' => 'required|string',
+    //     ], $messages);
+
+    //     if ($validatedData->fails()) {
+    //         return back()->withErrors($validatedData)->withInput();
+    //     }
+
+    //     $military_number = $request->military_number;
+    //     $password = $request->password;
+
+    //     // Check if the user exists
+    //     $user = User::where('military_number', $military_number)->first();
+
+    //     if (!$user) {
+    //         return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
+    //     }
+
+    //     // Check if the user has the correct flag
+    //     if ($user->flag !== 'user') {
+    //         return back()->with('error', 'لا يسمح لك بدخول الهيئة');
+    //     }
+
+    //     $credentials = $request->only('military_number', 'password');
+
+    //     // Check if the user has logged in within the last two hours
+    //     $twoHoursAgo = now()->subHours(6);
+
+    //     if (Auth::attempt($credentials)) {
+    //         // If the user has logged in within the last two hours, do not set the code
+    //         if ($user->updated_at >= $twoHoursAgo) {
+
+    //             $firstlogin = 0;
+    //             if ($user->token == null) {
+    //                 $firstlogin = 1;
+    //                             $set = '123456789';
+    //         $code = substr(str_shuffle($set), 0, 4);
+
+    //         $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+
+    //         $response = send_sms_code($msg, $user->phone, $user->country_code);
+    //         $result = json_decode($response, true);
+
+    //         if (isset($result['sent']) && $result['sent'] === 'true') {
+    //             return view('verfication_code', compact('code', 'military_number', 'password'));
+    //         } else {
+    //             return back()->with('error', 'سجل الدخول مرة أخرى');
+    //         }
+    //                // return view('resetpassword', compact('military_number', 'firstlogin'));
+    //             }
+                
+    //             Auth::login($user); // Log the user in
+    //             return redirect()->route('home');
+    //         }
+
+    //         $set = '123456789';
+    //         $code = substr(str_shuffle($set), 0, 4);
+
+    //         $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+
+    //         $response = send_sms_code($msg, $user->phone, $user->country_code);
+    //         $result = json_decode($response, true);
+
+    //         if (isset($result['sent']) && $result['sent'] === 'true') {
+    //             return view('verfication_code', compact('code', 'military_number', 'password'));
+    //         } else {
+    //             return back()->with('error', 'سجل الدخول مرة أخرى');
+    //         }
+    //     }
+
+    //     return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
+    // }
     public function login(Request $request)
     {
         $messages = [
             'military_number.required' => 'رقم العسكري مطلوب.',
             'password.required' => 'كلمة المرور مطلوبة.',
         ];
-
-        $validatedData = Validator::make($request->all(), [
+    
+        $validatedData = $request->validate([
             'military_number' => 'required|string',
             'password' => 'required|string',
         ], $messages);
-
-        if ($validatedData->fails()) {
-            return back()->withErrors($validatedData)->withInput();
-        }
-
+    
         $military_number = $request->military_number;
         $password = $request->password;
-
+    
         // Check if the user exists
         $user = User::where('military_number', $military_number)->first();
-
         if (!$user) {
-            return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
+            return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا')->withInput();
         }
-
+    
         // Check if the user has the correct flag
         if ($user->flag !== 'user') {
-            return back()->with('error', 'لا يسمح لك بدخول الهيئة');
+            return back()->with('error', 'لا يسمح لك بدخول الهيئة')->withInput();
         }
-
+    
         $credentials = $request->only('military_number', 'password');
-
-        // Check if the user has logged in within the last two hours
         $twoHoursAgo = now()->subHours(6);
-
+    
         if (Auth::attempt($credentials)) {
-            // If the user has logged in within the last two hours, do not set the code
-            if ($user->updated_at >= $twoHoursAgo) {
-
-                $firstlogin = 0;
-                if ($user->token == null) {
-                    $firstlogin = 1;
-                                $set = '123456789';
-            $code = substr(str_shuffle($set), 0, 4);
-
-            $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
-
-            $response = send_sms_code($msg, $user->phone, $user->country_code);
-            $result = json_decode($response, true);
-
-            if (isset($result['sent']) && $result['sent'] === 'true') {
-                return view('verfication_code', compact('code', 'military_number', 'password'));
-            } else {
-                return back()->with('error', 'سجل الدخول مرة أخرى');
-            }
-                   // return view('resetpassword', compact('military_number', 'firstlogin'));
-                }
-                
+            // to not send code
+            if ($user->token == 'logined') {
                 Auth::login($user); // Log the user in
                 return redirect()->route('home');
             }
-
-            $set = '123456789';
-            $code = substr(str_shuffle($set), 0, 4);
-
-            $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
-
-            $response = send_sms_code($msg, $user->phone, $user->country_code);
-            $result = json_decode($response, true);
-
-            if (isset($result['sent']) && $result['sent'] === 'true') {
-                return view('verfication_code', compact('code', 'military_number', 'password'));
-            } else {
-                return back()->with('error', 'سجل الدخول مرة أخرى');
+            //end code
+            if ($user->updated_at >= $twoHoursAgo) {
+                if ($user->token == null) {
+                    $firstlogin = 1;
+    
+                    $set = '123456789';
+                    $code = substr(str_shuffle($set), 0, 4);
+    
+                    $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+                    $response = send_sms_code($msg, $user->phone, $user->country_code);
+                    $result = json_decode($response, true);
+    
+                    if (isset($result['sent']) && $result['sent'] === 'true') {
+                        return view('verfication_code', compact('code', 'military_number', 'password'));
+                    } else {
+                        return back()->with('error', 'سجل الدخول مرة أخرى')->withInput();
+                    }
+                }
             }
+    
+            Auth::login($user); // Log the user in
+            return redirect()->route('home');
         }
-
-        return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
+    
+        return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا')->withInput();
     }
-
+    
     public function resend_code(Request $request)
     {
         // dd($request);
@@ -290,7 +333,6 @@ class UserController extends Controller
                 if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code') || url()->previous() == route('verfication_code')) {
                     return view('resetpassword', compact('military_number', 'firstlogin'));
                 } else {
-                    Auth::login($user); // Log the user in
                     return redirect()->route('home');
                 }
             }
@@ -389,9 +431,8 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
         Auth::login($user); // Log the user in
-        session()->flash('success', 'تم إعادة تعيين كلمة المرور بنجاح');
 
-        return redirect()->route('home');
+        return redirect()->route('home')->with('success', 'تم إعادة تعيين كلمة المرور بنجاح');
         // return redirect()->route('home')->with('user', auth()->user());
 
     }
@@ -424,17 +465,13 @@ class UserController extends Controller
             $alldepartment = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
         }
 
-        if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin" )
-        {
+        if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $alluser = User::where('flag', 'employee')->get();
-        
+        } else {
+            $alluser = User::where('flag', 'employee')->where('department_id', $user->department_id)->get();
         }
-        else
-        {
-            $alluser = User::where('flag', 'employee')->where('department_id',$user->department_id)->get();
-        }       
-         // $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
-        
+        // $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
+
         // $speificUsers = User::where('department_id',$user->department_id)->where('flag','employee')->get();
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
@@ -517,7 +554,7 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'file_number'),
                 ],
                 'military_number' => [
-                   'nullable',
+                    'nullable',
                 ],
             ];
             if ($request->has('solderORcivil') && $request->solderORcivil == "military") {
@@ -701,54 +738,54 @@ class UserController extends Controller
         //         'Civil_number' => 'required',
         //     ], $messages);
         // } else {
-            $messages = [
-                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
-                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
-                'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
-            ];
+        $messages = [
+            'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+            'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
+            'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+            'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
+            'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
+        ];
 
-            $validatedData = Validator::make($request->all(), [
-                // 'military_number' => 'required|string|max:255',
-                'military_number' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    // ValidationRule::unique('permissions', 'name'),
-                    new UniqueNumberInUser($user),
-                ],
-                // 'phone' => 'required|string',
-                'phone' => [
-                    'required',
-                    'string',
-                    // 'max:255',
-                    // ValidationRule::unique('permissions', 'name'),
-                    new UniqueNumberInUser($user),
-                ],
-                // 'file_number' => 'required|string',
-                'file_number' => [
-                    'required',
-                    'string',
-                    // 'max:255',
-                    // ValidationRule::unique('permissions', 'name'),
-                    new UniqueNumberInUser($user),
-                ],
-                'email' => [
-                    // 'max:255',
-                    // ValidationRule::unique('permissions', 'name'),
-                    new UniqueNumberInUser($user),
-                ],
-                'public_administration' => 'required',
-                // 'Civil_number' => 'required',
-                'Civil_number' => [
-                    'required',
-                    // 'string',
-                    // 'max:255',
-                    // ValidationRule::unique('permissions', 'name'),
-                    new UniqueNumberInUser($user),
-                ],
-            ], $messages);
+        $validatedData = Validator::make($request->all(), [
+            // 'military_number' => 'required|string|max:255',
+            'military_number' => [
+                'required',
+                'string',
+                'max:255',
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueNumberInUser($user),
+            ],
+            // 'phone' => 'required|string',
+            'phone' => [
+                'required',
+                'string',
+                // 'max:255',
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueNumberInUser($user),
+            ],
+            // 'file_number' => 'required|string',
+            'file_number' => [
+                'required',
+                'string',
+                // 'max:255',
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueNumberInUser($user),
+            ],
+            'email' => [
+                // 'max:255',
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueNumberInUser($user),
+            ],
+            'public_administration' => 'required',
+            // 'Civil_number' => 'required',
+            'Civil_number' => [
+                'required',
+                // 'string',
+                // 'max:255',
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueNumberInUser($user),
+            ],
+        ], $messages);
         // }
 
         // Handle validation failure

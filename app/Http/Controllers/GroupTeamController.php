@@ -346,7 +346,7 @@ class GroupTeamController extends Controller
     {
         $selectedInspectors = [];
 
-        $inspectors = Inspector::where('group_id', $group_id)->get();
+        $inspectors = Inspector::with('user')->where('group_id', $group_id)->get();
         $inspectorGroups = collect();
         foreach ($inspectors as $inspector) {
             $groupTeams = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->get();
