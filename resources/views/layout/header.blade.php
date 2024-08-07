@@ -1,6 +1,6 @@
 <div class="all-nav">
     <div class="upper-navbar d-flex">
-        <div class="second-section d-flex  col-md-10 col-sm-6">
+        <div class="second-section d-flex  col-md-9 col-sm-6">
             <div class="dropdown">
                 {{-- @if ($user->login) Test --}}
                 @php
@@ -63,7 +63,7 @@
         </div>
         <div class="first-section d-flex justify-content-between mt-1 ">
             
-            <h2 style="color: #ffffff">{{ showUserDepartment() }}  -</h2>
+        <h2 style="color: #FFFFFF">{{ showUserDepartment() }}  -</h2>
      
             <h2> الرقابة والتفتيش</h2>
             <img class="mt-2" src="{{ asset('frontend/images/logo.svg') }}" alt="">
