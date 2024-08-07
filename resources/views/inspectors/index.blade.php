@@ -175,7 +175,7 @@ $(document).ready(function() {
                 var departmentShow = '{{ route('inspectors.show', ':id') }}'.replace(':id', row.id);
                 var btn_add = '';
 
-                if (row.group_id == null) {
+                if (row.group_id ==  'لا يوجد مجموعه للمفتش') {
                     var addToGroup = '{{ route('inspectors.addToGroup', ':id') }}'.replace(':id', row.id);
                     btn_add = `
                         <a class="btn btn-sm" id="updateValueButton" style="background-color: green;" 
