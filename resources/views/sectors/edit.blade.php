@@ -28,7 +28,7 @@
                     <h3 class="pt-3 px-md-5 px-3">اضف قطاع</h3>
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="name">ادخل اسم القطاع</label>
-                        <input type="text" id="name" name="name" class="form-control" value="{{ $data->name }}" placeholder="قطاع واحد" required/>
+                        <input type="text" id="name" name="name" class="form-control" value="{{ $data->name }}" placeholder="قطاع واحد" dir="rtl" required/>
                         <span class="text-danger span-error" id="name-error"></span>
 
                     </div>

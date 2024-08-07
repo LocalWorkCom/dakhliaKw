@@ -54,7 +54,7 @@
                     <div class="form-group col-md-10">
                         <label for="name">اسم الادارة </label>
                         <input type="text" class="form-control" id="name" name="name"
-                            value="{{ old('name', $department->name) }}">
+                            value="{{ old('name', $department->name) }}" dir="rtl">
                     </div>
                 </div>
                 <div class="form-row mx-md-2 d-flex justify-content-center">
