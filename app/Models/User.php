@@ -94,7 +94,7 @@ class User extends Authenticatable
     }
     public function department()
     {
-        return $this->belongsTo(departements::class, 'id'); // Assuming 'department_id' is the foreign key
+        return $this->belongsTo(departements::class, 'department_id'); // Assuming 'department_id' is the foreign key
     }
 
 

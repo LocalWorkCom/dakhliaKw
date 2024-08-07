@@ -37,13 +37,12 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" dir="rtl">
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" dir="rtl">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <img src="{{ asset('frontend/images/group-add-modal') }}.svg" alt>
+                        <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
                         <h5 class="modal-title"> اضافة فريق</h5>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
@@ -55,33 +54,39 @@
                             <form action="{{ route('groupTeam.store', $id) }}" method="POST">
                                 @csrf
                                 <div class="form-group mt-4 mb-3">
-                                    <label class="d-flex justify-content-start pt-3 pb-2" for="groupTeam_name"> ادخل اسم
-                                        الفريق
-                                    </label>
-
-                                    <input type="text" id="groupTeam_name" name="groupTeam_name" class="form-control"
-                                        placeholder="ادخل الفريق" required>
-
+                                    <label class="d-flex justify-content-start pt-3 pb-2" for="groupTeam_name"> ادخل اسم الفريق </label>
+                                    <input type="text" id="groupTeam_name" name="groupTeam_name" class="form-control @error('groupTeam_name') is-invalid @enderror" placeholder="ادخل الفريق" value="{{ old('groupTeam_name') }}">
+                                    @error('groupTeam_name')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
                                 </div>
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                    <button type="submit" class="btn-all mx-2 p-2"
-                                        style="background-color: #274373; color: #ffffff;">
+                                    <button type="submit" class="btn-all mx-2 p-2" style="background-color: #274373; color: #ffffff;">
                                         <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> الاضافة
                                     </button>
-                                    <button type="button" class="btn-all p-2"
-                                        style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
-                                        data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
+                                    <button type="button" class="btn-all p-2" style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);" data-bs-dismiss="modal" aria-label="Close">
                                         <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
-
+    
+                    <!-- Script to Reopen Modal if there are Validation Errors -->
+                    @if ($errors->any())
+                    <script>
+                        $(document).ready(function() {
+                            $('#myModal1').modal('show');
+                        });
+                    </script>
+                    @endif
+                    
                     <!-- Second Modal Body (Initially Hidden) -->
                     <div id="secondModalBody" class="d-none">
                         <div class="body-img-modal d-block">
-                            <img src="{{ asset('frontend/images/ordered.svg') }}" alt>
+                            <img src="{{ asset('frontend/images/ordered.svg') }}" alt="">
                             <p>تمت الاضافه بنجاح</p>
                         </div>
                     </div>
@@ -89,6 +94,7 @@
             </div>
         </div>
     </div>
+    
     <div class="row">
         <div class="container col-11 mt-3 py-4">
             @if (session('success'))
@@ -172,7 +178,7 @@
                     // permissiondelete = permissiondelete.replace(':id', row.id);
                     return `
                        <a href="` + teamShow + `" class="btn btn-sm" style="background-color: #274373;"> <i class="fa fa-eye"></i>عرض  </a>
-                       <a href="` + teamEdit + `" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> تعديل </a>
+                       <a href="` + teamEdit + `" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> تعديل او اضافه مفتش </a>
                      
                     `;
                 }

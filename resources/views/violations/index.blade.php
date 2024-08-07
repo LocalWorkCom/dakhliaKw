@@ -89,7 +89,7 @@
                         <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                             <div class="form-group mt-4 mb-3">
                                 <label class="d-flex justify-content-start pt-3 pb-2" for="name" 
-                                style="display:flex; flex-direction:column-reverse;"> اسم
+                                style=" flex-direction:column-reverse;"> اسم
                                     المخالفه</label>
                                 <input type="text" id="name" name="name" class="form-control" placeholder="اسم المخالفه"
                                     required>
@@ -105,7 +105,7 @@
                                     <div class="options" id="options">
                                         <div class="search-box">
                                             <input type="text" id="search-input" placeholder="ابحث هنا ....."
-                                                style="width: 100% !important;">
+                                                style="width: 100% !important;" >
                                         </div>
                                         @foreach (getDepartments() as $department)
                                         <div class="option">

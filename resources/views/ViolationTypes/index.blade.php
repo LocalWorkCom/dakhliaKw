@@ -7,7 +7,8 @@
 @push('style')
 <style>
 .selected-option {
-    background-color: yellow; /* Change this to your desired color */
+    background-color: #e7e7e7;
+    color: black;
 }
 </style>
 
@@ -20,15 +21,23 @@
         <div class="row">
 
             <div class="container welcome col-11">
+            <div class="d-flex justify-content-between">
                 <p> أنواع المخالفـــات</p>
+                {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
+
+<button class="btn-all px-3" style="color: #274373;" onclick="openadd()" data-bs-toggle="modal"
+    data-bs-target="#myModal1">
+    اضافة مخالفه    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">
+</button>
+{{-- @endif --}}
             </div>
         </div>
-
+        </div>
         <br>
         <div class="row">
-            <div class="container  col-11 mt-3 p-0 ">
+        <div class="container  col-11 mt-3 p-0 pt-5 pb-4">
 
-                <div class="row " dir="rtl">
+                <!-- <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
                         {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
 
@@ -39,7 +48,7 @@
                         </button>
                         {{-- @endif --}}
                     </div>
-                </div>
+                </div> -->
                 <div class="col-lg-12">
                     <div class="bg-white ">
                         @if (session()->has('message'))
@@ -85,7 +94,7 @@
                         <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
                             <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                                 <div class="form-group mt-4 mb-3">
-                                    <label class="d-flex justify-content-start pt-3 pb-2" for="name"> اسم
+                                    <label class="d-flex justify-content-start pt-3 pb-2" for="name" style=" flex-direction: row-reverse;"> اسم
                                         المخالفه</label>
                                     <input type="text" id="nameadd" name="nameadd" class="form-control"
                                         placeholder="اسم المخالفه" required>
@@ -108,11 +117,12 @@
 
                                             </div>
                                             @foreach (getDepartments() as $department)
-                                                <div class="option">
+                                                <div class="option" style="    display: flex; justify-content: flex-end;">
+                                                <label for="option{{ $department->id }}"> {{ $department->name }}
+                                                </label>
                                                     <input type="checkbox" id="option{{ $department->id }}"
                                                         value="{{ $department->id }}" name="types[]">
-                                                    <label for="option{{ $department->id }}"> {{ $department->name }}
-                                                    </label>
+                                                   
                                                 </div>
                                             @endforeach
 
@@ -124,7 +134,7 @@
                                     @endif
                                     <div id="selected-values" class="mt-2"></div>
                                 </div>
-                                <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
+                                <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2" dir="rtl">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn">
                                         <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
@@ -169,16 +179,16 @@
                         <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
                             <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                                 <div class="form-group mt-4 mb-3">
-                                    <label class="d-flex justify-content-start pt-3 pb-2" for="nameedit">اسم
+                                    <label class="d-flex justify-content-start pt-3 pb-2" for="nameedit" style=" flex-direction: row-reverse;">اسم
                                         المخالفه</label>
                                     <input type="text" id="nameedit" name="nameedit" class="form-control"
                                         placeholder="اسم المخالفه" required>
                                 </div>
                                 <div class="form-group  mb-3">
-                                    <label class="d-flex justify-content-start pb-2" for="types">
+                                    <label class="d-flex justify-content-start pb-2" for="types" style=" flex-direction: row-reverse;">
                                         الاداره الخاصه بالمخالفه</label>
                                     <select class="w-100 px-2" name="types[]" id="types" multiple
-                                        style="border: 0.2px solid rgb(199, 196, 196);" required>
+                                        style="border: 0.2px solid rgb(199, 196, 196);" required dir="rtl">
                                         @foreach (getDepartments() as $department)
                                             <option value="{{ $department->id }}"> {{ $department->name }}</option>
                                         @endforeach
@@ -201,7 +211,7 @@
                                                 <div class="option">
                                                     <input type="checkbox" id="option{{ $department->id }}"
                             value="{{ $department->id }}" name="types[]">
-                            <label for="option{{ $department->id }}"> {{ $department->name }}
+                            <label for="option{{ $department->id }}" > {{ $department->name }}
                             </label>
                         </div>
                         @endforeach
@@ -209,7 +219,7 @@
             </div>
             <div id="selected-values" class="mt-2"></div>
         </div> --}}
-                                <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
+                                <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2" dir="rtl">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn">
                                         <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
