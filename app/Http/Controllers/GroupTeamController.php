@@ -61,7 +61,7 @@ class GroupTeamController extends Controller
      */
     public function store(Request $request, $id)
     {
-      
+
         try {
             // $inspector_ids = implode(",", $request->inspectors_ids);
 
@@ -157,7 +157,12 @@ class GroupTeamController extends Controller
      */
     public function show($id)
     {
-        
+        $team = GroupTeam::find($id);
+        $inspectorIds = explode(',', $team->inspector_ids);
+        $inspectors = Inspector::whereIn('id', $inspectorIds)->get();
+        $group_id = $team->group_id;
+
+        return view('groupteam.showdetails', compact('team', 'inspectors', 'group_id'));
     }
 
     /**
@@ -254,9 +259,8 @@ class GroupTeamController extends Controller
             $groupTeams = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->get();
             $GroupTeamGets = GroupTeam::where('group_id', $group_id)->get();
             foreach ($GroupTeamGets as $GroupTeamGet) {
-                $inspectorIds= explode(',', $GroupTeamGet->inspector_ids);
+                $inspectorIds = explode(',', $GroupTeamGet->inspector_ids);
                 $selectedInspectors = array_merge($selectedInspectors, $inspectorIds);
-
             }
             $groupTeamIds = $groupTeams->pluck('id', 'name')->toArray();
 
