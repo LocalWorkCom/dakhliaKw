@@ -136,7 +136,7 @@
                                         {{-- <a href="${vacation}"  "   class="btn btn-sm" style=" background-color:#864824; "> <i class="fa-solid fa-mug-hot" ></i> </a> --}}
                                     
                                         <a href="${unsigned}" class="btn btn-sm ${visibility}" style="background-color: #28a39c;"> 
-                                            <i class="fa-solid fa-user-minus"></i> unsigned 
+                                            <i class="fa-solid fa-user-minus"></i> الغاء التعيين 
                                         </a>
 
                                         `;
