@@ -50,15 +50,30 @@
                     </div>
                 </div>
                 <div class="form-row col-11 mb-2 mt-3 mx-md-2">
-                
-                @foreach (getgovernments() as $government)
+                    @foreach($governments as $government)
+
+                    <div class="form-group col-3 d-flex mx-md-4">
+                        <input type="checkbox" name="governmentIDS[]" value="{{ $government->id }}"
+                        @if(in_array($government->id, $data->governments_IDs)) checked @endif
+                            id="governmentIDS_{{ $government->id }}">
+                        <label for="governmentIDS_{{ $government->id }}">{{ $government->name }}</label>
+                    </div>
+                    @endforeach 
+                    {{-- @foreach($governments as $government)
+                    <option value="{{ $government->id }}"
+                        @if(in_array($government->id, $sector->governments_IDs)) selected @endif>
+                        {{ $government->name }}
+                    </option>
+                @endforeach --}}
+        
+                {{-- @foreach (getgovernments() as $government)
                     <div class="form-group col-3 d-flex mx-md-4">
                         <input type="checkbox" name="governmentIDS[]" value="{{ $government->id }}"
                             @if(isset($checkedGovernments[$government->id])) checked @endif
                             id="governmentIDS_{{ $government->id }}">
                         <label for="governmentIDS_{{ $government->id }}">{{ $government->name }}</label>
                     </div>
-                @endforeach
+                @endforeach --}}
                     <input type="hidden" name="id" value="{{ $data->id }}">
                 </div>
                 <span class="text-danger span-error" id="governmentIDS-error"></span>

@@ -170,7 +170,7 @@
                     // Using route generation correctly in JavaScript
                     var teamEdit = '{{ route('groupTeam.edit', ':id') }}';
                     teamEdit = teamEdit.replace(':id', row.id);
-                    var teamShow = '{{ route('groupTeam.index', ':id') }}';
+                    var teamShow = '{{ route('groupTeam.show', ':id') }}';
                     teamShow = teamShow.replace(':id', row.id);
                     // var permissionshow = '{{ route('permissions_show', ':id') }}';
                     // permissionshow = permissionshow.replace(':id', row.id);
