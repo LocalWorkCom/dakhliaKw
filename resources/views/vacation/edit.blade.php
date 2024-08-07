@@ -37,7 +37,7 @@
 
 
                             <label for="name">اسم الاجازة:</label>
-                            <input type="text" id="name" name="name" class="form-control"
+                            <input type="text" id="name" name="name" class="form-control" dir="rtl" 
                                 value="{{ $vacation->name }}">
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                     <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-md-2">
                             <label for="date_to">تاريخ النهاية</label>
-                            <input type="date" id="date_to" name="date_to" class="form-control"
+                            <input type="date" id="date_to" name="date_to" class="form-control" 
                                 value="{{ $vacation->date_to ? $vacation->date_to : date('Y-m-d') }}">
                         </div>
                         <div class="form-group col-md-5 mx-md-2">

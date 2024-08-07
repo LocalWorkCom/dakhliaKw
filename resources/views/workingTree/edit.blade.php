@@ -31,7 +31,7 @@
                 <div class="form-row mx-2 mb-2">
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="name">اسم نظام العمل</label>
-                        <input type="text" id="name" name="name" class="form-control" required
+                        <input type="text" id="name" name="name" class="form-control" required dir="rtl"
                             value="{{ $workingTree->name }}" placeholder="ادخل نظام العمل" />
                     </div>
                 </div>

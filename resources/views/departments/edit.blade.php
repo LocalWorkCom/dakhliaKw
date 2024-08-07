@@ -29,7 +29,7 @@
                     <div class="form-row mx-md-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="name">اسم الادارة </label>
-                            <input type="text" name="name" class="form-control" value="{{ old('name', $department->name) }}">
+                            <input type="text" name="name" class="form-control" value="{{ old('name', $department->name) }}" dir="rtl">
                             @error('name')
                             <div class="alert alert-danger" style="height: 40px;">{{ $message }}</div>
                             @enderror
@@ -52,7 +52,7 @@
                     <div class="form-row mx-md-2 d-flex justify-content-center">
                     <div class="form-group col-md-10">
                         <label for="description">الوصف </label>
-                        <input type="text" name="description" class="form-control"  value="{{ old('description', $department->description) }}">
+                        <input type="text" name="description" class="form-control"  value="{{ old('description', $department->description) }}" dir="rtl">
                         @error('description')
                             <div class="alert alert-danger" style="height: 40px;">{{ $message }}</div>
                             @enderror

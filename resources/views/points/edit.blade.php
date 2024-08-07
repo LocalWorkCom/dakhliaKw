@@ -37,7 +37,7 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="name"> اسم النقطة </label>
-                        <input type="text" id="name" class="form-control" name="name" value="{{ $data->name }}"
+                        <input type="text" id="name" class="form-control" name="name" value="{{ $data->name }}" dir="rtl"
                             placeholder=" اسم النقطه" required />
                         <span class="text-danger span-error" id="name-error"></span>
 
@@ -98,25 +98,25 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="map_link"> رابط جوجل ماب </label>
-                        <input type="text" id="map_link" name="map_link" class="form-control" placeholder=" ادخل الرابط"
+                        <input type="text" id="map_link" name="map_link" class="form-control" placeholder=" ادخل الرابط"  dir="rtl"
                             value="{{ $data->google_map }}" />
                     </div>
                 </div>
                 <div class="form-row   mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="long"> خطوط الطول </label>
-                        <input type="text" id="long" name="long" value="{{ $data->long }}"
+                        <input type="text" id="long" name="long" value="{{ $data->long }}"  dir="rtl"
                             class="form-control" placeholder="  خطوط الطول " />
                     </div>
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="lat"> خطوط العرض </label>
-                        <input type="text" id="lat" name="Lat"  class="form-control" placeholder="  خطوط العرض "  value="{{ $data->lat }}"/>
+                        <input type="text" id="lat" name="Lat"  class="form-control" placeholder="  خطوط العرض "  value="{{ $data->lat }}" dir="rtl"/>
                     </div>
                 </div>
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="note"> اضف ملاحظتك </label>
-                        <textarea type="text" id="note" name="note" class="form-control note" placeholder="ملاحظتك">{{ $data->note }}</textarea>
+                        <textarea type="text" id="note" name="note" class="form-control note" placeholder="ملاحظتك" dir="rtl">{{ $data->note }}</textarea>
                     </div>
                 </div>
                 <div class="container col-11 ">

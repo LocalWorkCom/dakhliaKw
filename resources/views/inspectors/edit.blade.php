@@ -28,7 +28,7 @@
                         </div>
                         <div class="options" id="options">
                             <div class="search-box">
-                            
+                                <input name="Id_number" type="text" id="search-input" dir="rtl" placeholder="ابحث هنا ....." style="width: 100% !important;">
                             </div>
                             @foreach($users as $user)
                               <div class="option" 

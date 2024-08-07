@@ -43,7 +43,7 @@
             
                 <div class="form-group col-md-11 mx-4">
                     <label for="name" style="display: flex; flex-direction: column-reverse;">الاسم</label>
-                    <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="الاسم" value="{{ old('name', $team->name) }}">
+                    <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="الاسم" dir="rtl" value="{{ old('name', $team->name) }}">
                     @error('name')
                     <div class="invalid-feedback">
                         {{ $message }}
