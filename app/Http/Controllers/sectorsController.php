@@ -60,12 +60,14 @@ class sectorsController extends Controller
         ->flatten()
         ->unique()
         ->toArray();
+        //dd($associatedGovernmentIds);
 
-    // Get governments that are not associated with any sector
-    $unassociatedGovernments = Government::query()
-        ->whereNotIn('id', $associatedGovernmentIds)
-        ->get();
-        
+        // if(isset($associatedGovernmentIds)){
+            $unassociatedGovernments = Government::query()
+            ->whereNotIn('id', $associatedGovernmentIds)
+            ->get();
+            //dd($unassociatedGovernments);
+        // }
         return view('sectors.create', ['governments' => $unassociatedGovernments]);
 
                 // return view('sectors.create',compact('governments'));
@@ -120,10 +122,34 @@ class sectorsController extends Controller
      */
     public function edit(string $id)
     {
-        $data = Sector::find($id);
-        $checkedGovernments = array_flip($data->governments_IDs);
-        return view('sectors.edit',compact('data','checkedGovernments'));
+         // Find the sector being edited
+    $data = Sector::findOrFail($id);
 
+    // Retrieve all government IDs associated with any sector except the current sector
+    $associatedGovernmentIds = Sector::query()
+        ->where('id', '!=', $data->id)
+        ->pluck('governments_IDs')
+        ->flatten()
+        ->unique()
+        ->toArray();
+
+    // Retrieve governments not associated with any sector
+    $unassociatedGovernments = Government::query()
+        ->whereNotIn('id', $associatedGovernmentIds)
+        ->get();
+
+    // Retrieve governments associated with the current sector
+    $currentSectorGovernments = Government::query()
+        ->whereIn('id', $data->governments_IDs)
+        ->get();
+
+    // Merge the current sector's governments with the unassociated governments
+    $governments = $currentSectorGovernments->merge($unassociatedGovernments);
+
+    return view('sectors.edit', [
+        'data' => $data,
+        'governments' => $governments,
+    ]);
     }
 
     /**
