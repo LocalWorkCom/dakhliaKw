@@ -53,7 +53,7 @@
                 </div>
                 {{-- {{ dd($governments== ''? 't' :'f') }} --}}
                 <div class="form-row col-11 mb-2 mt-3 mx-md-2">
-                    @if($governments== '')
+                    @if($governments!= '')
                         @foreach ($governments as $government)
                             <div class="form-group col-3 d-flex mx-md-4">
                                 <input type="checkbox" name="governmentIDS[]" value="{{ $government->id }}"
@@ -62,7 +62,8 @@
                             </div>
                         @endforeach
                     @else
-                    <h5 style="color: #274373; font-size: 24px;" >                  عفوا لا يوجد محافظات متاحه
+                    <h5 style="color: #274373; font-size: 24px;" >        
+                        عفوا لا يوجد محافظات متاحه
                    </h5>
 
                     @endif
