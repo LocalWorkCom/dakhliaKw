@@ -31,7 +31,7 @@
                     <div class="form-group col-md-12">
                         <label for="name">الاسم</label>
                         <input type="text" class="form-control" value="{{ $data->name }}" name="name" id="name" placeholder="الاسم"
-                            required>
+                            required dir="rtl">
                     </div>
 
                 </div>

@@ -49,7 +49,7 @@
                     <div class="form-row mx-md-2">
                         <div class="form-group col-md-6">
                             <label for="nameex">العنوان</label>
-                            <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان"
+                            <input type="text" class="form-control" name="nameex" id="nameex" placeholder="العنوان" dir="rtl"
                                 value="{{ $data->name }}" required>
                         </div>
 
@@ -74,7 +74,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="exportnum">رقم الصادر</label>
-                            <input type="text" class="form-control" name="num" id="exportnum"
+                            <input type="text" class="form-control" name="num" id="exportnum" dir="rtl"
                                 value="{{ $data->num }}" required>
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                     <div class="form-row mx-md-2">
                         <div class="form-group col-md-12">
                             <label for="exampleFormControlTextarea1">ملاحظات </label>
-                            <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" required> {{ $data->note }}</textarea>
+                            <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3" dir="rtl" required> {{ $data->note }}</textarea>
                         </div>
                     </div>
                     <div class="form-row mx-md-2 d-flex justify-content-center">

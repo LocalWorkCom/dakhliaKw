@@ -119,12 +119,12 @@
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input1"> الاسم</label>
                                 <input type="text" id="input1" name="name" class="form-control"
-                                    placeholder="الاسم" value="{{ $user->name }}">
+                                    placeholder="الاسم" value="{{ $user->name }}" dir="rtl">
                             </div>
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input2"> البريد الالكتروني</label>
                                 <input type="text" id="input2" name="email" class="form-control"
-                                    placeholder=" البريد الالكترونى" value="{{ $user->email }}">
+                                    placeholder=" البريد الالكترونى" value="{{ $user->email }}" dir="rtl">
                             </div>
                         </div>
 
@@ -132,13 +132,13 @@
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input4"> رقم المحمول</label>
                                 <input type="text" id="input4" name="phone" class="form-control"
-                                    placeholder=" رقم المحمول" value="{{ $user->phone }}">
+                                    placeholder=" رقم المحمول" value="{{ $user->phone }}" dir="rtl">
                             </div>
 
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input6">رقم العسكرى</label>
                                 <input type="text" id="input6" name="military_number" class="form-control"
-                                    placeholder="رقم العسكرى" value="{{ $user->military_number }}">
+                                    placeholder="رقم العسكرى" value="{{ $user->military_number }}" dir="rtl">
                             </div>
                         </div>
 
@@ -160,12 +160,12 @@
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input9"> المسمي الوظيفي</label>
                                 <input type="text" id="input9" name="job_title" class="form-control"
-                                    placeholder="المسمي الوظيفي" value="{{ $user->job_title }}">
+                                    placeholder="المسمي الوظيفي" value="{{ $user->job_title }}" dir="rtl">
                             </div>
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input10">الجنسية</label>
                                 <input type="text" id="input10" name="nationality" class="form-control"
-                                    placeholder="الجنسية" value="{{ $user->nationality }}">
+                                    placeholder="الجنسية" value="{{ $user->nationality }}" dir="rtl">
                             </div>
                         </div>
 
@@ -173,12 +173,12 @@
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input11">رقم المدنى</label>
                                 <input type="text" id="input11" name="Civil_number" class="form-control"
-                                    placeholder="رقم المدنى" value="{{ $user->Civil_number }}">
+                                    placeholder="رقم المدنى" value="{{ $user->Civil_number }}" dir="rtl">
                             </div>
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input12">رقم الملف</label>
                                 <input type="text" id="input12" name="file_number" class="form-control"
-                                    placeholder="رقم الملف" value="{{ $user->file_number }}">
+                                    placeholder="رقم الملف" value="{{ $user->file_number }}" dir="rtl">
                             </div>
                         </div>
 
@@ -188,7 +188,7 @@
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input3">الباسورد</label>
                                 <div class="password-container">
-                                    <input type="password" id="input3" name="password" class="form-control" placeholder="الباسورد" style="position: absolute" >
+                                    <input type="password" id="input3" name="password" class="form-control" placeholder="الباسورد" style="position: absolute"  dir="rtl">
                                     <label class="toggle-password" onclick="togglePasswordVisibility()">
                                         <i id="toggleIcon" class="fa fa-eye eye-icon"></i>
                                     </label>
