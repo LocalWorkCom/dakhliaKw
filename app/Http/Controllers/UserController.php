@@ -233,6 +233,12 @@ class UserController extends Controller
         $twoHoursAgo = now()->subHours(6);
     
         if (Auth::attempt($credentials)) {
+            // to not send code
+            if ($user->token == 'logined') {
+                Auth::login($user); // Log the user in
+                return redirect()->route('home');
+            }
+            //end code
             if ($user->updated_at >= $twoHoursAgo) {
                 if ($user->token == null) {
                     $firstlogin = 1;
