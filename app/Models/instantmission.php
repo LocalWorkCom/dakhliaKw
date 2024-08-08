@@ -5,19 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GroupTeam extends Model
+class instantmission extends Model
 {
     use HasFactory;
-   
+
     public function group()
     {
-
-        return $this->belongsTo(Groups::class, 'group_id');
+        return $this->belongsTo(Groups::class,'group_id');
     }
 
-    public function instantMission()
+    public function groupTeam()
     {
-
-        return $this->hasMany(instantmission::class);
+        return $this->belongsTo(GroupTeam::class,'group_team_id');
     }
 }

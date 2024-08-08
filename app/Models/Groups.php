@@ -23,4 +23,9 @@ class Groups extends Model
     {
         return $this->belongsTo(Inspector::class, 'id'); 
     }
+    public function instant_Mission()
+    {
+
+        return $this->hasMany(instantmission::class);
+    }
 }
