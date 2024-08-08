@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class gardController extends Controller
+class GroupPointsController extends Controller
 {
     /**
      * Display a listing of the resource.
