@@ -129,10 +129,10 @@
                                             sLengthMenu: 'اظهار _MENU_ عنصر لكل صفحة',
                                             sZeroRecords: 'نأسف لا توجد نتيجة',
                                             oPaginate: {
-                                                sFirst: "<< &nbsp;",
-                                                sPrevious: "<&nbsp;",
-                                                sNext: ">&nbsp;",
-                                                sLast: "&nbsp; >>"
+                                                "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                                                "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                                                "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                                                "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                             }
                                         },
                                         pagingType: "full_numbers"
