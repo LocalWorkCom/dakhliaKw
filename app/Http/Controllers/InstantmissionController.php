@@ -155,13 +155,31 @@ class InstantmissionController extends Controller
         $instantmission->save();
 
         // Handle file uploads
-        if ($request->hasFile('images')) {
-            $files = $request->images;
+        // if ($request->hasFile('images') && $request->remaining_files != null) {
+
+
+            $files = [];
+
+            // dd(explode(',',$request->remaining_files));
+    // Check if 'images' are uploaded and merge them into the $files array
+    if ($request->hasFile('images')) {
+        $files = array_merge($files, $request->file('images'));
+    }
+
+    // Check if 'remaining_files' are present and merge them into the $files array
+    if ($request->remaining_files != null) {
+        $files = array_merge($files, explode(',',$request->remaining_files));
+    }
+
+    // dd($request->file('images'));
+    // $path = 'instantMission/images';
+
+            // $files = $files;
             $path = 'instantMission/images';
 
             // Assuming UploadFilesIM is a helper function to handle the file upload
             UploadFilesIM($path, 'attachment', $instantmission, $files);
-        }
+        // }
 
         return view('instantMissions.view')->with('success', 'Mission updated successfully.');
     }

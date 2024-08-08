@@ -132,30 +132,21 @@
                             <label for="description">الوصف </label>
                             <input type="text" name="description" class="form-control"
                                 value="{{ $IM->description }}">
-                            {{-- @error('description')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror --}}
+                           
                         </div>
 
-                        {{-- <div class="form-group col-md-10">
-                            <label for="images"> اختار الملفات</label>
-                            <div class="form-group file-input-container">
-                                <input type="file" name="images[]" id="images" class="form-control" multiple>
-                                <span id="file-count"></span>
-                            </div>
-                            <div class="file-preview" id="file-preview"></div>
-                        </div> --}}
-                        {{-- {{ dd( $IM->attachment) }} --}}
+                     
                         <input type="hidden" id="remaining-files" name="remaining_files"
                             value="{{ $IM->attachment }}">
                         <div class="form-group col-md-10">
                             <label for="images">اختر الملفات</label>
                             <div class="form-group file-input-container">
                                 <input type="file" name="images[]" id="images" class="form-control" multiple
-                                    value="{{ $IM->attachment }}">
+                            >
+                                <!-- <span id="file-count1"></span> -->
                                 <span id="file-count"></span>
                             </div>
-
+                            <div class="file-preview1" id="file-preview1"></div>
                             <!-- Display existing attachments -->
                             <div class="file-preview" id="file-preview">
                                 @foreach (explode(',', $IM->attachment) as $attachment)
@@ -167,10 +158,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                            {{-- <input type="file" name="images[]" id="images" class="form-control" multiple>
-                            <input type="hidden" id="remaining-files" name="remaining_files" value="{{ implode(',', explode(',', $IM->attachment)) }}">
-                            <div id="file-preview"></div>
-                            <span id="file-count"></span> --}}
+                            
                     </div>
 
                 </div>
@@ -195,90 +183,6 @@
 
 </section>
 
-{{-- <script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const fileInput = document.getElementById('images');
-        const filePreview = document.getElementById('file-preview');
-        const fileCount = document.getElementById('file-count');
-        const remainingFilesInput = document.getElementById('remaining-files');
-
-        // Function to update file preview and remaining files input
-        function updateFilePreview() {
-            filePreview.innerHTML = remainingFilesInput.value;
-            const files = Array.from(fileInput.files);
-            fileCount.innerText = `files ${files.length}`;
-
-            files.forEach((file, index) => {
-                const fileItem = document.createElement('div');
-                fileItem.classList.add('file-item');
-
-                const fileName = document.createElement('span');
-                fileName.textContent = file.name;
-
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'Delete';
-                deleteButton.addEventListener('click', () => {
-                    files.splice(index, 1); // Remove file from array
-                    const dataTransfer = new DataTransfer();
-                    files.forEach(f => dataTransfer.items.add(f));
-                    fileInput.files = dataTransfer.files;
-                    updateFilePreview(); // Update preview
-                });
-
-                fileItem.appendChild(fileName);
-                fileItem.appendChild(deleteButton);
-                filePreview.appendChild(fileItem);
-            });
-
-            // Update remaining files hidden input
-            const fileNames = files.map(file => file.name).join(',');
-            remainingFilesInput.value = fileNames;
-        }
-
-        // Handle file input change event
-        fileInput.addEventListener('change', function() {
-            updateFilePreview();
-        });
-
-        // Handle existing files removal from preview
-        filePreview.addEventListener('click', function(e) {
-            if (e.target.classList.contains('delete-file')) {
-                const fileItem = e.target.closest('.file-item');
-                const fileName = e.target.getAttribute('data-file');
-
-                const remainingFiles = remainingFilesInput.value.split(',').filter(file => file !== fileName).join(',');
-                remainingFilesInput.value = remainingFiles;
-
-                fileItem.remove();
-            }
-        });
-
-        // Initialize preview with existing files
-        (function initializeFilePreview() {
-            const existingFiles = remainingFilesInput.value.split(',');
-            existingFiles.forEach(fileName => {
-                if (fileName) {
-                    const fileItem = document.createElement('div');
-                    fileItem.classList.add('file-item');
-
-                    const fileNameSpan = document.createElement('span');
-                    fileNameSpan.textContent = fileName;
-
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Delete';
-                    deleteButton.classList.add('delete-file');
-                    deleteButton.setAttribute('data-file', fileName);
-                    
-                    fileItem.appendChild(fileNameSpan);
-                    fileItem.appendChild(deleteButton);
-                    filePreview.appendChild(fileItem);
-                }
-            });
-        })();
-    });
-
-</script> --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const filePreview = document.getElementById('file-preview');
@@ -311,14 +215,14 @@
 
 <script>
     const fileInput = document.getElementById('images');
-    const filePreview = document.getElementById('file-preview');
+    const filePreview = document.getElementById('file-preview1');
     const fileCount = document.getElementById('file-count');
-    const remainingFilesInput = document.getElementById('remaining-files');
+    // const remainingFilesInput = document.getElementById('remaining-files');
 
     fileInput.addEventListener('change', function() {
-        filePreview.innerHTML = remainingFilesInput;
+        filePreview.innerHTML = '';
         const files = Array.from(fileInput.files);
-        fileCount.innerText = `files ${files.length}`;
+        // fileCount.innerText = `files ${files.length}`;
 
         files.forEach((file, index) => {
             const fileItem = document.createElement('div');
