@@ -37,7 +37,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" dir="rtl">
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" dir="rtl">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -54,35 +55,56 @@
                             <form action="{{ route('groupTeam.store', $id) }}" method="POST">
                                 @csrf
                                 <div class="form-group mt-4 mb-3">
-                                    <label class="d-flex justify-content-start pt-3 pb-2" for="groupTeam_name"> ادخل اسم الفريق </label>
-                                    <input type="text" id="groupTeam_name" name="groupTeam_name" class="form-control @error('groupTeam_name') is-invalid @enderror" placeholder="ادخل الفريق" value="{{ old('groupTeam_name') }}">
+                                    <label class="d-flex justify-content-start pt-3 pb-2" for="groupTeam_name"> ادخل اسم
+                                        الفريق </label>
+                                    <input type="text" id="groupTeam_name" name="groupTeam_name"
+                                        class="form-control @error('groupTeam_name') is-invalid @enderror"
+                                        placeholder="ادخل الفريق" value="{{ old('groupTeam_name') }}">
                                     @error('groupTeam_name')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
+                                <div class="form-group mt-4 mb-3">
+                                    <label for="working_tree_id" class="d-flex justify-content-start pt-3 pb-2">اختر
+                                        نظام العمل</label>
+                                    <select class="form-control" name="working_tree_id" id="working_tree_id">
+                                        <option selected disabled>اختار من القائمة</option>
+                                        @foreach ($workTrees as $workTree)
+                                            <option value="{{ $workTree->id }}"
+                                                {{ old('working_tree_id') == $workTree->id ? 'selected' : '' }}>
+                                                {{ $workTree->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('working_tree_id'))
+                                        <span class="text-danger">{{ $errors->first('working_tree_id') }}</span>
+                                    @endif
+                                </div>
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                    <button type="submit" class="btn-all mx-2 p-2" style="background-color: #274373; color: #ffffff;">
+                                    <button type="submit" class="btn-all mx-2 p-2"
+                                        style="background-color: #274373; color: #ffffff;">
                                         <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> الاضافة
                                     </button>
-                                    <button type="button" class="btn-all p-2" style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);" data-bs-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-all p-2"
+                                        style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                                        data-bs-dismiss="modal" aria-label="Close">
                                         <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
-    
+
                     <!-- Script to Reopen Modal if there are Validation Errors -->
                     @if ($errors->any())
-                    <script>
-                        $(document).ready(function() {
-                            $('#myModal1').modal('show');
-                        });
-                    </script>
+                        <script>
+                            $(document).ready(function() {
+                                $('#myModal1').modal('show');
+                            });
+                        </script>
                     @endif
-                    
+
                     <!-- Second Modal Body (Initially Hidden) -->
                     <div id="secondModalBody" class="d-none">
                         <div class="body-img-modal d-block">
@@ -94,7 +116,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="container col-11 mt-3 py-4">
             @if (session('success'))
@@ -120,7 +142,10 @@
                                 <tr>
                                     <th>رقم التعريف</th>
                                     <th>الاسم</th>
+
                                     <th>المتفتشين</th>
+                                    <th>نظام العمل</th>
+
                                     <th>المجموعة</th>
                                     <th style="width:150px;">العمليات</th>
                                 </tr>
@@ -151,6 +176,10 @@
                 {
                     data: 'inspectorCount',
                     name: 'inspectorCount'
+                },
+                {
+                    data: 'working_tree.name',
+                    name: 'working_tree.name'
                 },
                 {
                     data: 'group.name',

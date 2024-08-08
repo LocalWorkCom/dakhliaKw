@@ -10,6 +10,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreGroupTeamRequest;
 use App\Http\Requests\UpdateGroupTeamRequest;
+use App\Models\WorkingTree;
 
 class GroupTeamController extends Controller
 {
@@ -18,12 +19,14 @@ class GroupTeamController extends Controller
      */
     public function index($id)
     {
+        $workTrees = WorkingTree::all();
+
         //
-        return view('groupteam.show', compact('id'));
+        return view('groupteam.show', compact('id', 'workTrees'));
     }
     public function getGroupTeam($id)
     {
-        $data = GroupTeam::with('group')->where('group_id', $id)->get();
+        $data = GroupTeam::with('group')->with('working_tree')->where('group_id', $id)->get();
         // dd($data);
         foreach ($data as $key) {
             # code...
@@ -64,19 +67,20 @@ class GroupTeamController extends Controller
         $messages = [
             'groupTeam_name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
         ];
-
-
+        
+        
         // Validate the request input
         $request->validate([
             'groupTeam_name' => 'required|string|max:255',
         ], $messages);
-
+        
         try {
             $grouptemItem = new GroupTeam();
             $grouptemItem->name = $request->groupTeam_name;
             $grouptemItem->group_id = $id;
+            $grouptemItem->working_tree_id = $request->working_tree_id;
             $grouptemItem->save();
-
+            
             return redirect()->back()->with('success', 'تم الاضافة بنجاح');
         } catch (\Exception $e) {
             return response()->json($e->getMessage());

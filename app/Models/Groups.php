@@ -12,13 +12,10 @@ class Groups extends Model
     protected $table = 'groups';
     public $timestamps = false;
 
-    protected $fillable = ['name', 'work_time_id', 'points_inspector']; // Ensure this matches your table's columns
+    protected $fillable = ['name', 'points_inspector']; // Ensure this matches your table's columns
 
 
-    public function working_time()
-    {
-        return $this->belongsTo(WorkingTree::class,'work_time_id');
-    }
+
     public function inspector()
     {
         return $this->belongsTo(Inspector::class, 'id'); 

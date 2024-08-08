@@ -26,14 +26,13 @@ class GroupsController extends Controller
     {
         // $workTimes = WorkingTime::all();
         // $inspector = Inspector::where('group_id',$id)->get();
-        $workTimes = WorkingTree::all();
         // dd($workTimes);
-        return view('group.view', compact('workTimes'));
+        return view('group.view');
     }
 
     public function getgroups()
     {
-        $data = Groups::with('working_time')->get();
+        $data = Groups::get();
         // $data = Groups::all();
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
@@ -139,7 +138,6 @@ class GroupsController extends Controller
         try {
             $group = new Groups();
             $group->name = $request->name;
-            $group->work_time_id = $request->work_time_id;
             $group->points_inspector = $request->points_inspector;
             $group->save();
             session()->flash('success', 'تم اضافه مجموعة بنجاح.');
