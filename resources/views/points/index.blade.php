@@ -24,7 +24,7 @@
                         {{-- @endif --}}
                         {{-- @if (Auth::user()->hasPermission('create Point')) --}}
                         <button type="button" class="btn-all  "
-                            onclick="window.location.href='{{ route('points.create') }}'" style="color: #0D992C;">
+                            onclick="window.location.href='{{ route('grouppoints.create') }}'" style="color: #0D992C;">
                             اضافة نقاط لمجموعه  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </button>
                         {{-- @endif --}}

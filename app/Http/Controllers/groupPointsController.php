@@ -20,7 +20,7 @@ class GroupPointsController extends Controller
      */
     public function create()
     {
-        //
+        return view('grouppoints.create');
     }
 
     /**
