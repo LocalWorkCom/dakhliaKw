@@ -114,7 +114,7 @@ class pointsController extends Controller
             //         $btn = '<p> لايوجد مجموعه</p>';
             //     }
             //dd($group->flag);
-            
+
             if($group->flag !=0){
                 $btn = ' <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> ' . $group->name . ' </a>';
                 

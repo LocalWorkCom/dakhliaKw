@@ -31,7 +31,7 @@ class InspectorMission extends Model
         'group_id',
         'group_team_id',
         'date',
-        'flag',
+        'day_off',
     ];
 
     // Cast the attributes to specific types
@@ -39,7 +39,7 @@ class InspectorMission extends Model
         'ids_group_point' => 'array',
         'ids_instant_mission' => 'array',
         'date' => 'date',
-        'flag' => 'boolean',
+        'day_off' => 'boolean',
     ];
 
     // Define relationships if needed

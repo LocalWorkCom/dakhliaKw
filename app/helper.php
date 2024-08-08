@@ -176,17 +176,21 @@ function UploadFilesWithoutReal($path, $image, $model, $request)
 function UploadFilesIM($path, $image, $model, $request)
 {
 
+    // dd($request);
+
     $imagePaths = [];
     $thumbnail = $request;
     $destinationPath = $path;
     foreach ($thumbnail as $key=> $item) {
-        $filename = $key.time() . '.' . $item->getClientOriginalExtension();
-        $item->move($destinationPath, $filename);
-
-        // $image->image = asset($path) . '/' . $filename;
-        $imagePaths[] = asset($path) . '/' . $filename;
+        if(is_object($item)) {
+            $filename = $key.time() . '.' . $item->getClientOriginalExtension();
+            $item->move($destinationPath, $filename);
+            $imagePaths[] = asset($path) . '/' . $filename;
+        }
+        else {
+            $imagePaths[] = $item;
+        }
     }
-
     // dd($model->image);
     $model->$image = implode(',', $imagePaths);
 

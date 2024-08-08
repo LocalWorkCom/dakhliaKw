@@ -41,7 +41,7 @@ class CreateInspectorMissionTable extends Migration
 
             $table->date('date');
 
-            $table->boolean('flag')->default(0);
+            $table->boolean('day_off')->default(0);
 
             $table->timestamps();
 

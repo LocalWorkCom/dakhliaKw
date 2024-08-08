@@ -109,9 +109,10 @@ class InstantmissionController extends Controller
      */
     public function show($id)
     {
+        $IM = instantmission::find($id);
         $groups = Groups::all();
-        $groupTeams = GroupTeam::all();
-        return view('instantMissions.edit', compact('groups', 'groupTeams'));
+        $groupTeams = GroupTeam::where('group_id', $IM->group_id)->get();
+        return view('instantMissions.show', compact('groups', 'groupTeams', 'IM'));
     }
 
     /**
@@ -131,7 +132,7 @@ class InstantmissionController extends Controller
     public function update(Request $request, $id)
     {
 
-        dd($request);
+        // dd($request);
         // Validate request data
         $messages = [
             'label.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
@@ -154,13 +155,31 @@ class InstantmissionController extends Controller
         $instantmission->save();
 
         // Handle file uploads
-        if ($request->hasFile('images')) {
-            $files = $request->images;
+        // if ($request->hasFile('images') && $request->remaining_files != null) {
+
+
+            $files = [];
+
+            // dd(explode(',',$request->remaining_files));
+    // Check if 'images' are uploaded and merge them into the $files array
+    if ($request->hasFile('images')) {
+        $files = array_merge($files, $request->file('images'));
+    }
+
+    // Check if 'remaining_files' are present and merge them into the $files array
+    if ($request->remaining_files != null) {
+        $files = array_merge($files, explode(',',$request->remaining_files));
+    }
+
+    // dd($request->file('images'));
+    // $path = 'instantMission/images';
+
+            // $files = $files;
             $path = 'instantMission/images';
 
             // Assuming UploadFilesIM is a helper function to handle the file upload
             UploadFilesIM($path, 'attachment', $instantmission, $files);
-        }
+        // }
 
         return view('instantMissions.view')->with('success', 'Mission updated successfully.');
     }
