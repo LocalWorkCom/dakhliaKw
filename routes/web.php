@@ -311,12 +311,15 @@ Route::middleware(['auth'])->group(function () {
 
     //Start GroupPoints
     Route::get('points/create/group', [GroupPointsController::class, 'create'])->name('grouppoints.create');
-    Route::get('points/add/group', [GroupPointsController::class, 'store'])->name('grouppoints.store');
+    Route::post('points/add/group', [GroupPointsController::class, 'store'])->name('grouppoints.store');
+    Route::get('points/edit/group/{id}', [GroupPointsController::class, 'edit'])->name('grouppoints.edit');
 
     //End GroupPoints
 
     Route::get('/get-governorates/{sector}', [pointsController::class, 'getGovernorates']);
     Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions']);
+    Route::get('/get-points/{governorate}', [pointsController::class, 'getAllPoints']);
+
 
     //Start Violation
     Route::get('setting/violation/all', [ViolationTypesController::class, 'index'])->name('violations.index');

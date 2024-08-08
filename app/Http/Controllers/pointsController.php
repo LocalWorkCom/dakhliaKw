@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Government;
+use App\Models\Grouppoint;
 use App\Models\Point;
 use App\Models\Region;
 use App\Models\Sector;
@@ -45,6 +46,12 @@ class pointsController extends Controller
         $regions = Region::where('government_id', $governorate)->get();
         return response()->json($regions);
     }
+    public function getAllPoints($governorate)
+    {
+        // Fetch regions based on the selected governorate
+        $regions = Point::where('government_id', $governorate)->get();
+        return response()->json($regions);
+    }
     public function index()
     {
         return view("points.index");
@@ -63,27 +70,36 @@ class pointsController extends Controller
             ->addColumn('region_name', function ($row) {
                 return $row->region ? $row->region->name : '';
             })
+            ->addColumn('group_name', function ($row) {
+                // Fetch the group related to the government
+                $group = Grouppoint::where('government_id', $row->government->id)->first();
+        
+                if ($group) {
+                    $btn = '
+                    <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> '.$group->name.' </a>';
+                } else {
+                    $btn = '<p> لايوجد مجموعه</p>';
+                }
+                return $btn;
+            })
             ->addColumn('from', function ($row) {
-                $time = Carbon::createFromFormat('H:i:s', $row->from)->format('h:i A');
+                // Ensure $row->from is in 'H:i:s' format before using createFromFormat
+                $time = $row->from ? Carbon::createFromFormat('H:i:s', $row->from)->format('h:i A') : '';
                 return str_replace(['AM', 'PM'], ['ص', 'م'], $time);
             })
             ->addColumn('to', function ($row) {
-                $time = Carbon::createFromFormat('H:i:s', $row->to)->format('h:i A');
+                // Ensure $row->to is in 'H:i:s' format before using createFromFormat
+                $time = $row->to ? Carbon::createFromFormat('H:i:s', $row->to)->format('h:i A') : '';
                 return str_replace(['AM', 'PM'], ['ص', 'م'], $time);
             })
             ->addColumn('action', function ($row) {
-                // $edit_permission = null;
-                // $show_permission = null;
-                // if (Auth::user()->hasPermission('edit Point')) {
-                    $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;"  href=' . route('points.edit', $row->id) . '><i class="fa fa-edit"></i> تعديل</a>';
-                // }
-                // if (Auth::user()->hasPermission('view Point')) {
-                    $show_permission = '<a class="btn btn-sm" style="background-color: #274373;"  href=' . route('points.show', $row->id) . '> <i class="fa fa-eye"></i>عرض</a>';
-                // }
+                $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('points.edit', $row->id) . '"><i class="fa fa-edit"></i> تعديل</a>';
+                $show_permission = '<a class="btn btn-sm" style="background-color: #274373;" href="' . route('points.show', $row->id) . '"><i class="fa fa-eye"></i> عرض</a>';
                 return $show_permission . ' ' . $edit_permission;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'group_name'])
             ->make(true);
+        
     }
 
     public function create()

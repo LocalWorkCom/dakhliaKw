@@ -64,6 +64,7 @@
                                         <th>القطاع </th>
                                         <th>المحافظه</th>
                                         <th>المنطقه</th>
+                                        <th>المجموعه الخاصه بالنقطه</th>
                                         <th>من</th>
                                         <th>الى</th>
                                         <th style="width:150px;">العمليات</th>
@@ -104,6 +105,10 @@
                     {
                         data: 'region_name',
                         name: 'region_name'
+                    },
+                    {
+                        data: 'group_name',
+                        name: 'group_name'
                     },
                     {
                         data: 'from',
