@@ -98,7 +98,7 @@ class pointsController extends Controller
                 $group = Grouppoint::where('government_id', $row->government->id)->first();
             //dd($row->government->id);
                 // Check if the group exists and has the points_ids field
-                if ($group && $group->points_ids) {
+                if (isset($group) && isset($group->points_ids)) {
                     // Decode the JSON field into a PHP array
                     //$pointsIds = json_decode($group->points_ids, true);
             
@@ -197,7 +197,7 @@ class pointsController extends Controller
         $point->save();
         $pointgroups = new Grouppoint();
         $pointgroups->name = $point->name;
-        $pointgroups->points_ids = json_encode([$point->id]);
+        $pointgroups->points_ids = [json_encode($point->id)];
         $pointgroups->government_id  = $request->governorate;
         $pointgroups->flag  = 0;
 
