@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use App\Models\WorkingTree;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,16 +13,17 @@ class Groups extends Model
     protected $table = 'groups';
     public $timestamps = false;
 
-    protected $fillable = ['name', 'work_time_id', 'points_inspector']; // Ensure this matches your table's columns
+    protected $fillable = ['name', 'points_inspector']; // Ensure this matches your table's columns
 
 
-    public function working_time()
-    {
-        return $this->belongsTo(WorkingTree::class,'work_time_id');
-    }
+
     public function inspector()
     {
-        return $this->belongsTo(Inspector::class, 'id'); 
+        return $this->belongsTo(Inspector::class, 'id');
+    }
+    public function government()
+    {
+        return $this->belongsTo(Government::class, 'government_id');
     }
     public function instant_Mission()
     {

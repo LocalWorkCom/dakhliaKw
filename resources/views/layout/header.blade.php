@@ -219,11 +219,18 @@
                                         </li>
                                         @endif
                                         <li>
-                                            <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
-                                                style="margin-left: 7px;">
-                                            <a href="{{ route('violations.index') }}">أنواع المخالفات</a>
-                                        </li>
-                                      
+                                                <img src="{{ asset('frontend/images/governorates.svg') }}"
+                                                    alt="logo" style="margin-left: 7px;">
+                                                <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
+                                            </li>
+                                            {{-- @endif --}}
+                                        {{-- @if (Auth::user()->hasPermission('view Sector')) --}}
+                                            <li>
+                                                <img src="{{ asset('frontend/images/governorates.svg') }}"
+                                                    alt="logo" style="margin-left: 7px;">
+                                                <a href="{{ route('sectors.index') }}">القطاعات</a>
+                                            </li>
+                                            {{-- @endif --}}
                                         @if (Auth::user()->hasPermission('view Point'))
                                         <li>
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
@@ -231,6 +238,9 @@
                                             <a href="{{ route('points.index') }}">النقاط</a>
                                         </li>
                                         @endif
+                                      
+                                      
+                                    
                                     </div>
                                     <div class="col-6">
                                        
@@ -242,6 +252,11 @@
                                             <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
                                         </li>
                                         @endif
+                                        <li>
+                                            <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('violations.index') }}">أنواع المخالفات</a>
+                                        </li>
                                         <!-- @if (Auth::user()->hasPermission('view VacationType')) -->
                                        
                                         <!-- @endif -->
@@ -275,19 +290,8 @@
 
 
                                            
-                                            <li>
-                                                <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
-                                            </li>
-                                            {{-- @endif --}}
-                                            {{-- @if (Auth::user()->hasPermission('view Sector')) --}}
-                                            <li>
-                                                <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('sectors.index') }}">القطاعات</a>
-                                            </li>
-                                            {{-- @endif --}}
+                                          
+                                          
                                         </div>
                                     </div>
 

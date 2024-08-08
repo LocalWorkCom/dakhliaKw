@@ -5,6 +5,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\outgoingController;
 use App\Http\Controllers\dashboard\VacationController;
 use App\Http\Controllers\dashboard\WorkingTreeController;
+use App\Http\Controllers\GroupPointsController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
 use App\Http\Controllers\SettingsController;
@@ -139,7 +140,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/groups', [GroupsController::class, 'getgroups'])->name('api.groups');
     Route::get('/group/create/Inspectors/{id}', [GroupsController::class, 'groupCreateInspectors'])->name('group.groupcreateInspectors');
     Route::post('/group/add/Inspectors/{id}', [GroupsController::class, 'groupAddInspectors'])->name('group.groupAddInspectors');
-   
+
     // export
     //Start Export routes
     Route::get('/export/all', [outgoingController::class, 'index'])->name('Export.index')->middleware('check.permission:view outgoings');
@@ -281,7 +282,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::post('points/edit', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
-  
+
 
     Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index');
     Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors');
@@ -317,8 +318,18 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('points/show/{id}', [pointsController::class, 'show'])->name('points.show')->middleware('check.permission:view Point');
     // Route::post('points/update', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
+
+    //Start GroupPoints
+    Route::get('points/create/group', [GroupPointsController::class, 'create'])->name('grouppoints.create');
+    Route::post('points/add/group', [GroupPointsController::class, 'store'])->name('grouppoints.store');
+    Route::get('points/edit/group/{id}', [GroupPointsController::class, 'edit'])->name('grouppoints.edit');
+
+    //End GroupPoints
+
     Route::get('/get-governorates/{sector}', [pointsController::class, 'getGovernorates']);
     Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions']);
+    Route::get('/get-points/{governorate}', [pointsController::class, 'getAllPoints']);
+
 
     //Start Violation
     Route::get('setting/violation/all', [ViolationTypesController::class, 'index'])->name('violations.index');
