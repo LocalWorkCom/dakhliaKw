@@ -49,19 +49,7 @@
                     </div>
                 </div>
                 <div class="form-row mx-2 d-flex justify-content-center">
-                    <!--<div class="form-group col-md-5 mx-2">-->
-                    <!--    <label for="manger_assistance"> مساعد المدير</label>-->
-                    <!--    <select name="manger_assistance" class="form-control">-->
-                    <!--        <option value="">اختار مساعد المدير</option>-->
-                    <!--        @foreach($users as $user)-->
-                    <!--        <option value="{{ $user->id }}">{{ $user->name }}</option>-->
-                    <!--        @endforeach-->
-                    <!--    </select>-->
-                    <!--    @error('manger_assistance')-->
-                    <!--    <div class="alert alert-danger">{{ $message }}</div>-->
-                    <!--    @enderror-->
-                    <!--</div>-->
-
+                 
                     <div class="form-group col-md-10 mx-md-2">
                         <label for="description">الوصف </label>
                         <input type="text" name="description" class="form-control" value="{{ old('description') }}">
@@ -70,14 +58,11 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-10 mx-md-2">
-                        <label for="description">الموظفين </label>
-                        <select name="employess[]" id="" class="form-group col-md-12 " multiple dir="rtl" style=" height: 150px;
-    font-size: 18px;
-    border: 0.2px solid lightgray;
-} overflow-y: auto;">
+                        <label for="employess">الموظفين </label>
+                        <select name="employess[]" id="employess" class="form-group col-md-12 " multiple dir="rtl" style=" height: 150px;font-size: 18px;border: 0.2px solid lightgray; overflow-y: auto;">
                             @foreach($employee as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach -->
+                            @endforeach 
                         </select>
                         
                     </div>
@@ -178,12 +163,12 @@
         console.log('Selected Manager:', selectedManager);
 
         // Clear the employees dropdown
-        $('#employees').empty();
+        $('#employess').empty();
 
         // Iterate over the users list and add only those who are not the selected manager
         allUsers.forEach(function(user) {
             if (user.id != selectedManager) {
-                $('#employees').append('<option value="' + user.id + '">' + user.name + '</option>');
+                $('#employess').append('<option value="' + user.id + '">' + user.name + '</option>');
             }
         });
     });

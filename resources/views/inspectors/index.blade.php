@@ -152,9 +152,9 @@ $(document).ready(function() {
             dataSrc: function(json) {
                 // Filter data based on the selected filter
                 if (filter === 'assigned') {
-                    return json.data.filter(item => item.group_id != null && String(item.group_id).trim() !== "");
+                    return json.data.filter(item => item.group_id != 'لا يوجد مجموعه للمفتش' && String(item.group_id).trim() !== "");
                 } else if (filter === 'unassigned') {
-                    return json.data.filter(item => !item.group_id || (typeof item.group_id === 'string' && item.group_id.trim() === ""));
+                    return json.data.filter(item => !item.group_id || ( item.group_id === 'لا يوجد مجموعه للمفتش'));
                 }
                 return json.data; // 'all' or default case
             }
@@ -168,41 +168,41 @@ $(document).ready(function() {
             { data: 'phone', name: 'phone' },
             { data: 'action', name: 'action', sWidth: '200px', orderable: false, searchable: false }
         ],
-        columnDefs: [{
-            targets: -1,
-            render: function(data, type, row) {
-                var departmentEdit = '{{ route('inspectors.edit', ':id') }}'.replace(':id', row.id);
-                var departmentShow = '{{ route('inspectors.show', ':id') }}'.replace(':id', row.id);
-                var btn_add = '';
+        // columnDefs: [{
+        //     targets: -1,
+        //     render: function(data, type, row) {
+        //         var departmentEdit = '{{ route('inspectors.edit', ':id') }}'.replace(':id', row.id);
+        //         var departmentShow = '{{ route('inspectors.show', ':id') }}'.replace(':id', row.id);
+        //         var btn_add = '';
 
-                if (row.group_id == null) {
-                    var addToGroup = '{{ route('inspectors.addToGroup', ':id') }}'.replace(':id', row.id);
-                    btn_add = `
-                        <a class="btn btn-sm" id="updateValueButton" style="background-color: green;" 
-                           onclick="openAddModal(${row.id},0)" data-bs-toggle="modal" 
-                           data-bs-target="#myModal1">
-                           <i class="fa fa-plus"></i> أضافه
-                        </a>`;
-                }else{
-                    var addToGroup = '{{ route('inspectors.addToGroup', ':id') }}'.replace(':id', row.id);
-                    btn_add = `
-                        <a class="btn btn-sm" id="updateValueButton" style="background-color: #7e7d7c;" 
-                           onclick="openAddModal(${row.id} , ${row.group_id})" data-bs-toggle="modal" 
-                           data-bs-target="#myModal1">
-                           <i class="fa fa-edit"></i> تعديل مجموعه
-                        </a>`;
-                }
+        //         if (row.group_id ==  'لا يوجد مجموعه للمفتش') {
+        //             var addToGroup = '{{ route('inspectors.addToGroup', ':id') }}'.replace(':id', row.id);
+        //             btn_add = `
+        //                 <a class="btn btn-sm" id="updateValueButton" style="background-color: green;" 
+        //                    onclick="openAddModal(${row.id},0)" data-bs-toggle="modal" 
+        //                    data-bs-target="#myModal1">
+        //                    <i class="fa fa-plus"></i> أضافه
+        //                 </a>`;
+        //         }else{
+        //             var addToGroup = '{{ route('inspectors.addToGroup', ':id') }}'.replace(':id', row.id);
+        //             btn_add = `
+        //                 <a class="btn btn-sm" id="updateValueButton" style="background-color: #7e7d7c;" 
+        //                    onclick="openAddModal(${row.id} , ${row.group_id})" data-bs-toggle="modal" 
+        //                    data-bs-target="#myModal1">
+        //                    <i class="fa fa-edit"></i> تعديل مجموعه
+        //                 </a>`;
+        //         }
 
-                return `
-                    <a href="${departmentEdit}" class="btn btn-sm"  style="background-color: #F7AF15;">
-                        <i class="fa fa-edit"></i> تعديل 
-                    </a>
-                    <a href="${departmentShow}" class="btn btn-sm " style="background-color: #274373;">
-                       <i class="fa fa-eye"></i>عرض</a>
-                    ${btn_add}
-                `;
-            }
-        }],
+        //         return `
+        //             <a href="${departmentEdit}" class="btn btn-sm"  style="background-color: #F7AF15;">
+        //                 <i class="fa fa-edit"></i> تعديل 
+        //             </a>
+        //             <a href="${departmentShow}" class="btn btn-sm " style="background-color: #274373;">
+        //                <i class="fa fa-eye"></i>عرض</a>
+        //             ${btn_add}
+        //         `;
+        //     }
+        // }],
         "oLanguage": {
             "sSearch": "",
             "sSearchPlaceholder": "بحث",
@@ -279,22 +279,24 @@ $('.btn-filter').click(function() {
         });
     });
 
-function openAddModal(id,idGroup) {
+    function openAddModal(id, idGroup) {
     $('#myModal1').modal('show');
     document.getElementById('id').value = id;
-    document.getElementById('group_id').value = idGroup;
 
+    console.log(id);
+    // Set the selected value for group_id
+    var selectElement = document.getElementById('group_id');
+    selectElement.value = idGroup;
+
+    // Optionally, if you want to ensure the option is selected if the value doesn't match
+    for (var i = 0; i < selectElement.options.length; i++) {
+        if (selectElement.options[i].value == idGroup) {
+            selectElement.selectedIndex = i;
+            break;
+        }
+    }
 }
 
-// $(document).ready(function() {
-//     // Function to set the value of the select element
-//     function setSelectValue(id) {
-//         $('#group_id').val(id);
-//     }
-
-//     // Example: Set the select element to the group with ID 2
-//     setSelectValue(2); // Replace 2 with the desired ID
-// });
 </script>
 </script>
 @endpush

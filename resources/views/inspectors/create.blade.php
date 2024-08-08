@@ -1,6 +1,15 @@
 @extends('layout.main')
 
 @section('content')
+    <div class="row col-11" dir="rtl">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('inspectors.index') }}">المفتشون</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة مفتش</a></li>
+            </ol>
+        </nav>
+    </div>
     <div class="row ">
         <div class="container welcome col-11">
             <p> المفتــــــشون </p>
@@ -12,7 +21,7 @@
         <div class="row" dir="rtl">
 
             <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
-                <h3 class="pt-3  px-md-5  px-3 "> تعديل مفتش</h3>
+                <h3 class="pt-3  px-md-5  px-3 "> أضافه مفتش</h3>
                 <div class="form-row mx-2 mb-2 pb-4">
                     <label class="px-md-5 px-3 col-12 " for=""> الرقم المدني / رقم الهوية</label>
                     <div class="input-group px-md-5 px-3 pt-3">
@@ -30,7 +39,7 @@
                                     <div class="option" data-id="{{ $user->id }}" data-name="{{ $user->name }}"
                                         data-phone="{{ $user->phone }}"
                                         data-grade_id="{{ $user->grade ? $user->grade->name : '' }}">
-                                        {{ $user->name }}
+                                        {{ $user->name }} ( رقم الهويه:{{ $user->Civil_number }})
                                     </div>
                                 @endforeach
 
@@ -52,6 +61,13 @@
             <div class="form-row  mx-md-5 mx-1 mb-2 pb-4">
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
+                        {{-- <tr>
+                            <th scope="row" style="background: #f5f6fa;">id</th>
+                            <td style="background: #f5f6fa;" id="user-id">####</td>
+                        </tr> --}}
+                        <input type="hidden" name="user_id" id="hidden-id">
+
+
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">الرتبه</th>
                             <td style="background: #f5f6fa;" id="user-grade_id">####</td>
@@ -75,25 +91,37 @@
         <div class="container moftsh col-11 mt-5 p-0 pb-2 mb-3">
             <h3 class="pt-3  px-md-5 px-3 "> اختر المفتش </h3>
             <div class="form-row mx-md-5 mx-2 mb-2 d-block justify-content-start" dir="rtl">
+                @if (Auth::user()->department_id == 1)
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
                         <input type="radio" id="intern" name="type" checked value="in" required>
-                        <label for="intern">مفتش</label>
+                        <label for="intern">مفتش سلوك أنضباطى</label>
                     </div>
                 </div>
-
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
                         <input type="radio" id="intern" name="type" checked value="trainee" required>
                         <label for="intern">مفتش متدرب</label>
                     </div>
                 </div>
+                @else
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
                         <input type="radio" id="intern" name="type" checked value="Buildings" required>
                         <label for="intern">مفتش مباني </label>
                     </div>
                 </div>
+                <div class="form-group d-flex">
+                    <div class="radio-btn  d-flex">
+                        <input type="radio" id="intern" name="type" checked value="trainee" required>
+                        <label for="intern">مفتش متدرب</label>
+                    </div>
+                </div>
+                @endif
+              
+
+              
+             
 
                 <div class="container col-11 ">
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
@@ -109,7 +137,8 @@
     </form>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: transparent; border: none;">
@@ -133,7 +162,11 @@
         const searchInput = document.getElementById('search-input');
         const optionElements = document.querySelectorAll('.option');
         const userPosition = document.getElementById('user-grade_id');
+
         const hiddenPosition = document.getElementById('hidden-position');
+
+        const userId = document.getElementById('hidden-id');
+        const userId_number = document.getElementById('hidden-id');
 
         const userName = document.getElementById('user-name');
         const hiddenName = document.getElementById('hidden-name');
@@ -157,6 +190,9 @@
                 selectBox.dataset.value = this.dataset.id;
 
                 // Update user details
+                userId.textContent = this.dataset.id;
+                userId.value = this.dataset.id;
+
                 userPosition.textContent = this.dataset.grade_id;
                 hiddenPosition.value = this.dataset.grade_id;
                 userName.textContent = this.dataset.name;

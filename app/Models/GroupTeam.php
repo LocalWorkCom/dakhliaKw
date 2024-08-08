@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GroupTeam extends Model
 {
     use HasFactory;
+   
     public function group()
     {
 

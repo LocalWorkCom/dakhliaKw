@@ -144,7 +144,7 @@
                         <div class="form-group">
                             <label for="name">الاسم</label>
                             <input type="text" class="form-control" id="name" name="name"
-                            value="{{ old('name', $department->name) }}">
+                            value="{{ old('name', $department->name) }} " dir="rtl">
                             <span class="text-danger span-error" id="name-error"></span>
 
                         </div>

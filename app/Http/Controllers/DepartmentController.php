@@ -284,14 +284,14 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, departements $department)
     {
-        // dd($request);
+         //dd($request);
         $request->validate([
             'name' => 'required',
             'manger' => 'required',
         ]);
 
         // Update the department details
-        $department->update($request->only(['name', 'manager', 'description']));
+        $department->update($request->only(['name', 'manger', 'description']));
 
         // Check if employees data is provided
         if ($request->has('employess')) {

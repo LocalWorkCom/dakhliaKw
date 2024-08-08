@@ -26,8 +26,8 @@
     <br>
     <section style="direction: rtl;">
         <div class="row">
-            <div class="container col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11 pt-4 pb-4">
-                <table class="table table-bordered ">
+            <div class="container col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11 pt-4 pb-4  px-3">
+                <table class="table table-bordered">
                     <tbody>
                         <tr>
                             <th scope="row"  style="background-color:#f5f6fa;">الاسم</th>

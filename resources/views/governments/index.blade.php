@@ -104,7 +104,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
-                            <input type="text" id="nameedit" value="" name="name" class="form-control" required>
+                            <input type="text" id="nameedit" value="" name="name" class="form-control" dir="rtl" required>
                             <input type="text" id="idedit" value="" name="id" hidden class="form-control">
 
                         </div>

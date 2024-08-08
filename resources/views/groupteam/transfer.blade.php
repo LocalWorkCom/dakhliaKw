@@ -9,9 +9,7 @@
     </style>
 @endpush
 
-@section('title')
-    نقل
-@endsection
+@section('title', 'نقل')
 
 @section('content')
     <div class="row col-11" dir="rtl">
@@ -35,7 +33,7 @@
     <br>
     <div class="row" dir="rtl">
         <div class="container moftsh col-11 mt-3 pt-3 pb-3">
-            <h3 class="pt-3 px-md-5 px-3">من فضلك قم بنقل المفتشون من فريق الي اخر</h3>
+            <h3 class="pt-3 px-md-5 px-3">من فضلك قم بنقل المفتشون من فريق إلى آخر</h3>
             <div class="input-group mx-2">
                 <div class="form-outline mt-4">
                     <input type="search" id="search" class="form-control mx-4" placeholder="بحث"
@@ -54,13 +52,18 @@
                                 <input type="checkbox" class="toggle-radio-buttons mx-2" id="checkbox{{ $index }}"
                                     name="inspectors_ids[]" value="{{ $inspectorGroup['inspector_id']->id }}"
                                     {{ in_array($inspectorGroup['inspector_id']->id, $selectedInspectors) ? 'checked' : '' }}>
-                                <label for="checkbox{{ $index }}">{{ $inspectorGroup['inspector_id']->name }}</label>
+                                <input type="hidden" value="{{ $inspectorGroup['inspector_id']->user->Civil_number }}"
+                                    id="Civil_number{{ $index }}" name="Civil_number">
+                                <label for="checkbox{{ $index }}">
+                                    {{ $inspectorGroup['inspector_id']->name }}
+                                </label>
                             </div>
                             <div class="radio-buttons" id="radio-buttons{{ $index }}">
                                 <div class="d-flex justify-content-start">
                                     @foreach ($allteams as $item)
                                         <input type="radio" id="radio{{ $index }}-{{ $item->id }}"
-                                            name="team_id[{{ $inspectorGroup['inspector_id']->id }}]" value="{{ $item->id }}"
+                                            name="team_id[{{ $inspectorGroup['inspector_id']->id }}]"
+                                            value="{{ $item->id }}"
                                             {{ in_array($item->id, $inspectorGroup['group_team_ids']) ? 'checked' : '' }}>
                                         <label class="mx-4" for="radio{{ $index }}-{{ $item->id }}">
                                             {{ $item->name }}
@@ -99,7 +102,8 @@
             const searchValue = this.value.toLowerCase();
             document.querySelectorAll('.inspector-item').forEach(function(item) {
                 const label = item.querySelector('label').textContent.toLowerCase();
-                if (label.includes(searchValue)) {
+                const civilNumber = item.querySelector('input[type="hidden"]').value.toLowerCase();
+                if (label.includes(searchValue) || civilNumber.includes(searchValue)) {
                     item.style.display = 'block';
                 } else {
                     item.style.display = 'none';

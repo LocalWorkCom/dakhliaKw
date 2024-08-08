@@ -97,7 +97,7 @@
                                     <label class="d-flex justify-content-start pt-3 pb-2" for="name" style=" flex-direction: row-reverse;"> اسم
                                         المخالفه</label>
                                     <input type="text" id="nameadd" name="nameadd" class="form-control"
-                                        placeholder="اسم المخالفه" required>
+                                        placeholder="اسم المخالفه" dir="rtl" required>
                                     @if ($errors->has('nameadd'))
                                         <span class="text-danger span-error" id="nameadd-error"
                                             dir="rtl">{{ $errors->first('nameadd') }}</span>
@@ -113,7 +113,7 @@
                                         <div class="options" id="options">
                                             <div class="search-box">
                                                 <input type="text" id="search-input" placeholder="ابحث هنا ....."
-                                                    style="width: 100% !important;">
+                                                    style="width: 100% !important;" dir="rtl">
 
                                             </div>
                                             @foreach (getDepartments() as $department)
