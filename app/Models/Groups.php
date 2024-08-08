@@ -25,4 +25,9 @@ class Groups extends Model
     {
         return $this->belongsTo(Government::class, 'government_id');
     }
+    public function instant_Mission()
+    {
+
+        return $this->hasMany(instantmission::class);
+    }
 }

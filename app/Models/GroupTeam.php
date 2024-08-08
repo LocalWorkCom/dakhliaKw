@@ -13,4 +13,18 @@ class GroupTeam extends Model
     {
         return $this->hasMany(Government::class);
     }
+
+
+    public function instantMission()
+    {
+
+        return $this->hasMany(instantmission::class);
+    }
+
+    public function working_tree()
+    {
+        return $this->belongsTo(WorkingTree::class, 'working_tree_id');
+    }
+
+
 }

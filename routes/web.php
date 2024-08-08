@@ -24,6 +24,7 @@ use App\Http\Controllers\InspectorController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\GroupTeamController;
+use App\Http\Controllers\InstantmissionController;
 use App\Http\Controllers\ViolationTypesController;
 
 /*
@@ -105,6 +106,16 @@ Route::middleware(['auth'])->group(function () {
 
     Route::any('/working_time/update', [WorkingTimeController::class, 'update'])->name('working_time.update');
     Route::any('/working_time/show/{id}', [WorkingTimeController::class, 'show'])->name('working_time.show');
+
+    // instantmission
+    Route::any('/instant_mission', [InstantmissionController::class, 'index'])->name('instant_mission.index');
+    Route::get('api/instant_mission', [InstantmissionController::class, 'getInstantMission'])->name('api.instant_mission');
+    Route::any('/instant_mission/create', [InstantmissionController::class, 'create'])->name('instant_mission.create');
+    Route::any('/instant_mission/edit/{id}', [InstantmissionController::class, 'edit'])->name('instant_mission.edit');
+    Route::any('/instant_mission/show/{id}', [InstantmissionController::class, 'show'])->name('instant_mission.show');
+    Route::any('/instant_mission/update/{id}', [InstantmissionController::class, 'update'])->name('instant_mission.update');
+    Route::any('/instant_mission/store', [InstantmissionController::class, 'store'])->name('instant_mission.store');
+    Route::any('/getGroups/{id}', [InstantmissionController::class, 'getGroups'])->name('instant_mission.getGroups');
 
     //groups
     // Route::resource('groups', GroupsController::class);

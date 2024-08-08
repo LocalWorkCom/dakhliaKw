@@ -60,7 +60,7 @@
                                         <th>اسم المجموعة</th>
                                         <th>عدد الفرق</th>
                                         <th>عدد المفتشيين</th>
-                                        <th>عدد نقاط التفتيش للمجموعة</th>
+                                        <th>عدد النقاط لكل فريق فى اليوم</th>
                                         <th>اسم المحافظة</th>
                                         <th style="width:150px !important;">العمليات</th>
                                     </tr>
@@ -192,8 +192,8 @@
 
 
                                 <div class="form-group mt-4 mb-3">
-                                    <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد نقاط
-                                        التفتيش</label>
+                                    <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد النقاط
+                                        لكل فريق فى اليوم</label>
                                     <input type="number" id="points_inspector" name="points_inspector" class="form-control"
                                         placeholder="4" value="{{ old('points_inspector') }}">
                                     @if ($errors->has('points_inspector'))
@@ -286,7 +286,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label class="d-flex justify-content-start pb-2" for="points_inspector_show">
-                                    عدد نقاط التفتيش </label>
+                                    عدد النقاط لكل فريق فى اليوم  </label>
 
                                 <input type="number" id="points_inspector_show" name="points_inspector_show"
                                     class="form-control" disabled>
@@ -347,7 +347,7 @@
 
                                 <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
-                                        نقاط التفتيش</label>
+                                        النقاط لكل فريق فى اليوم </label>
                                     <input type="number" id="points_inspector_edit" name="points_inspector_edit"
                                         class="form-control" placeholder="4" value="{{ old('points_inspector_edit') }}">
                                     @if ($errors->has('points_inspector_edit'))
@@ -360,7 +360,7 @@
                                         {{ $errors->first('nothing_updated') }}
                                     @endif
                                 </span>
-                                
+
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;">
@@ -380,6 +380,22 @@
             </div>
         </div>
     </div>
+    
+    <!-- JavaScript to handle modal display -->
+    <script>
+        @if (session('editModal'))
+            $(document).ready(function() {
+                $('#edit').modal('show');
+            });
+        @endif
+
+        @if (session('message'))
+            $(document).ready(function() {
+                alert('{{ session('message') }}');
+            });
+        @endif
+    </script>
+
     <!-- Team Modal -->
     {{-- <div class="modal fade" id="team" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
         style="padding-left: 0px;" dir="rtl">
@@ -423,20 +439,7 @@
             </div>
         </div>
     </div> --}}
-    <!-- JavaScript to handle modal display -->
-    <script>
-        @if (session('editModal'))
-            $(document).ready(function() {
-                $('#edit').modal('show');
-            });
-        @endif
-
-        @if (session('message'))
-            $(document).ready(function() {
-                alert('{{ session('message') }}');
-            });
-        @endif
-    </script>
+    
 @endsection
 
 @push('scripts')
