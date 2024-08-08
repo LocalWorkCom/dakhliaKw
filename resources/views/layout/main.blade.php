@@ -23,7 +23,17 @@
     @stack('style')
     <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
-
+    <!-- Select 2-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<style>
+  .select2-container .select2-selection--single{
+    height: 45px;
+    font-size: 14px;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+  }  
+    </style>
 </head>
 <body >
 @include('layout.header')

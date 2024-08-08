@@ -91,7 +91,7 @@
                             <div class="form-group col-md-10 mx-2">
                                 <label for="nameus"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> الاسم</label>
                                 {{-- <input type="text" id="nameus" name="name" class="form-control" placeholder="الاسم"> --}}
-                                <select class="custom-select custom-select-lg mb-3" name="name" id="nameus">
+                                <select class="custom-select custom-select-lg mb-3 select2" name="name" id="nameus">
                                     <option selected disabled>اختار من القائمة</option>
                                     @foreach ($alluser as $item)
                                         <option value="{{ $item->id }}" {{ old('name') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
@@ -102,7 +102,7 @@
                 @else
                     <div class="form-group col-md-5 mx-2">
                         <label for="job"> الوظيفة</label>
-                        <select class="custom-select custom-select-lg mb-3" name="job" id="job">
+                        <select class="custom-select custom-select-lg mb-3 select2" name="job" id="job">
                             <option selected disabled>اختار من القائمة</option>
                             @foreach ($job as $item)
                                 <option value="{{ $item->id }}" {{ old('job') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
@@ -134,7 +134,7 @@
 
                     <div class="form-group col-md-5 mx-2">
                         <label for="input7"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> المهام</label>
-                        <select id="input7" name="rule_id" class="form-control" placeholder="المهام">
+                        <select id="input7" name="rule_id" class="form-control select2" placeholder="المهام">
                             <option selected disabled>اختار من القائمة</option>
                             @foreach ($rule as $item)
                                 <option value="{{ $item->id }}" {{ old('name') == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
@@ -233,7 +233,7 @@
 
                     <div class="form-group col-md-5 mx-2">
                         <label for="input15"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  القسم </label>
-                        <select id="input15" name="department_id" class="form-control" placeholder="القسم">
+                        <select id="input15" name="department_id" class="form-control select2" placeholder="القسم">
                             <option value="{{ null }}" selected>
                                 لا يوجد قسم محدد</option>
                             @foreach ($alldepartment as $item)
@@ -278,7 +278,7 @@
                 </div> --}}
                 <div class="form-group col-md-10 mx-2">
                     <label for="input24"> الرتبة</label>
-                    <select id="input24" name="grade_id" class="form-control" placeholder="الرتبة">
+                    <select id="input24" name="grade_id" class="form-control select2" placeholder="الرتبة">
                         @foreach ($grade as $item)
 
                         <option value="{{ $item->id }}" {{ $item->name == "عسكرى" ? 'selected':'' }}  {{ old('grade_id') == $item->id ? 'selected' : '' }}> {{ $item->name }}
@@ -314,7 +314,7 @@
                 </div>
                 <div class="form-group col-md-5 mx-2">
                     <label for="department">الادارة</label>
-                    <select class="custom-select custom-select-lg mb-3" name="department" id="department">
+                    <select class="custom-select custom-select-lg mb-3 select2" name="department" id="department">
                         <option selected disabled>Open this select menu</option>
                         @foreach ($alldepartment as $item)
                         <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -328,7 +328,7 @@
     <div class="form-row mx-3 d-flex justify-content-center">
         <div class="form-group col-md-5 mx-2">
             <label for="rule_id">المهام</label>
-            <select class="custom-select custom-select-lg mb-3" name="rule" id="rule_id">
+            <select class="custom-select custom-select-lg mb-3 select2" name="rule" id="rule_id">
                 <option selected disabled>Open this select menu</option>
                 @foreach ($rule as $item)
                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -354,7 +354,7 @@
 
             <div class="form-group col-md-5 ">
                 <label for="grade_id">الرتبة</label>
-                <select class="custom-select custom-select-lg mb-3" name="grade_id" id="grade_id">
+                <select class="custom-select custom-select-lg mb-3 select2" name="grade_id" id="grade_id">
                     <option selected disabled>Open this select menu</option>
                     @foreach ($grade as $item)
                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -437,8 +437,16 @@
 
         });
     });
-</script>
 
+
+    // In your Javascript (external .js resource or <script> tag)
+
+</script>
+<script>
+   // $(document).ready(function() {
+    $('.select2').select2({  dir: "rtl"});
+//});
+    </script>
 <script>
     function togglePasswordVisibility() {
         var passwordInput = document.getElementById('input3');
