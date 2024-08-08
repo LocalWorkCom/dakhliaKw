@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use App\Models\WorkingTree;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,10 @@ class Groups extends Model
 
     public function inspector()
     {
-        return $this->belongsTo(Inspector::class, 'id'); 
+        return $this->belongsTo(Inspector::class, 'id');
+    }
+    public function government()
+    {
+        return $this->belongsTo(Government::class, 'government_id');
     }
 }

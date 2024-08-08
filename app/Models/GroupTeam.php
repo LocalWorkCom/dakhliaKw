@@ -18,4 +18,5 @@ class GroupTeam extends Model
     {
         return $this->belongsTo(WorkingTree::class, 'working_tree_id');
     }
+
 }

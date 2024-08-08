@@ -52,7 +52,7 @@
                         </div>
                     @enderror
                 </div>
-                <div class="form-group mt-4 mb-3">
+                <div class="form-group col-md-11 mx-4">
                     <label for="working_tree_id" class="d-flex justify-content-start pt-3 pb-2">اختر
                         نظام العمل</label>
                     <select class="form-control" name="working_tree_id" id="working_tree_id">
