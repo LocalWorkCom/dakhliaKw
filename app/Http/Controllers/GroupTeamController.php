@@ -242,9 +242,15 @@ class GroupTeamController extends Controller
 
 
         $newName = $request->name;
+        
         $newInspectors = $request->inspectors_ids ? (array) $request->inspectors_ids : [];
         $oldInspectorIds = $team->inspector_ids ? explode(',', $team->inspector_ids) : [];
 
+        foreach($newInspectors as $key){
+         $value =   Inspector::find($key) ;
+         $value->group_id=$team->group_id;
+         $value->save();
+        }
         // Ensure all IDs are strings for comparison
         $newInspectors = array_map('strval', $newInspectors);
         $oldInspectorIds = array_map('strval', $oldInspectorIds);
