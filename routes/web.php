@@ -113,6 +113,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/instant_mission/create', [InstantmissionController::class, 'create'])->name('instant_mission.create');
     Route::any('/instant_mission/edit/{id}', [InstantmissionController::class, 'edit'])->name('instant_mission.edit');
     Route::any('/instant_mission/show/{id}', [InstantmissionController::class, 'show'])->name('instant_mission.show');
+    Route::any('/instant_mission/update/{id}', [InstantmissionController::class, 'update'])->name('instant_mission.update');
     Route::any('/instant_mission/store', [InstantmissionController::class, 'store'])->name('instant_mission.store');
     Route::any('/getGroups/{id}', [InstantmissionController::class, 'getGroups'])->name('instant_mission.getGroups');
 

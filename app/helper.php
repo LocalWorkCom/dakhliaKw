@@ -173,8 +173,28 @@ function UploadFilesWithoutReal($path, $image, $model, $request)
 
     $model->save();
 }
+function UploadFilesIM($path, $image, $model, $request)
+{
 
- function showUserDepartment()
+    $imagePaths = [];
+    $thumbnail = $request;
+    $destinationPath = $path;
+    foreach ($thumbnail as $key=> $item) {
+        $filename = $key.time() . '.' . $item->getClientOriginalExtension();
+        $item->move($destinationPath, $filename);
+
+        // $image->image = asset($path) . '/' . $filename;
+        $imagePaths[] = asset($path) . '/' . $filename;
+    }
+
+    // dd($model->image);
+    $model->$image = implode(',', $imagePaths);
+
+    $model->save();
+}
+
+
+function showUserDepartment()
 {
     // Retrieve the authenticated user
     $user = Auth::user();
@@ -211,17 +231,17 @@ function getCountries()
 }
 function getgovernments()
 {
-    
+
     return  Government::all();
 }
 function getsectores()
 {
-    
+
     return  Sector::all();
 }
 function getgroups()
 {
-    
+
     return  Groups::all();
 }
 function CheckStartVacationDate($id)
