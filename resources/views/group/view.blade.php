@@ -355,6 +355,12 @@
                                     @endif
                                 </div>
 
+                                <span class="text-danger span-error">
+                                    @if ($errors->has('nothing_updated'))
+                                        {{ $errors->first('nothing_updated') }}
+                                    @endif
+                                </span>
+                                
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;">

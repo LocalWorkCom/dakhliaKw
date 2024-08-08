@@ -260,10 +260,19 @@ class GroupsController extends Controller
 
             // return redirect()->back();
         }
+        
         $group = Groups::find($request->id_edit);
+
+        
         $group->name = $request->name_edit;
         $group->points_inspector = $request->points_inspector_edit;
         $group->government_id = $request->government_id;
+
+
+        // if ($group->name === $request->name_edit && $group->points_inspector == $request->points_inspector_edit && $group->government_id === $request->government_id) {
+        //     return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.'])->withInput()->with('editModal', true);
+
+        // }
 
         $group->save();
         session()->flash('success', 'تم تعديل مجموعة بنجاح.');
