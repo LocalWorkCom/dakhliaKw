@@ -15,28 +15,28 @@
     <section>
         <div class="row">
             <div class="container welcome col-11">
-            <div class="d-flex justify-content-between">
-                <p> المجــــــــموعات</p>
-                <button class="btn-all px-3" style="color: #274373;" onclick="openAddModal()" data-bs-toggle="modal"
-                            data-bs-target="#myModal1">
-                            اضافة مجموعة جديده 
-                            <img src="{{ asset('frontend/images/group-add.svg') }}" alt="">
-                        </button>
+                <div class="d-flex justify-content-between">
+                    <p> المجــــــــموعات</p>
+                    <button class="btn-all px-3" style="color: #274373;" onclick="openAddModal()" data-bs-toggle="modal"
+                        data-bs-target="#myModal1">
+                        اضافة مجموعة جديده
+                        <img src="{{ asset('frontend/images/group-add.svg') }}" alt="">
+                    </button>
+                </div>
             </div>
-        </div>
         </div>
         <br>
         <div class="row">
             <div class="container col-11 mt-3 p-0">
                 <div class="row d-flex justify-content-between" dir="ltr">
                     <!-- <div class="form-group mt-4 mx-3 d-flex">
-                        <button class="btn-all px-3" style="color: #274373;" onclick="openAddModal()" data-bs-toggle="modal"
-                            data-bs-target="#myModal1">
-                            <img src="{{ asset('frontend/images/group-add.svg') }}" alt="">
-                            اضافة مجموعة جديده
-                        </button>
+                                                                <button class="btn-all px-3" style="color: #274373;" onclick="openAddModal()" data-bs-toggle="modal"
+                                                                    data-bs-target="#myModal1">
+                                                                    <img src="{{ asset('frontend/images/group-add.svg') }}" alt="">
+                                                                    اضافة مجموعة جديده
+                                                                </button>
 
-                    </div> -->
+                                                            </div> -->
                     <div class="form-group mt-4 mx-3 d-flex justify-content-end">
                         <button class="btn-all px-3" style="color: #FFFFFF; background-color: #274373;"
                             onclick="window.print()">
@@ -58,10 +58,10 @@
                                     <tr>
                                         <th>رقم التسلسلي</th>
                                         <th>اسم المجموعة</th>
-                                        <th>نظام العمل</th>
                                         <th>عدد الفرق</th>
                                         <th>عدد المفتشيين</th>
-                                        <th>نقاط التفتيش </th>
+                                        <th>عدد نقاط التفتيش للمجموعة</th>
+                                        <th>اسم المحافظة</th>
                                         <th style="width:150px !important;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -84,10 +84,7 @@
                                                 data: 'name',
                                                 name: 'name'
                                             },
-                                            {
-                                                data: 'working_time.name',
-                                                name: 'working_time.name'
-                                            },
+
                                             {
                                                 data: 'num_team',
                                                 name: 'num_team'
@@ -100,6 +97,10 @@
                                             {
                                                 data: 'points_inspector',
                                                 name: 'points_inspector'
+                                            },
+                                            {
+                                                data: 'government.name',
+                                                name: 'government.name'
                                             },
                                             {
                                                 data: 'action',
@@ -175,20 +176,21 @@
                                     @endif
                                 </div>
                                 <div class="form-group mt-4 mb-3">
-                                    <label for="work_time_id" class="d-flex justify-content-start pt-3 pb-2">اختر نظام
-                                        العمل</label>
-                                    <select class="form-control" name="work_time_id" id="work_time_id">
-                                        <option selected disabled>اختار من القائمة</option>
-                                        @foreach ($workTimes as $workTime)
-                                            <option value="{{ $workTime->id }}"
-                                                {{ old('work_time_id') == $workTime->id ? 'selected' : '' }}>
-                                                {{ $workTime->name }}</option>
+                                    <label class="d-flex justify-content-start pt-3 pb-2" for="government_id"> اختر
+                                        المحافظة </label>
+                                    <select name="government_id" id="government_id" class="form-control"
+                                        style="border: 0.2px solid rgb(199, 196, 196);">
+                                        <option value="">محافظه </option>
+                                        @foreach ($governments as $government)
+                                            <option value="{{ $government->id }}">{{ $government->name }} </option>
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('work_time_id'))
-                                        <span class="text-danger">{{ $errors->first('work_time_id') }}</span>
+                                    @if ($errors->has('government_id'))
+                                        <span class="text-danger">{{ $errors->first('government_id') }}</span>
                                     @endif
                                 </div>
+
+
                                 <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد نقاط
                                         التفتيش</label>
@@ -237,10 +239,6 @@
             </div>
         </div>
     </div>
-    </div>
-    </div>
-    </div>
-    </div>
 
     <script>
         @if (session('showModal'))
@@ -275,6 +273,17 @@
                                 <input type="text" id="nameadd_show" name="nameadd_show" class="form-control"
                                     placeholder="مجموعة أ" disabled>
                             </div>
+                            <div class="form-group mt-4 mb-3">
+                                <label class="d-flex justify-content-start pt-3 pb-2" for="government_id"> اختر المحافظة
+                                </label>
+                                <select name="government_id" id="government_show_id" class="form-control" disabled
+                                    style="border: 0.2px solid rgb(199, 196, 196);">
+                                    <option value="">محافظه </option>
+                                    @foreach ($governments as $government)
+                                        <option value="{{ $government->id }}">{{ $government->name }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="form-group mb-3">
                                 <label class="d-flex justify-content-start pb-2" for="points_inspector_show">
                                     عدد نقاط التفتيش </label>
@@ -282,13 +291,7 @@
                                 <input type="number" id="points_inspector_show" name="points_inspector_show"
                                     class="form-control" disabled>
                             </div>
-                            <div class="form-group mb-3">
-                                <label class="d-flex justify-content-start pb-2" for="work_time_id_show">
-                                    نظام العمل
-                                </label>
-                                <input type="text" id="work_time_id_show" name="work_time_id_show"
-                                    class="form-control" disabled>
-                            </div>
+
 
                         </div>
                     </div>
@@ -328,20 +331,20 @@
                                     @endif
                                 </div>
                                 <div class="form-group mt-4 mb-3">
-                                    <label for="work_time_id_edit" class="d-flex justify-content-start pt-3 pb-2">اختر
-                                        نظام العمل</label>
-                                    <select class="form-control" name="work_time_id_edit" id="work_time_id_edit">
-                                        <option selected disabled>اختار من القائمة</option>
-                                        @foreach ($workTimes as $workTime)
-                                            <option value="{{ $workTime->id }}"
-                                                {{ old('work_time_id_edit') == $workTime->id ? 'selected' : '' }}>
-                                                {{ $workTime->name }}</option>
+                                    <label class="d-flex justify-content-start pt-3 pb-2" for="government_id"> اختر
+                                        المحافظة </label>
+                                    <select name="government_id" id="government_edit_id" class="form-control"
+                                        style="border: 0.2px solid rgb(199, 196, 196);">
+                                        <option value="">محافظه </option>
+                                        @foreach ($governments as $government)
+                                            <option value="{{ $government->id }}">{{ $government->name }} </option>
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('work_time_id_edit'))
-                                        <span class="text-danger">{{ $errors->first('work_time_id_edit') }}</span>
+                                    @if ($errors->has('government_id'))
+                                        <span class="text-danger">{{ $errors->first('government_id') }}</span>
                                     @endif
                                 </div>
+
                                 <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
                                         نقاط التفتيش</label>
@@ -483,7 +486,7 @@
                         // // Populate modal fields with data
                         document.getElementById('nameadd_show').value = data.group.name;
                         document.getElementById('points_inspector_show').value = data.group.points_inspector;
-                        document.getElementById('work_time_id_show').value = data.working_time.name;
+                        document.getElementById('government_show_id').value = data.group.government_id;
                         // document.getElementById('id_show').value = data.id;
                         $('#view').modal('show');
                     } else {
@@ -507,20 +510,13 @@
                         // Populate modal fields with data
                         document.getElementById('name_edit').value = data.group.name;
                         document.getElementById('points_inspector_edit').value = data.group.points_inspector;
-                        document.getElementById('work_time_id_edit').value = data.working_time.name;
                         document.getElementById('id_edit').value = data.group.id;
+                        document.getElementById('government_edit_id').value = data.group.government_id;
+                        $('#government_edit_id').val(data.group.government_id).change();
+
 
                         // Select the option in the dropdown
-                        var workTimeSelect = document.getElementById('work_time_id_edit');
-                        var workTimeName = data.working_time.name;
 
-                        // Loop through the options to find the matching name
-                        for (var i = 0; i < workTimeSelect.options.length; i++) {
-                            if (workTimeSelect.options[i].text === workTimeName) {
-                                workTimeSelect.selectedIndex = i;
-                                break;
-                            }
-                        }
 
                         $('#edit').modal('show');
                     } else {
