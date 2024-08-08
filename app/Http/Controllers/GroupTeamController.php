@@ -10,6 +10,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreGroupTeamRequest;
 use App\Http\Requests\UpdateGroupTeamRequest;
+use App\Models\WorkingTree;
 
 class GroupTeamController extends Controller
 {
@@ -18,12 +19,14 @@ class GroupTeamController extends Controller
      */
     public function index($id)
     {
+        $workTrees = WorkingTree::all();
+
         //
-        return view('groupteam.show', compact('id'));
+        return view('groupteam.show', compact('id', 'workTrees'));
     }
     public function getGroupTeam($id)
     {
-        $data = GroupTeam::with('group')->where('group_id', $id)->get();
+        $data = GroupTeam::with('group')->with('working_tree')->where('group_id', $id)->get();
         // dd($data);
         foreach ($data as $key) {
             # code...
@@ -44,7 +47,28 @@ class GroupTeamController extends Controller
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
-            ->rawColumns(['action'])
+            ->addColumn('inspectorCount', function ($row) use ($id) {
+                $inspector_ids = GroupTeam::where('group_id', $id)->where('id', $row->id)->first()->inspector_ids;
+                if ($inspector_ids) {
+
+                    $inspectorIds = explode(',', $inspector_ids);
+
+                    // Count the number of inspectors
+             
+                    $count = count($inspectorIds);
+                } else {
+                    $count = 0;
+                }
+                if ($count == 1 || $count == 0) {
+
+                    $btn = '<a class="btn btn-sm"   style="background-color: #F7AF15;">' . $count . '</a>';
+                } else {
+                    $btn = '<a class="btn btn-sm"   style="background-color: #274373; padding-inline: 15px;">' . $count . '</a>';
+                }
+                // dd($btn);
+                return  $btn;
+            })
+            ->rawColumns(['action', 'inspectorCount'])
             ->make(true);
     }
 
@@ -63,18 +87,34 @@ class GroupTeamController extends Controller
     {
         $messages = [
             'groupTeam_name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+            'working_tree_id.required' => 'نظام العمل مطلوبة ولا يمكن تركها فارغة.',
+
         ];
 
-
-        // Validate the request input
         $request->validate([
-            'groupTeam_name' => 'required|string|max:255',
+            'groupTeam_name' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($id) {
+                    // Check for uniqueness within the specific group_id
+                    $exists = GroupTeam::where('name', $value)
+                        ->where('group_id', $id)
+                        ->exists();
+                    if ($exists) {
+                        $fail('هذا الاسم موجود بالفعل ضمن هذه المجموعة.');
+                    }
+                },
+            ],
+            'working_tree_id' => 'required|integer', // Assuming working_tree_id is required and is an integer
         ], $messages);
+        // Validate the request input
 
         try {
             $grouptemItem = new GroupTeam();
             $grouptemItem->name = $request->groupTeam_name;
             $grouptemItem->group_id = $id;
+            $grouptemItem->working_tree_id = $request->working_tree_id;
             $grouptemItem->save();
 
             return redirect()->back()->with('success', 'تم الاضافة بنجاح');
@@ -117,6 +157,7 @@ class GroupTeamController extends Controller
     {
         $team = GroupTeam::find($id);
         $group_id = $team->group_id;
+        $workTrees  = WorkingTree::all();
         $inspectors = Inspector::where('group_id', $team->group_id)->orwhereNull('group_id')->get();
         $inspectorGroups = collect();
         $selectedInspectors = [];
@@ -155,7 +196,7 @@ class GroupTeamController extends Controller
         $allteams = GroupTeam::where('group_id', $team->group_id)->get();
 
 
-        return view('groupteam.edit', compact('team', 'inspectorGroups', 'allteams', 'group_id', 'id', 'selectedInspectors'));
+        return view('groupteam.edit', compact('team', 'inspectorGroups', 'allteams', 'group_id', 'id', 'selectedInspectors', 'workTrees'));
     }
 
     /**
@@ -164,7 +205,7 @@ class GroupTeamController extends Controller
     public function show($id)
     {
 
-        $team = GroupTeam::find($id);
+        $team = GroupTeam::with('group')->with('working_tree')->where('id', $id)->first();
         $inspectorIds = explode(',', $team->inspector_ids);
         $inspectors = Inspector::whereIn('id', $inspectorIds)->get();
         $group_id = $team->group_id;
@@ -180,11 +221,17 @@ class GroupTeamController extends Controller
         // Custom validation messages
         $messages = [
             'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+            'working_tree_id.required' => 'نظام العمل مطلوبة ولا يمكن تركها فارغة.',
+
+
         ];
 
         // Validate the request input
         $request->validate([
             'name' => 'required|string',
+            'working_tree_id' => 'required',
+
+
         ], $messages);
 
         $team = GroupTeam::find($id);
@@ -193,10 +240,17 @@ class GroupTeamController extends Controller
             return redirect()->back()->withErrors(['team_not_found' => 'فريق العمل غير موجود.']);
         }
 
+
         $newName = $request->name;
+        
         $newInspectors = $request->inspectors_ids ? (array) $request->inspectors_ids : [];
         $oldInspectorIds = $team->inspector_ids ? explode(',', $team->inspector_ids) : [];
 
+        foreach($newInspectors as $key){
+         $value =   Inspector::find($key) ;
+         $value->group_id=$team->group_id;
+         $value->save();
+        }
         // Ensure all IDs are strings for comparison
         $newInspectors = array_map('strval', $newInspectors);
         $oldInspectorIds = array_map('strval', $oldInspectorIds);
@@ -206,12 +260,13 @@ class GroupTeamController extends Controller
         // Also check for removed inspector IDs
         $removedArr = array_diff($oldInspectorIds, $newInspectors);
 
-        if (empty($changeArr) && empty($removedArr) && $team->name === $newName) {
+        if (empty($changeArr) && empty($removedArr) && $team->name === $newName && $team->working_tree_id == $request->working_tree_id) {
             return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.']);
         }
 
         // Update the team name
         $team->name = $newName;
+        $team->working_tree_id = $request->working_tree_id;
 
         // Update inspector_ids if provided
         if (!empty($newInspectors)) {

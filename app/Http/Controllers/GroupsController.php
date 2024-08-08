@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Government;
 use App\Models\Groups;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
@@ -26,14 +27,14 @@ class GroupsController extends Controller
     {
         // $workTimes = WorkingTime::all();
         // $inspector = Inspector::where('group_id',$id)->get();
-        $workTimes = WorkingTree::all();
         // dd($workTimes);
-        return view('group.view', compact('workTimes'));
+        $governments = Government::all();
+        return view('group.view', compact('governments'));
     }
 
     public function getgroups()
     {
-        $data = Groups::with('working_time')->get();
+        $data = Groups::with('government')->get();
         // $data = Groups::all();
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
@@ -53,12 +54,12 @@ class GroupsController extends Controller
                 if ($count == 0) {
                     $btn = '<a class="btn btn-sm" style="background-color: #F7AF15;"href=' . route('groupTeam.index', $row->id) . '> ' . $count . '</a>';
                 } else {
-                  
+
                     $btn = '<a class="btn btn-sm"  style="background-color: #274373; padding-inline: 15px" href=' . route('groupTeam.index', $row->id) . '> ' . $count . '</a>';
                 }
                 return  $btn;
             })
-            ->rawColumns(['action', 'num_inspectors','num_team'])
+            ->rawColumns(['action', 'num_inspectors', 'num_team'])
             ->make(true);
     }
 
@@ -118,16 +119,19 @@ class GroupsController extends Controller
     {
         $messages = [
             'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
-            'work_time_id.required' => 'فترة العمل مطلوبة ولا يمكن تركها فارغة.',
             'points_inspector.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
+            'government_id.required' => 'المحافظة مطلوبة ولا يمكن تركه فارغا'
+
         ];
 
         $validatedData = Validator::make($request->all(), [
             'name' => 'required',
-            'work_time_id' => 'required',
             'points_inspector' => 'required',
+            'government_id' => 'required',
+
         ], $messages);
 
+        // dd($validatedData);
         // Handle validation failure
         if ($validatedData->fails()) {
             // session()->flash('errors', $validatedData->errors());
@@ -139,8 +143,9 @@ class GroupsController extends Controller
         try {
             $group = new Groups();
             $group->name = $request->name;
-            $group->work_time_id = $request->work_time_id;
             $group->points_inspector = $request->points_inspector;
+            $group->government_id = $request->government_id;
+
             $group->save();
             session()->flash('success', 'تم اضافه مجموعة بنجاح.');
 
@@ -233,16 +238,18 @@ class GroupsController extends Controller
     {
         $messages = [
             'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
-            'work_time_id_edit.required' => 'فترة العمل مطلوبة ولا يمكن تركها فارغة.',
             'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
+            'government_id.required' => 'المحافظة مطلوبة ولا يمكن تركه فارغا'
+
         ];
-    
+
         $validatedData = Validator::make($request->all(), [
             'name_edit' => 'required',
-            'work_time_id_edit' => 'required',
             'points_inspector_edit' => 'required',
+            'government_id' => 'required|integer',
+
         ], $messages);
-    
+
         // // Handle validation failure
         // if ($validatedData->fails()) {
         //     return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
@@ -250,17 +257,27 @@ class GroupsController extends Controller
         if ($validatedData->fails()) {
             // session()->flash('errors', $validatedData->errors());
             return redirect()->back()->withErrors($validatedData)->withInput()->with('editModal', true);
-    
+
             // return redirect()->back();
         }
+        
         $group = Groups::find($request->id_edit);
+
+        
         $group->name = $request->name_edit;
         $group->points_inspector = $request->points_inspector_edit;
-        $group->work_time_id = $request->work_time_id_edit;
+        $group->government_id = $request->government_id;
+
+
+        // if ($group->name === $request->name_edit && $group->points_inspector == $request->points_inspector_edit && $group->government_id === $request->government_id) {
+        //     return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.'])->withInput()->with('editModal', true);
+
+        // }
+
         $group->save();
         session()->flash('success', 'تم تعديل مجموعة بنجاح.');
-    
-            return redirect()->back();
+
+        return redirect()->back();
     }
 
     /**
