@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 
 class pointsController extends Controller
@@ -96,23 +97,30 @@ class pointsController extends Controller
             ->addColumn('group_name', function ($row) {
                 // Fetch the group related to the government
                 $group = Grouppoint::where('government_id', $row->government->id)->first();
-            //dd($row->government->id);
-                // Check if the group exists and has the points_ids field
-                if (isset($group) && isset($group->points_ids)) {
-                    // Decode the JSON field into a PHP array
-                    //$pointsIds = json_decode($group->points_ids, true);
+            // //dd($row->government->id);
+            //     // Check if the group exists and has the points_ids field
+            //     if ($group && $group->points_ids) {
+            //         // Decode the JSON field into a PHP array
+            //         //$pointsIds = json_decode($group->points_ids, true);
             
-                    // Check if the point ID exists in the group
-                    if (in_array($row->id, $group->points_ids)) {
-                        $btn = '
-                        <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> ' . $group->name . ' </a>';
-                    } else {
-                        $btn = '<p> لايوجد مجموعه</p>';
-                    }
-                } else {
-                    $btn = '<p> لايوجد مجموعه</p>';
-                }
-            
+            //         // Check if the point ID exists in the group
+            //         if (in_array($row->id, $group->points_ids)) {
+            //             $btn = '
+            //             <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> ' . $group->name . ' </a>';
+            //         } else {
+            //             $btn = '<p> لايوجد مجموعه</p>';
+            //         }
+            //     } else {
+            //         $btn = '<p> لايوجد مجموعه</p>';
+            //     }
+            //dd($group->flag);
+
+            if($group->flag !=0){
+                $btn = ' <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> ' . $group->name . ' </a>';
+                
+            }else{
+                      $btn = '<p> لايوجد مجموعه</p>';
+            }
                 return $btn;
             })
             ->addColumn('from', function ($row) {
@@ -147,7 +155,11 @@ class pointsController extends Controller
     {
         //dd($request->all());
         $rules = [
-            'name' => 'required|string',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('points', 'name')->ignore($request->id),
+            ],
             'sector_id' => 'required|exists:sectors,id',
             'governorate' => 'required|exists:governments,id',
             'region' => 'required|exists:regions,id',
@@ -162,6 +174,8 @@ class pointsController extends Controller
         // Define custom messages
         $messages = [
             'name.required' => 'يجب ادخال اسم نقطه',
+            'name.unique' => 'يجب إدخال اسم نقطة مختلف',
+
             'name.string' => 'يجب ان لا يحتوى اسم النقطه على رموز',
             'governorate.required' => 'يجب اختيار محافظه واحده على الاقل',
             'sector_id.required' => '',
@@ -178,7 +192,6 @@ class pointsController extends Controller
         $validatedData = Validator::make($request->all(), $rules, $messages);
 
         if ($validatedData->fails()) {
-            //dd($validatedData->messages());
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
 

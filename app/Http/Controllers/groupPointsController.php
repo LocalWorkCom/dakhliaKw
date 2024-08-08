@@ -66,6 +66,21 @@ class GroupPointsController extends Controller
         $points->flag  = 1;
 
         $points->save();
+        $pointsIDs = is_array($request->pointsIDs) ? $request->pointsIDs : json_decode($request->pointsIDs, true);
+
+        $deleted = Grouppoint::where('flag', 0)
+        ->where(function ($query) use ($pointsIDs) {
+            foreach ($pointsIDs as $id) {
+                $query->orWhereRaw('JSON_CONTAINS(points_ids, ?) = 1', [json_encode($id)]);
+            }
+        })
+        ->get();
+
+    // Optional: Perform actions with the retrieved records
+    foreach ($deleted as $record) {
+        // Example action: Delete the record
+        $record->delete();
+    }
         return redirect()->route('points.index')->with('message', 'تم أضافه قطاع جديد');
     }
 
@@ -153,7 +168,24 @@ class GroupPointsController extends Controller
         $points->name = $request->name;
         $points->points_ids = $request->pointsIDs;
         $points->government_id  = $points->government_id;
+        $points->flag  = 1;
         $points->save();
+
+        $pointsIDs = is_array($request->pointsIDs) ? $request->pointsIDs : json_decode($request->pointsIDs, true);
+
+        $deleted = Grouppoint::where('flag', 0)
+        ->where(function ($query) use ($pointsIDs) {
+            foreach ($pointsIDs as $id) {
+                $query->orWhereRaw('JSON_CONTAINS(points_ids, ?) = 1', [json_encode($id)]);
+            }
+        })
+        ->get();
+
+    // Optional: Perform actions with the retrieved records
+    foreach ($deleted as $record) {
+        // Example action: Delete the record
+        $record->delete();
+    }
         return redirect()->route('points.index')->with('message', 'تم تعديل مجموعه ');
     }
 
