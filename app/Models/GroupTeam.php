@@ -9,9 +9,8 @@ class GroupTeam extends Model
 {
     use HasFactory;
    
-    public function group()
+    public function government()
     {
-
-        return $this->belongsTo(Groups::class, 'group_id');
+        return $this->hasMany(Government::class);
     }
 }

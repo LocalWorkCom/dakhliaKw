@@ -52,6 +52,29 @@ class pointsController extends Controller
         $regions = Point::where('government_id', $governorate)->get();
         return response()->json($regions);
     }
+//     public function getAllPoints2($governorate, $points)
+// {
+//     // Fetch selected points
+//     $selectedPoints = Point::whereIn('id', $points)->get();
+//     $governmentIds = $selectedPoints->pluck('government_id')->unique();
+
+//     // Fetch all points for the same government
+//     $allPoints = Point::whereIn('government_id', $governmentIds)->get();
+
+//     // Get all points in the grouppoint table
+//     $pointsInGroup = Grouppoint::whereIn('government_id', $governmentIds)
+//         ->pluck('point_ids') // Assuming this is a serialized array or JSON
+//         ->flatten() // Flatten the array
+//         ->unique(); // Get unique point IDs
+
+//     // Filter out points that are already in the grouppoint table
+//     $availablePoints = $allPoints->filter(function($point) use ($pointsInGroup) {
+//         return !$pointsInGroup->contains($point->id);
+//     });
+
+//     return response()->json($availablePoints);
+// }
+
     public function index()
     {
         return view("points.index");
@@ -73,13 +96,23 @@ class pointsController extends Controller
             ->addColumn('group_name', function ($row) {
                 // Fetch the group related to the government
                 $group = Grouppoint::where('government_id', $row->government->id)->first();
-        
-                if ($group) {
-                    $btn = '
-                    <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> '.$group->name.' </a>';
+            //dd($row->government->id);
+                // Check if the group exists and has the points_ids field
+                if ($group && $group->points_ids) {
+                    // Decode the JSON field into a PHP array
+                    //$pointsIds = json_decode($group->points_ids, true);
+            
+                    // Check if the point ID exists in the group
+                    if (in_array($row->id, $group->points_ids)) {
+                        $btn = '
+                        <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> ' . $group->name . ' </a>';
+                    } else {
+                        $btn = '<p> لايوجد مجموعه</p>';
+                    }
                 } else {
                     $btn = '<p> لايوجد مجموعه</p>';
                 }
+            
                 return $btn;
             })
             ->addColumn('from', function ($row) {
@@ -162,7 +195,13 @@ class pointsController extends Controller
         $point->from = $request->from;
         $point->to = $request->to;
         $point->save();
+        $pointgroups = new Grouppoint();
+        $pointgroups->name = $point->name;
+        $pointgroups->points_ids = json_encode([$point->id]);
+        $pointgroups->government_id  = $request->governorate;
+        $pointgroups->flag  = 0;
 
+        $pointgroups->save();
         return redirect()->route('points.index')->with('message', 'تم أضافه نقطه');
     }
 

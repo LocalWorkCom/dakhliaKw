@@ -313,12 +313,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('points/create/group', [GroupPointsController::class, 'create'])->name('grouppoints.create');
     Route::post('points/add/group', [GroupPointsController::class, 'store'])->name('grouppoints.store');
     Route::get('points/edit/group/{id}', [GroupPointsController::class, 'edit'])->name('grouppoints.edit');
+    Route::post('points/update/group/{id}', [GroupPointsController::class, 'update'])->name('grouppoints.update');
+
 
     //End GroupPoints
 
     Route::get('/get-governorates/{sector}', [pointsController::class, 'getGovernorates']);
     Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions']);
     Route::get('/get-points/{governorate}', [pointsController::class, 'getAllPoints']);
+    Route::get('/get-pointsAll/{governorate}/{points}', [pointsController::class, 'getAllPoints2']);
 
 
     //Start Violation

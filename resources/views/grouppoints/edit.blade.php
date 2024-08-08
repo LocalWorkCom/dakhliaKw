@@ -22,7 +22,7 @@
     </div> --}}
     {{-- {{ dd($governments) }} --}}
     <br>
-    <form class="edit-grade-form" id="Qta3-form" action=" " method="POST">
+    <form class="edit-grade-form" id="Qta3-form" action="{{ route('grouppoints.update',$data->id) }}" method="POST">
         @csrf
         <div class="row" dir="rtl">
             <div id="first-container" class="container moftsh col-11 mt-3 p-0 pb-3">
@@ -30,8 +30,8 @@
                     <h3 class="pt-3 px-md-5 px-3">اضف مجموعه</h3>
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="name">ادخل اسم المجموعه</label>
-                        <input type="text" id="name" name="name" value="{{ $data->name }}" class="form-control" placeholder="قطاع واحد"
-                            required />
+                        <input type="text" id="name" name="name" value="{{ $data->name }}" class="form-control"
+                            placeholder="قطاع واحد" required />
                         <span class="text-danger span-error" id="name-error"></span>
 
                     </div>
@@ -54,15 +54,14 @@
 
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="governorate">أختر المحافظه الخاصه لمجوعه النقاط</label>
-                        <select name="governorate" id="governorate"
+                        <select name="governorate" id="governorate" disabled
                             class="custom-select custom-select-lg mb-3 select2 col-12"
                             style="border: 0.2px solid rgb(199, 196, 196);">
                             <option value="" selected disabled>اختر</option>
-                            @foreach (getgovernments() as $government)
-                                <option value="{{ $government->id }}" @if ($government->id == $data->government_id)
-                                    selected
-                                @endif>{{ $government->name }}</option>
-                            @endforeach
+
+                            <option value="{{ $data->government_id }}" selected>
+                                {{ $data->government->name }}</option>
+
 
                         </select>
                     </div>
@@ -70,10 +69,14 @@
                 {{-- {{ dd($governments== ''? 't' :'f') }} --}}
                 <div class="input-group moftsh px-md-5 px-3 pt-3">
                     <label class="pb-3" for="pointsIDs">أختر النقاط</label>
-                    <select name="pointsIDs[]" id="pointsIDs" multiple class="custom-select custom-select-lg mb-3 select2 col-12"
+                    <select name="pointsIDs[]" id="pointsIDs" multiple
+                        class="custom-select custom-select-lg mb-3 select2 col-12"
                         style="border: 0.2px solid rgb(199, 196, 196);">
                         <option value="" selected disabled>اختر</option>
-
+                        @foreach ($selectedPoints as $points)
+                            <option value="{{ $points->id }}" @if(in_array($points->id, $data->points_ids ?? [])) selected @endif>
+                                {{ $points->name }}</option>
+                        @endforeach
 
                     </select>
                 </div>
@@ -144,74 +147,71 @@
                 document.getElementById('first-container').classList.remove('hidden');
             });
         });
-        $(document).ready(function() {
-            // Initialize Select2 for the pointsIDs select element
-            // $('#pointsIDs').select2({
-            //     placeholder: 'اختر',
-            //     allowClear: true
-            // });
-        });
-            $('#governorate').change(function() {
-                var governorateId = $(this).val();
-                if (governorateId) {
-                    $.ajax({
-                        url: '/get-points/' + governorateId,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            console.log(data);
-                            
-                            var pointsSelect = $('#pointsIDs');
-                            pointsSelect.empty().append(
-                                '<option value="" selected disabled>اختر</option>');
 
-                            // Check if data is an array
-                            if (Array.isArray(data)) {
-                                if (data.length > 0) {
-                                    $.each(data, function(key, value) {
-                                        var optionHtml =
-                                            '<option value="' + value.id + '">' + value
-                                            .name + '</option>';
-                                        pointsSelect.append(optionHtml);
-                                    });
-                                    pointsSelect.prop('disabled', false);
-                                } else {
-                                    // Show a message if no data is available
-                                    pointsSelect.append(
-                                        '<option disabled>عفوا لا يوجد نقاط لهذه المافظه بعد</option>'
-                                        );
-                                    pointsSelect.prop('disabled', false);
-                                }
-                            } else {
-                                // Handle unexpected data format
-                                console.error('Unexpected data format', data);
-                                pointsSelect.append(
-                                    '<option disabled>تعذر تحميل النقاط</option>');
-                                pointsSelect.prop('disabled', false);
-                            }
+        // $(function() {
 
-                            // Update Select2 component
-                            pointsSelect.trigger('change');
-                        },
-                        error: function(xhr) {
-                            // Handle AJAX errors
-                            console.error('AJAX request failed', xhr);
-                            pointsSelect.empty().append(
-                                '<option disabled>حدث خطأ في تحميل النقاط</option>');
-                            pointsSelect.prop('disabled', false);
+        //     // Handle governorate change
+        //     $('#governorate').on('change', function() {
+        //         var governorateId = $(this).val();
+        //         var pointsSelect = $('#pointsIDs');
 
-                            // Update Select2 component
-                            pointsSelect.trigger('change');
-                        }
-                    });
-                } else {
-                    $('#pointsIDs').empty().append('<option value="" selected disabled>اختر</option>').prop(
-                        'disabled', false);
+        //         // Reset the points select to show "اختر" option
+        //         pointsSelect.empty().append('<option value="" selected disabled>اختر</option>');
+        //         pointsSelect.prop('disabled', true).trigger('change');
+        //         if (governorateId) {
+        //             $.ajax({
+        //                 url: '/get-pointsAll/' + governorateId ,
+        //                 type: 'GET',
+        //                 dataType: 'json',
+        //                 success: function(data) {
+        //                     pointsSelect.empty().append(
+        //                         '<option value="" selected disabled>اختر</option>');
 
-                    // Update Select2 component
-                    $('#pointsIDs').trigger('change');
-                }
-            });
-        
+        //                     if (Array.isArray(data)) {
+        //                         if (data.length > 0) {
+        //                             $.each(data, function(key, value) {
+        //                                 pointsSelect.append('<option value="' + value
+        //                                     .id + '">' + value.name + '</option>');
+        //                             });
+        //                         } else {
+        //                             pointsSelect.append(
+        //                                 '<option disabled>عفوا لا يوجد نقاط لهذه المحافظة بعد</option>'
+        //                             );
+        //                         }
+        //                     } else {
+        //                         console.error('Unexpected data format', data);
+        //                         pointsSelect.append(
+        //                             '<option disabled>تعذر تحميل النقاط</option>');
+        //                     }
+        //                     $('#governorate').prop('disabled', true); // Enable and update Select2
+        //                     pointsSelect.prop('disabled', false).trigger(
+        //                         'change'); // Enable and update Select2
+        //                 },
+        //                 error: function(xhr) {
+        //                     console.error('AJAX request failed', xhr);
+        //                     pointsSelect.empty().append(
+        //                         '<option disabled>حدث خطأ في تحميل النقاط</option>').prop(
+        //                         'disabled', false).trigger(
+        //                         'change'); // Enable and update Select2
+        //                 }
+        //             });
+        //         } else {
+        //             pointsSelect.empty().append('<option value="" selected disabled>اختر</option>').prop(
+        //                 'disabled', false).trigger('change'); // Enable and update Select2
+        //         }
+        //     });
+
+        //     // Initial loading of points for edit case
+        //     var selectedPoints = @json($selectedPoints);
+        //     if (selectedPoints) {
+        //         $('#pointsIDs').val(selectedPoints).trigger('change');
+        //     }
+
+        //     // Trigger change event to load points based on selected governorate
+        //     var initialGovernorate = $('#governorate').val();
+        //     if (initialGovernorate) {
+        //         $('#governorate').trigger('change');
+        //     }
+        // });
     </script>
 @endpush
