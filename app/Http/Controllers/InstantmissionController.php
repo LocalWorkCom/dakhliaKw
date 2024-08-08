@@ -109,9 +109,10 @@ class InstantmissionController extends Controller
      */
     public function show($id)
     {
+        $IM = instantmission::find($id);
         $groups = Groups::all();
-        $groupTeams = GroupTeam::all();
-        return view('instantMissions.edit', compact('groups', 'groupTeams'));
+        $groupTeams = GroupTeam::where('group_id', $IM->group_id)->get();
+        return view('instantMissions.show', compact('groups', 'groupTeams', 'IM'));
     }
 
     /**
@@ -131,7 +132,7 @@ class InstantmissionController extends Controller
     public function update(Request $request, $id)
     {
 
-        dd($request);
+        // dd($request);
         // Validate request data
         $messages = [
             'label.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',

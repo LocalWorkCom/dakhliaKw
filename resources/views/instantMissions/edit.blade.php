@@ -41,7 +41,7 @@
         }
     </style>
 @section('title')
-    اضافة
+    تعديل
 @endsection
 <div class="row col-11" dir="rtl">
     <nav aria-label="breadcrumb">
@@ -50,7 +50,7 @@
 
             <li class="breadcrumb-item"><a href="{{ route('instant_mission.index') }}">الاوامر</a></li>
 
-            <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
+            <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
         </ol>
 
     </nav>
@@ -195,7 +195,7 @@
 
 </section>
 
-<script>
+{{-- <script>
 
     document.addEventListener('DOMContentLoaded', function() {
         const fileInput = document.getElementById('images');
@@ -278,8 +278,8 @@
         })();
     });
 
-</script>
-{{-- <script>
+</script> --}}
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const filePreview = document.getElementById('file-preview');
         const remainingFilesInput = document.getElementById('remaining-files');
@@ -307,9 +307,9 @@
             }
         });
     });
-</script> --}}
+</script> 
 
-{{-- <script>
+<script>
     const fileInput = document.getElementById('images');
     const filePreview = document.getElementById('file-preview');
     const fileCount = document.getElementById('file-count');
@@ -341,7 +341,7 @@
             filePreview.appendChild(fileItem);
         });
     });
-</script> --}}
+</script>
 
 <script>
     $(document).ready(function() {
