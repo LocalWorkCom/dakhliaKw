@@ -22,7 +22,7 @@
     </div> --}}
     {{-- {{ dd($governments) }} --}}
     <br>
-    <form class="edit-grade-form" id="Qta3-form" action=" {{ route('grouppoints.store') }}" method="POST">
+    <form class="edit-grade-form" id="Qta3-form" action=" " method="POST">
         @csrf
         <div class="row" dir="rtl">
             <div id="first-container" class="container moftsh col-11 mt-3 p-0 pb-3">
@@ -30,7 +30,7 @@
                     <h3 class="pt-3 px-md-5 px-3">اضف مجموعه</h3>
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="name">ادخل اسم المجموعه</label>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="قطاع واحد"
+                        <input type="text" id="name" name="name" value="{{ $data->name }}" class="form-control" placeholder="قطاع واحد"
                             required />
                         <span class="text-danger span-error" id="name-error"></span>
 
@@ -59,7 +59,9 @@
                             style="border: 0.2px solid rgb(199, 196, 196);">
                             <option value="" selected disabled>اختر</option>
                             @foreach (getgovernments() as $government)
-                                <option value="{{ $government->id }}">{{ $government->name }}</option>
+                                <option value="{{ $government->id }}" @if ($government->id == $data->government_id)
+                                    selected
+                                @endif>{{ $government->name }}</option>
                             @endforeach
 
                         </select>

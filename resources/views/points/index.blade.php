@@ -24,7 +24,7 @@
                         {{-- @endif --}}
                         {{-- @if (Auth::user()->hasPermission('create Point')) --}}
                         <button type="button" class="btn-all  "
-                            onclick="window.location.href='{{ route('points.create') }}'" style="color: #0D992C;">
+                            onclick="window.location.href='{{ route('grouppoints.create') }}'" style="color: #0D992C;">
                             اضافة نقاط لمجموعه  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </button>
                         {{-- @endif --}}
@@ -64,6 +64,7 @@
                                         <th>القطاع </th>
                                         <th>المحافظه</th>
                                         <th>المنطقه</th>
+                                        <th>المجموعه الخاصه بالنقطه</th>
                                         <th>من</th>
                                         <th>الى</th>
                                         <th style="width:150px;">العمليات</th>
@@ -104,6 +105,10 @@
                     {
                         data: 'region_name',
                         name: 'region_name'
+                    },
+                    {
+                        data: 'group_name',
+                        name: 'group_name'
                     },
                     {
                         data: 'from',
