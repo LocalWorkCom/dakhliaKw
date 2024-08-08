@@ -360,7 +360,7 @@
                                         {{ $errors->first('nothing_updated') }}
                                     @endif
                                 </span>
-                                
+
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;">
@@ -380,6 +380,22 @@
             </div>
         </div>
     </div>
+    
+    <!-- JavaScript to handle modal display -->
+    <script>
+        @if (session('editModal'))
+            $(document).ready(function() {
+                $('#edit').modal('show');
+            });
+        @endif
+
+        @if (session('message'))
+            $(document).ready(function() {
+                alert('{{ session('message') }}');
+            });
+        @endif
+    </script>
+
     <!-- Team Modal -->
     {{-- <div class="modal fade" id="team" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
         style="padding-left: 0px;" dir="rtl">
@@ -423,20 +439,7 @@
             </div>
         </div>
     </div> --}}
-    <!-- JavaScript to handle modal display -->
-    <script>
-        @if (session('editModal'))
-            $(document).ready(function() {
-                $('#edit').modal('show');
-            });
-        @endif
-
-        @if (session('message'))
-            $(document).ready(function() {
-                alert('{{ session('message') }}');
-            });
-        @endif
-    </script>
+    
 @endsection
 
 @push('scripts')
