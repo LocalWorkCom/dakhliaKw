@@ -135,7 +135,11 @@
                                     <a href="{{ route('group.view') }}"> المجموعات</a>
                                 </li>
 
-
+                                <li>
+                                    <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="{{ route('instant_mission.index') }}"> الاوامر الفورية</a>
+                                </li>
 
 
                             </ul>
