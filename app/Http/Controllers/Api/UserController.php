@@ -55,7 +55,9 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             // If the user has logged in within the last two hours, do not set the code
+
             if ($user->updated_at >= $sixHoursAgo) {
+
 
              
                 $token=$user->createToken('auth_token')->accessToken;
@@ -69,7 +71,9 @@ class UserController extends Controller
                 $success['user'] = $user->only(['id', 'firstname', 'email', 'lastname', 'phone', 'country_code', 'code','image']);
               return $this->respondSuccess($success, 'User login successfully.');
 
+
             }else {
+
 
               $set = '123456789';
               $code = substr(str_shuffle($set), 0, 4);
@@ -86,6 +90,50 @@ class UserController extends Controller
            
         }
         return $this->respondError('password error', ['crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']], 403);
+    }
+
+
+
+    public function reset_password(Request $request)
+    {
+        $messages = [
+            'military_number.required' => 'رقم العسكري مطلوب.',
+            'password.required' => 'كلمة المرور مطلوبة.',
+        ];
+
+        $validatedData = Validator::make($request->all(), [
+            'military_number' => 'required|string',
+            'password' => 'required|string',
+        ], $messages);
+
+        if ($validatedData->fails()) {
+          return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+      }
+
+        $user = User::where('military_number', $request->military_number)->first();
+
+        if (!$user) {
+          return $this->respondError('Validation Error.', ['milltary_number'=> 'الرقم العسكري لا يتطابق مع سجلاتنا'], 400);
+        }
+
+        // Check if the user has the correct flag
+        if ($user->flag !== 'user') {
+          return $this->respondError('Validation Error.', ['not authorized'=> 'لا يسمح لك بدخول الهيئة'], 400);
+        }
+
+        if (Hash::check($request->password, $user->password) == true) {
+          return $this->respondError('Validation Error.', ['password'=> 'لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية' ], 400);
+        }
+
+        // Update password and set token for first login if applicable
+        Auth::login($user); // Log the user in
+        $user->device_token = $request->device_token;
+        $user->password = Hash::make($request->password);
+        $user->save();
+        $success['token'] = $user->createToken('MyApp')->accessToken;
+        // $user->image = $user->image;
+        $success['user'] = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
+        return $this->respondSuccess($success, 'reset password successfully.');
     }
 
     public function checkCode(Request $request)
@@ -157,5 +205,6 @@ class UserController extends Controller
 
 
     }
+
 
 }

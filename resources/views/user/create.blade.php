@@ -69,6 +69,7 @@
                                     <label class="form-check-label mx-2" for="female">انثى</label>
                                 </div>
                                 <label for="input44 " class="mx-3">الفئة </label>
+                                
                             </div>
                             <div class="form-group d-flex  justify-content-end col-md-5 mx-2">
                                 <div class="radio-btns mx-md-4 ">

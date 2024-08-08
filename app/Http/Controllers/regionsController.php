@@ -11,6 +11,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class regionsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
       //START government
     //show governments

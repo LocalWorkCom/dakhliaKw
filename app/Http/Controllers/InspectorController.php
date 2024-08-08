@@ -79,13 +79,16 @@ class InspectorController extends Controller
         return DataTables::of($data)->addColumn('action', function ($row) {
             if ($row->group_id !=  null) {
 
-                $edit_permission = '<a class="btn btn-sm"  style="background-color: #7e7d7c;"  onclick="openAddModal(' . $row->id . ', ' . $row->group_id . ')">  <i class="fa fa-edit"></i> تعديل مجموعه</a>';
+                $group_permission = '<a class="btn btn-sm"  style="background-color: #7e7d7c;"  onclick="openAddModal(' . $row->id . ', ' . $row->group_id . ')">  <i class="fa fa-edit"></i> تعديل مجموعه</a>';
             } else {
-                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openAddModal(' . $row->id . ',0)">  <i class="fa fa-edit"></i> تعديل </a>';
+                $group_permission = '<a class="btn btn-sm"  style="background-color: green;"  onclick="openAddModal(' . $row->id . ',0)">   <i class="fa fa-plus"></i> أضافه</a>';
             }
             $show_permission = '<a href="${departmentShow}" class="btn btn-sm " style="background-color: #274373;">
                             <i class="fa fa-eye"></i>عرض</a>';
-            return  $show_permission . ' ' . $edit_permission;
+                            $edit_permission=  '<a href="'.route('inspectors.edit', $row->id).'" class="btn btn-sm"  style="background-color: #F7AF15;">
+                                            <i class="fa fa-edit"></i> تعديل 
+                                        </a>';
+            return  $show_permission . ' ' . $edit_permission. ' '. $group_permission;
         })
             ->addColumn('group_id', function ($row) {
                 return $row->group_id ? $row->group->name : 'لا يوجد مجموعه للمفتش'; // Assuming 'name' is the column in external_users
