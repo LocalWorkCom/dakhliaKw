@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Government;
 use Carbon\Carbon;
 use App\Models\job;
 use App\Models\Rule;
@@ -23,8 +24,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Console\View\Components\Alert;
 use Illuminate\Validation\Rule as ValidationRule;
 use App\helper; // Adjust this namespace as per your helper file location
-
-
+use App\Models\Qualification;
+use App\Models\Region;
+use App\Models\Sector;
 
 class UserController extends Controller
 {
@@ -56,15 +58,13 @@ class UserController extends Controller
 
         // dd(Auth::user()->rule->name);
         if (Auth::user()->rule->name == "localworkadmin") {
-           
+
             $data = User::where('flag', $flagType)->get();
             // dd($data);
-        }
-        elseif  (Auth::user()->rule->name == "superadmin") {
+        } elseif (Auth::user()->rule->name == "superadmin") {
             if ($flagType == 'employee') {
                 $data = User::where('flag', $flagType)->get();
-            } 
-            else {
+            } else {
                 $data = User::where('flag', $flagType)
                     ->whereHas('rule', function ($query) {
                         $query->where('hidden', false);
@@ -184,7 +184,7 @@ class UserController extends Controller
     //         }
     //                // return view('resetpassword', compact('military_number', 'firstlogin'));
     //             }
-                
+
     //             Auth::login($user); // Log the user in
     //             return redirect()->route('home');
     //         }
@@ -212,29 +212,29 @@ class UserController extends Controller
             'military_number.required' => 'رقم العسكري مطلوب.',
             'password.required' => 'كلمة المرور مطلوبة.',
         ];
-    
+
         $validatedData = $request->validate([
             'military_number' => 'required|string',
             'password' => 'required|string',
         ], $messages);
-    
+
         $military_number = $request->military_number;
         $password = $request->password;
-    
+
         // Check if the user exists
         $user = User::where('military_number', $military_number)->first();
         if (!$user) {
             return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا')->withInput();
         }
-    
+
         // Check if the user has the correct flag
         if ($user->flag !== 'user') {
             return back()->with('error', 'لا يسمح لك بدخول الهيئة')->withInput();
         }
-    
+
         $credentials = $request->only('military_number', 'password');
         $twoHoursAgo = now()->subHours(6);
-    
+
         if (Auth::attempt($credentials)) {
             // to not send code
             if ($user->token == 'logined') {
@@ -245,14 +245,14 @@ class UserController extends Controller
             if ($user->updated_at >= $twoHoursAgo) {
                 if ($user->token == null) {
                     $firstlogin = 1;
-    
+
                     $set = '123456789';
                     $code = substr(str_shuffle($set), 0, 4);
-    
+
                     $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
                     $response = send_sms_code($msg, $user->phone, $user->country_code);
                     $result = json_decode($response, true);
-    
+
                     if (isset($result['sent']) && $result['sent'] === 'true') {
                         return view('verfication_code', compact('code', 'military_number', 'password'));
                     } else {
@@ -260,14 +260,14 @@ class UserController extends Controller
                     }
                 }
             }
-    
+
             Auth::login($user); // Log the user in
             return redirect()->route('home');
         }
-    
+
         return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا')->withInput();
     }
-    
+
     public function resend_code(Request $request)
     {
         // dd($request);
@@ -461,6 +461,10 @@ class UserController extends Controller
         $flag = $id;
         $grade = grade::all();
         $job = job::all();
+        $govermnent = Government::all();
+        $area = Region::all();
+        $sector = Sector::all();
+        $qualifications = Qualification::all();
         // dd($user->department_id);
         if ($flag == "0") {
             $alldepartment = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
@@ -481,7 +485,7 @@ class UserController extends Controller
         // dd($allPermission);
         // $alldepartment = $user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
-        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade', 'job', 'alluser'));
+        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade', 'job', 'alluser', 'govermnent', 'area', 'sector' ,'qualifications'));
     }
 
     public function unsigned($id)
@@ -679,6 +683,10 @@ class UserController extends Controller
         $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
         $job = job::all();
+        $govermnent = Government::all();
+        $area = Region::all();
+        $sector = Sector::all();
+        $qualifications = Qualification::all();
         // dd($user);
         // if ($user->flag == "user") {
         //     $department = departements::where('id', $user->department_id)->get();
@@ -688,7 +696,7 @@ class UserController extends Controller
         // $department = departements::all();
         $department = departements::where('id', $user->department_id)->first();
         $hisdepartment = $user->createdDepartments;
-        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job'));
+        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job','sector','area','govermnent','qualifications'));
     }
 
     /**
@@ -704,22 +712,23 @@ class UserController extends Controller
         $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
         $job = job::all();
+        $govermnent = Government::all();
+        $area = Region::all();
+        $sector = Sector::all();
+        $qualifications = Qualification::all();
         // dd($user);
         if ($user->department_id == "NULL") {
             $department = departements::all();
         } else {
-            if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin")
-            {
+            if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
                 $department = departements::all();
-            }
-            else
-            {
+            } else {
                 $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
-            } 
+            }
         }
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
-        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job'));
+        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job','sector','area','govermnent','qualifications'));
     }
 
     /**
@@ -818,6 +827,9 @@ class UserController extends Controller
         $user->flag = $request->flag;
         $user->job_id = $request->job;
         $user->seniority = $request->seniority;
+        $user->Provinces = $request->Provinces;
+        $user->sector = $request->sector;
+        $user->region = $request->region;
         $user->public_administration = $request->public_administration;
         $user->department_id = $request->public_administration;
         $user->work_location = $request->work_location;
@@ -847,14 +859,11 @@ class UserController extends Controller
                 $user->token = null; // Set token to null before saving
                 $user->save();
 
-                if(auth()->user()->id == $user->id)
-                {
+                if (auth()->user()->id == $user->id) {
                     Auth::logout();
                     session()->flash('success', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى.');
                     return redirect('/login');
                 }
-
-                
             }
         }
 
@@ -865,6 +874,26 @@ class UserController extends Controller
         return view('user.view', compact('id'));
     }
 
+    public function getGoverment($id)
+    {
+        $sector = Sector::find($id);
+        
+        // $idsArray = json_decode($sector->governments_IDs, true);
+
+        // Convert strings to integers
+        // $idsArray = array_map('intval', $idsArray);
+        $governments = Government::whereIn('id', $sector->governments_IDs)->get();
+        // dd($governments);
+        // $area = Region::all();
+        return response()->json($governments);
+    }
+
+    public function getRegion($id)
+    {
+       
+        $area = Region::where('government_id',$id)->get();
+        return response()->json($area);
+    }
 
     /**
      * Remove the specified resource from storage.
