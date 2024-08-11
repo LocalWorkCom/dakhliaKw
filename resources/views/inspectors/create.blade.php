@@ -19,9 +19,23 @@
     <form id="inspector-form" action="{{ route('inspectors.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row" dir="rtl">
-
+           
             <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
                 <h3 class="pt-3  px-md-5  px-3 "> أضافه مفتش</h3>
+                @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
                 <div class="form-row mx-2 mb-2 pb-4">
                     <label class="px-md-5 px-3 col-12 " for=""> الرقم المدني / رقم الهوية</label>
                     <div class="input-group px-md-5 px-3 pt-3">
@@ -92,36 +106,36 @@
             <h3 class="pt-3  px-md-5 px-3 "> اختر المفتش </h3>
             <div class="form-row mx-md-5 mx-2 mb-2 d-block justify-content-start" dir="rtl">
                 @if (Auth::user()->department_id == 1)
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="in" required>
-                        <label for="intern">مفتش سلوك أنضباطى</label>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="intern" name="type" checked value="in" required>
+                            <label for="intern">مفتش سلوك أنضباطى</label>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="trainee" required>
-                        <label for="intern">مفتش متدرب</label>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="intern" name="type" checked value="trainee" required>
+                            <label for="intern">مفتش متدرب</label>
+                        </div>
                     </div>
-                </div>
                 @else
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="Buildings" required>
-                        <label for="intern">مفتش مباني </label>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="intern" name="type" checked value="Buildings" required>
+                            <label for="intern">مفتش مباني </label>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="trainee" required>
-                        <label for="intern">مفتش متدرب</label>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="intern" name="type" checked value="trainee" required>
+                            <label for="intern">مفتش متدرب</label>
+                        </div>
                     </div>
-                </div>
                 @endif
-              
 
-              
-             
+
+
+
 
                 <div class="container col-11 ">
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
