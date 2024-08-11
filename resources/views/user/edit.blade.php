@@ -213,7 +213,7 @@
                                 </select>
                             </div>
                         </div>
-                            <div class="form-row mx-2  d-flex justify-content-center flex-row-reverse">
+                            {{-- <div class="form-row mx-2  d-flex justify-content-center flex-row-reverse">
                                 <div class="form-group col-md-10 mx-2">
                                     <label for="input25"> القسم</label>
                                     <select id="input25" name="department_id" class="form-control select2"
@@ -229,7 +229,7 @@
 
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                         @endif
 
                         <div class="form-row mx-2 mx-2 d-flex justify-content-center flex-row-reverse">

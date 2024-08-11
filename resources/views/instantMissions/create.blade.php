@@ -41,6 +41,7 @@
 @section('title')
     اضافة
 @endsection
+<main>
 <div class="row col-11" dir="rtl">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -164,9 +165,7 @@
 </div>
 
 
-</section>
-
-
+</main>
 
 <script>
     const fileInput = document.getElementById('images');

@@ -20,9 +20,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('app:inspector_mission')->yearly();
-        // $schedule->command('app:inspector_points')->everyMinute();
-
+        $schedule->command('app:inspector_mission')->monthly();
 
     }
 
