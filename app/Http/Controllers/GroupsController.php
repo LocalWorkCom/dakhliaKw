@@ -43,7 +43,7 @@ class GroupsController extends Controller
                 $count = Inspector::where('group_id', $row->id)->count();
 
                 if ($count == 0) {
-                    $btn = '<a class="btn btn-sm"  style="background-color: #F7AF15;" href=' . route('group.groupcreateInspectors', $row->id) . '> ' . $count . '</a>';
+                    $btn = '<a class="btn btn-sm"  style="background-color: #F7AF15; padding-inline: 15px;" href=' . route('group.groupcreateInspectors', $row->id) . '> ' . $count . '</a>';
                 } else {
                     $btn = '<a class="btn btn-sm"  style="    background-color: #274373; padding-inline: 15px" href=' . route('group.groupcreateInspectors', $row->id) . '> ' . $count . '</a>';
                 }
@@ -52,7 +52,7 @@ class GroupsController extends Controller
             ->addColumn('num_team', function ($row) {
                 $count = GroupTeam::where('group_id', $row->id)->count();
                 if ($count == 0) {
-                    $btn = '<a class="btn btn-sm" style="background-color: #F7AF15;"href=' . route('groupTeam.index', $row->id) . '> ' . $count . '</a>';
+                    $btn = '<a class="btn btn-sm" style="background-color: #F7AF15; padding-inline: 15px;"href=' . route('groupTeam.index', $row->id) . '> ' . $count . '</a>';
                 } else {
 
                     $btn = '<a class="btn btn-sm"  style="background-color: #274373; padding-inline: 15px" href=' . route('groupTeam.index', $row->id) . '> ' . $count . '</a>';
