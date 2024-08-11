@@ -53,28 +53,28 @@ class pointsController extends Controller
         $regions = Point::where('government_id', $governorate)->get();
         return response()->json($regions);
     }
-//     public function getAllPoints2($governorate, $points)
-// {
-//     // Fetch selected points
-//     $selectedPoints = Point::whereIn('id', $points)->get();
-//     $governmentIds = $selectedPoints->pluck('government_id')->unique();
+    //     public function getAllPoints2($governorate, $points)
+    // {
+    //     // Fetch selected points
+    //     $selectedPoints = Point::whereIn('id', $points)->get();
+    //     $governmentIds = $selectedPoints->pluck('government_id')->unique();
 
-//     // Fetch all points for the same government
-//     $allPoints = Point::whereIn('government_id', $governmentIds)->get();
+    //     // Fetch all points for the same government
+    //     $allPoints = Point::whereIn('government_id', $governmentIds)->get();
 
-//     // Get all points in the grouppoint table
-//     $pointsInGroup = Grouppoint::whereIn('government_id', $governmentIds)
-//         ->pluck('point_ids') // Assuming this is a serialized array or JSON
-//         ->flatten() // Flatten the array
-//         ->unique(); // Get unique point IDs
+    //     // Get all points in the grouppoint table
+    //     $pointsInGroup = Grouppoint::whereIn('government_id', $governmentIds)
+    //         ->pluck('point_ids') // Assuming this is a serialized array or JSON
+    //         ->flatten() // Flatten the array
+    //         ->unique(); // Get unique point IDs
 
-//     // Filter out points that are already in the grouppoint table
-//     $availablePoints = $allPoints->filter(function($point) use ($pointsInGroup) {
-//         return !$pointsInGroup->contains($point->id);
-//     });
+    //     // Filter out points that are already in the grouppoint table
+    //     $availablePoints = $allPoints->filter(function($point) use ($pointsInGroup) {
+    //         return !$pointsInGroup->contains($point->id);
+    //     });
 
-//     return response()->json($availablePoints);
-// }
+    //     return response()->json($availablePoints);
+    // }
 
     public function index()
     {
@@ -96,31 +96,36 @@ class pointsController extends Controller
             })
             ->addColumn('group_name', function ($row) {
                 // Fetch the group related to the government
-                $group = Grouppoint::where('government_id', $row->government->id)->first();
-            // //dd($row->government->id);
-            //     // Check if the group exists and has the points_ids field
-            //     if ($group && $group->points_ids) {
-            //         // Decode the JSON field into a PHP array
-            //         //$pointsIds = json_decode($group->points_ids, true);
-            
-            //         // Check if the point ID exists in the group
-            //         if (in_array($row->id, $group->points_ids)) {
-            //             $btn = '
-            //             <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> ' . $group->name . ' </a>';
-            //         } else {
-            //             $btn = '<p> لايوجد مجموعه</p>';
-            //         }
-            //     } else {
-            //         $btn = '<p> لايوجد مجموعه</p>';
-            //     }
-            //dd($group->flag);
+                $groups = Grouppoint::where('government_id', $row->government->id)->get();
 
-            if($group->flag !=0){
-                $btn = ' <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> ' . $group->name . ' </a>';
+                $btn = '<p>لايوجد مجموعه</p>'; // Default message
                 
-            }else{
-                      $btn = '<p> لايوجد مجموعه</p>';
-            }
+                foreach ($groups as $group) {
+                    if ($group && $group->points_ids) {
+                        $pointsIds = $group->points_ids; // Decode if points_ids is a JSON string
+                
+                        if (in_array($row->id, $pointsIds) && $group->flag == 1) {
+                            $btn = '<a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> ' . $group->name . ' </a>';
+                            break; // Exit loop once a matching group is found
+                        }
+                    }
+                }
+                
+
+
+
+                // if (isset($group)) {
+                //     foreach ($group as $G) {
+                //         //dd($G->flag);
+                //         if ($G->flag == 1) {
+                //             $btn = ' <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $G->id) . '"><i class="fa fa-edit"></i> ' . $G->name . ' </a>';
+                //         } else {
+                //             // $btn = '<p> لايوجد مجموعه</p>';
+                //             $btn = ' <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $G->id) . '"><i class="fa fa-edit"></i> ' . $G->name . ' </a>';
+
+                //         }
+                //     }
+                // }
                 return $btn;
             })
             ->addColumn('from', function ($row) {
@@ -140,7 +145,6 @@ class pointsController extends Controller
             })
             ->rawColumns(['action', 'group_name'])
             ->make(true);
-        
     }
 
     public function create()
@@ -228,11 +232,11 @@ class pointsController extends Controller
         // Format 'from' and 'to' fields
         $data->formatted_from = Carbon::createFromFormat('H:i:s', $data->from)->format('h:i A');
         $data->formatted_to = Carbon::createFromFormat('H:i:s', $data->to)->format('h:i A');
-    
+
         // Replace AM/PM with ص/م
         $data->formatted_from = str_replace(['AM', 'PM'], ['ص', 'م'], $data->formatted_from);
         $data->formatted_to = str_replace(['AM', 'PM'], ['ص', 'م'], $data->formatted_to);
-    
+
         return view('points.showdetails', compact('data'));
     }
 
