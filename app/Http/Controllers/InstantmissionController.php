@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Groups;
 use App\Models\GroupTeam;
+use Illuminate\Http\Request;
+use App\Events\MissionCreated;
 use App\Models\instantmission;
 use Yajra\DataTables\DataTables;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreinstantmissionRequest;
 use App\Http\Requests\UpdateinstantmissionRequest;
@@ -101,6 +102,8 @@ class InstantmissionController extends Controller
             // }
 
         }
+        // ;
+        dd(event(new MissionCreated($new)));
         return view('instantMissions.view');
     }
 
