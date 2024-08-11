@@ -57,7 +57,7 @@
 </div>
 <div class="row ">
     <div class="container welcome col-11">
-        <p> الاوامر </p>
+        <p> الاوامر </p>   
     </div>
 </div>
 <br>
