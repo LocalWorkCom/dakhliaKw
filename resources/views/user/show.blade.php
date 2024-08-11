@@ -89,7 +89,7 @@
                             <th scope="row">الوظيفة</th>
                             @foreach ($job as $item)
                                 @if ($user->job_id == $item->id)
-                                <td>   {{ $item->name }} </td>
+                                    <td> {{ $item->name }} </td>
                                 @endif
                             @endforeach
 
@@ -111,7 +111,14 @@
                         </tr>
                         <tr>
                             <th scope="row"> المؤهل </th>
-                            <td> {{ $user->qualification }} </td>
+
+                            <td>
+                                @foreach ($qualifications as $item)
+                                    @if ($user->qualification == $item->id)
+                                        {{ $item->name }}
+                                    @endif
+                                @endforeach
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row"> تاريخ الميلاد </th>
@@ -197,13 +204,13 @@
                             <th scope="row">الإدارة العامة</th>
                             <td>
                                 <!-- Display the selected item name here with a null check -->
-                               
+
 
                                 @if ($department)
                                     {{ $department->name }}
                                 @else
                                     <!-- Fallback text if no department is found -->
-                                    لا يوجد ادارة  محددة
+                                    لا يوجد ادارة محددة
                                 @endif
                             </td>
                             <td style="display: none;">
@@ -249,14 +256,13 @@
                             <td>
                                 {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
                                     disabled> --}}
-                                    @foreach ($sector as $item)
+                                @foreach ($sector as $item)
                                     @if ($user->sector == $item->id)
-                                    <label>
-                                        {{ $item->name }}
-                                    </label>
+                                        <label>
+                                            {{ $item->name }}
+                                        </label>
                                     @endif
-                                        
-                                    @endforeach
+                                @endforeach
                                 {{-- </select> --}}
                             </td>
                         </tr>
@@ -265,14 +271,13 @@
                             <td>
                                 {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
                                     disabled> --}}
-                                    @foreach ($sector as $item)
+                                @foreach ($sector as $item)
                                     @if ($user->sector == $item->id)
-                                    <label>
-                                        {{ $item->name }}
-                                    </label>
+                                        <label>
+                                            {{ $item->name }}
+                                        </label>
                                     @endif
-                                        
-                                    @endforeach
+                                @endforeach
                                 {{-- </select> --}}
                             </td>
                         </tr>
@@ -281,14 +286,13 @@
                             <td>
                                 {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
                                     disabled> --}}
-                                    @foreach ($govermnent as $item)
+                                @foreach ($govermnent as $item)
                                     @if ($user->Provinces == $item->id)
-                                    <label>
-                                        {{ $item->name }}
-                                    </label>
+                                        <label>
+                                            {{ $item->name }}
+                                        </label>
                                     @endif
-                                        
-                                    @endforeach
+                                @endforeach
                                 {{-- </select> --}}
                             </td>
                         </tr>
@@ -297,14 +301,13 @@
                             <td>
                                 {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
                                     disabled> --}}
-                                    @foreach ($area as $item)
+                                @foreach ($area as $item)
                                     @if ($user->region == $item->id)
-                                    <label>
-                                        {{ $item->name }}
-                                    </label>
+                                        <label>
+                                            {{ $item->name }}
+                                        </label>
                                     @endif
-                                        
-                                    @endforeach
+                                @endforeach
                                 {{-- </select> --}}
                             </td>
                         </tr>

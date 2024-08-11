@@ -344,8 +344,17 @@
                                     </div> --}}
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input18">المؤهل</label>
-                                <input type="text" id="input18" name="qualification" class="form-control"
-                                    placeholder="المؤهل" value="{{ $user->qualification }}">
+                                {{-- <input type="text" id="input18" name="qualification" class="form-control"
+                                    placeholder="المؤهل" value="{{ $user->qualification }}"> --}}
+
+                                    <select id="qualification" name="qualification" class="form-control" placeholder="المجموعة">
+                                        <option selected disabled>اختار من القائمة</option>
+                                        @foreach ($qualifications as $item)
+                                            <option value="{{ $item->id }}"{{ $user->qualification == $item->id ? 'selected' : ''}}
+                                               > {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                             </div>
                         </div>
 

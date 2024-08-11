@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Console\View\Components\Alert;
 use Illuminate\Validation\Rule as ValidationRule;
 use App\helper; // Adjust this namespace as per your helper file location
+use App\Models\Qualification;
 use App\Models\Region;
 use App\Models\Sector;
 
@@ -463,6 +464,7 @@ class UserController extends Controller
         $govermnent = Government::all();
         $area = Region::all();
         $sector = Sector::all();
+        $qualifications = Qualification::all();
         // dd($user->department_id);
         if ($flag == "0") {
             $alldepartment = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
@@ -483,7 +485,7 @@ class UserController extends Controller
         // dd($allPermission);
         // $alldepartment = $user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
-        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade', 'job', 'alluser', 'govermnent', 'area', 'sector'));
+        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade', 'job', 'alluser', 'govermnent', 'area', 'sector' ,'qualifications'));
     }
 
     public function unsigned($id)
@@ -684,6 +686,7 @@ class UserController extends Controller
         $govermnent = Government::all();
         $area = Region::all();
         $sector = Sector::all();
+        $qualifications = Qualification::all();
         // dd($user);
         // if ($user->flag == "user") {
         //     $department = departements::where('id', $user->department_id)->get();
@@ -693,7 +696,7 @@ class UserController extends Controller
         // $department = departements::all();
         $department = departements::where('id', $user->department_id)->first();
         $hisdepartment = $user->createdDepartments;
-        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job','sector','area','govermnent'));
+        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job','sector','area','govermnent','qualifications'));
     }
 
     /**
@@ -712,6 +715,7 @@ class UserController extends Controller
         $govermnent = Government::all();
         $area = Region::all();
         $sector = Sector::all();
+        $qualifications = Qualification::all();
         // dd($user);
         if ($user->department_id == "NULL") {
             $department = departements::all();
@@ -724,7 +728,7 @@ class UserController extends Controller
         }
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
-        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job','sector','area','govermnent'));
+        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job','sector','area','govermnent','qualifications'));
     }
 
     /**
