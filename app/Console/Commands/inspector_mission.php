@@ -11,6 +11,7 @@ use App\Models\WorkingTree;
 use App\Models\WorkingTreeTime;
 use DateTime;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class inspector_mission extends Command
 {
@@ -33,83 +34,49 @@ class inspector_mission extends Command
      */
     public function handle()
     {
-        // 'ids_group_point',
-        // 'ids_instant_mission',
 
-        // 'vacation_id',
-
-
+        // Set the start date to the 1st of the current month
         $start_day_date = date('Y-m-01');
-        // $date = new DateTime('last day of previous month');
-        // $last_day_previous_month = $date->format('Y-m-d');
-        $num_days = date('t');
+        $num_days = date('t', strtotime($start_day_date)); // Get the number of days in the month
+        $Inspectors = Inspector::pluck('id')->toArray(); // get inspectors ids
 
-
-        // $date = new DateTime('last day of this month');
-        // $last_day_current_month = $date->format('Y-m-d');
-
-
-
-
-        $Inspectors = Inspector::pluck('id')->toArray();
-        $count = 0;
-        $is_repeat = 1;
+        // to get inspectors ids
         foreach ($Inspectors as $Inspector) {
-            $date = $start_day_date; // Example date
-            $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$Inspector])->first();
+            $date = $start_day_date; // Start from the 1st of the month
+            $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$Inspector])->first(); //to get team for inspector
+            // get work tree for team
             $WorkingTree = WorkingTree::find($GroupTeam->working_tree_id);
+            // validation for no teem or no work tree
+            if (!$WorkingTree || !$GroupTeam) {
+                Log::warning("Inspector ID $Inspector does not have a valid working tree or group team.");
+                continue;
+            }
+            // to sum num of working day and holiday
+            $total_days_in_cycle = $WorkingTree->working_days_num + $WorkingTree->holiday_days_num;
+            // for loob by num of day's monthly
+            for ($day_of_month = 1; $day_of_month <= $num_days; $day_of_month++) {
+                // check day off or not 
+                $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
+                $is_day_off = $day_in_cycle > $WorkingTree->working_days_num;
+                // if not  day off get working tree
+                $WorkingTreeTime = !$is_day_off
+                    ? WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
+                    ->where('day_num', $day_in_cycle)
+                    ->first()
+                    : null;
+                // insert data for monthly
+                $inspectorMission = new InspectorMission();
+                $inspectorMission->inspector_id = $Inspector;
+                $inspectorMission->group_id = $GroupTeam->group_id;
+                $inspectorMission->group_team_id = $GroupTeam->id;
+                $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
+                $inspectorMission->working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+                $inspectorMission->date = $date;
+                $inspectorMission->day_off = $is_day_off ? 1 : 0;
+                $inspectorMission->save();
 
-            if ($is_repeat) {
-                $update_workingdays =  $WorkingTree->working_days_num;
-                $update_holidays = $WorkingTree->holiday_days_num;
-                if ($count + $WorkingTree->working_days_num > $num_days) {
-                    $update_workingdays = $count - $WorkingTree->working_days_num;
-                    $count = $update_workingdays;
-                } else {
-                    $count += $WorkingTree->working_days_num;
-                }
-                if ($count + $WorkingTree->holiday_days_num > $num_days) {
-                    $update_holidays = $count - $WorkingTree->holiday_days_num;
-                } else {
-                    $count += $WorkingTree->holiday_days_num;
-    
-                }
-                for ($i = 1; $i <= $update_workingdays; $i++) {
-                    $WorkingTreeTime = WorkingTreeTime::where('working_tree_id', $WorkingTree->id)->where('day_num', $i)->first();
-
-                    $date = date('Y-m-d', strtotime($date . ' +1 day'));
-
-
-                    $inpectorMission = new InspectorMission();
-                    $inpectorMission->inspector_id = $Inspector;
-                    $inpectorMission->group_id = $GroupTeam->group_id;
-                    $inpectorMission->group_team_id = $GroupTeam->id;
-                    $inpectorMission->working_tree_id = $GroupTeam->working_tree_id;
-                    $inpectorMission->working_time_id = $WorkingTreeTime->working_time_id;
-                    $inpectorMission->date = $date;
-                    $inpectorMission->save();
-                }
-                for ($i = 1; $i <= $update_holidays; $i++) {
-                    $WorkingTreeTime = WorkingTreeTime::where('working_tree_id', $WorkingTree->id)->where('day_num', $i)->first();
-
-
-                    $date = date('Y-m-d', strtotime($date . ' +1 day'));
-
-                    $inpectorMission = new InspectorMission();
-                    $inpectorMission->inspector_id = $Inspector;
-                    $inpectorMission->group_id = $GroupTeam->group_id;
-                    $inpectorMission->group_team_id = $GroupTeam->id;
-                    $inpectorMission->working_tree_id = $GroupTeam->working_tree_id;
-                    $inpectorMission->working_time_id = $WorkingTreeTime->working_time_id;
-                    $inpectorMission->date = $date;
-                    $inpectorMission->day_off = 1;
-                    $inpectorMission->save();
-                    if ($count >= $num_days) {
-                        $is_repeat = 0;
-                    } else {
-                        $is_repeat = 1;
-                    }
-                }
+                // Move to the next day
+                $date = date('Y-m-d', strtotime($date . ' +1 day'));
             }
         }
     }
