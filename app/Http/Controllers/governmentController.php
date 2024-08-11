@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Groups;
+use App\Models\GroupTeam;
+use App\Models\Inspector;
 use Illuminate\Http\Request;
 
 class governmentController extends Controller
@@ -12,7 +15,15 @@ class governmentController extends Controller
      */
     public function index()
     {
-        //
+        $groups_points = Groups::select('id','points_inspector')->get();
+
+        foreach($groups_points as $group_points){
+            $Inspectors = Inspector::where('group_id',$group_points->id)->pluck('id')->toArray();
+
+            // $groups_points = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$Inspector])->first();
+
+        }
+        return view('grouppoints.create1',['groups_points' => $Inspectors]);
     }
 
     /**
