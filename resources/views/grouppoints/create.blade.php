@@ -28,6 +28,20 @@
             <div id="first-container" class="container moftsh col-11 mt-3 p-0 pb-3">
                 <div class="form-row mx-2 mb-2">
                     <h3 class="pt-3 px-md-5 px-3">اضف مجموعه</h3>
+                    @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="name">ادخل اسم المجموعه</label>
                         <input type="text" id="name" name="name" class="form-control" placeholder="قطاع واحد"

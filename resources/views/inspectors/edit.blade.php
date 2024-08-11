@@ -26,11 +26,25 @@
 
         <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
             <h3 class="pt-3  px-md-5  px-3 "> تعديل مفتش</h3>
+            @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
             <div class="form-row mx-2 mb-2 pb-4">
                 <label class="px-md-5 px-3 col-12 " for=""> الرقم المدني / رقم الهوية</label>
                 <div class="input-group px-md-5 px-3 pt-3">
                     <input name="Id_number" disabled value="{{ $inspector->Id_number}}" disabled type="text" id="search-input" placeholder="ابحث هنا ....." style="width: 100% !important;">
-
+                    <input type="hidden" name="user_id" value="{{ $inspector->user_id  }}">
                     {{-- <div class="select-wrapper">
                         <div class="select-box d-flex justify-content-between " disable id="select-box">
                             <p> {{ $inspector->name }}</p>

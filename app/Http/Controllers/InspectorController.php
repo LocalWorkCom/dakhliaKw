@@ -127,9 +127,37 @@ class InspectorController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+      //  dd($request->all());
 
-        $request->validate([]);
+        $rules = [
+            // 'Id_number' => [
+            //     'required',
+            //     'string',
+            // ],
+            'user_id' => 'required|exists:users,id',
+            // 'position' => 'required',
+            // 'name' => 'required|string',
+            'type' => 'required|string',
+            // 'phone' => 'nullable|string',
+        ];
+
+        // Define custom messages
+        $messages = [
+            'name.required' => 'يجب ادخال اسم نقطه',
+            'user_id.required'=>'يجب ادخال الموظف المراد تحويله لمفتش',
+            'position.required'=>'يجب ادخال الرتبه',
+            'Id_number.required'=>'يجب ادخال رقم الهويه ',
+
+            'type.required'=>'يجب اختيار نوع المفتش',
+
+        ];
+
+        // Validate the request
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
         $user = User::findOrFail($request->user_id);
         $inspector = new Inspector();
         $inspector->name = $request->name;
@@ -164,6 +192,7 @@ class InspectorController extends Controller
      */
     public function edit($id)
     {
+        
         $inspector = Inspector::find($id);
         // dd($inspector);
         $departmentId = Auth::user()->department_id ? Auth::user()->department_id : null;
@@ -178,8 +207,36 @@ class InspectorController extends Controller
 
     public function update(Request $request, $id)
     {
+// dd($request);
+        $rules = [
+            // 'Id_number' => [
+            //     'required',
+            //     'string',
+            // ],
+            'user_id' => 'required',
+            // 'position' => 'required',
+            // 'name' => 'required|string',
+            'type' => 'required|string',
+            // 'phone' => 'nullable|string',
+        ];
 
-        $request->validate([]);
+        // Define custom messages
+        $messages = [
+            'name.required' => 'يجب ادخال اسم نقطه',
+            'user_id.required'=>'يجب ادخال الموظف المراد تحويله لمفتش',
+            'position.required'=>'يجب ادخال الرتبه',
+            'Id_number.required'=>'يجب ادخال رقم الهويه ',
+
+            'type.required'=>'يجب اختيار نوع المفتش',
+
+        ];
+
+        // Validate the request
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
         $inspector = Inspector::find($id);
         $inspector->update($request->only(['position', 'name', 'phone', 'type']));
         // $inspector->save();
