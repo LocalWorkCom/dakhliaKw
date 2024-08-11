@@ -5,6 +5,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\outgoingController;
 use App\Http\Controllers\dashboard\VacationController;
 use App\Http\Controllers\dashboard\WorkingTreeController;
+use App\Http\Controllers\governmentController;
 use App\Http\Controllers\GroupPointsController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
@@ -329,6 +330,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('points/edit/group/{id}', [GroupPointsController::class, 'edit'])->name('grouppoints.edit');
     Route::post('points/update/group/{id}', [GroupPointsController::class, 'update'])->name('grouppoints.update');
 
+    Route::get('trstssss', [governmentController::class, 'index']);
 
     //End GroupPoints
 
@@ -396,6 +398,11 @@ Route::post('/Inspectors', [InspectorController::class, 'store'])->name('inspect
 Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit');
 Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
 Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');
+
+
+Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
+
+
 
 // // view All Models permission
 // Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {
