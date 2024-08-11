@@ -842,16 +842,19 @@ class UserController extends Controller
 
         if ($user->flag == "user") {
             $user->rule_id = $request->rule_id;
-            // $user->department_id = $request->department_id;
-
             if ($request->password && !Hash::check($request->password, $user->password)) {
                 $user->password = Hash::make($request->password);
                 $user->token = null; // Set token to null before saving
                 $user->save();
 
-                Auth::logout();
-                session()->flash('success', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى.');
-                return redirect('/login');
+                if(auth()->user()->id == $user->id)
+                {
+                    Auth::logout();
+                    session()->flash('success', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى.');
+                    return redirect('/login');
+                }
+
+                
             }
         }
 
