@@ -19,17 +19,21 @@
         <p> نقاط الوزاره </p>
     </div>
 </div> --}}
-    <br>
+    <br>  
+    <div class="bg-white">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            @foreach ($errors->all() as $error)
+            {{ $error }}
+            @endforeach
+        </div>
+    @endif
+
+    </div>
     <form class="edit-grade-form" id="Points-form" action=" {{ route('points.store') }}" method="POST">
         @csrf
         <div class="row" dir="rtl">
-            <div class="bg-white">
-                @if (session()->has('message'))
-                <div class="alert alert-info">
-                    {{ session('message') }}
-                </div>
-            @endif
-            </div>
+          
             <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
                 <h3 class="pt-3  px-md-5 px-3 "> اضافة نقطة </h3>
                 <div class="form-row mx-2 mb-2 ">
