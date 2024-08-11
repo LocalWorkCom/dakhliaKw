@@ -36,10 +36,10 @@ class UserController extends Controller
         $password = $request->password;
 
         // Check if the user exists
-        $user = User::where('military_number', $military_number)->first();
+        $user = User::where('military_number', $military_number)->join('inspectors','user_id','users.id')->first();
 
         if (!$user) {
-          return $this->respondError('Validation Error.', ['milltary_number'=> 'الرقم العسكري لا يتطابق مع سجلاتنا'], 400);
+          return $this->respondError('Validation Error.', ['milltary_number'=> 'الرقم العسكري لا يتطابق مع سجلات المفتشين'], 400);
         }
 
         // Check if the user has the correct flag
@@ -49,21 +49,28 @@ class UserController extends Controller
         }
 
         $credentials = $request->only('military_number', 'password');
+        //DD(Auth::attempt($credentials));
 
+
+      /*   if (!Hash::check($credentials['password'], $user->password)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }else{
+            return response()->json(['sucess' => 'user In'], 401);
+        } */
         // Check if the user has logged in within the last two hours
         $sixHoursAgo = now()->subHours(6);
 
         if (Auth::attempt($credentials)) {
             // If the user has logged in within the last two hours, do not set the code
-
-            if ($user->updated_at >= $sixHoursAgo) {
+           // dd('Inn');
+           // if ($user->updated_at >= $sixHoursAgo) {
 
 
              
                 $token=$user->createToken('auth_token')->accessToken;
                 Auth::login($user); // Log the user in
                 $user->device_token = $request->device_token;
-                $user->device_token = $token->token;
+                $user->token = $token->token;
 
                 $user->save();
                 $success['token'] = $token->token;
@@ -72,7 +79,8 @@ class UserController extends Controller
               return $this->respondSuccess($success, 'User login successfully.');
 
 
-            }else {
+            //}
+            /*else {
 
 
               $set = '123456789';
@@ -85,7 +93,7 @@ class UserController extends Controller
               $user->save();
               $success['user'] = $user->only(['id', 'firstname', 'email', 'lastname', 'phone', 'country_code', 'code','image']);
               return $this->respondwarning($success, trans('message.account not verified'), ['account' => trans('message.account not verified')], 402);
-          }
+          }*/
 
            
         }
