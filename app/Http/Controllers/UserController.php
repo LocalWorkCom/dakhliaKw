@@ -54,14 +54,17 @@ class UserController extends Controller
         $flagType = $id == 0 ? 'user' : 'employee';
         $parentDepartment = Departements::find(Auth()->user()->department_id);
 
+        // dd(Auth::user()->rule->name);
         if (Auth::user()->rule->name == "localworkadmin") {
+           
             $data = User::where('flag', $flagType)->get();
+            // dd($data);
         }
-        if (Auth::user()->rule->name == "superadmin") {
-
+        elseif  (Auth::user()->rule->name == "superadmin") {
             if ($flagType == 'employee') {
                 $data = User::where('flag', $flagType)->get();
-            } else {
+            } 
+            else {
                 $data = User::where('flag', $flagType)
                     ->whereHas('rule', function ($query) {
                         $query->where('hidden', false);
@@ -705,7 +708,14 @@ class UserController extends Controller
         if ($user->department_id == "NULL") {
             $department = departements::all();
         } else {
-            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+            if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin")
+            {
+                $department = departements::all();
+            }
+            else
+            {
+                $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+            } 
         }
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
@@ -717,6 +727,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request);
         $user = User::find($id);
 
         // if ($user->flag == "user") {
@@ -808,6 +819,7 @@ class UserController extends Controller
         $user->job_id = $request->job;
         $user->seniority = $request->seniority;
         $user->public_administration = $request->public_administration;
+        $user->department_id = $request->public_administration;
         $user->work_location = $request->work_location;
         $user->qualification = $request->qualification;
         $user->date_of_birth = $request->date_of_birth;
@@ -830,7 +842,7 @@ class UserController extends Controller
 
         if ($user->flag == "user") {
             $user->rule_id = $request->rule_id;
-            $user->department_id = $request->department_id;
+            // $user->department_id = $request->department_id;
 
             if ($request->password && !Hash::check($request->password, $user->password)) {
                 $user->password = Hash::make($request->password);
