@@ -27,12 +27,21 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <style>
-  .select2-container .select2-selection--single{
+.select2-container .select2-selection--single {
     height: 45px;
     font-size: 14px;
-    border-radius: 5px;
+    border: 0.2px solid #d9d4d4;
+    border-radius: 10px;
     background-color: #f8f8f8;
-  }  
+}
+.select2-container--default .select2-selection--multiple  {
+    height: 45px;
+    font-size: 14px;
+    border: 0.2px solid #d9d4d4;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    direction:rtl;
+}
     </style>
 </head>
 <body >

@@ -106,7 +106,7 @@ ul {
     margin-top: 5px;
 } */
 .first-section {
-    margin-left: -145px;
+    margin-left: -125px;
 }
 .first-section img{
     height:70px;
@@ -1265,6 +1265,15 @@ text-align: right;
         left: 0;
         top: 0;
     }
+    #days-table, #days-table * {
+        visibility: visible;
+    }
+ 
+    #days-table {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
     #users-table th:last-child,
     #users-table td:last-child {
         display: none;
@@ -1309,4 +1318,36 @@ text-align: right;
 .modal-body label{
     text-align: right;
     display: flex;
+}
+
+/************* phase 3 table *********** */
+.night {
+    background-color: #1f6c97;
+    color: #ffffff;
+}
+.morning{
+    
+    background-color:  #e1c35c;
+    color: #ffffff;
+    color: #ffffff;
+}
+.dayoff{
+    background-color: #b9b5b4;
+    color: #ffffff;
+}
+.afternoon{
+    background-color: #d17404c7;
+    color: #ffffff;
+}
+.rest{
+    background-color: #484848;
+    color: #ffffff;
+}
+.emergency-text{
+    color: rgb(223, 145, 0);
+}
+.group-table{
+    color: rgb(97, 96, 96);
+    font-size: 22px;
+    font-weight: 600;
 }

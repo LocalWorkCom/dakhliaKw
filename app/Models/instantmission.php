@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Events\MissionCreated;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class instantmission extends Model
 {
@@ -18,4 +19,11 @@ class instantmission extends Model
     {
         return $this->belongsTo(GroupTeam::class,'group_team_id');
     }
+
+    protected static function booted()
+{
+    static::created(function ($mission) {
+        event(new MissionCreated($mission));
+    });
+}
 }

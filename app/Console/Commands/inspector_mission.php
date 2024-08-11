@@ -44,6 +44,7 @@ class inspector_mission extends Command
         foreach ($Inspectors as $Inspector) {
             $date = $start_day_date; // Start from the 1st of the month
             $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$Inspector])->first(); //to get team for inspector
+            // if team exist
             if ($GroupTeam) {
 
                 // get work tree for team

@@ -73,6 +73,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users_create/{id}', [UserController::class, 'create'])->name('user.create')->middleware('check.permission:create User');
     Route::post('/store', [UserController::class, 'store'])->name('user.store')->middleware('check.permission:create User');
 
+    Route::any('/getGoverment/{id}', [UserController::class, 'getGoverment'])->name('user.getGoverment');
+    Route::any('/getRegion/{id}', [UserController::class, 'getRegion'])->name('user.getRegion');
+
     Route::get('/employees/{id}', [UserController::class, 'index'])->name('user.employees')->middleware('check.permission:view User');
     Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit')->middleware('check.permission:edit User');
     Route::get('/show/{id}', [UserController::class, 'show'])->name('user.show')->middleware('check.permission:view User');
@@ -395,6 +398,11 @@ Route::post('/Inspectors', [InspectorController::class, 'store'])->name('inspect
 Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit');
 Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
 Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');
+
+
+Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
+
+
 
 // // view All Models permission
 // Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {

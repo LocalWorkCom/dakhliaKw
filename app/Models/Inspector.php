@@ -23,4 +23,9 @@ class Inspector extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function groupTeams()
+    {
+        return $this->belongsTo(GroupTeam::class,'inspector_ids');
+    }
 }
