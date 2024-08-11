@@ -397,6 +397,11 @@ Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])
 Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
 Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');
 
+
+Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
+
+
+
 // // view All Models permission
 // Route::middleware(['auth', 'check.permission:view Rule,view Permission,view departements'])->group(function () {
 // });

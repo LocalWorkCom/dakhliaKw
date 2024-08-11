@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Console\Commands\inspector_mission;
 use App\Http\Requests\StoreGroupTeamRequest;
 use App\Http\Requests\UpdateGroupTeamRequest;
+use App\Models\Groups;
 
 class GroupTeamController extends Controller
 {
@@ -534,5 +535,24 @@ class GroupTeamController extends Controller
     public function destroy(GroupTeam $groupTeam)
     {
         //
+    }
+    public function IspectorMession()
+    {
+        // $data = [];
+        // $Groups = Groups::all();
+        // foreach ($Groups as $Group) {
+
+        //     $GroupTeam = GroupTeam::where('group_id', $Group->id)->get();
+        //     $inspector_ids = $GroupTeam->inspector_ids;
+        //     $inspectorIds = explode(',', $inspector_ids);
+        //     $Group['GroupTeam'] = $GroupTeam;
+        //     foreach ($inspectorIds as $inspector_id) {
+        //         $inspector = Inspector::find($inspector_id);
+        //         $inspectorMission = InspectorMission::where('inspector_id', $inspector_id)->where('group_id', $Group->id)->where('group_team_id', $GroupTeam->id)->get();
+        //         # code...
+        //         // $inspector[];
+        //     }
+        // }
+        return view('inspectorMission.index');
     }
 }
