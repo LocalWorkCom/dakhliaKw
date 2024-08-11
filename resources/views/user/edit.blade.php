@@ -577,7 +577,7 @@ $(document).ready(function() {
         </script>
         <script>
    // $(document).ready(function() {
-    // $('.select2').select2({  dir: "rtl"});
+    $('.select2').select2({  dir: "rtl"});
 //});
     </script>
       <script>
