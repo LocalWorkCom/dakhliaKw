@@ -7,24 +7,24 @@
 
 @section('content')
 @section('title')
-    الاوامر 
+    الاوامر
 @endsection
-    <section>
-        <div class="row">
-            <div class="container welcome col-11">
+<section>
+    <div class="row">
+        <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
                 <p>الاوامر</p>
-                   <button type="button" class="wide-btn"
-                            onclick="window.location.href='{{ route('instant_mission.create') }}'" style="color:#259240;">
-                             اضافة مهمة جديدة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                        </button>
-            </div>
+                <button type="button" class="wide-btn"
+                    onclick="window.location.href='{{ route('instant_mission.create') }}'" style="color:#259240;">
+                    اضافة مهمة جديدة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                </button>
             </div>
         </div>
+    </div>
 
-        <div class="row">
+    <div class="row">
         <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
-                <!-- <div class="row" dir="rtl">
+            <!-- <div class="row" dir="rtl">
                     <div class="form-group mt-4 mx-md-2 col-12 d-flex">
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('permission.create') }}'">
@@ -33,67 +33,111 @@
                     </div>
                 </div> -->
 
-                <div class="col-lg-12">
-                    <div class="bg-white ">
-                        <div>
-                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
-                                <thead>
-                                    <tr>
-                                        <th>رقم التعريف</th>
-                                        <th>الاسم</th>
-                                        <th>الوصف</th>
-                                        <th>الموقع</th>
-                                        <th>الفرقة</th>
-                                        <th>المجموعة</th>
-                                        <th style="width:150px;">العمليات</th>
-                                    </tr>
-                                </thead>
-                            </table>
+
+
+            <div class="col-lg-12">
+                <div class="bg-white ">
+                    {{-- @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
                         </div>
+                    @endif --}}
+
+                    @if (session()->has('message'))
+                            <div class="alert alert-info">
+                                {{ session('message') }}
+                            </div>
+                        @endif
+{{-- 
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif --}}
+                    <div>
+                        <table id="users-table"
+                            class="display table table-responsive-sm  table-bordered table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>رقم التعريف</th>
+                                    <th>الاسم</th>
+                                    <th>الوصف</th>
+                                    <th>الموقع</th>
+                                    <th>الفرقة</th>
+                                    <th>المجموعة</th>
+                                    <th style="width:150px;">العمليات</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <script>
-        $(document).ready(function() {
-            $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
+    </div>
+</section>
+<script>
+    $(document).ready(function() {
+        $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
 
-            $('#users-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ url('api/instant_mission') }}',
-                columns: [
-                    { data: 'id', sWidth: '50px', name: 'id' },
+        $('#users-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('api/instant_mission') }}',
+            columns: [{
+                    data: 'id',
+                    sWidth: '50px',
+                    name: 'id'
+                },
 
-                    { data: 'label', name: 'label' },
-                    { data: 'description', name: 'description' },
-                    { data: 'location', name: 'location' },
-                    { data: 'group_id', name: 'group_id' },
-                    { data: 'group_team_id', name: 'group_team_id' },
+                {
+                    data: 'label',
+                    name: 'label'
+                },
+                {
+                    data: 'description',
+                    name: 'description'
+                },
+                {
+                    data: 'locationLink',
+                    name: 'locationLink',
+                },
+                {
+                    data: 'group_id',
+                    name: 'group_id'
+                },
+                {
+                    data: 'group_team_id',
+                    name: 'group_team_id'
+                },
 
 
-                    { data: 'action', name: 'action',  sWidth: '100px', orderable: false, searchable: false }
-                ],
-                columnDefs: [{
-                    targets: -1,
-                    render: function(data, type, row) {
+                {
+                    data: 'action',
+                    name: 'action',
+                    sWidth: '100px',
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            columnDefs: [{
+                targets: -1,
+                render: function(data, type, row) {
 
-                        // Using route generation correctly in JavaScript
-                        var edit = '{{ route('instant_mission.edit', ':id') }}';
-                        edit = edit.replace(':id', row.id);
-                        var show = '{{ route('instant_mission.show', ':id') }}';
-                        show = show.replace(':id', row.id);
-                        // var permissiondelete = '{{ route('permissions_destroy', ':id') }}';
-                        // permissiondelete = permissiondelete.replace(':id', row.id);
-                        return `
+                    // Using route generation correctly in JavaScript
+                    var edit = '{{ route('instant_mission.edit', ':id') }}';
+                    edit = edit.replace(':id', row.id);
+                    var show = '{{ route('instant_mission.show', ':id') }}';
+                    show = show.replace(':id', row.id);
+                    // var permissiondelete = '{{ route('permissions_destroy', ':id') }}';
+                    // permissiondelete = permissiondelete.replace(':id', row.id);
+                    return `
                         <a href="` + show + `"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i>عرض  </a>
                         <a href="` + edit + `" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> تعديل </a>
                        `;
-                    }
+                }
 
-                }],
-                "oLanguage": {
+            }],
+            "oLanguage": {
                 "sSearch": "",
                 "sSearchPlaceholder": "بحث",
                 "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
@@ -117,8 +161,8 @@
             },
             "pagingType": "full_numbers"
 
-            });
         });
-    </script>
+    });
+</script>
 @endsection
 {{-- <a href="` + permissionedit + `" class="btn btn-primary btn-sm">تعديل</a> --}}

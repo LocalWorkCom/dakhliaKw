@@ -39,8 +39,12 @@ class InstantmissionController extends Controller
                 $group_team_id = GroupTeam::where('id', $row->group_team_id)->pluck('name')->first();
                 return $group_team_id;
             })
+            ->addColumn('locationLink', function ($row) { // New column for departments count
 
-            ->rawColumns(['action'])
+                return '<a href="'.$row->location.'" target="_blank" style="color:blue !important;">رابط</a>';
+            })
+
+            ->rawColumns(['action', 'locationLink'])
             ->make(true);
     }
 
@@ -103,8 +107,15 @@ class InstantmissionController extends Controller
 
         }
         // ;
-        dd(event(new MissionCreated($new)));
-        return view('instantMissions.view');
+
+        $results = event(new MissionCreated($new));
+
+        if (!empty($results) && in_array(true, $results, true)) {
+            return redirect()->route('instant_mission.index')->with('message', "تمت اضافة المهمة بنجاح");
+        } else {
+            // Handle specific errors based on listener responses
+            return redirect()->route('instant_mission.index')->with('message', "خطأ ");
+        }
     }
 
     /**
@@ -161,30 +172,30 @@ class InstantmissionController extends Controller
         // if ($request->hasFile('images') && $request->remaining_files != null) {
 
 
-            $files = [];
+        $files = [];
 
-            // dd(explode(',',$request->remaining_files));
-    // Check if 'images' are uploaded and merge them into the $files array
-    if ($request->hasFile('images')) {
-        $files = array_merge($files, $request->file('images'));
-    }
+        // dd(explode(',',$request->remaining_files));
+        // Check if 'images' are uploaded and merge them into the $files array
+        if ($request->hasFile('images')) {
+            $files = array_merge($files, $request->file('images'));
+        }
 
-    // Check if 'remaining_files' are present and merge them into the $files array
-    if ($request->remaining_files != null) {
-        $files = array_merge($files, explode(',',$request->remaining_files));
-    }
+        // Check if 'remaining_files' are present and merge them into the $files array
+        if ($request->remaining_files != null) {
+            $files = array_merge($files, explode(',', $request->remaining_files));
+        }
 
-    // dd($request->file('images'));
-    // $path = 'instantMission/images';
+        // dd($request->file('images'));
+        // $path = 'instantMission/images';
 
-            // $files = $files;
-            $path = 'instantMission/images';
+        // $files = $files;
+        $path = 'instantMission/images';
 
-            // Assuming UploadFilesIM is a helper function to handle the file upload
-            UploadFilesIM($path, 'attachment', $instantmission, $files);
+        // Assuming UploadFilesIM is a helper function to handle the file upload
+        UploadFilesIM($path, 'attachment', $instantmission, $files);
         // }
 
-        return view('instantMissions.view')->with('success', 'Mission updated successfully.');
+        return redirect()->route('instant_mission.index')->with('success', 'Mission updated successfully.');
     }
 
 
