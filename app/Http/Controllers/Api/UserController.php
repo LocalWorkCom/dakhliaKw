@@ -67,13 +67,14 @@ class UserController extends Controller
 
 
              
-                $token=$user->createToken('auth_token')->accessToken;
+             //   $token=$user->createToken('auth_token')->accessToken;
+              $token =$user->createToken('auth_token')->accessToken;
                 Auth::login($user); // Log the user in
                 $user->device_token = $request->device_token;
-                $user->token = $token->token;
+                $user->token = $token;//->token;
 
                 $user->save();
-                $success['token'] = $token->token;
+                $success['token'] = $token;//->token;
                 $user->image=$user->image;
                 $success['user'] = $user->only(['id', 'firstname', 'email', 'lastname', 'phone', 'country_code', 'code','image']);
               return $this->respondSuccess($success, 'User login successfully.');
