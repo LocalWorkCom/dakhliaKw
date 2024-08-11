@@ -15,11 +15,11 @@
             </ol>
         </nav>
     </div>
-    {{-- <div class="row ">
+ <div class="row ">
         <div class="container welcome col-11">
-            <p> القطــــاعات </p>
+            <p> النــــقـــاط </p>
         </div>
-    </div> --}}
+    </div> 
     {{-- {{ dd($governments) }} --}}
     <br>
     <form class="edit-grade-form" id="Qta3-form" action=" {{ route('grouppoints.store') }}" method="POST">
@@ -48,15 +48,15 @@
             <div id="second-container" class="container moftsh col-11 mt-3 p-0 pb-3 hidden">
                 <h3 class="pt-3 px-md-5 px-3">اضف محافظات داخل قطاع</h3>
                 <div class="form-row mx-2">
-                    <div class="form-group moftsh px-md-5 px-3 pt-3">
+                    <!-- <div class="form-group moftsh px-md-5 px-3 pt-3">
                         <h4 style="color: #274373; font-size: 24px;">حدد المحافظات المراد اضافتها</h4>
-                    </div>
+                    </div> -->
 
-                    <div class="input-group moftsh px-md-5 px-3 pt-3">
+                    <div class="input-group moftsh  px-md-5 px-3 pt-3">
                         <label class="pb-3" for="governorate">أختر المحافظه الخاصه لمجوعه النقاط</label>
                         <select name="governorate" id="governorate"
-                            class="custom-select custom-select-lg mb-3 select2 col-12"
-                            style="border: 0.2px solid rgb(199, 196, 196);">
+                            class=" form-control custom-select custom-select-lg mb-3 select2 "
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;">
                             <option value="" selected disabled>اختر</option>
                             @foreach (getgovernments() as $government)
                                 <option value="{{ $government->id }}">{{ $government->name }}</option>
@@ -66,23 +66,23 @@
                     </div>
                 </div>
                 {{-- {{ dd($governments== ''? 't' :'f') }} --}}
-                <div class="input-group moftsh px-md-5 px-3 pt-3">
-                    <label class="pb-3" for="pointsIDs">أختر النقاط</label>
-                    <select name="pointsIDs[]" id="pointsIDs" multiple class="custom-select custom-select-lg mb-3 select2 col-12"
-                        style="border: 0.2px solid rgb(199, 196, 196);">
+                <div class="input-group moftsh px-md-5 px-3 pt-4">
+                    <label class=" d-flex pb-3" for="pointsIDs" >أختر النقاط</label>
+                    <select name="pointsIDs[]" id="pointsIDs" multiple class=" form-control custom-select custom-select-lg mb-3 select2 col-12"
+                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;">
                         <option value="" selected disabled>اختر</option>
 
 
                     </select>
                 </div>
                 <span class="text-danger span-error" id="governmentIDS-error"></span>
-                <div class="container col-11">
-                    <div class="form-row d-flex justify-content-end mt-4 mb-3">
-                        <button type="submit" class="btn-blue">
+                <div class="container col-12 pt-4">
+                    <div class="form-row d-flex justify-content-end mt-4 mb-3 mx-5">
+                        <button type="submit" class="btn-blue mx-3">
                             <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img" height="20px"
                                 width="20px"> اضافة
                         </button>
-                        <button type="button" id="back-button" class="btn-back mx-2">
+                        <button type="button" id="back-button" class="btn-back ">
                             <img src="{{ asset('frontend/images/previous.svg') }}" alt="img" height="20px"
                                 width="20px"> السابق</button>
 

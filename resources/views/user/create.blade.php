@@ -121,7 +121,7 @@
 
 
             @if ($flag == '0')
-                <div class="form-row  mx-md-3 d-flex justify-content-center flex-row-reverse">
+                <div class="form-row  mx-md-4 d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
                         <label for="input3"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> الباسورد</label>
                         <div class="password-container">
