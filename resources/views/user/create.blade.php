@@ -146,6 +146,7 @@
                     </div>
                 </div>
             @else
+            
                 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
 
                     <div class="form-group col-md-5 mx-2">
@@ -153,14 +154,48 @@
                         <input type="text" id="input2" name="email" class="form-control"
                             placeholder=" البريد الالكترونى" value="{{ old('email') }}">
                     </div>
+                    
                     <div class="form-group col-md-5 mx-2">
-                        <label for="input44"> المحافظة</label>
-                        <input type="text" id="input44" name="Provinces" class="form-control"
-                            placeholder="  المحافظة" value="{{ old('Provinces') }}">
+                        <label for="sector">قطاع </label>
+                        {{-- <input type="text" id="input66" name="sector" class="form-control"
+                            placeholder="قطاع " value="{{ old('sector') }}" > --}}
+                            <select id="sector" name="sector" class="form-control select2" placeholder="المنطقة">
+                                <option selected >اختار من القائمة</option>
+                                @foreach ($sector as $item)
+                                    <option value="{{ $item->id }}" {{ old('sector') == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
+                                @endforeach
+                            </select>
                     </div>
-
                 </div>
 
+                
+                <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
+                    <div class="form-group col-md-5 mx-2">
+                        <label for="region"> المنطقة</label>
+                        {{-- <input type="text" id="input44" name="region" class="form-control"
+                            placeholder="  المنطقة" value="{{ old('region') }}"> --}}
+
+                            <select id="region" name="region" class="form-control select2" placeholder="المنطقة">
+                                <option selected disabled>اختار من القائمة</option>
+                                @foreach ($area as $item)
+                                    <option value="{{ $item->id }}" {{ old('region') == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                    </div>
+
+                    <div class="form-group col-md-5 mx-2">
+                        <label for="Provinces"> المحافظة</label>
+                        {{-- <input type="text" id="input44" name="Provinces" class="form-control"
+                            placeholder="  المحافظة" value="{{ old('Provinces') }}"> --}}
+                            <select id="Provinces" name="Provinces" class="form-control select2" placeholder="المحافظة">
+                                <option selected disabled>اختار من القائمة</option>
+                                @foreach ($govermnent as $item)
+                                    <option value="{{ $item->id }}" {{ old('Provinces') == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                    </div>
+                    
+                </div>
                 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
                         <label for="input44">العنوان 1</label>
@@ -175,28 +210,18 @@
                 </div>
                 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
-                        <label for="input44"> المنطقة</label>
-                        <input type="text" id="input44" name="region" class="form-control"
-                            placeholder="  المنطقة" value="{{ old('region') }}">
+                        <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم العسكرى</label>
+                        <input type="text" id="input6" name="military_number" class="form-control"
+                            placeholder="رقم العسكرى" value="{{ old('military_number') }}" >
                     </div>
                     <div class="form-group col-md-5 mx-2">
                         <label for="input4"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم الهاتف</label>
                         <input type="text" id="input4" name="phone" class="form-control"
                             placeholder=" رقم الهاتف" value="{{ old('phone') }}">
                     </div>
+                 
                 </div>
-                <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم العسكرى</label>
-                        <input type="text" id="input6" name="military_number" class="form-control"
-                            placeholder="رقم العسكرى" value="{{ old('military_number') }}" >
-                    </div>
-                    <div class="form-group col-md-5 mx-2">
-                        <label for="input66">قطاع </label>
-                        <input type="text" id="input66" name="sector" class="form-control"
-                            placeholder="قطاع " value="{{ old('sector') }}" >
-                    </div>
-                </div>
+                
 
                 <div class="form-row  mx-md-3 d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
@@ -423,8 +448,69 @@
 
 </div>
 </section>
-
 <script>
+    $(document).ready(function() {
+    $('#sector').on('change', function() {
+        var sector_id = $(this).val();
+       
+
+        if (sector_id) {
+            $.ajax({
+                url: '/getGoverment/' + sector_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#Provinces').empty();
+                    $('#region').empty();
+                    $('#Provinces').append('<option selected> اختار من القائمة </option>');
+                    $.each(data, function(key, employee) {               
+                        console.log(employee);   
+                        $('#Provinces').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                    });                 
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#Provinces').empty();
+            $('#region').empty();
+        }
+    });
+});
+
+$(document).ready(function() {
+    $('#Provinces').on('change', function() {
+        var Provinces_id = $(this).val();
+       
+
+        if (Provinces_id) {
+            $.ajax({
+                url: '/getRegion/' + Provinces_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#region').empty();
+                    $('#region').append('<option selected> اختار من القائمة </option>');
+                    $.each(data, function(key, employee) {               
+                        console.log(employee);   
+                        $('#region').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                    });                 
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#region').empty();
+        }
+    });
+});
+</script>
+
+{{-- <script>
     document.addEventListener("DOMContentLoaded", function() {
         const checkbox = document.getElementById("myCheckbox");
         const grade = document.getElementById("grade");
@@ -442,10 +528,10 @@
 
     // In your Javascript (external .js resource or <script> tag)
 
-</script>
+</script> --}}
 <script>
    // $(document).ready(function() {
-    $('.select2').select2({  dir: "rtl"});
+    // $('.select2').select2({  dir: "rtl"});
 //});
     </script>
 <script>

@@ -266,15 +266,39 @@
                             </div>
                         </div>
                         <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
-                            <div class="form-group col-md-5 mx-md-2">
-                                <label for="input44"> المحافظة</label>
-                                <input type="text" id="input44" name="Provinces" class="form-control"
-                                    placeholder="  المحافظة" value="{{ $user->Provinces }}">
+                            <div class="form-group col-md-10 mx-2">
+                                <label for="sector">قطاع </label>
+                                {{-- <input type="text" id="input66" name="sector" class="form-control"
+                                    placeholder="قطاع " value="{{ old('sector') }}" > --}}
+                                    <select id="sector" name="sector" class="form-control select2" placeholder="المنطقة">
+                                        <option selected value="null">اختار من القائمة</option>
+                                        @foreach ($sector as $item)
+                                            <option value="{{ $item->id }}" {{ $user->sector == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
                             </div>
                             <div class="form-group col-md-5 mx-md-2">
-                                <label for="input44"> المنطقة</label>
-                                <input type="text" id="input44" name="region" class="form-control"
-                                    placeholder="  المنطقة" value="{{ $user->region }}">
+                                <label for="Provinces"> المحافظة</label>
+                                {{-- <input type="text" id="input44" name="Provinces" class="form-control"
+                                    placeholder="  المحافظة" value="{{ $user->Provinces }}"> --}}
+
+                                    <select id="Provinces" name="Provinces" class="form-control select2" placeholder="المحافظة">
+                                        <option  disabled>اختار من القائمة</option>
+                                        @foreach ($govermnent as $item)
+                                            <option value="{{ $item->id }}" {{ $user->Provinces == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
+                            <div class="form-group col-md-5 mx-md-2">
+                                <label for="region"> المنطقة</label>
+                                {{-- <input type="text" id="region" name="region" class="form-control"
+                                    placeholder="  المنطقة" value="{{ $user->region }}"> --}}
+                                    <select id="region" name="region" class="form-control select2" placeholder="المنطقة">
+                                        <option disabled >اختار من القائمة</option>
+                                        @foreach ($area as $item)
+                                            <option value="{{ $item->id }}" {{ $user->region == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
                             </div>
                         </div>
 
@@ -397,6 +421,137 @@
 
     </section>
     <script>
+    //     $(document).ready(function() {
+    //     $('#sector').on('change', function() {
+    //         var sector_id = $(this).val();
+           
+    
+    //         if (sector_id) {
+    //             $.ajax({
+    //                 url: '/getGoverment/' + sector_id,
+    //                 type: 'GET',
+    //                 dataType: 'json',
+    //                 success: function(data) {
+    //                     $('#Provinces').empty();
+    //                     $('#Provinces').append('<option selected> اختار من القائمة </option>');
+    //                     $.each(data, function(key, employee) {               
+    //                         console.log(employee);   
+    //                         $('#Provinces').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+    //                     });                 
+    //                 },
+    //                 error: function(xhr, status, error) {
+    //                     console.log('Error:', error);
+    //                     console.log('XHR:', xhr.responseText);
+    //                 }
+    //             });
+    //         } else {
+    //             $('#Provinces').empty();
+    //         }
+    //     });
+    // });
+
+    $(document).ready(function() {
+    function loadRegions() {
+        var sector_id = $('#sector').val();
+        // 
+        var selectedProvincesId = '{{ $user->Provinces }}';
+        if (sector_id) {
+            $.ajax({
+                url: '/getGoverment/' + sector_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#Provinces').empty();
+                    $('#region').empty();
+                    $('#Provinces').append('<option selected value="null"> اختار من القائمة </option>');
+                    $.each(data, function(key, employee) {               
+                        console.log(employee);   
+                        var selected = (employee.id == selectedProvincesId) ? 'selected' : '';
+                        $('#Provinces').append('<option value="' + employee.id + '" ' + selected + '>' + employee.name + '</option>');
+                    });                 
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#Provinces').empty();
+            $('#region').empty();
+        }
+    }
+
+    // Trigger loadRegions when Provinces changes
+    $('#sector').on('change', loadRegions);
+
+    // Trigger loadRegions when the page loads
+    loadRegions();
+});
+
+$(document).ready(function() {
+    function loadRegions() {
+        var Provinces_id = $('#Provinces').val();
+        var selectedregionId = '{{ $user->region }}';
+        if (Provinces_id) {
+            $.ajax({
+                url: '/getRegion/' + Provinces_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#region').empty();
+                    $('#region').append('<option selected value="null"> اختار من القائمة </option>');
+                    $.each(data, function(key, employee) {               
+                        console.log(employee);   
+                        var selected = (employee.id == selectedregionId) ? 'selected' : '';
+                        $('#region').append('<option value="' + employee.id + '"  ' + selected + '>' + employee.name + '</option>');
+                    });                 
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#region').empty();
+        }
+    }
+
+    // Trigger loadRegions when Provinces changes
+    $('#Provinces').on('change', loadRegions);
+
+    // Trigger loadRegions when the page loads
+    loadRegions();
+});
+
+    
+    // $(document).ready(function() {
+    //     $('#Provinces').on('change', function() {
+    //         var Provinces_id = $(this).val();
+    //         if (Provinces_id) {
+    //             $.ajax({
+    //                 url: '/getRegion/' + Provinces_id,
+    //                 type: 'GET',
+    //                 dataType: 'json',
+    //                 success: function(data) {
+    //                     $('#region').empty();
+    //                     $('#region').append('<option selected> اختار من القائمة </option>');
+    //                     $.each(data, function(key, employee) {               
+    //                         console.log(employee);   
+    //                         $('#region').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+    //                     });                 
+    //                 },
+    //                 error: function(xhr, status, error) {
+    //                     console.log('Error:', error);
+    //                     console.log('XHR:', xhr.responseText);
+    //                 }
+    //             });
+    //         } else {
+    //             $('#region').empty();
+    //         }
+    //     });
+    // });
+    </script>
+    <script>
         function togglePasswordVisibility() {
             var passwordField = document.getElementById('input3');
             var toggleIcon = document.getElementById('toggleIcon');
@@ -413,7 +568,7 @@
         </script>
         <script>
    // $(document).ready(function() {
-    $('.select2').select2({  dir: "rtl"});
+    // $('.select2').select2({  dir: "rtl"});
 //});
     </script>
       <script>

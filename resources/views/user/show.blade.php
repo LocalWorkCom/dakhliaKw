@@ -244,6 +244,70 @@
                         @endif
 
 
+                        <tr>
+                            <th> قطاع</th>
+                            <td>
+                                {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
+                                    disabled> --}}
+                                    @foreach ($sector as $item)
+                                    @if ($user->sector == $item->id)
+                                    <label>
+                                        {{ $item->name }}
+                                    </label>
+                                    @endif
+                                        
+                                    @endforeach
+                                {{-- </select> --}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th> قطاع</th>
+                            <td>
+                                {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
+                                    disabled> --}}
+                                    @foreach ($sector as $item)
+                                    @if ($user->sector == $item->id)
+                                    <label>
+                                        {{ $item->name }}
+                                    </label>
+                                    @endif
+                                        
+                                    @endforeach
+                                {{-- </select> --}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th> المحافظة</th>
+                            <td>
+                                {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
+                                    disabled> --}}
+                                    @foreach ($govermnent as $item)
+                                    @if ($user->Provinces == $item->id)
+                                    <label>
+                                        {{ $item->name }}
+                                    </label>
+                                    @endif
+                                        
+                                    @endforeach
+                                {{-- </select> --}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th> المنطقة</th>
+                            <td>
+                                {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
+                                    disabled> --}}
+                                    @foreach ($area as $item)
+                                    @if ($user->region == $item->id)
+                                    <label>
+                                        {{ $item->name }}
+                                    </label>
+                                    @endif
+                                        
+                                    @endforeach
+                                {{-- </select> --}}
+                            </td>
+                        </tr>
 
 
                         {{-- <tr>
