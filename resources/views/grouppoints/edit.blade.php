@@ -21,6 +21,20 @@
         </div>
     </div> --}}
     {{-- {{ dd($governments) }} --}}
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <br>
     <form class="edit-grade-form" id="Qta3-form" action="{{ route('grouppoints.update',$data->id) }}" method="POST">
         @csrf
@@ -51,7 +65,7 @@
                     <div class="form-group moftsh px-md-5 px-3 pt-3">
                         <h4 style="color: #274373; font-size: 24px;">حدد المحافظات المراد اضافتها</h4>
                     </div>
-
+<input hidden value="{{ $data->government_id }}" name="government_id">
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="governorate">أختر المحافظه الخاصه لمجوعه النقاط</label>
                         <select name="governorate" id="governorate" disabled
