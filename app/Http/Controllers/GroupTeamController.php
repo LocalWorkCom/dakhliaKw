@@ -357,7 +357,7 @@ class GroupTeamController extends Controller
         foreach ($removedArr as $Inspector) {
             InspectorMission::where('inspector_id', $Inspector)->where('date', '>=', today())->delete();
         }
-        foreach ($newInspectors as $Inspector) {
+        foreach ($changeArr as $Inspector) {
             $date = $start_day_date; // Start from the 1st of the month
             $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$Inspector])->first();
 
@@ -370,7 +370,7 @@ class GroupTeamController extends Controller
 
                 $total_days_in_cycle = $WorkingTree->working_days_num + $WorkingTree->holiday_days_num;
 
-                for ($day_of_month = 1; $day_of_month <= $num_days; $day_of_month++) {
+                for ($day_of_month = 1; $day_of_month <= $num_days + 1; $day_of_month++) {
                     $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
                     $is_day_off = $day_in_cycle > $WorkingTree->working_days_num;
                     $WorkingTreeTime = !$is_day_off
