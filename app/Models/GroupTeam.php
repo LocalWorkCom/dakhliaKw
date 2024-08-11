@@ -21,6 +21,12 @@ class GroupTeam extends Model
         return $this->hasMany(instantmission::class);
     }
 
+    public function group()
+    {
+
+        return $this->belongsTo(Groups::class, 'group_id');
+    }
+    
     public function working_tree()
     {
         return $this->belongsTo(WorkingTree::class, 'working_tree_id');
