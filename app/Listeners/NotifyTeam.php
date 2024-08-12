@@ -37,7 +37,7 @@ class NotifyTeam
             $query = InspectorMission::whereDate('date', $today)
                 ->where('inspector_id', $item)
                 ->first();
-                // dd($query->date);
+                // dd($query);
                 if ($query) {
                     // Ensure ids_instant_mission is not null
                     if (!empty($query->ids_instant_mission)) {
