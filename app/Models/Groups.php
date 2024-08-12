@@ -30,4 +30,12 @@ class Groups extends Model
 
         return $this->hasMany(instantmission::class);
     }
+
+    public function groupPoints() {
+        return $this->hasMany(Grouppoint::class);
+    }
+
+    public function groupTeams() {
+        return $this->hasMany(GroupTeam::class);
+    }
 }
