@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\InspectorMissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', 'App\Http\Controllers\Api\UserController@login');
 Route::post('/resetpassword', 'App\Http\Controllers\Api\UserController@reset_password');
 
+Route::get('/inspector/{inspectorId}/missions', [InspectorMissionController::class, 'getMissionsByInspector']);
 
