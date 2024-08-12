@@ -1356,3 +1356,22 @@ text-align: right;
     font-size: 24px;
     font-weight: 600;
 }
+.table-container {
+    margin: 0 auto;
+    /* Center the table */
+    width: 100%;
+}
+
+.urgent {
+    background-color: #1ECBC9;
+    color: #FFFFFF;
+}
+
+.task {
+    background-color: #F9C9C9;
+    color: black;
+}
+/* .danger{
+    background-color: #2e25a7;
+    color: black;
+} */
