@@ -13,11 +13,34 @@
     <div class="row">
         @if (url()->current() == url('/users/0'))
             <div class="container welcome col-11">
-                <p>المستخـــــــــــدمين</p>
+                <div class="d-flex justify-content-between">
+                        <p>المستخـــــــــــدمين</p>
+                    
+                            <div class="form-group">
+                                @if (Auth::user()->hasPermission('create User'))
+                                    <button type="button" class="wide-btn"
+                                        onclick="window.location.href='{{ route('user.create', $id) }}'">
+                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                        اضافة جديد
+                                    </button>
+                                @endif
+                            </div>
+                </div>
             </div>
         @elseif (url()->current() == url('/employees/1'))
             <div class="container welcome col-11">
-                <p>المـــــــــــوظفين</p>
+                <div class="d-flex justify-content-between">
+                        <p>المـــــــــــوظفين</p>
+                        <div class="form-group">
+                                @if (Auth::user()->hasPermission('add_employee User'))
+                                <button type="button" class="wide-btn"
+                                        onclick="window.location.href='{{ route('user.create', $id) }}'">
+                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                        اضافة جديد
+                                    </button>
+                                @endif
+                            </div>
+                </div>
             </div>
         @endif
     </div>
@@ -26,31 +49,7 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-            <div class="row " dir="rtl">
-                @if (url()->current() == url('/users/0'))
-                    <div class="form-group mt-4  mx-5 col-12 d-flex ">
-                        @if (Auth::user()->hasPermission('create User'))
-                            <button type="button" class="wide-btn"
-                                onclick="window.location.href='{{ route('user.create', $id) }}'">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                اضافة جديد
-                            </button>
-                        @endif
-                    </div>
-                @elseif (url()->current() == url('/employees/1'))
-                    <div class="form-group mt-4  mx-5 col-12 d-flex ">
-                        @if (Auth::user()->hasPermission('add_employee User'))
-                            <button type="button" class="wide-btn"
-                                onclick="window.location.href='{{ route('user.create', $id) }}'">
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                اضافة جديد
-                            </button>
-                        @endif
-                    </div>
-                @endif
-                
-                
-            </div>
+           
             <div class="col-lg-12">
                 <div class="bg-white ">
 
@@ -82,7 +81,6 @@
                                     serverSide: true,
                                     ajax: '{{ url('api/users') }}/' + id, // Correct URL concatenation
                                     bAutoWidth: false,
-
                                     columns: [{
                                             data: 'id',
                                             sWidth: '50px',
