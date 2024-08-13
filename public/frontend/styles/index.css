@@ -1255,6 +1255,8 @@ text-align: right;
 @media print {
     body * {
         visibility: hidden;
+        -webkit-print-color-adjust: exact !important; /* Chrome, Safari */
+        color-adjust: exact !important; /* Firefox */
     }
     #users-table, #users-table * {
         visibility: visible;
