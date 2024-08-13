@@ -24,11 +24,11 @@
     </div>
     <br>
     <div class="row">
-        <div class="container  col-11 mt-3 p-0 ">
+        <div class="container col-11 mt-3 p-0">
             <form action="{{ route('vacation.store', $id) }}" method="POST" enctype="multipart/form-data">
                 <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
                     @csrf
-                 
+
                     <div class="form-row mx-md-3 mt-4 d-flex justify-content-center" dir="rtl">
                         <div class="form-group col-md-5 mx-md-2 ">
                             <label for="vacation_type_id" style=" display: flex; justify-content: flex-start;">نوع
@@ -53,41 +53,37 @@
                         </div>
 
                     </div>
- 
+
 
                     <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-md-2">
                             <label for="days_num">عدد الايام</label>
                             <input type="number" id="days_num" name="days_num" class="form-control">
                         </div>
-                     
+
                         <div class="form-group col-md-5 mx-2">
                             <label for="start_date">تاريخ البداية</label>
                             <input type="date" id="start_date" name="start_date" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
-                        <div class="form-group col-md-5 mx-md-md-2">
-                            <label for="country_id" style=" display: flex; justify-content: flex-start;">المحافظة</label>
-                            <select id="country_id" name="country_id" class="form-control" >
-                                <option value="">اختر المحافظة</option>
-                                @foreach ($countries as $item)
-                                    <option value="{{ $item->id }}">{{ $item->country_name_ar }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                     
+                    <div class="form-group col-md-10 mx-md-md-2  d-flex ">
+                        <label for="days_num"> دولة خارجية </label>
+                        <input type="checkbox" class="mx-2" name="check_country" id="check_country">
                     </div>
-                    <div class="form-row mx-md-2 mt-4 d-flex justify-content-center">
-                        <div class="form-group col-md-10" id="reportImage-div" hidden>
-                            <label for="reportImage">اضافة ملف</label>
-                            <div id="reportImage">
-                                <div class="file-input mb-3" dir="rtl">
-                                    <input type="file" name="reportImage" class="form-control">
-                                </div>
-                            </div>
-                        </div>
+
+
+                    <div class="form-group col-md-10 mx-2" style="display: none" id="country-dev">
+                        <label for="country_id" style=" display: flex; justify-content: flex-start;">الدولة</label>
+                        <select id="country_id" name="country_id" class="form-control">
+                            <option value="">اختر الدولة</option>
+                            @foreach ($countries as $item)
+                                <option value="{{ $item->id }}">{{ $item->country_name_ar }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
+
+
                 </div>
                 <div class="container col-10 mt-5 mb-5 ">
                     <div class="form-row col-10 " dir="ltr">
@@ -104,6 +100,15 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
+                // Set minimum date for the start_date input to today's date
+
+                $('#check_country').change(function() {
+                    if ($(this).is(':checked')) {
+                        $('#country-dev').show();
+                    } else {
+                        $('#country-dev').hide();
+                    }
+                });
                 var id = "{{ $id }}";
                 // Get today's date
                 var today = new Date().toISOString().split('T')[0];
@@ -165,6 +170,11 @@
 
 
                 // });
+                $('#check_country').click(function(e) {
+                    e.preventDefault();
+                    $("#country-dev").show();
+
+                });
             });
         </script>
     @endpush

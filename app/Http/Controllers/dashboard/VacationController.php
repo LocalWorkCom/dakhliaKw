@@ -44,7 +44,6 @@ class VacationController extends Controller
                 ->orderby('created_at', 'desc')
                 ->get();
             foreach ($EmployeeVacations as  $EmployeeVacation) {
-                # code...
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
                 $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
                 $EmployeeVacation['EndDate'] = ExpectedEndDate($EmployeeVacation)[0];
@@ -110,7 +109,7 @@ class VacationController extends Controller
         $employee_vacation->start_date = $request->start_date;
         $employee_vacation->days_number = $request->days_num;
         $employee_vacation->country_id = $request->country_id;
-        $employee_vacation->employee_id = $employee_id  && $request->vacation_type_id != 3 ? $employee_id : null;
+        $employee_vacation->employee_id = $employee_id ;
         $employee_vacation->created_by = auth()->id();
         $employee_vacation->created_departement = auth()->user()->department_id;
         $employee_vacation->save();
@@ -134,7 +133,7 @@ class VacationController extends Controller
     public function show($id)
     {
         //
-        $vacation = EmployeeVacation::with('employee', 'vacation_type')->where('id', $id)->first();
+        $vacation = EmployeeVacation::with('employee', 'vacation_type', 'country')->where('id', $id)->first();
         $employees = getEmployees();
         $vacation_types = getVactionTypes();
 

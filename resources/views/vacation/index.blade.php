@@ -17,7 +17,7 @@
         <div class="container  col-11 mt-3 p-0 ">
             <div class="row " dir="rtl">
                 <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                    @if (Auth::user()->hasPermission('add EmployeeVacation'))
+                    @if (Auth::user()->hasPermission('create EmployeeVacation'))
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('vacation.add', $id) }}'">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
@@ -100,38 +100,31 @@
                             columnDefs: [{
                                 targets: -1,
                                 render: function(data, type, row) {
-                                    var editVacation = "<?php echo Auth::user()->hasPermission('edit EmployeeVacation'); ?>";
-                                    var showVacation = "<?php echo Auth::user()->hasPermission('show EmployeeVacation'); ?>";
-                                    var deleteVacation = "<?php echo Auth::user()->hasPermission('delete EmployeeVacation'); ?>";
+                                    var showVacation = "<?php echo Auth::user()->hasPermission('view EmployeeVacation'); ?>";
                                     // Using route generation correctly in JavaScript
-                                    var editUrl = '{{ route('vacation.edit', ':id') }}';
                                     var showUrl = '{{ route('vacation.show', ':id') }}';
-                                    var deleteUrl = '{{ route('vacation.delete', ':id') }}';
+                                    var acceptUrl = '{{ route('vacation.accept', ':id') }}';
+                                    var rejectUrl = '{{ route('vacation.reject', ':id') }}';
 
-                                    editUrl = editUrl.replace(':id', row.id);
                                     showUrl = showUrl.replace(':id', row.id);
-                                    deleteUrl = deleteUrl.replace(':id', row.id);
-                                    var deleteButton = '';
-                                    var editButton = '';
                                     var showButton = '';
-                                    if (row.StartVacation) {
-                                        if (deleteVacation) {
-                                            
-                                            deleteButton =
-                                                `<a href="${deleteUrl}" class="delete btn  btn-sm" style="background-color: #c91d1d;"><i class="fa fa-trash"></i> حذف</a>`;
-                                        }
-                                    }
-                                    if (editVacation) {
-                                        editButton =
-                                            `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i> تعديل</a>`;
-                                    }
+                                    var acceptButton = '';
+                                    var rejectButton = '';
+
                                     if (showVacation) {
                                         showButton =
                                             `<a href="${showUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
                                     }
+                                    if (row.VacationStatus == 'مقدمة') {
+                                        acceptButton =
+                                            `<a href="${acceptUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> موافقة</a>`;
+                                        rejectButton =
+                                            `<a href="${rejectUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> رفض</a>`;
+                                    }
+
                                     // Checking if the vacation start date condition is met
 
-                                    return `${editButton}${showButton}${deleteButton}`;
+                                    return `${showButton}${acceptButton}${rejectButton}`;
 
                                 }
 
@@ -145,10 +138,10 @@
                                 "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                 "sZeroRecords": 'نأسف لا توجد نتيجة',
                                 "oPaginate": {
-                                        "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
-                                        "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
-                                        "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
-                                        "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
+                                    "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                                    "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                                    "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                                    "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                 }
 
 

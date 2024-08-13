@@ -48,13 +48,25 @@
                                 {{ $vacation->employee ? $vacation->employee->name : 'عامة' }}
                             </td>
                         </tr>
+                        @if ($vacation->country_id)
+                            <tr>
+                                <th scope="row" style="background: #f5f6fa;">اسم الدولة</th>
+                                <td>{{ $vacation->country->country_name_ar }}</td>
+                            </tr>
+                        @endif
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">تاريخ البداية:</th>
-                            <td>{{ $vacation->date_from }}</td>
+                            <td>{{ $vacation->start_date }}</td>
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> تاريخ النهاية:</th>
-                            <td>{{ $vacation->date_to ? $vacation->date_to : $vacation->date_from }}</td>
+                            <td>
+                                <?php echo ExpectedEndDate($vacation)[0]; ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="background: #f5f6fa;"> تاريخ المباشرة:</th>
+                            <td>
+                                <?php echo ExpectedEndDate($vacation)[1]; ?></td>
                         </tr>
                         @if ($vacation->report_image && $vacation->vacation_type_id == 2)
                             <tr>
@@ -98,7 +110,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
-             
+
                 </div>
                 <div class="modal-body text-center">
                     <img id="modalImage" src="#" class="img-fluid" alt="صورة">
