@@ -38,65 +38,6 @@
                 <div class="col-12" dir="rtl">
                     <table class="table table-bordered  table-responsive table-container" border="1" dir="rtl">
                         <?php $count = 1; ?>
-
-                        {{-- @foreach ($Groups as $Group)
-                            <thead>
-                                <tr>
-                                    <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;">العدد</th>
-                                    <th scope="col" rowspan="2" style="background-color: #e4f1ffbd;">
-                                        {{ $Group->name }}</th>
-                                    @foreach ($Group['days_name'] as $day)
-                                        <th scope="col" class="{{ $day }}">{{ $day }}</th>
-                                    @endforeach
-                                </tr>
-                                <tr>
-                                    @foreach ($Group['days_num'] as $num)
-                                        <th scope="col" class="{{ $num }}">{{ $num }}</th>
-                                    @endforeach
-                                </tr>
-
-
-                            </thead>
-                            <tbody>
-                                @foreach ($Group['teams'] as $team)
-                                    <tr class="group-table">
-                                        <td colspan="2" style=" text-align: center"> {{ $team->name }}</td>
-                                        @foreach ($Group['days_num'] as $num)
-                                            <td style=" text-align: center"></td>
-                                        @endforeach
-                                    </tr>
-
-                                    @foreach ($team['inspectors'] as $inspector)
-                                        <tr>
-                                            <td>{{ $count }}</td>
-                                            <td>{{ $inspector->name }}</td>
-                                            @foreach ($inspector['missions'] as $mission)
-                                                @if (!$mission->day_off)
-                                                    <td class="dayoff"></td>
-                                                @endif
-                                                <td>
-                                                    <ul>
-                                                        @if (count($mission['points']) > 0 && !$mission->day_off)
-                                                            @foreach ($mission['points'] as $point)
-                                                                <li>{{ $point->name }}</li>
-                                                            @endforeach
-                                                        @endif
-                                                        @if (count($mission['instant_missions']) > 0 && !$mission->day_off)
-                                                            @foreach ($mission['instant_missions'] as $instant_mission)
-                                         
-                                                                <li class="urgent">{{ $instant_mission->name }}</li>
-                                                            @endforeach
-                                                        @endif
-                                                    </ul>
-                                                </td>
-                                            @endforeach
-                                        </tr>
-                                        <?php //$count++;
-                                        ?>
-                                    @endforeach
-                                @endforeach
-                            </tbody>
-                        @endforeach --}}
                         @foreach ($Groups as $Group)
                             <thead>
                                 <tr>
@@ -116,20 +57,20 @@
                             <tbody>
                                 @foreach ($Group['teams'] as $team)
                                     <tr class="group-table">
-                                        <td colspan="2" style=" text-align: center"> {{ $team->name }}</td>
+                                        <td colspan="2"
+                                            style=" text-align: center;color: white;background-color: darkgreen;">
+                                            {{ $team->name }}</td>
                                         @foreach ($Group['days_num'] as $index => $num)
-                                            {{-- @php
-                                                $color = $team['colors'][$index] ?? null;
-                                            @endphp --}}
-                                            <td style="background-color:{{ $color }}"></td>
+                                            <td style="background-color:{{ $team['colors'][$index] }}"></td>
                                         @endforeach
                                     </tr>
 
                                     @foreach ($team['inspectors'] as $index => $inspector)
                                         <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $inspector->name }}</td>
-                                            @foreach ($inspector['missions'] as $mission)
+                                            <td style="background-color: #a5d0ffbd">{{ $count }}</td>
+                                            <td style="color: white;background-color: darkcyan;">
+                                                {{ $inspector->name }}</td>
+                                            @foreach ($inspector['missions'] as $index2 => $mission)
                                                 @if ($mission)
                                                     @php
                                                         $class = '';
@@ -140,24 +81,29 @@
                                                         }
                                                     @endphp
 
-                                                    <td class="{{ $class }}">
+                                                    <td class="{{ $class }}"
+                                                        style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
                                                         <ul>
                                                             @if (!$mission->day_off && isset($mission['points']) && count($mission['points']) > 0)
                                                                 @foreach ($mission['points'] as $point)
-                                                                    <li>{{ $point->name }}</li>
+                                                                    <li style="color: white;font-weight: bold">
+                                                                        {{ $point->name }}</li>
                                                                 @endforeach
                                                             @endif
+
                                                             @if (!$mission->day_off && isset($mission['instant_missions']) && count($mission['instant_missions']) > 0)
                                                                 @foreach ($mission['instant_missions'] as $instant_mission)
-                                                                    <li class="urgent">{{ $instant_mission->name }}</li>
+                                                                    <li class="urgent">{{ $instant_mission->label }}</li>
                                                                 @endforeach
                                                             @endif
                                                         </ul>
                                                     </td>
-                                                
+                                                @else
+                                                    <td style="background-color: #756262"></td>
                                                 @endif
                                             @endforeach
                                         </tr>
+                                        <?php $count++; ?>
                                     @endforeach
                                 @endforeach
                             </tbody>
