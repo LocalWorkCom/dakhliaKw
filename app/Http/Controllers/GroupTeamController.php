@@ -628,10 +628,10 @@ class GroupTeamController extends Controller
                         if ($WorkingTreeTime) {
                             $colors[] = $WorkingTreeTime->color;
                         } else {
-                            $colors[] = '#b9b5b4';
+                            $colors[] = 'white';
                         }
                     } else {
-                        $colors[] = '#756262';
+                        $colors[] = '#d6d6d6';
                     }
                 }
                 $GroupTeam['colors'] = $colors;
@@ -670,7 +670,7 @@ class GroupTeamController extends Controller
                             }
                         } else {
                             $inspector_mission = null;
-                            $colors[] = '#756262';
+                            $colors[] = '#d6d6d6';
                         }
                         $inspector_missions[] = $inspector_mission;
 
