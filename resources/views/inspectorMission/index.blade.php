@@ -118,7 +118,10 @@
                                     <tr class="group-table">
                                         <td colspan="2" style=" text-align: center"> {{ $team->name }}</td>
                                         @foreach ($Group['days_num'] as $index => $num)
-                                            <td style="background-color:{{ $team['colors'][$index] }}"></td>
+                                            {{-- @php
+                                                $color = $team['colors'][$index] ?? null;
+                                            @endphp --}}
+                                            <td style="background-color:{{ $color }}"></td>
                                         @endforeach
                                     </tr>
 
@@ -127,35 +130,39 @@
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $inspector->name }}</td>
                                             @foreach ($inspector['missions'] as $mission)
-                                                @if ($mission->day_off)
-                                                    <?php $class = 'dayoff'; ?>
-                                                @elseif($mission->vacation_id)
-                                                    <?php $class = 'rest'; ?>
-                                                @else
-                                                    <?php $class = ''; ?>
+                                                @if ($mission)
+                                                    @php
+                                                        $class = '';
+                                                        if ($mission->day_off) {
+                                                            $class = 'dayoff';
+                                                        } elseif ($mission->vacation_id) {
+                                                            $class = 'rest';
+                                                        }
+                                                    @endphp
+
+                                                    <td class="{{ $class }}">
+                                                        <ul>
+                                                            @if (!$mission->day_off && isset($mission['points']) && count($mission['points']) > 0)
+                                                                @foreach ($mission['points'] as $point)
+                                                                    <li>{{ $point->name }}</li>
+                                                                @endforeach
+                                                            @endif
+                                                            @if (!$mission->day_off && isset($mission['instant_missions']) && count($mission['instant_missions']) > 0)
+                                                                @foreach ($mission['instant_missions'] as $instant_mission)
+                                                                    <li class="urgent">{{ $instant_mission->name }}</li>
+                                                                @endforeach
+                                                            @endif
+                                                        </ul>
+                                                    </td>
+                                                
                                                 @endif
-
-                                                <td class="{{ $class }}">
-                                                    <ul>
-                                                        @if (!$mission->day_off && count($mission['points']) > 0)
-                                                            @foreach ($mission['points'] as $point)
-                                                                <li>{{ $point->name }}</li>
-                                                            @endforeach
-                                                        @endif
-                                                        @if (!$mission->day_off && count($mission['instant_missions']) > 0)
-                                                            @foreach ($mission['instant_missions'] as $instant_mission)
-                                                                <li class="urgent">{{ $instant_mission->name }}</li>
-                                                            @endforeach
-                                                        @endif
-
-                                                    </ul>
-                                                </td>
                                             @endforeach
                                         </tr>
                                     @endforeach
                                 @endforeach
                             </tbody>
                         @endforeach
+
                     </table>
 
                 </div>

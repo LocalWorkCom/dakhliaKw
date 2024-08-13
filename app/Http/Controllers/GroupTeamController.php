@@ -568,8 +568,24 @@ class GroupTeamController extends Controller
                 $inspectorIds = explode(',', $inspector_ids);
                 $inspectors = Inspector::whereIn('id', $inspectorIds)->get();
                 $GroupTeam['inspectors'] = $inspectors;
+                $colors = [];
 
+                foreach ($Group['days_num'] as $num) {
+                    $date = $currentDate->copy()->startOfMonth()->addDays($num - 1);
 
+                    $inspector_mission_check = InspectorMission::where('date', $date->toDateString())->where('group_id', $Group->id)->where('group_team_id', $GroupTeam->id)->first();
+                    // dd($inspector_mission_check);
+                    if ($inspector_mission_check) {
+                        $WorkingTreeTime = WorkingTime::find($inspector_mission_check->working_time_id);
+                        if ($WorkingTreeTime) {
+                            $colors[] = $WorkingTreeTime->color;
+                        } else {
+                            $colors[] = '#b9b5b4';
+                        }
+                    }
+                    $GroupTeam['colors'] = $colors;
+
+                }
                 foreach ($GroupTeam['inspectors'] as $inspector) {
                     $inspector_missions = [];
                     $colors = [];
@@ -599,25 +615,13 @@ class GroupTeamController extends Controller
                         }
                         $inspector_missions[] = $inspector_mission;
 
-                        $inspector_mission_check = InspectorMission::where('date', $date->toDateString())->where('group_id', $Group->id)->where('group_team_id', $GroupTeam->id)->first();
-// dd($inspector_mission_check);
-                        if ($inspector_mission_check) {
-                            $WorkingTreeTime = WorkingTime::find($inspector_mission_check->working_time_id);
-                            if ($WorkingTreeTime) {
-                                $colors[] = $WorkingTreeTime->color;
-                            } else {
-                                $colors[] = '#b9b5b4';
-                            }
-                        }
                     }
-                    $GroupTeam['colors'] = $colors;
-                    // dd($colors);
                     $inspector['missions'] = $inspector_missions;
                 }
             }
         }
-        // dd($Groups);
 
+        // dd($Groups);
         return view('inspectorMission.index', compact('Groups'));
     }
 }
