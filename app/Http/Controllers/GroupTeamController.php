@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Validator;
 use App\Console\Commands\inspector_mission;
 use App\Http\Requests\StoreGroupTeamRequest;
 use App\Http\Requests\UpdateGroupTeamRequest;
+use App\Models\Grouppoint;
 use App\Models\Groups;
+use App\Models\instantmission;
 
 class GroupTeamController extends Controller
 {
@@ -539,20 +541,87 @@ class GroupTeamController extends Controller
     public function IspectorMession()
     {
         // $data = [];
-        // $Groups = Groups::all();
-        // foreach ($Groups as $Group) {
+        $Groups = Groups::all();
+        foreach ($Groups as $Group) {
+            $currentDate = Carbon::now();
 
-        //     $GroupTeam = GroupTeam::where('group_id', $Group->id)->get();
-        //     $inspector_ids = $GroupTeam->inspector_ids;
-        //     $inspectorIds = explode(',', $inspector_ids);
-        //     $Group['GroupTeam'] = $GroupTeam;
-        //     foreach ($inspectorIds as $inspector_id) {
-        //         $inspector = Inspector::find($inspector_id);
-        //         $inspectorMission = InspectorMission::where('inspector_id', $inspector_id)->where('group_id', $Group->id)->where('group_team_id', $GroupTeam->id)->get();
-        //         # code...
-        //         // $inspector[];
-        //     }
-        // }
-        return view('inspectorMission.index');
+            $startOfMonth = $currentDate->copy()->startOfMonth();
+            $endOfMonth = $currentDate->copy()->endOfMonth();
+
+            $daysInMonth = [];
+            $daysNum = [];
+            $count = 1;
+            Carbon::setLocale('ar');
+            while ($startOfMonth->lte($endOfMonth)) {
+                $daysInMonth[] = $startOfMonth->translatedFormat('l'); // 'l' gives the full name of the day in Arabic
+                $daysNum[] = $count;
+                $startOfMonth->addDay();
+                $count++;
+            }
+
+            $Group['days_name'] = $daysInMonth;
+            $Group['days_num'] = $daysNum;
+            $GroupTeams = GroupTeam::where('group_id', $Group->id)->get();
+            $Group['teams'] = $GroupTeams;
+            foreach ($Group['teams'] as $GroupTeam) {
+                $inspector_ids = $GroupTeam->inspector_ids;
+                $inspectorIds = explode(',', $inspector_ids);
+                $inspectors = Inspector::whereIn('id', $inspectorIds)->get();
+                $GroupTeam['inspectors'] = $inspectors;
+                $colors = [];
+
+                foreach ($Group['days_num'] as $num) {
+                    $date = $currentDate->copy()->startOfMonth()->addDays($num - 1);
+
+                    $inspector_mission_check = InspectorMission::where('date', $date->toDateString())->where('group_id', $Group->id)->where('group_team_id', $GroupTeam->id)->first();
+                    // dd($inspector_mission_check);
+                    if ($inspector_mission_check) {
+                        $WorkingTreeTime = WorkingTime::find($inspector_mission_check->working_time_id);
+                        if ($WorkingTreeTime) {
+                            $colors[] = $WorkingTreeTime->color;
+                        } else {
+                            $colors[] = '#b9b5b4';
+                        }
+                    }
+                    $GroupTeam['colors'] = $colors;
+
+                }
+                foreach ($GroupTeam['inspectors'] as $inspector) {
+                    $inspector_missions = [];
+                    $colors = [];
+                    foreach ($Group['days_num'] as $num) {
+
+
+                        $date = $currentDate->copy()->startOfMonth()->addDays($num - 1);
+                        $inspector_mission = InspectorMission::where('date', $date->toDateString())->where('inspector_id', $inspector->id)->where('group_id', $Group->id)->where('group_team_id', $GroupTeam->id)->first();
+                        if ($inspector_mission) {
+                            if ($inspector_mission->ids_group_point) {
+                                $points = $inspector_mission->ids_group_point;
+                                $GroupPoints = Grouppoint::whereIn('id', $points)->get();
+                            } else {
+                                $GroupPoints = [];
+                            }
+                            $inspector_mission['points'] = $GroupPoints;
+                            if ($inspector_mission->ids_instant_mission) {
+
+                                $missions = $inspector_mission->ids_instant_mission;
+                                $InstantMissions = instantmission::whereIn('id', $missions)->get();
+                            } else {
+                                $InstantMissions = [];
+                            }
+                            $inspector_mission['instant_missions'] = $InstantMissions;
+                        } else {
+                            $inspector_mission = null;
+                        }
+                        $inspector_missions[] = $inspector_mission;
+
+                    }
+                    $inspector['missions'] = $inspector_missions;
+                }
+            }
+        }
+
+        // dd($Groups);
+        return view('inspectorMission.index', compact('Groups'));
     }
 }

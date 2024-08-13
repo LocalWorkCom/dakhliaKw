@@ -50,7 +50,7 @@
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="sector_id"> اختر القطاع </label>
                         <select name="sector_id" id="sector_id" style="border: 0.2px solid rgb(199, 196, 196);" required>
-                            <option value="">قطاع </option>
+                            <option value="" disabled selected>اختر القطاع </option>
 
                             @foreach (getsectores() as $sector)
                                 <option value="{{ $sector->id }}">{{ $sector->name }} </option>
@@ -64,7 +64,7 @@
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="governorate"> اختر المحافظة </label>
                         <select name="governorate" id="governorate" style="border: 0.2px solid rgb(199, 196, 196);" required>
-                            <option value="">محافظه </option>
+                            <option value="" disabled selected >اختر المحافظه </option>
                         </select>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="region"> اختر المنطقة </label>
                         <select name="region" id="region" style="border: 0.2px solid rgb(199, 196, 196);" required>
-                            <option value="">منطقه </option>
+                            <option value="" disabled selected>اختر المنطقه </option>
                         </select>
                     </div>
                 </div>
@@ -175,7 +175,7 @@
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
-                            $('#governorate').empty().append('<option value="">نقطة</option>');
+                            $('#governorate').empty().append('<option value="" disabled selected>اختر المحافظه </option>');
 
                             // Check if data is an array
                             if (Array.isArray(data)) {
@@ -190,7 +190,7 @@
                                 $('#governorate').prop('disabled', true);
                             }
 
-                            $('#region').empty().append('<option value="">نقطة</option>').prop(
+                            $('#region').empty().append('<option value=""disabled selected>اختر المنطقه </option>').prop(
                                 'disabled', true);
                         },
                         error: function(xhr) {
@@ -198,9 +198,9 @@
                         }
                     });
                 } else {
-                    $('#governorate').empty().append('<option value="">نقطة</option>').prop('disabled',
+                    $('#governorate').empty().append('<option value=""  disabled selected>اختر المحافظه </option>').prop('disabled',
                         true);
-                    $('#region').empty().append('<option value="">نقطة</option>').prop('disabled', true);
+                    $('#region').empty().append('<option value="" disabled selected>اختر المنطقه </option>').prop('disabled', true);
                 }
             });
 
@@ -212,7 +212,7 @@
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
-                            $('#region').empty().append('<option value="">نقطة</option>');
+                            $('#region').empty().append('<option value=""  disabled selected>اختر المنطقه </option>');
 
                             // Check if data is an array
                             if (Array.isArray(data)) {
@@ -232,7 +232,7 @@
                         }
                     });
                 } else {
-                    $('#region').empty().append('<option value="">نقطة</option>').prop('disabled', true);
+                    $('#region').empty().append('<option value="" disabled selected>اختر المنطقه </option>').prop('disabled', true);
                 }
             });
         });

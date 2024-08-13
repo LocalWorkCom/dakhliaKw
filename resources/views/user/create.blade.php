@@ -457,7 +457,12 @@
 </div>
 </section>
 <script>
-    $(document).ready(function() {
+    // $(document).ready(function() {
+      $('.select2').select2({  dir: "rtl"});
+ //});
+     </script>
+<script>
+    // $(document).ready(function() {
     $('#sector').on('change', function() {
         var sector_id = $(this).val();
        
@@ -473,7 +478,9 @@
                     $('#Provinces').append('<option selected> اختار من القائمة </option>');
                     $.each(data, function(key, employee) {               
                         console.log(employee);   
-                        $('#Provinces').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                        $('#Provinces').append('<option value="' + employee.id + '">' + employee.name + '</option>').trigger('change');
+                        $('#Provinces').trigger('change');
+
                     });                 
                 },
                 error: function(xhr, status, error) {
@@ -486,9 +493,9 @@
             $('#region').empty();
         }
     });
-});
+// });
 
-$(document).ready(function() {
+// $(document).ready(function() {
     $('#Provinces').on('change', function() {
         var Provinces_id = $(this).val();
        
@@ -504,6 +511,7 @@ $(document).ready(function() {
                     $.each(data, function(key, employee) {               
                         console.log(employee);   
                         $('#region').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                        $('#region').trigger('change');
                     });                 
                 },
                 error: function(xhr, status, error) {
@@ -515,8 +523,10 @@ $(document).ready(function() {
             $('#region').empty();
         }
     });
-});
+// });
 </script>
+
+
 
 {{-- <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -537,11 +547,7 @@ $(document).ready(function() {
     // In your Javascript (external .js resource or <script> tag)
 
 </script> --}}
-<script>
-   // $(document).ready(function() {
-     $('.select2').select2({  dir: "rtl"});
-//});
-    </script>
+
 <script>
     function togglePasswordVisibility() {
         var passwordInput = document.getElementById('input3');

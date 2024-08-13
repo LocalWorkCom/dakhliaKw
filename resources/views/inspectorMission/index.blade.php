@@ -1,13 +1,8 @@
 @extends('layout.main')
-
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
-</script>
-@section('content')
 @section('title')
     مــهام التــفتــيش
 @endsection
+
 
 @section('content')
     <section>
@@ -36,443 +31,141 @@
             </div>
         </div>
         <br>
-        <div class="container col-12 pb-5 pt-4">
 
 
-            <div class="  col-12 table-responsive table-container" id="days-table">
-                <table class="table table-bordered " id="days-table" dir="rtl" id="days-table">
-                    <table border="1" dir="rtl" style="text-align: center;">
-                        <thead>
-                            <tr>
-                                <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;">العدد</th>
-                                <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;">العدد</th>
-                                <th scope="col" rowspan="2" style="background-color: #e4f1ffbd;">العاصمة+حولي</th>
-                                <th scope="col" class="night">الخميس</th>
-                                <th scope="col" class="morning">الجمعة</th>
-                                <th scope="col" class="morning">السبت</th>
-                                <th scope="col" class="dayoff">الأحد</th>
-                                <th scope="col" class="dayoff">الأثنين</th>
-                                <th scope="col" class="night">الثلاثاء</th>
-                                <th scope="col" class="night">الأربعاء</th>
-                                <th scope="col" class="morning">الخميس</th>
-                                <th scope="col" class="morning">الجمعة</th>
-                                <th scope="col" class="dayoff">السبت</th>
-                                <th scope="col" class="dayoff">الأحد</th>
-                                <th scope="col" class="night">الأثنين</th>
-                                <th scope="col" class="night">الثلاثاء</th>
-                                <th scope="col" class="afternoon">الأربعاء</th>
-                                <th scope="col" class="afternoon">الخميس</th>
-                                <th scope="col" class="night">الجمعة</th>
-                                <th scope="col" class="night">السبت</th>
-                                <th scope="col" class="morning">الأحد</th>
-                                <th scope="col" class="morning">الأثنين</th>
-                                <th scope="col" class="afternoon">الثلاثاء</th>
-                                <th scope="col" class="afternoon">الأربعاء</th>
-                                <th scope="col" class="dayoff">الخميس</th>
-                                <th scope="col" class="dayoff">الجمعة</th>
-                                <th scope="col" class="night">السبت</th>
-                                <th scope="col" class="night">الأحد</th>
-                                <th scope="col" class="morning">الأثنين</th>
-                                <th scope="col" class="morning">الثلاثاء</th>
-                                <th scope="col" class="afternoon">الأربعاء</th>
-                                <th scope="col" class="afternoon">الخميس</th>
-                                <th scope="col" class="night">الجمعة</th>
-                                <th scope="col" class="night">السبت</th>
-                            </tr>
-                            <tr>
-                                <th scope="col" class="night">1</th>
-                                <th scope="col" class="morning">2</th>
-                                <th scope="col" class="morning">3</th>
-                                <th scope="col" class="dayoff">4</th>
-                                <th scope="col" class="dayoff">5</th>
-                                <th scope="col" class="night">6</th>
-                                <th scope="col" class="night">7</th>
-                                <th scope="col" class="morning">8</th>
-                                <th scope="col" class="morning">9</th>
-                                <th scope="col" class="dayoff">10</th>
-                                <th scope="col" class="dayoff">11</th>
-                                <th scope="col" class="night">12</th>
-                                <th scope="col" class="night">13</th>
-                                <th scope="col" class="afternoon">14</th>
-                                <th scope="col" class="afternoon">15</th>
-                                <th scope="col" class="night">16</th>
-                                <th scope="col" class="night">17</th>
-                                <th scope="col" class="morning">18</th>
-                                <th scope="col" class="morning">19</th>
-                                <th scope="col" class="afternoon">20</th>
-                                <th scope="col" class="afternoon">21</th>
-                                <th scope="col" class="dayoff">22</th>
-                                <th scope="col" class="dayoff">23</th>
-                                <th scope="col" class="night">24</th>
-                                <th scope="col" class="night">25</th>
-                                <th scope="col" class="morning">26</th>
-                                <th scope="col" class="morning">27</th>
-                                <th scope="col" class="afternoon">28</th>
-                                <th scope="col" class="afternoon">29</th>
-                                <th scope="col" class="night">30</th>
-                                <th scope="col" class="night">31</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="group-table">
-                                <td colspan="34">نوبة 1</td>
-                            </tr>
+        <div class="row col-12" id="days-table">
+            <div class="container col-12">
+                <div class="col-12" dir="rtl">
+                    <table class="table table-bordered  table-responsive table-container" border="1" dir="rtl">
+                        <?php $count = 1; ?>
 
-                            <tr>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>احمد</td>
-                                <td class="rest">طارئه</td>
-                                <td class="rest">طارئه</td>
-                                <td>عاصمة 2</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>
-                                    <ul>
-                                        <li>حولي 2</li>
-                                        <li>حولي 1</li>
+                        {{-- @foreach ($Groups as $Group)
+                            <thead>
+                                <tr>
+                                    <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;">العدد</th>
+                                    <th scope="col" rowspan="2" style="background-color: #e4f1ffbd;">
+                                        {{ $Group->name }}</th>
+                                    @foreach ($Group['days_name'] as $day)
+                                        <th scope="col" class="{{ $day }}">{{ $day }}</th>
+                                    @endforeach
+                                </tr>
+                                <tr>
+                                    @foreach ($Group['days_num'] as $num)
+                                        <th scope="col" class="{{ $num }}">{{ $num }}</th>
+                                    @endforeach
+                                </tr>
 
-                                    </ul>
-                                </td>
-                                <td>عالصمه 2</td>
-                                <td>حولي</td>
-                                <td></td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 1</td>
-                                <td>1 حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمة</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولي</td>
-                                <td>1حولي</td>
-                            </tr>
 
-                            <tr>
-                                <td>2</td>
-                                <td>2</td>
-                                <td></td>
-                                <td>عاصمه3 مع الياسين</td>
-                                <td>عاصمه33</td>
-                                <td>
-                                    <ul>
-                                        <li>u222</li>
-                                        <li>u222</li>
-                                    </ul>
-                                </td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 2</td>
-                                <td>عالصمه 2</td>
-                                <td>حولي</td>
-                                <td></td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 1</td>
-                                <td>1 حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمة</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولي</td>
-                                <td>1حولي</td>
-                            </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($Group['teams'] as $team)
+                                    <tr class="group-table">
+                                        <td colspan="2" style=" text-align: center"> {{ $team->name }}</td>
+                                        @foreach ($Group['days_num'] as $num)
+                                            <td style=" text-align: center"></td>
+                                        @endforeach
+                                    </tr>
 
-                            <tr>
-                                <td>3</td>
-                                <td>3</td>
-                                <td></td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="dayoff"></td>
-                                <td>حولى 2</td>
-                                <td>عالصمه 2</td>
-                                <td>حولي</td>
-                                <td></td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 1</td>
-                                <td>1 حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمة</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولي</td>
-                                <td>1حولي</td>
-                            </tr>
-                            <tr class="group-table">
-                                <td colspan="34">نوبة 3</td>
-                            </tr>
+                                    @foreach ($team['inspectors'] as $inspector)
+                                        <tr>
+                                            <td>{{ $count }}</td>
+                                            <td>{{ $inspector->name }}</td>
+                                            @foreach ($inspector['missions'] as $mission)
+                                                @if (!$mission->day_off)
+                                                    <td class="dayoff"></td>
+                                                @endif
+                                                <td>
+                                                    <ul>
+                                                        @if (count($mission['points']) > 0 && !$mission->day_off)
+                                                            @foreach ($mission['points'] as $point)
+                                                                <li>{{ $point->name }}</li>
+                                                            @endforeach
+                                                        @endif
+                                                        @if (count($mission['instant_missions']) > 0 && !$mission->day_off)
+                                                            @foreach ($mission['instant_missions'] as $instant_mission)
+                                         
+                                                                <li class="urgent">{{ $instant_mission->name }}</li>
+                                                            @endforeach
+                                                        @endif
+                                                    </ul>
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                        <?php //$count++;
+                                        ?>
+                                    @endforeach
+                                @endforeach
+                            </tbody>
+                        @endforeach --}}
+                        @foreach ($Groups as $Group)
+                            <thead>
+                                <tr>
+                                    <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;">العدد</th>
+                                    <th scope="col" rowspan="2" style="background-color: #e4f1ffbd;">
+                                        {{ $Group->name }}</th>
+                                    @foreach ($Group['days_name'] as $day)
+                                        <th scope="col" class="{{ $day }}">{{ $day }}</th>
+                                    @endforeach
+                                </tr>
+                                <tr>
+                                    @foreach ($Group['days_num'] as $num)
+                                        <th scope="col" class="{{ $num }}">{{ $num }}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($Group['teams'] as $team)
+                                    <tr class="group-table">
+                                        <td colspan="2" style=" text-align: center"> {{ $team->name }}</td>
+                                        @foreach ($Group['days_num'] as $index => $num)
+                                            {{-- @php
+                                                $color = $team['colors'][$index] ?? null;
+                                            @endphp --}}
+                                            <td style="background-color:{{ $color }}"></td>
+                                        @endforeach
+                                    </tr>
 
-                            <tr>
-                                <td>1</td>
-                                <td>1</td>
-                                <td> محمدد</td>
-                                <td class="rest">طارئه</td>
-                                <td class="rest">طارئه</td>
-                                <td>عاصمة 2</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 2</td>
-                                <td>عالصمه 2</td>
-                                <td>حولي</td>
-                                <td></td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 1</td>
-                                <td>1 حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمة</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولي</td>
-                                <td>1حولي</td>
-                            </tr>
+                                    @foreach ($team['inspectors'] as $index => $inspector)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $inspector->name }}</td>
+                                            @foreach ($inspector['missions'] as $mission)
+                                                @if ($mission)
+                                                    @php
+                                                        $class = '';
+                                                        if ($mission->day_off) {
+                                                            $class = 'dayoff';
+                                                        } elseif ($mission->vacation_id) {
+                                                            $class = 'rest';
+                                                        }
+                                                    @endphp
 
-                            <tr>
-                                <td>2</td>
-                                <td>2</td>
-                                <td></td>
-                                <td>عاصمه3 مع الياسين</td>
-                                <td>عاصمه33</td>
-                                <td>عاصمة 2</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 2</td>
-                                <td>عالصمه 2</td>
-                                <td>حولي</td>
-                                <td></td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 1</td>
-                                <td>1 حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمة</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولي</td>
-                                <td>1حولي</td>
-                            </tr>
-
-                            <tr>
-                                <td>3</td>
-                                <td>3</td>
-                                <td></td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="dayoff"></td>
-                                <td>حولى 2</td>
-                                <td>عالصمه 2</td>
-                                <td>حولي</td>
-                                <td></td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 1</td>
-                                <td>1 حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمة</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولي</td>
-                                <td>1حولي</td>
-                            </tr>
-
-                            <tr class="group-table">
-                                <td colspan="34">نوبة 2</td>
-                            </tr>
-
-                            <tr>
-                                <td>1</td>
-                                <td>1</td>
-                                <td></td>
-                                <td class="rest">طارئه</td>
-                                <td class="rest">طارئه</td>
-                                <td>عاصمة 2</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 2</td>
-                                <td>عالصمه 2</td>
-                                <td>حولي</td>
-                                <td></td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 1</td>
-                                <td>1 حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمة</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولي</td>
-                                <td>1حولي</td>
-                            </tr>
-
-                            <tr>
-                                <td>2</td>
-                                <td>2</td>
-                                <td></td>
-                                <td>عاصمه3 مع الياسين</td>
-                                <td>عاصمه33</td>
-                                <td>عاصمة 2</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 2</td>
-                                <td>عالصمه 2</td>
-                                <td>حولي</td>
-                                <td></td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 1</td>
-                                <td>1 حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمة</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولي</td>
-                                <td>1حولي</td>
-                            </tr>
-
-                            <tr>
-                                <td>3</td>
-                                <td>3</td>
-                                <td></td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="rest emergency-text"> مباشرة عمل</td>
-                                <td class="dayoff"></td>
-                                <td>حولى 2</td>
-                                <td>عالصمه 2</td>
-                                <td>حولي</td>
-                                <td></td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>حولى 1</td>
-                                <td>1 حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمة</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td class="dayoff"></td>
-                                <td class="dayoff"></td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولى</td>
-                                <td>حولى</td>
-                                <td>عاصمه</td>
-                                <td>عاصمه</td>
-                                <td>حولي</td>
-                                <td>1حولي</td>
-                            </tr>
-                        </tbody>
-
+                                                    <td class="{{ $class }}">
+                                                        <ul>
+                                                            @if (!$mission->day_off && isset($mission['points']) && count($mission['points']) > 0)
+                                                                @foreach ($mission['points'] as $point)
+                                                                    <li>{{ $point->name }}</li>
+                                                                @endforeach
+                                                            @endif
+                                                            @if (!$mission->day_off && isset($mission['instant_missions']) && count($mission['instant_missions']) > 0)
+                                                                @foreach ($mission['instant_missions'] as $instant_mission)
+                                                                    <li class="urgent">{{ $instant_mission->name }}</li>
+                                                                @endforeach
+                                                            @endif
+                                                        </ul>
+                                                    </td>
+                                                
+                                                @endif
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                @endforeach
+                            </tbody>
+                        @endforeach
 
                     </table>
 
+                </div>
             </div>
         </div>
     </section>

@@ -24,4 +24,5 @@ class Grouppoint extends Model
     {
         return $this->belongsTo(Government::class, 'government_id', 'id');
     }
+   
 }

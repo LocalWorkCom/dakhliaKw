@@ -2,7 +2,7 @@
 
 
 @section('content')
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 <style>
     .file-preview {
         display: flex;
@@ -141,11 +141,11 @@
                             <div class="form-group col-md-10">
                                 <label for="images">اختر الملفات</label>
                                 <div class="form-group file-input-container">
-                                    <input type="file" name="images[]" id="images" class="form-control" multiple>
+                                    <input type="file" name="images[]" id="images" class="form-control" dir="rtl" multiple>
                                     <!-- <span id="file-count1"></span> -->
                                     <span id="file-count"></span>
                                 </div>
-                                <div class="file-preview1" id="file-preview1"></div>
+                                <div class="file-preview1" id="file-preview1" dir="rtl"></div>
                                 <!-- Display existing attachments -->
                                 <div class="file-preview" id="file-preview">
                                     @foreach (explode(',', $IM->attachment) as $attachment)
