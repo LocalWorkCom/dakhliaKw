@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Grouppoint;
 use Illuminate\Http\Request;
 use App\Models\InspectorMission;
+use Illuminate\Support\Facades\Auth;
 
 class InspectorMissionController extends Controller
 {
@@ -15,7 +16,14 @@ class InspectorMissionController extends Controller
         // Retrieve the missions for the specific inspector
         // $missions = InspectorMission::whereDate('date', $today)->where('inspector_id', $inspectorId)->get();
 
-        $missions = InspectorMission::whereDate('date', $today)->where('inspector_id', $inspectorId)->with('workingTime', 'groupPoints.government')->get();
+         // Retrieve the currently authenticated user
+         $inspectorId = Auth::id();
+
+         // Retrieve the missions for the specific inspector
+         $missions = InspectorMission::whereDate('date', $today)
+             ->where('inspector_id', $inspectorId)
+             ->with('workingTime', 'groupPoints.government')
+             ->get();
 
         $missionCount = $missions->count();
         
@@ -47,7 +55,11 @@ class InspectorMissionController extends Controller
 
     foreach ($missions as $mission) {
         $idsGroupPoint = is_array($mission->ids_group_point) ? $mission->ids_group_point : explode(',', $mission->ids_group_point);
-        // dd($idsGroupPoint);
+
+          // Count the number of group points
+          $groupPointCount = count($idsGroupPoint);
+          
+        // dd($groupPointCount);
         $groupPointsData = [];
 
         foreach ($idsGroupPoint as $groupId) {
@@ -77,7 +89,7 @@ class InspectorMissionController extends Controller
         $missionData[] = [
             'mission_id' => $mission->id,
             'التاريخ' => $mission->date,
-            'عدد المهام' =>  $missionCount ,
+            'عدد المهام' =>  $groupPointCount ,
             'المهام' => $groupPointsData,
         ];
     }
