@@ -126,6 +126,18 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="inspectors">المفتش</label>
+                            <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش">
+                                <option selected disabled>اختار من القائمة</option>
+                                @foreach ($inspectors as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ old('inspectors') == $item->id ? 'selected' : '' }}> {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         
                         <div class="form-group col-md-10 mx-md-2">
                             <label for="description">الوصف </label>
@@ -230,6 +242,38 @@
         }
     });
 });
+
+$(document).ready(function() {
+    $('#group_team_id').on('change', function() {
+        var group_team_id = $(this).val();
+        var group_id = $('#group_id').val();
+        console.log(group_team_id);
+       
+
+        if (group_id) {
+            $.ajax({
+                url: '/getInspector/' + group_team_id +'/'+  group_id ,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#inspectors').empty();
+                    $('#inspectors').append('<option selected disabled> اختار من القائمة </option>');
+                    $.each(data, function(key, employee) {               
+                        // console.log(employee);   
+                        $('#inspectors').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                    });                 
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#inspectors').empty();
+        }
+    });
+});
+
 </script>
 
 

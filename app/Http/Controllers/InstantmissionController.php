@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Groups;
 use App\Models\GroupTeam;
+use App\Models\Inspector;
 use Illuminate\Http\Request;
 use App\Events\MissionCreated;
 use App\Models\instantmission;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreinstantmissionRequest;
 use App\Http\Requests\UpdateinstantmissionRequest;
@@ -55,7 +57,8 @@ class InstantmissionController extends Controller
     {
         $groups = Groups::all();
         $groupTeams = GroupTeam::all();
-        return view('instantMissions.create', compact('groups', 'groupTeams'));
+        $inspectors = Inspector::all();
+        return view('instantMissions.create', compact('groups', 'groupTeams','inspectors'));
     }
     // getGroups
     public function getGroups($id)
@@ -63,6 +66,21 @@ class InstantmissionController extends Controller
         // $groups = Groups::all();
         $groupTeams = GroupTeam::where('group_id', $id)->get();
         return response()->json($groupTeams);
+        // return view('instantMissions.create',compact('groups','groupTeams'));
+    }
+    public function getInspector($team_id,$group_id)
+    {
+        // $groups = Groups::all();
+        $team = GroupTeam::where('group_id', $group_id)->where('id', $team_id)->first();
+        $inspectorIds = explode(',', $team->inspector_ids);
+
+        // Retrieve the inspectors based on the ids
+        $inspectors = Inspector::whereIn('id', $inspectorIds)->get();
+
+        // dd($team);
+        // $inspectors = Inspector::whereIn('id',$team->inspector_ids)->get();
+        
+        return response()->json($inspectors);
         // return view('instantMissions.create',compact('groups','groupTeams'));
     }
     /**
@@ -94,6 +112,7 @@ class InstantmissionController extends Controller
         $new->location = $request->location;
         $new->group_id = $request->group_id;
         $new->group_team_id = $request->group_team_id;
+        $new->inspector_id = $request->inspectors;
         $new->description = $request->description;
         $new->save();
 
@@ -107,8 +126,8 @@ class InstantmissionController extends Controller
 
         }
         // ;
-
-        $results = event(new MissionCreated($new));
+        $results = Event::dispatch(new MissionCreated($new));
+        // $results = event(new MissionCreated($new));
 // dd($results);
         if (!empty($results) && in_array(true, $results, true)) {
             return redirect()->route('instant_mission.index')->with('message', "تمت اضافة المهمة بنجاح");
