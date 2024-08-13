@@ -76,14 +76,17 @@ class ViolationController  extends Controller
             if ($validatedData->fails()) {
                 return $this->respondError('Validation Error.', $validatedData->errors(), 400);
             }
-
+             
+            $idsArray = array_map('intval', explode(',', $request->violation_type));
+            $cleanedString = implode(",", $idsArray);
+                
             $new = new Violation();
             $new->name = $request->name;
             $new->military_number = $request->military_number;
             $new->Civil_number = $request->Civil_number;
             $new->grade = $request->grade;
             // $new->image = $request->image;
-            $new->violation_type = json_encode($request->violation_type);
+            $new->violation_type = $cleanedString;
             // $new->user_id = auth()->user()->id;
             $new->user_id = 1;
             $new->save();

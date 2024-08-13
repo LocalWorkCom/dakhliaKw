@@ -132,10 +132,11 @@
                     // permissiondelete = permissiondelete.replace(':id', row.id);
                     return `
                         <a href="` + show + `"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i>عرض  </a>
-                        <a href="` + edit + `" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> تعديل </a>
+                    
                        `;
                 }
 
+                // <a href="` + edit + `" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> تعديل </a>
             }],
             "oLanguage": {
                 "sSearch": "",

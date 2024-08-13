@@ -120,6 +120,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/instant_mission/update/{id}', [InstantmissionController::class, 'update'])->name('instant_mission.update');
     Route::any('/instant_mission/store', [InstantmissionController::class, 'store'])->name('instant_mission.store');
     Route::any('/getGroups/{id}', [InstantmissionController::class, 'getGroups'])->name('instant_mission.getGroups');
+    Route::any('/getInspector/{team_id}/{group_id}', [InstantmissionController::class, 'getInspector'])->name('instant_mission.getInspector');
 
     //groups
     // Route::resource('groups', GroupsController::class);
