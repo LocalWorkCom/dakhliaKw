@@ -15,18 +15,23 @@ use App\Http\Controllers\InspectorMissionController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 Route::post('/login', 'App\Http\Controllers\Api\UserController@login');
 Route::post('/resetpassword', 'App\Http\Controllers\Api\UserController@reset_password');
 
+/* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+}); */
+
+Route::group(['middleware' => 'auth:api'], function () {
+   Route::get('/user', function (Request $request) {
+       echo "hello user";
+    });
 Route::post('/check_military_number', 'App\Http\Controllers\Api\UserController@check_military_number');
 Route::any('/Violation_type/{id}', 'App\Http\Controllers\Api\ViolationController@get_Violation_type');
 Route::post('/add_Violation', 'App\Http\Controllers\Api\ViolationController@add_Violation');
 
-
+ 
 Route::get('/inspector/{inspectorId}/missions', [InspectorMissionController::class, 'getMissionsByInspector']);
+});
 
 

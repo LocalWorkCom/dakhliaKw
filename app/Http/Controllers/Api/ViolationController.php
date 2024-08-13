@@ -16,7 +16,7 @@ class ViolationController  extends Controller
 {
     //
 
-
+   
     public function get_Violation_type($type)
     {
         $allViolationType = ViolationTypes::whereJsonContains('type_id', $type)->get();
