@@ -142,7 +142,7 @@
                                     <a href="{{ route('inspector.mission') }}">الجدول العام</a>
                                 </li>
                                 <li>
-                                    <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo"
+                                    <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
                                         style="margin-left: 7px;">
                                     <a href="{{ route('vacations.list') }}">الاجازات</a>
 
