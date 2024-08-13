@@ -76,62 +76,67 @@
                             <th scope="row" style="background: #f5f6fa;"> عدد الكتب </th>
                             <td>{{ $iotelegram->files_num }}</td>
                         </tr>
-                        <tr>
-                            <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
-                            <td>
-                                <?php $count = 0; ?>
-                                <div class="row">
-                                    <div class="col-md-11 mb-3 px-5 mt-2 d-flex">
-                                        @foreach ($iotelegram->ioFiles as $file)
-                                            @if ($file->file_type == 'image')
-                                                <div class="pb-4 mx-2">
+                        @if (Auth::user()->hasPermission('view Io_file'))
+                            <tr>
+                                <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
+                                <td>
+                                    <?php $count = 0; ?>
+                                    <div class="row">
+                                        <div class="col-md-11 mb-3 px-5 mt-2 d-flex">
+                                            @foreach ($iotelegram->ioFiles as $file)
+                                                @if ($file->file_type == 'image')
+                                                    <div class="pb-4 mx-2">
 
-                                                    <a href="#" class="image-popup" data-toggle="modal"
-                                                        data-target="#imageModal"
-                                                        data-image="{{ asset($file->file_name) }}"
-                                                        data-title="{{ $file->file_name }}">
-                                                        <img src="{{ asset($file->file_name) }}" class="img-thumbnail mx-2"
-                                                            alt="{{ $file->file_name }}">
-                                                        <br> <br>
+                                                        <a href="#" class="image-popup" data-toggle="modal"
+                                                            data-target="#imageModal"
+                                                            data-image="{{ asset($file->file_name) }}"
+                                                            data-title="{{ $file->file_name }}">
+                                                            <img src="{{ asset($file->file_name) }}"
+                                                                class="img-thumbnail mx-2" alt="{{ $file->file_name }}">
+                                                            <br> <br>
+                                                            @if (Auth::user()->hasPermission('download Io_file'))
+                                                                <a id="downloadButton"
+                                                                    href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
+                                                                    class="btn-download"><i class="fa fa-download"
+                                                                        style="color:green;"></i>
+                                                                    تحميل الملف
+                                                                </a>
+                                                            @endif
+                                                        </a>
+                                                    </div>
+                                                    <?php $count++; ?>
+                                                @endif
+                                            @endforeach
+                                            @if ($count == 0)
+                                                _______________
+                                            @endif
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="background: #f5f6fa;"> الملفات المرفقة الاخري </th>
+                                <td>
+                                    <ul class="list-group">
+                                        @foreach ($iotelegram->ioFiles as $file)
+                                            @if ($file->file_type == 'pdf')
+                                                <div class="col-md-11 mb-3 px-5 mt-3">
+                                                    @if (Auth::user()->hasPermission('download Io_file'))
                                                         <a id="downloadButton"
                                                             href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
-                                                            class="btn-download"><i class="fa fa-download"
-                                                                style="color:green;"></i>
-                                                            تحميل الملف
-                                                        </a>
+                                                            target="_blank" class="btn-download">
+                                                            <i class="fa fa-download" style="color:green; "> </i>
+                                                            {{ basename($file->real_name) }}</a>
+                                                    @endif
 
-                                                    </a>
                                                 </div>
-                                                <?php $count++; ?>
                                             @endif
                                         @endforeach
-                                        @if ($count == 0)
-                                            _______________
-                                        @endif
-
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="background: #f5f6fa;"> الملفات المرفقة الاخري </th>
-                            <td>
-                                <ul class="list-group">
-                                    @foreach ($iotelegram->ioFiles as $file)
-                                        @if ($file->file_type == 'pdf')
-                                            <div class="col-md-11 mb-3 px-5 mt-3">
-                                                <a id="downloadButton"
-                                                    href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
-                                                    target="_blank" class="btn-download">
-                                                    <i class="fa fa-download" style="color:green; "> </i>
-                                                    {{ basename($file->real_name) }}</a>
-
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </ul>
-                            </td>
-                        </tr>
+                                    </ul>
+                                </td>
+                            </tr>
+                        @endif
 
 
 

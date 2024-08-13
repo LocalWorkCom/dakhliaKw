@@ -14,4 +14,17 @@ class Government extends Model
     protected $fillable = [
         'name'
     ];
+    public function region()
+    {
+        return $this->hasMany(outgoings::class);
+
+    }
+    public function points()
+    {
+        return $this->hasMany(Point::class);
+    }
+    public function groupPoints()
+    {
+        return $this->belongsTo(Grouppoint::class);
+    }
 }

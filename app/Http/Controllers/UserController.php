@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Government;
 use Carbon\Carbon;
 use App\Models\job;
 use App\Models\Rule;
@@ -12,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\departements;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Rules\UniqueNumberInUser;
 use App\DataTables\UsersDataTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -22,8 +24,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Console\View\Components\Alert;
 use Illuminate\Validation\Rule as ValidationRule;
 use App\helper; // Adjust this namespace as per your helper file location
-
-
+use App\Models\Qualification;
+use App\Models\Region;
+use App\Models\Sector;
 
 class UserController extends Controller
 {
@@ -42,44 +45,69 @@ class UserController extends Controller
     public function index($id)
     {
         // if()
-           return view('user.view', compact('id'));
+        return view('user.view', compact('id'));
     }
 
     public function getUsers($id)
     {
 
-        // $flagType = $id == 0 ? 'user' : 'employee';
-        // $perentdepartment = departements::find(Auth()->user()->department_id)->first();
-        // if($perentdepartment->parent_id == Null)
-        // {
-        //     $subdepart =  departements::where('parent_id',$perentdepartment->id)->pluck('id')->toArray();
-        //     $data = User::where('flag', $flagType)->whereIn('department_id' ,$subdepart)->orwhere('department_id' ,$perentdepartment->id)->get();
-        // }
-        // else
-        // {
-        //     $data = User::where('flag', $flagType)->where('department_id' ,$perentdepartment->id)->get();
-        // }
-       
+
+
         $flagType = $id == 0 ? 'user' : 'employee';
         $parentDepartment = Departements::find(Auth()->user()->department_id);
-        
-        if (Auth()->user()->rule_id == 2) {
+
+        // dd(Auth::user()->rule->name);
+        if (Auth::user()->rule->name == "localworkadmin") {
+
             $data = User::where('flag', $flagType)->get();
+            // dd($data);
+        } elseif (Auth::user()->rule->name == "superadmin") {
+            if ($flagType == 'employee') {
+                $data = User::where('flag', $flagType)->get();
+            } else {
+                $data = User::where('flag', $flagType)
+                    ->whereHas('rule', function ($query) {
+                        $query->where('hidden', false);
+                    })->get();
+            }
         } else {
             if (is_null($parentDepartment->parent_id)) {
                 $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();
-                $data = User::where('flag', $flagType)
-                    ->where(function ($query) use ($subdepart, $parentDepartment) {
-                        $query->whereIn('department_id', $subdepart)
-                              ->orWhere('department_id', $parentDepartment->id);
-                    })
-                    // ->whereIn('department_id', $subdepart)
-                    // ->orWhere('department_id', $parentDepartment->id)
-                    ->get();
+
+                if ($flagType == 'employee') {
+                    $data = User::where('flag', $flagType)
+                        ->where(function ($query) use ($subdepart, $parentDepartment) {
+                            $query->whereIn('department_id', $subdepart)
+                                ->orWhere('department_id', $parentDepartment->id);
+                        })
+                        // ->whereIn('department_id', $subdepart)
+                        // ->orWhere('department_id', $parentDepartment->id)
+                        ->get();
+                } else {
+                    $data = User::where('flag', $flagType)
+                        ->where(function ($query) use ($subdepart, $parentDepartment) {
+                            $query->whereIn('department_id', $subdepart)
+                                ->orWhere('department_id', $parentDepartment->id);
+                        })->whereHas('rule', function ($query) {
+                            $query->where('hidden', false);
+                        })
+                        // ->whereIn('department_id', $subdepart)
+                        // ->orWhere('department_id', $parentDepartment->id)
+                        ->get();
+                }
             } else {
-                $data = User::where('flag', $flagType)
-                    ->where('department_id', $parentDepartment->id)
-                    ->get();
+                if ($flagType == 'employee') {
+                    $data = User::where('flag', $flagType)
+                        ->where('department_id', $parentDepartment->id)
+                        ->get();
+                } else {
+                    $data = User::where('flag', $flagType)
+                        ->where('department_id', $parentDepartment->id)
+                        ->whereHas('rule', function ($query) {
+                            $query->where('hidden', false);
+                        })
+                        ->get();
+                }
             }
         }
 
@@ -87,8 +115,7 @@ class UserController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 
-            return '<button class="btn btn-primary btn-sm">Edit</button>
-              <a href="" class="btn btn-primary btn-sm">vacations</a>';
+            return $row;
         })
             ->addColumn('department', function ($row) { // New column for departments count
 
@@ -99,68 +126,147 @@ class UserController extends Controller
             ->make(true);
     }
 
+    // public function login(Request $request)
+    // {
+    //     $messages = [
+    //         'military_number.required' => 'رقم العسكري مطلوب.',
+    //         'password.required' => 'كلمة المرور مطلوبة.',
+    //     ];
+
+    //     $validatedData = Validator::make($request->all(), [
+    //         'military_number' => 'required|string',
+    //         'password' => 'required|string',
+    //     ], $messages);
+
+    //     if ($validatedData->fails()) {
+    //         return back()->withErrors($validatedData)->withInput();
+    //     }
+
+    //     $military_number = $request->military_number;
+    //     $password = $request->password;
+
+    //     // Check if the user exists
+    //     $user = User::where('military_number', $military_number)->first();
+
+    //     if (!$user) {
+    //         return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
+    //     }
+
+    //     // Check if the user has the correct flag
+    //     if ($user->flag !== 'user') {
+    //         return back()->with('error', 'لا يسمح لك بدخول الهيئة');
+    //     }
+
+    //     $credentials = $request->only('military_number', 'password');
+
+    //     // Check if the user has logged in within the last two hours
+    //     $twoHoursAgo = now()->subHours(6);
+
+    //     if (Auth::attempt($credentials)) {
+    //         // If the user has logged in within the last two hours, do not set the code
+    //         if ($user->updated_at >= $twoHoursAgo) {
+
+    //             $firstlogin = 0;
+    //             if ($user->token == null) {
+    //                 $firstlogin = 1;
+    //                             $set = '123456789';
+    //         $code = substr(str_shuffle($set), 0, 4);
+
+    //         $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+
+    //         $response = send_sms_code($msg, $user->phone, $user->country_code);
+    //         $result = json_decode($response, true);
+
+    //         if (isset($result['sent']) && $result['sent'] === 'true') {
+    //             return view('verfication_code', compact('code', 'military_number', 'password'));
+    //         } else {
+    //             return back()->with('error', 'سجل الدخول مرة أخرى');
+    //         }
+    //                // return view('resetpassword', compact('military_number', 'firstlogin'));
+    //             }
+
+    //             Auth::login($user); // Log the user in
+    //             return redirect()->route('home');
+    //         }
+
+    //         $set = '123456789';
+    //         $code = substr(str_shuffle($set), 0, 4);
+
+    //         $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+
+    //         $response = send_sms_code($msg, $user->phone, $user->country_code);
+    //         $result = json_decode($response, true);
+
+    //         if (isset($result['sent']) && $result['sent'] === 'true') {
+    //             return view('verfication_code', compact('code', 'military_number', 'password'));
+    //         } else {
+    //             return back()->with('error', 'سجل الدخول مرة أخرى');
+    //         }
+    //     }
+
+    //     return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
+    // }
     public function login(Request $request)
-{
-    $messages = [
-        'military_number.required' => 'رقم العسكري مطلوب.',
-        'password.required' => 'كلمة المرور مطلوبة.',
-    ];
+    {
+        $messages = [
+            'military_number.required' => 'رقم العسكري مطلوب.',
+            'password.required' => 'كلمة المرور مطلوبة.',
+        ];
 
-    $validatedData = Validator::make($request->all(), [
-        'military_number' => 'required|string',
-        'password' => 'required|string',
-    ], $messages);
+        $validatedData = $request->validate([
+            'military_number' => 'required|string',
+            'password' => 'required|string',
+        ], $messages);
 
-    if ($validatedData->fails()) {
-        return back()->withErrors($validatedData)->withInput();
-    }
+        $military_number = $request->military_number;
+        $password = $request->password;
 
-    $military_number = $request->military_number;
-    $password = $request->password;
+        // Check if the user exists
+        $user = User::where('military_number', $military_number)->first();
+        if (!$user) {
+            return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا')->withInput();
+        }
 
-    // Check if the user exists
-    $user = User::where('military_number', $military_number)->first();
+        // Check if the user has the correct flag
+        if ($user->flag !== 'user') {
+            return back()->with('error', 'لا يسمح لك بدخول الهيئة')->withInput();
+        }
 
-    if (!$user) {
-        return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
-    }
+        $credentials = $request->only('military_number', 'password');
+        $twoHoursAgo = now()->subHours(6);
 
-    // Check if the user has the correct flag
-    if ($user->flag !== 'user') {
-        return back()->with('error', 'لا يسمح لك بدخول الهيئة');
-    }
+        if (Auth::attempt($credentials)) {
+            // to not send code
+            if ($user->token == 'logined') {
+                Auth::login($user); // Log the user in
+                return redirect()->route('home');
+            }
+            //end code
+            if ($user->updated_at >= $twoHoursAgo) {
+                if ($user->token == null) {
+                    $firstlogin = 1;
 
-    $credentials = $request->only('military_number', 'password');
+                    $set = '123456789';
+                    $code = substr(str_shuffle($set), 0, 4);
 
-    // Check if the user has logged in within the last two hours
-    $twoHoursAgo = now()->subHours(2);
+                    $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+                    $response = send_sms_code($msg, $user->phone, $user->country_code);
+                    $result = json_decode($response, true);
 
-    if (Auth::attempt($credentials)) {
-        // If the user has logged in within the last two hours, do not set the code
-        if ($user->updated_at >= $twoHoursAgo) {
+                    if (isset($result['sent']) && $result['sent'] === 'true') {
+                        return view('verfication_code', compact('code', 'military_number', 'password'));
+                    } else {
+                        return back()->with('error', 'سجل الدخول مرة أخرى')->withInput();
+                    }
+                }
+            }
+
             Auth::login($user); // Log the user in
             return redirect()->route('home');
         }
 
-        $set = '123456789';
-        $code = substr(str_shuffle($set), 0, 4);
-
-        $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
-
-        $response = send_sms_code($msg, $user->phone, $user->country_code);
-        $result = json_decode($response, true);
-
-        if (isset($result['sent']) && $result['sent'] === 'true') {
-            return view('verfication_code', compact('code', 'military_number', 'password'));
-        } else {
-            return back()->with('error', 'سجل الدخول مرة أخرى');
-        }
+        return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا')->withInput();
     }
-
-    return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
-}
-
-
 
     public function resend_code(Request $request)
     {
@@ -230,7 +336,6 @@ class UserController extends Controller
                 if (url()->previous() == route('forget_password2') || url()->previous() == route('resend_code') || url()->previous() == route('verfication_code')) {
                     return view('resetpassword', compact('military_number', 'firstlogin'));
                 } else {
-                    Auth::login($user); // Log the user in
                     return redirect()->route('home');
                 }
             }
@@ -329,9 +434,8 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
         Auth::login($user); // Log the user in
-        session()->flash('success', 'تم إعادة تعيين كلمة المرور بنجاح');
 
-        return redirect()->route('home');
+        return redirect()->route('home')->with('success', 'تم إعادة تعيين كلمة المرور بنجاح');
         // return redirect()->route('home')->with('user', auth()->user());
 
     }
@@ -357,6 +461,10 @@ class UserController extends Controller
         $flag = $id;
         $grade = grade::all();
         $job = job::all();
+        $govermnent = Government::all();
+        $area = Region::all();
+        $sector = Sector::all();
+        $qualifications = Qualification::all();
         // dd($user->department_id);
         if ($flag == "0") {
             $alldepartment = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
@@ -364,15 +472,20 @@ class UserController extends Controller
             $alldepartment = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
         }
 
+        if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
+            $alluser = User::where('flag', 'employee')->get();
+        } else {
+            $alluser = User::where('flag', 'employee')->where('department_id', $user->department_id)->get();
+        }
         // $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
-        $alluser = User::where('flag', 'employee')->get();
+
         // $speificUsers = User::where('department_id',$user->department_id)->where('flag','employee')->get();
         // $permission_ids = explode(',', $rule_permisssion->permission_ids);
         // $allPermission = Permission::whereIn('id', $permission_ids)->get();
         // dd($allPermission);
         // $alldepartment = $user->createdDepartments;
         // return view('role.create',compact('allPermission','alldepartment'));
-        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade', 'job', 'alluser'));
+        return view('user.create', compact('alldepartment', 'rule', 'flag', 'grade', 'job', 'alluser', 'govermnent', 'area', 'sector' ,'qualifications'));
     }
 
     public function unsigned($id)
@@ -435,22 +548,24 @@ class UserController extends Controller
             $rules = [
                 'phone' => [
                     'required',
-                    'max:6',
+                    'max:8',
                     ValidationRule::unique('users', 'phone'),
                 ],
                 'name' => 'required|string',
                 // 'department_id' => 'required',
                 'Civil_number' => [
+                    'max:12',
                     ValidationRule::unique('users', 'Civil_number'),
                 ],
                 'file_number' => [
                     ValidationRule::unique('users', 'file_number'),
                 ],
                 'military_number' => [
-                    ValidationRule::unique('users', 'military_number'),
+                    'nullable',
                 ],
             ];
-            if ($request->has('solderORcivil') && $request->solderORcivil == "solder") {
+            if ($request->has('solderORcivil') && $request->solderORcivil == "military") {
+                // dd("dd");
                 if ($request->has('military_number')) {
                     $rules['military_number'] = [
                         'required',
@@ -568,15 +683,20 @@ class UserController extends Controller
         $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
         $job = job::all();
+        $govermnent = Government::all();
+        $area = Region::all();
+        $sector = Sector::all();
+        $qualifications = Qualification::all();
         // dd($user);
-        if ($user->flag == "user") {
-            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
-        } else {
-            $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
-        }
+        // if ($user->flag == "user") {
+        //     $department = departements::where('id', $user->department_id)->get();
+        // } else {
+        //     $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
+        // }
         // $department = departements::all();
+        $department = departements::where('id', $user->department_id)->first();
         $hisdepartment = $user->createdDepartments;
-        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job'));
+        return view('user.show', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job','sector','area','govermnent','qualifications'));
     }
 
     /**
@@ -591,17 +711,24 @@ class UserController extends Controller
         $joining_date = Carbon::parse($user->joining_date);
         $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
         $end_of_service = $end_of_serviceUnit->format('Y-m-d');
-
         $job = job::all();
+        $govermnent = Government::all();
+        $area = Region::all();
+        $sector = Sector::all();
+        $qualifications = Qualification::all();
         // dd($user);
-        if ($user->flag == "user") {
-            $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+        if ($user->department_id == "NULL") {
+            $department = departements::all();
         } else {
-            $department = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
+            if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
+                $department = departements::all();
+            } else {
+                $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+            }
         }
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
-        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job'));
+        return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job','sector','area','govermnent','qualifications'));
     }
 
     /**
@@ -609,86 +736,103 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request);
         $user = User::find($id);
-        if ($user->flag == "user") {
-            $messages = [
-                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
-                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
 
-                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
-                'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
-                'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
+        // if ($user->flag == "user") {
+        //     $messages = [
+        //         'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+        //         'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
+        //         'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+        //         'rule_id.required' => ' المهام  مطلوب ولا يمكن تركه فارغاً.',
+        //         'password.required' => ' الباسورد مطلوب ولا يمكن تركه فارغاً.',
+        //         'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
+        //     ];
 
-                // Add more custom messages here
-            ];
+        //     $validatedData = Validator::make($request->all(), [
+        //         'military_number' => 'required|string|max:255',
+        //         'phone' => 'required|string',
+        //         'file_number' => 'required|string',
+        //         'rule_id' => 'required',
+        //         'password' => 'required',
+        //         'Civil_number' => 'required',
+        //     ], $messages);
+        // } else {
+        $messages = [
+            'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+            'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
+            'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+            'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
+            'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
+        ];
 
-            $validatedData = Validator::make($request->all(), [
-                'military_number' => [
-                    'required',
-                    'string',
-                    'max:255',
-                ],
-                'phone' => 'required|string',
-                'file_number' => 'required|string',
-                'rule_id' => 'required',
-                'password' => 'required',
-                'Civil_number' => 'required',
-
-            ], $messages);
-        } else {
-            $messages = [
-                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
-                'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-
-                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-                'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
-                'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
-
-                // Add more custom messages here
-            ];
-
-            $validatedData = Validator::make($request->all(), [
-                'military_number' => [
-                    'required',
-                    'string',
-                    'max:255',
-                ],
-                'phone' => 'required|string',
-                'file_number' => 'required|string',
-                'public_administration' => 'required',
-                'Civil_number' => 'required',
-
-            ], $messages);
-        }
-
+        $validatedData = Validator::make($request->all(), [
+            // 'military_number' => 'required|string|max:255',
+            'military_number' => [
+                'required',
+                'string',
+                'max:255',
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueNumberInUser($user),
+            ],
+            // 'phone' => 'required|string',
+            'phone' => [
+                'required',
+                'string',
+                // 'max:255',
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueNumberInUser($user),
+            ],
+            // 'file_number' => 'required|string',
+            'file_number' => [
+                'required',
+                'string',
+                // 'max:255',
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueNumberInUser($user),
+            ],
+            'email' => [
+                // 'max:255',
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueNumberInUser($user),
+            ],
+            'public_administration' => 'required',
+            // 'Civil_number' => 'required',
+            'Civil_number' => [
+                'required',
+                // 'string',
+                // 'max:255',
+                // ValidationRule::unique('permissions', 'name'),
+                new UniqueNumberInUser($user),
+            ],
+        ], $messages);
+        // }
 
         // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
 
-
-        // dd($request);
-
+        // Update user attributes
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->description = $request->description;
         $user->military_number = $request->military_number;
-        if ($request->has('job')) {
-            $user->job_id = $request->job;
-        }
-        // $user->job_id = $request->job;
         $user->job_title = $request->job_title;
+        $user->job_id = $request->job_id;
         $user->nationality = $request->nationality;
         $user->Civil_number = $request->Civil_number;
         $user->file_number = $request->file_number;
         $user->flag = $request->flag;
+        $user->job_id = $request->job;
         $user->seniority = $request->seniority;
+        $user->Provinces = $request->Provinces;
+        $user->sector = $request->sector;
+        $user->region = $request->region;
         $user->public_administration = $request->public_administration;
+        $user->department_id = $request->public_administration;
         $user->work_location = $request->work_location;
-        // $user->position = $request->position;
         $user->qualification = $request->qualification;
         $user->date_of_birth = $request->date_of_birth;
         $user->joining_date = $request->joining_date;
@@ -696,43 +840,59 @@ class UserController extends Controller
 
         $joining_dateDate = Carbon::parse($request->input('joining_date'));
         $end_of_serviceDate = Carbon::parse($request->input('end_of_service'));
-        $user->length_of_service =  $end_of_serviceDate->year - $joining_dateDate->year;
+        $user->length_of_service = $end_of_serviceDate->year - $joining_dateDate->year;
+
         if ($request->has('grade_id')) {
             $user->grade_id = $request->grade_id;
         }
+
         if ($request->hasFile('image')) {
             $file = $request->image;
             $path = 'users/user_profile';
-
             UploadFilesWithoutReal($path, 'image', $user, $file);
         }
 
         if ($user->flag == "user") {
             $user->rule_id = $request->rule_id;
-            $user->department_id  = $request->department_id;
-            if (!Hash::check($request->password, $user->password)) {
+            if ($request->password && !Hash::check($request->password, $user->password)) {
                 $user->password = Hash::make($request->password);
+                $user->token = null; // Set token to null before saving
                 $user->save();
-                Auth::logout();
-                session()->flash('success', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى. .');
 
-                return redirect('/login');
-                // with('status', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى.');
+                if (auth()->user()->id == $user->id) {
+                    Auth::logout();
+                    session()->flash('success', 'تم تغيير كلمة المرور. يرجى تسجيل الدخول مرة أخرى.');
+                    return redirect('/login');
+                }
             }
         }
+
         $user->save();
-        // dd($user);
-        if ($user->flag == "user") {
-            $id = "0";
-        } else {
-            $id = "1";
-        }
 
+        $id = $user->flag == "user" ? "0" : "1";
 
-
-        // return response()->json($newUser);
         return view('user.view', compact('id'));
-        // return view('user.edit',compact('user'));
+    }
+
+    public function getGoverment($id)
+    {
+        $sector = Sector::find($id);
+        
+        // $idsArray = json_decode($sector->governments_IDs, true);
+
+        // Convert strings to integers
+        // $idsArray = array_map('intval', $idsArray);
+        $governments = Government::whereIn('id', $sector->governments_IDs)->get();
+        // dd($governments);
+        // $area = Region::all();
+        return response()->json($governments);
+    }
+
+    public function getRegion($id)
+    {
+       
+        $area = Region::where('government_id',$id)->get();
+        return response()->json($area);
     }
 
     /**

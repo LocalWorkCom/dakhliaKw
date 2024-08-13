@@ -6,7 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+//use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
+
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -65,6 +67,7 @@ class User extends Authenticatable
     public function hasPermission($permission)
     {
         $userPermission = Rule::find(auth()->user()->rule_id);     
+        // dd($permission);
         // 1,2,3,4,5
         $permission_ids = explode(',', $userPermission->permission_ids);
         // dd($permission_ids);
@@ -80,5 +83,39 @@ class User extends Authenticatable
         }
 
         
+    }
+    public function createdViolations()
+    {
+        return $this->hasMany(ViolationTypes::class, 'created_by');
+    }
+
+    // Relationship with Violation for updated violations
+    public function updatedViolations()
+    {
+        return $this->hasMany(ViolationTypes::class, 'updated_by');
+    }
+    public function department()
+    {
+        return $this->belongsTo(departements::class, 'department_id'); // Assuming 'department_id' is the foreign key
+    }
+
+
+    public function rule()
+    {
+        return $this->belongsTo(Rule::class);
+    }
+    public function grade()
+    {
+        return $this->belongsTo(grade::class, 'grade_id'); // Assuming 'grade_id' is the foreign key
+    }
+
+    // public function inspectors()
+    // {
+    //     return $this->belongsTo(grade::class, 'id'); // Assuming 'grade_id' is the foreign key
+    // }
+
+    public function inspectors()
+    {
+        return $this->hasMany(Inspector::class);
     }
 }

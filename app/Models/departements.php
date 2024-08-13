@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class departements extends Model
 {
-    use HasFactory;
+    use HasFactory , SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -18,7 +20,10 @@ class departements extends Model
     ];
 
    
-
+    public function employees()
+    {
+        return $this->hasMany(User::class , 'department_id');
+    }
     // Relationships
     public function manager()
     {
@@ -65,5 +70,20 @@ class departements extends Model
     {
         return $this->hasMany(departements::class, 'parent_id')->with('children');
 
+    }
+    public function violations()
+    {
+        return $this->hasMany(ViolationTypes::class);
+    }
+    public function getAllChildren()
+    {
+        $children = collect([]);
+
+        foreach ($this->children as $child) {
+            $children->push($child);
+            $children = $children->merge($child->getAllChildren());
+        }
+
+        return $children;
     }
 }

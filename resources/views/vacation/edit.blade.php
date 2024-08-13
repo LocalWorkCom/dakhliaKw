@@ -31,7 +31,16 @@
                 <div class="container col-10 mt-5 mb-5 pb-5" style="border:0.5px solid #C7C7CC;">
                     @csrf
 
-                   
+                    <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
+
+                        <div class="form-group col-md-3 mx-md-2" id="name_dev" hidden>
+
+
+                            <label for="name">اسم الاجازة:</label>
+                            <input type="text" id="name" name="name" class="form-control" dir="rtl" 
+                                value="{{ $vacation->name }}">
+                        </div>
+                    </div>
                     <div class="form-row mx-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-2 "> <label for="vacation_type_id">نوع الاجازة</label>
 
@@ -62,7 +71,7 @@
                     <div class="form-row mx-md-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-md-2">
                             <label for="date_to">تاريخ النهاية</label>
-                            <input type="date" id="date_to" name="date_to" class="form-control"
+                            <input type="date" id="date_to" name="date_to" class="form-control" 
                                 value="{{ $vacation->date_to ? $vacation->date_to : date('Y-m-d') }}">
                         </div>
                         <div class="form-group col-md-5 mx-md-2">

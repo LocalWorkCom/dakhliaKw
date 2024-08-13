@@ -52,9 +52,9 @@ class IoTelegramController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         foreach ($IoTelegrams as  $IoTelegram) {
-            $IoTelegram['department'] = ($IoTelegram->type == 'in') ?
-                $IoTelegram->internal_department->name :
-                $IoTelegram->external_department->name;
+            $IoTelegram['department'] = ($IoTelegram->type == 'in')
+                ? ($IoTelegram->internal_department ? $IoTelegram->internal_department->name : '')
+                : ($IoTelegram->external_department ? $IoTelegram->external_department->name : '');
             $IoTelegram['archives'] = CheckUploadIoFiles($IoTelegram->id);
             $IoTelegram['type'] = ($IoTelegram->type == 'in') ? 'داخلي' : 'خارجي';
         }
@@ -74,15 +74,16 @@ class IoTelegramController extends Controller
         $external_departments = ExternalDepartment::all();
         $iotelegram_num = Iotelegram::orderBy('id', 'desc')->first();
         if ($iotelegram_num) {
-            $iotelegram_num = $iotelegram_num->id;
-        } else {
-            $iotelegram_num = 0;
-        }
-        $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
-        $iotelegram_num  = generateUniqueNumber($iotelegram_num)['counter'];
+            $record = $iotelegram_num->iotelegram_num;
 
+            $parts = explode('-', $record);
+            $counter = end($parts);
+        } else {
+            $counter = 0000;
+        }
+        $iotelegram_num = generateUniqueNumber($counter)['formattedNumber'];
         $users = User::where('department_id', auth()->user()->department_id)->get();
-        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments', 'iotelegram_num', 'outgoing_num', 'users'));
+        return view('iotelegram.add', compact('representives', 'departments', 'recieves', 'external_departments', 'iotelegram_num', 'users'));
     }
 
     /**
@@ -98,21 +99,22 @@ class IoTelegramController extends Controller
         }
         $iotelegram_num = Iotelegram::orderBy('id', 'desc')->first();
         if ($iotelegram_num) {
-            $iotelegram_num = $iotelegram_num->id;
+            $record = $iotelegram_num->iotelegram_num;
+
+            $parts = explode('-', $record);
+            $counter = end($parts);
         } else {
-            $iotelegram_num = 0;
+            $counter = 0000;
         }
 
 
-        $outgoing_num = generateUniqueNumber($iotelegram_num)['formattedNumber'];
-        $iotelegram_num  = generateUniqueNumber($iotelegram_num)['counter'];
-
+        $iotelegram_num = generateUniqueNumber($counter)['formattedNumber'];
 
         $iotelegram = new Iotelegram();
         $iotelegram->type = $request->type;
         $iotelegram->from_departement = $request->from_departement;
         $iotelegram->representive_id = $request->representive_id;
-        $iotelegram->outgoing_num = $outgoing_num;
+        $iotelegram->outgoing_num = $request->outgoing_num;
         $iotelegram->outgoing_date = $request->outgoing_date;
         $iotelegram->iotelegram_num = $iotelegram_num;
         $iotelegram->date = $request->date;
@@ -232,12 +234,12 @@ class IoTelegramController extends Controller
     {
         $rules = [
             'name' => 'required|string',
-            'phone1' => 'required|unique:postmans,phone1|integer',
-            'phone2' => 'unique:postmans,phone2|integer',
+            'phone1' => 'required|unique:postmans,phone1|regex:/^[0-9]{8}$/',
+            'phone2' => 'unique:postmans,phone2|regex:/^[0-9]{8}$/',
             'national_id' => 'required|unique:postmans,national_id|integer',
             'modal_department_id' => 'required',
-
         ];
+
 
         $messages = [
             'name.string' => 'يجب ان يكون الأسم حروف فقط',
@@ -246,20 +248,19 @@ class IoTelegramController extends Controller
             'phone1.required' => 'يجب ادخال الهاتف',
             'phone1.integer' => 'يجب ان يكون الهاتف ارقام',
             'phone1.unique' => 'رقم الهاتف 1 موجود بالفعل',
+            'phone1.regex' => 'يجب أن يكون الهاتف الكويتي مكونًا من 8 أرقام',
 
-
-            'phone2.required' => 'يجب ادخال الهاتف',
             'phone2.integer' => 'يجب ان يكون الهاتف ارقام',
             'phone2.unique' => 'رقم الهاتف 2 موجود بالفعل',
-
+            'phone2.regex' => 'يجب أن يكون الهاتف الكويتي مكونًا من 8 أرقام',
 
             'national_id.required' => 'يجب ادخال رقم الهوية',
             'national_id.integer' => 'يجب ان يكون رقم الهوية ارقام',
             'national_id.unique' => 'رقم الهوية موجود بالفعل',
 
-            'modal_department_id.required' => 'يجب ادخال اسم الادارة'
-
+            'modal_department_id.required' => 'يجب ادخال اسم الادارة',
         ];
+
         $validatedData = Validator::make($request->all(), $rules, $messages);
 
         if ($validatedData->fails()) {

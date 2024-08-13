@@ -144,7 +144,7 @@
                         <div class="form-group">
                             <label for="name">الاسم</label>
                             <input type="text" class="form-control" id="name" name="name"
-                            value="{{ old('name', $department->name) }}">
+                            value="{{ old('name', $department->name) }} " dir="rtl">
                             <span class="text-danger span-error" id="name-error"></span>
 
                         </div>
@@ -222,7 +222,7 @@
                     // departmentDelete = departmentDelete.replace(':id', row.id);
 
                     return `
-                        <a href="" class="btn  btn-sm" style="background-color: #259240;" data-bs-toggle="modal"
+                        <a href="" class="btn btn-sm"  style="background-color: #F7AF15;" data-bs-toggle="modal"
                             data-bs-target="#Departmentedit" data-dismiss="modal" id="edit-dev"> <i class="fa fa-edit"></i> </a>
                        `;
                 }
@@ -236,10 +236,10 @@
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                             "sZeroRecords": 'نأسف لا توجد نتيجة',
                                             "oPaginate": {
-                                                    "sFirst": "<< &nbsp;", // This is the link to the first page
-                                                    "sPrevious": "<&nbsp;", // This is the link to the previous page
-                                                    "sNext": ">&nbsp;", // This is the link to the next page
-                                                    "sLast": "&nbsp; >>" // This is the link to the last page
+                                                "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                                                "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                                                "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                                                "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                                     }
                                         },
                                         layout: {

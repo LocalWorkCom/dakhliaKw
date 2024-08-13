@@ -11,7 +11,13 @@
     <section>
         <div class="row">
                 <div class="container welcome col-11">
+                <div class="d-flex justify-content-between">
                     <p>المـــــــهام</p>
+                    <button type="button" class="wide-btn"
+                            onclick="window.location.href='{{ route('rule.create') }}'" style="color:#259240;">
+                            اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        </button>
+                </div>
                 </div>
         </div>
 
@@ -21,11 +27,7 @@
             <div class="container  col-11 mt-3 p-0 ">
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                        <button type="button" class="wide-btn"
-                            onclick="window.location.href='{{ route('rule.create') }}'">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                            اضافة جديد
-                        </button>
+                      
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -79,8 +81,8 @@
                         var ruleshow = '{{ route('rule_show', ':id') }}';
                         ruleshow = ruleshow.replace(':id', row.id);
                         return `
-                            <a href="` + ruleshow + `" class="btn  btn-sm" style="background-color: #375A97;"> <i class="fa fa-eye"></i> </a>
-                            <a href="` + ruleedit + `" class="btn  btn-sm" style="background-color: #259240;"> <i class="fa fa-edit"></i> </a>`;
+                            <a href="` + ruleshow + `" class="btn  btn-sm" style="background-color: #375A97;"> <i class="fa fa-eye"></i> عرض</a>
+                            <a href="` + ruleedit + `" class="btn  btn-sm" style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> تعديل </a>`;
                     }
 
                 }],
@@ -93,10 +95,10 @@
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                             "sZeroRecords": 'نأسف لا توجد نتيجة',
                                             "oPaginate": {
-                                                    "sFirst": "<< &nbsp;", // This is the link to the first page
-                                                    "sPrevious": "<&nbsp;", // This is the link to the previous page
-                                                    "sNext": ">&nbsp;", // This is the link to the next page
-                                                    "sLast": "&nbsp; >>" // This is the link to the last page
+                                                "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                                                "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                                                "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                                                "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                                     }
                                         },
                                         layout: {

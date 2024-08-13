@@ -36,7 +36,7 @@
                         <div class="alert alert-info">
                             {{ session('message') }}
                         </div>
-                    @endif
+                        @endif
                         <div>
                             <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
@@ -68,6 +68,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                <div class="container pt-4 pb-4" style="border: 0.2px solid rgb(166, 165, 165);">
                     <form class="edit-grade-form" id="add-form" action=" {{ route('government.add') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -80,6 +81,7 @@
                             <button type="submit" class="btn-blue" onclick="confirmAdd()">اضافه</button>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,12 +98,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body mt-3 mb-5">
+                <div class="container pt-4 pb-4" style="border: 0.2px solid rgb(166, 165, 165);">
                     <form class="edit-grade-form" id="edit-form" action=" {{ route('government.update') }}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
-                            <input type="text" id="nameedit" value="" name="name" class="form-control">
+                            <input type="text" id="nameedit" value="" name="name" class="form-control" dir="rtl" required>
                             <input type="text" id="idedit" value="" name="id" hidden class="form-control">
 
                         </div>
@@ -110,6 +113,7 @@
                             <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
                         </div>
                     </form>
+                </div>
                 </div>
             </div>
         </div>
@@ -219,10 +223,10 @@
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                             "sZeroRecords": 'نأسف لا توجد نتيجة',
                                             "oPaginate": {
-                                                    "sFirst": "<<", // This is the link to the first page
-                                                    "sPrevious": "<", // This is the link to the previous page
-                                                    "sNext": ">", // This is the link to the next page
-                                                    "sLast": " >>" // This is the link to the last page
+                                                "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                                                "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                                                "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                                                "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                                     }
 
 

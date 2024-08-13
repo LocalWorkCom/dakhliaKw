@@ -43,9 +43,8 @@
                     <div class="form-row pt-2 mx-md-3 d-flex justify-content-center  mt-5">
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="outgoing_num">رقم الصادر</label>
-                            <input type="hidden" name="outgoing_num" id="outgoing_num" value="{{ $outgoing_num }}">
-                            <input type="text" id="outgoing_num_text" name="outgoing_num_text" class="form-control"
-                                value="{{ $outgoing_num }}" disabled>
+                            <input type="text" id="outgoing_num" name="outgoing_num" class="form-control" required
+                                value="">
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="outgoing_date">تاريخ الصادر</label>
@@ -63,20 +62,20 @@
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="iotelegram_num"> رقم الوارد</label>
                             <input type="hidden" name="iotelegram_num" id="iotelegram_num" value="{{ $iotelegram_num }}">
-                            <input type="number" id="iotelegram_num" name="iotelegram_num" class="form-control" disabled
+                            <input type="text" id="iotelegram_num" name="iotelegram_num" class="form-control" disabled
                                 value="{{ $iotelegram_num }}">
                         </div>
-
                     </div>
-
 
                     <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
                         <div class="form-group col-md-5 mx-md-2 " dir="rtl">
                             <div class="d-flex justify-content-between">
                                 <label for="representive_id">اختر المندوب </label>
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
-                                    data-bs-toggle="modal" data-bs-target="#representative" data-dismiss="modal"
-                                    id="representative-dev">
+                                @if (Auth::user()->hasPermission('create Postman'))
+                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
+                                        data-bs-toggle="modal" data-bs-target="#representative" data-dismiss="modal"
+                                        id="representative-dev">
+                                @endif
                             </div>
                             <select id="representive_id" name="representive_id" class="form-control" required>
                                 <option value="">اختر المندوب</option>
@@ -88,9 +87,11 @@
                         <div class="form-group col-md-5 mx-md-2 " dir="rtl">
                             <div class="d-flex justify-content-between">
                                 <label for="from_departement">القطاع </label>
-                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 "
-                                    style="display: none" data-bs-toggle="modal" id="extern-department-dev"
-                                    data-bs-target="#extern-department" data-dismiss="modal">
+                                @if (Auth::user()->hasPermission('create ExternalDepartment'))
+                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 "
+                                        style="display: none" data-bs-toggle="modal" id="extern-department-dev"
+                                        data-bs-target="#extern-department" data-dismiss="modal">
+                                @endif
                             </div>
                             <select id="from_departement" name="from_departement" class="form-control" required>
                                 <option value="">اختر القطاع</option>
@@ -103,18 +104,20 @@
                     </div>
 
                     <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
+                        @if (Auth::user()->hasPermission('create Io_file'))
+                            <div class="form-group col-md-5 mx-md-2">
+                                <label for="files_num"> عدد الكتب</label>
 
-                        <div class="form-group col-md-5 mx-md-2">
-                            <label for="files_num"> عدد الكتب</label>
+                                <select id="files_num" name="files_num" class="form-control"
+                                    onchange="updateFileInput()">
+                                    <option value="">اختر العدد</option>
 
-                            <select id="files_num" name="files_num" class="form-control" onchange="updateFileInput()">
-                                <option value="">اختر العدد</option>
-
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
-                        </div>
+                                    @for ($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        @endif
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="recieved_by">الموظف المستلم</label>
                             <select id="recieved_by" name="recieved_by" class="form-control" required>
@@ -129,27 +132,29 @@
                     </div>
 
 
+                    @if (Auth::user()->hasPermission('create Io_file'))
+                        <div class="form-row mx-md-2 d-flex justify-content-center">
+                            <div class="form-group col-md-10">
+                                <label for="files">اضف ملفات بحد اقصي 10</label>
+                            </div>
+                            <div class="form-group col-md-10" dir="rtl">
+                                <div class="fileupload d-inline">
+                                    <div class="d-flex">
+                                        <input id="fileInput" type="file" name="files[]" multiple
+                                            class="mb-2 form-control"  onchange="uploadFils()"
+                                            disabled>
 
-                    <div class="form-row mx-md-2 d-flex justify-content-center">
-                        <div class="form-group col-md-10">
-                            <label for="files">اضف ملفات بحد اقصي 10</label>
-                        </div>
-                        <div class="form-group col-md-10" dir="rtl">
-                            <div class="fileupload d-inline">
-                                <div class="d-flex">
-                                    <input id="fileInput" type="file" name="files[]" multiple
-                                        class="mb-2 form-control" accept=".pdf,.jpg,.png,.jpeg"onchange="uploadFils()"
-                                        disabled>
-
-                                </div>
-                                <div class="space-uploading">
-                                    <ul id="fileList" class="d-flex flex-wrap">
-                                        <!-- Uploaded files will be listed here -->
-                                    </ul>
+                                    </div>
+                                    <div class="space-uploading">
+                                        <ul id="fileList" class="d-flex flex-wrap">
+                                            <!-- Uploaded files will be listed here -->
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
+
                     <div class="form-row  mx-md-2 d-flex justify-content-center">
                         <div class="form-group d-flex col-md-10 mx-md-2" dir="rtl">
                             <input type="checkbox" id="linked_employee">
@@ -452,8 +457,11 @@
             $('#linked_employee').click(function() {
                 if ($(this).is(':checked')) {
                     $('#identityGroup').attr('hidden', false);
+                    $('#user_id').attr('required', true);
                 } else {
                     $('#identityGroup').attr('hidden', true);
+                    $('#user_id').attr('required', false);
+
 
                 }
 

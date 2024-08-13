@@ -9,26 +9,48 @@
 
     <div class="row">
         <div class="container welcome col-11">
-            <p> الـــــــــــــــواردات </p>
+            <div class="d-flex justify-content-between">    
+                <p> الـــــــــــــــواردات </p>
+                <div class="form-group  ">
+                    @if (Auth::user()->hasPermission('create Iotelegram'))
+                        <button type="button" class="wide-btn"
+                            onclick="window.location.href='{{ route('iotelegrams.add') }}'">
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            اضافة جديد
+                        </button>
+                    @endif
+                    @if (Auth::user()->hasPermission('archive Iotelegram'))
+                        <button type="button" class="btn-all mx-3 "
+                            onclick="window.location.href='{{ route('iotelegram.archives') }}'" style="color: #C1920C;">
+                            <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
+                            عرض الارشيف
+                        </button>
+                    @endif
+                </div>
+            </div>
+            </div>
         </div>
     </div>
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
             <div class="row " dir="rtl">
-                <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                    <button type="button" class="wide-btn" onclick="window.location.href='{{ route('iotelegrams.add') }}'">
-                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                        اضافة جديد
-                    </button>
-                    <button type="button" class="btn-all mx-3 "
-                        onclick="window.location.href='{{ route('iotelegram.archives') }}'" style="color: #C1920C;">
-                        <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
-                        عرض الارشيف
-                    </button>
-
-
-                </div>
+               <!--  <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                    @if (Auth::user()->hasPermission('create Iotelegram'))
+                        <button type="button" class="wide-btn"
+                            onclick="window.location.href='{{ route('iotelegrams.add') }}'">
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            اضافة جديد
+                        </button>
+                    @endif
+                    @if (Auth::user()->hasPermission('archive Iotelegram'))
+                        <button type="button" class="btn-all mx-3 "
+                            onclick="window.location.href='{{ route('iotelegram.archives') }}'" style="color: #C1920C;">
+                            <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
+                            عرض الارشيف
+                        </button>
+                    @endif
+                </div> -->
             </div>
             @include('inc.flash')
 
@@ -118,6 +140,10 @@
                             columnDefs: [{
                                 targets: -1,
                                 render: function(data, type, row) {
+                                    var addArchive = "<?php echo Auth::user()->hasPermission('add_archive Iotelegram'); ?>";
+                                    var editIotelegram = "<?php echo Auth::user()->hasPermission('edit Iotelegram'); ?>";
+                                    var showIotelegram = "<?php echo Auth::user()->hasPermission('view Iotelegram'); ?>";
+
                                     // Using route generation correctly in JavaScript
                                     var editUrl = '{{ route('iotelegram.edit', ':id') }}';
                                     var showUrl = '{{ route('iotelegram.show', ':id') }}';
@@ -127,13 +153,26 @@
                                     editUrl = editUrl.replace(':id', row.id);
                                     showUrl = showUrl.replace(':id', row.id);
                                     archiveUrl = archiveUrl.replace(':id', row.id);
+                                    var archiveButton = '';
+                                    var showButton = '';
+                                    if (row.archives) {
+                                        if (addArchive) {
+                                            archiveButton =
+                                                `<a href="${archiveUrl}" class="archive btn  btn-sm" onclick="confirmArchive(event, this)" style="background-color:#c1920c;"> <i class="fa-solid fa-file-arrow-up"></i> ارشفة</a>`;
+                                        }
+                                    } else {
+                                        if (editIotelegram) {
+                                            archiveButton =
 
+                                                `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i> تعديل</a>`;
+                                        }
+                                    }
+                                    if (showIotelegram) {
+                                        showButton =
+                                            `<a href="${showUrl}" class="archive btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
+                                    }
                                     // Checking if the vacation start date condition is met
-                                    var archiveButton = (row.archives) ?
-                                        `<a href="${archiveUrl}" class="archive btn  btn-sm" onclick="confirmArchive(event, this)" style="background-color:#c1920c;"> <i class="fa-solid fa-file-arrow-up"></i> </a>` :
-                                        `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i></a>`;
-
-                                    return `<a href="${showUrl}" class="archive btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>${archiveButton}`;
+                                    return `${showButton}${archiveButton}`;
 
                                 }
 
@@ -147,10 +186,10 @@
                                 "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                 "sZeroRecords": 'نأسف لا توجد نتيجة',
                                 "oPaginate": {
-                                    "sFirst": "<<", // This is the link to the first page
-                                    "sPrevious": "<", // This is the link to the previous page
-                                    "sNext": ">", // This is the link to the next page
-                                    "sLast": " >>" // This is the link to the last page
+                                    "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                                    "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                                    "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                                    "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                 }
 
 

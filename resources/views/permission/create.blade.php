@@ -23,7 +23,7 @@
     <br>
 
 <div class="row">
-    <div class="container col-11 mt-3 p-0 ">
+<div class="container  col-11 mt-3 p-0  pt-5 pb-4">
 
 
         @if (session('success'))
@@ -59,7 +59,9 @@
                                     <option value="create">اضافة</option>
                                     <option value="delete">ازالة</option>
                                     <option value="download">تحميل</option>
-
+                                    <option value="archive">ارشفة</option>
+                                    <option value="add_archive"> اضافة ارشفة</option>
+                                    <option value="add_employee"> اضافة موظف</option>
                                 </select>
 
                             </div>

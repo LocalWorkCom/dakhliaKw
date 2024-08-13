@@ -41,13 +41,33 @@ class outgoingController extends Controller
         return DataTables::of($data)->addColumn('action', function ($row) {
             $fileCount = outgoing_files::where('outgoing_id', $row->id)->count();
             $is_file = $fileCount == 0;
-            $uploadButton = $is_file
-                ? '<a class="btn  btn-sm"  style="background-color: #259240;" href=' . route('Export.edit', $row->id) . '> <i class="fa fa-edit"></i> </a>'
-                : '<a class="btn  btn-sm" style="background-color:#c1920c;" onclick="opendelete(' . $row->id . ')">  <i class="fa-solid fa-file-arrow-up"></i> </a>';
+            if($fileCount == 0){
+                if(Auth::user()->hasPermission('edit outgoings')){
+                    $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;" href=' . route('Export.edit', $row->id) . '> <i class="fa fa-edit"></i> تعديل </a>';
+                    $uploadButton = $edit_permission;
+                }else{
+                    $edit_permission = null;
+                    $uploadButton = $edit_permission;
+                }
+            }else{
+                if(Auth::user()->hasPermission('add_archive outgoings')){
+                    $addToArchive_permission = '<a class="btn  btn-sm" style="background-color:#c1920c;" onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-file-arrow-up"></i> الارشيف</a>';
+                    $uploadButton = $addToArchive_permission;
+                }else{
+                    $addToArchive_permission = null;
+                    $uploadButton = $addToArchive_permission;
+                }
+            }
+            
+           
+            if(Auth::user()->hasPermission('view outgoings')){
+                $show_permission = ' <a class="btn btn-sm " style="background-color: #274373;" href=' . route('Export.show', $row->id) . '>  <i class="fa fa-eye"></i>عرض</a>' ;
+            }else{
+                $show_permission = null;
+            }
+           
 
-            return '
-                   <a class="btn  btn-sm" style="background-color: #375A97;" href=' . route('Export.show', $row->id) . '> <i class="fa fa-eye"></i> </a>
-                    ' . $uploadButton;
+            return  $show_permission . $uploadButton;
         })
             ->addColumn('person_to_username', function ($row) {
                 return $row->personTo->name ?? 'لايوجد مرسل اليه  '; // Assuming 'name' is the column in external_users
@@ -73,8 +93,8 @@ class outgoingController extends Controller
             ->select('outgoings.*');
 
         return DataTables::of($data)->addColumn('action', function ($row) {
-            return '
-                   <a class="btn btn-primary btn-sm"  style="background-color: #375A97;" href=' . route('Export.show', $row->id) . '> <i class="fa fa-eye"></i></a>';
+            $show_permission = Auth::user()->hasPermission('view outgoings') ? ' <a class="btn btn-sm " style="background-color: #274373;" href=' . route('Export.show', $row->id) . '>  <i class="fa fa-eye"></i>عرض</a>' : '' ;
+            return $show_permission;
         })
             ->addColumn('person_to_username', function ($row) {
                 return $row->personTo->name ?? 'لايوجد مرسل اليه  '; // Assuming 'name' is the column in external_users
@@ -156,6 +176,7 @@ class outgoingController extends Controller
 
         return response()->json(['success' => true]);
     }
+    
     public function create()
     {
 
@@ -258,14 +279,14 @@ class outgoingController extends Controller
 
                     UploadFiles('files/export', 'file_name',  'real_name', $file_model, $file);
                     //}
-                }
+                } }
 
 
                 return redirect()->route('Export.index')->with('status', 'تم الاضافه بنجاح');
             } else {
                 return redirect()->route('login');
             }
-        }
+       
     }
     /**
      * Display the specified resource.
@@ -298,9 +319,6 @@ class outgoingController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-
-
         // Define validation rules
         $rules = [
             'nameex' => 'required|string',
@@ -353,7 +371,6 @@ class outgoingController extends Controller
 
             if ($request->hasFile('files')) {
 
-                if (function_exists('UploadFiles')) {
                     //  dd('file yes');
                     foreach ($request->file('files') as $file) {
 
@@ -368,7 +385,6 @@ class outgoingController extends Controller
 
                         UploadFiles('files/export', 'file_name', 'real_name', $file_model, $file);
                     }
-                }
             }
             return redirect()->route('Export.index')->with('status', 'تم الاضافة بنجاح');
         } else {

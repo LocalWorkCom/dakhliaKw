@@ -14,6 +14,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class qualificationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -28,8 +32,17 @@ class qualificationController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
-            return '<a class="btn  btn-sm" style="background-color: #259240;"  onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>
-            <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
+            $edit_permission= null;
+            $delete_permission=null;
+            if(Auth::user()->hasPermission('edit Government')){
+                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
+            }
+            // if(Auth::user()->hasPermission('edit Government')){
+            //     $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+            // }
+            return $edit_permission ;
+            // return '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>
+            //  <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>' ;
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -126,15 +139,15 @@ class qualificationController extends Controller
      */
     public function destroy(Request $request)
     {
-        $isForeignKeyUsed = DB::table('users')->where('qualification_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);
-        if( $isForeignKeyUsed ){
-            return redirect()->route('qualifications.index')->with(['message' => 'لا يمكن حذف هذا المؤهل  يوجد موظفين له']);
-        }else{
+        // $isForeignKeyUsed = DB::table('users')->where('qualification_id', $request->id)->exists();
+        // //dd($isForeignKeyUsed);
+        // if( $isForeignKeyUsed ){
+        //     return redirect()->route('qualifications.index')->with(['message' => 'لا يمكن حذف هذا المؤهل  يوجد موظفين له']);
+        // }else{
             $type= Qualification::find($request->id);
             $type->delete();
             return redirect()->route('qualifications.index')->with(['message' => 'تم حذف المؤهل']);
 
-        }
+        // }
     }
 }

@@ -24,13 +24,13 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0 pt-5 ">
             <!-- <div class="row " dir="rtl">
-                            <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                                <button type="button" class="wide-btn" onclick="window.location.href='{{ route('iotelegrams.add') }}'">
-                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    اضافة جديد
-                                </button>
-                            </div>
-                        </div> -->
+                                    <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                                        <button type="button" class="wide-btn" onclick="window.location.href='{{ route('iotelegrams.add') }}'">
+                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                            اضافة جديد
+                                        </button>
+                                    </div>
+                                </div> -->
             @include('inc.flash')
 
             <div class="col-lg-12 mb-2">
@@ -117,11 +117,16 @@
                             columnDefs: [{
                                 targets: -1,
                                 render: function(data, type, row) {
+                                    var showIotelegram = "<?php echo Auth::user()->hasPermission('view Iotelegram'); ?>";
+                                    var showButton = '';
                                     // Using route generation correctly in JavaScript
                                     var showUrl = '{{ route('iotelegram.show', ':id') }}';
                                     showUrl = showUrl.replace(':id', row.id);
-
-                                    return `<a href="${showUrl}" class="edit btn btn-info btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>`;
+                                    if (showIotelegram) {
+                                        showButton =
+                                            `<a href="${showUrl}" class="edit btn btn-info btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>`;
+                                    }
+                                    return `${showButton}`;
 
                                 }
 
@@ -135,10 +140,10 @@
                                 "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                 "sZeroRecords": 'نأسف لا توجد نتيجة',
                                 "oPaginate": {
-                                    "sFirst": "<<", // This is the link to the first page
-                                    "sPrevious": "<", // This is the link to the previous page
-                                    "sNext": ">", // This is the link to the next page
-                                    "sLast": " >>" // This is the link to the last page
+                                    "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                                    "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                                    "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                                    "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                 }
 
 

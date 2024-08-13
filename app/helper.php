@@ -1,11 +1,16 @@
 <?php
 
 use App\Models\Country;
+use App\Models\departements;
 use App\Models\EmployeeVacation;
+use App\Models\Government;
+use App\Models\Groups;
 use App\Models\Io_file;
+use App\Models\Sector;
 use App\Models\User;
 use App\Models\VacationType;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -168,7 +173,42 @@ function UploadFilesWithoutReal($path, $image, $model, $request)
 
     $model->save();
 }
+function UploadFilesIM($path, $image, $model, $request)
+{
 
+    // dd($request);
+
+    $imagePaths = [];
+    $thumbnail = $request;
+    $destinationPath = $path;
+    foreach ($thumbnail as $key=> $item) {
+        if(is_object($item)) {
+            $filename = $key.time() . '.' . $item->getClientOriginalExtension();
+            $item->move($destinationPath, $filename);
+            $imagePaths[] = asset($path) . '/' . $filename;
+        }
+        else {
+            $imagePaths[] = $item;
+        }
+    }
+    // dd($model->image);
+    $model->$image = implode(',', $imagePaths);
+
+    $model->save();
+}
+
+
+function showUserDepartment()
+{
+    // Retrieve the authenticated user
+    $user = Auth::user();
+
+    // Access the department name
+    // dd($user->department);
+    $departmentName = $user->department != null ? $user->department->name : '';
+
+    return $departmentName;
+}
 function CheckUploadIoFiles($id)
 {
     $count = Io_file::where('iotelegram_id', $id)->count();
@@ -181,6 +221,10 @@ function getEmployees()
 {
     return User::all();
 }
+function getDepartments()
+{
+    return departements::all();
+}
 function getVactionTypes()
 {
     return VacationType::all();
@@ -189,7 +233,21 @@ function getCountries()
 {
     return  Country::all();
 }
+function getgovernments()
+{
 
+    return  Government::all();
+}
+function getsectores()
+{
+
+    return  Sector::all();
+}
+function getgroups()
+{
+
+    return  Groups::all();
+}
 function CheckStartVacationDate($id)
 {
     $EmployeeVaction =  EmployeeVacation::find($id);

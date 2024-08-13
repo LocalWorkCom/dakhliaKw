@@ -12,7 +12,25 @@
         <div class="row">
 
             <div class="container welcome col-11">
-                <p> الصـــــــــادرات</p>
+                <div class="d-flex justify-content-between">
+                    <p> الصـــــــــادرات</p>
+                    <div class="form-group ">
+                        @if (Auth::user()->hasPermission('archive outgoings'))
+                        <button type="button" class="btn-all mx-3 "
+                            onclick="window.location.href='{{ route('Export.AllArchive') }}'" style="color: #C1920C;">
+                            <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
+                            عرض الارشيف
+                        </button>
+                        @endif
+                        @if (Auth::user()->hasPermission('create outgoings'))
+                        <button type="button" class="btn-all  "
+                            onclick="window.location.href='{{ route('Export.create') }}'" style="color: #0D992C;">
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            اضافة جديد
+                        </button>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -21,20 +39,23 @@
             <div class="container  col-11 mt-3 p-0 ">
 
                 <div class="row " dir="rtl">
-                    <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                  <!--   <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                        @if (Auth::user()->hasPermission('archive outgoings'))
                         <button type="button" class="btn-all mx-3 "
                             onclick="window.location.href='{{ route('Export.AllArchive') }}'" style="color: #C1920C;">
                             <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
                             عرض الارشيف
                         </button>
+                        @endif
+                        @if (Auth::user()->hasPermission('create outgoings'))
                         <button type="button" class="btn-all  "
                             onclick="window.location.href='{{ route('Export.create') }}'" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
+                        @endif
 
-
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white ">
@@ -174,10 +195,10 @@
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                             "sZeroRecords": 'نأسف لا توجد نتيجة',
                                             "oPaginate": {
-                                                    "sFirst": "<<", // This is the link to the first page
-                                                    "sPrevious": "<", // This is the link to the previous page
-                                                    "sNext": ">", // This is the link to the next page
-                                                    "sLast": " >>" // This is the link to the last page
+                                                "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                                                "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                                                "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                                                "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                                     }
 
 

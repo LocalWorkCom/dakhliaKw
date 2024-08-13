@@ -14,21 +14,30 @@
         <div class="row">
 
             <div class="container welcome col-11">
+            <div class="d-flex justify-content-between">
                 <p> الرتـــــــب</p>
-            </div>
+                @if (Auth::user()->hasPermission('edit grade'))
+                        <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
+                            
+                            اضافة رتبة جديده <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        </button>
+                        @endif
+            </div>   </div>
         </div>
 
         <br>
         <div class="row">
-            <div class="container  col-11 mt-3 p-0 ">
+        <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
 
                 <div class="row " dir="rtl">
-                    <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
+                    <!-- <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
+                        @if (Auth::user()->hasPermission('edit grade'))
                         <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                            اضافة جديد
+                            اضافة رتبة جديده
                         </button>
-                    </div>
+                        @endif
+                    </div> -->
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white ">
@@ -68,7 +77,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
-                <div class="modal-body  mt-5 mb-5">
+                <div class="modal-body  mt-3 mb-5 ">
+                <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
                     <form class="edit-grade-form" id="add-form" action=" {{ route('grads.add') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -82,6 +92,7 @@
                             <button type="submit" class="btn-blue" onclick="confirmAdd()">اضافه</button>
                         </div>
                     </form>
+                </div>
                 </div>
             </div>
         </div>
@@ -98,21 +109,22 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
-                <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
+                <div class="modal-body  mt-3 mb-5">
+                <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
                     <form class="edit-grade-form" id="edit-form" action=" {{ route('grads.update') }}" method="POST">
                         @csrf
-                        <div class="form-row mx-md-2 ">
-                        <div class="form-group col-md-10 ">
+                        <div class="form-group ">
                             <label for="name">الاسم</label>
-                            <input type="text" id="nameedit" value="" name="name" class="form-control">
+                            <input type="text" id="nameedit" value="" name="name" class="form-control" dir="rtl" required>
                             <input type="text" id="idedit" value="" name="id" hidden class="form-control">
 
-                        </div> </div>
+                        </div> 
                         <!-- Save button -->
                         <div class="text-end">
                             <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,6 +147,7 @@
 
 
                         <input type="text" id="id" hidden name="id" class="form-control" dir="rtl">
+                  
                     </div>
                     <div class="modal-footer mx-2 d-flex justify-content-center">
                         <div class="text-end">
@@ -186,9 +199,13 @@
 
         function confirmEdit() {
             var id = document.getElementById('id').value;
+            var name = document.getElementById('nameedit').value;
+            console.log(name);
             var form = document.getElementById('edit-form');
-
-            form.submit();
+            // if(form){
+            //     form.submit();
+            // }
+            
 
         }
 
@@ -254,10 +271,10 @@
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                             "sZeroRecords": 'نأسف لا توجد نتيجة',
                                             "oPaginate": {
-                                                    "sFirst": "<<", // This is the link to the first page
-                                                    "sPrevious": "<", // This is the link to the previous page
-                                                    "sNext": ">", // This is the link to the next page
-                                                    "sLast": " >>" // This is the link to the last page
+                                                "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                                                "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                                                "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                                                "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                                     }
 
 

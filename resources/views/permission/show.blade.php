@@ -50,10 +50,17 @@
                             <label for="input1"> الصلاحية</label>
                             <select class="custom-select custom-select-lg mb-3" name="name" disabled>
                                 <option selected disabled>اختر الصلاحية</option>
-                                <option value="view" {{ $permissionAction == 'view' ? 'selected' : '' }}>عرض</option>
+                                {{-- <option value="view" {{ $permissionAction == 'view' ? 'selected' : '' }}>عرض</option>
                                 <option value="edit" {{ $permissionAction == 'edit' ? 'selected' : '' }}>تعديل</option>
                                 <option value="create" {{ $permissionAction == 'create' ? 'selected' : '' }}>اضافة
-                                </option>
+                                </option> --}}
+                                <option value="view" {{ $permissionAction == 'view' ? 'selected' : '' }}>عرض</option>
+                                <option value="edit" {{ $permissionAction == 'edit' ? 'selected' : '' }}>تعديل</option>
+                                <option value="create" {{ $permissionAction == 'create' ? 'selected' : '' }}>اضافة</option>
+                                <option value="delete" {{ $permissionAction == 'delete' ? 'selected' : '' }}>ازالة</option>
+                                <option value="download" {{ $permissionAction == 'download' ? 'selected' : '' }}>تحميل</option>
+                                <option value="archive" {{ $permissionAction == 'archive' ? 'selected' : '' }}>ارشفة</option>
+                                <option value="add_archive" {{ $permissionAction == 'add_archive' ? 'selected' : '' }}> اضافة ارشفة</option>
                                 {{-- <option value="delete" {{ $permissionAction == 'delete' ? 'selected' : '' }}>ازالة
                                 </option> --}}
                             </select>

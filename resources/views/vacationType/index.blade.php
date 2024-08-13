@@ -22,10 +22,12 @@
 
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
+                        @if (Auth::user()->hasPermission('create VacationType'))
                         <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -64,7 +66,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body mt-3 mb-5">
                     <form class="edit-grade-form" id="add-form" action=" {{ route('vacationType.add') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -94,14 +96,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body mt-3 mb-5">
                     <form class="edit-grade-form" id="edit-form" action=" {{ route('vacationType.update') }}"
                         method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="name">الاسم</label>
-                            <input type="text" id="nameedit" value="" name="name" class="form-control">
-                            <input type="text" id="idedit" value="" name="id" hidden class="form-control">
+                            <input type="text" id="nameedit" value="" name="name" class="form-control" required dir="rtl">
+                            <input type="text" id="idedit" value="" name="id" hidden class="form-control" dir="rtl">
 
                         </div>
                         <!-- Save button -->
@@ -150,6 +152,7 @@
         $(document).ready(function() {
             function closeModal() {
                 $('#delete').modal('hide');
+                
             }
 
             $('#closeButton').on('click', function() {
@@ -185,7 +188,7 @@
             var id = document.getElementById('id').value;
             var form = document.getElementById('edit-form');
 
-            form.submit();
+            // form.submit();
 
         }
 
@@ -251,10 +254,10 @@
                                             "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                                             "sZeroRecords": 'نأسف لا توجد نتيجة',
                                             "oPaginate": {
-                                                    "sFirst": "<<", // This is the link to the first page
-                                                    "sPrevious": "<", // This is the link to the previous page
-                                                    "sNext": ">", // This is the link to the next page
-                                                    "sLast": " >>" // This is the link to the last page
+                                                "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                                                "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                                                "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                                                "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                                     }
 
 
