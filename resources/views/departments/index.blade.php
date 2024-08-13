@@ -21,11 +21,11 @@
               <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
                     @if (Auth::user()->hasPermission('create Postman'))
-                    <button type="button" class="wide-btn mx-md-3 mx-1"
+                  <!--   <button type="button" class="wide-btn mx-md-3 mx-1"
                         onclick="window.location.href='{{ route('postmans.create') }}'">
                         اضافة مندوب
                         <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                    </button>
+                    </button> -->
                     @endif
                 </div>
             </div>

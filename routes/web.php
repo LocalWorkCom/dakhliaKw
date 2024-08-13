@@ -388,6 +388,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('working_tree/edit/{id}', [WorkingTreeController::class, 'edit'])->name('working_tree.edit');
     Route::post('working_tree/update/{id}', [WorkingTreeController::class, 'update'])->name('working_tree.update');
     Route::get('working_tree/show/{id}', [WorkingTreeController::class, 'show'])->name('working_tree.show');
+
+
+    Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
 });
 
 Route::get('api/Inspectors', [InspectorController::class, 'getInspectors'])->name('api.inspector');
@@ -398,9 +401,6 @@ Route::post('/Inspectors', [InspectorController::class, 'store'])->name('inspect
 Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit');
 Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
 Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');
-
-
-Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
 
 
 
