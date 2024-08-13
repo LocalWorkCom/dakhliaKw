@@ -652,12 +652,12 @@ class GroupTeamController extends Controller
                         if ($WorkingTreeTime) {
                             $colors[] = $WorkingTreeTime->color;
                         } else {
-                            // Default color if no working time is found
-                            $colors[] = '#b9b5b4';
+
+                            $colors[] = 'white';
                         }
                     } else {
-                        // Default color if no mission is found
-                        $colors[] = '#756262';
+                        $colors[] = '#d6d6d6';
+
                     }
                 }
                 // Assign the colors array to the GroupTeam object
@@ -709,7 +709,7 @@ class GroupTeamController extends Controller
                         } else {
                             // Default color if no mission is found
                             $inspector_mission = null;
-                            $colors[] = '#756262';
+                            $colors[] = '#d6d6d6';
                         }
                         // Add the mission to the inspector's missions array
                         $inspector_missions[] = $inspector_mission;

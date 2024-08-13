@@ -18,14 +18,19 @@
                         </button>
                         
                         <div class="colors  d-flex mx-5">
-                            <!-- Legend for different types of shifts -->
-                            <div class="night rounded p-1 px-3 mx-1"> ليل</div>
-                            <div class="morning  rounded p-1 px-3 mx-1 ">صبح</div>
-                            <div class="afternoon rounded p-1 px-3 mx-1">عصر</div>
-                            <div class="dayoff rounded p-1 px-3 mx-1">راحه</div>
-                            <div class="rest rounded p-1 px-3 mx-1">اجازات</div>
-                            <div class=" guide rounded p-1 px-3 mx-1">: للارشاد </div>
-                        </div>
+
+     
+     <div class="night rounded p-1 px-3 mx-1"> ليل</div>
+     <div class="task rounded p-1 px-3 mx-1"> مهمة</div>
+     <div class="urgent rounded p-1 px-3 mx-1"> أمر فوري</div>
+    <div class="morning  rounded p-1 px-3 mx-1 ">صبح</div>
+    <div class="afternoon rounded p-1 px-3 mx-1">عصر</div>
+    <div class="change rounded p-1 px-3 mx-1">منقول</div>
+    <div class="dayoff rounded p-1 px-3 mx-1">راحه</div>
+    <div class="rest rounded p-1 px-3 mx-1" >اجازات</div>
+    <div class=" guide rounded p-1 px-3 mx-1" >: للارشاد </div>
+    </div>
+
                     </div>
 
                 </div>
@@ -36,24 +41,24 @@
         <!-- Main Table Section -->
         <div class="row col-12" id="days-table">
             <div class="container col-12">
-                <div class="col-12" dir="rtl">
-                    <table class="table table-bordered  table-responsive table-container" border="1" dir="rtl">
+                <div class="col-12 pt-5 pb-5" dir="rtl">
+                    <table class="table table-bordered  table-responsive table-container " border="1" dir="rtl" >
                         <?php $count = 1; ?>
                         @foreach ($Groups as $Group)
                             <thead>
                                 <tr>
                                     <!-- Table Headers for Group -->
                                     <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;">العدد</th>
-                                    <th scope="col" rowspan="2" style="background-color: #e4f1ffbd;">
+                                    <th scope="col" rowspan="2" style="background-color: #97b8dd;">
                                         {{ $Group->name }}</th>
                                     @foreach ($Group['days_name'] as $day)
-                                        <th scope="col" class="{{ $day }}">{{ $day }}</th>
+                                        <th scope="col" class="{{ $day }}" style="background-color: #e4f1ffbd;">{{ $day }}</th>
                                     @endforeach
                                 </tr>
                                 <tr>
                                     <!-- Day Numbers for the Group -->
                                     @foreach ($Group['days_num'] as $num)
-                                        <th scope="col" class="{{ $num }}">{{ $num }}</th>
+                                        <th scope="col" class="{{ $num }}" style="background-color: #e4f1ffbd;">{{ $num }}</th>
                                     @endforeach
                                 </tr>
                             </thead>
@@ -63,7 +68,7 @@
                                     <tr class="group-table">
                                         <!-- Team Name Row -->
                                         <td colspan="2"
-                                            style=" text-align: center;color: white;background-color: darkgreen;">
+                                            style=" text-align: center;background-color: #e4f1ffbd; color:black;">
                                             {{ $team->name }}</td>
                                         @foreach ($Group['days_num'] as $index => $num)
                                             <!-- Colors for Each Day in the Team -->
@@ -76,8 +81,9 @@
                                         <tr>
                                             <!-- Inspector Number -->
                                             <td style="background-color: #a5d0ffbd">{{ $count }}</td>
-                                            <!-- Inspector Name -->
-                                            <td style="color: white;background-color: darkcyan;">
+
+                                            <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;">
+
                                                 {{ $inspector->name }}</td>
                                             @foreach ($inspector['missions'] as $index2 => $mission)
                                                 @if ($mission)
@@ -112,8 +118,9 @@
                                                         </ul>
                                                     </td>
                                                 @else
-                                                    <!-- Default Background if No Mission -->
-                                                    <td style="background-color: #756262"></td>
+
+                                                    <td style="background-color: #d6d6d6"></td>
+
                                                 @endif
                                             @endforeach
                                         </tr>

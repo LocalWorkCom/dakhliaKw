@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use App\Models\EmployeeVacation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -29,6 +30,10 @@ class VacationController extends Controller
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 # code...
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
+                $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
+                $EmployeeVacation['EndDate'] = ExpectedEndDate($EmployeeVacation)[0];
+                $EmployeeVacation['StartWorkDate'] = ExpectedEndDate($EmployeeVacation)[1];
+                $EmployeeVacation['DaysLeft'] = VacationDaysLeft($EmployeeVacation);
             }
             return DataTables::of($EmployeeVacations)
 
@@ -39,8 +44,11 @@ class VacationController extends Controller
                 ->orderby('created_at', 'desc')
                 ->get();
             foreach ($EmployeeVacations as  $EmployeeVacation) {
-                # code...
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
+                $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
+                $EmployeeVacation['EndDate'] = ExpectedEndDate($EmployeeVacation)[0];
+                $EmployeeVacation['StartWorkDate'] = ExpectedEndDate($EmployeeVacation)[1];
+                $EmployeeVacation['DaysLeft'] = VacationDaysLeft($EmployeeVacation);
             }
             return DataTables::of($EmployeeVacations)
 
@@ -61,7 +69,8 @@ class VacationController extends Controller
         } else {
             $vacation_types = getVactionTypes();
         }
-        return view('vacation.add', compact('employees', 'vacation_types', 'id'));
+        $countries = getCountries();
+        return view('vacation.add', compact('employees', 'vacation_types', 'id', 'countries'));
     }
 
     /**
@@ -71,18 +80,15 @@ class VacationController extends Controller
     {
         $rules = [
             'vacation_type_id' => 'required',
-            'date_from' => 'required|date|before_or_equal:date_to',
-            'date_to' => 'required|date|after_or_equal:date_from',
-
+            'start_date' => 'required|date',
+            'employee_id' => 'required',
         ];
 
         $messages = [
-          
-            'vacation_type_id.required' => 'يجب ادخال اسم الادارة',
-            'date_from.required' => 'يجب ادخال تاريخ البداية',
-            'date_to.required' => 'يجب ادخال تاريخ النهاية',
-            'date_from.before_or_equal' => 'تاريخ البداية يجب ان يكون قبل او يساوي تاريخ النهاية',
-            'date_to.after_or_equal' => 'تاريخ النهاية يجب ان يكون بعد او يساوي تاريخ البداية',
+
+            'employee_id.required' => 'يجب عليك اختيار موظف',
+            'vacation_type_id.required' => 'يجب ادخال نوع الاجازة',
+            'start_date.required' => 'يجب ادخال تاريخ البداية',
         ];
         $validatedData = Validator::make($request->all(), $rules, $messages);
 
@@ -100,10 +106,10 @@ class VacationController extends Controller
 
         $employee_vacation = new EmployeeVacation();
         $employee_vacation->vacation_type_id = $request->vacation_type_id;
-        $employee_vacation->name = $request->name;
-        $employee_vacation->date_from = $request->date_from;
-        $employee_vacation->date_to = isset($request->date_to) ? $request->date_to : null;
-        $employee_vacation->employee_id = $employee_id  && $request->vacation_type_id != 3 ? $employee_id : null;
+        $employee_vacation->start_date = $request->start_date;
+        $employee_vacation->days_number = $request->days_num;
+        $employee_vacation->country_id = $request->country_id;
+        $employee_vacation->employee_id = $employee_id ;
         $employee_vacation->created_by = auth()->id();
         $employee_vacation->created_departement = auth()->user()->department_id;
         $employee_vacation->save();
@@ -127,7 +133,7 @@ class VacationController extends Controller
     public function show($id)
     {
         //
-        $vacation = EmployeeVacation::with('employee', 'vacation_type')->where('id', $id)->first();
+        $vacation = EmployeeVacation::with('employee', 'vacation_type', 'country')->where('id', $id)->first();
         $employees = getEmployees();
         $vacation_types = getVactionTypes();
 
@@ -147,7 +153,9 @@ class VacationController extends Controller
         } else {
             $vacation_types = getVactionTypes();
         }
-        return view('vacation.edit', compact('employees', 'vacation', 'vacation_types', 'id'));
+        $countries = getCountries();
+
+        return view('vacation.edit', compact('employees', 'vacation', 'vacation_types', 'id', 'countries'));
     }
 
     /**
@@ -164,7 +172,7 @@ class VacationController extends Controller
         ];
 
         $messages = [
-          
+
             'vacation_type_id.required' => 'يجب ادخال نوع الاجازة',
             'date_from.required' => 'يجب ادخال تاريخ البداية',
             'date_to.required' => 'يجب ادخال تاريخ النهاية',

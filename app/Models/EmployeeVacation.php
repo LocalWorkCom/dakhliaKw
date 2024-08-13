@@ -36,5 +36,10 @@ class EmployeeVacation extends Model
     {
         return $this->belongsTo(VacationType::class, 'vacation_type_id');
     }
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+    
   
 }

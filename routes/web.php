@@ -373,10 +373,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add')->middleware('check.permission:create EmployeeVacation');
     Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store')->middleware('check.permission:edit EmployeeVacation');
-    Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit')->middleware('check.permission:edit EmployeeVacation');
-    Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update')->middleware('check.permission:edit EmployeeVacation');
+    Route::post('vacation/accept/{id}', [VacationController::class, 'acceptVacation'])->name('vacation.accept');
+    Route::post('vacation/reject/{id}', [VacationController::class, 'rejectVacation'])->name('vacation.reject');
+   
+    // Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit')->middleware('check.permission:edit EmployeeVacation');
+    // Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update')->middleware('check.permission:edit EmployeeVacation');
     Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show')->middleware('check.permission:view EmployeeVacation');
-    Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete')->middleware('check.permission:delete EmployeeVacation');
+    // Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete')->middleware('check.permission:delete EmployeeVacation');
     Route::get('vacation/downlaod/{id}', [VacationController::class, 'downlaodfile'])->name('vacation.downlaodfile')->middleware('check.permission:download EmployeeVacation');
     Route::get('/employees/by-department/{departmentId}', [DepartmentController::class, 'getEmployeesByDepartment']);
 
@@ -388,6 +391,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('working_tree/edit/{id}', [WorkingTreeController::class, 'edit'])->name('working_tree.edit');
     Route::post('working_tree/update/{id}', [WorkingTreeController::class, 'update'])->name('working_tree.update');
     Route::get('working_tree/show/{id}', [WorkingTreeController::class, 'show'])->name('working_tree.show');
+
+
+    Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
 });
 
 Route::get('api/Inspectors', [InspectorController::class, 'getInspectors'])->name('api.inspector');
@@ -398,9 +404,6 @@ Route::post('/Inspectors', [InspectorController::class, 'store'])->name('inspect
 Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit');
 Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
 Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');
-
-
-Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
 
 
 

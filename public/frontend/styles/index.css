@@ -1328,21 +1328,20 @@ text-align: right;
     color: #ffffff;
 }
 .morning{
-    
-    background-color:  #e1c35c;
-    color: #ffffff;
+    background-color:#efc844;
     color: #ffffff;
 }
 .dayoff{
-    background-color: #b9b5b4;
-    color: #ffffff;
+    background-color: white;
+    color: #252525;
+    border: 1px solid #cccaca;
 }
 .afternoon{
-    background-color: #d17404c7;
+    background-color: #ed8b17;   
     color: #ffffff;
 }
 .rest{
-    background-color: #484848;
+    background-color: #000000ab;
     color: #ffffff;
 }
 .emergency-text{
@@ -1359,10 +1358,17 @@ text-align: right;
     font-weight: 600;
 }
 .urgent{
-    background-color: #1ecbc9;
-    color: #ffffff;
+    background-color: #8d8d8dbd;
+    color: #c90404;
+    font-weight: bolder;
 }
 .task{
-    background-color: #f9c9c9;
+    background-color: #c9f5f9;
     color: black;
+    font-weight: bolder;
+}
+.change{
+    background-color:    #d6d6d6;
+    color: #000000;
+    font-weight: bolder;
 }
