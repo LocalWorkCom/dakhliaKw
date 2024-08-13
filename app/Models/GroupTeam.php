@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class GroupTeam extends Model
 {
     use HasFactory;
-   
+    protected $table = 'group_teams';
+
+    protected $fillable = [
+        'name',
+        'group_id',
+    ];
+
     public function government()
     {
         return $this->hasMany(Government::class);

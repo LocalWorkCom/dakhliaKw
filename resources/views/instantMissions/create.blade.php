@@ -2,7 +2,6 @@
 
 
 @section('content')
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <style>
     
     .file-preview {
@@ -41,7 +40,7 @@
 @section('title')
     اضافة
 @endsection
-<main>
+
 <div class="row col-11" dir="rtl">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -53,7 +52,7 @@
         </ol>
 
     </nav>
-</div>
+</div> 
 <div class="row ">
     <div class="container welcome col-11">
         <p> الاوامر </p>
@@ -139,10 +138,10 @@
                         <div class="form-group col-md-10">
                             <label for="images"> اختار الملفات</label>
                             <div class="form-group file-input-container">
-                                <input type="file" name="images[]" id="images" class="form-control" multiple>
+                                <input type="file" name="images[]" id="images" class="form-control" dir="rtl" multiple>
                                 <span id="file-count"></span>
                             </div>
-                            <div class="file-preview" id="file-preview"></div>
+                            <div class="file-preview" id="file-preview" dir="rtl"></div>
                         </div>
 
                     </div>
@@ -165,7 +164,6 @@
 </div>
 
 
-</main>
 
 <script>
     const fileInput = document.getElementById('images');

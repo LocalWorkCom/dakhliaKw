@@ -532,33 +532,6 @@ $(document).ready(function() {
     loadRegions();
 });
 
-    
-    // $(document).ready(function() {
-    //     $('#Provinces').on('change', function() {
-    //         var Provinces_id = $(this).val();
-    //         if (Provinces_id) {
-    //             $.ajax({
-    //                 url: '/getRegion/' + Provinces_id,
-    //                 type: 'GET',
-    //                 dataType: 'json',
-    //                 success: function(data) {
-    //                     $('#region').empty();
-    //                     $('#region').append('<option selected> اختار من القائمة </option>');
-    //                     $.each(data, function(key, employee) {               
-    //                         console.log(employee);   
-    //                         $('#region').append('<option value="' + employee.id + '">' + employee.name + '</option>');
-    //                     });                 
-    //                 },
-    //                 error: function(xhr, status, error) {
-    //                     console.log('Error:', error);
-    //                     console.log('XHR:', xhr.responseText);
-    //                 }
-    //             });
-    //         } else {
-    //             $('#region').empty();
-    //         }
-    //     });
-    // });
     </script>
     <script>
         function togglePasswordVisibility() {
@@ -577,7 +550,7 @@ $(document).ready(function() {
         </script>
         <script>
    // $(document).ready(function() {
-    $('.select2').select2({  dir: "rtl"});
+    // $('.select2').select2({  dir: "rtl"});
 //});
     </script>
       <script>
