@@ -657,9 +657,12 @@ class UserController extends Controller
 
                 UploadFilesWithoutReal($path, 'image', $newUser, $file);
             }
+
+            $id = $request->type;
+             return redirect()->route('user.employees', ['id' => $id]);
         }
 
-        $id = $request->type;
+        
         // if($user->flag == "user")
         // {
         //     $department = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
@@ -672,7 +675,7 @@ class UserController extends Controller
         // $hisdepartment = $user->createdDepartments;
 
         // return response()->json($newUser);
-        return redirect()->route('user.employees', ['id' => $id]);
+       
     }
 
     /**
