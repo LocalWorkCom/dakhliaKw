@@ -13,9 +13,15 @@
                 <p> الاجــــــازات </p>
 
                 @if (Auth::user()->hasPermission('create EmployeeVacation'))
+<<<<<<< HEAD
                     <button type="button" class="wide-btn" onclick="window.location.href='{{ route('vacation.add', $id) }}'">
 
                         اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+=======
+                    <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;" onclick="window.location.href='{{ route('vacation.add', $id) }}'">
+
+                        اضافة جديد <img src="{{ asset('frontend/images/time.svg') }}" alt="img">
+>>>>>>> a0c8f4991ebb737eb823ba56e2cdde6bc0f5b551
                     </button>
                 @endif
             </div>
@@ -139,9 +145,9 @@
                             ],
                             columnDefs: [{
                                 targets: -1,
+                               
                                 render: function(data, type, row) {
                                     var showVacation = "<?php echo Auth::user()->hasPermission('view EmployeeVacation'); ?>";
-                                    // Using route generation correctly in JavaScript
                                     var showUrl = '{{ route('vacation.show', ':id') }}';
                                     var acceptUrl = '{{ route('vacation.accept', ':id') }}';
                                     var cutUrl = '{{ route('vacation.accept', ':id') }}';
@@ -151,6 +157,9 @@
                                     var directWorkUrl = '{{ route('vacation.reject', ':id') }}';
 
                                     showUrl = showUrl.replace(':id', row.id);
+                                    acceptUrl = acceptUrl.replace(':id', row.id);
+                                    rejectUrl = rejectUrl.replace(':id', row.id);
+
                                     var showButton = '';
                                     var acceptButton = '';
                                     var cutButton = '';
@@ -161,13 +170,7 @@
 
                                     if (showVacation) {
                                         showButton =
-                                            `<a href="${showUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
-                                    }
-                                    if (row.VacationStatus == 'مقدمة') {
-                                        acceptButton =
-                                            `<a href="${acceptUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> موافقة</a>`;
-                                        rejectButton =
-                                            `<a href="${rejectUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> رفض</a>`;
+                                            `<a href="${showUrl}" class="edit btn btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
                                     }
                                     if (row.VacationStatus == 'متجاوزة') {
                                         acceptButton =
@@ -192,9 +195,25 @@
 
                                     }
                                     // Checking if the vacation start date condition is met
+                                    if (row.VacationStatus == 'مقدمة') {
+                                        acceptButton = `
+                                            <form id="acceptForm" action="${acceptUrl}" method="POST" style="display:inline;">
+                                                @csrf
+                                                <a href="#" class="edit btn btn-sm" style="background-color: #28a745;" onclick="document.getElementById('acceptForm').submit();">
+                                                    <i class="fa fa-check"></i> موافقة
+                                                </a>
+                                            </form>`;
+
+                                        rejectButton = `
+                                            <form id="rejectForm" action="${rejectUrl}" method="POST" style="display:inline;">
+                                                @csrf
+                                                <a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('rejectForm').submit();">
+                                                    <i class="fa fa-times"></i> رفض
+                                                </a>
+                                            </form>`;
+                                    }
 
                                     return `${showButton}${acceptButton}${rejectButton}`;
-
                                 }
 
                             }],

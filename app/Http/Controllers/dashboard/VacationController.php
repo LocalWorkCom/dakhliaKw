@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\dashboard;
 
-use App\Http\Controllers\Controller;
+use Log;
 use App\Models\Country;
-use App\Models\EmployeeVacation;
+use App\Models\Inspector;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\EmployeeVacation;
 
+use App\Models\InspectorMission;
 use Yajra\DataTables\DataTables;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class VacationController extends Controller
 {
@@ -240,5 +243,70 @@ class VacationController extends Controller
 
         return response()->download($file_path, $file_name);
         //echo 'downloaded';
+    }
+
+    public function acceptVacation($id)
+    {
+        // Find the vacation record
+        $vacation = EmployeeVacation::find($id);
+
+        if ($vacation) {
+            // Update the status to Approved
+            $vacation->status = 'Approved';
+            $vacation->save();
+
+            // Find the inspector based on employee_id
+            $inspector = Inspector::where('user_id', $vacation->employee_id)->first();
+
+            if ($inspector) {
+                // Fetch InspectorMission records for the found inspector ID
+                $inspectorMissions = InspectorMission::where('inspector_id', $inspector->id)
+                    ->whereDate('date', '>=', $vacation->start_date)
+                    ->get();
+
+                if ($inspectorMissions->isEmpty()) {
+                    session()->flash('info', 'لا توجد مهام للمفتش لتحديثها.');
+                } else {
+                    $daysNumber = $vacation->days_number; // Ensure this field exists in your EmployeeVacation model
+
+                    foreach ($inspectorMissions as $mission) {
+                        // Check if the mission date is within the vacation period
+                        if ($mission->date->diffInDays($vacation->start_date) < $daysNumber) {
+                            // Update the InspectorMission record with the vacation ID
+                            $mission->vacation_id = $vacation->id;
+                            // $mission->status = 'Canceled'; // Or another appropriate status
+                            $mission->save();
+                        }
+                    }
+                    session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
+                }
+            } else {
+                session()->flash('error', 'المفتش غير موجود.');
+                return redirect()->back();
+            }
+        } else {
+            session()->flash('error', 'الإجازة غير موجودة.');
+        }
+
+        return redirect()->back();
+    }
+
+    public function rejectVacation($id)
+    {
+        // Find the vacation record
+        $vacation = EmployeeVacation::find($id);
+
+        if ($vacation) {
+            // Update the status to Rejected
+            $vacation->status = 'Rejected';
+            $vacation->save();
+
+            session()->flash('success', 'تم رفض الإجازة بنجاح.');
+        } else {
+            session()->flash('error', 'الإجازة غير موجودة.');
+        }
+        return redirect()->back();
+
+        // return redirect()->route('vacations.list', $vacation->employee_id ?? null);
     }
 }
