@@ -112,6 +112,8 @@ class inspector_points extends Command
                                 // Update the ids_group_point field
                                 $upated->ids_group_point = array_map('strval', $pointTeam);
                                 $upated->save();
+                                
+                                // call notification function to notify this inspector with his points for today
                             }
                         }
         
