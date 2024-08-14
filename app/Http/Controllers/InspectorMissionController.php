@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Grouppoint;
 use Carbon\Carbon;
-
 use App\Models\Grouppoint;
+
 use Illuminate\Http\Request;
 use App\Models\InspectorMission;
 use Illuminate\Support\Facades\Auth;
 
 class InspectorMissionController extends Controller
 {
-    public function getMissionsByInspector($inspectorId)
+    public function getMissionsByInspector()
     {
         $today = Carbon::today()->format('Y-m-d');
         // Retrieve the missions for the specific inspector
