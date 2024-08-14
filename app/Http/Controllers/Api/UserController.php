@@ -77,7 +77,8 @@ class UserController extends Controller
                 $success['token'] = $token;//->token;
                 $user->image=$user->image;
                 $success['user'] = $user->only(['id', 'name', 'username', 'military_number', 'phone', 'code','image']);
-                $success['user']['grade']=$user->grade->name;
+                if($user->grade) $grade=$user->grade->name; else $grade='مدني';
+                $success['user']['grade']=$grade;
               return $this->respondSuccess($success, 'User login successfully.');
 
 
