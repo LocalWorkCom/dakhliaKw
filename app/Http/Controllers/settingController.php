@@ -382,6 +382,100 @@ class settingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+       $yesterday = '2024-08-13';
+        $today = '2024-08-14';
+        $allGovernments = Government::pluck('id')->toArray();
+        foreach ($allGovernments as $government) {
+            $allAvailablePoints = Grouppoint::where('government_id', $government)->pluck('id')->toArray();
+            $allGroupsForGovernment = Groups::where('government_id', $government)->select('id', 'points_inspector')->get();
+
+            foreach ($allGroupsForGovernment as $group) {
+                
+                $groupTeams = InspectorMission::where('group_id', $group->id)
+                    ->select('group_team_id', 'ids_group_point')->whereDate('date', $yesterday)
+                    ->distinct('group_team_id')
+                    ->get();
+                
+                foreach ($groupTeams as $groupTeam) {
+                    $pointPerTeam = $group->points_inspector;
+                    if (!empty($allAvailablePoints)) {
+                        
+                        // Get random keys from the available points
+                        $randomKeys = array_rand($allAvailablePoints, $pointPerTeam);
+
+                        if ($pointPerTeam == 1) {
+                            
+                            $randomKeys = [$randomKeys];
+                        }else{
+                            $randomKeys = array_rand($allAvailablePoints, $pointPerTeam);
+
+                        }
+
+                        // Map the random keys to their corresponding values in the $allAvailablePoints array
+                        $pointTeam = array_map(function ($key) use ($allAvailablePoints) {
+                            return $allAvailablePoints[$key];
+                        }, $randomKeys);
+
+                        $allAvailableteam = array_diff($pointTeam, $groupTeam->ids_group_point);
+                      
+                        //dd(implode(', ', $pointTeam) . '-old-' . implode(', ', $groupTeam->ids_group_point) . '-diferent-' . implode(', ', $allAvailablePoint));
+                        if (count($allAvailableteam) == count($pointTeam)) {
+
+                            //dd($group->id . "  /   ".$groupTeam->group_team_id);
+                            $upatedMissions = InspectorMission::where('group_id', $group->id)->where('group_team_id', $groupTeam->group_team_id)->where('date', $today)->pluck('id')->toArray();
+                            foreach ($upatedMissions as $upatedMission) {
+                                $upated = InspectorMission::find($upatedMission);
+                                if ($upated) {
+                                    
+                                    // Update the ids_group_point field
+                                    $upated->ids_group_point = $pointTeam;
+
+                                    // Save the updated record
+                                    $upated->save();
+                                }
+                                $allAvailablePoints = array_diff($allAvailablePoints, $pointTeam);
+                               // dd($allAvailablePoints);
+                            }
+                            // dd('upatedMissions');
+                        } else {
+                         
+                           // dd('7' . "  / " . implode(', ', $allAvailablePoints));
+                            if (count($allAvailablePoints) <= 1) {
+                                 
+                                $pointTeam = [];
+                                break;
+                            } else {
+                                // Get random keys from the available points
+                                $randomKeys = array_rand($allAvailablePoints, $pointPerTeam);
+                                //dd('7 ^' . "  / " . implode(', ', $randomKeys));
+                                if ($pointPerTeam == 1) {
+                                    // If only one key is selected, convert it to an array
+                                    $randomKeys = [$randomKeys];
+                                }
+
+                                // Map the random keys to their corresponding values in the $allAvailablePoints array
+                                $pointTeam = array_map(function ($key) use ($allAvailablePoints) {
+                                    return $allAvailablePoints[$key];
+                                }, $randomKeys);
+                                $allAvailableteam = array_diff($pointTeam, $groupTeam->ids_group_point);
+                            }
+                        }
+                    } else {
+                       // dd('k');
+                        $upatedMissions = InspectorMission::where('group_id', $group->id)->where('group_team_id', $groupTeam->group_team_id)->where('date', $today)->pluck('id')->toArray();
+                        foreach ($upatedMissions as $upatedMission) {
+                            $upated = InspectorMission::find($upatedMission);
+                            if ($upated) {
+                                // Update the ids_group_point field
+                                $upated->ids_group_point = [];
+
+                                // Save the updated record
+                                $upated->save();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

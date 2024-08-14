@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Grouppoint;
 use Carbon\Carbon;
 
 use App\Models\Grouppoint;
