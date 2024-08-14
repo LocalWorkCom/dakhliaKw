@@ -7,7 +7,7 @@ use App\Http\Controllers\InspectorMissionController;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| API Routes 
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
