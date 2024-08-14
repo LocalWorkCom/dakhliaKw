@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Carbon\Carbon;
-use App\Models\Grouppoint;
 
+use App\Models\Grouppoint;
 use Illuminate\Http\Request;
+use App\Models\instantmission;
 use App\Models\InspectorMission;
+
 use Illuminate\Support\Facades\Auth;
 
 class InspectorMissionController extends Controller
@@ -26,6 +27,10 @@ class InspectorMissionController extends Controller
              ->with('workingTime', 'groupPoints.government')
              ->get();
 
+             $instantmissions = instantmission::where('inspector_id', $inspectorId)
+             ->get();
+             
+             $instantmissioncount = $instantmissions->count();
         $missionCount = $missions->count();
         
     // // Group the missions by some criteria (e.g., date or group type)
@@ -89,16 +94,39 @@ class InspectorMissionController extends Controller
         // dd($groupPointsData);
         $missionData[] = [
             'mission_id' => $mission->id,
-            'التاريخ' => $mission->date,
-            'عدد المهام' =>  $groupPointCount ,
+            'تاريخ اليوم' => $mission->date,
+            'عدد المهام' =>  $missionCount ,
+            'عدد الاوامر الفورية' =>  $instantmissioncount ,
+
+            'عدد النقاط' =>  $groupPointCount ,
             'المهام' => $groupPointsData,
         ];
     }
+
+     // Include the instant missions in the response
+     $instantMissionData = [];
+
+     foreach ($instantmissions as $instantmission) {
+         $instantMissionData[] = [
+             'instant_mission_id' => $instantmission->id,
+             'اسم الامر الفوري' => $instantmission->label,  // Assuming description field
+             'الموقع' => $instantmission->location,  
+             'الوصف' => $instantmission->description,  
+             'المجموعة' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
+             'الفريق' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name ,
+             'تاريخ الامر الفوري' => $instantmission->created_at->format('Y-m-d'),
+         ];
+     }
+
+     $responseData = [
+         'التفتيشات' => $missionData,
+         'الاوامر الفورية' => $instantMissionData,
+     ];
     // $success['ViolationType'] = $missionData->map(function ($item) {
     //     return $item->only(['id', 'name']);
     // });
     // return response()->json($missionData);
-    return $this->respondSuccess($missionData, 'Get Data successfully.');
+    return $this->respondSuccess($responseData, 'Get Data successfully.');
     }
 
     
