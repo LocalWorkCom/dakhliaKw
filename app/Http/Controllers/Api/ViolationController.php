@@ -86,7 +86,8 @@ class ViolationController  extends Controller
             $new->military_number = $request->military_number;
             $new->Civil_number = $request->Civil_number;
             $new->grade = $request->grade;
-            // $new->image = $request->image;
+            $new->mission_id = $request->mission_id;
+            $new->point_id = $request->point_id;
             $new->violation_type = $cleanedString;
             $new->user_id = auth()->user()->id;
             // $new->user_id = 1;
