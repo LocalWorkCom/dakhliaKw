@@ -39,7 +39,7 @@ class UserController extends Controller
         $user = User::where('military_number', $military_number)->join('inspectors','user_id','users.id')->first();
 
         if (!$user) {
-          return $this->respondError('Validation Error.', ['milltary_number'=> 'الرقم العسكري لا يتطابق مع سجلات المفتشين'], 400);
+          return $this->respondError('Validation Error.', ['military_number'=> 'الرقم العسكري لا يتطابق مع سجلات المفتشين'], 400);
         }
 
         // Check if the user has the correct flag
@@ -76,7 +76,8 @@ class UserController extends Controller
                 $user->save();
                 $success['token'] = $token;//->token;
                 $user->image=$user->image;
-                $success['user'] = $user->only(['id', 'firstname', 'email', 'lastname', 'phone', 'country_code', 'code','image']);
+                $success['user'] = $user->only(['id', 'name', 'username', 'military_number', 'phone', 'code','image']);
+                $success['user']['grade']=$user->grade->name;
               return $this->respondSuccess($success, 'User login successfully.');
 
 
