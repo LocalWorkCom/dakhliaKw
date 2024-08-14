@@ -36,7 +36,7 @@ class VacationController extends Controller
                 $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
                 $EmployeeVacation['EndDate'] = ExpectedEndDate($EmployeeVacation)[0];
                 $EmployeeVacation['StartWorkDate'] = ExpectedEndDate($EmployeeVacation)[1];
-                $EmployeeVacation['DaysLeft'] = VacationDaysLeft($EmployeeVacation);
+                $EmployeeVacation['DaysLeft'] = ($EmployeeVacation->start_date <= date('Y-m-d')) ? VacationDaysLeft($EmployeeVacation) : 'لم تبدا بعد';
             }
             return DataTables::of($EmployeeVacations)
 
@@ -51,7 +51,20 @@ class VacationController extends Controller
                 $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
                 $EmployeeVacation['EndDate'] = ExpectedEndDate($EmployeeVacation)[0];
                 $EmployeeVacation['StartWorkDate'] = ExpectedEndDate($EmployeeVacation)[1];
-                $EmployeeVacation['DaysLeft'] = VacationDaysLeft($EmployeeVacation);
+                $daysLeft = VacationDaysLeft($EmployeeVacation);
+                $currentDate = date('Y-m-d');
+
+                if ($EmployeeVacation->start_date > $currentDate) {
+                    // Vacation has not started yet
+                    $EmployeeVacation['DaysLeft'] = 'لم تبدا بعد';
+                } else {
+                    // Vacation has started, check days left
+                    if ($daysLeft >= 0) {
+                        $EmployeeVacation['DaysLeft'] = $daysLeft;
+                    } else {
+                        $EmployeeVacation['DaysLeft'] = 'متجاوز';
+                    }
+                }
             }
             return DataTables::of($EmployeeVacations)
 
