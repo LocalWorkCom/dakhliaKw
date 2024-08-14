@@ -1,18 +1,16 @@
 @extends('layout.main')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
+</script>
 
 @section('title', 'الاجازات')
 
 @section('content')
-    <!-- Include DataTables CSS and JS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
-    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
-    </script>
-
-    <div class="row">
+    <div class="row ">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
-                <p>الاجازات</p>
+                <p> الاجــــــازات </p>
 
                 @if (Auth::user()->hasPermission('create EmployeeVacation'))
                     <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;"
@@ -23,9 +21,7 @@
             </div>
         </div>
     </div>
-
     <br>
-
     <div class="row">
         <div class="container col-11 mt-3 p-0">
             <div class="row d-flex justify-content-between" dir="rtl">
@@ -58,7 +54,7 @@
                     <button class="btn-all px-3 mx-3" data-filter="rejected" style="color: #274373;">
                         الاجازات المرفوضة({{ $data_filter['rejected'] }})
                     </button>
-
+                 
                 </div>
             </div>
 
@@ -77,7 +73,7 @@
                             <th>تاريخ النهاية</th>
                             <th>الايام المتبقية</th>
                             <th>تاريخ المباشرة</th>
-                            <th style="width: 150px !important;">العمليات</th>
+                            <th style="width:150px !important;">العمليات</th>
                         </tr>
                     </thead>
                 </table>
@@ -151,28 +147,33 @@
 
                     $(document).ready(function() {
                         $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
-                        var filter = 'all';
-                        $('#users-table').DataTable({
+
+                        var id = {{ $id }};
+                        var filter = 'all'; // Default filter
+
+                        const table = $('#users-table').DataTable({
                             processing: true,
                             serverSide: true,
-                            ajax: '{{ route('employee.vacations', $id) }}',
-                            dataSrc: function(json) {
-                                // Filter data based on the selected filter
-                                if (filter === 'exceeded') {
-                                    return json.data.filter(item => item.VacationStatus === 'متجاوزة');
-                                } else if (filter === 'finished') {
-                                    return json.data.filter(item => item.VacationStatus === 'منتهية');
-                                } else if (filter === 'current') {
-                                    return json.data.filter(item => item.VacationStatus === 'حالية');
-                                } else if (filter === 'not_begin') {
-                                    return json.data.filter(item => item.VacationStatus === 'لم تبدأ بعد');
-                                } else if (filter === 'pending') {
-                                    return json.data.filter(item => item.VacationStatus === 'مقدمة');
-
-                                } else if (filter === 'rejected') {
-                                    return json.data.filter(item => item.VacationStatus === 'مرفوضة');
+                            ajax: {
+                                url: '{{ route('employee.vacations', $id) }}',
+                                dataSrc: function(json) {
+                                    // Filter data based on the selected filter
+                                    if (filter === 'exceeded') {
+                                        return json.data.filter(item => item.VacationStatus === 'متجاوزة');
+                                    } else if (filter === 'finished') {
+                                        return json.data.filter(item => item.VacationStatus === 'منتهية');
+                                    } else if (filter === 'current') {
+                                        return json.data.filter(item => item.VacationStatus === 'حالية');
+                                    } else if (filter === 'not_begin') {
+                                        return json.data.filter(item => item.VacationStatus === 'لم تبدأ بعد');
+                                    } else if (filter === 'pending') {
+                                        return json.data.filter(item => item.VacationStatus === 'مقدمة');
+                            
+                                    } else if (filter === 'rejected') {
+                                        return json.data.filter(item => item.VacationStatus === 'مرفوضة');
+                                    }
+                                    return json.data; // 'all' or default case
                                 }
-                                return json.data; // 'all' or default case
                             },
                             columns: [{
                                     data: 'id',
@@ -180,7 +181,6 @@
                                 },
                                 {
                                     data: 'VacationStatus',
-                                    sWidth: '50px',
                                     name: 'VacationStatus'
                                 },
                                 {
@@ -214,7 +214,6 @@
                                 {
                                     data: 'action',
                                     name: 'action',
-                                    sWidth: '100px',
                                     orderable: false,
                                     searchable: false
                                 }
@@ -308,6 +307,7 @@
                         });
                     });
                 </script>
+
             </div>
         </div>
     </div>
