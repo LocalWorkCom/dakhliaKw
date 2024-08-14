@@ -611,7 +611,7 @@ class UserController extends Controller
             $newUser->flag = "user";
             $newUser->rule_id = $request->rule_id;
             $newUser->save();
-
+            $id = $request->type;
             return redirect()->route('user.index', ['id' => $id]);
         } else {
 
