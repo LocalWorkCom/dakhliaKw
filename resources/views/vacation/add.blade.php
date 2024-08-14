@@ -66,30 +66,31 @@
                             <input type="date" id="start_date" name="start_date" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-group col-md-10 mx-md-md-2  d-flex ">
-                        <label for="days_num"> دولة خارجية </label>
-                        <input type="checkbox" class="mx-2" name="check_country" id="check_country">
+                    <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-10 mx-md-md-2  d-flex " dir="rtl">
+                            <input type="checkbox" class="mx-2" name="check_country" id="toggleCheckbox">
+                            <label for="toggleCheckbox"> دولة خارجية </label>
+                        </div>
                     </div>
 
+                    <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
 
-                    <div class="form-group col-md-10 mx-2" style="display: none" id="country-dev">
-                        <label for="country_id" style=" display: flex; justify-content: flex-start;">الدولة</label>
-                        <select id="country_id" name="country_id" class="form-control">
-                            <option value="">اختر الدولة</option>
-                            @foreach ($countries as $item)
-                                <option value="{{ $item->id }}">{{ $item->country_name_ar }}</option>
-                            @endforeach
-                        </select>
+                        <div class="form-group col-md-10 mx-2" style="display: none" id="toggleDiv">
+                            <label for="country_id" style=" display: flex; justify-content: flex-start;">الدولة</label>
+                            <select id="country_id" name="country_id" class="form-control">
+                                <option value="">اختر الدولة</option>
+                                @foreach ($countries as $item)
+                                    <option value="{{ $item->id }}">{{ $item->country_name_ar }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                     </div>
-
-
-
-                </div>
-                <div class="container col-10 mt-5 mb-5 ">
-                    <div class="form-row col-10 " dir="ltr">
-                        <button type="submit" class="btn-blue">حفظ</button>
+                    <div class="container col-10 mt-5 mb-5 ">
+                        <div class="form-row col-10 " dir="ltr">
+                            <button type="submit" class="btn-blue">حفظ</button>
+                        </div>
                     </div>
-                </div>
 
             </form>
         </div>
@@ -99,16 +100,19 @@
 
     @push('scripts')
         <script>
+            document.getElementById('toggleCheckbox').addEventListener('change', function() {
+                var toggleDiv = document.getElementById('toggleDiv');
+                if (this.checked) {
+                    toggleDiv.style.display = 'block';
+                } else {
+                    toggleDiv.style.display = 'none';
+                }
+            });
+        </script>
+        <script>
             $(document).ready(function() {
                 // Set minimum date for the start_date input to today's date
 
-                $('#check_country').change(function() {
-                    if ($(this).is(':checked')) {
-                        $('#country-dev').show();
-                    } else {
-                        $('#country-dev').hide();
-                    }
-                });
                 var id = "{{ $id }}";
                 // Get today's date
                 var today = new Date().toISOString().split('T')[0];

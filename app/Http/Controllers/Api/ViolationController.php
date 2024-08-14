@@ -88,8 +88,8 @@ class ViolationController  extends Controller
             $new->grade = $request->grade;
             // $new->image = $request->image;
             $new->violation_type = $cleanedString;
-            // $new->user_id = auth()->user()->id;
-            $new->user_id = 1;
+            $new->user_id = auth()->user()->id;
+            // $new->user_id = 1;
             $new->save();
 
             if ($request->hasFile('image')) {

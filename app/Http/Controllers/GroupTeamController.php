@@ -620,6 +620,7 @@ class GroupTeamController extends Controller
                     $group_teams[] = $GroupTeam;
                 }
             }
+
             // Assign the group_teams array to the Group object
             $Group['teams'] = $group_teams;
 
@@ -657,7 +658,6 @@ class GroupTeamController extends Controller
                         }
                     } else {
                         $colors[] = '#d6d6d6';
-
                     }
                 }
                 // Assign the colors array to the GroupTeam object
@@ -720,7 +720,10 @@ class GroupTeamController extends Controller
                 }
             }
         }
-
+        // Remove groups that do not have any teams
+        $Groups = $Groups->filter(function ($group) {
+            return count($group['teams']) > 0;
+        });
         // Return the view with the Groups data
         return view('inspectorMission.index', compact('Groups'));
     }

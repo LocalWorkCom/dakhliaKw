@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class InspectorMission extends Model
 {
@@ -66,6 +66,11 @@ class InspectorMission extends Model
     public function group()
     {
         return $this->belongsTo(Groups::class, 'group_id');
+    }
+
+    public function groupPoints()
+    {
+        return $this->hasMany(Grouppoint::class, 'id', 'ids_group_point');
     }
 
     public function groupTeam()

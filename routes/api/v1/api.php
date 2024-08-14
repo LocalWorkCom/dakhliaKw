@@ -7,7 +7,7 @@ use App\Http\Controllers\InspectorMissionController;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| API Routes 
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
@@ -29,7 +29,8 @@ Route::any('/Violation_type', 'App\Http\Controllers\Api\ViolationController@get_
 Route::post('/add_Violation', 'App\Http\Controllers\Api\ViolationController@add_Violation');
 
  
-Route::get('/inspector/{inspectorId}/missions', [InspectorMissionController::class, 'getMissionsByInspector']);
+Route::get('/inspector/missions', [InspectorMissionController::class, 'getMissionsByInspector']);
+
 });
 
 
