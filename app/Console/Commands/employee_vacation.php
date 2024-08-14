@@ -34,7 +34,7 @@ class employee_vacation extends Command
 
             if ($EmployeeeVacation->status == 'Approved') {
 
-                if ($EmployeeeVacation->start_date < $today && $expectedEndDate < $today) {
+                if ($EmployeeeVacation->start_date < $today && $expectedEndDate < $today && (!$EmployeeeVacation->end_date || $EmployeeeVacation->end_date > $today)) {
                     $EmployeeeVacation->is_exceeded = 1;
                     $EmployeeeVacation->save();
                 }
