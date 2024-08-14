@@ -18,10 +18,91 @@ class VacationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($id = 0)
+    public function index(Request $request, $id = 0)
     {
-        return view('vacation.index', compact('id'));
+        $filter = $request->query('filter');
+
+        // Initialize query
+        $vacations = EmployeeVacation::query();
+
+        // Apply filter if specified
+        if ($filter) {
+            switch ($filter) {
+                case 'exceeded':
+                    $vacations->where('is_exceeded', '=', 1);
+                    break;
+                case 'finished':
+                    $vacations->where('end_date', '<', now()->toDateString());
+                    break;
+                case 'current':
+                    $vacations->where('start_date', '=', now()->toDateString())
+                        ->where('status', '=', 'Approved');
+                    break;
+                case 'not_begin':
+                    $vacations->where('start_date', '>', now()->toDateString());
+                    break;
+            }
+        }
+
+        // Use for DataTable response
+        if ($request->ajax()) {
+            return datatables()->of($vacations)
+                ->addColumn('action', function ($vacation) {
+                    return view('vacation.partials.action-buttons', compact('vacation'));
+                })
+                ->make(true);
+        }
+
+        $vacationCount = $vacations->count();
+        $vacations = $vacations->with('employee', 'vacation_type')->orderby('created_at', 'desc')->get();
+
+        // Count based on filters
+        $exceeded = EmployeeVacation::where('is_exceeded', '=', 1)->count();
+        $finished = EmployeeVacation::where('end_date', '<', now()->toDateString())->count();
+        $current = EmployeeVacation::where('start_date', '=', now()->toDateString())
+            ->where('status', '=', 'Approved')
+            ->count();
+        $not_begin = EmployeeVacation::where('start_date', '>', now()->toDateString())->count();
+
+        // Pass results and counts to the view
+        return view('vacation.index', compact('id', 'vacations', 'exceeded', 'finished', 'current', 'not_begin', 'vacationCount'));
     }
+
+
+
+
+    // public function index(Request $request, $id = 0)
+    // {
+    //     $filter = $request->query('filter');
+
+    //     // Initialize query
+    //     $vacations = EmployeeVacation::query();
+
+    //     $vacationCount = $vacations->count();
+
+    //     $vacations = $vacations->with('employee', 'vacation_type')->orderby('created_at', 'desc')->get();
+
+    //     // Count based on filters
+    //     $exceeded = EmployeeVacation::where('is_exceeded', '=', 1)->count();
+    //     $finished = EmployeeVacation::where('end_date', '<', now()->toDateString())->count();
+    //     $current = EmployeeVacation::where('start_date', '=', now()->toDateString())
+    //         ->where('status', '=', 'Approved')
+    //         ->count();
+    //     $not_begin = EmployeeVacation::where('start_date', '>', now()->toDateString())->count();
+
+    //     // Pass results and counts to the view
+    //     return view('vacation.index', compact('id', 'vacations', 'exceeded', 'finished', 'current', 'not_begin', 'vacationCount'));
+    // }
+
+    // public function index($id = 0)
+    // {
+    //     // Fetch the count of EmployeeVacation records
+    //     $vacationCount = EmployeeVacation::count();
+
+    //     // Pass the count and ID to the view
+    //     return view('vacation.index', compact('id', 'vacationCount'));
+    // }
+
     public function getVacations($id)
     {
         if ($id) {
