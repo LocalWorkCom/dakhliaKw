@@ -28,8 +28,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::any('/Violation_type/{id}', 'App\Http\Controllers\Api\ViolationController@get_Violation_type');
 Route::post('/add_Violation', 'App\Http\Controllers\Api\ViolationController@add_Violation');
 
- 
 Route::get('/inspector/missions', [InspectorMissionController::class, 'getMissionsByInspector']);
+
 
 });
 
