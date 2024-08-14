@@ -644,7 +644,9 @@ class UserController extends Controller
             if ($request->has('job')) {
                 $newUser->job_id = $request->job;
             }
+
             $newUser->save();
+            // dd($newUser);
 
             if ($request->hasFile('image')) {
                 $file = $request->image;
@@ -667,7 +669,7 @@ class UserController extends Controller
         // $hisdepartment = $user->createdDepartments;
 
         // return response()->json($newUser);
-        return view('user.view', compact('id'));
+        return redirect()->route('user.employees', ['id' => $id]);
     }
 
     /**

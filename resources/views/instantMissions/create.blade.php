@@ -2,7 +2,6 @@
 
 
 @section('content')
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <style>
     
     .file-preview {
@@ -41,7 +40,7 @@
 @section('title')
     اضافة
 @endsection
-<main>
+
 <div class="row col-11" dir="rtl">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -53,7 +52,7 @@
         </ol>
 
     </nav>
-</div>
+</div> 
 <div class="row ">
     <div class="container welcome col-11">
         <p> الاوامر </p>
@@ -126,6 +125,18 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="inspectors">المفتش</label>
+                            <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش">
+                                <option selected disabled>اختار من القائمة</option>
+                                @foreach ($inspectors as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ old('inspectors') == $item->id ? 'selected' : '' }}> {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         
                         <div class="form-group col-md-10 mx-md-2">
                             <label for="description">الوصف </label>
@@ -139,10 +150,10 @@
                         <div class="form-group col-md-10">
                             <label for="images"> اختار الملفات</label>
                             <div class="form-group file-input-container">
-                                <input type="file" name="images[]" id="images" class="form-control" multiple>
+                                <input type="file" name="images[]" id="images" class="form-control" dir="rtl" multiple>
                                 <span id="file-count"></span>
                             </div>
-                            <div class="file-preview" id="file-preview"></div>
+                            <div class="file-preview" id="file-preview" dir="rtl"></div>
                         </div>
 
                     </div>
@@ -165,7 +176,6 @@
 </div>
 
 
-</main>
 
 <script>
     const fileInput = document.getElementById('images');
@@ -230,6 +240,38 @@
         }
     });
 });
+
+$(document).ready(function() {
+    $('#group_team_id').on('change', function() {
+        var group_team_id = $(this).val();
+        var group_id = $('#group_id').val();
+        console.log(group_team_id);
+       
+
+        if (group_id) {
+            $.ajax({
+                url: '/getInspector/' + group_team_id +'/'+  group_id ,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#inspectors').empty();
+                    $('#inspectors').append('<option selected disabled> اختار من القائمة </option>');
+                    $.each(data, function(key, employee) {               
+                        // console.log(employee);   
+                        $('#inspectors').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                    });                 
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#inspectors').empty();
+        }
+    });
+});
+
 </script>
 
 

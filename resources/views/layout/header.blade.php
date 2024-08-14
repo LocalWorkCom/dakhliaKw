@@ -104,12 +104,7 @@
                                         style="margin-left: 7px;">
                                     <a href="{{ route('user.employees', 1) }}">الموظفين</a>
                                 </li>
-                                <li> --}}
-                        {{-- <img src="{{ asset('frontend/images/weekend.png') }}" alt="logo"
-                                    style="margin-left: 7px;">
-                                    <a href="{{ route('vacations.list') }}">الاجازات</a>
-                                    --}}
-                        {{-- </li>
+                     
                             </ul>
                         </div>
                     </li> --}}
@@ -145,6 +140,12 @@
                                     <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo"
                                         style="margin-left: 7px;">
                                     <a href="{{ route('inspector.mission') }}">الجدول العام</a>
+                                </li>
+                                <li>
+                                    <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
+                                        style="margin-left: 7px;">
+                                    <a href="{{ route('vacations.list') }}">الاجازات</a>
+
                                 </li>
 
 

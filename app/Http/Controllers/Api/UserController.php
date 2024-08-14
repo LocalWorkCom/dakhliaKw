@@ -108,11 +108,13 @@ class UserController extends Controller
         $messages = [
             'military_number.required' => 'رقم العسكري مطلوب.',
             'password.required' => 'كلمة المرور مطلوبة.',
+            'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
         ];
 
         $validatedData = Validator::make($request->all(), [
             'military_number' => 'required|string',
             'password' => 'required|string',
+            'password_confirm' => 'same:password',
         ], $messages);
 
         if ($validatedData->fails()) {
@@ -203,6 +205,28 @@ class UserController extends Controller
         }
     }
 
+    public function check_military_number(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'military_number' => 'required_without:userId',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->respondError('Validation Error.', $validator->errors(), 400);
+        }
+
+        $user = User::where('military_number', $request->military_number)->join('inspectors','user_id','users.id')->first();
+
+        if ($user) { 
+        // $success['user'] = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
+        // return $this->respondSuccess($success, 'reset password successfully.');
+          return $this->respondSuccess(json_decode('{}'), 'الرقم العسكرى صحيح');
+        }
+        
+         else {
+            return $this->respondError('user not found', ['error' => 'مستخدم غير مسجل لدينا'], 404);
+        }
+    }
 
     public function logout()
     {

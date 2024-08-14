@@ -19,6 +19,7 @@ use App\Http\Requests\UpdateGroupTeamRequest;
 use App\Models\Grouppoint;
 use App\Models\Groups;
 use App\Models\instantmission;
+use Illuminate\Support\Facades\DB;
 
 class GroupTeamController extends Controller
 {
@@ -130,9 +131,9 @@ class GroupTeamController extends Controller
             return response()->json($e->getMessage());
         }
     }
-
-
-
+    /**
+     * team a newly created resource in storage.
+     */
     public function team($id)
     {
         $arrayInspector = [];
@@ -224,71 +225,6 @@ class GroupTeamController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, $id)
-    // {
-    //     // Custom validation messages
-    //     $messages = [
-    //         'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
-    //         'working_tree_id.required' => 'نظام العمل مطلوبة ولا يمكن تركها فارغة.',
-
-
-    //     ];
-
-    //     // Validate the request input
-    //     $request->validate([
-    //         'name' => 'required|string',
-    //         'working_tree_id' => 'required',
-
-
-    //     ], $messages);
-
-    //     $team = GroupTeam::find($id);
-
-    //     if (!$team) {
-    //         return redirect()->back()->withErrors(['team_not_found' => 'فريق العمل غير موجود.']);
-    //     }
-
-
-    //     $newName = $request->name;
-
-    //     $newInspectors = $request->inspectors_ids ? (array) $request->inspectors_ids : [];
-    //     $oldInspectorIds = $team->inspector_ids ? explode(',', $team->inspector_ids) : [];
-
-    //     foreach ($newInspectors as $key) {
-    //         $value =   Inspector::find($key);
-    //         $value->group_id = $team->group_id;
-    //         $value->save();
-    //     }
-    //     // Ensure all IDs are strings for comparison
-    //     $newInspectors = array_map('strval', $newInspectors);
-    //     $oldInspectorIds = array_map('strval', $oldInspectorIds);
-
-    //     $changeArr = array_diff($newInspectors, $oldInspectorIds);
-
-    //     // Also check for removed inspector IDs
-    //     $removedArr = array_diff($oldInspectorIds, $newInspectors);
-
-    //     if (empty($changeArr) && empty($removedArr) && $team->name === $newName && $team->working_tree_id == $request->working_tree_id) {
-    //         return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.']);
-    //     }
-
-    //     // Update the team name
-    //     $team->name = $newName;
-    //     $team->working_tree_id = $request->working_tree_id;
-
-    //     // Update inspector_ids if provided
-    //     if (!empty($newInspectors)) {
-    //         $team->inspector_ids = implode(",", $newInspectors);
-    //     } else {
-    //         // If no inspectors are provided, clear the inspector_ids
-    //         $team->inspector_ids = '';
-    //     }
-
-    //     // Save the changes
-    //     $team->save();
-
-    //     return redirect()->route('groupTeam.index', $team->group_id)->with('success', 'تم التعديل بنجاح');
-    // }
 
     public function update(Request $request, $id)
     {
@@ -298,72 +234,81 @@ class GroupTeamController extends Controller
             'working_tree_id.required' => 'نظام العمل مطلوبة ولا يمكن تركها فارغة.',
         ];
 
-        // Validate the request input
+        // Validate the request input with custom messages
         $request->validate([
             'name' => 'required|string',
             'working_tree_id' => 'required',
         ], $messages);
 
+        // Find the GroupTeam by ID
         $team = GroupTeam::find($id);
 
+        // Check if the team exists
         if (!$team) {
+            // Redirect back with an error if the team is not found
             return redirect()->back()->withErrors(['team_not_found' => 'فريق العمل غير موجود.']);
         }
 
+        // Retrieve the new name and inspector IDs from the request
         $newName = $request->name;
         $newInspectors = $request->inspectors_ids ? (array) $request->inspectors_ids : [];
         $oldInspectorIds = $team->inspector_ids ? explode(',', $team->inspector_ids) : [];
 
-        // Update inspector information
+        // Update group ID for each inspector in the new inspectors list
         foreach ($newInspectors as $key) {
             $value = Inspector::find($key);
             $value->group_id = $team->group_id;
             $value->save();
         }
 
-        // Ensure all IDs are strings for comparison
+        // Ensure all IDs are strings for comparison purposes
         $newInspectors = array_map('strval', $newInspectors);
         $oldInspectorIds = array_map('strval', $oldInspectorIds);
 
+        // Determine which inspectors were added or removed
         $changeArr = array_diff($newInspectors, $oldInspectorIds);
         $removedArr = array_diff($oldInspectorIds, $newInspectors);
 
-        // dd($changeArr, $removedArr);
+        // Check if there are any changes; if not, return with a message
         if (empty($changeArr) && empty($removedArr) && $team->name === $newName && $team->working_tree_id == $request->working_tree_id) {
             return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.']);
         }
 
-        // Update the team name and working tree
+        // Update the team name and working tree ID
         $team->name = $newName;
         $team->working_tree_id = $request->working_tree_id;
 
-        // Update inspector_ids if provided
+        // Update inspector_ids if provided; otherwise, clear the field
         if (!empty($newInspectors)) {
             $team->inspector_ids = implode(",", $newInspectors);
         } else {
-            // If no inspectors are provided, clear the inspector_ids
             $team->inspector_ids = '';
         }
 
-        // Save the changes
+        // Save the changes to the team
         $team->save();
 
-        // Generate or update InspectorMission records
+        // Prepare to generate or update InspectorMission records
         $start_day_date = date('Y-m-d');
         $currentDate = Carbon::now();
 
         // Determine the total number of days in the current month
         $totalDaysInMonth = $currentDate->endOfMonth()->day;
 
-        // Calculate the number of days left in the month
-        $num_days = $totalDaysInMonth -  now()->day;
+        // Calculate the number of days remaining in the month
+        $num_days = $totalDaysInMonth - now()->day;
+
+        // Delete missions for removed inspectors
         foreach ($removedArr as $Inspector) {
             InspectorMission::where('inspector_id', $Inspector)->where('date', '>=', today())->delete();
         }
+
+        // Generate missions for added or changed inspectors
         foreach ($changeArr as $Inspector) {
-            $date = $start_day_date; // Start from the 1st of the month
+            $date = $start_day_date; // Start from the current date
             $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$Inspector])->first();
 
+            // Check if the group team and working tree are valid
             if ($GroupTeam) {
                 $WorkingTree = WorkingTree::find($GroupTeam->working_tree_id);
                 if (!$WorkingTree || !$GroupTeam) {
@@ -371,9 +316,12 @@ class GroupTeamController extends Controller
                     continue;
                 }
 
+                // Calculate the total days in the working cycle
                 $total_days_in_cycle = $WorkingTree->working_days_num + $WorkingTree->holiday_days_num;
 
+                // Loop through the remaining days of the month
                 for ($day_of_month = 1; $day_of_month <= $num_days + 1; $day_of_month++) {
+                    // Determine if the day is a working day or a day off
                     $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
                     $is_day_off = $day_in_cycle > $WorkingTree->working_days_num;
                     $WorkingTreeTime = !$is_day_off
@@ -382,6 +330,7 @@ class GroupTeamController extends Controller
                         ->first()
                         : null;
 
+                    // Create a new InspectorMission record
                     $inspectorMission = new InspectorMission();
                     $inspectorMission->inspector_id = $Inspector;
                     $inspectorMission->group_id = $GroupTeam->group_id;
@@ -392,14 +341,20 @@ class GroupTeamController extends Controller
                     $inspectorMission->day_off = $is_day_off ? 1 : 0;
                     $inspectorMission->save();
 
+                    // Move to the next day
                     $date = date('Y-m-d', strtotime($date . ' +1 day'));
                 }
             }
         }
 
+        // Redirect back to the group team index with a success message
         return redirect()->route('groupTeam.index', $team->group_id)->with('success', 'تم التعديل بنجاح');
     }
 
+
+    /**
+     * updateTransfer the inspector from team to team.
+     */
     public function updateTransfer(Request $request, $group_id)
     {
         // Get the inspectors' IDs and team IDs from the request
@@ -411,16 +366,20 @@ class GroupTeamController extends Controller
 
         // Iterate over each inspector ID
         foreach ($inspectorIds as $inspectorId) {
+            // Get the new team ID for the current inspector
             $newTeamId = $teams[$inspectorId];
+            // Get the current group information based on group ID and team ID
             $currentGroup = GroupTeam::where('group_id', $group_id)->where('id', $newTeamId)->first();
 
             // Check if the inspector is already in a different group
             $existingGroupQuery = GroupTeam::where('group_id', $group_id)
                 ->whereRaw('find_in_set(?, inspector_ids)', [$inspectorId]);
 
+            // If the inspector is found in another group
             if ($existingGroupQuery->exists()) {
                 $existingGroup = $existingGroupQuery->first();
 
+                // If the inspector is not already in the new team, transfer them
                 if ($existingGroup->id != $newTeamId) {
                     // Mark this inspector as transferred
                     $transferredInspectors[] = $inspectorId;
@@ -433,8 +392,10 @@ class GroupTeamController extends Controller
 
                     // Add inspector to the new group
                     if (empty($currentGroup->inspector_ids)) {
+                        // If the new group has no inspectors, simply add the inspector
                         $currentGroup->inspector_ids = $inspectorId;
                     } else {
+                        // Otherwise, append the inspector to the existing list
                         $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
                         $currentInspectorIds[] = $inspectorId;
                         $currentGroup->inspector_ids = implode(',', $currentInspectorIds);
@@ -442,10 +403,13 @@ class GroupTeamController extends Controller
                     $currentGroup->save();
                 }
             } else {
-                // Add inspector to the new group if not already assigned
+                // If the inspector is not already assigned to a group
                 if (empty($currentGroup->inspector_ids)) {
+                    // If the new group has no inspectors, add the inspector
                     $currentGroup->inspector_ids = $inspectorId;
+                    $transferredInspectors[] = $inspectorId;
                 } else {
+                    // Otherwise, append the inspector to the existing list
                     $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
                     $currentInspectorIds[] = $inspectorId;
                     $currentGroup->inspector_ids = implode(',', $currentInspectorIds);
@@ -456,36 +420,38 @@ class GroupTeamController extends Controller
 
         // Only update inspector missions for transferred inspectors
         foreach ($transferredInspectors as $inspectorId) {
+            // Get current missions for the inspector starting from today
             $inspector_missions = InspectorMission::where('inspector_id', $inspectorId)->where('date', '>=', today())->get();
+            // Get the current group and its working tree
             $currentGroup = GroupTeam::where('group_id', $group_id)->where('id', $teams[$inspectorId])->first();
             $WorkingTree = WorkingTree::find($currentGroup->working_tree_id);
-            $start_day_date = date('Y-m-d');
-            // $num_days = date('t', strtotime($start_day_date));
+            $start_day_date = date('Y-m-d'); // Start from today's date
             $currentDate = Carbon::now();
 
             // Determine the total number of days in the current month
             $totalDaysInMonth = $currentDate->endOfMonth()->day;
 
             // Calculate the number of days left in the month
-            $num_days = $totalDaysInMonth -  now()->day;
+            $num_days = $totalDaysInMonth - now()->day;
             $day_of_month = 1;
-            if (count($inspector_missions)) {
 
-                $date = $start_day_date; // Start from the 1st of the month
+            // If there are existing missions for the inspector
+            if (count($inspector_missions)) {
+                $date = $start_day_date; // Start from today's date
                 foreach ($inspector_missions as $inspector_mission) {
+                    // Calculate the cycle of work and holidays
                     $total_days_in_cycle = $WorkingTree->working_days_num + $WorkingTree->holiday_days_num;
-                    // Loop by number of days in the month
-                    // for ($day_of_month = 1; $day_of_month <= $num_days; $day_of_month++) {
-                    // Check day off or not
+                    // Calculate which day in the cycle this is
                     $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
+                    // Determine if the day is a day off
                     $is_day_off = $day_in_cycle > $WorkingTree->working_days_num;
-                    // Get working tree time if not a day off
+                    // Get the working tree time if it's not a day off
                     $WorkingTreeTime = !$is_day_off
                         ? WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
                         ->where('day_num', $day_in_cycle)
                         ->first()
                         : null;
-                    // Insert data for monthly
+                    // Update the inspector's mission details
                     $inspector_mission->inspector_id = $inspectorId;
                     $inspector_mission->group_id = $currentGroup->group_id;
                     $inspector_mission->group_team_id = $currentGroup->id;
@@ -498,38 +464,108 @@ class GroupTeamController extends Controller
                     // Move to the next day
                     $date = date('Y-m-d', strtotime($date . ' +1 day'));
                     $day_of_month++;
-                    // }
+                }
+            } else {
+                // If there are no existing missions, create new ones
+                $date = $start_day_date; // Start from today's date
+                $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->first();
+
+                if ($GroupTeam) {
+                    // Validate working tree and group team existence
+                    $WorkingTree = WorkingTree::find($GroupTeam->working_tree_id);
+                    if (!$WorkingTree || !$GroupTeam) {
+                        Log::warning("Inspector ID $inspectorId does not have a valid working tree or group team.");
+                        continue;
+                    }
+
+                    // Calculate the total days in the working cycle
+                    $total_days_in_cycle = $WorkingTree->working_days_num + $WorkingTree->holiday_days_num;
+
+                    // Loop through the remaining days of the month
+                    for ($day_of_month = 1; $day_of_month <= $num_days + 1; $day_of_month++) {
+                        // Calculate which day in the cycle this is
+                        $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
+                        // Determine if the day is a day off
+                        $is_day_off = $day_in_cycle > $WorkingTree->working_days_num;
+                        // Get the working tree time if it's not a day off
+                        $WorkingTreeTime = !$is_day_off
+                            ? WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
+                            ->where('day_num', $day_in_cycle)
+                            ->first()
+                            : null;
+
+                        // Create a new inspector mission
+                        $inspectorMission = new InspectorMission();
+                        $inspectorMission->inspector_id = $inspectorId;
+                        $inspectorMission->group_id = $GroupTeam->group_id;
+                        $inspectorMission->group_team_id = $GroupTeam->id;
+                        $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
+                        $inspectorMission->working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+                        $inspectorMission->date = $date;
+                        $inspectorMission->day_off = $is_day_off ? 1 : 0;
+                        $inspectorMission->save();
+
+                        // Move to the next day
+                        $date = date('Y-m-d', strtotime($date . ' +1 day'));
+                    }
                 }
             }
         }
 
+        // Redirect back to the group team index with a success message
         return redirect()->route('groupTeam.index', $group_id)->with('success', 'تم التعديل بنجاح');
     }
 
-    public  function transfer($group_id)
+
+    /**
+     * transfer the inspector from team to team.
+     */
+
+    public function transfer($group_id)
     {
+        // Initialize an array to store the IDs of selected inspectors.
         $selectedInspectors = [];
 
+        // Fetch all inspectors belonging to the specified group along with their associated user data.
         $inspectors = Inspector::with('user')->where('group_id', $group_id)->get();
+
+        // Initialize a collection to hold the inspector groups and their associated group team IDs.
         $inspectorGroups = collect();
+
+        // Loop through each inspector to find their associated group teams.
         foreach ($inspectors as $inspector) {
+            // Get all group teams that the current inspector is a part of based on their ID.
             $groupTeams = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->get();
+
+            // Fetch all group teams belonging to the specified group.
             $GroupTeamGets = GroupTeam::where('group_id', $group_id)->get();
+
+            // Loop through each group team to extract and store inspector IDs.
             foreach ($GroupTeamGets as $GroupTeamGet) {
+                // Split the inspector_ids string into an array of IDs.
                 $inspectorIds = explode(',', $GroupTeamGet->inspector_ids);
+
+                // Merge the current inspector IDs with the selected inspectors array.
                 $selectedInspectors = array_merge($selectedInspectors, $inspectorIds);
             }
+
+            // Create an array mapping group team names to their IDs.
             $groupTeamIds = $groupTeams->pluck('id', 'name')->toArray();
 
+            // Push the inspector data and associated group team IDs into the inspectorGroups collection.
             $inspectorGroups->push([
                 'inspector_id' => $inspector,
                 'group_team_ids' => $groupTeamIds
             ]);
         }
+
+        // Fetch all group teams for the specified group.
         $allteams = GroupTeam::where('group_id', $group_id)->get();
-        // dd($groupTeams);
+
+        // Return the view with the necessary data to be used in the transfer interface.
         return view('groupteam.transfer', compact('inspectorGroups', 'allteams', 'group_id', 'selectedInspectors'));
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -540,45 +576,111 @@ class GroupTeamController extends Controller
     }
     public function IspectorMession()
     {
-        // $data = [];
+        // Retrieve all Groups
         $Groups = Groups::all();
+
         foreach ($Groups as $Group) {
+            // Initialize an array to hold teams associated with the group
+            $group_teams = [];
             $currentDate = Carbon::now();
 
+            // Get the start and end dates of the current month
             $startOfMonth = $currentDate->copy()->startOfMonth();
             $endOfMonth = $currentDate->copy()->endOfMonth();
 
+            // Initialize arrays to hold the days of the month and their corresponding numbers
             $daysInMonth = [];
             $daysNum = [];
             $count = 1;
-            Carbon::setLocale('ar');
+            Carbon::setLocale('ar'); // Set the locale to Arabic for day names
+
+            // Loop through each day of the month
             while ($startOfMonth->lte($endOfMonth)) {
-                $daysInMonth[] = $startOfMonth->translatedFormat('l'); // 'l' gives the full name of the day in Arabic
+                // Get the full name of the day in Arabic
+                $daysInMonth[] = $startOfMonth->translatedFormat('l');
+                // Add the day's number to the array
                 $daysNum[] = $count;
-                $startOfMonth->addDay();
+                $startOfMonth->addDay(); // Move to the next day
                 $count++;
             }
 
+            // Store the days' names and numbers in the Group object
             $Group['days_name'] = $daysInMonth;
             $Group['days_num'] = $daysNum;
+
+            // Retrieve all teams associated with the current group
             $GroupTeams = GroupTeam::where('group_id', $Group->id)->get();
-            $Group['teams'] = $GroupTeams;
+            foreach ($GroupTeams as $GroupTeam) {
+                // Check if there are any inspector missions associated with the team and group
+                $check = InspectorMission::where('group_id', $Group->id)
+                    ->where('group_team_id', $GroupTeam->id)
+                    ->first();
+                if ($check) {
+                    // If a mission exists, add the team to the group_teams array
+                    $group_teams[] = $GroupTeam;
+                }
+            }
+
+            // Assign the group_teams array to the Group object
+            $Group['teams'] = $group_teams;
+
+            // Process each team in the group
             foreach ($Group['teams'] as $GroupTeam) {
-                $inspector_ids = $GroupTeam->inspector_ids;
-                $inspectorIds = explode(',', $inspector_ids);
-                $inspectors = Inspector::whereIn('id', $inspectorIds)->get();
+                // Retrieve all inspectors associated with the team in the current group
+                $inspectorIds = InspectorMission::where('group_id', $Group->id)
+                    ->where('group_team_id', $GroupTeam->id)
+                    ->groupBy('inspector_id')
+                    ->pluck('inspector_id');
+                // Get the inspector objects
+                $inspectors = Inspector::whereIn('id', $inspectorIds->toArray())->get();
                 $GroupTeam['inspectors'] = $inspectors;
 
+                // Initialize an array to hold colors for each day in the month
+                $colors = [];
+                foreach ($Group['days_num'] as $num) {
+                    // Calculate the date corresponding to the current day number
+                    $date = $currentDate->copy()->startOfMonth()->addDays($num - 1);
 
+                    // Check if there is a mission for the group, team, and date
+                    $inspector_mission_check = InspectorMission::where('date', $date->toDateString())
+                        ->where('group_id', $Group->id)
+                        ->where('group_team_id', $GroupTeam->id)
+                        ->first();
+
+                    if ($inspector_mission_check) {
+                        // Get the working time and its associated color
+                        $WorkingTreeTime = WorkingTime::find($inspector_mission_check->working_time_id);
+                        if ($WorkingTreeTime) {
+                            $colors[] = $WorkingTreeTime->color;
+                        } else {
+
+                            $colors[] = 'white';
+                        }
+                    } else {
+                        $colors[] = '#d6d6d6';
+                    }
+                }
+                // Assign the colors array to the GroupTeam object
+                $GroupTeam['colors'] = $colors;
+
+                // Process each inspector in the team
                 foreach ($GroupTeam['inspectors'] as $inspector) {
-                    $inspector_missions = [];
                     $colors = [];
+                    $inspector_missions = [];
+
+                    // Loop through each day of the month for the inspector
                     foreach ($Group['days_num'] as $num) {
-
-
                         $date = $currentDate->copy()->startOfMonth()->addDays($num - 1);
-                        $inspector_mission = InspectorMission::where('date', $date->toDateString())->where('inspector_id', $inspector->id)->where('group_id', $Group->id)->where('group_team_id', $GroupTeam->id)->first();
+
+                        // Retrieve the inspector's mission for the specific date, group, and team
+                        $inspector_mission = InspectorMission::where('date', $date->toDateString())
+                            ->where('inspector_id', $inspector->id)
+                            ->where('group_id', $Group->id)
+                            ->where('group_team_id', $GroupTeam->id)
+                            ->first();
+
                         if ($inspector_mission) {
+                            // Retrieve the group points associated with the mission
                             if ($inspector_mission->ids_group_point) {
                                 $points = $inspector_mission->ids_group_point;
                                 $GroupPoints = Grouppoint::whereIn('id', $points)->get();
@@ -586,38 +688,43 @@ class GroupTeamController extends Controller
                                 $GroupPoints = [];
                             }
                             $inspector_mission['points'] = $GroupPoints;
-                            if ($inspector_mission->ids_instant_mission) {
 
+                            // Retrieve the instant missions associated with the mission
+                            if ($inspector_mission->ids_instant_mission) {
                                 $missions = $inspector_mission->ids_instant_mission;
                                 $InstantMissions = instantmission::whereIn('id', $missions)->get();
                             } else {
                                 $InstantMissions = [];
                             }
                             $inspector_mission['instant_missions'] = $InstantMissions;
-                        } else {
-                            $inspector_mission = null;
-                        }
-                        $inspector_missions[] = $inspector_mission;
 
-                        $inspector_mission_check = InspectorMission::where('date', $date->toDateString())->where('group_id', $Group->id)->where('group_team_id', $GroupTeam->id)->first();
-// dd($inspector_mission_check);
-                        if ($inspector_mission_check) {
-                            $WorkingTreeTime = WorkingTime::find($inspector_mission_check->working_time_id);
+                            // Get the working time and its associated color
+                            $WorkingTreeTime = WorkingTime::find($inspector_mission->working_time_id);
                             if ($WorkingTreeTime) {
                                 $colors[] = $WorkingTreeTime->color;
                             } else {
+                                // Default color if no working time is found
                                 $colors[] = '#b9b5b4';
                             }
+                        } else {
+                            // Default color if no mission is found
+                            $inspector_mission = null;
+                            $colors[] = '#d6d6d6';
                         }
+                        // Add the mission to the inspector's missions array
+                        $inspector_missions[] = $inspector_mission;
                     }
-                    $GroupTeam['colors'] = $colors;
-                    // dd($colors);
+                    // Assign the missions and colors arrays to the inspector object
                     $inspector['missions'] = $inspector_missions;
+                    $inspector['colors'] = $colors;
                 }
             }
         }
-        // dd($Groups);
-
+        // Remove groups that do not have any teams
+        $Groups = $Groups->filter(function ($group) {
+            return count($group['teams']) > 0;
+        });
+        // Return the view with the Groups data
         return view('inspectorMission.index', compact('Groups'));
     }
 }
