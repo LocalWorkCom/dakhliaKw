@@ -17,8 +17,9 @@ class ViolationController  extends Controller
     //
 
    
-    public function get_Violation_type($type)
+    public function get_Violation_type(Request $request)
     {
+        $type = $request->type;
         $allViolationType = ViolationTypes::whereJsonContains('type_id', $type)->get();
         if ($allViolationType->isNotEmpty()) {
             $grade = grade::all();
@@ -87,8 +88,8 @@ class ViolationController  extends Controller
             $new->grade = $request->grade;
             // $new->image = $request->image;
             $new->violation_type = $cleanedString;
-            // $new->user_id = auth()->user()->id;
-            $new->user_id = 1;
+            $new->user_id = auth()->user()->id;
+            // $new->user_id = 1;
             $new->save();
 
             if ($request->hasFile('image')) {
