@@ -17,8 +17,9 @@ class ViolationController  extends Controller
     //
 
    
-    public function get_Violation_type($type)
+    public function get_Violation_type(Request $request)
     {
+        $type = $request->type;
         $allViolationType = ViolationTypes::whereJsonContains('type_id', $type)->get();
         if ($allViolationType->isNotEmpty()) {
             $grade = grade::all();
