@@ -420,4 +420,23 @@ class VacationController extends Controller
 
         // return redirect()->route('vacations.list', $vacation->employee_id ?? null);
     }
+    public function updateVacation(Request $request, $id)
+    {
+
+        $vacation = EmployeeVacation::find($id);
+        if ($vacation) {
+            if ($request->type == 'cut') {
+                $vacation->is_cut = 1;
+            } else if ($request->type == 'exceed') {
+                $vacation->is_exceed = 1;
+            }
+            $vacation->end_date = $request->end_date;
+            $vacation->save();
+
+            session()->flash('success', 'تم التعديل بنجاح.');
+        } else {
+            session()->flash('error', 'الإجازة غير موجودة.');
+        }
+        return redirect()->back();
+    }
 }

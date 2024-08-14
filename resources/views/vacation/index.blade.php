@@ -1,16 +1,18 @@
 @extends('layout.main')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
-</script>
 
 @section('title', 'الاجازات')
 
 @section('content')
-    <div class="row ">
+    <!-- Include DataTables CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
+    </script>
+
+    <div class="row">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
-                <p> الاجــــــازات </p>
+                <p>الاجازات</p>
 
                 @if (Auth::user()->hasPermission('create EmployeeVacation'))
                     <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;"
@@ -21,7 +23,9 @@
             </div>
         </div>
     </div>
+
     <br>
+
     <div class="row">
         <div class="container col-11 mt-3 p-0">
             <div class="row d-flex justify-content-between" dir="rtl">
@@ -54,7 +58,7 @@
                     <button class="btn-all px-3 mx-3" data-filter="rejected" style="color: #274373;">
                         الاجازات المرفوضة({{ $data_filter['rejected'] }})
                     </button>
-                 
+
                 </div>
             </div>
 
@@ -73,40 +77,102 @@
                             <th>تاريخ النهاية</th>
                             <th>الايام المتبقية</th>
                             <th>تاريخ المباشرة</th>
-                            <th style="width:150px !important;">العمليات</th>
+                            <th style="width: 150px !important;">العمليات</th>
                         </tr>
                     </thead>
                 </table>
+
+                <!-- Modal for adding representative -->
+                <div class="modal fade" id="representative" tabindex="-1" aria-labelledby="representativeLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header d-flex justify-content-center">
+                                <div class="title d-flex flex-row align-items-center">
+                                    <h5 class="modal-title" id="representativeLabel">تعديل التاريخ</h5>
+                                    <img src="{{ asset('frontend/images/add-mandob.svg') }}" alt="">
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="type" id="type">
+                                <input type="hidden" name="id" id="id">
+                                <div class="form-group">
+                                    <label for="end_date">تاريخ النهاية</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                    <span class="text-danger span-error" id="end-date-error"></span>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn-blue" onclick="UpdateDate()">حفظ</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close">&times;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Script for DataTables and modal behavior -->
                 <script>
+                    function UpdateDate() {
+                        var end_date = $('#end_date').val();
+                        var type = $('#type').val();
+                        var id = $('#id').val();
+
+                        // Correctly replace ':id' in the URL
+                        var url = '{{ route('vacation.update', ':id') }}'.replace(':id', id);
+
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: {
+                                'end_date': end_date,
+                                'type': type,
+                                '_token': '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+                                console.log('Success:', data);
+                                // Optionally, you can close the modal and refresh the DataTable
+                                $('#representative').modal('hide');
+                                $('#users-table').DataTable().ajax.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.log('Error:', error);
+                                console.log('XHR:', xhr.responseText);
+                            }
+                        });
+                    }
+
+                    function update_type(type, id) {
+                        $('#type').val(type);
+                        $('#id').val(id);
+                    }
+
                     $(document).ready(function() {
                         $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
-
-                        var id = {{ $id }};
-                        var filter = 'all'; // Default filter
-
-                        const table = $('#users-table').DataTable({
+                        var filter = 'all';
+                        $('#users-table').DataTable({
                             processing: true,
                             serverSide: true,
-                            ajax: {
-                                url: '{{ route('employee.vacations', $id) }}',
-                                dataSrc: function(json) {
-                                    // Filter data based on the selected filter
-                                    if (filter === 'exceeded') {
-                                        return json.data.filter(item => item.VacationStatus === 'متجاوزة');
-                                    } else if (filter === 'finished') {
-                                        return json.data.filter(item => item.VacationStatus === 'منتهية');
-                                    } else if (filter === 'current') {
-                                        return json.data.filter(item => item.VacationStatus === 'حالية');
-                                    } else if (filter === 'not_begin') {
-                                        return json.data.filter(item => item.VacationStatus === 'لم تبدأ بعد');
-                                    } else if (filter === 'pending') {
-                                        return json.data.filter(item => item.VacationStatus === 'مقدمة');
-                            
-                                    } else if (filter === 'rejected') {
-                                        return json.data.filter(item => item.VacationStatus === 'مرفوضة');
-                                    }
-                                    return json.data; // 'all' or default case
+                            ajax: '{{ route('employee.vacations', $id) }}',
+                            dataSrc: function(json) {
+                                // Filter data based on the selected filter
+                                if (filter === 'exceeded') {
+                                    return json.data.filter(item => item.VacationStatus === 'متجاوزة');
+                                } else if (filter === 'finished') {
+                                    return json.data.filter(item => item.VacationStatus === 'منتهية');
+                                } else if (filter === 'current') {
+                                    return json.data.filter(item => item.VacationStatus === 'حالية');
+                                } else if (filter === 'not_begin') {
+                                    return json.data.filter(item => item.VacationStatus === 'لم تبدأ بعد');
+                                } else if (filter === 'pending') {
+                                    return json.data.filter(item => item.VacationStatus === 'مقدمة');
+
+                                } else if (filter === 'rejected') {
+                                    return json.data.filter(item => item.VacationStatus === 'مرفوضة');
                                 }
+                                return json.data; // 'all' or default case
                             },
                             columns: [{
                                     data: 'id',
@@ -114,6 +180,7 @@
                                 },
                                 {
                                     data: 'VacationStatus',
+                                    sWidth: '50px',
                                     name: 'VacationStatus'
                                 },
                                 {
@@ -147,6 +214,7 @@
                                 {
                                     data: 'action',
                                     name: 'action',
+                                    sWidth: '100px',
                                     orderable: false,
                                     searchable: false
                                 }
@@ -157,43 +225,50 @@
                             columnDefs: [{
                                 targets: -1,
                                 render: function(data, type, row) {
-                                    var showVacation = "<?php echo Auth::user()->hasPermission('view EmployeeVacation'); ?>";
-                                    var showUrl = '{{ route('vacation.show', ':id') }}';
-                                    var acceptUrl = '{{ route('vacation.accept', ':id') }}';
-                                    var rejectUrl = '{{ route('vacation.reject', ':id') }}';
+                                    var showVacation =
+                                        "{{ Auth::user()->hasPermission('view EmployeeVacation') }}";
+                                    var urls = {
+                                        show: '{{ route('vacation.show', ':id') }}',
+                                        accept: '{{ route('vacation.accept', ':id') }}',
+                                        reject: '{{ route('vacation.reject', ':id') }}',
+                                        printReturn: '{{ route('vacation.print_return', ':id') }}',
+                                        permit: '{{ route('vacation.permit', ':id') }}',
+                                        print: '{{ route('vacation.print', ':id') }}'
+                                    };
 
-                                    showUrl = showUrl.replace(':id', row.id);
-                                    acceptUrl = acceptUrl.replace(':id', row.id);
-                                    rejectUrl = rejectUrl.replace(':id', row.id);
+                                    for (var key in urls) {
+                                        urls[key] = urls[key].replace(':id', row.id);
+                                    }
 
-                                    var showButton = '';
-                                    var acceptButton = '';
-                                    var rejectButton = '';
-
+                                    var buttons = '';
                                     if (showVacation) {
-                                        showButton =
-                                            `<a href="${showUrl}" class="edit btn btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
+                                        buttons +=
+                                            `<a href="${urls.show}" class="edit btn btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
                                     }
 
-                                    if (row.VacationStatus === 'مقدمة') {
-                                        acceptButton = `
-                                            <form id="acceptForm" action="${acceptUrl}" method="POST" style="display:inline;">
-                                                @csrf
-                                                <a href="#" class="edit btn btn-sm" style="background-color: #28a745;" onclick="document.getElementById('acceptForm').submit();">
-                                                    <i class="fa fa-check"></i> موافقة
-                                                </a>
-                                            </form>`;
-
-                                        rejectButton = `
-                                            <form id="rejectForm" action="${rejectUrl}" method="POST" style="display:inline;">
-                                                @csrf
-                                                <a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('rejectForm').submit();">
-                                                    <i class="fa fa-times"></i> رفض
-                                                </a>
-                                            </form>`;
+                                    if (row.VacationStatus == 'منتهية') {
+                                        buttons +=
+                                            `<a href="${urls.printReturn}" class="edit btn btn-sm" style="background-color: #6020c5;"><i class="fa fa-eye"></i> طباعة العودة</a>`;
+                                        buttons +=
+                                            `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c93da4;" onclick="update_type('direct_work', '${row.id}')"><i class="fa fa-eye"></i> مباشرة العمل</a>`;
+                                    } else if (row.VacationStatus == 'مقدمة') {
+                                        buttons +=
+                                            `<form id="acceptForm" action="${urls.accept}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #28a745;" onclick="document.getElementById('acceptForm').submit();"><i class="fa fa-check"></i> موافقة</a></form>`;
+                                        buttons +=
+                                            `<form id="rejectForm" action="${urls.reject}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('rejectForm').submit();"><i class="fa fa-times"></i> رفض</a></form>`;
+                                        buttons +=
+                                            `<form id="permitForm" action="${urls.permit}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('permitForm').submit();"><i class="fa fa-times"></i> تصريح</a></form>`;
+                                        buttons +=
+                                            `<form id="printForm" action="${urls.print}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('printForm').submit();"><i class="fa fa-times"></i> طباعة</a></form>`;
+                                    } else if (row.VacationStatus == 'متجاوزة') {
+                                        buttons +=
+                                            `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #9dad1f;" onclick="update_type('direct_exceed', '${row.id}')"><i class="fa fa-eye"></i> باشر بعد التجاوز</a>`;
+                                    } else if (row.VacationStatus == 'حالية') {
+                                        buttons +=
+                                            `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c55a49;" onclick="update_type('cut', '${row.id}')"><i class="fa fa-eye"></i> قطع الاجازة</a>`;
                                     }
 
-                                    return `${showButton} ${acceptButton} ${rejectButton}`;
+                                    return buttons;
                                 }
                             }],
                             oLanguage: {
@@ -233,7 +308,6 @@
                         });
                     });
                 </script>
-
             </div>
         </div>
     </div>
