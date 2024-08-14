@@ -42,6 +42,7 @@
                             <th scope="row"style="background: #f5f6fa;">نوع الاجازة:</th>
                             <td>{{ $vacation->vacation_type->name }}</td>
                         </tr>
+                        
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">اسم الموظف:</th>
                             <td>
