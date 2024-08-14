@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('app:inspector_mission')->monthly();
+        $schedule->command('app:inspector_points')->dailyAt('00:00');
 
     }
 
