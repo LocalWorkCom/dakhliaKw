@@ -13,7 +13,6 @@
                 <p> الاجــــــازات </p>
 
                 @if (Auth::user()->hasPermission('create EmployeeVacation'))
-
                     <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;" onclick="window.location.href='{{ route('vacation.add', $id) }}'">
 
                         اضافة جديد <img src="{{ asset('frontend/images/time.svg') }}" alt="img">
@@ -169,6 +168,20 @@
                                             `<a href="${showUrl}" class="edit btn btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
                                     }
 
+                                    
+                                    if (row.VacationStatus == 'منتهية') {
+                                        // updated automatic using cron job
+                                        // exceedButton =
+                                        //     `<a href="${exceedUrl}" class="cut btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i>تجاوز الاجازة</a>`;
+                                        //this template if you don't need remove it
+                                        printReturnButton =
+                                            `<a href="${printReturnUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> طباعة العودة</a>`;
+                                        directWorkButton =
+                                            `<a href="${directWorkUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> مباشرة العمل</a>`;
+
+                                    }
+                                    // Checking if the vacation start date condition is met
+
                                     if (row.VacationStatus == 'مقدمة') {
                                         acceptButton = `
                                             <form id="acceptForm" action="${acceptUrl}" method="POST" style="display:inline;">
@@ -186,6 +199,7 @@
                                                 </a>
                                             </form>`;
                                     }
+
                                     if (row.VacationStatus == 'متجاوزة') {
                                         acceptButton =
                                             `<a href="${acceptUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> موافقة</a>`;
