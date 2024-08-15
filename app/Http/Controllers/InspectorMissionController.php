@@ -133,7 +133,8 @@ $count=0;
                 $instantMissionData = [];
                 $instantmission =  instantmission::find($instant);
                 //dd( $instabtMi);
-                $instantMissionData[] = [
+                if($instantmission)
+              {  $instantMissionData[] = [
                     'instant_mission_id' => $instantmission->id,
                     'name' => $instantmission->label,  // Assuming description field
                     'location' => $instantmission->location,  
@@ -141,7 +142,7 @@ $count=0;
                     'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
                     'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name ,
                     'date' => $instantmission->created_at->format('Y-m-d'),
-                ];
+                ];}
              }
         }
 
