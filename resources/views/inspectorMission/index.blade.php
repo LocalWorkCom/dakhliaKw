@@ -100,23 +100,37 @@
                                                         <!-- Mission Details -->
                                                         <td class="{{ $class }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
-                                                            <ul>
-                                                                <!-- Mission Points -->
-                                                                @if (!$mission->day_off && isset($mission['points']) && count($mission['points']) > 0)
-                                                                    @foreach ($mission['points'] as $point)
-                                                                        <li style="color: white;font-weight: bold">
-                                                                            {{ $point->name }}</li>
-                                                                    @endforeach
-                                                                @endif
+                                                            @if ($mission->vacation_id && !$mission->day_off)
+                                                                <ul>
+                                                                    <li>
+                                                                        @if ($mission->vacation->is_exceeded)
+                                                                            متجاوزة
+                                                                        @else
+                                                                            {{ $mission->vacation->vacation_type->name }}
+                                                                        @endif
+                                                                    </li>
+                                                                </ul>
+                                                            @else
+                                                                <ul>
+                                                                    <!-- Mission Points -->
+                                                                    @if (!$mission->day_off && isset($mission['points']) && count($mission['points']) > 0)
+                                                                        @foreach ($mission['points'] as $point)
+                                                                            <li style="color: white;font-weight: bold">
+                                                                                {{ $point->name }}</li>
+                                                                        @endforeach
+                                                                    @endif
 
-                                                                <!-- Instant Missions -->
-                                                                @if (!$mission->day_off && isset($mission['instant_missions']) && count($mission['instant_missions']) > 0)
-                                                                    @foreach ($mission['instant_missions'] as $instant_mission)
-                                                                        <li class="urgent">{{ $instant_mission->label }}
-                                                                        </li>
-                                                                    @endforeach
-                                                                @endif
-                                                            </ul>
+                                                                    <!-- Instant Missions -->
+                                                                    @if (!$mission->day_off && isset($mission['instant_missions']) && count($mission['instant_missions']) > 0)
+                                                                        @foreach ($mission['instant_missions'] as $instant_mission)
+                                                                            <li class="urgent">
+                                                                                {{ $instant_mission->label }}
+                                                                            </li>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </ul>
+                                                            @endif
+
                                                         </td>
                                                     @else
                                                         <td style="background-color: #d6d6d6"></td>
