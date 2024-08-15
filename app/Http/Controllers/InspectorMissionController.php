@@ -115,8 +115,8 @@ $count=0;
                // $workingTime = $mission->workingTime;
                $missionData[] = [
                 'mission_id' => $mission->id,
-                'date' => date('Y-m-d'),
-                'count' =>  $missionCount ,
+                'governate' => $groupPoint->government->name,
+                'name' =>  $groupPoint->name ,
                 'points_count' =>  $groupPointCount ,
                 'points' => $groupPointsData,
                  ];
@@ -163,7 +163,7 @@ $count=0;
 */
         $responseData = [
             'date'=>date('Y-m-d'),
-            'points_count'=>$count,
+            'mission_count'=>$groupPointCount,
             'missions' => $missionData,
             'instant_missions' => $instantMissionData,
         ];
