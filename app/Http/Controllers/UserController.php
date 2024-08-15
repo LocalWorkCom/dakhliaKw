@@ -611,6 +611,8 @@ class UserController extends Controller
             $newUser->flag = "user";
             $newUser->rule_id = $request->rule_id;
             $newUser->save();
+            $id = $request->type;
+            return redirect()->route('user.index', ['id' => $id]);
         } else {
 
 
@@ -630,6 +632,7 @@ class UserController extends Controller
             $newUser->Civil_number = $request->Civil_number;
             $newUser->seniority = $request->seniority;
             $newUser->department_id = $request->department_id;
+            $newUser->public_administration = $request->department_id;
             $newUser->work_location = $request->work_location;
             $newUser->qualification = $request->qualification;
             $newUser->date_of_birth = $request->date_of_birth;
@@ -644,7 +647,9 @@ class UserController extends Controller
             if ($request->has('job')) {
                 $newUser->job_id = $request->job;
             }
+
             $newUser->save();
+            // dd($newUser);
 
             if ($request->hasFile('image')) {
                 $file = $request->image;
@@ -652,9 +657,12 @@ class UserController extends Controller
 
                 UploadFilesWithoutReal($path, 'image', $newUser, $file);
             }
+
+            $id = $request->type;
+             return redirect()->route('user.employees', ['id' => $id]);
         }
 
-        $id = $request->type;
+        
         // if($user->flag == "user")
         // {
         //     $department = departements::where('id',$user->department_id)->orwhere('parent_id',$user->department_id)->get();
@@ -667,7 +675,7 @@ class UserController extends Controller
         // $hisdepartment = $user->createdDepartments;
 
         // return response()->json($newUser);
-        return view('user.view', compact('id'));
+       
     }
 
     /**
@@ -871,20 +879,22 @@ class UserController extends Controller
 
         $id = $user->flag == "user" ? "0" : "1";
 
-        return view('user.view', compact('id'));
+        if($user->flag == "user")
+        {
+            // return view('user.view', compact('id'));
+            return redirect()->route('user.index', ['id' => $id]);
+        }
+        
+        else
+        {
+            return redirect()->route('user.employees', ['id' => $id]);
+        }
     }
 
     public function getGoverment($id)
     {
         $sector = Sector::find($id);
-        
-        // $idsArray = json_decode($sector->governments_IDs, true);
-
-        // Convert strings to integers
-        // $idsArray = array_map('intval', $idsArray);
         $governments = Government::whereIn('id', $sector->governments_IDs)->get();
-        // dd($governments);
-        // $area = Region::all();
         return response()->json($governments);
     }
 
