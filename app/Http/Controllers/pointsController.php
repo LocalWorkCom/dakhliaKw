@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Government;
 use App\Models\Grouppoint;
 use App\Models\Point;
+use App\Models\PointDays;
 use App\Models\Region;
 use App\Models\Sector;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -53,29 +55,6 @@ class pointsController extends Controller
         $regions = Point::where('government_id', $governorate)->get();
         return response()->json($regions);
     }
-    //     public function getAllPoints2($governorate, $points)
-    // {
-    //     // Fetch selected points
-    //     $selectedPoints = Point::whereIn('id', $points)->get();
-    //     $governmentIds = $selectedPoints->pluck('government_id')->unique();
-
-    //     // Fetch all points for the same government
-    //     $allPoints = Point::whereIn('government_id', $governmentIds)->get();
-
-    //     // Get all points in the grouppoint table
-    //     $pointsInGroup = Grouppoint::whereIn('government_id', $governmentIds)
-    //         ->pluck('point_ids') // Assuming this is a serialized array or JSON
-    //         ->flatten() // Flatten the array
-    //         ->unique(); // Get unique point IDs
-
-    //     // Filter out points that are already in the grouppoint table
-    //     $availablePoints = $allPoints->filter(function($point) use ($pointsInGroup) {
-    //         return !$pointsInGroup->contains($point->id);
-    //     });
-
-    //     return response()->json($availablePoints);
-    // }
-
     public function index()
     {
         return view("points.index");
@@ -111,32 +90,10 @@ class pointsController extends Controller
                     }
                 }
                 
-
-
-
-                // if (isset($group)) {
-                //     foreach ($group as $G) {
-                //         //dd($G->flag);
-                //         if ($G->flag == 1) {
-                //             $btn = ' <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $G->id) . '"><i class="fa fa-edit"></i> ' . $G->name . ' </a>';
-                //         } else {
-                //             // $btn = '<p> لايوجد مجموعه</p>';
-                //             $btn = ' <a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $G->id) . '"><i class="fa fa-edit"></i> ' . $G->name . ' </a>';
-
-                //         }
-                //     }
-                // }
                 return $btn;
             })
-            ->addColumn('from', function ($row) {
-                // Ensure $row->from is in 'H:i:s' format before using createFromFormat
-                $time = $row->from ? Carbon::createFromFormat('H:i:s', $row->from)->format('h:i A') : '';
-                return str_replace(['AM', 'PM'], ['ص', 'م'], $time);
-            })
-            ->addColumn('to', function ($row) {
-                // Ensure $row->to is in 'H:i:s' format before using createFromFormat
-                $time = $row->to ? Carbon::createFromFormat('H:i:s', $row->to)->format('h:i A') : '';
-                return str_replace(['AM', 'PM'], ['ص', 'م'], $time);
+            ->addColumn('work_type', function ($row) {
+                return $row->work_type == 0 ? 'دوام 24 ساعه' : ' دوام جزئى';
             })
             ->addColumn('action', function ($row) {
                 $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('points.edit', $row->id) . '"><i class="fa fa-edit"></i> تعديل</a>';
@@ -158,67 +115,80 @@ class pointsController extends Controller
     public function store(Request $request)
     {
         //dd($request->all());
-        $rules = [
-            'name' => [
-                'required',
-                'string',
-                Rule::unique('points', 'name')->ignore($request->id),
-            ],
-            'sector_id' => 'required|exists:sectors,id',
-            'governorate' => 'required|exists:governments,id',
-            'region' => 'required|exists:regions,id',
-            'map_link' => 'nullable|string',
-            'Lat' => 'nullable|string',
-            'long' => 'nullable|string',
-            'from' => 'required|date_format:H:i|before_or_equal:to',
-            'to' => 'required|date_format:H:i|after_or_equal:from',
-            'note' => 'nullable|string',
-        ];
+        // $rules = [
+        //     'name' => [
+        //         'required',
+        //         'string',
+        //         Rule::unique('points', 'name')->ignore($request->id),
+        //     ],
+        //     'sector_id' => 'required|exists:sectors,id',
+        //     'governorate' => 'required|exists:governments,id',
+        //     'region' => 'required|exists:regions,id',
+        //     'map_link' => 'nullable|string',
+        //     'Lat' => 'nullable|string',
+        //     'long' => 'nullable|string',
+        //     'day_name' => 'required|array',
+        //     'note' => 'nullable|string',
+        // ];
 
-        // Define custom messages
-        $messages = [
-            'name.required' => 'يجب ادخال اسم نقطه',
-            'name.unique' => 'يجب إدخال اسم نقطة مختلف',
+        // // Define custom messages
+        // $messages = [
+        //     'name.required' => 'يجب ادخال اسم نقطه',
+        //     'name.unique' => 'يجب إدخال اسم نقطة مختلف',
+        //     'name.string' => 'يجب ان لا يحتوى اسم النقطه على رموز',
+        //     'governorate.required' => 'يجب اختيار محافظه واحده على الاقل',
+        //     'sector_id.required' => '',
+        //     'region.required' => '',
+        // ];
 
-            'name.string' => 'يجب ان لا يحتوى اسم النقطه على رموز',
-            'governorate.required' => 'يجب اختيار محافظه واحده على الاقل',
-            'sector_id.required' => '',
-            'region.required' => '',
-            'from.required' => 'يجب ادخال تاريخ البداية',
-            'to.required' => 'يجب ادخال تاريخ النهاية',
-            'from.date_format' => 'تاريخ البداية يجب أن يكون بصيغة صحيحة (HH:MM)',
-            'to.date_format' => 'تاريخ النهاية يجب أن يكون بصيغة صحيحة (HH:MM)',
-            'from.before_or_equal' => 'تاريخ البداية يجب ان يكون قبل أو يساوي تاريخ النهاية',
-            'to.after_or_equal' => 'تاريخ النهاية يجب أن يكون بعد أو يساوي تاريخ البداية',
-        ];
+        // // Validate the request
+        // $validatedData = Validator::make($request->all(), $rules, $messages);
 
-        // Validate the request
-        $validatedData = Validator::make($request->all(), $rules, $messages);
-
-        if ($validatedData->fails()) {
-            return redirect()->back()->withErrors($validatedData)->withInput();
-        }
-
-        // Proceed with storing the data
-        $point = new Point();
-        $point->name = $request->name;
-        $point->government_id = $request->governorate;
-        $point->region_id = $request->region;
-        $point->sector_id = $request->sector_id;
-        $point->google_map = $request->map_link;
-        $point->lat = $request->Lat;
-        $point->long = $request->long;
-        $point->note = $request->note;
-        $point->from = $request->from;
-        $point->to = $request->to;
-        $point->save();
-        $pointgroups = new Grouppoint();
-        $pointgroups->name = $point->name;
-        $pointgroups->points_ids = [json_encode($point->id)];
-        $pointgroups->government_id  = $request->governorate;
-        $pointgroups->flag  = 0;
-
-        $pointgroups->save();
+        // if ($validatedData->fails()) {
+        //     return redirect()->back()->withErrors($validatedData)->withInput();
+        // }
+        DB::transaction(function () use ($request) {
+            $dayNames = $request->input('day_name'); 
+            $fromTimes = $request->input('from');
+            $toTimes = $request->input('to');
+    
+            // Storing the point data
+            $point = new Point();
+            $point->name = $request->name;
+            $point->government_id = $request->governorate;
+            $point->region_id = $request->region;
+            $point->sector_id = $request->sector_id;
+            $point->google_map = $request->map_link;
+            $point->lat = $request->Lat;
+            $point->long = $request->long;
+            $point->work_type = $request->time_type;
+            $point->days_work = $request->time_type == 0 ? json_encode($dayNames) : null; // Assigning array directly
+            $point->created_by = auth()->id(); // Use auth() helper
+            $point->note = $request->note;
+            $point->save();
+    
+            // Creating a group point record
+            $pointgroups = new Grouppoint();
+            $pointgroups->name = $point->name;
+            $pointgroups->points_ids = [json_encode($point->id)]; // Store as JSON array
+            $pointgroups->government_id = $request->governorate;
+            $pointgroups->flag = 0;
+            $pointgroups->save();
+    
+            // If work type is part-time, create related PointDays records
+            if ($request->time_type == 1 && count($dayNames) === count($fromTimes) && count($fromTimes) === count($toTimes)) {
+                foreach ($dayNames as $index => $dayName) {
+                    PointDays::create([
+                        'name' => $dayName,
+                        'from' => $fromTimes[$index],
+                        'to' => $toTimes[$index],
+                        'point_id' => $point->id,
+                        'created_by' => auth()->id(),
+                    ]);
+                }
+            }
+        });
+       
         return redirect()->route('points.index')->with('message', 'تم أضافه نقطه');
     }
 
@@ -228,16 +198,12 @@ class pointsController extends Controller
     public function show(string $id)
     {
         $data = Point::findOrFail($id);
-
-        // Format 'from' and 'to' fields
-        $data->formatted_from = Carbon::createFromFormat('H:i:s', $data->from)->format('h:i A');
-        $data->formatted_to = Carbon::createFromFormat('H:i:s', $data->to)->format('h:i A');
-
-        // Replace AM/PM with ص/م
-        $data->formatted_from = str_replace(['AM', 'PM'], ['ص', 'م'], $data->formatted_from);
-        $data->formatted_to = str_replace(['AM', 'PM'], ['ص', 'م'], $data->formatted_to);
-
-        return view('points.showdetails', compact('data'));
+        if($data->work_type == 1){
+            $days = PointDays::where('point_id',$data->id)->get();
+        }else{
+            $days = null;
+        }
+        return view('points.showdetails', compact('data','days'));
     }
 
     /**
@@ -247,8 +213,12 @@ class pointsController extends Controller
     {
 
         $data = Point::findOrFail($id);
-
-        return view('points.edit', compact('data'));
+        if($data->work_type == 1){
+            $days = PointDays::where('point_id',$data->id)->get();
+        }else{
+            $days = null;
+        }
+        return view('points.edit', compact('data','days'));
     }
 
     /**
@@ -257,56 +227,99 @@ class pointsController extends Controller
     public function update(Request $request)
     {
         //dd($request->all());
-        $rules = [
-            'name' => 'required|string',
-            'sector_id' => 'required|exists:sectors,id',
-            'governorate' => 'required|exists:governments,id',
-            'region' => 'required|exists:regions,id',
-            'map_link' => 'nullable|string',
-            'lat' => 'nullable|string',
-            'long' => 'nullable|string',
-            'from' => 'required|date_format:H:i|before_or_equal:to',
-            'to' => 'required|date_format:H:i|after_or_equal:from',
-            'note' => 'nullable|string',
-        ];
+        // $rules = [
+        //     'name' => 'required|string',
+        //     'sector_id' => 'required|exists:sectors,id',
+        //     'governorate' => 'required|exists:governments,id',
+        //     'region' => 'required|exists:regions,id',
+        //     'map_link' => 'nullable|string',
+        //     'lat' => 'nullable|string',
+        //     'long' => 'nullable|string',
+        //     'note' => 'nullable|string',
+        // ];
 
-        // Define custom messages
-        $messages = [
-            'name.required' => 'يجب ادخال اسم نقطه',
-            'name.string' => 'يجب ان لا يحتوى اسم النقطه على رموز',
-            'governorate.required' => 'يجب اختيار محافظه واحده على الاقل',
-            'sector_id.required' => '',
-            'region.required' => '',
-            'from.required' => 'يجب ادخال تاريخ البداية',
-            'to.required' => 'يجب ادخال تاريخ النهاية',
-            'from.date_format' => 'تاريخ البداية يجب أن يكون بصيغة صحيحة (HH:MM)',
-            'to.date_format' => 'تاريخ النهاية يجب أن يكون بصيغة صحيحة (HH:MM)',
-            'from.before_or_equal' => 'تاريخ البداية يجب ان يكون قبل أو يساوي تاريخ النهاية',
-            'to.after_or_equal' => 'تاريخ النهاية يجب أن يكون بعد أو يساوي تاريخ البداية',
-        ];
+        // // Define custom messages
+        // $messages = [
+        //     'name.required' => 'يجب ادخال اسم نقطه',
+        //     'name.string' => 'يجب ان لا يحتوى اسم النقطه على رموز',
+        //     'governorate.required' => 'يجب اختيار محافظه واحده على الاقل',
+        //     'sector_id.required' => '',
+        //     'region.required' => '',
+        //     'from.required' => 'يجب ادخال تاريخ البداية',
+        //     'to.required' => 'يجب ادخال تاريخ النهاية',
+        //     'from.date_format' => 'تاريخ البداية يجب أن يكون بصيغة صحيحة (HH:MM)',
+        //     'to.date_format' => 'تاريخ النهاية يجب أن يكون بصيغة صحيحة (HH:MM)',
+        //     'from.before_or_equal' => 'تاريخ البداية يجب ان يكون قبل أو يساوي تاريخ النهاية',
+        //     'to.after_or_equal' => 'تاريخ النهاية يجب أن يكون بعد أو يساوي تاريخ البداية',
+        // ];
 
-        // Validate the request
-        $validatedData = Validator::make($request->all(), $rules, $messages);
+        // // Validate the request
+        // $validatedData = Validator::make($request->all(), $rules, $messages);
 
-        if ($validatedData->fails()) {
-            //dd($validatedData->messages());
-            return redirect()->back()->withErrors($validatedData)->withInput();
-        }
+        // if ($validatedData->fails()) {
+        //     //dd($validatedData->messages());
+        //     return redirect()->back()->withErrors($validatedData)->withInput();
+        // }
 
-        // Proceed with storing the data
-        $point = Point::find($request->id);
-        $point->name = $request->name;
-        $point->government_id = $request->governorate;
-        $point->region_id = $request->region;
-        $point->sector_id = $request->sector_id;
-        $point->google_map = $request->map_link;
-        $point->lat = $request->Lat;
-        $point->long = $request->long;
-        $point->note = $request->note;
-        $point->from = $request->from;
-        $point->to = $request->to;
-        $point->save();
-
+        DB::transaction(function () use ($request) {
+            $dayNames = $request->input('day_name');
+            $fromTimes = $request->input('from');
+            $toTimes = $request->input('to');
+            $pointId = $request->input('point_id'); // Assuming you pass the point ID in the request for updating
+        
+            // Check if point exists
+            $point = Point::find($pointId);
+        
+            if (!$point) {
+                // Create a new point if it doesn't exist
+                $point = new Point();
+            }
+        
+            // Update the point data
+            $point->name = $request->name;
+            $point->government_id = $request->governorate;
+            $point->region_id = $request->region;
+            $point->sector_id = $request->sector_id;
+            $point->google_map = $request->map_link;
+            $point->lat = $request->Lat;
+            $point->long = $request->long;
+            $point->work_type = $request->time_type;
+            $point->days_work = $request->time_type == 0 ? $dayNames : null; // Assigning array directly
+            $point->created_by = auth()->id(); // Use auth() helper
+            $point->note = $request->note;
+            $point->save();
+        
+            // Update or create the group point record
+            $pointgroups = Grouppoint::updateOrCreate(
+                ['points_ids' => json_encode([$point->id])],
+                [
+                    'name' => $point->name,
+                    'government_id' => $request->governorate,
+                    'flag' => 0,
+                ]
+            );
+        
+            // Update or create PointDays records
+            if ($request->time_type == 1 && count($dayNames) === count($fromTimes) && count($fromTimes) === count($toTimes)) {
+                // Delete existing PointDays records for the point
+                PointDays::where('point_id', $point->id)->delete();
+        
+                // Create new PointDays records
+                foreach ($dayNames as $index => $dayName) {
+                    PointDays::create([
+                        'name' => $dayName,
+                        'from' => $fromTimes[$index],
+                        'to' => $toTimes[$index],
+                        'point_id' => $point->id,
+                        'created_by' => auth()->id(),
+                    ]);
+                }
+            } else {
+                // If not part-time, ensure no PointDays records exist
+                PointDays::where('point_id', $point->id)->delete();
+            }
+        });
+        
         return redirect()->route('points.index')->with('message', 'تم تعديل نقطه');
     }
 

@@ -65,8 +65,7 @@
                                         <th>المحافظه</th>
                                         <th>المنطقه</th>
                                         <th>المجموعه الخاصه بالنقطه</th>
-                                        <th>من</th>
-                                        <th>الى</th>
+                                        <th>دوام النقطه</th>
                                         <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -111,12 +110,8 @@
                         name: 'group_name'
                     },
                     {
-                        data: 'from',
-                        name: 'from'
-                    },
-                    {
-                        data: 'to',
-                        name: 'to'
+                        data: 'work_type',
+                        name: 'work_type'
                     },
                     {
                         data: 'action',

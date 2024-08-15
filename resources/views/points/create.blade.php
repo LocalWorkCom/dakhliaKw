@@ -19,21 +19,21 @@
         <p> نقاط الوزاره </p>
     </div>
 </div> --}}
-    <br>  
+    <br>
     <div class="bg-white">
         @if ($errors->any())
-        <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-            {{ $error }}
-            @endforeach
-        </div>
-    @endif
+            <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    {{ $error }}
+                @endforeach
+            </div>
+        @endif
 
     </div>
     <form class="edit-grade-form" id="Points-form" action=" {{ route('points.store') }}" method="POST">
         @csrf
         <div class="row" dir="rtl">
-          
+
             <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
                 <h3 class="pt-3  px-md-5 px-3 "> اضافة نقطة </h3>
                 <div class="form-row mx-2 mb-2 ">
@@ -63,8 +63,9 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="governorate"> اختر المحافظة </label>
-                        <select name="governorate" id="governorate" style="border: 0.2px solid rgb(199, 196, 196);" required>
-                            <option value="" disabled selected >اختر المحافظه </option>
+                        <select name="governorate" id="governorate" style="border: 0.2px solid rgb(199, 196, 196);"
+                            required>
+                            <option value="" disabled selected>اختر المحافظه </option>
                         </select>
                     </div>
                 </div>
@@ -74,22 +75,6 @@
                         <select name="region" id="region" style="border: 0.2px solid rgb(199, 196, 196);" required>
                             <option value="" disabled selected>اختر المنطقه </option>
                         </select>
-                    </div>
-                </div>
-                <div class="form-row   mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
-                        <label class="pb-3" for="fromTime"> موعد البدايه </label>
-                        <input type="time" id="fromTime" name="from" class="form-control" required />
-                    </div>
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
-                        <label class="pb-3" for="toTime"> موعد النهايه </label>
-                        <input type="time" id="toTime" name="to" class="form-control" required />
-                    </div>
-                </div>
-
-                <div class="form-row   mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
-                        <span class="text-danger span-error" id="error-message" style="font-weight: bold;"></span>
                     </div>
                 </div>
                 {{-- <div id="error-message" class="error"></div> --}}
@@ -104,11 +89,38 @@
                 <div class="form-row   mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="long"> خطوط الطول </label>
-                        <input type="text" id="long" name="long" class="form-control" placeholder="  خطوط الطول " />
+                        <input type="text" id="long" name="long" class="form-control"
+                            placeholder="  خطوط الطول " />
                     </div>
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="lat"> خطوط العرض </label>
-                        <input type="text" id="lat" name="Lat" class="form-control" placeholder="  خطوط العرض " />
+                        <input type="text" id="lat" name="Lat" class="form-control"
+                            placeholder="  خطوط العرض " />
+                    </div>
+                </div>
+                <div class="form-row   mx-2 mb-2 ">
+                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
+                        <label class="pb-3" for="time_type"> اختر نظام العمل </label>
+                        <select name="time_type" id="time_type" style="border: 0.2px solid rgb(199, 196, 196);" required>
+                            <option value="0">نظام 24 ساعه</option>
+                            <option value="1">نظام دوام جزئى </option>
+
+                        </select>
+                        <span class="text-danger span-error" id="time_type-error"></span>
+
+                    </div>
+                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
+                        <label class="pb-3" for="days_num">عدد أيام العمل</label>
+                        <input type="number" id="days_num" name="days_num" class="form-control"
+                            max="7" min="1" required />
+                    </div>
+                </div>
+                <!-- Container for dynamically added inputs -->
+                <div id="dynamic-input-container">
+                </div>
+                <div class="form-row   mx-2 mb-2 ">
+                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
+                        <span class="text-danger span-error" id="error-message" style="font-weight: bold;"></span>
                     </div>
                 </div>
                 <div class="form-row mx-2 mb-2 ">
@@ -121,7 +133,8 @@
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
 
                         <button type="submit" class="btn-blue">
-                            <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img" height="20px" width="20px"> اضافة</button>
+                            <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img" height="20px"
+                                width="20px"> اضافة</button>
                     </div>
                 </div>
             </div>
@@ -130,6 +143,119 @@
 @endsection
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.getElementById('time_type').addEventListener('change', updateForm);
+        document.getElementById('days_num').addEventListener('input', updateForm);
+
+        function updateForm() {
+            const timeType = document.getElementById('time_type').value;
+            const daysNum = parseInt(document.getElementById('days_num').value, 10);
+            const dynamicInputContainer = document.getElementById('dynamic-input-container');
+
+            // Clear previous dynamic inputs
+            dynamicInputContainer.innerHTML = '';
+
+            if (isNaN(daysNum) || daysNum <= 0) {
+                dynamicInputContainer.style.display = 'none';
+                return;
+            }
+
+            dynamicInputContainer.style.display = 'block';
+
+            // Create divs dynamically based on the selected value and the number entered
+            for (let i = 0; i < daysNum; i++) {
+                const mainDiv = document.createElement('div');
+                mainDiv.className = 'form-row mx-2 mb-2';
+
+                const dayNameContainer = document.createElement('div');
+                dayNameContainer.className = 'form-row mx-2 mb-2';
+
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3';
+                inputGroup.id = `day_name-container_${i}`;
+
+                // Create day_name select
+                const label = document.createElement('label');
+                label.className = 'pb-3';
+                label.setAttribute('for', `day_name_${i}`);
+                label.textContent = 'اختر اليوم';
+
+                const select = document.createElement('select');
+                select.name = 'day_name[]';
+                select.id = `day_name_${i}`;
+                select.style.border = '0.2px solid rgb(199, 196, 196)';
+                select.required = true;
+
+                // Add options to select
+                ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day, index) => {
+                    const option = document.createElement('option');
+                    option.value = index; // Use the index as the value
+                    option.text = day; // Display the day name
+                    select.appendChild(option);
+                });
+
+                const errorSpan = document.createElement('span');
+                errorSpan.className = 'text-danger span-error';
+                errorSpan.id = `day_name_${i}-error`;
+
+                inputGroup.appendChild(label);
+                inputGroup.appendChild(select);
+                inputGroup.appendChild(errorSpan);
+
+                dayNameContainer.appendChild(inputGroup);
+                mainDiv.appendChild(dayNameContainer);
+
+                // If timeType == 1, add fromTime and toTime inputs
+                if (timeType == '1') {
+                    const timeInputRow = document.createElement('div');
+                    timeInputRow.className = 'form-row mx-2 mb-2';
+
+                    const fromTimeGroup = document.createElement('div');
+                    fromTimeGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3 col-6';
+
+                    const fromTimeLabel = document.createElement('label');
+                    fromTimeLabel.className = 'pb-3';
+                    fromTimeLabel.setAttribute('for', `fromTime_${i}`);
+                    fromTimeLabel.textContent = 'موعد البدايه';
+
+                    const fromTimeInput = document.createElement('input');
+                    fromTimeInput.type = 'time';
+                    fromTimeInput.id = `fromTime_${i}`;
+                    fromTimeInput.name = 'from[]';
+                    fromTimeInput.className = 'form-control';
+                    fromTimeInput.required = true;
+
+                    fromTimeGroup.appendChild(fromTimeLabel);
+                    fromTimeGroup.appendChild(fromTimeInput);
+
+                    const toTimeGroup = document.createElement('div');
+                    toTimeGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3 col-6';
+
+                    const toTimeLabel = document.createElement('label');
+                    toTimeLabel.className = 'pb-3';
+                    toTimeLabel.setAttribute('for', `toTime_${i}`);
+                    toTimeLabel.textContent = 'موعد النهايه';
+
+                    const toTimeInput = document.createElement('input');
+                    toTimeInput.type = 'time';
+                    toTimeInput.id = `toTime_${i}`;
+                    toTimeInput.name = 'to[]';
+                    toTimeInput.className = 'form-control';
+                    toTimeInput.required = true;
+
+                    toTimeGroup.appendChild(toTimeLabel);
+                    toTimeGroup.appendChild(toTimeInput);
+
+                    timeInputRow.appendChild(fromTimeGroup);
+                    timeInputRow.appendChild(toTimeGroup);
+
+                    mainDiv.appendChild(timeInputRow);
+                }
+
+                dynamicInputContainer.appendChild(mainDiv);
+            }
+        }
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const fromTimeInput = document.getElementById('fromTime');
@@ -167,6 +293,18 @@
     </script>
     <script>
         $(document).ready(function() {
+            const daysInput = document.getElementById('days_num');
+
+            daysInput.addEventListener('input', function() {
+                if (parseInt(this.value) > 7) {
+                    this.value = 7; // Restrict the value to 7 if the user enters a larger number
+                    alert("عفوا عدد الايام لا يمكن ان تكون اكثر من 7 ايام");
+                }
+                if (parseInt(this.value) < 1) {
+                    this.value = 1; // Restrict the value to 7 if the user enters a larger number
+                    alert("عفوا عدد الايام لا يمكن ان تكون اقل من يوم");
+                }
+            });
             $('#sector_id').change(function() {
                 var sectorId = $(this).val();
                 if (sectorId) {
@@ -175,7 +313,9 @@
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
-                            $('#governorate').empty().append('<option value="" disabled selected>اختر المحافظه </option>');
+                            $('#governorate').empty().append(
+                                '<option value="" disabled selected>اختر المحافظه </option>'
+                            );
 
                             // Check if data is an array
                             if (Array.isArray(data)) {
@@ -190,17 +330,21 @@
                                 $('#governorate').prop('disabled', true);
                             }
 
-                            $('#region').empty().append('<option value=""disabled selected>اختر المنطقه </option>').prop(
-                                'disabled', true);
+                            $('#region').empty().append(
+                                    '<option value=""disabled selected>اختر المنطقه </option>')
+                                .prop(
+                                    'disabled', true);
                         },
                         error: function(xhr) {
                             console.error('AJAX request failed', xhr);
                         }
                     });
                 } else {
-                    $('#governorate').empty().append('<option value=""  disabled selected>اختر المحافظه </option>').prop('disabled',
+                    $('#governorate').empty().append(
+                        '<option value=""  disabled selected>اختر المحافظه </option>').prop('disabled',
                         true);
-                    $('#region').empty().append('<option value="" disabled selected>اختر المنطقه </option>').prop('disabled', true);
+                    $('#region').empty().append('<option value="" disabled selected>اختر المنطقه </option>')
+                        .prop('disabled', true);
                 }
             });
 
@@ -212,7 +356,9 @@
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
-                            $('#region').empty().append('<option value=""  disabled selected>اختر المنطقه </option>');
+                            $('#region').empty().append(
+                                '<option value=""  disabled selected>اختر المنطقه </option>'
+                            );
 
                             // Check if data is an array
                             if (Array.isArray(data)) {
@@ -232,7 +378,8 @@
                         }
                     });
                 } else {
-                    $('#region').empty().append('<option value="" disabled selected>اختر المنطقه </option>').prop('disabled', true);
+                    $('#region').empty().append('<option value="" disabled selected>اختر المنطقه </option>')
+                        .prop('disabled', true);
                 }
             });
         });

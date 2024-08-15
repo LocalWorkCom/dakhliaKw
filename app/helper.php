@@ -322,3 +322,9 @@ function ExpectedEndDate($employeeVacation)
     $workStartdDate = $expectedEndDate->copy()->addDays(1);
     return [$expectedEndDate->toDateString(), $workStartdDate->toDateString()];
 }
+
+function formatTime($time){
+    $to = Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
+    $toDay = str_replace(['AM', 'PM'], ['ص', 'م'], $to);
+    return $toDay ;
+}
