@@ -13,4 +13,14 @@ class PointDays extends Model
     protected $fillable = [
         'name','from','to','point_id','created_by'
     ];
+    public function point()
+    {
+        return $this->belongsTo(Point::class, 'point_id');
+    }
+
+    // Define the relationship with the User model
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }
