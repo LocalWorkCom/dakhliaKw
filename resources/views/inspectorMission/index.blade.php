@@ -100,14 +100,10 @@
                                                         <!-- Mission Details -->
                                                         <td class="{{ $class }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
-                                                            @if ($mission->vacation_id && !$mission->day_off)
+                                                            @if (!$mission->day_off && isset($inspector['vacations']) && count($inspector['vacations']) > 0)
                                                                 <ul>
-                                                                    <li>
-                                                                        @if ($mission->vacation->is_exceeded)
-                                                                            متجاوزة
-                                                                        @else
-                                                                            {{ $mission->vacation->vacation_type->name }}
-                                                                        @endif
+                                                                    <li style="color: white;font-weight: bold">
+                                                                        {{ $inspector['vacations'][$index2] }}
                                                                     </li>
                                                                 </ul>
                                                             @else
