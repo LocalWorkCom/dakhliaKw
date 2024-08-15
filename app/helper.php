@@ -278,13 +278,23 @@ function GetEmployeeVacationType($employeeVacation)
         if ($employeeVacation->start_date > $today) {
             return $notBegin;
         } else if ($employeeVacation->start_date < $today && $expectedEndDate < $today) {
-            if ($employeeVacation->is_exceeded) {
-                return $exceeded;
-            } else {
+            if (!$employeeVacation->end_data || $employeeVacation->end_date > $today) {
                 return $finished;
+            } else {
+
+                if ($employeeVacation->is_exceeded) {
+                    return $exceeded;
+                } else {
+                    return $finished;
+                }
             }
         } else {
-            return $current;
+            if ($employeeVacation->is_cut) {
+                return $finished;
+            } else {
+
+                return $current;
+            }
         }
     }
 }
@@ -320,4 +330,12 @@ function ExpectedEndDate($employeeVacation)
     $expectedEndDate = $startDate->copy()->addDays($daysNumber);
     $workStartdDate = $expectedEndDate->copy()->addDays(1);
     return [$expectedEndDate->toDateString(), $workStartdDate->toDateString()];
+}
+function AddDays($date, $daysNumber)
+{
+    $startDate = Carbon::parse($date);
+    $daysNumber = $daysNumber;
+
+    $next_date = $startDate->copy()->addDays($daysNumber);
+    return $next_date->toDateString();
 }

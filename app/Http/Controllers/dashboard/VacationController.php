@@ -76,7 +76,7 @@ class VacationController extends Controller
                 $rejected++;
             } else if (GetEmployeeVacationType($EmployeeVacation) == 'مقدمة') {
                 $pending++;
-            } 
+            }
         }
         $data_filter['current'] = $current;
         $data_filter['finished'] = $finished;
@@ -145,9 +145,26 @@ class VacationController extends Controller
                 # code...
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
                 $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
-                $EmployeeVacation['EndDate'] = ExpectedEndDate($EmployeeVacation)[0];
-                $EmployeeVacation['StartWorkDate'] = ExpectedEndDate($EmployeeVacation)[1];
-                $EmployeeVacation['DaysLeft'] = ($EmployeeVacation->start_date <= date('Y-m-d')) ? VacationDaysLeft($EmployeeVacation) : 'لم تبدا بعد';
+                $EmployeeVacation['EndDate'] = ($EmployeeVacation->end_date) ? $EmployeeVacation->end_date : ExpectedEndDate($EmployeeVacation)[0];
+                $EmployeeVacation['StartWorkDate'] = ($EmployeeVacation->end_date) ? AddDays($EmployeeVacation->end_date, 1) : ExpectedEndDate($EmployeeVacation)[1];
+                $daysLeft = VacationDaysLeft($EmployeeVacation);
+                $currentDate = date('Y-m-d');
+
+                if ($EmployeeVacation->start_date > $currentDate) {
+                    // Vacation has not started yet
+                    $EmployeeVacation['DaysLeft'] = 'لم تبدا بعد';
+                } else {
+                    // Vacation has started, check days left
+                    if ($EmployeeVacation->is_cut) {
+                        $EmployeeVacation['DaysLeft'] = 0;
+                    } else {
+                        if ($daysLeft >= 0) {
+                            $EmployeeVacation['DaysLeft'] = $daysLeft;
+                        } else {
+                            $EmployeeVacation['DaysLeft'] = 'متجاوز';
+                        }
+                    }
+                }
             }
             return DataTables::of($EmployeeVacations)
 
@@ -160,20 +177,23 @@ class VacationController extends Controller
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
                 $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
-                $EmployeeVacation['EndDate'] = ExpectedEndDate($EmployeeVacation)[0];
-                $EmployeeVacation['StartWorkDate'] = ExpectedEndDate($EmployeeVacation)[1];
+                $EmployeeVacation['EndDate'] = ($EmployeeVacation->end_date) ? $EmployeeVacation->end_date : ExpectedEndDate($EmployeeVacation)[0];
+                $EmployeeVacation['StartWorkDate'] = ($EmployeeVacation->end_date) ? AddDays($EmployeeVacation->end_date, 1) : ExpectedEndDate($EmployeeVacation)[1];
                 $daysLeft = VacationDaysLeft($EmployeeVacation);
                 $currentDate = date('Y-m-d');
-
                 if ($EmployeeVacation->start_date > $currentDate) {
                     // Vacation has not started yet
                     $EmployeeVacation['DaysLeft'] = 'لم تبدا بعد';
                 } else {
                     // Vacation has started, check days left
-                    if ($daysLeft >= 0) {
-                        $EmployeeVacation['DaysLeft'] = $daysLeft;
+                    if ($EmployeeVacation->is_cut) {
+                        $EmployeeVacation['DaysLeft'] = 'مقطوعة';
                     } else {
-                        $EmployeeVacation['DaysLeft'] = 'متجاوز';
+                        if ($daysLeft >= 0) {
+                            $EmployeeVacation['DaysLeft'] = $daysLeft;
+                        } else {
+                            $EmployeeVacation['DaysLeft'] = 'متجاوز';
+                        }
                     }
                 }
             }
@@ -422,7 +442,6 @@ class VacationController extends Controller
     }
     public function updateVacation(Request $request, $id)
     {
-
         $vacation = EmployeeVacation::find($id);
         if ($vacation) {
             if ($request->type == 'cut') {
@@ -432,11 +451,8 @@ class VacationController extends Controller
             }
             $vacation->end_date = $request->end_date;
             $vacation->save();
-
-            session()->flash('success', 'تم التعديل بنجاح.');
         } else {
-            session()->flash('error', 'الإجازة غير موجودة.');
         }
-        return redirect()->back();
+        return true;
     }
 }
