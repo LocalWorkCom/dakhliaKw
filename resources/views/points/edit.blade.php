@@ -37,8 +37,8 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="name"> اسم النقطة </label>
-                        <input type="text" id="name" class="form-control" name="name" value="{{ $data->name }}" dir="rtl"
-                            placeholder=" اسم النقطه" required />
+                        <input type="text" id="name" class="form-control" name="name" value="{{ $data->name }}"
+                            dir="rtl" placeholder=" اسم النقطه" required />
                         <span class="text-danger span-error" id="name-error"></span>
 
                     </div>
@@ -76,7 +76,7 @@
                         </select>
                     </div>
                 </div>
-               <div class="form-row   mx-2 mb-2 ">
+                {{-- <div class="form-row   mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="fromTime"> موعد البدايه </label>
                         <input type="time" id="fromTime"   value="{{ $data->to ? date('H:i', strtotime($data->to)) : '' }}"  name="from" class="form-control" required />
@@ -92,37 +92,61 @@
                         <span class="text-danger span-error" id="error-message" style="font-weight: bold;"></span>
                     </div>
                 </div>
-                
+                 --}}
                 {{-- <div id="error-message" class="error"></div> --}}
 
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="map_link"> رابط جوجل ماب </label>
-                        <input type="text" id="map_link" name="map_link" class="form-control" placeholder=" ادخل الرابط"  dir="rtl"
-                            value="{{ $data->google_map }}" />
+                        <input type="text" id="map_link" name="map_link" class="form-control" placeholder=" ادخل الرابط"
+                            dir="rtl" value="{{ $data->google_map }}" />
                     </div>
                 </div>
                 <div class="form-row   mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="long"> خطوط الطول </label>
-                        <input type="text" id="long" name="long" value="{{ $data->long }}"  dir="rtl"
+                        <input type="text" id="long" name="long" value="{{ $data->long }}" dir="rtl"
                             class="form-control" placeholder="  خطوط الطول " />
                     </div>
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="lat"> خطوط العرض </label>
-                        <input type="text" id="lat" name="Lat"  class="form-control" placeholder="  خطوط العرض "  value="{{ $data->lat }}" dir="rtl"/>
+                        <input type="text" id="lat" name="Lat" class="form-control" placeholder="  خطوط العرض "
+                            value="{{ $data->lat }}" dir="rtl" />
                     </div>
+                </div>
+
+                <div class="form-row   mx-2 mb-2 ">
+                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
+                        <label class="pb-3" for="time_type"> اختر نظام العمل </label>
+                        <select name="time_type" id="time_type" style="border: 0.2px solid rgb(199, 196, 196);" required>
+                            <option value="0" @if($data->work_type == 0) selected @endif>نظام 24 ساعه</option>
+                            <option value="1" @if($data->work_type == 1) selected @endif>نظام دوام جزئى </option>
+
+                        </select>
+                        <span class="text-danger span-error" id="time_type-error"></span>
+
+                    </div>
+                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
+                        <label class="pb-3" for="days_num">عدد أيام العمل</label>
+                        <input type="number" id="days_num" name="days_num" value="{{ json_decode($data->days_work, true)? count(json_decode($data->days_work, true)) : 0 }}" class="form-control" 
+                            max="7" min="1" required />
+                    </div>
+                </div>
+                <!-- Container for dynamically added inputs -->
+                <div id="dynamic-input-container">
                 </div>
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="note"> اضف ملاحظتك </label>
-                        <textarea type="text" id="note" name="note" class="form-control note" placeholder="ملاحظتك" dir="rtl">{{ $data->note }}</textarea>
+                        <textarea type="text" id="note" name="note" class="form-control note" placeholder="ملاحظتك"
+                            dir="rtl">{{ $data->note }}</textarea>
                     </div>
                 </div>
                 <div class="container col-11 ">
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
 
-                        <button type="submit" class="btn-blue"><img src="{{ asset('frontend/images/white-add.svg') }}" alt="img" height="20px" width="20px"> اضافة</button>
+                        <button type="submit" class="btn-blue"><img src="{{ asset('frontend/images/white-add.svg') }}"
+                                alt="img" height="20px" width="20px"> اضافة</button>
                     </div>
                 </div>
             </div>
@@ -131,31 +155,119 @@
 @endsection
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.js"></script> --}}
-    {{-- <script>
-        $(document).ready(function() {
-            $('#toTime').timepicker({
-                timeFormat: 'h:i A',
-                ampm: true,
-                ampmText: {
-                    am: 'ص',
-                    pm: 'م'
-                },
-                lang: {
-                    am: 'ص',
-                    pm: 'م'
-                },
-                minTime: '00:00', // Set the minimum time if needed
-                maxTime: '23:59' // Set the maximum time if needed
-            });
+    <script>
+        document.getElementById('time_type').addEventListener('change', updateForm);
+        document.getElementById('days_num').addEventListener('input', updateForm);
 
-            // Initialize with the existing value if available
-            if (isset($data - > to)) {
-                $('#toTime').timepicker('setTime',
-                    '{{ Carbon\Carbon::createFromFormat('H:i:s', $data->to)->format('h:i A') }}');
+        function updateForm() {
+            const timeType = document.getElementById('time_type').value;
+            const daysNum = parseInt(document.getElementById('days_num').value, 10);
+            const dynamicInputContainer = document.getElementById('dynamic-input-container');
+
+            // Clear previous dynamic inputs
+            dynamicInputContainer.innerHTML = '';
+
+            if (isNaN(daysNum) || daysNum <= 0) {
+                dynamicInputContainer.style.display = 'none';
+                return;
             }
-        });
-    </script> --}}
+
+            dynamicInputContainer.style.display = 'block';
+
+            // Create divs dynamically based on the selected value and the number entered
+            for (let i = 0; i < daysNum; i++) {
+                const mainDiv = document.createElement('div');
+                mainDiv.className = 'form-row mx-2 mb-2';
+
+                const dayNameContainer = document.createElement('div');
+                dayNameContainer.className = 'form-row mx-2 mb-2';
+
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3';
+                inputGroup.id = `day_name-container_${i}`;
+
+                // Create day_name select
+                const label = document.createElement('label');
+                label.className = 'pb-3';
+                label.setAttribute('for', `day_name_${i}`);
+                label.textContent = 'اختر اليوم';
+
+                const select = document.createElement('select');
+                select.name = 'day_name[]';
+                select.id = `day_name_${i}`;
+                select.style.border = '0.2px solid rgb(199, 196, 196)';
+                select.required = true;
+
+                // Add options to select
+                ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day, index) => {
+                    const option = document.createElement('option');
+                    option.value = index; // Use the index as the value
+                    option.text = day; // Display the day name
+                    select.appendChild(option);
+                });
+
+                const errorSpan = document.createElement('span');
+                errorSpan.className = 'text-danger span-error';
+                errorSpan.id = `day_name_${i}-error`;
+
+                inputGroup.appendChild(label);
+                inputGroup.appendChild(select);
+                inputGroup.appendChild(errorSpan);
+
+                dayNameContainer.appendChild(inputGroup);
+                mainDiv.appendChild(dayNameContainer);
+
+                // If timeType == 1, add fromTime and toTime inputs
+                if (timeType == '1') {
+                    const timeInputRow = document.createElement('div');
+                    timeInputRow.className = 'form-row mx-2 mb-2';
+
+                    const fromTimeGroup = document.createElement('div');
+                    fromTimeGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3 col-6';
+
+                    const fromTimeLabel = document.createElement('label');
+                    fromTimeLabel.className = 'pb-3';
+                    fromTimeLabel.setAttribute('for', `fromTime_${i}`);
+                    fromTimeLabel.textContent = 'موعد البدايه';
+
+                    const fromTimeInput = document.createElement('input');
+                    fromTimeInput.type = 'time';
+                    fromTimeInput.id = `fromTime_${i}`;
+                    fromTimeInput.name = 'from[]';
+                    fromTimeInput.className = 'form-control';
+                    fromTimeInput.required = true;
+
+                    fromTimeGroup.appendChild(fromTimeLabel);
+                    fromTimeGroup.appendChild(fromTimeInput);
+
+                    const toTimeGroup = document.createElement('div');
+                    toTimeGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3 col-6';
+
+                    const toTimeLabel = document.createElement('label');
+                    toTimeLabel.className = 'pb-3';
+                    toTimeLabel.setAttribute('for', `toTime_${i}`);
+                    toTimeLabel.textContent = 'موعد النهايه';
+
+                    const toTimeInput = document.createElement('input');
+                    toTimeInput.type = 'time';
+                    toTimeInput.id = `toTime_${i}`;
+                    toTimeInput.name = 'to[]';
+                    toTimeInput.className = 'form-control';
+                    toTimeInput.required = true;
+
+                    toTimeGroup.appendChild(toTimeLabel);
+                    toTimeGroup.appendChild(toTimeInput);
+
+                    timeInputRow.appendChild(fromTimeGroup);
+                    timeInputRow.appendChild(toTimeGroup);
+
+                    mainDiv.appendChild(timeInputRow);
+                }
+
+                dynamicInputContainer.appendChild(mainDiv);
+            }
+        }
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -193,67 +305,77 @@
         });
     </script>
     <script>
-     $(document).ready(function() {
-    var currentGovernorateId = {{ $data->government_id }};
-    var currentRegionId = {{ $data->region_id  ?? 'null' }};
+        $(document).ready(function() {
+            var currentGovernorateId = {{ $data->government_id }};
+            var currentRegionId = {{ $data->region_id ?? 'null' }};
 
-    $('#sector_id').change(function() {
-        var sectorId = $(this).val();
-        if (sectorId) {
-            $.ajax({
-                url: '/get-governorates/' + sectorId,
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    $('#governorate').empty().append('<option value="">اختر المحافظة</option>');
-                    $.each(data, function(key, value) {
-                        var selected = value.id == currentGovernorateId ? 'selected' : '';
-                        $('#governorate').append('<option value="' + value.id + '" ' + selected + '>' + value.name + '</option>');
+            $('#sector_id').change(function() {
+                var sectorId = $(this).val();
+                if (sectorId) {
+                    $.ajax({
+                        url: '/get-governorates/' + sectorId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#governorate').empty().append(
+                                '<option value="">اختر المحافظة</option>');
+                            $.each(data, function(key, value) {
+                                var selected = value.id == currentGovernorateId ?
+                                    'selected' : '';
+                                $('#governorate').append('<option value="' + value.id +
+                                    '" ' + selected + '>' + value.name + '</option>'
+                                    );
+                            });
+                            $('#governorate').prop('disabled', false);
+
+                            // Trigger change to load regions if currentGovernorateId is set
+                            if (currentGovernorateId) {
+                                $('#governorate').trigger('change');
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error('AJAX request failed', xhr);
+                        }
                     });
-                    $('#governorate').prop('disabled', false);
-
-                    // Trigger change to load regions if currentGovernorateId is set
-                    if (currentGovernorateId) {
-                        $('#governorate').trigger('change');
-                    }
-                },
-                error: function(xhr) {
-                    console.error('AJAX request failed', xhr);
+                } else {
+                    $('#governorate').empty().append('<option value="">اختر المحافظة</option>').prop(
+                        'disabled', true);
+                    $('#region').empty().append('<option value="">اختر المنطقة</option>').prop('disabled',
+                        true);
                 }
             });
-        } else {
-            $('#governorate').empty().append('<option value="">اختر المحافظة</option>').prop('disabled', true);
-            $('#region').empty().append('<option value="">اختر المنطقة</option>').prop('disabled', true);
-        }
-    });
 
-    $('#governorate').change(function() {
-        var governorateId = $(this).val();
-        if (governorateId) {
-            $.ajax({
-                url: '/get-regions/' + governorateId,
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    $('#region').empty().append('<option value="">اختر المنطقة</option>');
-                    $.each(data, function(key, value) {
-                        var selected = value.id == currentRegionId ? 'selected' : '';
-                        $('#region').append('<option value="' + value.id + '" ' + selected + '>' + value.name + '</option>');
+            $('#governorate').change(function() {
+                var governorateId = $(this).val();
+                if (governorateId) {
+                    $.ajax({
+                        url: '/get-regions/' + governorateId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#region').empty().append(
+                                '<option value="">اختر المنطقة</option>');
+                            $.each(data, function(key, value) {
+                                var selected = value.id == currentRegionId ?
+                                    'selected' : '';
+                                $('#region').append('<option value="' + value.id +
+                                    '" ' + selected + '>' + value.name + '</option>'
+                                    );
+                            });
+                            $('#region').prop('disabled', false);
+                        },
+                        error: function(xhr) {
+                            console.error('AJAX request failed', xhr);
+                        }
                     });
-                    $('#region').prop('disabled', false);
-                },
-                error: function(xhr) {
-                    console.error('AJAX request failed', xhr);
+                } else {
+                    $('#region').empty().append('<option value="">اختر المنطقة</option>').prop('disabled',
+                        true);
                 }
             });
-        } else {
-            $('#region').empty().append('<option value="">اختر المنطقة</option>').prop('disabled', true);
-        }
-    });
 
-    // Trigger change event to prepopulate data
-    $('#sector_id').trigger('change');
-});
-
+            // Trigger change event to prepopulate data
+            $('#sector_id').trigger('change');
+        });
     </script>
 @endpush

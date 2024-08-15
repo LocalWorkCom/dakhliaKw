@@ -247,6 +247,7 @@ function getgroups()
 
     return  Groups::all();
 }
+############################################## Vacation #######################################################################
 function CheckStartVacationDate($id)
 {
     $EmployeeVaction =  EmployeeVacation::find($id);
@@ -255,7 +256,6 @@ function CheckStartVacationDate($id)
     }
     return false;
 }
-############################################## Vacation #######################################################################
 function GetEmployeeVacationType($employeeVacation)
 {
     $introduce = 'مقدمة';
@@ -278,13 +278,23 @@ function GetEmployeeVacationType($employeeVacation)
         if ($employeeVacation->start_date > $today) {
             return $notBegin;
         } else if ($employeeVacation->start_date < $today && $expectedEndDate < $today) {
-            if ($employeeVacation->is_exceeded) {
-                return $exceeded;
-            } else {
+            if (!$employeeVacation->end_data || $employeeVacation->end_date > $today) {
                 return $finished;
+            } else {
+
+                if ($employeeVacation->is_exceeded) {
+                    return $exceeded;
+                } else {
+                    return $finished;
+                }
             }
         } else {
-            return $current;
+            if ($employeeVacation->is_cut) {
+                return $finished;
+            } else {
+
+                return $current;
+            }
         }
     }
 }
@@ -299,12 +309,8 @@ function VacationDaysLeft($employeeVacation)
     $daysNumber = $employeeVacation->days_number;
 
     // Calculate the end date
-    $endDate = $startDate->copy()->addDays($daysNumber);
-
-    // Get today's date
+    $endDate = AddDays($startDate, $daysNumber);
     $today = Carbon::today();
-
-    // Calculate the number of days left
     $daysLeft = $today->diffInDays($endDate, false);
 
     if ($daysLeft < 0) {
@@ -317,7 +323,21 @@ function ExpectedEndDate($employeeVacation)
     $startDate = Carbon::parse($employeeVacation->start_date);
     $daysNumber = $employeeVacation->days_number - 1;
 
-    $expectedEndDate = $startDate->copy()->addDays($daysNumber);
-    $workStartdDate = $expectedEndDate->copy()->addDays(1);
-    return [$expectedEndDate->toDateString(), $workStartdDate->toDateString()];
+    $expectedEndDate = AddDays($startDate, $daysNumber);
+    $workStartdDate = AddDays($expectedEndDate, 1);
+    return [$expectedEndDate, $workStartdDate];
+}
+function AddDays($date, $daysNumber)
+{
+    $startDate = Carbon::parse($date);
+    $daysNumber = $daysNumber;
+
+    $next_date = $startDate->copy()->addDays($daysNumber);
+    return $next_date->toDateString();
+}
+function formatTime($time)
+{
+    $to = Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
+    $toDay = str_replace(['AM', 'PM'], ['ص', 'م'], $to);
+    return $toDay;
 }
