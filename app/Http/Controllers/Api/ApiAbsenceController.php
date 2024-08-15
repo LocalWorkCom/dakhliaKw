@@ -28,7 +28,7 @@ class ApiAbsenceController extends Controller
             $success['grade'] = "لا يوجد بيانات";
         }
         if ($absenceType->isNotEmpty()) {
-            $success['absence_Type'] = $grade->map(function ($item) {
+            $success['absence_Type'] = $absenceType->map(function ($item) {
                 return $item->only(['id', 'name']);
             });
         } else {
