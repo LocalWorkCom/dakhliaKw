@@ -34,20 +34,14 @@
                         <tr>
                             <th scope="row"> القطاع الخاص بها</th>
                             <td>
-                                {{-- @foreach (getgovernments() as $government)
-                                    @if (isset($checkedGovernments[$government->id])) --}}
-                                        {{ $data->sector->name }}
-                                    {{-- @endif
-                                @endforeach --}}
+                                {{ $data->sector->name }}
                             </td>
-                            {{-- <td>{{ $data->name ? $data->name : 'لا يوجد عنوان للصادر' }}</td> --}}
                         </tr>
                         <tr>
                             <th scope="row">المحافظه الخاصه بها</th>
                             <td>
                                 {{ $data->government->name }}
                             </td>
-                            {{-- <td>{{ $data->name ? $data->name : 'لا يوجد عنوان للصادر' }}</td> --}}
                         </tr>
 
 
@@ -57,40 +51,61 @@
                                 {{ $data->region->name }}
 
                             </td>
-                            {{-- <td>{{ $data->name ? $data->name : 'لا يوجد عنوان للصادر' }}</td> --}}
-                        </tr>
-
-                        <tr>
-                            <th scope="row">موعد بدايه العمل</th>
-                            <td>
-                              {{ $data->formatted_from }}
-                            </td>
-                            {{-- <td>{{ $data->name ? $data->name : 'لا يوجد عنوان للصادر' }}</td> --}}
                         </tr>
                         <tr>
-                            <th scope="row">موعد نهايه العمل</th>
+                            <th scope="row">نظام عمل النقطه</th>
                             <td>
-                                {{ $data->formatted_to }}
+                                {{ $data->work_type == 0 ? 'دوام 24 ساعه' : 'دوام جزئى' }}
 
                             </td>
-                            {{-- <td>{{ $data->name ? $data->name : 'لا يوجد عنوان للصادر' }}</td> --}}
                         </tr>
+                        @if ($days)
+                            @foreach ($days as $day)
+                                <tr>
+                                    <th scope="row">نظام عمل النقطه</th>
+
+                                    <td>
+                                        @if ($day->name == 0)
+                                            السبت
+                                        @elseif($day->name == 1)
+                                            الأحد
+                                        @elseif($day->name == 2)
+                                            الأثنين
+                                        @elseif($day->name == 3)
+                                            الثلاثاء
+                                        @elseif($day->name == 4)
+                                            الأربعاء
+                                        @elseif($day->name == 5)
+                                            الخميس
+                                        @elseif($day->name == 6)
+                                            الجمعه
+                                        @endif
+                                     
+                                        , "موعد بدايه العمل " : -
+                                        {{ formatTime($day->from) }}
+                                        - "موعد نهايه العمل " : -
+                                        {{ formatTime($day->to) }}
+
+                                    </td>
+
+                                </tr>
+                            @endforeach
+                        @endif
                         <tr>
                             <th scope="row"> رابط جوجل ماب </th>
                             <td>
-                               {{$data->google_map ? $data->google_map : 'لا يوجد رابط جوجل ماب'}}
+                                {{ $data->google_map ? $data->google_map : 'لا يوجد رابط جوجل ماب' }}
                             </td>
-                            {{-- <td>{{ $data->name ? $data->name : 'لا يوجد عنوان للصادر' }}</td> --}}
                         </tr>
 
                         <tr>
                             <th scope="row">الملاحظات</th>
                             <td>
-                               {{ $data->note  ? $data->note : 'لا يوجد ملاحظات' }}
+                                {{ $data->note ? $data->note : 'لا يوجد ملاحظات' }}
                             </td>
                         </tr>
 
-                       
+
                     </tbody>
                     <tfoot>
 

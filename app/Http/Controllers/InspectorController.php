@@ -111,7 +111,7 @@ class InspectorController extends Controller
         $departmentId = auth()->user()->department_id;
         $inspectorUserIds = Inspector::pluck('user_id')->toArray();
 
-        $users = User::where('flag', 'employee')
+        $users = User::where('flag', 'user')
             ->where('department_id', $departmentId)
             ->where('id', '!=', $department->manger)
             ->where('id', '!=', auth()->user()->id)

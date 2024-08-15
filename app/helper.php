@@ -338,4 +338,11 @@ function AddDays($date, $daysNumber)
 
     $next_date = $startDate->copy()->addDays($daysNumber);
     return $next_date->toDateString();
+
+}
+function formatTime($time){
+    $to = Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
+    $toDay = str_replace(['AM', 'PM'], ['ص', 'م'], $to);
+    return $toDay ;
+
 }
