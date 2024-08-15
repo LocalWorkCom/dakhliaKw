@@ -475,6 +475,7 @@ class VacationController extends Controller
                                 // $mission->status = 'Canceled'; // Or another appropriate status
                                 $mission->save();
                             } else {
+                                // dd($mission);
                                 $mission->vacation_id  = null;
                                 $mission->save();
                             }
