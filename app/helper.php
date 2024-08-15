@@ -278,7 +278,7 @@ function GetEmployeeVacationType($employeeVacation)
         if ($employeeVacation->start_date > $today) {
             return $notBegin;
         } else if ($employeeVacation->start_date < $today && $expectedEndDate < $today) {
-            if (!$employeeVacation->end_data || $employeeVacation->end_date > $today) {
+            if ($employeeVacation->end_data || $employeeVacation->end_date > $expectedEndDate) {
                 return $finished;
             } else {
 

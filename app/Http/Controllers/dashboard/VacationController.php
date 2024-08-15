@@ -11,6 +11,7 @@ use App\Models\EmployeeVacation;
 use App\Models\InspectorMission;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class VacationController extends Controller
@@ -401,8 +402,10 @@ class VacationController extends Controller
                     $daysNumber = $vacation->days_number; // Ensure this field exists in your EmployeeVacation model
 
                     foreach ($inspectorMissions as $mission) {
+                        $mission_date =  Carbon::parse($mission->date);
+
                         // Check if the mission date is within the vacation period
-                        if ($mission->date->diffInDays($vacation->start_date) < $daysNumber) {
+                        if ($mission_date->diffInDays($vacation->start_date) < $daysNumber) {
                             // Update the InspectorMission record with the vacation ID
                             $mission->vacation_id = $vacation->id;
                             // $mission->status = 'Canceled'; // Or another appropriate status
@@ -445,9 +448,82 @@ class VacationController extends Controller
         $vacation = EmployeeVacation::find($id);
         if ($vacation) {
             if ($request->type == 'cut') {
+                $inspector = Inspector::where('user_id', $vacation->employee_id)->first();
+
+                if ($inspector) {
+                    // Fetch InspectorMission records for the found inspector ID
+                    $inspectorMissions = InspectorMission::where('inspector_id', $inspector->id)
+                        ->whereDate('date', '>=', $vacation->start_date)
+                        ->get();
+
+                    if ($inspectorMissions->isEmpty()) {
+                        session()->flash('info', 'لا توجد مهام للمفتش لتحديثها.');
+                    } else {
+                        $end_date = $request->end_date;
+                        $end_date = Carbon::parse($end_date);
+                        $start_date =  Carbon::parse($vacation->start_date);
+                        $daysNumber = $start_date->diffInDays($end_date, false) + 1; // Ensure this field exists in your EmployeeVacation model
+                        foreach ($inspectorMissions as $index => $mission) {
+                            // Check if the mission date is within the vacation period
+
+                            $mission_date =  Carbon::parse($mission->date);
+
+                            if ($mission_date->diffInDays($vacation->start_date) < $daysNumber) {
+
+                                // Update the InspectorMission record with the vacation ID
+                                $mission->vacation_id = $vacation->id;
+                                // $mission->status = 'Canceled'; // Or another appropriate status
+                                $mission->save();
+                            } else {
+                                $mission->vacation_id  = null;
+                                $mission->save();
+                            }
+                        }
+                        session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
+                    }
+                }
+
                 $vacation->is_cut = 1;
             } else if ($request->type == 'exceed') {
                 $vacation->is_exceed = 1;
+            } elseif ($request->type == 'direct_exceed') {
+                $inspector = Inspector::where('user_id', $vacation->employee_id)->first();
+
+                if ($inspector) {
+                    // Fetch InspectorMission records for the found inspector ID
+                    $inspectorMissions = InspectorMission::where('inspector_id', $inspector->id)
+                        ->whereDate('date', '>=', $vacation->start_date)
+                        ->get();
+
+                    if ($inspectorMissions->isEmpty()) {
+                        session()->flash('info', 'لا توجد مهام للمفتش لتحديثها.');
+                    } else {
+                        $end_date = $request->end_date;
+                        $end_date = Carbon::parse($end_date);
+                        $start_date =  Carbon::parse($vacation->start_date);
+                        $daysNumber = $start_date->diffInDays($end_date, false) + 1;
+                        // Ensure this field exists in your EmployeeVacation model
+                        foreach ($inspectorMissions as $index => $mission) {
+                            // Check if the mission date is within the vacation period
+
+                            $mission_date =  Carbon::parse($mission->date);
+                            // if($index == 2){
+
+                            //     dd($daysNumber,$mission_date->diffInDays($vacation->start_date),$start_date,$end_date);
+                            // }
+                            if ($mission_date->diffInDays($vacation->start_date) < $daysNumber) {
+
+                                // Update the InspectorMission record with the vacation ID
+                                $mission->vacation_id = $vacation->id;
+                                // $mission->status = 'Canceled'; // Or another appropriate status
+                                $mission->save();
+                            } else {
+                                $mission->vacation_id  = null;
+                                $mission->save();
+                            }
+                        }
+                    }
+                }
             }
             $vacation->end_date = $request->end_date;
             $vacation->save();

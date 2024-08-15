@@ -247,7 +247,7 @@
 
                                     if (row.VacationStatus == 'منتهية') {
                                         buttons +=
-                                            `<a href="${urls.printReturn}" class="edit btn btn-sm" style="background-color: #6020c5;"><i class="fa fa-eye"></i> طباعة العودة</a>`;
+                                            `<a href="" class="edit btn btn-sm" style="background-color: #6020c5;"><i class="fa fa-eye"></i> طباعة العودة</a>`;
                                       if(!row.end_date){
                                           buttons +=
                                           `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c93da4;" onclick="update_type('direct_work', '${row.id}')"><i class="fa fa-eye"></i> مباشرة العمل</a>`;
@@ -262,6 +262,7 @@
                                         buttons +=
                                             `<form id="printForm" action="${urls.print}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('printForm').submit();"><i class="fa fa-times"></i> طباعة</a></form>`;
                                     } else if (row.VacationStatus == 'متجاوزة') {
+
                                         buttons +=
                                             `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #9dad1f;" onclick="update_type('direct_exceed', '${row.id}')"><i class="fa fa-eye"></i> باشر بعد التجاوز</a>`;
                                     } else if (row.VacationStatus == 'حالية') {
