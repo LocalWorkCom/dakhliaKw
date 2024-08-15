@@ -118,7 +118,7 @@ $count=0;
                 'date' => date('Y-m-d'),
                 'count' =>  $missionCount ,
                 'points_count' =>  $groupPointCount ,
-                'missions' => $groupPointsData,
+                'points' => $groupPointsData,
                  ];
             
                 }
