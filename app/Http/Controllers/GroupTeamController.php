@@ -680,59 +680,29 @@ class GroupTeamController extends Controller
                             ->where('group_id', $Group->id)
                             ->where('group_team_id', $GroupTeam->id)
                             ->first();
-
+                 
 
                         if ($inspector_mission) {
                             $today = date('Y-m-d');
                             $EmployeeVacation = EmployeeVacation::find($inspector_mission->vacation_id);
 
                             if ($EmployeeVacation) {
-
-                                $expectedEndDate = ExpectedEndDate($EmployeeVacation)[0];
-                                if ($date->toDateString() == $EmployeeVacation->start_date) {
-
-                                    if ($EmployeeVacation->start_date < $today && $expectedEndDate < $today) {
-                                        if ($EmployeeVacation->end_data || $EmployeeVacation->end_date > $expectedEndDate) {
-                                            $end_data =  Carbon::parse($EmployeeVacation->end_data);
-
-                                            if ($date->toDateString() <= $expectedEndDate) {
-                                                $vacations[] = ($inspector_mission->vacation_id) ? $inspector_mission->vacation->vacation_type->name : null;
-                                            } else {
-                                                if ($inspector->id == 17) {
-
-                                                    dd(0);
-                                                }
-                                                $diff = $end_data->diffInDays($expectedEndDate); //1
-
-                                                for ($i = 0; $i < $diff; $i++) {
-                                                    $vacations[] = 'متجاوزة';
-                                                }
-                                            }
-                                        } else {
-                                            // if ($inspector->id == 17) {
-                                            //     dd(0);
-                                            // }
-                                        }
-                                    } else {
-                                        // if ($inspector->id == 17) {
-                                        //     dd("hjhgj");
-                                        // }
-                                    }
+                                $days_number =   $EmployeeVacation->days_number;
+                                if ($date->diffInDays($EmployeeVacation->start_date) < $days_number) {
+                                    $vacations[] = $inspector_mission->vacation->vacation_type->name;
                                 } else {
-                                    
-                                    // if ($date->toDateString() == $EmployeeVacation->start_date) {
-
-                                    $vacations[] = ($inspector_mission->vacation_id) ? $inspector_mission->vacation->vacation_type->name : null;
-                                    // } else {
-                                    // $vacations[] = null;
-                                    // }
+                                
+                                    if ($date->toDateString() <= $EmployeeVacation->end_date) {
+                                        $vacations[] = 'متجاوزة';
+                                    } else if ($EmployeeVacation->is_exceeded && $today <= $date->toDateString()) {
+                                        $vacations[] = 'متجاوزة';
+                                    } else {
+                                        $vacations[] = null;
+                                    }
                                 }
                             } else {
                                 $vacations[] =  null;
                             }
-                            // if ($inspector->id == 17) {
-                            //     dd($num, $vacations);
-                            // }
                             // Retrieve the group points associated with the mission
                             if ($inspector_mission->ids_group_point) {
                                 $points = $inspector_mission->ids_group_point;
@@ -764,14 +734,14 @@ class GroupTeamController extends Controller
                             // Default color if no mission is found
                             $inspector_mission = null;
                             $colors[] = '#d6d6d6';
+                            $vacations[] = null;
                         }
                         // Add the mission to the inspector's missions array
                         $inspector_missions[] = $inspector_mission;
                     }
+
                     $inspector['vacations'] = $vacations;
-                    if ($inspector->id == 17) {
-                        dd($vacations);
-                    }
+
                     // Assign the missions and colors arrays to the inspector object
                     $inspector['missions'] = $inspector_missions;
                     $inspector['colors'] = $colors;
@@ -782,6 +752,7 @@ class GroupTeamController extends Controller
         $Groups = $Groups->filter(function ($group) {
             return count($group['teams']) > 0;
         });
+        // dd($Groups);
         // Return the view with the Groups data
         return view('inspectorMission.index', compact('Groups'));
     }
