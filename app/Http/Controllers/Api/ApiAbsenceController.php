@@ -8,6 +8,7 @@ use App\Models\AbsenceType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Absence;
+use App\Models\Inspector;
 use Illuminate\Support\Facades\Validator;
 
 class ApiAbsenceController extends Controller
@@ -71,15 +72,16 @@ class ApiAbsenceController extends Controller
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
 
-      
-            $new = new Absence();
-            $new->date = $request->date;
-            $new->point_id = $request->point_id;
-            $new->mission_id = $request->mission_id;
-            $new->total_number = $request->total_number;
-            $new->actual_number = $request->actual_number;
-            $new->inspector_id = auth()->user()->inspectors;
-            $new->save();
+        $inspectorId = Inspector::where('user_id',auth()->user()->id)->first();
+        //  dd(auth()->user()->inspectors);
+        $new = new Absence();
+        $new->date = $request->date;
+        $new->point_id = $request->point_id;
+        $new->mission_id = $request->mission_id;
+        $new->total_number = $request->total_number;
+        $new->actual_number = $request->actual_number;
+        $new->inspector_id = $inspectorId ? $inspectorId->id : null;
+        $new->save();
 
             if($new)
             {
