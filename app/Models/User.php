@@ -116,6 +116,6 @@ class User extends Authenticatable
 
     public function inspectors()
     {
-        return $this->hasMany(Inspector::class);
+        return $this->belongsTo(Inspector::class);
     }
 }
