@@ -118,4 +118,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Inspector::class);
     }
+    public function pointDays()
+    {
+        return $this->hasMany(PointDays::class, 'created_by');
+    }
 }

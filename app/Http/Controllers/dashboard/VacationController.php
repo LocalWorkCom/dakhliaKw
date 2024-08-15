@@ -18,10 +18,121 @@ class VacationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($id = 0)
+    public function index(Request $request, $id = 0)
     {
-        return view('vacation.index', compact('id'));
+        $filter = $request->query('filter');
+
+        // Initialize query
+        $vacations = EmployeeVacation::query();
+
+        // Apply filter if specified
+        // if ($filter) {
+        //     switch ($filter) {
+        //         case 'exceeded':
+        //             $vacations->where('is_exceeded', '=', 1);
+        //             break;
+        //         case 'finished':
+        //             $vacations->where('end_date', '<', now()->toDateString());
+        //             break;
+        //         case 'current':
+        //             $vacations->where('start_date', '=', now()->toDateString())
+        //                 ->where('status', '=', 'Approved');
+        //             break;
+        //         case 'not_begin':
+        //             $vacations->where('start_date', '>', now()->toDateString());
+        //             break;
+        //     }
+        // }
+
+        // Use for DataTable response
+        if ($request->ajax()) {
+            return datatables()->of($vacations)
+                ->addColumn('action', function ($vacation) {
+                    return view('vacation.partials.action-buttons', compact('vacation'));
+                })
+                ->make(true);
+        }
+
+        $vacationCount = $vacations->count();
+        $vacations = $vacations->with('employee', 'vacation_type')->orderby('created_at', 'desc')->get();
+        $EmployeeVacations = EmployeeVacation::all();
+        $data_filter = [];
+        $exceeded = 0;
+        $finished = 0;
+        $current = 0;
+        $not_begin = 0;
+        $pending = 0;
+        $rejected = 0;
+        foreach ($EmployeeVacations as  $EmployeeVacation) {
+            if (GetEmployeeVacationType($EmployeeVacation) == 'متجاوزة') {
+                $exceeded++;
+            } else if (GetEmployeeVacationType($EmployeeVacation) == 'لم تبدأ بعد') {
+                $not_begin++;
+            } else if (GetEmployeeVacationType($EmployeeVacation) == 'حالية') {
+                $current++;
+            } else if (GetEmployeeVacationType($EmployeeVacation) == 'منتهية') {
+                $finished++;
+            } else if (GetEmployeeVacationType($EmployeeVacation) == 'مرفوضة') {
+                $rejected++;
+            } else if (GetEmployeeVacationType($EmployeeVacation) == 'مقدمة') {
+                $pending++;
+            } 
+        }
+        $data_filter['current'] = $current;
+        $data_filter['finished'] = $finished;
+        $data_filter['exceeded'] = $exceeded;
+        $data_filter['not_begin'] = $not_begin;
+        $data_filter['rejected'] = $rejected;
+        $data_filter['pending'] = $pending;
+        // Count based on filters
+        // $exceeded = EmployeeVacation::where('is_exceeded', '=', 1)->count();
+        // $finished = EmployeeVacation::where('end_date', '<', now()->toDateString())->count();
+        // $current = EmployeeVacation::where('start_date', '=', now()->toDateString())
+        //     ->where('status', '=', 'Approved')
+        //     ->where('is_exceeded', '!=', '1') // Exclude records where `is_exceeded` is 1
+        //     ->count();
+
+        // $not_begin = EmployeeVacation::where('start_date', '>', now()->toDateString())
+        //     ->where('status', '!=', 'Pending')
+        //     ->count();
+        // dd($current);
+        // Pass results and counts to the view
+        return view('vacation.index', compact('id', 'vacations', 'data_filter', 'vacationCount'));
     }
+
+
+    // public function index(Request $request, $id = 0)
+    // {
+    //     $filter = $request->query('filter');
+
+    //     // Initialize query
+    //     $vacations = EmployeeVacation::query();
+
+    //     $vacationCount = $vacations->count();
+
+    //     $vacations = $vacations->with('employee', 'vacation_type')->orderby('created_at', 'desc')->get();
+
+    //     // Count based on filters
+    //     $exceeded = EmployeeVacation::where('is_exceeded', '=', 1)->count();
+    //     $finished = EmployeeVacation::where('end_date', '<', now()->toDateString())->count();
+    //     $current = EmployeeVacation::where('start_date', '=', now()->toDateString())
+    //         ->where('status', '=', 'Approved')
+    //         ->count();
+    //     $not_begin = EmployeeVacation::where('start_date', '>', now()->toDateString())->count();
+
+    //     // Pass results and counts to the view
+    //     return view('vacation.index', compact('id', 'vacations', 'exceeded', 'finished', 'current', 'not_begin', 'vacationCount'));
+    // }
+
+    // public function index($id = 0)
+    // {
+    //     // Fetch the count of EmployeeVacation records
+    //     $vacationCount = EmployeeVacation::count();
+
+    //     // Pass the count and ID to the view
+    //     return view('vacation.index', compact('id', 'vacationCount'));
+    // }
+
     public function getVacations($id)
     {
         if ($id) {
@@ -308,5 +419,24 @@ class VacationController extends Controller
         return redirect()->back();
 
         // return redirect()->route('vacations.list', $vacation->employee_id ?? null);
+    }
+    public function updateVacation(Request $request, $id)
+    {
+
+        $vacation = EmployeeVacation::find($id);
+        if ($vacation) {
+            if ($request->type == 'cut') {
+                $vacation->is_cut = 1;
+            } else if ($request->type == 'exceed') {
+                $vacation->is_exceed = 1;
+            }
+            $vacation->end_date = $request->end_date;
+            $vacation->save();
+
+            session()->flash('success', 'تم التعديل بنجاح.');
+        } else {
+            session()->flash('error', 'الإجازة غير موجودة.');
+        }
+        return redirect()->back();
     }
 }

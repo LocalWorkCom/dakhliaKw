@@ -181,13 +181,12 @@ function UploadFilesIM($path, $image, $model, $request)
     $imagePaths = [];
     $thumbnail = $request;
     $destinationPath = $path;
-    foreach ($thumbnail as $key=> $item) {
-        if(is_object($item)) {
-            $filename = $key.time() . '.' . $item->getClientOriginalExtension();
+    foreach ($thumbnail as $key => $item) {
+        if (is_object($item)) {
+            $filename = $key . time() . '.' . $item->getClientOriginalExtension();
             $item->move($destinationPath, $filename);
             $imagePaths[] = asset($path) . '/' . $filename;
-        }
-        else {
+        } else {
             $imagePaths[] = $item;
         }
     }
@@ -316,7 +315,7 @@ function VacationDaysLeft($employeeVacation)
 function ExpectedEndDate($employeeVacation)
 {
     $startDate = Carbon::parse($employeeVacation->start_date);
-    $daysNumber = $employeeVacation->days_number;
+    $daysNumber = $employeeVacation->days_number - 1;
 
     $expectedEndDate = $startDate->copy()->addDays($daysNumber);
     $workStartdDate = $expectedEndDate->copy()->addDays(1);

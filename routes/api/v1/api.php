@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\personalMissionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
@@ -25,12 +26,14 @@ Route::post('/check_military_number', 'App\Http\Controllers\Api\UserController@c
 
 Route::group(['middleware' => 'auth:api'], function () {
   
-Route::any('/Violation_type/{id}', 'App\Http\Controllers\Api\ViolationController@get_Violation_type');
+Route::any('/Violation_type', 'App\Http\Controllers\Api\ViolationController@get_Violation_type');
 Route::post('/add_Violation', 'App\Http\Controllers\Api\ViolationController@add_Violation');
 
- 
 Route::get('/inspector/missions', [InspectorMissionController::class, 'getMissionsByInspector']);
 
-});
+Route::post('/inspector/add/mission', [personalMissionController::class, 'addPersonalMission']);
 
+
+});
+Route::get('/getAll/points', [personalMissionController::class, 'getAllPoints']);
 

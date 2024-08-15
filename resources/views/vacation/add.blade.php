@@ -76,7 +76,7 @@
                     <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
 
                         <div class="form-group col-md-10 mx-2" style="display: none" id="toggleDiv">
-                            <label for="country_id" style=" display: flex; justify-content: flex-start;">الدولة</label>
+                            <label for="country_id" style=" display: flex;">الدولة</label>
                             <select id="country_id" name="country_id" class="form-control">
                                 <option value="">اختر الدولة</option>
                                 @foreach ($countries as $item)

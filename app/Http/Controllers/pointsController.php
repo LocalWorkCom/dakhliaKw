@@ -61,7 +61,7 @@ class pointsController extends Controller
     }
     public function getpoints()
     {
-        $data = Point::with(['sector', 'government', 'region'])->get();
+        $data = Point::with(['sector', 'government', 'region'])->orderBy('created_at','desc')->get();
 
         return DataTables::of($data)
             ->addColumn('sector_name', function ($row) {
@@ -78,18 +78,18 @@ class pointsController extends Controller
                 $groups = Grouppoint::where('government_id', $row->government->id)->get();
 
                 $btn = '<p>لايوجد مجموعه</p>'; // Default message
-                
+
                 foreach ($groups as $group) {
                     if ($group && $group->points_ids) {
                         $pointsIds = $group->points_ids; // Decode if points_ids is a JSON string
-                
+
                         if (in_array($row->id, $pointsIds) && $group->flag == 1) {
                             $btn = '<a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('grouppoints.edit', $group->id) . '"><i class="fa fa-edit"></i> ' . $group->name . ' </a>';
                             break; // Exit loop once a matching group is found
                         }
                     }
                 }
-                
+
                 return $btn;
             })
             ->addColumn('work_type', function ($row) {
@@ -115,43 +115,48 @@ class pointsController extends Controller
     public function store(Request $request)
     {
         //dd($request->all());
-        // $rules = [
-        //     'name' => [
-        //         'required',
-        //         'string',
-        //         Rule::unique('points', 'name')->ignore($request->id),
-        //     ],
-        //     'sector_id' => 'required|exists:sectors,id',
-        //     'governorate' => 'required|exists:governments,id',
-        //     'region' => 'required|exists:regions,id',
-        //     'map_link' => 'nullable|string',
-        //     'Lat' => 'nullable|string',
-        //     'long' => 'nullable|string',
-        //     'day_name' => 'required|array',
-        //     'note' => 'nullable|string',
-        // ];
+        $rules = [
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('points', 'name')->ignore($request->id),
+            ],
+            'sector_id' => 'required|exists:sectors,id',
+            'governorate' => 'required|exists:governments,id',
+            'region' => 'required|exists:regions,id',
+            'map_link' => 'nullable|string',
+            'Lat' => 'nullable|string',
+            'long' => 'nullable|string',
+            'time_type' => 'required',
+            'day_name' => 'required|array',
+            'note' => 'nullable|string',
+        ];
 
-        // // Define custom messages
-        // $messages = [
-        //     'name.required' => 'يجب ادخال اسم نقطه',
-        //     'name.unique' => 'يجب إدخال اسم نقطة مختلف',
-        //     'name.string' => 'يجب ان لا يحتوى اسم النقطه على رموز',
-        //     'governorate.required' => 'يجب اختيار محافظه واحده على الاقل',
-        //     'sector_id.required' => '',
-        //     'region.required' => '',
-        // ];
+        // Define custom messages
+        $messages = [
+            'name.required' => 'يجب ادخال اسم نقطه',
+            'name.unique' => 'يجب إدخال اسم نقطة مختلف',
+            'name.string' => 'يجب ان لا يحتوى اسم النقطه على رموز',
+            'governorate.required' => 'يجب اختيار محافظه واحده على الاقل',
+            'sector_id.required' => 'يجب اختيار قطاع الخاصه بالنقطه',
+            'region.required' => 'يجب اختيار المنطقه الخاصه بالنقطه',
+            'time_type.required' => 'يجب ادخال نظام العمل',
+            'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
+            'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
 
-        // // Validate the request
-        // $validatedData = Validator::make($request->all(), $rules, $messages);
+        ];
 
-        // if ($validatedData->fails()) {
-        //     return redirect()->back()->withErrors($validatedData)->withInput();
-        // }
+        // Validate the request
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
         DB::transaction(function () use ($request) {
-            $dayNames = $request->input('day_name'); 
+            $dayNames = $request->input('day_name');
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
-    
+
             // Storing the point data
             $point = new Point();
             $point->name = $request->name;
@@ -166,7 +171,7 @@ class pointsController extends Controller
             $point->created_by = auth()->id(); // Use auth() helper
             $point->note = $request->note;
             $point->save();
-    
+
             // Creating a group point record
             $pointgroups = new Grouppoint();
             $pointgroups->name = $point->name;
@@ -174,7 +179,7 @@ class pointsController extends Controller
             $pointgroups->government_id = $request->governorate;
             $pointgroups->flag = 0;
             $pointgroups->save();
-    
+
             // If work type is part-time, create related PointDays records
             if ($request->time_type == 1 && count($dayNames) === count($fromTimes) && count($fromTimes) === count($toTimes)) {
                 foreach ($dayNames as $index => $dayName) {
@@ -188,7 +193,7 @@ class pointsController extends Controller
                 }
             }
         });
-       
+
         return redirect()->route('points.index')->with('message', 'تم أضافه نقطه');
     }
 
@@ -198,12 +203,12 @@ class pointsController extends Controller
     public function show(string $id)
     {
         $data = Point::findOrFail($id);
-        if($data->work_type == 1){
-            $days = PointDays::where('point_id',$data->id)->get();
-        }else{
+        if ($data->work_type == 1) {
+            $days = PointDays::where('point_id', $data->id)->get();
+        } else {
             $days = null;
         }
-        return view('points.showdetails', compact('data','days'));
+        return view('points.showdetails', compact('data', 'days'));
     }
 
     /**
@@ -213,12 +218,13 @@ class pointsController extends Controller
     {
 
         $data = Point::findOrFail($id);
-        if($data->work_type == 1){
-            $days = PointDays::where('point_id',$data->id)->get();
-        }else{
+        if ($data->work_type == 1) {
+            $days = PointDays::where('point_id', $data->id)->get();
+        } else {
             $days = null;
         }
-        return view('points.edit', compact('data','days'));
+
+        return view('points.edit', compact('data', 'days'));
     }
 
     /**
@@ -227,54 +233,54 @@ class pointsController extends Controller
     public function update(Request $request)
     {
         //dd($request->all());
-        // $rules = [
-        //     'name' => 'required|string',
-        //     'sector_id' => 'required|exists:sectors,id',
-        //     'governorate' => 'required|exists:governments,id',
-        //     'region' => 'required|exists:regions,id',
-        //     'map_link' => 'nullable|string',
-        //     'lat' => 'nullable|string',
-        //     'long' => 'nullable|string',
-        //     'note' => 'nullable|string',
-        // ];
+        $rules = [
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('points', 'name')->ignore($request->id),
+            ],
+            'sector_id' => 'required|exists:sectors,id',
+            'governorate' => 'required|exists:governments,id',
+            'region' => 'required|exists:regions,id',
+            'map_link' => 'nullable|string',
+            'Lat' => 'nullable|string',
+            'long' => 'nullable|string',
+            'time_type' => 'required',
+            'day_name' => 'required|array',
+            'note' => 'nullable|string',
+        ];
 
-        // // Define custom messages
-        // $messages = [
-        //     'name.required' => 'يجب ادخال اسم نقطه',
-        //     'name.string' => 'يجب ان لا يحتوى اسم النقطه على رموز',
-        //     'governorate.required' => 'يجب اختيار محافظه واحده على الاقل',
-        //     'sector_id.required' => '',
-        //     'region.required' => '',
-        //     'from.required' => 'يجب ادخال تاريخ البداية',
-        //     'to.required' => 'يجب ادخال تاريخ النهاية',
-        //     'from.date_format' => 'تاريخ البداية يجب أن يكون بصيغة صحيحة (HH:MM)',
-        //     'to.date_format' => 'تاريخ النهاية يجب أن يكون بصيغة صحيحة (HH:MM)',
-        //     'from.before_or_equal' => 'تاريخ البداية يجب ان يكون قبل أو يساوي تاريخ النهاية',
-        //     'to.after_or_equal' => 'تاريخ النهاية يجب أن يكون بعد أو يساوي تاريخ البداية',
-        // ];
+        // Define custom messages
+        $messages = [
+            'name.required' => 'يجب ادخال اسم نقطه',
+            'name.unique' => 'يجب إدخال اسم نقطة مختلف',
+            'name.string' => 'يجب ان لا يحتوى اسم النقطه على رموز',
+            'governorate.required' => 'يجب اختيار محافظه واحده على الاقل',
+            'sector_id.required' => 'يجب اختيار قطاع الخاصه بالنقطه',
+            'region.required' => 'يجب اختيار المنطقه الخاصه بالنقطه',
+            'time_type.required' => 'يجب ادخال نظام العمل',
+            'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
+            'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
 
-        // // Validate the request
-        // $validatedData = Validator::make($request->all(), $rules, $messages);
+        ];
 
-        // if ($validatedData->fails()) {
-        //     //dd($validatedData->messages());
-        //     return redirect()->back()->withErrors($validatedData)->withInput();
-        // }
+
+        // Validate the request
+        $validatedData = Validator::make($request->all(), $rules, $messages);
+
+        if ($validatedData->fails()) {
+            //dd($validatedData->messages());
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
 
         DB::transaction(function () use ($request) {
             $dayNames = $request->input('day_name');
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
-            $pointId = $request->input('point_id'); // Assuming you pass the point ID in the request for updating
-        
+            $pointId = $request->input('id'); // Assuming you pass the point ID in the request for updating
+
             // Check if point exists
             $point = Point::find($pointId);
-        
-            if (!$point) {
-                // Create a new point if it doesn't exist
-                $point = new Point();
-            }
-        
             // Update the point data
             $point->name = $request->name;
             $point->government_id = $request->governorate;
@@ -288,22 +294,12 @@ class pointsController extends Controller
             $point->created_by = auth()->id(); // Use auth() helper
             $point->note = $request->note;
             $point->save();
-        
-            // Update or create the group point record
-            $pointgroups = Grouppoint::updateOrCreate(
-                ['points_ids' => json_encode([$point->id])],
-                [
-                    'name' => $point->name,
-                    'government_id' => $request->governorate,
-                    'flag' => 0,
-                ]
-            );
-        
+
             // Update or create PointDays records
             if ($request->time_type == 1 && count($dayNames) === count($fromTimes) && count($fromTimes) === count($toTimes)) {
                 // Delete existing PointDays records for the point
                 PointDays::where('point_id', $point->id)->delete();
-        
+
                 // Create new PointDays records
                 foreach ($dayNames as $index => $dayName) {
                     PointDays::create([
@@ -319,7 +315,7 @@ class pointsController extends Controller
                 PointDays::where('point_id', $point->id)->delete();
             }
         });
-        
+
         return redirect()->route('points.index')->with('message', 'تم تعديل نقطه');
     }
 
