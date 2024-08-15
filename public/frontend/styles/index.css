@@ -1372,3 +1372,7 @@ text-align: right;
     color: #000000;
     font-weight: bolder;
 }
+.only {
+    background-color: #e48bd0;
+    color: #ffffff;
+}
