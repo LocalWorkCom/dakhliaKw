@@ -88,7 +88,7 @@ class InspectorMissionController extends Controller
                 
                     $groupPointsData[] = [
                         'point_name' => $groupPoint->name,
-                        ' point_governate' => $groupPoint->government->name, // Assuming government name is the location
+                        'point_governate' => $groupPoint->government->name, // Assuming government name is the location
                         'point_time' => $inspectionTime, // Assuming 'time' is the attribute for time
                     ];
                 }
