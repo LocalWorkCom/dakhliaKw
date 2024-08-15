@@ -27,9 +27,9 @@ class InspectorMissionController extends Controller
          // Retrieve the missions for the specific inspector
          $missions = InspectorMission::whereDate('date', $today)
              ->where('inspector_id', $inspectorId)
-             ->with('workingTime', 'groupPoints.government')
+            // ->with('workingTime', 'groupPoints.government')
              ->get();
-
+           // dd($mission);
              $instantmissions = instantmission::where('inspector_id', $inspectorId)
              ->get();
              
