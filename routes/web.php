@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsenceTypeController;
 use App\Http\Controllers\dashboard\IoTelegramController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\outgoingController;
@@ -90,6 +91,15 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/permission_show/{id}', [PermissionController::class, 'show'])->name('permissions_show')->middleware('check.permission:edit Permission');
     Route::any('/permission_store', [PermissionController::class, 'store'])->name('permission.store')->middleware('check.permission:edit Permission');
     Route::any('/permission_delete/{id}', [PermissionController::class, 'destroy'])->name('permissions_destroy')->middleware('check.permission:delete Permission');
+    
+
+    // Absence
+    Route::any('/absence', [AbsenceTypeController::class, 'index'])->name('absence.index');
+    Route::get('api/absence', [AbsenceTypeController::class, 'getAbsence'])->name('api.absence');
+    Route::any('/absence/edit/{id}', [AbsenceTypeController::class, 'edit'])->name('absence_edit');
+    Route::any('/absence_update', [AbsenceTypeController::class, 'update'])->name('absence_update');
+    Route::any('/absence_store', [AbsenceTypeController::class, 'store'])->name('absence.store');
+
 
 
     // rule
