@@ -15,13 +15,12 @@ class personalMissionController extends Controller
 {
     public function getAllPoints(Request $request)
     {
-
         $today = Carbon::today()->toDateString();
-        $id = auth()->user()->inspectors;
-        $inspector = GroupTeam::with('group')->whereJsonContains('inspector_ids', 16)->first();
-
+        $id = auth()->user()->inspectorId;
+        $inspector = GroupTeam::with('group')->whereJsonContains('inspector_ids', $id)->first();
+        dd($id);
         if ($inspector) {
-            $inspector_points = InspectorMission::where('inspector_id', 16)
+            $inspector_points = InspectorMission::where('inspector_id', $id)
                 ->where('date', $today)
                 ->get()
                 ->pluck('ids_group_point')
@@ -46,14 +45,12 @@ class personalMissionController extends Controller
 
             $available_points = Point::whereIn('id', $availablegroup_points)->get();
 
-            dd($available_points);
+           
         }
         //dd($available_points);
-        // if () {
+        // if ($available_points) {
 
-        //     $success[''] = ->map(function ($item) {
-        //         return $item->only(['id', 'name']);
-        //     });
+        //     $success['$available_points'] = $available_points;
         //     return $this->respondSuccess($success, 'Get Data successfully.');
         // } else {
         //     return $this->respondError('type not found', ['error' => 'خطأ فى استرجاع البيانات'], 404);

@@ -11,6 +11,7 @@ use App\Models\EmployeeVacation;
 use App\Models\InspectorMission;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class VacationController extends Controller
@@ -76,7 +77,7 @@ class VacationController extends Controller
                 $rejected++;
             } else if (GetEmployeeVacationType($EmployeeVacation) == 'مقدمة') {
                 $pending++;
-            } 
+            }
         }
         $data_filter['current'] = $current;
         $data_filter['finished'] = $finished;
@@ -145,9 +146,26 @@ class VacationController extends Controller
                 # code...
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
                 $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
-                $EmployeeVacation['EndDate'] = ExpectedEndDate($EmployeeVacation)[0];
-                $EmployeeVacation['StartWorkDate'] = ExpectedEndDate($EmployeeVacation)[1];
-                $EmployeeVacation['DaysLeft'] = ($EmployeeVacation->start_date <= date('Y-m-d')) ? VacationDaysLeft($EmployeeVacation) : 'لم تبدا بعد';
+                $EmployeeVacation['EndDate'] = ($EmployeeVacation->end_date) ? $EmployeeVacation->end_date : ExpectedEndDate($EmployeeVacation)[0];
+                $EmployeeVacation['StartWorkDate'] = ($EmployeeVacation->end_date) ? AddDays($EmployeeVacation->end_date, 1) : ExpectedEndDate($EmployeeVacation)[1];
+                $daysLeft = VacationDaysLeft($EmployeeVacation);
+                $currentDate = date('Y-m-d');
+
+                if ($EmployeeVacation->start_date > $currentDate) {
+                    // Vacation has not started yet
+                    $EmployeeVacation['DaysLeft'] = 'لم تبدا بعد';
+                } else {
+                    // Vacation has started, check days left
+                    if ($EmployeeVacation->is_cut) {
+                        $EmployeeVacation['DaysLeft'] = 0;
+                    } else {
+                        if ($daysLeft >= 0) {
+                            $EmployeeVacation['DaysLeft'] = $daysLeft;
+                        } else {
+                            $EmployeeVacation['DaysLeft'] = 'متجاوز';
+                        }
+                    }
+                }
             }
             return DataTables::of($EmployeeVacations)
 
@@ -160,20 +178,23 @@ class VacationController extends Controller
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
                 $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
-                $EmployeeVacation['EndDate'] = ExpectedEndDate($EmployeeVacation)[0];
-                $EmployeeVacation['StartWorkDate'] = ExpectedEndDate($EmployeeVacation)[1];
+                $EmployeeVacation['EndDate'] = ($EmployeeVacation->end_date) ? $EmployeeVacation->end_date : ExpectedEndDate($EmployeeVacation)[0];
+                $EmployeeVacation['StartWorkDate'] = ($EmployeeVacation->end_date) ? AddDays($EmployeeVacation->end_date, 1) : ExpectedEndDate($EmployeeVacation)[1];
                 $daysLeft = VacationDaysLeft($EmployeeVacation);
                 $currentDate = date('Y-m-d');
-
                 if ($EmployeeVacation->start_date > $currentDate) {
                     // Vacation has not started yet
                     $EmployeeVacation['DaysLeft'] = 'لم تبدا بعد';
                 } else {
                     // Vacation has started, check days left
-                    if ($daysLeft >= 0) {
-                        $EmployeeVacation['DaysLeft'] = $daysLeft;
+                    if ($EmployeeVacation->is_cut) {
+                        $EmployeeVacation['DaysLeft'] = 'مقطوعة';
                     } else {
-                        $EmployeeVacation['DaysLeft'] = 'متجاوز';
+                        if ($daysLeft >= 0) {
+                            $EmployeeVacation['DaysLeft'] = $daysLeft;
+                        } else {
+                            $EmployeeVacation['DaysLeft'] = 'متجاوز';
+                        }
                     }
                 }
             }
@@ -381,8 +402,10 @@ class VacationController extends Controller
                     $daysNumber = $vacation->days_number; // Ensure this field exists in your EmployeeVacation model
 
                     foreach ($inspectorMissions as $mission) {
+                        $mission_date =  Carbon::parse($mission->date);
+
                         // Check if the mission date is within the vacation period
-                        if ($mission->date->diffInDays($vacation->start_date) < $daysNumber) {
+                        if ($mission_date->diffInDays($vacation->start_date) < $daysNumber) {
                             // Update the InspectorMission record with the vacation ID
                             $mission->vacation_id = $vacation->id;
                             // $mission->status = 'Canceled'; // Or another appropriate status
@@ -422,21 +445,91 @@ class VacationController extends Controller
     }
     public function updateVacation(Request $request, $id)
     {
-
         $vacation = EmployeeVacation::find($id);
         if ($vacation) {
             if ($request->type == 'cut') {
+                $inspector = Inspector::where('user_id', $vacation->employee_id)->first();
+
+                if ($inspector) {
+                    // Fetch InspectorMission records for the found inspector ID
+                    $inspectorMissions = InspectorMission::where('inspector_id', $inspector->id)
+                        ->whereDate('date', '>=', $vacation->start_date)
+                        ->get();
+
+                    if ($inspectorMissions->isEmpty()) {
+                        session()->flash('info', 'لا توجد مهام للمفتش لتحديثها.');
+                    } else {
+                        $end_date = $request->end_date;
+                        $end_date = Carbon::parse($end_date);
+                        $start_date =  Carbon::parse($vacation->start_date);
+                        $daysNumber = $start_date->diffInDays($end_date, false) + 1; // Ensure this field exists in your EmployeeVacation model
+                        foreach ($inspectorMissions as $index => $mission) {
+                            // Check if the mission date is within the vacation period
+
+                            $mission_date =  Carbon::parse($mission->date);
+
+                            if ($mission_date->diffInDays($vacation->start_date) < $daysNumber) {
+
+                                // Update the InspectorMission record with the vacation ID
+                                $mission->vacation_id = $vacation->id;
+                                // $mission->status = 'Canceled'; // Or another appropriate status
+                                $mission->save();
+                            } else {
+                                // dd($mission);
+                                $mission->vacation_id  = null;
+                                $mission->save();
+                            }
+                        }
+                        session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
+                    }
+                }
+
                 $vacation->is_cut = 1;
             } else if ($request->type == 'exceed') {
                 $vacation->is_exceed = 1;
+            } elseif ($request->type == 'direct_exceed') {
+                $inspector = Inspector::where('user_id', $vacation->employee_id)->first();
+
+                if ($inspector) {
+                    // Fetch InspectorMission records for the found inspector ID
+                    $inspectorMissions = InspectorMission::where('inspector_id', $inspector->id)
+                        ->whereDate('date', '>=', $vacation->start_date)
+                        ->get();
+
+                    if ($inspectorMissions->isEmpty()) {
+                        session()->flash('info', 'لا توجد مهام للمفتش لتحديثها.');
+                    } else {
+                        $end_date = $request->end_date;
+                        $end_date = Carbon::parse($end_date);
+                        $start_date =  Carbon::parse($vacation->start_date);
+                        $daysNumber = $start_date->diffInDays($end_date, false) + 1;
+                        // Ensure this field exists in your EmployeeVacation model
+                        foreach ($inspectorMissions as $index => $mission) {
+                            // Check if the mission date is within the vacation period
+
+                            $mission_date =  Carbon::parse($mission->date);
+                            // if($index == 2){
+
+                            //     dd($daysNumber,$mission_date->diffInDays($vacation->start_date),$start_date,$end_date);
+                            // }
+                            if ($mission_date->diffInDays($vacation->start_date) < $daysNumber) {
+
+                                // Update the InspectorMission record with the vacation ID
+                                $mission->vacation_id = $vacation->id;
+                                // $mission->status = 'Canceled'; // Or another appropriate status
+                                $mission->save();
+                            } else {
+                                $mission->vacation_id  = null;
+                                $mission->save();
+                            }
+                        }
+                    }
+                }
             }
             $vacation->end_date = $request->end_date;
             $vacation->save();
-
-            session()->flash('success', 'تم التعديل بنجاح.');
         } else {
-            session()->flash('error', 'الإجازة غير موجودة.');
         }
-        return redirect()->back();
+        return true;
     }
 }

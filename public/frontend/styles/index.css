@@ -1385,3 +1385,7 @@ text-align: right;
     font-weight: bolder;
 }
 input[type="file"] { direction :rtl; }
+.only {
+    background-color: #e48bd0;
+    color: #ffffff;
+}

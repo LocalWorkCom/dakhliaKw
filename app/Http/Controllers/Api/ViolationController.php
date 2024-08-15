@@ -64,6 +64,8 @@ class ViolationController  extends Controller
                'image.required' => 'المرفقات مطلوبة',
                 'violation_type.required' => 'نوع المخالفة مطلوب',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
+                'point_id.required' => 'رقم النقطة  مطلوب',
+                'mission_id.required' => 'رقم المهمة  مطلوب',
             ];
             $validatedData = Validator::make($request->all(), [
                 'military_number' => 'required',
@@ -72,6 +74,9 @@ class ViolationController  extends Controller
                 'image' => 'required',
                 'violation_type' => 'required',
                 'Civil_number' => 'required',
+                'point_id' => 'required',
+                'mission_id' => 'required',
+                
             ], $messages);
 
             if ($validatedData->fails()) {

@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\EmployeeVacation;
+use App\Models\Inspector;
+use App\Models\InspectorMission;
 use Illuminate\Console\Command;
 
 class employee_vacation extends Command
@@ -30,6 +32,7 @@ class employee_vacation extends Command
 
         $EmployeeVacations = EmployeeVacation::all();
         foreach ($EmployeeVacations as $EmployeeeVacation) {
+
             $expectedEndDate = ExpectedEndDate($EmployeeeVacation)[0];
 
             if ($EmployeeeVacation->status == 'Approved') {
@@ -37,6 +40,18 @@ class employee_vacation extends Command
                 if ($EmployeeeVacation->start_date < $today && $expectedEndDate < $today && (!$EmployeeeVacation->end_date || $EmployeeeVacation->end_date > $today)) {
                     $EmployeeeVacation->is_exceeded = 1;
                     $EmployeeeVacation->save();
+                    $inspector = Inspector::where('user_id', $EmployeeeVacation->employee_id)->first();
+
+                    if ($inspector) {
+                        // Fetch InspectorMission records for the found inspector ID
+                        $inspectorMission = InspectorMission::where('inspector_id', $inspector->id)
+                            ->whereDate('date', '=', $today)
+                            ->first();
+
+                        // Update the InspectorMission record with the vacation ID
+                        $inspectorMission->vacation_id = $EmployeeeVacation->id;
+                        $inspectorMission->save();
+                    }
                 }
             }
         }
