@@ -1386,6 +1386,9 @@ text-align: right;
 }
 input[type="file"] { direction :rtl; }
 .only {
-    background-color: #e48bd0;
-    color: #ffffff;
+    color: #020202;
+    background-color: #4edfd0ba;
+    
+    /* background-color: #e48bd0;
+    color: #ffffff; */
 }
