@@ -136,6 +136,17 @@
                                                                             </li>
                                                                         @endforeach
                                                                     @endif
+                                                                    @if (
+                                                                        !$mission->day_off &&
+                                                                            isset($inspector['personal_missions'][$index2]) &&
+                                                                            count($inspector['personal_missions'][$index2]) > 0)
+                                                                        @foreach ($inspector['personal_missions'][$index2] as $personal_mission)
+                                                                            <li class="task">
+                                                                                {{ $personal_mission->point->name }}
+                                                                            </li>
+                                                                        @endforeach
+                                                                    @endif
+                                                                    
                                                                 </ul>
                                                             @endif
                                                         </td>
