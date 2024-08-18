@@ -105,14 +105,16 @@
                                                         <!-- Mission Details -->
                                                         <td class="{{ $class }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
+
                                                             @if (!$mission->day_off && isset($inspector['vacations'][$index2]))
                                                                 <ul>
+
                                                                     <li style="color: white;font-weight: bold">
                                                                         {{ $inspector['vacations'][$index2] }}
                                                                     </li>
                                                                 </ul>
                                                             @else
-                                                                <ul>
+                                                                <ul style="list-style:none;">
                                                                     <!-- Mission Points -->
                                                                   
                                                                     @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)

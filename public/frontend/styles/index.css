@@ -711,7 +711,7 @@ color: #999595;
 }
 .btn-blue{
     width: 150px;
-    height: 45px;
+    height: 40px;
     border-radius: 10px;
     background-color: #274373;
     font-family: Almarai;
@@ -1369,15 +1369,17 @@ text-align: right;
     font-size: 24px;
     font-weight: 600;
 }
-.urgent{
-    background-color: #8d8d8dbd;
-    color: #c90404;
+.urgent {
+    background-color: #fdfdfdc2;
+    color: #eb3e3e;
     font-weight: bolder;
+    text-align: center;
 }
 .task{
     background-color: #c9f5f9;
     color: black;
     font-weight: bolder;
+    text-align: center;
 }
 .change{
     background-color:    #d6d6d6;

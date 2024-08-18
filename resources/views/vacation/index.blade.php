@@ -86,12 +86,12 @@
                             <div class="modal-header d-flex justify-content-center">
                                 <div class="title d-flex flex-row align-items-center">
                                     <h5 class="modal-title" id="representativeLabel">تعديل التاريخ</h5>
-                                    <img src="{{ asset('frontend/images/add-mandob.svg') }}" alt="">
+                                    <!-- <img src="{{ asset('frontend/images/add-mandob.svg') }}" alt=""> -->
                                 </div>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close">&times;</button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body pt-4 pb-5">
                                 <input type="hidden" name="type" id="type">
                                 <input type="hidden" name="id" id="id">
                                 <div class="form-group">
@@ -99,7 +99,7 @@
                                     <input type="date" id="end_date" name="end_date" class="form-control" required>
                                     <span class="text-danger span-error" id="end-date-error"></span>
                                 </div>
-                                <div class="text-end">
+                                <div class="text-end mt-3">
                                     <button type="submit" class="btn-blue" onclick="UpdateDate()">حفظ</button>
                                 </div>
                             </div>

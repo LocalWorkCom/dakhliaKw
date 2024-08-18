@@ -126,7 +126,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group col-md-5 mx-2">
+                        <div class="form-group col-md-10 mx-2">
                             <label for="inspectors">المفتش</label>
                             <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش">
                                 <option selected disabled>اختار من القائمة</option>
