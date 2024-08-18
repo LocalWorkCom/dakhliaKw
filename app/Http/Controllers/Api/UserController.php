@@ -111,12 +111,13 @@ class UserController extends Controller
             'military_number.required' => 'رقم العسكري مطلوب.',
             'password.required' => 'كلمة المرور مطلوبة.',
             'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
+            'password_confirm.required' => 'تأكيد كلمة المرور مطلوبة     .',
         ];
 
         $validatedData = Validator::make($request->all(), [
             'military_number' => 'required|string',
             'password' => 'required|string',
-            'password_confirm' => 'same:password',
+            'password_confirm' => 'required|same:password',
         ], $messages);
 
         if ($validatedData->fails()) {
