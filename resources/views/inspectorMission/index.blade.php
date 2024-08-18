@@ -106,13 +106,13 @@
                                                         <td class="{{ $class }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
                                                             @if (!$mission->day_off && isset($inspector['vacations']) && count($inspector['vacations']) > 0)
-                                                                <ul>
+                                                                <ul style="list-style:none;">
                                                                     <li style="color: white;font-weight: bold">
                                                                         {{ $inspector['vacations'][$index2] }}
                                                                     </li>
                                                                 </ul>
                                                             @else
-                                                                <ul>
+                                                                <ul style="list-style:none;">
                                                                     <!-- Mission Points -->
                                                                     @if (!$mission->day_off && isset($mission['points']) && count($mission['points']) > 0)
                                                                         @foreach ($mission['points'] as $point)
