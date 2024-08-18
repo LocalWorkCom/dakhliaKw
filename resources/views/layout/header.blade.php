@@ -297,6 +297,11 @@
                                                     alt="logo" style="margin-left: 7px;">
                                                 <a href="{{ route('working_trees.list') }}">نظام العمل</a>
                                             </li>
+                                            <li>
+                                                <img src="{{ asset('frontend/images/permission.svg') }}"
+                                                    alt="logo" style="margin-left: 7px;">
+                                                <a href="{{ route('absence.index') }}">انواع الغيابات </a>
+                                            </li>
 
 
 

@@ -673,6 +673,18 @@ color: #999595;
     text-align: center;
     border: 0.5px solid #D7D8D9;
 }
+.btn-all-new {
+    width: auto;
+    height: 65px;
+    border-radius: 10px;
+    background-color: #FAFBFD;
+    font-family: Almarai;
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 26.78px;
+    text-align: center;
+    border: 0.5px solid #D7D8D9;
+}
 .btn-all-2 {
     width: auto;
     height: 40px;
@@ -1371,4 +1383,15 @@ text-align: right;
     background-color:    #d6d6d6;
     color: #000000;
     font-weight: bolder;
+}
+input[type="file"] { direction :rtl; }
+.only {
+    color: #020202;
+    background-color: #4edfd0ba;
+    font-weight: 600;
+    /* background-color: #e48bd0;
+    color: #ffffff; */
+}
+button{
+    cursor: pointer;
 }

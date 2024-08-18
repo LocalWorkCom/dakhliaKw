@@ -18,6 +18,7 @@
                         </button>
 
                         <div class="colors  d-flex mx-5">
+                            <div class="only rounded p-1 px-2 mx-1"> فريق به مفتش فقط</div>
                             <div class="night rounded p-1 px-2 mx-1"> ليل</div>
                             <div class="task rounded p-1 px-2 mx-1"> مهمة</div>
                             <div class="urgent rounded p-1 px-2 mx-1"> أمر فوري</div>
@@ -68,8 +69,10 @@
                                         <tr class="group-table">
                                             <!-- Team Name Row -->
                                             <td colspan="2"
-                                                style=" text-align: center;background-color: #e4f1ffbd; color:black;">
-                                                {{ $team->name }}</td>
+                                                style="text-align: center; color:black;
+                                            background-color: {{ count($team['inspectors']) == 1 ? '#4edfd0ba' : '#e4f1ffbd' }};">
+                                                {{ $team->name }}
+                                            </td>
                                             @foreach ($Group['days_num'] as $index => $num)
                                                 <!-- Colors for Each Day in the Team -->
                                                 <td style="background-color:{{ $team['colors'][$index] }}"></td>
@@ -83,8 +86,10 @@
                                                 <td style="background-color: #a5d0ffbd">{{ $count }}</td>
 
                                                 <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;">
+                                                    {{ $inspector->name }}
+                                                </td>
 
-                                                    {{ $inspector->name }}</td>
+                                                <!-- Loop through each mission of the inspector -->
                                                 @foreach ($inspector['missions'] as $index2 => $mission)
                                                     @if ($mission)
                                                         <!-- Determine Class Based on Mission Type -->
@@ -113,7 +118,8 @@
                                                                     @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
                                                                         @foreach ($inspector['points'][$index2] as $point)
                                                                             <li style="color: white;font-weight: bold">
-                                                                                {{ $point->name }}</li>
+                                                                                {{ $point->name }}
+                                                                            </li>
                                                                         @endforeach
                                                                     @endif
 
@@ -130,12 +136,13 @@
                                                                     @endif
                                                                 </ul>
                                                             @endif
-
                                                         </td>
                                                     @else
                                                         <td style="background-color: #d6d6d6"></td>
                                                     @endif
                                                 @endforeach
+
+
                                             </tr>
                                             <?php $count++; ?>
                                         @endforeach

@@ -36,7 +36,7 @@ class UserController extends Controller
         $password = $request->password;
 
         // Check if the user exists
-        $user = User::where('military_number', $military_number)->join('inspectors','user_id','users.id')->first();
+        $user = User::where('military_number', $military_number)->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId')->first();
 
         if (!$user) {
           return $this->respondError('Validation Error.', ['military_number'=> 'الرقم العسكري لا يتطابق مع سجلات المفتشين'], 400);
@@ -76,7 +76,7 @@ class UserController extends Controller
                 $user->save();
                 $success['token'] = $token;//->token;
                 $user->image=$user->image;
-                $success['user'] = $user->only(['id', 'name', 'username', 'military_number', 'phone', 'code','image']);
+                $success['user'] = $user->only(['id', 'name', 'username', 'military_number', 'phone', 'code','image','inspectorId']);
                 if($user->grade) $grade=$user->grade->name; else $grade='مدني';
                 $success['user']['grade']=$grade;
               return $this->respondSuccess($success, 'User login successfully.');

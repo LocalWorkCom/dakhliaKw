@@ -209,6 +209,22 @@ class VacationController extends Controller
      */
     public function create($id = 0)
     {
+        // this employees that in teams
+        // $employees = getEmployees()->filter(function ($employee) {
+        //     // Get the inspector_id and group_id from the inspectors table based on the employee's user_id
+        //     $inspector = \App\Models\Inspector::where('user_id', $employee->id)->first();
+        //     $groupId = $inspector ? $inspector->group_id : null;
+        //     $inspectorId = $inspector ? $inspector->id : null;
+
+        //     // Check if the groupId exists in groupTeams and if the inspector_id is part of that group
+        //     return $groupId && $inspectorId &&
+        //            \App\Models\GroupTeam::where('group_id', $groupId)
+        //                                 ->whereRaw('FIND_IN_SET(?, inspector_ids)', [$inspectorId])
+        //                                 ->exists();
+        // });
+        // all employees
+
+        // dd($employees);        
         $employees = getEmployees();
         $vacation_types = getVactionTypes();
         if ($id) {
@@ -229,21 +245,29 @@ class VacationController extends Controller
         $rules = [
             'vacation_type_id' => 'required',
             'start_date' => 'required|date',
+            'days_num' => 'required|integer|min:1', // Added validation for days_num
             'employee_id' => 'required',
         ];
 
-        $messages = [
+        if ($request->has('check_country')) {
+            $rules['country_id'] = 'required';
+        }
 
-            'employee_id.required' => 'يجب عليك اختيار موظف',
+
+        $messages = [
             'vacation_type_id.required' => 'يجب ادخال نوع الاجازة',
             'start_date.required' => 'يجب ادخال تاريخ البداية',
+            'days_num.required' => 'يجب ادخال عدد الأيام', // Added custom message for days_num
+            'employee_id.required' => 'يجب عليك اختيار موظف',
+            'country_id.required' => 'يجب اختيار دولة عند تحديد دولة خارجية',
         ];
+       
         $validatedData = Validator::make($request->all(), $rules, $messages);
 
         if ($validatedData->fails()) {
             session()->flash('errors', $validatedData->errors());
-
-            return redirect()->route('vacations.list', $id);
+            return redirect()->route('vacation.add', $id)
+                ->withInput(); // Retain input values
         }
 
         if ($id == 0) {
@@ -264,16 +288,15 @@ class VacationController extends Controller
 
         if ($request->hasFile('reportImage')) {
             $file = $request->reportImage;
-            // You can modify the UploadFiles function call according to your needs
             $path = 'vacations/employee';
 
             UploadFiles($path, 'report_image', 'report_image_real', $employee_vacation, $file);
         }
 
         session()->flash('success', 'تم الحفظ بنجاح.');
-
         return redirect()->route('vacations.list', $id);
     }
+
 
     /**
      * Display the specified resource.
@@ -475,6 +498,7 @@ class VacationController extends Controller
                                 // $mission->status = 'Canceled'; // Or another appropriate status
                                 $mission->save();
                             } else {
+                                // dd($mission);
                                 $mission->vacation_id  = null;
                                 $mission->save();
                             }
