@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <div class="row d-flex justify-content-between "  dir="rtl">
+            <div class="row d-flex justify-content-between " dir="rtl">
                 <div class="form-group moftsh mx-4 d-flex flex-wrap">
                     <p class="filter">تصفية حسب:</p>
                     <button class="btn-all px-3 mx-3" data-filter="all" style="color: #274373;">
@@ -54,7 +54,7 @@
                     <button class="btn-all px-3 mx-3" data-filter="rejected" style="color: #274373;">
                         الاجازات المرفوضة({{ $data_filter['rejected'] }})
                     </button>
-                 
+
                 </div>
             </div>
 
@@ -86,12 +86,12 @@
                             <div class="modal-header d-flex justify-content-center">
                                 <div class="title d-flex flex-row align-items-center">
                                     <h5 class="modal-title" id="representativeLabel">تعديل التاريخ</h5>
-                                    <img src="{{ asset('frontend/images/add-mandob.svg') }}" alt="">
+                                    <!-- <img src="{{ asset('frontend/images/add-mandob.svg') }}" alt=""> -->
                                 </div>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close">&times;</button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body pt-4 pb-5">
                                 <input type="hidden" name="type" id="type">
                                 <input type="hidden" name="id" id="id">
                                 <div class="form-group">
@@ -99,7 +99,7 @@
                                     <input type="date" id="end_date" name="end_date" class="form-control" required>
                                     <span class="text-danger span-error" id="end-date-error"></span>
                                 </div>
-                                <div class="text-end">
+                                <div class="text-end mt-3">
                                     <button type="submit" class="btn-blue" onclick="UpdateDate()">حفظ</button>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
                                         return json.data.filter(item => item.VacationStatus === 'لم تبدأ بعد');
                                     } else if (filter === 'pending') {
                                         return json.data.filter(item => item.VacationStatus === 'مقدمة');
-                            
+
                                     } else if (filter === 'rejected') {
                                         return json.data.filter(item => item.VacationStatus === 'مرفوضة');
                                     }
@@ -248,11 +248,11 @@
                                     if (row.VacationStatus == 'منتهية') {
                                         buttons +=
                                             `<a href="" class="edit btn btn-sm" style="background-color: #2099c5;"><i class="fa-solid fa-print"></i> طباعة العودة</a>`;
-                                      if(!row.end_date){
-                                          buttons +=
-                                          `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c96f3d;" onclick="update_type('direct_work', '${row.id}')"><i class="fa-brands fa-stack-overflow"></i> مباشرة العمل</a>`;
+                                        if (!row.end_date) {
+                                            buttons +=
+                                                `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c96f3d;" onclick="update_type('direct_work', '${row.id}')"><i class="fa-brands fa-stack-overflow"></i> مباشرة العمل</a>`;
                                         }
-                                        } else if (row.VacationStatus == 'مقدمة') {
+                                    } else if (row.VacationStatus == 'مقدمة') {
                                         buttons +=
                                             `<form id="acceptForm" action="${urls.accept}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #28a745;" onclick="document.getElementById('acceptForm').submit();"><i class="fa fa-check"></i> موافقة</a></form>`;
                                         buttons +=
@@ -262,14 +262,12 @@
                                         buttons +=
                                             `<form id="printForm" action="${urls.print}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('printForm').submit();"><i class="fa fa-times"></i> طباعة</a></form>`;
                                     } else if (row.VacationStatus == 'متجاوزة') {
-
                                         buttons +=
                                             `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #9dad1f;" onclick="update_type('direct_exceed', '${row.id}')"><i class="fa fa-eye"></i> باشر بعد التجاوز</a>`;
                                     } else if (row.VacationStatus == 'حالية') {
-                                        if(!row.is_cut){
-
+                                        if (!row.is_cut) {
                                             buttons +=
-                                            `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c55a49;" onclick="update_type('cut', '${row.id}')"><i class="fa fa-eye"></i> قطع الاجازة</a>`;
+                                                `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c55a49;" onclick="update_type('cut', '${row.id}')"><i class="fa fa-eye"></i> قطع الاجازة</a>`;
                                         }
                                     }
 
@@ -309,19 +307,50 @@
                             $('.btn-all').removeClass('btn-active');
                             $(this).addClass('btn-active');
 
-                            table.ajax.reload(); // Reload data with the new filter
+                            if (filter === 'all') {
+                                // Apply ordering by ID in descending order
+                                table.order([0, 'desc']).page.len(10); // Assuming 10 records per page for 'all' filter
+                            } else {
+                                // Reset any ordering and show all data on a single page for other filters
+                                table.order([]).page.len(-1); // Show all records on a single page
+                            }
+
+                            table.ajax.reload(); // Reload data with the new filter and ordering
                         });
+                        
+                        // $('.btn-all').click(function() {
+                        //     filter = $(this).data('filter'); // Update the filter based on the clicked button
+
+                        //     // Remove 'btn-active' class from all buttons and add to the clicked one
+                        //     $('.btn-all').removeClass('btn-active');
+                        //     $(this).addClass('btn-active');
+
+                        //     if (filter === 'all') {
+                        //         // Apply ordering by ID in descending order and show 10 records per page
+                        //         table.order([0, 'desc']).page.len(10); // Assuming 10 records per page for 'all' filter
+                        //     } else {
+                        //         // Reset any ordering and show 10 records per page for other filters
+                        //         table.order([]).page.len(1); // Show 10 records per page with no specific order
+                        //     }
+                        //     // table.ajax.reload(); // Reload data with the new filter and ordering
+                        //     table.ajax.reload(); // Reload data with the new filter
+
+                        //     // Go to the first page to ensure data is shown
+                        //     // table.page('first');
+                        // });
+
                     });
 
+
                     $(document).ready(function() {
-                    // Set minimum date for the end_date input to today's date
+                        // Set minimum date for the end_date input to today's date
 
-                    var id = "{{ $id }}";
-                    // Get today's date
-                    var today = new Date().toISOString().split('T')[0];
-                    $('#end_date').attr('min', today);
+                        var id = "{{ $id }}";
+                        // Get today's date
+                        var today = new Date().toISOString().split('T')[0];
+                        $('#end_date').attr('min', today);
 
-                    $('#end_date').attr('value', today);
+                        $('#end_date').attr('value', today);
                     });
                 </script>
 

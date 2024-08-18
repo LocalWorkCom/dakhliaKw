@@ -70,7 +70,7 @@
                                             <!-- Team Name Row -->
                                             <td colspan="2"
                                                 style="text-align: center; color:black;
-                                            background-color: {{ count($team['inspectors']) == 1 ? '#4edfd0ba' : '#e4f1ffbd' }};">
+                                            background-color: {{ count($team['inspectors']) == 1 ? '#4edfd0ba' : '#11509bb3' }};">
                                                 {{ $team->name }}
                                             </td>
                                             @foreach ($Group['days_num'] as $index => $num)
@@ -105,14 +105,16 @@
                                                         <!-- Mission Details -->
                                                         <td class="{{ $class }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
+
                                                             @if (!$mission->day_off && isset($inspector['vacations'][$index2]))
                                                                 <ul>
+
                                                                     <li style="color: white;font-weight: bold">
                                                                         {{ $inspector['vacations'][$index2] }}
                                                                     </li>
                                                                 </ul>
                                                             @else
-                                                                <ul>
+                                                                <ul style="list-style:none;">
                                                                     <!-- Mission Points -->
                                                                   
                                                                     @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
@@ -134,6 +136,17 @@
                                                                             </li>
                                                                         @endforeach
                                                                     @endif
+                                                                    @if (
+                                                                        !$mission->day_off &&
+                                                                            isset($inspector['personal_missions'][$index2]) &&
+                                                                            count($inspector['personal_missions'][$index2]) > 0)
+                                                                        @foreach ($inspector['personal_missions'][$index2] as $personal_mission)
+                                                                            <li class="task">
+                                                                                {{ $personal_mission->point->name }}
+                                                                            </li>
+                                                                        @endforeach
+                                                                    @endif
+                                                                    
                                                                 </ul>
                                                             @endif
                                                         </td>

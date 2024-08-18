@@ -167,7 +167,9 @@ $(document).ready(function() {
             { data: 'group_id', name: 'group_id' },
             { data: 'phone', name: 'phone' },
             { data: 'action', name: 'action', sWidth: '200px', orderable: false, searchable: false }
-        ],
+        ],order: [
+                    [1, 'desc']
+                ],
         // columnDefs: [{
         //     targets: -1,
         //     render: function(data, type, row) {
@@ -241,22 +243,7 @@ $('.btn-filter').click(function() {
             table.ajax.reload(); // Reload data with the new filter
         });
 
-    //     $.fn.dataTable.ext.search.push(
-    //     function(settings, data, dataIndex) {
-    //         console.log();
-    //         var filter = $('.btn-filter.btn-active').data('filter');
-    //         var groupId = data[4]; // use data for the group_id column
-
-    //         if (filter === 'all') {
-    //             return true; // Show all records
-    //         } else if (filter === 'assigned' && groupId !== null && groupId !== "") {
-    //             return true; // Show only assigned inspectors
-    //         } else if (filter === 'unassigned' && (groupId === null || groupId === "")) {
-    //             return true; // Show only unassigned inspectors
-    //         }
-    //         return false; // Otherwise, don't show the record
-    //     }
-    // );
+    
     });
 
 </script>
