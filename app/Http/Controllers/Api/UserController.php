@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\grade;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -125,6 +126,7 @@ class UserController extends Controller
       }
 
         $user = User::where('military_number', $request->military_number)->first();
+        $grade = grade::where('id',$user->grade_id)->first();
 
         if (!$user) {
           return $this->respondError('Validation Error.', ['milltary_number'=> ['الرقم العسكري لا يتطابق مع سجلاتنا']], 400);
@@ -146,7 +148,17 @@ class UserController extends Controller
         $user->save();
         $success['token'] = $user->createToken('MyApp')->accessToken;
         // $user->image = $user->image;
-        $success['user'] = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
+        $userData = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
+        if($grade)
+        {
+            $gradeData = ['grade' => $grade->name];
+        }
+        else
+        {
+            $gradeData = ['grade' => 'لا يوجد بيانات'];
+        }
+        
+        $success = array_merge($userData, $gradeData);
         return $this->respondSuccess($success, 'reset password successfully.');
     }
 
@@ -227,7 +239,7 @@ class UserController extends Controller
         }
         
          else {
-            return $this->respondError('user not found', ['military_number' => ['مستخدم غير مسجل لدينا']], 200);
+            return $this->respondError('user not found', ['military_number' => ['مستخدم غير مسجل لدينا']], 400);
         }
     }
 
