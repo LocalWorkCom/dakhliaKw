@@ -18,7 +18,7 @@
                         </button>
 
                         <div class="colors  d-flex mx-5">
-                            <div class="only rounded p-1 px-2 mx-1"> فريق يحتوي على مفتش فقط</div>
+                            <div class="only rounded p-1 px-2 mx-1"> فريق به مفتش فقط</div>
                             <div class="night rounded p-1 px-2 mx-1"> ليل</div>
                             <div class="task rounded p-1 px-2 mx-1"> مهمة</div>
                             <div class="urgent rounded p-1 px-2 mx-1"> أمر فوري</div>
