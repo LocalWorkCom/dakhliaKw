@@ -20,6 +20,7 @@ use App\Models\EmployeeVacation;
 use App\Models\Grouppoint;
 use App\Models\Groups;
 use App\Models\instantmission;
+use App\Models\PersonalMission;
 use Illuminate\Support\Facades\DB;
 
 class GroupTeamController extends Controller
@@ -732,7 +733,7 @@ class GroupTeamController extends Controller
                             // Retrieve the instant missions associated with the mission
                             if ($inspector_mission->personal_mission_ids) {
                                 $missions = $inspector_mission->personal_mission_ids;
-                                $personalMissions = instantmission::whereIn('id', $missions)->get();
+                                $personalMissions = PersonalMission::whereIn('id', $missions)->get();
                             } else {
                                 $personalMissions = null;
                             }
