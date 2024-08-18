@@ -312,6 +312,17 @@
                             table.ajax.reload(); // Reload data with the new filter
                         });
                     });
+
+                    $(document).ready(function() {
+                    // Set minimum date for the end_date input to today's date
+
+                    var id = "{{ $id }}";
+                    // Get today's date
+                    var today = new Date().toISOString().split('T')[0];
+                    $('#end_date').attr('min', today);
+
+                    $('#end_date').attr('value', today);
+                    });
                 </script>
 
             </div>

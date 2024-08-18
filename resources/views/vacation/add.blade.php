@@ -33,7 +33,7 @@
                         <div class="form-group col-md-5 mx-md-2 ">
                             <label for="vacation_type_id" style=" display: flex; justify-content: flex-start;">نوع
                                 الاجازة</label>
-                            <select id="vacation_type_id" name="vacation_type_id" class="form-control" required>
+                            <select id="vacation_type_id" name="vacation_type_id" class="form-control" >
                                 <option value="">اختر النوع</option>
                                 @foreach ($vacation_types as $vacation_type)
                                     <option value="{{ $vacation_type->id }}">{{ $vacation_type->name }}</option>
@@ -42,7 +42,7 @@
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="employee_id" style=" display: flex; justify-content: flex-start;">اسم الموظف</label>
-                            <select id="employee_id" name="employee_id" class="form-control" required
+                            <select id="employee_id" name="employee_id" class="form-control" 
                                 @if ($id) disabled @endif>
                                 <option value="">اختر الموظف</option>
                                 @foreach ($employees as $item)
@@ -63,20 +63,19 @@
 
                         <div class="form-group col-md-5 mx-2">
                             <label for="start_date">تاريخ البداية</label>
-                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                            <input type="date" id="start_date" name="start_date" class="form-control" >
                         </div>
                     </div>
                     <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
-                        <div class="form-group col-md-10 mx-md-md-2  d-flex " dir="rtl">
+                        <div class="form-group col-md-10 mx-md-md-2  d-flex" dir="rtl">
                             <input type="checkbox" class="mx-2" name="check_country" id="toggleCheckbox">
                             <label for="toggleCheckbox"> دولة خارجية </label>
                         </div>
                     </div>
-
+                    
                     <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
-
                         <div class="form-group col-md-10 mx-2" style="display: none" id="toggleDiv">
-                            <label for="country_id" style=" display: flex;">الدولة</label>
+                            <label for="country_id" style="display: flex;">الدولة</label>
                             <select id="country_id" name="country_id" class="form-control">
                                 <option value="">اختر الدولة</option>
                                 @foreach ($countries as $item)
@@ -84,7 +83,6 @@
                                 @endforeach
                             </select>
                         </div>
-
                     </div>
                     <div class="container col-10 mt-5 mb-5 ">
                         <div class="form-row col-10 " dir="ltr">
@@ -109,6 +107,19 @@
                 }
             });
         </script>
+        {{-- <script>
+            document.getElementById('toggleCheckbox').addEventListener('change', function () {
+                var toggleDiv = document.getElementById('toggleDiv');
+                var countrySelect = document.getElementById('country_id');
+                if (this.checked) {
+                    toggleDiv.style.display = 'block';
+                    countrySelect.setAttribute('required', 'required');
+                } else {
+                    toggleDiv.style.display = 'none';
+                    countrySelect.removeAttribute('required');
+                }
+            });
+        </script> --}}
         <script>
             $(document).ready(function() {
                 // Set minimum date for the start_date input to today's date
