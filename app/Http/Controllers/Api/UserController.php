@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\grade;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -39,13 +40,13 @@ class UserController extends Controller
         $user = User::where('military_number', $military_number)->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId')->first();
 
         if (!$user) {
-          return $this->respondError('Validation Error.', ['military_number'=> 'الرقم العسكري لا يتطابق مع سجلات المفتشين'], 400);
+          return $this->respondError('Validation Error.', ['military_number'=> ['الرقم العسكري لا يتطابق مع سجلات المفتشين']], 400);
         }
 
         // Check if the user has the correct flag
         if ($user->flag !== 'user') {
           //  return back()->with('error', 'لا يسمح لك بدخول الهيئة');
-          return $this->respondError('Validation Error.', ['not authorized'=> 'لا يسمح لك بدخول الهيئة'], 400);
+          return $this->respondError('Validation Error.', ['not authorized'=> ['لا يسمح لك بدخول الهيئة']], 400);
         }
 
         $credentials = $request->only('military_number', 'password');
@@ -111,12 +112,13 @@ class UserController extends Controller
             'military_number.required' => 'رقم العسكري مطلوب.',
             'password.required' => 'كلمة المرور مطلوبة.',
             'password_confirm.same' => 'تأكيد كلمة المرور يجب أن يتطابق مع كلمة المرور.',
+            'password_confirm.required' => 'تأكيد كلمة المرور مطلوبة     .',
         ];
 
         $validatedData = Validator::make($request->all(), [
             'military_number' => 'required|string',
             'password' => 'required|string',
-            'password_confirm' => 'same:password',
+            'password_confirm' => 'required|same:password',
         ], $messages);
 
         if ($validatedData->fails()) {
@@ -124,18 +126,19 @@ class UserController extends Controller
       }
 
         $user = User::where('military_number', $request->military_number)->first();
+        $grade = grade::where('id',$user->grade_id)->first();
 
         if (!$user) {
-          return $this->respondError('Validation Error.', ['milltary_number'=> 'الرقم العسكري لا يتطابق مع سجلاتنا'], 400);
+          return $this->respondError('Validation Error.', ['milltary_number'=> ['الرقم العسكري لا يتطابق مع سجلاتنا']], 400);
         }
 
         // Check if the user has the correct flag
         if ($user->flag !== 'user') {
-          return $this->respondError('Validation Error.', ['not authorized'=> 'لا يسمح لك بدخول الهيئة'], 400);
+          return $this->respondError('Validation Error.', ['not authorized'=> ['لا يسمح لك بدخول الهيئة']], 400);
         }
 
         if (Hash::check($request->password, $user->password) == true) {
-          return $this->respondError('Validation Error.', ['password'=> 'لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية' ], 400);
+          return $this->respondError('Validation Error.', ['password'=> ['لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية'] ], 400);
         }
 
         // Update password and set token for first login if applicable
@@ -145,7 +148,17 @@ class UserController extends Controller
         $user->save();
         $success['token'] = $user->createToken('MyApp')->accessToken;
         // $user->image = $user->image;
-        $success['user'] = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
+        $userData = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
+        if($grade)
+        {
+            $gradeData = ['grade' => $grade->name];
+        }
+        else
+        {
+            $gradeData = ['grade' => 'لا يوجد بيانات'];
+        }
+        
+        $success = array_merge($userData, $gradeData);
         return $this->respondSuccess($success, 'reset password successfully.');
     }
 
@@ -203,7 +216,7 @@ class UserController extends Controller
         }
         
          else {
-            return $this->respondError('user not found', ['error' => 'مستخدم غير مسجل لدينا'], 404);
+            return $this->respondError('user not found', ['military_number' => ['مستخدم غير مسجل لدينا']], 400);
         }
     }
 
@@ -226,7 +239,7 @@ class UserController extends Controller
         }
         
          else {
-            return $this->respondError('user not found', ['error' => 'مستخدم غير مسجل لدينا'], 404);
+            return $this->respondError('user not found', ['military_number' => ['مستخدم غير مسجل لدينا']], 400);
         }
     }
 
