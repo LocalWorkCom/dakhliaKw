@@ -10,7 +10,7 @@
     <div class="row ">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
-                <p> الاجــــــازات </p>
+                <p> الاجــــــازات  ( {{ $vacationCount }} )</p>
 
                 @if (Auth::user()->hasPermission('create EmployeeVacation'))
                     <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;"
@@ -23,10 +23,10 @@
     </div>
     <br>
     <div class="row">
-        <div class="container col-11 mt-3 p-0">
+        <div class="container col-11 mt-3 p-0 pb-4">
             <div class="row d-flex justify-content-between" dir="rtl">
                 <div class="form-group moftsh mt-4 mx-4 d-flex">
-                    <p class="filter" style="font-size:35px;">عدد الاجازات : {{ $vacationCount }}</p>
+                    <!-- <p class="filter" style="font-size:35px;">عدد الاجازات :</p> -->
                 </div>
             </div>
 
