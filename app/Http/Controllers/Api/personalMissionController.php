@@ -89,7 +89,7 @@ class personalMissionController extends Controller
                             'dayname' => $available_point->pointDays->map(function ($pointDay) use ($daysOfWeek, $dayWeek) {
                                 $index = intval($pointDay->name); // Convert to integer to get the index
                                 return [
-                                    'is_thisDay_off' => $pointDay->name == $dayWeek ? false : true,
+                                    'is_thisDay_off' => $pointDay->name == $dayWeek ? false :  true,
                                     'name' => isset($daysOfWeek[$index]) ? $daysOfWeek[$index] : $pointDay->name,
                                     'from' => $pointDay->from ?? '',
                                     'to' => $pointDay->to ?? '',
