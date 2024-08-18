@@ -24,5 +24,9 @@ class Grouppoint extends Model
     {
         return $this->belongsTo(Government::class, 'government_id', 'id');
     }
+    public function points()
+    {
+        return $this->hasMany(Point::class, 'id', 'points_ids');
+    }
    
 }
