@@ -246,7 +246,7 @@
                         searchable: false
                     }
                 ],
-                // order: [[1, 'desc']],
+                 order: [[1, 'desc']],
                 "oLanguage": {
                                 "sSearch": "",
                                 "sSearchPlaceholder":"بحث",
