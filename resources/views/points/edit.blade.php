@@ -162,19 +162,19 @@
                                         <label class="pb-3" for="day_name"> اختر اليوم </label>
                                         <select name="day_name[]" id="day_name"
                                             style="border: 0.2px solid rgb(199, 196, 196);" required>
-                                            <option value="0" @if ($day == 0) selected @endif> السبت
+                                            <option value="السبت" @if ($day == 0) selected @endif> السبت
                                             </option>
-                                            <option value="1" @if ($day == 1) selected @endif> الأحد
+                                            <option value="الأحد" @if ($day == 1) selected @endif> الأحد
                                             </option>
-                                            <option value="2" @if ($day == 2) selected @endif>
+                                            <option value="الأثنين" @if ($day == 2) selected @endif>
                                                 الأثنين </option>
-                                            <option value="3" @if ($day == 3) selected @endif>
+                                            <option value="الثلاثاء" @if ($day == 3) selected @endif>
                                                 الثلاثاء </option>
-                                            <option value="4" @if ($day == 4) selected @endif>
+                                            <option value="الأربعاء" @if ($day == 4) selected @endif>
                                                 الأربعاء </option>
-                                            <option value="5" @if ($day == 5) selected @endif>
+                                            <option value="الخميس" @if ($day == 5) selected @endif>
                                                 الخميس </option>
-                                            <option value="6" @if ($day == 6) selected @endif>
+                                            <option value="الجمعه" @if ($day == 6) selected @endif>
                                                 الجمعه </option>
                                         </select>
                                         <span class="text-danger span-error" id="day_name-error"></span>
@@ -192,21 +192,21 @@
                                         <label class="pb-3" for="day_name"> اختر اليوم </label>
                                         <select name="day_name[]" id="day_name"
                                             style="border: 0.2px solid rgb(199, 196, 196);" required>
-                                            <option value="0" @if ($day->name == 0) selected @endif>
+                                            <option value="السبت" @if ($day->name == 0) selected @endif>
                                                 السبت
                                             </option>
-                                            <option value="1" @if ($day->name == 1) selected @endif>
+                                            <option value="الأحد" @if ($day->name == 1) selected @endif>
                                                 الأحد
                                             </option>
-                                            <option value="2" @if ($day->name == 2) selected @endif>
+                                            <option value="الأثنين" @if ($day->name == 2) selected @endif>
                                                 الأثنين </option>
-                                            <option value="3" @if ($day->name == 3) selected @endif>
+                                            <option value="الثلاثاء" @if ($day->name == 3) selected @endif>
                                                 الثلاثاء </option>
-                                            <option value="4" @if ($day->name == 4) selected @endif>
+                                            <option value="الأربعاء" @if ($day->name == 4) selected @endif>
                                                 الأربعاء </option>
-                                            <option value="5" @if ($day->name == 5) selected @endif>
+                                            <option value="الخميس" @if ($day->name == 5) selected @endif>
                                                 الخميس </option>
-                                            <option value="6" @if ($day->name == 6) selected @endif>
+                                            <option value="الجمعه" @if ($day->name == 6) selected @endif>
                                                 الجمعه </option>
                                         </select>
                                         <span class="text-danger span-error" id="day_name-error"></span>
@@ -350,7 +350,7 @@ debugger;
 
             ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day, index) => {
                 const option = document.createElement('option');
-                option.value = index;
+                option.value = day;
                 option.text = day;
                 select.appendChild(option);
             });

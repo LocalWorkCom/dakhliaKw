@@ -38,6 +38,7 @@ class InspectorMission extends Model
     protected $casts = [
         'ids_group_point' => 'array',
         'ids_instant_mission' => 'array',
+        'personal_mission_ids' => 'array',
         'date' => 'date',
         'day_off' => 'boolean',
     ];
