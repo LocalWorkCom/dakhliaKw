@@ -1388,7 +1388,10 @@ input[type="file"] { direction :rtl; }
 .only {
     color: #020202;
     background-color: #4edfd0ba;
-    
+    font-weight: 600;
     /* background-color: #e48bd0;
     color: #ffffff; */
+}
+button{
+    cursor: pointer;
 }

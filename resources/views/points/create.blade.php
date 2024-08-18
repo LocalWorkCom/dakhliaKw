@@ -177,10 +177,10 @@
         // Create divs dynamically based on the selected value and the number entered
         for (let i = 0; i < daysNum; i++) {
             const mainDiv = document.createElement('div');
-            mainDiv.className = 'form-row mx-2 mb-2';
+            mainDiv.className = 'form-row col-12  mb-2';
 
             const dayNameContainer = document.createElement('div');
-            dayNameContainer.className = 'form-row mx-2 mb-2';
+            dayNameContainer.className = 'form-row col-12   mb-2';
 
             const inputGroup = document.createElement('div');
             inputGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3';
@@ -229,7 +229,7 @@
             // If timeType == 1, add fromTime and toTime inputs
             if (timeType == '1') {
                 const timeInputRow = document.createElement('div');
-                timeInputRow.className = 'form-row mx-2 mb-2';
+                timeInputRow.className = 'form-row col-12 mx-2 mb-2';
 
                 const fromTimeGroup = document.createElement('div');
                 fromTimeGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3 col-6';
