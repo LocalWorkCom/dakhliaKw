@@ -30,8 +30,8 @@
                 </div>
             </div>
 
-            <div class="row d-flex justify-content-between" dir="rtl">
-                <div class="form-group moftsh mx-4 d-flex">
+            <div class="row d-flex justify-content-between "  dir="rtl">
+                <div class="form-group moftsh mx-4 d-flex flex-wrap">
                     <p class="filter">تصفية حسب:</p>
                     <button class="btn-all px-3 mx-3" data-filter="all" style="color: #274373;">
                         الكل ({{ \App\Models\EmployeeVacation::count() }})
@@ -247,10 +247,10 @@
 
                                     if (row.VacationStatus == 'منتهية') {
                                         buttons +=
-                                            `<a href="" class="edit btn btn-sm" style="background-color: #6020c5;"><i class="fa fa-eye"></i> طباعة العودة</a>`;
+                                            `<a href="" class="edit btn btn-sm" style="background-color: #2099c5;"><i class="fa-solid fa-print"></i> طباعة العودة</a>`;
                                       if(!row.end_date){
                                           buttons +=
-                                          `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c93da4;" onclick="update_type('direct_work', '${row.id}')"><i class="fa fa-eye"></i> مباشرة العمل</a>`;
+                                          `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c96f3d;" onclick="update_type('direct_work', '${row.id}')"><i class="fa-brands fa-stack-overflow"></i> مباشرة العمل</a>`;
                                         }
                                         } else if (row.VacationStatus == 'مقدمة') {
                                         buttons +=
