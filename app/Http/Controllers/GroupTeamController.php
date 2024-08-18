@@ -674,6 +674,7 @@ class GroupTeamController extends Controller
                     $inspector_missions = [];
                     $pointsArray = [];
                     $instantArray = [];
+                    $personalArray = [];
                     // Loop through each day of the month for the inspector
                     foreach ($Group['days_num'] as $index => $num) {
                         $date = $currentDate->copy()->startOfMonth()->addDays($num - 1);
@@ -719,11 +720,6 @@ class GroupTeamController extends Controller
                             }
                             $pointsArray[] = $GroupPoints;
 
-
-
-                            // $inspector_mission['points'] = $GroupPoints;
-
-
                             // Retrieve the instant missions associated with the mission
                             if ($inspector_mission->ids_instant_mission) {
                                 $missions = $inspector_mission->ids_instant_mission;
@@ -733,6 +729,15 @@ class GroupTeamController extends Controller
                             }
 
                             $instantArray[] = $InstantMissions;
+                            // Retrieve the instant missions associated with the mission
+                            if ($inspector_mission->personal_mission_ids) {
+                                $missions = $inspector_mission->personal_mission_ids;
+                                $personalMissions = instantmission::whereIn('id', $missions)->get();
+                            } else {
+                                $personalMissions = null;
+                            }
+
+                            $personalArray[] = $personalMissions;
 
                             // Get the working time and its associated color
                             $WorkingTreeTime = WorkingTime::find($inspector_mission->working_time_id);
@@ -749,6 +754,7 @@ class GroupTeamController extends Controller
                             $vacations[] = null;
                             $pointsArray[] = null;
                             $instantArray[] = null;
+                            $personalArray[] = null;
                         }
 
                         // Add the mission to the inspector's missions array
@@ -756,12 +762,13 @@ class GroupTeamController extends Controller
                     }
 
                     $inspector['vacations'] = $vacations;
-                    
+
                     // Assign the missions and colors arrays to the inspector object
                     $inspector['missions'] = $inspector_missions;
                     $inspector['colors'] = $colors;
                     $inspector['points'] = $pointsArray;
                     $inspector['instant_missions'] = $instantArray;
+                    $inspector['personal_missions'] = $personalArray;
                     // if ( $inspector->id == 10) {
 
                     //     dd([
