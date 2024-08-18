@@ -70,7 +70,7 @@
                                             <!-- Team Name Row -->
                                             <td colspan="2"
                                                 style="text-align: center; color:black;
-                                            background-color: {{ count($team['inspectors']) == 1 ? '#4edfd0ba' : '#e4f1ffbd' }};">
+                                            background-color: {{ count($team['inspectors']) == 1 ? '#4edfd0ba' : '#11509bb3' }};">
                                                 {{ $team->name }}
                                             </td>
                                             @foreach ($Group['days_num'] as $index => $num)
