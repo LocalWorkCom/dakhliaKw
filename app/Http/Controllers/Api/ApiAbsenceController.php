@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\AbsenceEmployee;
+use Carbon\Carbon;
 use App\Models\grade;
-use App\Models\AbsenceType;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Absence;
 use App\Models\Inspector;
+use App\Models\AbsenceType;
+use Illuminate\Http\Request;
+use App\Models\AbsenceEmployee;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class ApiAbsenceController extends Controller
@@ -58,14 +59,14 @@ class ApiAbsenceController extends Controller
             'actual_number.required' => 'الرقم الفعلى  مطلوب ولا يمكن تركه فارغاً.',
             'point_id.required' => 'رقم النقطة  مطلوب .',
             'mission_id.required' => 'رقم المهمة مطلوبة',
-            'date.required' => 'التاريخ مطلوبة',
+            // 'date.required' => 'التاريخ مطلوبة',
         ];
         $validatedData = Validator::make($request->all(), [
             'total_number' => 'required',
             'actual_number' => 'required',
             'point_id' => 'required',
             'mission_id' => 'required',
-            'date'=> 'required' 
+            // 'date'=> 'required' 
         ], $messages);
         
         if ($validatedData->fails()) {
@@ -74,8 +75,9 @@ class ApiAbsenceController extends Controller
 
         $inspectorId = Inspector::where('user_id',auth()->user()->id)->first();
         //  dd(auth()->user()->inspectors);
+        $today = Carbon::today()->toDateString();
         $new = new Absence();
-        $new->date = $request->date;
+        $new->date =  $today;
         $new->point_id = $request->point_id;
         $new->mission_id = $request->mission_id;
         $new->total_number = $request->total_number;
