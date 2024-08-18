@@ -621,20 +621,21 @@ class GroupTeamController extends Controller
                     $group_teams[] = $GroupTeam;
                 }
             }
-
             // Assign the group_teams array to the Group object
             $Group['teams'] = $group_teams;
-
             // Process each team in the group
-            foreach ($Group['teams'] as $GroupTeam) {
+            foreach ($Group['teams'] as  $Team) {
+                // dd(sizeof($Group['teams']));
+
+
                 // Retrieve all inspectors associated with the team in the current group
                 $inspectorIds = InspectorMission::where('group_id', $Group->id)
-                    ->where('group_team_id', $GroupTeam->id)
+                    ->where('group_team_id', $Team->id)
                     ->groupBy('inspector_id')
                     ->pluck('inspector_id');
                 // Get the inspector objects
                 $inspectors = Inspector::whereIn('id', $inspectorIds->toArray())->get();
-                $GroupTeam['inspectors'] = $inspectors;
+                $Team['inspectors'] = $inspectors;
 
                 // Initialize an array to hold colors for each day in the month
                 $colors = [];
@@ -645,7 +646,7 @@ class GroupTeamController extends Controller
                     // Check if there is a mission for the group, team, and date
                     $inspector_mission_check = InspectorMission::where('date', $date->toDateString())
                         ->where('group_id', $Group->id)
-                        ->where('group_team_id', $GroupTeam->id)
+                        ->where('group_team_id', $Team->id)
                         ->first();
 
                     if ($inspector_mission_check) {
@@ -661,28 +662,31 @@ class GroupTeamController extends Controller
                         $colors[] = '#d6d6d6';
                     }
                 }
-                // Assign the colors array to the GroupTeam object
-                $GroupTeam['colors'] = $colors;
+
+                // Assign the colors array to the Team object
+                $Team['colors'] = $colors;
 
                 // Process each inspector in the team
-                foreach ($GroupTeam['inspectors'] as $inspector) {
+                foreach ($Team['inspectors'] as $inspector) {
+
                     $colors = [];
                     $vacations = [];
                     $inspector_missions = [];
-
+                    $pointsArray = [];
+                    $instantArray = [];
                     // Loop through each day of the month for the inspector
-                    foreach ($Group['days_num'] as $num) {
+                    foreach ($Group['days_num'] as $index => $num) {
                         $date = $currentDate->copy()->startOfMonth()->addDays($num - 1);
 
                         // Retrieve the inspector's mission for the specific date, group, and team
                         $inspector_mission = InspectorMission::where('date', $date->toDateString())
                             ->where('inspector_id', $inspector->id)
                             ->where('group_id', $Group->id)
-                            ->where('group_team_id', $GroupTeam->id)
+                            ->where('group_team_id', $Team->id)
                             ->first();
-                 
 
                         if ($inspector_mission) {
+
                             $today = date('Y-m-d');
                             $EmployeeVacation = EmployeeVacation::find($inspector_mission->vacation_id);
 
@@ -691,7 +695,7 @@ class GroupTeamController extends Controller
                                 if ($date->diffInDays($EmployeeVacation->start_date) < $days_number) {
                                     $vacations[] = $inspector_mission->vacation->vacation_type->name;
                                 } else {
-                                
+
                                     if ($date->toDateString() <= $EmployeeVacation->end_date) {
                                         $vacations[] = 'متجاوزة';
                                     } else if ($EmployeeVacation->is_exceeded && $today <= $date->toDateString()) {
@@ -705,12 +709,19 @@ class GroupTeamController extends Controller
                             }
                             // Retrieve the group points associated with the mission
                             if ($inspector_mission->ids_group_point) {
-                                $points = $inspector_mission->ids_group_point;
+                                $points = is_array($inspector_mission->ids_group_point)
+                                    ? $inspector_mission->ids_group_point
+                                    : explode(',', $inspector_mission->ids_group_point);
+                                // dd($points);
                                 $GroupPoints = Grouppoint::whereIn('id', $points)->get();
                             } else {
-                                $GroupPoints = [];
+                                $GroupPoints = null;
                             }
-                            $inspector_mission['points'] = $GroupPoints;
+                            $pointsArray[] = $GroupPoints;
+
+
+
+                            // $inspector_mission['points'] = $GroupPoints;
 
 
                             // Retrieve the instant missions associated with the mission
@@ -718,9 +729,10 @@ class GroupTeamController extends Controller
                                 $missions = $inspector_mission->ids_instant_mission;
                                 $InstantMissions = instantmission::whereIn('id', $missions)->get();
                             } else {
-                                $InstantMissions = [];
+                                $InstantMissions = null;
                             }
-                            $inspector_mission['instant_missions'] = $InstantMissions;
+
+                            $instantArray[] = $InstantMissions;
 
                             // Get the working time and its associated color
                             $WorkingTreeTime = WorkingTime::find($inspector_mission->working_time_id);
@@ -735,16 +747,34 @@ class GroupTeamController extends Controller
                             $inspector_mission = null;
                             $colors[] = '#d6d6d6';
                             $vacations[] = null;
+                            $pointsArray[] = null;
+                            $instantArray[] = null;
                         }
+
                         // Add the mission to the inspector's missions array
                         $inspector_missions[] = $inspector_mission;
                     }
 
                     $inspector['vacations'] = $vacations;
-
+                    
                     // Assign the missions and colors arrays to the inspector object
                     $inspector['missions'] = $inspector_missions;
                     $inspector['colors'] = $colors;
+                    $inspector['points'] = $pointsArray;
+                    $inspector['instant_missions'] = $instantArray;
+                    // if ( $inspector->id == 10) {
+
+                    //     dd([
+                    //         'inspector_id' => $inspector->id,
+                    //         'group_id' => $Group->id,
+                    //         'group_team_id' => $Team->id,
+                    //         'inspector_mission' => $inspector_missions,
+                    //         'ids_group_point' => $inspector_mission ? $inspector_mission->ids_group_point : null,
+                    //         'pointsArray' => $pointsArray,
+                    //         'instantArray' => $instantArray, 
+                    //         'inspector'=>$inspector
+                    //     ]);
+                    // }
                 }
             }
         }
