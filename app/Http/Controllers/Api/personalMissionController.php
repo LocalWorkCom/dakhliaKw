@@ -131,7 +131,6 @@ class personalMissionController extends Controller
         $inspector = GroupTeam::with('group')->whereJsonContains('inspector_ids', $inspectorId)->first();
         $point_group = Grouppoint::whereJsonContains('points_ids', $request->pointID)->value('id');
         $is_added_before = PersonalMission::where('point_id',$point_group)->where('inspector_id',$inspectorId)->where('date',Carbon::today()->toDateString())->get();
-      
         if(!($is_added_before->isEmpty())){
            
             return $this->respondError('failed to save', ['error' => 'عفوا تمت أضافه هذه المهمه من قبل لك'], 404);
