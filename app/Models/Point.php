@@ -37,4 +37,8 @@ class Point extends Model
     {
         return $this->belongsTo(Sector::class);
     }
+    public function grouppoint()
+    {
+        return $this->belongsTo(Grouppoint::class);
+    }
 }

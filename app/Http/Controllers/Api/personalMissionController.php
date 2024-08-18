@@ -17,6 +17,7 @@ class personalMissionController extends Controller
 {
     public function getAllPoints(Request $request)
     {
+
         $today = Carbon::today()->toDateString();
         $daysOfWeek = [
             "السبت",  // Saturday
@@ -36,7 +37,6 @@ class personalMissionController extends Controller
         if ($inspector) {
             $inspector_points = InspectorMission::where('inspector_id', $inspectorId)
                 ->where('date', $today)
-                ->get()
                 ->pluck('ids_group_point')
                 ->map(function ($json) {
                     return is_string($json) ? json_decode($json, true) : $json;
@@ -48,61 +48,52 @@ class personalMissionController extends Controller
             // Fetch available group points
             $availablegroup_points = Grouppoint::where('government_id', $inspector->group->government_id)
                 ->whereNotIn('id', $inspector_points)
-                ->pluck('points_ids')
-                ->map(function ($json) {
-                    return is_string($json) ? json_decode($json, true) : $json;
-                })
-                ->flatten()
-                ->filter()
-                ->toArray();
-        
-            $available_points = Point::with('pointDays')->whereIn('id', $availablegroup_points)->get();
+                ->get();
         
             $All_points = []; // Initialize $All_points array
         
-            foreach ($available_points as $available_point) {
-                if ($available_point->work_type == 0) {
-                    // Check if today's day is in days_work
-                    if (in_array($index, $available_point->days_work)) {
-                        $All_points[] = [
-                            'pointId' => $available_point->id,
-                            'pointName' => $available_point->name,
-                            'pointgovernment_name' => $available_point->government->name,
-                            'work_type' => 'full Time',
-                            'point_work_days' => array_map(function ($dayIndex) use ($daysOfWeek) {
-                                $index = intval($dayIndex); // Convert to integer to get the index
-                                return [
-                                    'name' => isset($daysOfWeek[$index]) ? $daysOfWeek[$index] : 'Unknown',
-                                    'is_thisDay_off' => false,
-                                ];
-                            }, $available_point->days_work),
-                        ];
-                    }
-                } else {
-                    // Check if today's day is in pointDays
-                    $pointDays = $available_point->pointDays->filter(function ($pointDay) use ($index) {
-                        return intval($pointDay->name) == $index;
-                    });
+            // Process available group points
+            $availablegroup_points->each(function ($grouppoint) use (&$All_points, $daysOfWeek, $index, $dayWeek) {
+                // Fetch points related to the group point
+                $available_points = Point::with(['pointDays'])->whereIn('id', $grouppoint->points_ids)->get();
+                $name= $grouppoint->flag == 0 ? 'لا توجد مجموعه': $grouppoint->name;
         
-                    if ($pointDays->isNotEmpty()) {
+                $available_points->each(function ($available_point) use (&$All_points, $daysOfWeek, $index, $dayWeek,$name) {
+                    if ($available_point->work_type == 0) {
+                        // Check if today's day is in days_work
+                        $is_off = in_array($index, $available_point->days_work);
+                        
+                        if ($is_off) {
+                            $All_points[] = [
+                                'point_governate' => $available_point->government->name , 
+                                'point_id' => $available_point->id,
+                                'point_name' => $available_point->name,
+                                'point_GroupName' => $name ?? 'Unknown',
+                                'point_time' => 'طوال اليوم',
+                                'point_location' => $available_point->google_map,
+                                // 'point_work_days' => array_map(function ($dayIndex) use ($daysOfWeek, $is_off) {
+                                //     $index = intval($dayIndex); // Convert to integer to get the index
+                                //     return [
+                                //         'name' => isset($daysOfWeek[$index]) ? $daysOfWeek[$index] : 'Unknown',
+                                //         'is_thisDay_off' => $is_off,
+                                //     ];
+                                // }, $available_point->days_work),
+                            ];
+                        }
+                    } else {
+                        $pointDay =  $available_point->pointDays->where('name',$index)->first();
                         $All_points[] = [
-                            'pointId' => $available_point->id,
-                            'pointName' => $available_point->name,
-                            'pointgovernment_name' => $available_point->government->name,
-                            'work_type' => 'part Time',
-                            'point_work_days' => $pointDays->map(function ($pointDay) use ($daysOfWeek, $dayWeek) {
-                                $index = intval($pointDay->name); // Convert to integer to get the index
-                                return [
-                                    'is_thisDay_off' => $pointDay->name == $dayWeek ? false : true,
-                                    'name' => isset($daysOfWeek[$index]) ? $daysOfWeek[$index] : $pointDay->name,
-                                    'from' => $pointDay->from ?? '',
-                                    'to' => $pointDay->to ?? '',
-                                ];
-                            })->toArray(),
+                            'point_governate' => $available_point->government->name , 
+                            'point_id' => $available_point->id,
+                            'point_name' => $available_point->name,
+                            'point_GroupName' => $name ?? 'Unknown',
+                            'point_time' => "من {$pointDay->from} " . ($pointDay->from > 12 ? 'مساءا' : 'صباحا') . " الى {$pointDay->to} " . ($pointDay->to > 12 ? 'مساءا' : 'صباحا'),
+    
+                            'point_location' => $available_point->google_map,
                         ];
                     }
-                }
-            }
+                });
+            });
         
             $success['available_points'] = $All_points;
             return $this->respondSuccess($success, 'Get Data successfully.');
@@ -161,4 +152,50 @@ class personalMissionController extends Controller
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
         }
     }
+    // foreach ($available_points as $available_point) {
+    //     // Debugging to check if 'grouppoint' relationship is loaded and 'flag' exists
+    //     dd($available_point->grouppoint->flag);
+
+    //     if ($available_point->work_type == 0) {
+    //         // Check if today's day is in days_work
+    //         $is_off = in_array($index, $available_point->days_work);
+
+    //         if ($is_off) {
+    //             $All_points[] = [
+    //                 'pointId' => $available_point->id,
+    //                 'pointName' => $available_point->name,
+    //                 'pointGroupName' => $available_point->grouppoint->name ?? 'Unknown', // Ensure this is the correct field
+    //                 'pointgovernment_name' => $available_point->government->name,
+    //                 'work_type' => 'full Time',
+    //                 'point_work_days' => array_map(function ($dayIndex) use ($daysOfWeek, $is_off) {
+    //                     $index = intval($dayIndex); // Convert to integer to get the index
+    //                     return [
+    //                         'name' => isset($daysOfWeek[$index]) ? $daysOfWeek[$index] : 'Unknown',
+    //                         'is_thisDay_off' => $is_off,
+    //                     ];
+    //                 }, $available_point->days_work),
+    //             ];
+    //         }
+    //     } else {
+    //         // Assuming 'part Time' for work_type == 1
+    //         $All_points[] = [
+    //             'pointId' => $available_point->id,
+    //             'pointName' => $available_point->name,
+    //             'pointGroupName' => $available_point->grouppoint->name ?? 'Unknown', // Ensure this is the correct field
+    //             'pointgovernment_name' => $available_point->government->name,
+    //             'work_type' => 'part Time',
+    //             'point_work_days' => [
+    //                 'dayname' => $available_point->pointDays->map(function ($pointDay) use ($daysOfWeek, $dayWeek) {
+    //                     $index = intval($pointDay->name); // Convert to integer to get the index
+    //                     return [
+    //                         'is_thisDay_off' => $pointDay->name == $dayWeek ? false : true,
+    //                         'name' => isset($daysOfWeek[$index]) ? $daysOfWeek[$index] : $pointDay->name,
+    //                         'from' => $pointDay->from ?? '',
+    //                         'to' => $pointDay->to ?? '',
+    //                     ];
+    //                 })->toArray(), // Convert the collection to an array
+    //             ],
+    //         ];
+    //     }
+    // }
 }
