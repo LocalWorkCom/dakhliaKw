@@ -17,7 +17,6 @@ class personalMissionController extends Controller
 {
     public function getAllPoints(Request $request)
     {
-
         $today = Carbon::today()->toDateString();
         $daysOfWeek = [
             "السبت",  // Saturday
@@ -40,7 +39,6 @@ class personalMissionController extends Controller
                 ->get()
                 ->pluck('ids_group_point')
                 ->map(function ($json) {
-                    // Decode only if $json is a string
                     return is_string($json) ? json_decode($json, true) : $json;
                 })
                 ->flatten()
@@ -59,34 +57,40 @@ class personalMissionController extends Controller
                 ->toArray();
         
             $available_points = Point::with('pointDays')->whereIn('id', $availablegroup_points)->get();
-            
+        
             $All_points = []; // Initialize $All_points array
         
             foreach ($available_points as $available_point) {
                 if ($available_point->work_type == 0) {
-                    $is_off = in_array($dayWeek, $available_point->days_work);
-                    
-                    $All_points[] = [
-                        'pointId' => $available_point->id,
-                        'pointName' => $available_point->name,
-                        'pointgovernment_name' => $available_point->government->name,
-                        'work_type' => 'full Time',
-                        'point_work_days' => array_map(function ($dayIndex) use ($daysOfWeek, $is_off) {
-                            $index = intval($dayIndex); // Convert to integer to get the index
-                            return [
-                                'name' => isset($daysOfWeek[$index]) ? $daysOfWeek[$index] : 'Unknown',
-                                'is_thisDay_off' => $is_off,
-                            ];
-                        }, $available_point->days_work),
-                    ];
+                    // Check if today's day is in days_work
+                    if (in_array($index, $available_point->days_work)) {
+                        $All_points[] = [
+                            'pointId' => $available_point->id,
+                            'pointName' => $available_point->name,
+                            'pointgovernment_name' => $available_point->government->name,
+                            'work_type' => 'full Time',
+                            'point_work_days' => array_map(function ($dayIndex) use ($daysOfWeek) {
+                                $index = intval($dayIndex); // Convert to integer to get the index
+                                return [
+                                    'name' => isset($daysOfWeek[$index]) ? $daysOfWeek[$index] : 'Unknown',
+                                    'is_thisDay_off' => false,
+                                ];
+                            }, $available_point->days_work),
+                        ];
+                    }
                 } else {
-                    $All_points[] = [
-                        'pointId' => $available_point->id,
-                        'pointName' => $available_point->name,
-                        'pointgovernment_name' => $available_point->government->name,
-                        'work_type' => 'part Time', // Assuming part time here
-                        'point_work_days' => [
-                            'dayname' => $available_point->pointDays->map(function ($pointDay) use ($daysOfWeek, $dayWeek) {
+                    // Check if today's day is in pointDays
+                    $pointDays = $available_point->pointDays->filter(function ($pointDay) use ($index) {
+                        return intval($pointDay->name) == $index;
+                    });
+        
+                    if ($pointDays->isNotEmpty()) {
+                        $All_points[] = [
+                            'pointId' => $available_point->id,
+                            'pointName' => $available_point->name,
+                            'pointgovernment_name' => $available_point->government->name,
+                            'work_type' => 'part Time',
+                            'point_work_days' => $pointDays->map(function ($pointDay) use ($daysOfWeek, $dayWeek) {
                                 $index = intval($pointDay->name); // Convert to integer to get the index
                                 return [
                                     'is_thisDay_off' => $pointDay->name == $dayWeek ? false : true,
@@ -94,9 +98,9 @@ class personalMissionController extends Controller
                                     'from' => $pointDay->from ?? '',
                                     'to' => $pointDay->to ?? '',
                                 ];
-                            }),
-                        ],
-                    ];
+                            })->toArray(),
+                        ];
+                    }
                 }
             }
         
@@ -127,22 +131,29 @@ class personalMissionController extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
+        $today = Carbon::today()->toDateString();
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         $inspector = GroupTeam::with('group')->whereJsonContains('inspector_ids', $inspectorId)->first();
         $point_group = Grouppoint::whereJsonContains('points_ids', $request->pointID)->value('id');
-        $is_added_before = PersonalMission::where('point_id',$point_group)->where('inspector_id',$inspectorId)->where('date',Carbon::today()->toDateString())->get();
-      
-        if(!($is_added_before->isEmpty())){
-           
+        $is_added_before = PersonalMission::where('point_id', $point_group)->where('inspector_id', $inspectorId)->where('date', $today)->get();
+        if (!($is_added_before->isEmpty())) {
+
             return $this->respondError('failed to save', ['error' => 'عفوا تمت أضافه هذه المهمه من قبل لك'], 404);
         }
         $new = new PersonalMission();
-        $new->date = Carbon::today()->toDateString();
+        $new->date = $today;
         $new->inspector_id = $inspectorId;
         $new->point_id  = $point_group;
         $new->group_id  = $inspector->group_id;
         $new->team_id  = $inspector->id;
         $new->save();
+        $update_mission = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->first();
+        $currentArray = $update_mission->personal_mission_ids ? json_decode($update_mission->personal_mission_ids, true) : [];
+        $currentArray[] = $new->id;
+        $update_mission->personal_mission_ids = json_encode($currentArray);
+        $update_mission->save();
+
+        //send notification to inspector 
 
         if ($new) {
             return $this->respondSuccess('success', 'Data Saved successfully.');
