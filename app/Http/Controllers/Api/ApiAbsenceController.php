@@ -76,44 +76,55 @@ class ApiAbsenceController extends Controller
         $inspectorId = Inspector::where('user_id',auth()->user()->id)->first();
         //  dd(auth()->user()->inspectors);
         $today = Carbon::today()->toDateString();
-        $new = new Absence();
-        $new->date =  $today;
-        $new->point_id = $request->point_id;
-        $new->mission_id = $request->mission_id;
-        $new->total_number = $request->total_number;
-        $new->actual_number = $request->actual_number;
-        $new->inspector_id = $inspectorId ? $inspectorId->id : null;
-        $new->save();
-
-            if($new)
-            {
-                if($request->has('AbsenceEmployee'))
+        $abs = $request->total_number - $request->actual_number;
+        if( $abs !=  count($request->AbsenceEmployee))
+        {
+            return $this->respondError('failed to save', ['absence_number' => [' عدد الموظفين  المدخل لا يتوافق مع عددهم']], 400);
+        }
+        else
+        {
+            $new = new Absence();
+            $new->date =  $today;
+            $new->point_id = $request->point_id;
+            $new->mission_id = $request->mission_id;
+            $new->total_number = $request->total_number;
+            $new->actual_number = $request->actual_number;
+            $new->inspector_id = $inspectorId ? $inspectorId->id : null;
+            $new->save();
+    
+    
+    
+                if($new)
                 {
-                    $array=[];
-                    foreach($request->AbsenceEmployee as $item)
+                    if($request->has('AbsenceEmployee'))
                     {
-                        $Emp = new AbsenceEmployee();
-                        $Emp->name = $item["name"];
-                        $Emp->grade = $item["grade"];
-                        $Emp->absence_types_id  = $item["type"];
-                        $Emp->absences_id  = $new->id;
-                        $Emp->save();
-                        if($Emp)
+                        $array=[];
+                        foreach($request->AbsenceEmployee as $item)
                         {
-                            $array[]=$Emp->only(['id','name','grade','absence_types_id']);
+                            $Emp = new AbsenceEmployee();
+                            $Emp->name = $item["name"];
+                            $Emp->grade = $item["grade"];
+                            $Emp->absence_types_id  = $item["type"];
+                            $Emp->absences_id  = $new->id;
+                            $Emp->save();
+                            if($Emp)
+                            {
+                                $array[]=$Emp->only(['id','name','grade','absence_types_id']);
+                            }
+    
                         }
-
                     }
+    
+                    $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
+                    $success['AbsenceEmployee'] = $array;
+                    return $this->respondSuccess($success, 'Data Saved successfully.');
                 }
-
-                $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
-                $success['AbsenceEmployee'] = $array;
-                return $this->respondSuccess($success, 'Data Saved successfully.');
-            }
-            else
-            {
-                return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
-            }
+                else
+                {
+                    return $this->respondError('failed to save', ['error' =>[ 'خطأ فى حفظ البيانات']], 400);
+                }
+        }
+       
     }
 
     /**
