@@ -105,7 +105,7 @@
                                                         <!-- Mission Details -->
                                                         <td class="{{ $class }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
-                                                            @if (!$mission->day_off && isset($inspector['vacations']) && count($inspector['vacations']) > 0)
+                                                            @if (!$mission->day_off && isset($inspector['vacations'][$index2]))
                                                                 <ul>
                                                                     <li style="color: white;font-weight: bold">
                                                                         {{ $inspector['vacations'][$index2] }}
@@ -114,8 +114,9 @@
                                                             @else
                                                                 <ul>
                                                                     <!-- Mission Points -->
-                                                                    @if (!$mission->day_off && isset($mission['points']) && count($mission['points']) > 0)
-                                                                        @foreach ($mission['points'] as $point)
+                                                                  
+                                                                    @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
+                                                                        @foreach ($inspector['points'][$index2] as $point)
                                                                             <li style="color: white;font-weight: bold">
                                                                                 {{ $point->name }}
                                                                             </li>
@@ -123,8 +124,11 @@
                                                                     @endif
 
                                                                     <!-- Instant Missions -->
-                                                                    @if (!$mission->day_off && isset($mission['instant_missions']) && count($mission['instant_missions']) > 0)
-                                                                        @foreach ($mission['instant_missions'] as $instant_mission)
+                                                                    @if (
+                                                                        !$mission->day_off &&
+                                                                            isset($inspector['instant_missions'][$index2]) &&
+                                                                            count($inspector['instant_missions'][$index2]) > 0)
+                                                                        @foreach ($inspector['instant_missions'][$index2] as $instant_mission)
                                                                             <li class="urgent">
                                                                                 {{ $instant_mission->label }}
                                                                             </li>
