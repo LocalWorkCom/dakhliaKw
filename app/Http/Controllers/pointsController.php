@@ -272,16 +272,14 @@ class pointsController extends Controller
             //dd($validatedData->messages());
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
-
+//dd($request->day_name);
         DB::transaction(function () use ($request) {
-            $dayNames = $request->input('day_name');
+            $dayNames =$request->day_name;
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
-            $pointId = $request->input('id'); // Assuming you pass the point ID in the request for updating
+            $pointId = $request->input('id');
 
-            // Check if point exists
             $point = Point::find($pointId);
-            // Update the point data
             $point->name = $request->name;
             $point->government_id = $request->governorate;
             $point->region_id = $request->region;
@@ -290,8 +288,8 @@ class pointsController extends Controller
             $point->lat = $request->Lat;
             $point->long = $request->long;
             $point->work_type = $request->time_type;
-            $point->days_work = $request->time_type == 0 ? $dayNames : null; // Assigning array directly
-            $point->created_by = auth()->id(); // Use auth() helper
+            $point->days_work = $request->time_type == 0 ? json_encode($dayNames , true) : null; 
+            $point->created_by = auth()->id(); 
             $point->note = $request->note;
             $point->save();
 
@@ -311,7 +309,6 @@ class pointsController extends Controller
                     ]);
                 }
             } else {
-                // If not part-time, ensure no PointDays records exist
                 PointDays::where('point_id', $point->id)->delete();
             }
         });
