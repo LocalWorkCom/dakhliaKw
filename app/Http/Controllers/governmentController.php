@@ -10,6 +10,7 @@ use App\Models\GroupTeam;
 use App\Models\Inspector;
 use App\Models\InspectorMission;
 use App\Models\instantmission;
+use App\Models\Sector;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,120 @@ class governmentController extends Controller
     public function index()
     { 
         
+        //get vaiable times
+        $yesterday = Carbon::yesterday()->toDateString();
+        $today = Carbon::today()->toDateString();
+        //get all Sector
+        $allsectors = Sector::pluck('id')->toArray();
+        
+        foreach ($allsectors as $sector) { // fetch on all sectors
+            //get all points available for this government
+            $allAvailablePoints = Grouppoint::where('government_id', $sector)->pluck('id')->toArray();
+            //get all groups and num of points for each group 
+            $allGroupsForGovernment = Groups::where('government_id', $sector)->select('id', 'points_inspector')->get();
+        
+            foreach ($allGroupsForGovernment as $group) { //fetch on all groups in same governmet
+                //get all teams of this group and his history
+                $groupTeams = InspectorMission::where('group_id', $group->id)
+                    ->select('group_team_id', 'ids_group_point')
+                    ->whereDate('date', $yesterday)
+                    ->distinct('group_team_id')
+                    ->get();
+                // inisialize variables for new history and vacation of team
+                $usedValues = [];
+                $dayOffTeams = [];
+        
+                foreach ($groupTeams as $groupTeam) { // fetch on teams on same group
+                    //points for each team that should take
+                    $pointPerTeam = $group->points_inspector;
+        
+                    // Collect day-off teams
+                    $teamsWithDayOff = InspectorMission::where('group_id', $group->id)
+                        ->where('group_team_id', $groupTeam->group_team_id)
+                        ->where('date', $today)
+                        ->where('day_off', 1)
+                        ->pluck('id')
+                        ->toArray();
+                    
+                    if (!empty($teamsWithDayOff)) {
+                        $dayOffTeams = array_merge($dayOffTeams, $teamsWithDayOff);
+                        continue;
+                    }
+        
+                    if (!empty($allAvailablePoints)) {
+                        //merging points and get the points that not takes yesterday
+                        $allValues = array_merge($allAvailablePoints, $groupTeam->ids_group_point ? $groupTeam->ids_group_point : []);
+                        $allValues = array_unique($allValues);
+                        shuffle($allValues);
+        
+                        // Determine possible new points that are not used and not the old values
+                        $possibleNewValues = array_diff($allValues, $usedValues, $groupTeam->ids_group_point ? $groupTeam->ids_group_point : []);
+                    
+                        // If there are not enough points left, use whatever is available
+                        $requiredValuesCount = $pointPerTeam;
+                        if (count($possibleNewValues) < $requiredValuesCount) {
+                            $newValues = array_slice($possibleNewValues, 0);
+                        } else {
+                            $newValues = array_splice($possibleNewValues, 0, $requiredValuesCount);
+                        }
+                    
+                        // If still not enough points, fill with any remaining values
+                        if (count($newValues) < $requiredValuesCount) {
+                            $remainingValues = array_diff($allValues, $usedValues, $newValues);
+                            $newValues = array_merge($newValues, array_slice($remainingValues, 0, $requiredValuesCount - count($newValues)));
+                        }
+                    
+                        // Assign new values to the team
+                        $pointTeam = $newValues;
+                        $usedValues = array_merge($usedValues, $newValues);
+        
+                        $upatedMissions = InspectorMission::where('group_id', $group->id)
+                            ->where('group_team_id', $groupTeam->group_team_id)
+                            ->where('date', $today)
+                            ->where('day_off', 0)
+                            ->pluck('id')
+                            ->toArray();
+                        
+                        foreach ($upatedMissions as $upatedMission) {
+                            $upated = InspectorMission::where('id', $upatedMission)->where('vacation_id', null)->first();
+                            if ($upated) {
+                                // Update the ids_group_point field
+                                $upated->ids_group_point = array_map('strval', $pointTeam);
+                                $upated->save();
+                                
+                                // call notification function to notify this inspector with his points for today
+                            }
+                        }
+        
+                        // Remove the assigned points from available points
+                        $allAvailablePoints = array_diff($allAvailablePoints, $pointTeam);
+                    } else {
+                        $upatedMissions = InspectorMission::where('group_id', $group->id)
+                            ->where('group_team_id', $groupTeam->group_team_id)
+                            ->where('date', $today)
+                            ->pluck('id')
+                            ->toArray();
+                        
+                        foreach ($upatedMissions as $upatedMission) {
+                            $upated = InspectorMission::find($upatedMission);
+                            if ($upated) {
+                                // Update the ids_group_point field
+                                $upated->ids_group_point = [];
+                                $upated->save();
+                            }
+                        }
+                    }
+                }
+                foreach ($dayOffTeams as $dayOffTeam) {
+                    $upated = InspectorMission::find($dayOffTeam);
+                    if ($upated) {
+                        // Ensure ids_group_point is not updated for day off teams
+                        $upated->ids_group_point = [];
+                        $upated->save();
+                    }
+                }
+            }
+        }
     }
 
 
@@ -203,146 +318,7 @@ class governmentController extends Controller
      */
     public function destroy(string $id)
     {
-        // $yesterday = '2024-08-13';
-        // $results = InspectorMission::select(
-        //     'inspector_mission.group_id',
-        //     'inspector_mission.date',
-        //     DB::raw('COALESCE(groups.points_inspector, 0) as num_points')
-        // )
-        //     ->join('groups', 'inspector_mission.group_id', '=', 'groups.id')
-        //     ->whereDate('date', $yesterday)
-        //     ->distinct()
-        //     ->with(['group', 'groupTeam'])
-        //     ->groupBy('inspector_mission.group_id', 'groups.points_inspector', 'inspector_mission.date')
-        //     ->get();
-
-        // // Initialize a variable to store the first government's ID
-        // $initialGovernmentId = null;
-        // $groupIdSameGovernment = null;
-        // $sameGovernment = true;
-        // $availableGroupPoints = []; // Variable for available points
-        // foreach ($results as $result) {
-        //     $group = $result->group; // Access the group relation
-        //     $governmentId = $group->government_id; // Get the government_id
-        //     //dd($group);
-        //     if ($initialGovernmentId === null) {
-        //         $initialGovernmentId = $governmentId; // Set the first government's ID
-        //         $groupIdSameGovernment = $group->id;
-        //     } elseif ($initialGovernmentId !== $governmentId) {
-        //         $sameGovernment = false; // If a different government_id is found
-        //         break;
-        //     }
-        //     $groupAllPoints = DB::table('group_points')->where('government_id', $governmentId)->pluck('id')->toArray();
-        //     // Get team IDs
-        //     $teamIds = DB::table('inspector_mission')
-        //         ->where('group_id', $result->group_id)
-        //         ->distinct('group_team_id')
-        //         ->pluck('group_team_id')
-        //         ->toArray();
-
-        //     // Number of points each team should get
-        //     $pointsPerTeam = $result->num_points;
-
-        //     if ($sameGovernment) {
-        //         if ($group->id == 8) {
-        //             $allTakedpointes = DB::table('inspector_mission')
-        //                 ->where('group_id', $groupIdSameGovernment)
-        //                 ->distinct('group_team_id')
-        //                 ->whereDate('date', $yesterday)->distinct()
-        //                 ->pluck('ids_group_point')
-        //                 ->toArray();
-        //             foreach ($allTakedpointes as $allTakedpointe) {
-        //                 $GroupHistoryArray[] = json_decode($allTakedpointe, true);
-        //             }
-        //             $mergedArray = array_merge(...$GroupHistoryArray);
-        //             foreach ($teamIds as $teamId) {
-        //                 //history of this team
-        //                 $teamHistory = DB::table('inspector_mission')
-        //                     ->where('group_team_id', $teamId)->whereDate('date', $yesterday)->distinct()
-        //                     ->pluck('ids_group_point')
-        //                     ->toArray();
-        //                 //history of this team as Array
-        //                 $teamHistoryArray = json_decode($teamHistory[0], true);
-        //             }
-        //             dd($teamHistoryArray);
-        //         }
-        //     } else {
-        //         foreach ($teamIds as $teamId) {
-        //             //history of this team
-        //             $teamHistory = DB::table('inspector_mission')
-        //                 ->where('group_team_id', $teamId)->whereDate('date', $yesterday)->distinct()
-        //                 ->pluck('ids_group_point')
-        //                 ->toArray();
-        //             //history of this team as Array
-        //             $teamHistoryArray = json_decode($teamHistory[0], true);
-        //             //available points for team after compare with last history for it
-        //             $availablePoints = array_values(array_diff($groupAllPoints, $teamHistoryArray));
-        //             // points that will asigned for this team with limit of per team
-        //             $pointsToAssign = array_splice($availablePoints, 0, $pointsPerTeam);
-        //             // update uesed points with last points that assigened
-        //             $usedPoints[] = $pointsToAssign;
-        //             // Assign points to team or leave empty if no points available
-        //             $teamPoints[$teamId] = !empty($pointsToAssign) ? $pointsToAssign : [];
-        //         }
-        //     }
-        //     //$availableGroupPoints[$result->group_id] = $teamPoints;
-        // }
-
-        // dd('j');
-        // $today = Carbon::today()->toDateString();
-        // // Fetch results with group_id, num_points
-        // $results = InspectorMission::select(
-        //     'inspector_mission.group_id',
-        //     'inspector_mission.date',
-        //     DB::raw('COALESCE(groups.points_inspector, 0) as num_points')
-        // )
-        //     ->join('groups', 'inspector_mission.group_id', '=', 'groups.id')->whereDate('date', $yesterday)->distinct()
-        //     ->with(['group', 'groupTeam'])
-        //     ->groupBy('inspector_mission.group_id',  'groups.points_inspector', 'inspector_mission.date')
-        //     ->get();
-        // $availableGroupPoints = []; // Variable for available points
-
-        // foreach ($results as $result) {
-        //     // Get government_id of each group
-        //     $governmentId  = $result->group->government_id;
-        //     $governmentIds[] = $result->group->government_id;
-        //     //allpoints for this group
-        //     $groupAllPoints = DB::table('group_points')
-        //         ->where('government_id', $governmentId)
-        //         ->pluck('id')
-        //         ->toArray();
-        //     // Get team IDs
-        //     $teamIds = DB::table('inspector_mission')
-        //         ->where('group_id', $result->group_id)
-        //         ->distinct('group_team_id')
-        //         ->pluck('group_team_id')
-        //         ->toArray();
-        //     // Number of points each team should get
-        //     $pointsPerTeam = $result->num_points;
-        //     foreach ($teamIds as $teamId) {
-
-        //         //history of this team
-        //         $teamHistory = DB::table('inspector_mission')
-        //             ->where('group_team_id', $teamId)->whereDate('date', $yesterday)->distinct()
-        //             ->pluck('ids_group_point')
-        //             ->toArray();
-        //         if ($result->group_id == 8) {
-        //             dd($teamHistory);
-        //         }
-        //         //history of this team as Array
-        //         $teamHistoryArray = json_decode($teamHistory[0], true);
-        //         //available points for team after compare with last history for it
-        //         $availablePoints = array_values(array_diff($groupAllPoints, $teamHistoryArray));
-        //         // points that will asigned for this team with limit of per team
-        //         $pointsToAssign = array_splice($availablePoints, 0, $pointsPerTeam);
-        //         // update uesed points with last points that assigened
-        //         $usedPoints[] = $pointsToAssign;
-        //         // Assign points to team or leave empty if no points available
-        //         $teamPoints[$teamId] = !empty($pointsToAssign) ? $pointsToAssign : [];
-        //     }
-        //     $availableGroupPoints[$result->group_id] = $teamPoints;
-        // }
-        // dd($availableGroupPoints);
+       
     }
 
     public function lastfuctionbeforlastupdate(){

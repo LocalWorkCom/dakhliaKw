@@ -167,7 +167,7 @@ class pointsController extends Controller
             $point->lat = $request->Lat;
             $point->long = $request->long;
             $point->work_type = $request->time_type;
-            $point->days_work = $request->time_type == 0 ? json_encode($dayNames) : null; // Assigning array directly
+            $point->days_work = $request->time_type == 0 ? $dayNames : null;
             $point->created_by = auth()->id(); // Use auth() helper
             $point->note = $request->note;
             $point->save();
@@ -177,6 +177,7 @@ class pointsController extends Controller
             $pointgroups->name = $point->name;
             $pointgroups->points_ids = [json_encode($point->id)]; // Store as JSON array
             $pointgroups->government_id = $request->governorate;
+            $pointgroups->sector_id  = $request->sector_id;
             $pointgroups->flag = 0;
             $pointgroups->save();
 
