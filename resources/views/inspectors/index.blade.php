@@ -10,6 +10,7 @@
     المفتشون
 @endsection
 <section>
+    
     <div class="row">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">

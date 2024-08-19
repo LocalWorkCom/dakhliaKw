@@ -40,6 +40,7 @@
                         <div class="form-group moftsh  mx-3  d-flex">
                             <h4 style="    line-height: 1.8;"> التصنيف حسب المحافظة :</h4>
                             <select name="government-select" id="government-select" class="form-group mx-md-2 btn-all "
+
                                 onchange="filterRegions()"
                                 style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
                                 <option value="">اختر المحافظه</option>
@@ -316,6 +317,7 @@
                 table.ajax.reload(); // Reload DataTable data on dropdown change
             });
         });
+
 
         function filterRegions() {
             var government_id = $('#government-select').val();

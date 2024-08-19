@@ -6,6 +6,7 @@ use App\Models\Government;
 use App\Models\Groups;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
+use App\Models\Sector;
 use App\Models\WorkingTime;
 
 use App\Models\WorkingTree;
@@ -28,13 +29,14 @@ class GroupsController extends Controller
         // $workTimes = WorkingTime::all();
         // $inspector = Inspector::where('group_id',$id)->get();
         // dd($workTimes);
-        $governments = Government::all();
-        return view('group.view', compact('governments'));
+        $sectors = Sector::all();
+        return view('group.view', compact('sectors'));
     }
 
     public function getgroups()
     {
-        $data = Groups::with('government')->get();
+        $data = Groups::with('sector')->get();
+        // dd($data);
         // $data = Groups::all();
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
@@ -120,14 +122,14 @@ class GroupsController extends Controller
         $messages = [
             'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'points_inspector.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
-            'government_id.required' => 'المحافظة مطلوبة ولا يمكن تركه فارغا'
+            'sector_id.required' => 'القطاع مطلوب ولا يمكن تركه فارغا'
 
         ];
 
         $validatedData = Validator::make($request->all(), [
             'name' => 'required',
             'points_inspector' => 'required',
-            'government_id' => 'required',
+            'sector_id' => 'required|exists:sectors,id',
 
         ], $messages);
 
@@ -139,13 +141,11 @@ class GroupsController extends Controller
 
             // return redirect()->back();
         }
-
         try {
             $group = new Groups();
             $group->name = $request->name;
             $group->points_inspector = $request->points_inspector;
-            $group->government_id = $request->government_id;
-
+            $group->sector_id= $request->sector_id;
             $group->save();
             session()->flash('success', 'تم اضافه مجموعة بنجاح.');
 
@@ -239,13 +239,13 @@ class GroupsController extends Controller
         $messages = [
             'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
-            'government_id.required' => 'المحافظة مطلوبة ولا يمكن تركه فارغا'
+            'sector_id.required' => 'القطاع مطلوب ولا يمكن تركه فارغا'
         ];
 
         $validatedData = Validator::make($request->all(), [
             'name_edit' => 'required',
             'points_inspector_edit' => 'required',
-            'government_id' => 'required|integer',
+            'sector_id' => 'required|integer',
         ], $messages);
 
         if ($validatedData->fails()) {
@@ -267,8 +267,8 @@ class GroupsController extends Controller
             $updated = true;
         }
 
-        if ($group->government_id !== $request->government_id) {
-            $group->government_id = $request->government_id;
+        if ($group->sector_id !== $request->sector_id) {
+            $group->sector_id = $request->sector_id;
             $updated = true;
         }
 
@@ -310,10 +310,10 @@ class GroupsController extends Controller
 
     //         // return redirect()->back();
     //     }
-        
+
     //     $group = Groups::find($request->id_edit);
 
-        
+
     //     $group->name = $request->name_edit;
     //     $group->points_inspector = $request->points_inspector_edit;
     //     $group->government_id = $request->government_id;
