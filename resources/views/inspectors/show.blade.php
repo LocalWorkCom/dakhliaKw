@@ -39,7 +39,7 @@
                         </tr>
                         <tr>
                             <th scope="row"> اسم المجموعه</th>
-                            <td>{{ $inspector->group->name ? $inspector->group->name : 'لا يوجد مجموعه لهذا المفتش' }}</td>
+                            <td>{{ $inspector->group_id ? $inspector->group->name : 'لا يوجد مجموعه لهذا المفتش' }}</td>
                         </tr>
                         <tr>
                             <th scope="row"> الهاتف</th>

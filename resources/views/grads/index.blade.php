@@ -12,33 +12,24 @@
 @section('content')
     <section>
         <div class="row">
-
             <div class="container welcome col-11">
-            <div class="d-flex justify-content-between">
-                <p> الرتـــــــب</p>
-                @if (Auth::user()->hasPermission('edit grade'))
+                <div class="d-flex justify-content-between">
+                    <p> الرتـــــــب</p>
+                    @if (Auth::user()->hasPermission('edit grade'))
                         <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
-                            
+
                             اضافة رتبة جديده <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </button>
-                        @endif
-            </div>   </div>
+                    @endif
+                </div>
+            </div>
         </div>
 
         <br>
         <div class="row">
-        <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
+            <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
 
-                <div class="row " dir="rtl">
-                    <!-- <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
-                        @if (Auth::user()->hasPermission('edit grade'))
-                        <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                            اضافة رتبة جديده
-                        </button>
-                        @endif
-                    </div> -->
-                </div>
+
                 <div class="col-lg-12">
                     <div class="bg-white ">
                         @if (session()->has('message'))
@@ -47,7 +38,8 @@
                             </div>
                         @endif
                         <div>
-                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
+                            <table id="users-table"
+                                class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>الاسم</th>
@@ -78,21 +70,21 @@
                     </button>
                 </div>
                 <div class="modal-body  mt-3 mb-5 ">
-                <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
-                    <form class="edit-grade-form" id="add-form" action=" {{ route('grads.add') }}" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <label for="name">الاسم</label>
-                            <input type="text" id="nameadd" name="nameadd" class="form-control" required>
-                            <span class="text-danger span-error" id="Civil_number-error" dir="rtl"></span>
+                    <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form class="edit-grade-form" id="add-form" action=" {{ route('grads.add') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="name">الاسم</label>
+                                <input type="text" id="nameadd" name="nameadd" class="form-control" required>
+                                <span class="text-danger span-error" id="Civil_number-error" dir="rtl"></span>
 
-                        </div>
-                        <!-- Save button -->
-                        <div class="text-end">
-                            <button type="submit" class="btn-blue" onclick="confirmAdd()">اضافه</button>
-                        </div>
-                    </form>
-                </div>
+                            </div>
+                            <!-- Save button -->
+                            <div class="text-end">
+                                <button type="submit" class="btn-blue" onclick="confirmAdd()">اضافه</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,20 +102,22 @@
                     </button>
                 </div>
                 <div class="modal-body  mt-3 mb-5">
-                <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
-                    <form class="edit-grade-form" id="edit-form" action=" {{ route('grads.update') }}" method="POST">
-                        @csrf
-                        <div class="form-group ">
-                            <label for="name">الاسم</label>
-                            <input type="text" id="nameedit" value="" name="name" class="form-control" dir="rtl" required>
-                            <input type="text" id="idedit" value="" name="id" hidden class="form-control">
+                    <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form class="edit-grade-form" id="edit-form" action=" {{ route('grads.update') }}" method="POST">
+                            @csrf
+                            <div class="form-group ">
+                                <label for="name">الاسم</label>
+                                <input type="text" id="nameedit" value="" name="name" class="form-control"
+                                    dir="rtl" required>
+                                <input type="text" id="idedit" value="" name="id" hidden
+                                    class="form-control">
 
-                        </div> 
-                        <!-- Save button -->
-                        <div class="text-end">
-                            <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
-                        </div>
-                    </form>
+                            </div>
+                            <!-- Save button -->
+                            <div class="text-end">
+                                <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -136,31 +130,38 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <h5 class="modal-title" id="deleteModalLabel"> !تنبــــــيه</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
-                        </button>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    </button>
+                </div>
+                <div class="modal-body  mt-3 mb-5">
+                    <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form id="delete-form" action="{{ route('grads.delete') }}" method="POST">
+                            @csrf
+                            <div class="form-group d-flex justify-content-center ">
+                                <h5 class="modal-title "  id="deleteModalLabel"> هل تريد حذف هذه الرتبه ؟</h5>
+
+
+                                <input type="text" id="id" hidden name="id" class="form-control" dir="rtl">
+                            </div>
+                            <!-- Save button -->
+                            <div class="text-end">
+                                <div class="modal-footer mx-2 d-flex justify-content-center">
+                                    <div class="text-end">
+                                        <button type="button" class="btn-blue" id="closeButton">لا</button>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <form id="delete-form" action="{{ route('grads.delete') }}" method="POST">
-                    @csrf
-                    <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
-                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الرتبه  ؟</h5>
-
-
-                        <input type="text" id="id" hidden name="id" class="form-control" dir="rtl">
-                  
-                    </div>
-                    <div class="modal-footer mx-2 d-flex justify-content-center">
-                        <div class="text-end">
-                            <button type="button" class="btn-blue" id="closeButton">لا</button>
-                        </div>
-                        <div class="text-end">
-                            <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
+    
 @endsection
 @push('scripts')
     <script>
@@ -183,43 +184,25 @@
         function confirmDelete() {
             var id = document.getElementById('id').value;
             var form = document.getElementById('delete-form');
-
             form.submit();
-
         }
 
         function openedit(id, name) {
             document.getElementById('nameedit').value = name;
             document.getElementById('idedit').value = id;
-
             $('#edit').modal('show');
-
-
         }
 
         function confirmEdit() {
             var id = document.getElementById('id').value;
             var name = document.getElementById('nameedit').value;
             console.log(name);
-            var form = document.getElementById('edit-form');
-            // if(form){
-            //     form.submit();
-            // }
-            
-
+            var form = document.getElementById('edit-form')
         }
 
         function openadd() {
             $('#add').modal('show');
         }
-
-        // function confirmAdd() {
-        //     var name = document.getElementById('nameadd').value;
-        //     var form = document.getElementById('add-form');
-
-        //     form.submit();
-
-        // }
 
         function confirmAdd() {
             var name = document.getElementById('nameadd').value;
@@ -239,7 +222,7 @@
 
             if (valid) {
                 form.submit();
-            } 
+            }
         }
 
         $(document).ready(function() {
@@ -261,32 +244,34 @@
                         searchable: false
                     }
                 ],
-                order: [[1, 'desc']],
+                order: [
+                    [1, 'desc']
+                ],
                 "oLanguage": {
-                                "sSearch": "",
-                                "sSearchPlaceholder":"بحث",
-                                                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
-                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
-                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
-                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
-                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
-                                            "oPaginate": {
-                                                "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
-                                                "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
-                                                "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
-                                                "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
-                                                    }
+                    "sSearch": "",
+                    "sSearchPlaceholder": "بحث",
+                    "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                    "sInfoEmpty": 'لا توجد بيانات متاحه',
+                    "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                    "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                    "sZeroRecords": 'نأسف لا توجد نتيجة',
+                    "oPaginate": {
+                        "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                        "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                        "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                        "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
+                    }
 
 
-                                        },
-                                        layout: {
-                                            bottomEnd: {
-                                                paging: {
-                                                    firstLast: false
-                                                }
-                                            }
-                                        },
-                                         "pagingType": "full_numbers"
+                },
+                layout: {
+                    bottomEnd: {
+                        paging: {
+                            firstLast: false
+                        }
+                    }
+                },
+                "pagingType": "full_numbers"
             });
 
 

@@ -126,7 +126,7 @@ class UserController extends Controller
       }
 
         $user = User::where('military_number', $request->military_number)->first();
-        $grade = grade::where('id',$user->grade_id)->first();
+        
 
         if (!$user) {
           return $this->respondError('Validation Error.', ['milltary_number'=> ['الرقم العسكري لا يتطابق مع سجلاتنا']], 400);
@@ -140,7 +140,7 @@ class UserController extends Controller
         if (Hash::check($request->password, $user->password) == true) {
           return $this->respondError('Validation Error.', ['password'=> ['لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية'] ], 400);
         }
-
+        $grade = grade::where('id',$user->grade_id)->first();
         // Update password and set token for first login if applicable
         Auth::login($user); // Log the user in
         $user->device_token = $request->device_token;

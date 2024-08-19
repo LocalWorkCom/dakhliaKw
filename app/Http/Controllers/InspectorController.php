@@ -83,7 +83,7 @@ class InspectorController extends Controller
             } else {
                 $group_permission = '<a class="btn btn-sm"  style="background-color: green;"  onclick="openAddModal(' . $row->id . ',0)">   <i class="fa fa-plus"></i> أضافه</a>';
             }
-            $show_permission = '<a href="${departmentShow}" class="btn btn-sm " style="background-color: #274373;">
+            $show_permission = '<a href="'.route('inspectors.show', $row->id).'" class="btn btn-sm " style="background-color: #274373;">
                             <i class="fa fa-eye"></i>عرض</a>';
                             $edit_permission=  '<a href="'.route('inspectors.edit', $row->id).'" class="btn btn-sm"  style="background-color: #F7AF15;">
                                             <i class="fa fa-edit"></i> تعديل 
