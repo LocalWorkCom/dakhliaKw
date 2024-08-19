@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -13,18 +14,18 @@ return new class extends Migration
     {
         //
         Schema::table('groups', function (Blueprint $table) {
-            // $foreignKeys = [
-            //     'groups_government_id_foreign',
+            $foreignKeys = [
+                'groups_government_id_foreign',
 
-            // ];
+            ];
 
 
-            // foreach ($foreignKeys as $foreignKey) {
-            //     if ($this->foreignKeyExists('groups', $foreignKey)) {
-            //         $table->dropForeign([$this->getColumnNameFromForeignKey($foreignKey, 'groups')]);
-            //     }
-            // }
-            // $table->dropForeign(['government_id']); // Drop the foreign key constraint
+            foreach ($foreignKeys as $foreignKey) {
+                if ($this->foreignKeyExists('groups', $foreignKey)) {
+                    $table->dropForeign([$this->getColumnNameFromForeignKey($foreignKey, 'groups')]);
+                }
+            }
+            $table->dropForeign(['government_id']); // Drop the foreign key constraint
             $table->dropColumn('government_id'); // Remove the column
               $table->unsignedBigInteger('sector_id');
             $table->foreign('sector_id')->references('id')->on('sectors');
