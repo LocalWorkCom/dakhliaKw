@@ -60,6 +60,7 @@
                         <div class="form-row pt-5 pb-3 d-flex justify-content-around flex-row-reverse"
                             style="background-color:#f5f8fd; border-bottom:0.1px solid lightgray;">
                             <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
+                                {{-- {{ dd($user->type) }} --}}
                                 @if ($user->type == 'man')
                                     <div class="radio-btns mx-md-4 ">
                                         <input type="radio" class="form-check-input" id="male" name="gender"
@@ -117,12 +118,12 @@
                         <br>
                         <div class="form-row mx-3 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-5 mx-2">
-                                <label for="input1"> الاسم</label>
+                                <label for="input1"><i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  الاسم</label>
                                 <input type="text" id="input1" name="name" class="form-control"
                                     placeholder="الاسم" value="{{ $user->name }}" dir="rtl">
                             </div>
                             <div class="form-group col-md-5 mx-2">
-                                <label for="input2"> البريد الالكتروني</label>
+                                <label for="input2"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>   البريد الالكتروني</label>
                                 <input type="text" id="input2" name="email" class="form-control"
                                     placeholder=" البريد الالكترونى" value="{{ $user->email }}" dir="rtl">
                             </div>
@@ -130,13 +131,13 @@
 
                         <div class="form-row mx-3 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-5 mx-2">
-                                <label for="input4"> رقم المحمول</label>
+                                <label for="input4"><i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>   رقم المحمول</label>
                                 <input type="text" id="input4" name="phone" class="form-control"
                                     placeholder=" رقم المحمول" value="{{ $user->phone }}" dir="rtl">
                             </div>
 
                             <div class="form-group col-md-5 mx-2">
-                                <label for="input6">رقم العسكرى</label>
+                                <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  رقم العسكرى</label>
                                 <input type="text" id="input6" name="military_number" class="form-control"
                                     placeholder="رقم العسكرى" value="{{ $user->military_number }}" dir="rtl">
                             </div>
@@ -171,12 +172,12 @@
 
                         <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-5 mx-2">
-                                <label for="input11">رقم المدنى</label>
+                                <label for="input11"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  رقم المدنى</label>
                                 <input type="text" id="input11" name="Civil_number" class="form-control"
                                     placeholder="رقم المدنى" value="{{ $user->Civil_number }}" dir="rtl">
                             </div>
                             <div class="form-group col-md-5 mx-2">
-                                <label for="input12">رقم الملف</label>
+                                <label for="input12"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم الملف</label>
                                 <input type="text" id="input12" name="file_number" class="form-control"
                                     placeholder="رقم الملف" value="{{ $user->file_number }}" dir="rtl">
                             </div>
@@ -266,7 +267,7 @@
                             </div>
                         </div>
                         <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
-                            <div class="form-group col-md-10 mx-2">
+                            <div class="form-group col-md-5 mx-2">
                                 <label for="sector">قطاع </label>
                                 {{-- <input type="text" id="input66" name="sector" class="form-control"
                                     placeholder="قطاع " value="{{ old('sector') }}" > --}}
@@ -300,6 +301,12 @@
                                         @endforeach
                                     </select>
                             </div>
+
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input22">مدة الخدمة</label>
+                                <input type="date" id="input22" name="end_of_service" class="form-control"
+                                    placeholder="مدة الخدمة " value="{{ $user->length_of_service }}">
+                            </div>
                         </div>
 
                         <div class="form-row  mx-md-2 d-flex justify-content-center flex-row-reverse">
@@ -311,10 +318,10 @@
 
                             {{-- {{dd($department)}} --}}
                             <div class="form-group col-md-5 mx-2">
-                                <label for="input15"> القسم </label>
+                                <label for="input15"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  الادارة </label>
                                 <select id="input15" name="public_administration" class="form-control select2"
 
-                                        placeholder="الادارة العامة">
+                                        placeholder="الادارة ">
                                     @if ($user->department_id == null)
                                     <option selected  disabled>اختار من القائمة</option>
                                     @endif
@@ -377,11 +384,7 @@
     </div> --}}
 
                         <div class="form-row mx-2 mx-2 d-flex justify-content-center flex-row-reverse">
-                            {{-- <div class="form-group col-md-5 mx-2">
-                                <label for="input22">مدة الخدمة</label>
-                                <input type="date" id="input22" name="end_of_service" class="form-control"
-                                    placeholder="مدة الخدمة " value="{{ $end_of_service }}">
-                            </div> --}}
+                            
 
                             <div class="form-group col-md-10 mx-2">
                                 <label for="input24"> الرتبة</label>

@@ -67,6 +67,8 @@
                                     <th>رقم الهوية </th>
                                     <th>المجموعة </th>
                                     <th>رقم الهاتف </th>
+                                    <th>النوع</th>
+
                                     <th class="action" style="width:150px !important;">العمليات</th>
                                 </tr>
 
@@ -210,6 +212,10 @@
                     name: 'phone'
                 },
                 {
+                    data: 'type',
+                    name: 'type'
+                },
+                {
                     data: 'action',
                     name: 'action',
                     sWidth: '200px',
@@ -247,17 +253,27 @@
             "pagingType": "full_numbers"
         });
 
+        $('.btn-filter').click(function() {
+    filter = $(this).data('filter');
+
+    $('.btn-filter').removeClass('btn-active');
+    $(this).addClass('btn-active');
+
+    table.page(0).draw(true); // Force a full redraw and reset pagination
+    table.ajax.reload(); 
+});
+
 
         // Filter button click event listeners
-        $('.btn-filter').click(function() {
-            filter = $(this).data('filter'); // Update the filter based on the clicked button
+        // $('.btn-filter').click(function() {
+        //     filter = $(this).data('filter'); // Update the filter based on the clicked button
 
-            // Remove 'btn-active' class from all buttons and add to the clicked one
-            $('.btn-filter').removeClass('btn-active');
-            $(this).addClass('btn-active');
+        //     // Remove 'btn-active' class from all buttons and add to the clicked one
+        //     $('.btn-filter').removeClass('btn-active');
+        //     $(this).addClass('btn-active');
 
-            table.ajax.reload(); // Reload data with the new filter
-        });
+        //     table.ajax.reload(); // Reload data with the new filter
+        // });
 
 
     });

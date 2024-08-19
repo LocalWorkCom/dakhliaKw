@@ -112,7 +112,7 @@
         <div class="container moftsh col-11 mt-5 p-0 pb-2 mb-3">
             <h3 class="pt-3  px-md-5 px-3 "> اختر المفتش </h3>
             <div class="form-row mx-md-5 mx-2 mb-2 d-block justify-content-start" dir="rtl">
-                <div class="form-group d-flex">
+                {{-- <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
                         <input type="radio" id="intern" name="type" @if ($inspector->type == 'in') checked @endif
                             value="in" required>
@@ -133,7 +133,34 @@
                             value="Buildings" required>
                         <label for="intern">مفتش مباني </label>
                     </div>
+                </div> --}}
+                @if (Auth::user()->department_id == 1)
+                <div class="form-group d-flex">
+                    <div class="radio-btn  d-flex">
+                        <input type="radio" id="intern" name="type" checked value="in" @if ($inspector->type == 'in') checked @endif required>
+                        <label for="intern">مفتش سلوك أنضباطى</label>
+                    </div>
                 </div>
+                <div class="form-group d-flex">
+                    <div class="radio-btn  d-flex">
+                        <input type="radio" id="intern" name="type" checked value="trainee" @if ($inspector->type == 'trainee') checked @endif required>
+                        <label for="intern">مفتش متدرب</label>
+                    </div>
+                </div>
+            @else
+                <div class="form-group d-flex">
+                    <div class="radio-btn  d-flex">
+                        <input type="radio" id="intern" name="type" checked value="Buildings" @if ($inspector->type == 'Buildings') checked @endif required>
+                        <label for="intern">مفتش مباني </label>
+                    </div>
+                </div>
+                <div class="form-group d-flex">
+                    <div class="radio-btn  d-flex">
+                        <input type="radio" id="intern" name="type" checked value="trainee" @if ($inspector->type == 'trainee') checked @endif required>
+                        <label for="intern">مفتش متدرب</label>
+                    </div>
+                </div>
+            @endif
 
                 <div class="container col-11 ">
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
