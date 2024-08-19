@@ -179,7 +179,8 @@ class pointsController extends Controller
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
             $googleMapsUrl = $request->map_link;
-            $coordinates = $this->extractLatLongFromUrl($googleMapsUrl);
+            $coordinates = getLatLongFromUrl($googleMapsUrl);
+            //dd($coordinates);
             // Storing the point data
             $point = new Point();
             $point->name = $request->name;
