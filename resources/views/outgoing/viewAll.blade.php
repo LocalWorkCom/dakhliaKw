@@ -18,15 +18,15 @@
                         @if (Auth::user()->hasPermission('archive outgoings'))
                         <button type="button" class="btn-all mx-3 "
                             onclick="window.location.href='{{ route('Export.AllArchive') }}'" style="color: #C1920C;">
-                            <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
                             عرض الارشيف
+                            <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
                         </button>
                         @endif
                         @if (Auth::user()->hasPermission('create outgoings'))
                         <button type="button" class="btn-all  "
                             onclick="window.location.href='{{ route('Export.create') }}'" style="color: #0D992C;">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </button>
                         @endif
                     </div>
@@ -39,8 +39,8 @@
             <div class="container  col-11 mt-3 p-0 ">
 
                 <div class="row " dir="rtl">
-                  <!--   <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                        @if (Auth::user()->hasPermission('archive outgoings'))
+                  <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                        {{-- @if (Auth::user()->hasPermission('archive outgoings'))
                         <button type="button" class="btn-all mx-3 "
                             onclick="window.location.href='{{ route('Export.AllArchive') }}'" style="color: #C1920C;">
                             <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
@@ -53,9 +53,9 @@
                             <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             اضافة جديد
                         </button>
-                        @endif
+                        @endif --}}
 
-                    </div> -->
+                    </div> 
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white ">
