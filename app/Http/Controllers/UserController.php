@@ -511,7 +511,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
         // validation
 
         if ($request->type == "0") {
