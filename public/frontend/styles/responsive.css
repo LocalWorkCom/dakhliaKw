@@ -251,6 +251,39 @@
     width: 96px;
     height: 42px;
 }
+.logo-request img {
+    height: 135px;
+    width: 135px;
+}
+.request-headeer img {
+    height: 240px;
+    width: 240px;
+}
+.background-request p {
+    font-size: 23px;
+    padding-top: 4px;
+}
+.background-request {
+    height: 43px;
+    width: 385px;
+}
+.qoute {
+    font-size: 20px;
+}
+.inputs-request input[type="checkbox"] {
+    height: 21px;
+    width: 21px;
+    margin-inline: 5px;
+}
+.inputs-request input[type="text"] {
+    height: 35px;
+    width: 250px;
+    margin-inline: 5px;
+}
+.handprint {
+    height: 140px;
+    width: 235px;
+}
 }
 @media (min-width: 1600px){
     .container-responsive {
@@ -396,6 +429,32 @@
         height: 155px;
         margin: 0px;
     }
+    .logo-request img {
+        height: 130px;
+        width: 130px;
+    }
+    .request-headeer img {
+        height: 230px;
+        width: 230px;
+    }
+    .background-request p {
+        font-size: 21px;
+        padding-top: 4px;
+    }
+    .background-request {
+        height: 38px;
+        width: 308px;
+    }
+    .text-request {
+        font-size: 21px;
+    }
+    .qoute {
+        font-size: 19px;
+    }
+    .handprint {
+        height: 125px;
+        width: 225px;
+    }
 }
 @media (max-width: 1200px){
     .card1, .card2, .card3, .card4 {
@@ -532,6 +591,40 @@
     footer {
         height: 40px;
         padding: 10px;
+    }
+    .qoute {
+        font-size: 17px;
+    }
+    .handprint {
+        height: 105px;
+        width: 190px;
+    }
+    .inputs-request input[type="text"] {
+        height: 32px;
+        width: 163px;
+        margin-inline: 5px;
+    }
+    .inputs-request label {
+        font-size: 19px;
+    }
+    .inputs-request input[type="checkbox"] {
+        height: 19px;
+        width: 19px;
+        margin-inline: 5px;
+    }
+    .text-request {
+        font-size: 19px;
+    }
+    .request-headeer img {
+        height: 200px;
+        width: 200px;
+    }
+    .logo-request img {
+        height: 105px;
+        width: 105px;
+    }
+    .logo-request p {
+        font-size: 22px;
     }
 }
 @media (max-width: 1100px){
@@ -742,16 +835,66 @@
         height: 34px;
         font-size: 19px;
     }
+    .btn-all-2 {
+        width: auto;
+        height: 35px;
+        border-radius: 10px;
+        background-color: #FAFBFD;
+        font-family: Almarai;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 26.78px;
+        text-align: center;
+        border: 0.5px solid #D7D8D9;
+    }
+    .qoute {
+        font-size: 15px;
+    }
+    .inputs-request p {
+        font-size: 15px;
+    }
+    .handprint {
+        height: 90px;
+        width: 165px;
+    }
+    .inputs-request-handprint {
+        font-size: 18px;
+    }
+    .request-headeer img {
+        height: 170px;
+        width: 170px;
+    }
+    .logo-request img {
+        height: 90px;
+        width: 90px;
+    }
+    .logo-request p {
+        font-size: 20px;
+    }
+    .background-request p {
+        font-size: 20px;
+        padding-top: 4px;
+    }
+    .background-request {
+        height: 34px;
+        width: 245px;
+    }
 }
 @media (max-width: 768px){
-    #dropdownMenu3 a, #dropdownMenu4 a {
-        font-size: 13px;
+    #dropdownMenu3 a, #dropdownMenu4 a, #dropdownMenu5 a {
+        color: #1C1B1B;
+        background-color: #ffffff;
+        font-size: 12px;
+        text-decoration: none;
         font-weight: 400;
     }
     .eye-icon {
         font-size: 16px;
         top: 14px;
         right: 154px;
+    }
+    .colors{
+        visibility: hidden;
     }
     .dropdown-menu4 {
         top: 100%;
@@ -826,10 +969,6 @@
     }
     .navbar {
         padding-bottom: 0px;
-    }
-    .welcome {
-        height: 50px;
-        padding: 15px;
     }
     .welcome p {
         font-size: 20px;
@@ -914,8 +1053,28 @@
         text-align: center;
         border: 0.5px solid #D7D8D9;
     }
+    .welcome {
+        height: 60px;
+        padding: 15px;
+    }
+    .btn-all {
+        height: 30px;
+        font-size: 12px;
+    }
+    .btn-all-2 {
+        width: auto;
+        height: 30px;
+        border-radius: 10px;
+        background-color: #FAFBFD;
+        font-family: Almarai;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 26.78px;
+        text-align: center;
+        border: 0.5px solid #D7D8D9;
+    }
     .dataTables_filter input {
-        width: 37%;
+        width: 100%;
         border-radius: 20px;
         border: 1.5px solid #cfc8c8;
         height: 28px;

@@ -264,8 +264,7 @@
                                                 </li>
                                             @endif
                                             <li>
-                                                <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
-                                                    style="margin-left: 7px;">
+                                            <i class="fa-solid fa-xmark" style="margin-left: 7px;"></i>
                                                 <a href="{{ route('violations.index') }}">أنواع المخالفات</a>
                                             </li>
                                             <!-- @if (Auth::user()->hasPermission('view VacationType'))
