@@ -93,6 +93,7 @@ class InstantmissionController extends Controller
             'label.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
             'group_team_id.required' => ' الفرقة  مطلوب ولا يمكن تركه فارغاً.',
             'group_id.required' => ' المجموعة مطلوب ولا يمكن تركه فارغاً.',
+            'location.required' => ' الموقع مطلوب ولا يمكن تركه فارغاً.',
             // Add more custom messages here
         ];
 
@@ -100,6 +101,7 @@ class InstantmissionController extends Controller
             'label' => 'required|string',
             'group_team_id' => 'required',
             'group_id' => 'required',
+            'location' => 'required',
         ], $messages);
 
         // Handle validation failure
@@ -107,7 +109,17 @@ class InstantmissionController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
 
-        $coordinates = getLatLongFromUrl( $request->location);
+        $coordinates = getLatLongFromUrl($request->location);
+        if($coordinates == null)
+        {
+            $lat= null;
+            $long= null;
+        }
+        else
+        {
+            $lat = $coordinates["latitude"];
+            $long = $coordinates["longitude"];
+        }
         $new = new instantmission();
         $new->label = $request->label;
         $new->location = $request->location;
@@ -115,8 +127,8 @@ class InstantmissionController extends Controller
         $new->group_team_id = $request->group_team_id;
         $new->inspector_id = $request->inspectors;
         $new->description = $request->description;
-        $new->latitude = $coordinates["latitude"];
-        $new->longitude = $coordinates["longitude"];
+        $new->latitude = $lat;
+        $new->longitude = $long;
         $new->save();
 
         if ($request->hasFile('images')) {
