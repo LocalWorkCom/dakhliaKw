@@ -16,6 +16,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('group.view') }}">المجموعات </a></li>
                 <li class="breadcrumb-item"><a href="{{ route('groupTeam.index', $group_id) }}">الفرق </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
             </ol>

@@ -9,33 +9,42 @@
 @section('title')
     الفرق
 @endsection
+
 <section>
-    <div class="row">
-        <div class="container welcome col-11">
-            <div class="d-flex justify-content-between">
+    <div class="row col-11" dir="rtl">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('group.view') }}">المجموعات </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> الفرق</a></li>
+            </ol>
+        </nav>
+    </div>
+    <div class="container welcome col-11">
+        <div class="d-flex justify-content-between">
 
-                <p>الفرق</p>
-                <p></p>
-                <div class="second mx-4">
-                    <button class="btn-all px-3 mx-2" style="color: #274373;">
-                        <a href="{{ route('groupTeam.transfer', $id) }}" style="color: #274373">
+            <p>الفرق</p>
+            <p></p>
+            <div class="second mx-4">
+                <button class="btn-all px-3 mx-2" style="color: #274373;">
+                    <a href="{{ route('groupTeam.transfer', $id) }}" style="color: #274373">
 
-                            نقل مفتشين <img src="{{ asset('frontend/images/change.svg') }}" class="mx-1">
-                        </a>
-                    </button>
-                    {{-- <button class="btn-all px-3 mx-2" style="color: #259240;">
+                        نقل مفتشين <img src="{{ asset('frontend/images/change.svg') }}" class="mx-1">
+                    </a>
+                </button>
+                {{-- <button class="btn-all px-3 mx-2" style="color: #259240;">
                         <a href="{{ route('group.groupcreateInspectors', $id) }}" style="color: #259240">
 
                             اضافة مفتش جديد <img src="{{ asset('frontend/images/add-green.svg') }}" class="mx-1">
                         </a>
                     </button> --}}
-                    <button class="btn-all px-3 mx-2" style="color: #259240;" data-bs-toggle="modal"
-                        data-bs-target="#myModal1">
-                        اضافة فريق <img src="{{ asset('frontend/images/green-group.svg') }}" class="mx-1">
-                    </button>
-                </div>
+                <button class="btn-all px-3 mx-2" style="color: #259240;" data-bs-toggle="modal"
+                    data-bs-target="#myModal1">
+                    اضافة فريق <img src="{{ asset('frontend/images/green-group.svg') }}" class="mx-1">
+                </button>
             </div>
         </div>
+    </div>
     </div>
     <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true" dir="rtl">

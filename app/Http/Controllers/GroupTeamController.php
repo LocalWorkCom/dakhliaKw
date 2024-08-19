@@ -266,6 +266,7 @@ class GroupTeamController extends Controller
         // Ensure all IDs are strings for comparison purposes
         $newInspectors = array_map('strval', $newInspectors);
         $oldInspectorIds = array_map('strval', $oldInspectorIds);
+        $points = [];
 
         // Determine which inspectors were added or removed
         $changeArr = array_diff($newInspectors, $oldInspectorIds);
@@ -333,14 +334,27 @@ class GroupTeamController extends Controller
                         : null;
 
                     // Create a new InspectorMission record
+                    $getExistPoints = InspectorMission::where('group_team_id', $GroupTeam->id)->where('group_id', $GroupTeam->group_id)
+                        ->where('working_tree_id', $GroupTeam->working_tree_id)
+                        ->where('date', $date)->first();
+                    // dd($getExistPoints);
+                    if ($getExistPoints) {
+                        $points = $getExistPoints->ids_group_point;
+                        $day_off = $getExistPoints->day_off;
+                        $working_time_id = $getExistPoints->working_time_id;
+                    } else {
+                        $day_off = $is_day_off ? 1 : 0;
+                        $working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+                    }
                     $inspectorMission = new InspectorMission();
                     $inspectorMission->inspector_id = $Inspector;
                     $inspectorMission->group_id = $GroupTeam->group_id;
                     $inspectorMission->group_team_id = $GroupTeam->id;
                     $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
-                    $inspectorMission->working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+                    $inspectorMission->working_time_id = $working_time_id;
                     $inspectorMission->date = $date;
-                    $inspectorMission->day_off = $is_day_off ? 1 : 0;
+                    $inspectorMission->ids_group_point = $points;
+                    $inspectorMission->day_off = $day_off;
                     $inspectorMission->save();
 
                     // Move to the next day
@@ -365,6 +379,7 @@ class GroupTeamController extends Controller
 
         // Prepare an array to keep track of transferred inspectors
         $transferredInspectors = [];
+        $points = [];
 
         // Iterate over each inspector ID
         foreach ($inspectorIds as $inspectorId) {
@@ -453,14 +468,28 @@ class GroupTeamController extends Controller
                         ->where('day_num', $day_in_cycle)
                         ->first()
                         : null;
+
+                    $getExistPoints = InspectorMission::where('group_team_id', $currentGroup->id)->where('group_id', $currentGroup->group_id)
+                        ->where('working_tree_id', $currentGroup->working_tree_id)
+                        ->where('date', $date)->first();
+                    // dd($getExistPoints);
+                    if ($getExistPoints) {
+                        $points = $getExistPoints->ids_group_point;
+                        $day_off = $getExistPoints->day_off;
+                        $working_time_id = $getExistPoints->working_time_id;
+                    } else {
+                        $day_off = $is_day_off ? 1 : 0;
+                        $working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+                    }
                     // Update the inspector's mission details
                     $inspector_mission->inspector_id = $inspectorId;
                     $inspector_mission->group_id = $currentGroup->group_id;
                     $inspector_mission->group_team_id = $currentGroup->id;
                     $inspector_mission->working_tree_id = $currentGroup->working_tree_id;
-                    $inspector_mission->working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+                    $inspector_mission->working_time_id = $working_time_id;
                     $inspector_mission->date = $date;
-                    $inspector_mission->day_off = $is_day_off ? 1 : 0;
+                    $inspector_mission->ids_group_point = $points;
+                    $inspector_mission->day_off = $day_off;
                     $inspector_mission->save();
 
                     // Move to the next day
@@ -496,15 +525,27 @@ class GroupTeamController extends Controller
                             ->first()
                             : null;
 
+                        $getExistPoints = InspectorMission::where('group_team_id', $GroupTeam->id)->where('group_id', $GroupTeam->group_id)
+                            ->where('working_tree_id', $GroupTeam->working_tree_id)->where('working_time_id', $WorkingTreeTime->working_time_id)
+                            ->where('date', $date)->first();
+                        if ($getExistPoints) {
+                            $points = $getExistPoints->ids_group_point;
+                            $day_off = $getExistPoints->day_off;
+                            $working_time_id = $getExistPoints->working_time_id;
+                        } else {
+                            $day_off = $is_day_off ? 1 : 0;
+                            $working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+                        }
                         // Create a new inspector mission
                         $inspectorMission = new InspectorMission();
                         $inspectorMission->inspector_id = $inspectorId;
                         $inspectorMission->group_id = $GroupTeam->group_id;
                         $inspectorMission->group_team_id = $GroupTeam->id;
                         $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
-                        $inspectorMission->working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+                        $inspectorMission->working_time_id = $working_time_id;
                         $inspectorMission->date = $date;
-                        $inspectorMission->day_off = $is_day_off ? 1 : 0;
+                        $inspectorMission->ids_group_point = $points;
+                        $inspectorMission->day_off = $day_off;
                         $inspectorMission->save();
 
                         // Move to the next day
