@@ -72,9 +72,9 @@ class GroupTeamController extends Controller
                 }
                 if ($count == 1 || $count == 0) {
 
-                    $btn = '<a class="btn btn-sm"   style="background-color: #F7AF15;">' . $count . '</a>';
+                    $btn = '<a class="btn btn-sm"   style="background-color: #F7AF15;" href=' . route('groupTeam.edit', $row->id) . '>' . $count . '</a>';
                 } else {
-                    $btn = '<a class="btn btn-sm"   style="background-color: #274373; padding-inline: 15px;">' . $count . '</a>';
+                    $btn = '<a class="btn btn-sm"   style="background-color: #274373; padding-inline: 15px;" href=' . route('groupTeam.edit', $row->id) . '>' . $count . '</a>';
                 }
                 // dd($btn);
                 return  $btn;

@@ -128,7 +128,8 @@ button {
 }
 
 .forget-pass-a{
-  margin-left: 340px;
+  /* margin-left: 340px; */
+  display: flex;
   font-weight: 400;
   font-size: 20px;
   color: #032F70;

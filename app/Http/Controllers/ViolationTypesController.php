@@ -66,7 +66,7 @@ class ViolationTypesController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+        // dd($request->all());
         $rules = [
             'nameadd' => 'required|string',
             'types' => 'required|array|exists:departements,id',

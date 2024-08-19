@@ -7,11 +7,12 @@
 @section('title', 'الاجازات')
 
 @section('content')
+
     <div class="row ">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
-                <p> الاجــــــازات  ( {{ $vacationCount }} )</p>
-
+                <p> الاجــــــازات </p>
+                {{-- ( {{ $vacationCount }} ) --}}
                 @if (Auth::user()->hasPermission('create EmployeeVacation'))
                     <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;"
                         onclick="window.location.href='{{ route('vacation.add', $id) }}'">
@@ -33,6 +34,18 @@
             <div class="row d-flex justify-content-between " dir="rtl">
                 <div class="form-group moftsh mx-4 d-flex flex-wrap">
                     <p class="filter">تصفية حسب:</p>
+                    {{-- <select name="vacation-select" id="vacation-select" class="form-group mx-md-2 btn-all "
+                        style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
+                        <option value="">اختر نوع الاجازة</option>
+                        <option value="all">الكل</option>
+                        <option value="exceeded">متجاوز</option>
+                        <option value="finished">الاجازات المنتهيه </option>
+                        <option value="current"> الاجازات الحاليه </option>
+                        <option value="not_begin">اجازات لم تبدا </option>
+                        <option value="pending">الاجازات المقدمة </option>
+                        <option value="rejected"> الاجازات المرفوضة</option>
+
+                    </select> --}}
                     <button class="btn-all px-3 mx-3" data-filter="all" style="color: #274373;">
                         الكل ({{ \App\Models\EmployeeVacation::count() }})
                     </button>
@@ -147,6 +160,7 @@
 
                     $(document).ready(function() {
                         $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
+                        vacation_id = $('#vacation-select').val();
 
                         var id = {{ $id }};
                         var filter = 'all'; // Default filter
@@ -174,6 +188,9 @@
                                     }
                                     return json.data; // 'all' or default case
                                 }
+                                // data: function(d) {
+                                //     d.vacation = $('#vacation-select').val(); // Add government_id to request
+                                // }
                             },
                             columns: [{
                                     data: 'id',
@@ -317,7 +334,7 @@
 
                             table.ajax.reload(); // Reload data with the new filter and ordering
                         });
-                        
+
                         // $('.btn-all').click(function() {
                         //     filter = $(this).data('filter'); // Update the filter based on the clicked button
 
@@ -343,6 +360,9 @@
 
 
                     $(document).ready(function() {
+                        // $('#vacation-select').change(function() {
+                        //     table.ajax.reload(); // Reload DataTable data on dropdown change
+                        // });
                         // Set minimum date for the end_date input to today's date
 
                         var id = "{{ $id }}";

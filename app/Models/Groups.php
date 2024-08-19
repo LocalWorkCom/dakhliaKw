@@ -21,9 +21,9 @@ class Groups extends Model
     {
         return $this->belongsTo(Inspector::class, 'id');
     }
-    public function government()
+    public function sector()
     {
-        return $this->belongsTo(Government::class, 'government_id');
+        return $this->belongsTo(Sector::class, 'sector_id');
     }
     public function instant_Mission()
     {
