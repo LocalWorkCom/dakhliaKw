@@ -3,21 +3,21 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 @section('title')
-    النقاط
+    نقاط الوزاره
 @endsection
 @section('content')
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('points.index') }}">النقاط</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('points.index') }}">نقاط الوزاره</a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> أنشاء مجموعه للنقاط</a></li>
             </ol>
         </nav>
     </div>
  <div class="row ">
         <div class="container welcome col-11">
-            <p> النــــقـــاط </p>
+            <p> نقـــاط الوزاره </p>
         </div>
     </div> 
     {{-- {{ dd($governments) }} --}}

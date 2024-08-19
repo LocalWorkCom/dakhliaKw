@@ -134,6 +134,43 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <h5 class="modal-title" id="deleteModalLabel"> !تنبــــــيه</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    </button>
+                </div>
+                <div class="modal-body  mt-3 mb-5">
+                    <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form id="delete-form" action="{{ route('job.delete') }}" method="POST">
+                            @csrf
+                            <div class="form-group d-flex justify-content-center ">
+                                <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الوظيفه ؟</h5>
+
+
+                                <input type="text" id="id" hidden name="id" class="form-control">
+                            </div>
+                            <!-- Save button -->
+                            <div class="text-end">
+                                <div class="modal-footer mx-2 d-flex justify-content-center">
+                                    <div class="text-end">
+                                        <button type="button" class="btn-blue" id="closeButton">لا</button>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="deleteModalLabel"> !تنبــــــيه</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
                         </button>
                     </div>
@@ -157,7 +194,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 @push('scripts')
     <script>
@@ -205,14 +242,6 @@
         function openadd() {
             $('#add').modal('show');
         }
-
-        // function confirmAdd() {
-        //     var name = document.getElementById('nameadd').value;
-        //     var form = document.getElementById('add-form');
-
-        //     form.submit();
-
-        // }
 
         function confirmAdd() {
             var name = document.getElementById('nameadd').value;

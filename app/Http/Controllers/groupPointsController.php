@@ -164,11 +164,12 @@ class GroupPointsController extends Controller
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
+       // dd($id);
         $points = Grouppoint::find($request->id);
         $oldPointsIDs = $points->points_ids;
         $points->name = $request->name;
         $points->points_ids = $request->pointsIDs;
-        $points->government_id = $points->government_id;
+        $points->government_id = $request->government_id;
         $points->flag = 1;
         $points->save();
 
