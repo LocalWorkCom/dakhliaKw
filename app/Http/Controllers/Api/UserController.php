@@ -146,6 +146,8 @@ class UserController extends Controller
         $user->device_token = $request->device_token;
         $user->password = Hash::make($request->password);
         $user->save();
+        // $success['token'] = $token;//->token;
+        // $token =$user->createToken('auth_token')->accessToken;
         $success['token'] = $user->createToken('MyApp')->accessToken;
         // $user->image = $user->image;
         $userData = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
@@ -158,7 +160,7 @@ class UserController extends Controller
             $gradeData = ['grade' => 'لا يوجد بيانات'];
         }
         
-        $success = array_merge($userData, $gradeData);
+        $success['user'] = array_merge($userData, $gradeData);
         return $this->respondSuccess($success, 'reset password successfully.');
     }
 
