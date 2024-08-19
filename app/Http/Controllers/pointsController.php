@@ -142,7 +142,7 @@ class pointsController extends Controller
             'region.required' => 'يجب اختيار المنطقه الخاصه بالنقطه',
             'time_type.required' => 'يجب ادخال نظام العمل',
             'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
-            'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
+            // 'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
 
         ];
 
@@ -156,7 +156,7 @@ class pointsController extends Controller
             $dayNames = $request->input('day_name');
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
-
+            dd($request->all());
             // Storing the point data
             $point = new Point();
             $point->name = $request->name;
