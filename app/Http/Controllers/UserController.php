@@ -205,7 +205,7 @@ class UserController extends Controller
     //     }
 
     //     return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
-    // }
+ // }
     public function login(Request $request)
     {
         $messages = [
@@ -511,7 +511,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+        dd($request);
         // validation
 
         if ($request->type == "0") {
@@ -844,6 +844,9 @@ class UserController extends Controller
         $user->qualification = $request->qualification;
         $user->date_of_birth = $request->date_of_birth;
         $user->joining_date = $request->joining_date;
+        $user->employee_type = $request->solderORcivil;
+        $user->type = $request->gender;
+        
         $user->age = Carbon::parse($request->input('date_of_birth'))->age;
 
         $joining_dateDate = Carbon::parse($request->input('joining_date'));

@@ -258,8 +258,8 @@
                     </div>
 
                     <div class="form-group col-md-5 mx-2">
-                        <label for="input15"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  القسم </label>
-                        <select id="input15" name="department_id" class="form-control select2" placeholder="القسم">
+                        <label for="input15"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  الادارة </label>
+                        <select id="input15" name="department_id" class="form-control select2" placeholder="الادارة">
                             <option value="{{ null }}" selected>
                                 لا يوجد قسم محدد</option>
                             @foreach ($alldepartment as $item)
