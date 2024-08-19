@@ -17,7 +17,7 @@
                     انواع الغياب
                 </p>
                 <button type="button" class="wide-btn" data-bs-toggle="modal" data-bs-target="#myModal1"
-                    style="color:#259240;">
+                    style="color:#274373;">
                     اضافة نوع جديدة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                 </button>
             </div>

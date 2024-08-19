@@ -333,6 +333,12 @@ class GroupTeamController extends Controller
                         : null;
 
                     // Create a new InspectorMission record
+                    $getExistPoints = InspectorMission::where('group_team_id', $GroupTeam->id)->where('group_id', $GroupTeam->group_id)
+                        ->where('working_tree_id', $GroupTeam->working_tree_id)->where('working_time_id', $WorkingTreeTime->working_time_id)
+                        ->where('date', $date)->first();
+                    if ($getExistPoints) {
+                        $points = $getExistPoints->ids_group_point;
+                    }
                     $inspectorMission = new InspectorMission();
                     $inspectorMission->inspector_id = $Inspector;
                     $inspectorMission->group_id = $GroupTeam->group_id;
@@ -340,6 +346,7 @@ class GroupTeamController extends Controller
                     $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
                     $inspectorMission->working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
                     $inspectorMission->date = $date;
+                    $inspectorMission->ids_group_point = $points;
                     $inspectorMission->day_off = $is_day_off ? 1 : 0;
                     $inspectorMission->save();
 
@@ -496,6 +503,12 @@ class GroupTeamController extends Controller
                             ->first()
                             : null;
 
+                        $getExistPoints = InspectorMission::where('group_team_id', $GroupTeam->id)->where('group_id', $GroupTeam->group_id)
+                            ->where('working_tree_id', $GroupTeam->working_tree_id)->where('working_time_id', $WorkingTreeTime->working_time_id)
+                            ->where('date', $date)->first();
+                        if ($getExistPoints) {
+                            $points = $getExistPoints->ids_group_point;
+                        }
                         // Create a new inspector mission
                         $inspectorMission = new InspectorMission();
                         $inspectorMission->inspector_id = $inspectorId;
@@ -504,6 +517,8 @@ class GroupTeamController extends Controller
                         $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
                         $inspectorMission->working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
                         $inspectorMission->date = $date;
+                        $inspectorMission->ids_group_point = $points;
+
                         $inspectorMission->day_off = $is_day_off ? 1 : 0;
                         $inspectorMission->save();
 
