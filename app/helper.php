@@ -160,6 +160,18 @@ function generateUniqueNumber($counter)
     return ['formattedNumber' => $formattedNumber, 'counter' => $counter + 1];
 }
 
+function getLatLongFromUrl($url) {
+    $pattern = '/@([-+]?[\d]*\.?[\d]+),([-+]?[\d]*\.?[\d]+)/';
+    preg_match($pattern, $url, $matches);
+    if (isset($matches[1]) && isset($matches[2])) {
+        return [
+            'latitude' => $matches[1],
+            'longitude' => $matches[2]
+        ];
+    }
+    return null;
+}
+
 
 function UploadFilesWithoutReal($path, $image, $model, $request)
 {
