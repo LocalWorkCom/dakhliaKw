@@ -68,7 +68,6 @@
                                     <th>المجموعة </th>
                                     <th>رقم الهاتف </th>
                                     <th>النوع</th>
-
                                     <th class="action" style="width:150px !important;">العمليات</th>
                                 </tr>
 

@@ -70,12 +70,19 @@ class InspectorController extends Controller
     {
 
         $userDepartmentId = Auth::user()->department_id;
-        $data = Inspector::with('user')
+        if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
+            $data = Inspector::with('user')
+         ->orderBy('id', 'desc')
+            ->get();
+        }else{
+            $data = Inspector::with('user')
             ->whereHas('user', function ($query) use ($userDepartmentId) {
                 $query->where('department_id', $userDepartmentId);
             })
             ->orderBy('id', 'desc')
             ->get();
+        }
+       
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             if ($row->group_id !=  null) {
@@ -122,12 +129,20 @@ class InspectorController extends Controller
         $departmentId = auth()->user()->department_id;
         $inspectorUserIds = Inspector::pluck('user_id')->toArray();
 
-        $users = User::where('department_id', $departmentId)
-            ->where('id', '!=', $department->manger)
-            ->where('id', '!=', auth()->user()->id)
-
+        $userDepartmentId = Auth::user()->department_id;
+        if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
+            $users = User::
+            where('id', '!=', auth()->user()->id)
             ->whereNotIn('id', $inspectorUserIds)
             ->get();
+        }else{
+            $users = User::where('department_id', $departmentId)
+            ->where('id', '!=', $department->manger)
+            ->where('id', '!=', auth()->user()->id)
+            ->whereNotIn('id', $inspectorUserIds)
+            ->get();
+        }
+      
         //dd($users);
         return view('inspectors.create', compact('users'));
     }
