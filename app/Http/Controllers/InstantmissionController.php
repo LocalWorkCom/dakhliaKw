@@ -107,6 +107,7 @@ class InstantmissionController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
 
+        $coordinates = getLatLongFromUrl( $request->location);
         $new = new instantmission();
         $new->label = $request->label;
         $new->location = $request->location;
@@ -114,6 +115,8 @@ class InstantmissionController extends Controller
         $new->group_team_id = $request->group_team_id;
         $new->inspector_id = $request->inspectors;
         $new->description = $request->description;
+        $new->latitude = $coordinates["latitude"];
+        $new->longitude = $coordinates["longitude"];
         $new->save();
 
         if ($request->hasFile('images')) {
@@ -178,6 +181,8 @@ class InstantmissionController extends Controller
             'group_team_id' => 'required',
             'group_id' => 'required',
         ], $messages);
+
+        $coordinates = getLatLongFromUrl($request->location);
         $instantmission = instantmission::find($id);
         // Update the instantmission record
         $instantmission->label = $request->label;
@@ -185,6 +190,8 @@ class InstantmissionController extends Controller
         $instantmission->group_id = $request->group_id;
         $instantmission->group_team_id = $request->group_team_id;
         $instantmission->description = $request->description;
+        $instantmission->latitude = $coordinates["latitude"];
+        $instantmission->longitude = $coordinates["longitude"];
         $instantmission->save();
 
         // Handle file uploads

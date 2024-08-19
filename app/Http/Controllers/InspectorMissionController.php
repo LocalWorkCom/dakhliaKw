@@ -110,6 +110,8 @@ $count=0;
                     'point_governate' => $point->government->name, // Assuming government name is the location
                     'point_time' => $inspectionTime, // Assuming 'time' is the attribute for time
                     'point_location' => $point->google_map, // Assuming 'time' is the attribute for time
+                    'latitude'=> $point->latitude, 
+                    'longitude'=> $point->longitude, 
 
                 ];
                     }
@@ -121,6 +123,7 @@ $count=0;
                 'name' =>  $groupPoint->name ,
                 'points_count' =>  $groupPointCount ,
                 'points' => $groupPointsData,
+                
                  ];
             
                 }
@@ -144,6 +147,8 @@ $count=0;
                     'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
                     'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name ,
                     'date' => $instantmission->created_at->format('Y-m-d'),
+                    'latitude'=> $instantmission->latitude, 
+                    'longitude'=> $instantmission->longitude, 
                 ];}
              }
         }
