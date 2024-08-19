@@ -21,8 +21,7 @@ class governmentController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    { 
-        
+    {  
         //get vaiable times
         $yesterday = Carbon::yesterday()->toDateString();
         $today = Carbon::today()->toDateString();
@@ -31,9 +30,9 @@ class governmentController extends Controller
         
         foreach ($allsectors as $sector) { // fetch on all sectors
             //get all points available for this government
-            $allAvailablePoints = Grouppoint::where('government_id', $sector)->pluck('id')->toArray();
+            $allAvailablePoints = Grouppoint::where('sector_id', $sector)->pluck('id')->toArray();
             //get all groups and num of points for each group 
-            $allGroupsForGovernment = Groups::where('government_id', $sector)->select('id', 'points_inspector')->get();
+            $allGroupsForGovernment = Groups::where('sector_id', $sector)->select('id', 'points_inspector')->get();
         
             foreach ($allGroupsForGovernment as $group) { //fetch on all groups in same governmet
                 //get all teams of this group and his history

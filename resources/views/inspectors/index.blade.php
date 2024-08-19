@@ -35,7 +35,7 @@
                 <div class="form-group moftsh mt-4  mx-4  d-flex">
                     <p class="filter "> تصفية حسب:</p>
                     <button class="btn-all px-3 mx-2 btn-filter" data-filter="all" style="color: #274373;">
-                        الكل ({{ \App\Models\Inspector::count() }})
+                        الكل ({{ $all }})
                     </button>
                     <button class="btn-all px-3 mx-2 btn-filter" data-filter="assigned" style="color: #274373;">
                         مفتشون تم توزعهم ({{ $assignedInspectors }})

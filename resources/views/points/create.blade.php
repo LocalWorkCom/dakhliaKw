@@ -14,7 +14,7 @@
     </style>
 @endpush
 @section('title')
-    القطاعات
+    النقاط
 @endsection
 @section('content')
     <div class="row col-11" dir="rtl">
