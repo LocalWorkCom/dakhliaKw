@@ -240,46 +240,95 @@ class GroupsController extends Controller
             'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
             'government_id.required' => 'المحافظة مطلوبة ولا يمكن تركه فارغا'
-
         ];
 
         $validatedData = Validator::make($request->all(), [
             'name_edit' => 'required',
             'points_inspector_edit' => 'required',
             'government_id' => 'required|integer',
-
         ], $messages);
 
-        // // Handle validation failure
-        // if ($validatedData->fails()) {
-        //     return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
-        // }
         if ($validatedData->fails()) {
-            // session()->flash('errors', $validatedData->errors());
             return redirect()->back()->withErrors($validatedData)->withInput()->with('editModal', true);
-
-            // return redirect()->back();
         }
-        
+
         $group = Groups::find($request->id_edit);
 
-        
-        $group->name = $request->name_edit;
-        $group->points_inspector = $request->points_inspector_edit;
-        $group->government_id = $request->government_id;
+        $updated = false;
 
+        // Check each field individually to see if it has changed
+        if ($group->name !== $request->name_edit) {
+            $group->name = $request->name_edit;
+            $updated = true;
+        }
 
-        // if ($group->name === $request->name_edit && $group->points_inspector == $request->points_inspector_edit && $group->government_id === $request->government_id) {
-        //     return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.'])->withInput()->with('editModal', true);
+        if ($group->points_inspector !== $request->points_inspector_edit) {
+            $group->points_inspector = $request->points_inspector_edit;
+            $updated = true;
+        }
 
-        // }
+        if ($group->government_id !== $request->government_id) {
+            $group->government_id = $request->government_id;
+            $updated = true;
+        }
+
+        // If nothing was updated, return with an error and show the modal again
+        if (!$updated) {
+            return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.'])->withInput()->with('editModal', true);
+        }
 
         $group->save();
+
         session()->flash('success', 'تم تعديل مجموعة بنجاح.');
 
         return redirect()->back();
     }
 
+    // public function update(Request $request)
+    // {
+    //     $messages = [
+    //         'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+    //         'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
+    //         'government_id.required' => 'المحافظة مطلوبة ولا يمكن تركه فارغا'
+
+    //     ];
+
+    //     $validatedData = Validator::make($request->all(), [
+    //         'name_edit' => 'required',
+    //         'points_inspector_edit' => 'required',
+    //         'government_id' => 'required|integer',
+
+    //     ], $messages);
+
+    //     // // Handle validation failure
+    //     // if ($validatedData->fails()) {
+    //     //     return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
+    //     // }
+    //     if ($validatedData->fails()) {
+    //         // session()->flash('errors', $validatedData->errors());
+    //         return redirect()->back()->withErrors($validatedData)->withInput()->with('editModal', true);
+
+    //         // return redirect()->back();
+    //     }
+        
+    //     $group = Groups::find($request->id_edit);
+
+        
+    //     $group->name = $request->name_edit;
+    //     $group->points_inspector = $request->points_inspector_edit;
+    //     $group->government_id = $request->government_id;
+
+
+    //     // if ($group->name === $request->name_edit && $group->points_inspector == $request->points_inspector_edit && $group->government_id === $request->government_id) {
+    //     //     return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.'])->withInput()->with('editModal', true);
+
+    //     // }
+
+    //     $group->save();
+    //     session()->flash('success', 'تم تعديل مجموعة بنجاح.');
+
+    //     return redirect()->back();
+    // }
     /**
      * Remove the specified resource from storage.
      */
