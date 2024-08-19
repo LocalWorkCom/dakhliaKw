@@ -110,6 +110,7 @@ class InstantmissionController extends Controller
         }
 
         $coordinates = getLatLongFromUrl($request->location);
+        // dd($coordinates);
         if($coordinates == null)
         {
             $lat= null;
