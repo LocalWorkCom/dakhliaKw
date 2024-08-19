@@ -253,11 +253,11 @@ class UserController extends Controller
                     $response = send_sms_code($msg, $user->phone, $user->country_code);
                     $result = json_decode($response, true);
 
-                    if (isset($result['sent']) && $result['sent'] === 'true') {
-                        return view('verfication_code', compact('code', 'military_number', 'password'));
-                    } else {
-                        return back()->with('error', 'سجل الدخول مرة أخرى')->withInput();
-                    }
+                    // if (isset($result['sent']) && $result['sent'] === 'true') {
+                    //     return view('verfication_code', compact('code', 'military_number', 'password'));
+                    // } else {
+                    //     return back()->with('error', 'سجل الدخول مرة أخرى')->withInput();
+                    // }
                 }
             }
 

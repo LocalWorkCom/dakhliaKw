@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class InspectorController extends Controller
 {
@@ -99,6 +100,16 @@ class InspectorController extends Controller
             ->addColumn('phone', function ($row) {
                 return $row->phone ?? 'لا يوجد هاتف'; // Assuming 'name' is the column in external_users
             })
+            ->addColumn('type', function ($row) {
+                if($row->type == 'Buildings' ){
+                    $result=  'مفتش مباني ' ; 
+                }elseif($row->type == 'trainee'){
+                    $result=  'مفتش متدرب' ; 
+                }else{
+                    $result=  'مفتش سلوك أنضباطى' ; 
+                }
+                return $result; // Assuming 'name' is the column in external_users
+            })
             ->rawColumns(['action'])
             ->make(true);
     }
@@ -111,8 +122,7 @@ class InspectorController extends Controller
         $departmentId = auth()->user()->department_id;
         $inspectorUserIds = Inspector::pluck('user_id')->toArray();
 
-        $users = User::where('flag', 'user')
-            ->where('department_id', $departmentId)
+        $users = User::where('department_id', $departmentId)
             ->where('id', '!=', $department->manger)
             ->where('id', '!=', auth()->user()->id)
 
@@ -130,15 +140,8 @@ class InspectorController extends Controller
       //  dd($request->all());
 
         $rules = [
-            // 'Id_number' => [
-            //     'required',
-            //     'string',
-            // ],
             'user_id' => 'required|exists:users,id',
-            // 'position' => 'required',
-            // 'name' => 'required|string',
             'type' => 'required|string',
-            // 'phone' => 'nullable|string',
         ];
 
         // Define custom messages
@@ -159,6 +162,12 @@ class InspectorController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         $user = User::findOrFail($request->user_id);
+        //dd($user->flag);
+        if($user->flag === "employee"){
+            $user->flag = "user";
+            $user->password =  Hash::make('123456');
+            $user->save();
+        }
         $inspector = new Inspector();
         $inspector->name = $request->name;
         $inspector->phone = $request->phone;
