@@ -339,7 +339,7 @@
         width: 345px;
     }
     .forget-pass-a {
-        margin-left: 0px;
+        margin-left: -11px;
         font-size: 17px;
         text-decoration: underline;
     }
@@ -443,7 +443,7 @@
         display: none;
     }
     .forget-pass-a {
-        margin-left: 0px;
+        margin-left: -8px;
         font-size: 11px;
     }
     .btn1 {
