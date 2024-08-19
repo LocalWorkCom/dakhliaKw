@@ -131,8 +131,7 @@ class InspectorController extends Controller
 
         $userDepartmentId = Auth::user()->department_id;
         if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
-            $users = User::
-            where('id', '!=', auth()->user()->id)
+            $users = User::where('id', '!=', auth()->user()->id)
             ->whereNotIn('id', $inspectorUserIds)
             ->get();
         }else{
