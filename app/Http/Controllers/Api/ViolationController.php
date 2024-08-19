@@ -19,6 +19,18 @@ class ViolationController  extends Controller
    
     public function get_Violation_type(Request $request)
     {
+        // type_id : department_id
+        $messages = [
+            'type.required' => 'type required',
+        ];
+        $validatedData = Validator::make($request->all(), [
+            'type' => 'required',
+        ], $messages);
+
+        if ($validatedData->fails()) {
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+        }
+
         $type = $request->type;
         $allViolationType = ViolationTypes::whereJsonContains('type_id', $type)->get();
         if ($allViolationType->isNotEmpty()) {
