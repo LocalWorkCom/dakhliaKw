@@ -93,8 +93,11 @@
                         @endif
                         <tr>
                             <th scope="row"> رابط جوجل ماب </th>
-                            <td>
-                                {{ $data->google_map ? $data->google_map : 'لا يوجد رابط جوجل ماب' }}
+                            <td >
+                                <div style="width: 90%">
+                                    {{ $data->google_map ? $data->google_map : 'لا يوجد رابط جوجل ماب' }}
+
+                                </div>
                             </td>
                         </tr>
 
