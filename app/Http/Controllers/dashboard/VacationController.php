@@ -21,7 +21,7 @@ class VacationController extends Controller
      */
     public function index(Request $request, $id = 0)
     {
-        $filter = $request->query('filter');
+        // $filter = $request->query('filter');
 
         // Initialize query
         $vacations = EmployeeVacation::query();
@@ -46,13 +46,13 @@ class VacationController extends Controller
         // }
 
         // Use for DataTable response
-        if ($request->ajax()) {
-            return datatables()->of($vacations)
-                ->addColumn('action', function ($vacation) {
-                    return view('vacation.partials.action-buttons', compact('vacation'));
-                })
-                ->make(true);
-        }
+        // if ($request->ajax()) {
+        //     return datatables()->of($vacations)
+        //         ->addColumn('action', function ($vacation) {
+        //             return view('vacation.partials.action-buttons', compact('vacation'));
+        //         })
+        //         ->make(true);
+        // }
 
         $vacationCount = $vacations->count();
         $vacations = $vacations->with('employee', 'vacation_type')->orderby('created_at', 'desc')->get();
@@ -101,48 +101,15 @@ class VacationController extends Controller
         return view('vacation.index', compact('id', 'vacations', 'data_filter', 'vacationCount'));
     }
 
-
-    // public function index(Request $request, $id = 0)
-    // {
-    //     $filter = $request->query('filter');
-
-    //     // Initialize query
-    //     $vacations = EmployeeVacation::query();
-
-    //     $vacationCount = $vacations->count();
-
-    //     $vacations = $vacations->with('employee', 'vacation_type')->orderby('created_at', 'desc')->get();
-
-    //     // Count based on filters
-    //     $exceeded = EmployeeVacation::where('is_exceeded', '=', 1)->count();
-    //     $finished = EmployeeVacation::where('end_date', '<', now()->toDateString())->count();
-    //     $current = EmployeeVacation::where('start_date', '=', now()->toDateString())
-    //         ->where('status', '=', 'Approved')
-    //         ->count();
-    //     $not_begin = EmployeeVacation::where('start_date', '>', now()->toDateString())->count();
-
-    //     // Pass results and counts to the view
-    //     return view('vacation.index', compact('id', 'vacations', 'exceeded', 'finished', 'current', 'not_begin', 'vacationCount'));
-    // }
-
-    // public function index($id = 0)
-    // {
-    //     // Fetch the count of EmployeeVacation records
-    //     $vacationCount = EmployeeVacation::count();
-
-    //     // Pass the count and ID to the view
-    //     return view('vacation.index', compact('id', 'vacationCount'));
-    // }
-
-    public function getVacations($id)
+    public function getVacations($id, Request $request)
     {
         if ($id) {
 
             $EmployeeVacations = EmployeeVacation::where('employee_id', $id)
                 ->with('employee', 'vacation_type')
                 ->orderby('created_at', 'desc')
-                ->get();
-            foreach ($EmployeeVacations as  $EmployeeVacation) {
+            ->get();
+            foreach ($EmployeeVacations->clone()->get() as  $EmployeeVacation) {
                 # code...
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
                 $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
@@ -167,14 +134,21 @@ class VacationController extends Controller
                     }
                 }
             }
+
+
+            // if ($request->has('vacation') && $request->vacation) {
+            //     $EmployeeVacations->where('VacationStatus', $request->vacation);
+            // }
+
+            // $EmployeeVacations = $EmployeeVacations->get();
             return DataTables::of($EmployeeVacations)
 
                 ->rawColumns(['action'])
                 ->make(true);
         } else {
             $EmployeeVacations = EmployeeVacation::with('employee', 'vacation_type')
-                ->orderby('created_at', 'desc')
-                ->get();
+                ->orderby('created_at', 'desc')->get();
+
             foreach ($EmployeeVacations as  $EmployeeVacation) {
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
                 $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
@@ -198,6 +172,11 @@ class VacationController extends Controller
                     }
                 }
             }
+            // if ($request->has('vacation') && $request->vacation) {
+            //     $EmployeeVacations->where('VacationStatus', $request->vacation);
+            // }
+
+            // $EmployeeVacations = $EmployeeVacations->get();
             return DataTables::of($EmployeeVacations)
 
                 ->rawColumns(['action'])
@@ -261,7 +240,7 @@ class VacationController extends Controller
             'employee_id.required' => 'يجب عليك اختيار موظف',
             'country_id.required' => 'يجب اختيار دولة عند تحديد دولة خارجية',
         ];
-       
+
         $validatedData = Validator::make($request->all(), $rules, $messages);
 
         if ($validatedData->fails()) {

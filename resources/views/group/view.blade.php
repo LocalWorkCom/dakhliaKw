@@ -13,12 +13,13 @@
 
 @section('content')
     <section>
+
+
         <div class="row">
             <div class="container welcome col-11">
                 <div class="d-flex justify-content-between">
                     <p> المجــــــــموعات</p>
-                    <button class="btn-all px-3" style="color: #274373;" onclick="openAddModal()" data-bs-toggle="modal"
-                        data-bs-target="#myModal1">
+                    <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
                         اضافة مجموعة جديده
                         <img src="{{ asset('frontend/images/group-add.svg') }}" alt="">
                     </button>
@@ -29,14 +30,7 @@
         <div class="row">
             <div class="container col-11 mt-3 p-0">
                 <div class="row d-flex justify-content-between" dir="ltr">
-                    <!-- <div class="form-group mt-4 mx-3 d-flex">
-                                                                <button class="btn-all px-3" style="color: #274373;" onclick="openAddModal()" data-bs-toggle="modal"
-                                                                    data-bs-target="#myModal1">
-                                                                    <img src="{{ asset('frontend/images/group-add.svg') }}" alt="">
-                                                                    اضافة مجموعة جديده
-                                                                </button>
 
-                                                            </div> -->
                     <div class="form-group mt-4 mx-3 d-flex justify-content-end">
                         <button class="btn-all px-3" style="color: #FFFFFF; background-color: #274373;"
                             onclick="window.print()">
@@ -61,7 +55,7 @@
                                         <th>عدد الفرق</th>
                                         <th>عدد المفتشيين</th>
                                         <th>عدد النقاط لكل فريق فى اليوم</th>
-                                        <th>اسم المحافظة</th>
+                                        <th>اسم قطاع</th>
                                         <th style="width:150px !important;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -99,8 +93,8 @@
                                                 name: 'points_inspector'
                                             },
                                             {
-                                                data: 'government.name',
-                                                name: 'government.name'
+                                                data: 'sector.name',
+                                                name: 'sector.name'
                                             },
                                             {
                                                 data: 'action',
@@ -170,23 +164,24 @@
                                     <label for="nameadd" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
                                         المجموعة</label>
                                     <input type="text" id="nameadd" name="name" class="form-control"
-                                        placeholder="مجموعة أ" value="{{ old('name') }}">
+                                        placeholder=" اكتب المجموعة" value="{{ old('name') }}">
                                     @if ($errors->has('name'))
                                         <span class="text-danger">{{ $errors->first('name') }}</span>
                                     @endif
                                 </div>
+
                                 <div class="form-group mt-4 mb-3">
-                                    <label class="d-flex justify-content-start pt-3 pb-2" for="government_id"> اختر
-                                        المحافظة </label>
-                                    <select name="government_id" id="government_id" class="form-control"
+                                    <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر
+                                        القطاع </label>
+                                    <select name="sector_id" id="sector_id" class="form-control"
                                         style="border: 0.2px solid rgb(199, 196, 196);">
-                                        <option value="">محافظه </option>
-                                        @foreach ($governments as $government)
-                                            <option value="{{ $government->id }}">{{ $government->name }} </option>
+                                        <option value="">قطاع </option>
+                                        @foreach ($sectors as $sector)
+                                            <option value="{{ $sector->id }}">{{ $sector->name }} </option>
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('government_id'))
-                                        <span class="text-danger">{{ $errors->first('government_id') }}</span>
+                                    @if ($errors->has('sector_id'))
+                                        <span class="text-danger">{{ $errors->first('sector_id') }}</span>
                                     @endif
                                 </div>
 
@@ -195,7 +190,8 @@
                                     <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد النقاط
                                         لكل فريق فى اليوم</label>
                                     <input type="number" id="points_inspector" name="points_inspector" class="form-control"
-                                        placeholder="4" value="{{ old('points_inspector') }}">
+                                        placeholder="1"
+                                        value="{{ old('points_inspector') ? old('points_inspector') : 1 }}">
                                     @if ($errors->has('points_inspector'))
                                         <span class="text-danger">{{ $errors->first('points_inspector') }}</span>
                                     @endif
@@ -271,16 +267,16 @@
                                 <label class="d-flex justify-content-start pt-3 pb-2" for="nameadd_show">
                                     اسم المجموعة </label>
                                 <input type="text" id="nameadd_show" name="nameadd_show" class="form-control"
-                                    placeholder="مجموعة أ" disabled>
+                                    placeholder="اكتب المجموعة" disabled>
                             </div>
                             <div class="form-group mt-4 mb-3">
-                                <label class="d-flex justify-content-start pt-3 pb-2" for="government_id"> اختر المحافظة
+                                <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر المحافظة
                                 </label>
-                                <select name="government_id" id="government_show_id" class="form-control" disabled
+                                <select name="sector_id" id="sector_show_id" class="form-control" disabled
                                     style="border: 0.2px solid rgb(199, 196, 196);">
                                     <option value="">محافظه </option>
-                                    @foreach ($governments as $government)
-                                        <option value="{{ $government->id }}">{{ $government->name }} </option>
+                                    @foreach ($sectors as $sector)
+                                        <option value="{{ $sector->id }}">{{ $sector->name }} </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -325,31 +321,31 @@
                                     <label for="name_edit" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
                                         المجموعة</label>
                                     <input type="text" id="name_edit" name="name_edit" class="form-control"
-                                        placeholder="مجموعة أ" value="{{ old('name_edit') }}">
+                                        placeholder=" اكتب المجموعه" value="{{ old('name_edit') }}">
                                     @if ($errors->has('name_edit'))
                                         <span class="text-danger">{{ $errors->first('name_edit') }}</span>
                                     @endif
                                 </div>
                                 <div class="form-group mt-4 mb-3">
-                                    <label class="d-flex justify-content-start pt-3 pb-2" for="government_id"> اختر
-                                        المحافظة </label>
-                                    <select name="government_id" id="government_edit_id" class="form-control"
+                                    <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر
+                                        القطاع </label>
+                                    <select name="sector_id" id="sector_edit_id" class="form-control"
                                         style="border: 0.2px solid rgb(199, 196, 196);">
-                                        <option value="">محافظه </option>
-                                        @foreach ($governments as $government)
-                                            <option value="{{ $government->id }}">{{ $government->name }} </option>
+                                        <option value="">القطاع </option>
+                                        @foreach ($sectors as $sector)
+                                            <option value="{{ $sector->id }}">{{ $sector->name }} </option>
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('government_id'))
-                                        <span class="text-danger">{{ $errors->first('government_id') }}</span>
+                                    @if ($errors->has('sector_id'))
+                                        <span class="text-danger">{{ $errors->first('sector_id') }}</span>
                                     @endif
-                                </div>
+                                </div> 
 
                                 <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
                                         النقاط لكل فريق فى اليوم </label>
                                     <input type="number" id="points_inspector_edit" name="points_inspector_edit"
-                                        class="form-control" placeholder="4" value="{{ old('points_inspector_edit') }}">
+                                        class="form-control" value="{{ old('points_inspector_edit') }}">
                                     @if ($errors->has('points_inspector_edit'))
                                         <span class="text-danger">{{ $errors->first('points_inspector_edit') }}</span>
                                     @endif
@@ -380,7 +376,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- JavaScript to handle modal display -->
     <script>
         @if (session('editModal'))
@@ -439,7 +435,6 @@
             </div>
         </div>
     </div> --}}
-    
 @endsection
 
 @push('scripts')
@@ -495,7 +490,7 @@
                         // // Populate modal fields with data
                         document.getElementById('nameadd_show').value = data.group.name;
                         document.getElementById('points_inspector_show').value = data.group.points_inspector;
-                        document.getElementById('government_show_id').value = data.group.government_id;
+                        document.getElementById('sector_show_id').value = data.group.sector_id;
                         // document.getElementById('id_show').value = data.id;
                         $('#view').modal('show');
                     } else {
@@ -520,8 +515,27 @@
                         document.getElementById('name_edit').value = data.group.name;
                         document.getElementById('points_inspector_edit').value = data.group.points_inspector;
                         document.getElementById('id_edit').value = data.group.id;
-                        document.getElementById('government_edit_id').value = data.group.government_id;
-                        $('#government_edit_id').val(data.group.government_id).change();
+
+                        // let select = document.getElementById('types');
+                        // let options = select.options;
+
+                        // // Clear previous selections
+                        // for (let i = 0; i < options.length; i++) {
+                        //     options[i].selected = false;
+                        // }
+
+                        // // Set new selections
+                        // for (let i = 0; i < options.length; i++) {
+                        //     console.log('Option value:', options[i].value); // Debugging
+                        //     if (types.includes(parseInt(options[i].value))) {
+                        //         options[i].selected = true;
+                        //         console.log('Option value:', options[i].value); // Debugging
+
+                        //     }
+                        // }
+
+                        document.getElementById('sector_edit_id').value = data.group.sector_id;
+                        $('#sector_edit_id').val(data.group.sector_id).change();
 
 
                         // Select the option in the dropdown
@@ -614,6 +628,37 @@
 
                 // Show the second modal body
                 secondModalBody.classList.remove('d-none');
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectBox = document.getElementById('select-box');
+            const options = document.getElementById('options');
+            const searchInput = document.getElementById('search-input');
+            const selectedValuesContainer = document.getElementById('selected-values');
+            const optionCheckboxes = document.querySelectorAll('.option input[type="checkbox"]');
+            selectBox.addEventListener('click', function() {
+                options.style.display = options.style.display === 'block' ? 'none' : 'block';
+            });
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.select-wrapper')) {
+                    options.style.display = 'none';
+                }
+            });
+            optionCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const selectedOptions = Array.from(optionCheckboxes)
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.nextElementSibling.textContent);
+                    selectedValuesContainer.innerHTML = selectedOptions.join(', ');
+                });
+            });
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                optionCheckboxes.forEach(checkbox => {
+                    const optionLabel = checkbox.nextElementSibling.textContent.toLowerCase();
+                    checkbox.parentElement.style.display = optionLabel.includes(searchTerm) ?
+                        'block' : 'none';
+                });
             });
         });
     </script>
