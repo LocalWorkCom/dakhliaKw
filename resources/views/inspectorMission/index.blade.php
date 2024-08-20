@@ -13,6 +13,10 @@
             border: 2px dashed #aaa;
             /* Visual cue for drop target */
         }
+        .change-place{
+           color: white;
+           font-weight: bold;
+        }
     </style>
 @endsection
 
@@ -89,8 +93,12 @@
                                             <tr id="group-{{ $Group->id }}-team-inspector-tr{{ $inspector->id }}">
                                                 <td style="background-color: #a5d0ffbd">{{ $count }}</td>
                                                 <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;">
+                                                    @if ($inspector->user && $inspector->user->grade)
+                                                        {{ $inspector->user->grade->name }} /
+                                                    @endif
                                                     {{ $inspector->name }}
                                                 </td>
+
                                                 @foreach ($inspector['missions'] as $index2 => $mission)
                                                     @if ($mission)
                                                         @php
@@ -102,7 +110,7 @@
                                                             }
                                                         @endphp
                                                         <td class="{{ $class }} drop-target"
-                                                            id="day-{{ $index2 }}"
+                                                            id="day-{{ $index2+1 }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
                                                             @if (!$mission->day_off && isset($inspector['vacations'][$index2]))
                                                                 <ul>
@@ -115,8 +123,7 @@
                                                                         @foreach ($inspector['points'][$index2] as $index3 => $point)
                                                                             <li class="change-place"
                                                                                 id="point{{ $point->id }}"
-                                                                                draggable="true"
-                                                                                style="color: white; font-weight: bold;">
+                                                                                draggable="true">
                                                                                 {{ $point->name }}
                                                                             </li>
                                                                         @endforeach
@@ -200,7 +207,7 @@
         // Calculate the target date by adding the day number to the reference date
         const targetDate = new Date(referenceDate);
         targetDate.setDate(referenceDate.getDate() + (parseInt(dayNumber, 10) -
-        1)); // Subtract 1 to start from referenceDate
+            1)); // Subtract 1 to start from referenceDate
 
         // Format the date as YYYY-MM-DD
         const year = targetDate.getFullYear();
@@ -249,8 +256,8 @@
                 return;
             }
 
-       
-            
+
+
             if (targetDate < today) {
                 console.log('Cannot drop on past days');
                 return;

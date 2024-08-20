@@ -58,6 +58,7 @@
                                 <th>اسم الفترة</th>
                                 <th>بدايه وقت العمل </th>
                                 <th> نهاية وقت العمل</th>
+                                <th> لون الفترة</th>
                                 <th style="width:150px !important;">العمليات</th>
                             </tr>
                         </thead>
@@ -88,6 +89,16 @@
                                     {
                                         data: 'end_time',
                                         name: 'end_time'
+                                    },
+                                    {
+                                        data: 'color',
+                                        name: 'color',
+                                        render: function(data, type, row) {
+                                            if (type === 'display') {
+                                                return `<div style="width: 20px; height: 20px; background-color: ${data}; border: 1px solid #000;"></div>`;
+                                            }
+                                            return data;
+                                        }
                                     },
                                     {
                                         data: 'action',

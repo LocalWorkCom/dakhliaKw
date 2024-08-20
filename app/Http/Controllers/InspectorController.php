@@ -25,29 +25,39 @@ class InspectorController extends Controller
      */
     public function index()
     {
-        $userDepartmentId = Auth::user()->department_id;
-        if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
+        $user = Auth::user();
+        $userDepartmentId = $user->department_id;
+    
+        if ($user->rule->name == "localworkadmin" || $user->rule->name == "superadmin") {
             $all = Inspector::count();
             $assignedInspectors = Inspector::whereNotNull('group_id')->count();
             $unassignedInspectors = Inspector::whereNull('group_id')->count();
-        }else{
+        } else {
+            // Ensure manager cannot see inspectors in their own department
             $all = Inspector::with('user')
-            ->whereHas('user', function ($query) use ($userDepartmentId) {
-                $query->where('department_id', $userDepartmentId);
-            })
-            ->count();
+                ->whereHas('user', function ($query) use ($userDepartmentId) {
+                    $query->where('department_id', $userDepartmentId);
+                })
+                ->count();
+    
             $assignedInspectors = Inspector::with('user')
-            ->whereHas('user', function ($query) use ($userDepartmentId) {
-                $query->where('department_id', $userDepartmentId);
-            })->whereNotNull('group_id')->count();
+                ->whereHas('user', function ($query) use ($userDepartmentId) {
+                    $query->where('department_id', $userDepartmentId);
+                })
+                ->whereNotNull('group_id')
+                ->count();
+    
             $unassignedInspectors = Inspector::with('user')
-            ->whereHas('user', function ($query) use ($userDepartmentId) {
-                $query->where('department_id', $userDepartmentId);
-            })->whereNull('group_id')->count();
+                ->whereHas('user', function ($query) use ($userDepartmentId) {
+                    $query->where('department_id', $userDepartmentId);
+                })
+                ->whereNull('group_id')
+                ->count();
         }
      
-        return view('inspectors.index', compact('assignedInspectors', 'unassignedInspectors','all'));
+        return view('inspectors.index', compact('assignedInspectors', 'unassignedInspectors', 'all'));
     }
+    
     public function addToGroup(Request $request)
     {
         //dd($request);
@@ -147,8 +157,9 @@ class InspectorController extends Controller
         $department = departements::find($departmentId);
         $departmentId = auth()->user()->department_id;
         $inspectorUserIds = Inspector::pluck('user_id')->toArray();
-        $allmangers = departements::pluck('manger')->toArray();
+        $allmangers = departements::whereNotNull('manger')->pluck('manger')->toArray();
         $userDepartmentId = Auth::user()->department_id;
+        dd($allmangers);
         if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
             $users = User::where('id', '!=', auth()->user()->id)
             ->whereNotIn('id', $inspectorUserIds)
@@ -198,8 +209,12 @@ class InspectorController extends Controller
         $user = User::findOrFail($request->user_id);
         //dd($user->flag);
         if($user->flag === "employee"){
-            $user->flag = "user";
+          //  $user->flag = "user";
             $user->password =  Hash::make('123456');
+            $user->save();
+        }else{
+            $user->flag = "employee";
+          //  $user->password =  Hash::make('123456');
             $user->save();
         }
         $inspector = new Inspector();
