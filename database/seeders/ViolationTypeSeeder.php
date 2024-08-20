@@ -15,10 +15,8 @@ class ViolationTypeSeeder extends Seeder
     {
         //
         DB::table('violation_type')->insert([
-            ['name' => 'ضباط',   'type_id' => '0' ,'created_by'=>1,'updated_by'=>1],
-            ['name' => 'مدنيين', 'type_id' => '0' ,'created_by'=>1,'updated_by'=>1],
-            ['name' => 'مهنيين', 'type_id' => '0' ,'created_by'=>1,'updated_by'=>1],
-            ['name' => 'أفراد',  'type_id' => '0' ,'created_by'=>1,'updated_by'=>1],
+            ['name' => 'عسكرى',   'type_id' => '0' ,'created_by'=>1,'updated_by'=>1],
+            ['name' => 'مدني', 'type_id' => '0' ,'created_by'=>1,'updated_by'=>1],
 
         ]);
     }
