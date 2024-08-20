@@ -70,11 +70,16 @@ class GroupsController extends Controller
     {
         // $inspectors = Inspector::whereNull('group_id')->get();
         $departmentId = auth()->user()->department_id; // Or however you determine the department ID
-
-        $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
-            ->where('users.department_id', $departmentId)
-            ->whereNull('inspectors.group_id')
-            ->select("inspectors.*")->get();
+        if (auth()->user()->rule_id == 2) {
+            $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+                ->whereNull('inspectors.group_id')
+                ->select("inspectors.*")->get();
+        } else {
+            $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+                ->where('users.department_id', $departmentId)
+                ->whereNull('inspectors.group_id')
+                ->select("inspectors.*")->get();
+        }
 
         $inspectorsIngroup = Inspector::where('group_id', $id)->get();
         return view('group.inspector', compact('inspectors', 'inspectorsIngroup', 'id'));

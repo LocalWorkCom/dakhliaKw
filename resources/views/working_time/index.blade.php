@@ -10,14 +10,14 @@
 
 <div class="row ">
     <div class="container welcome col-11">
-    <div class="d-flex justify-content-between">
-        <p> فترة العمل</p>
-        <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
-                   
-                    اضافة فترة <img src="{{ asset('frontend/images/time.svg') }}" alt="">
-                </button>
-    </div>
-   
+        <div class="d-flex justify-content-between">
+            <p> فترة العمل</p>
+            <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
+
+                اضافة فترة <img src="{{ asset('frontend/images/time.svg') }}" alt="">
+            </button>
+        </div>
+
     </div>
 </div>
 <br>
@@ -51,7 +51,8 @@
         <div class="col-lg-12">
             <div class="bg-white ">
                 <div>
-                    <table  id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
+                    <table id="users-table"
+                        class="display table table-responsive-sm  table-bordered table-hover dataTable">
                         <thead>
                             <tr>
                                 <th>رقم التسلسلي</th>
@@ -95,10 +96,15 @@
                                         name: 'color',
                                         render: function(data, type, row) {
                                             if (type === 'display') {
-                                                return `<div style="width: 25px; height: 25px; border-radius:50%; background-color: ${data}; border: 1px solid #000;" class="d-flex justify-content-center align-items-center"></div>`;
+                                                if (data === null || data === '') {
+                                                    return 'لا يوجد لون';
+                                                } else {
+                                                    return `<div style="width: 25px; height: 25px; border-radius:50%; background-color: ${data}; border: 1px solid #000;" class="d-flex justify-content-center align-items-center"></div>`;
+                                                }
                                             }
                                             return data;
                                         }
+
                                     },
                                     {
                                         data: 'action',
@@ -141,7 +147,7 @@
 
                 <!-- Create Form Modal -->
                 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                    aria-hidden="true" >
+                    aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header d-flex justify-content-center">
@@ -205,14 +211,16 @@
                 </div>
 
                 <!-- Edit Form Modal -->
-                <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
+                <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header d-flex justify-content-center">
                                 <div class="title d-flex flex-row align-items-center ">
                                     <h5 class="modal-title">تعديل فترة</h5>
                                 </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close">&times;</button>
                             </div>
                             <div class="modal-body" dir="rtl">
                                 <form id="editForm" action="{{ route('working_time.update') }}" method="post">
@@ -222,23 +230,35 @@
                                     <div id="firstModalBody1" class="mb-3 mt-3 d-flex justify-content-center">
                                         <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                                             <div class="form-group mt-4 mb-3">
-                                                <label class="d-flex justify-content-start pt-3 pb-2" for="name_edit">اسم الفتره</label>
-                                                <input type="text" id="name_edit" name="name_edit" class="form-control" placeholder="اسم الفتره" required>
+                                                <label class="d-flex justify-content-start pt-3 pb-2"
+                                                    for="name_edit">اسم الفتره</label>
+                                                <input type="text" id="name_edit" name="name_edit"
+                                                    class="form-control" placeholder="اسم الفتره" required>
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label class="d-flex justify-content-start pb-2" for="start_time_edit">بداية فترة العمل</label>
-                                                <input type="time" id="start_time_edit" name="start_time_edit" class="form-control" required>
+                                                <label class="d-flex justify-content-start pb-2"
+                                                    for="start_time_edit">بداية فترة العمل</label>
+                                                <input type="time" id="start_time_edit" name="start_time_edit"
+                                                    class="form-control" required>
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label class="d-flex justify-content-start pb-2" for="end_time_edit">نهاية فترة العمل</label>
-                                                <input type="time" id="end_time_edit" name="end_time_edit" class="form-control" required>
+                                                <label class="d-flex justify-content-start pb-2"
+                                                    for="end_time_edit">نهاية فترة العمل</label>
+                                                <input type="time" id="end_time_edit" name="end_time_edit"
+                                                    class="form-control" required>
                                             </div>
                                             <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                                <button type="submit" class="btn-all mx-2 p-2" style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn1">
-                                                    <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
+                                                <button type="submit" class="btn-all mx-2 p-2"
+                                                    style="background-color: #274373; color: #ffffff;"
+                                                    id="openSecondModalBtn1">
+                                                    <img src="{{ asset('frontend/images/white-add.svg') }}"
+                                                        alt="img"> تعديل
                                                 </button>
-                                                <button type="button" class="btn-all p-2" style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);" data-bs-dismiss="modal" aria-label="Close">
-                                                    <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
+                                                <button type="button" class="btn-all p-2"
+                                                    style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                                                    data-bs-dismiss="modal" aria-label="Close">
+                                                    <img src="{{ asset('frontend/images/red-close.svg') }}"
+                                                        alt="img"> الغاء
                                                 </button>
                                             </div>
                                         </div>
@@ -255,7 +275,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- view Form Modal -->
                 <div class="modal fade" id="view" tabindex="-1" aria-labelledby="representativeLabel"
                     aria-hidden="true">
@@ -383,9 +403,9 @@
                                         // Handle the response
                                         // Optionally, reload the page
                                         firstModalBody.classList.add('d-none');
-                                secondModalBodycreate.classList.remove('d-none');
+                                        secondModalBodycreate.classList.remove('d-none');
                                         window.location.reload();
-                                        
+
                                     },
                                     error: function(error) {
                                         console.error('AJAX error', error);
@@ -419,7 +439,7 @@
                         // });
                     });
                 </script>
-             
+
 
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
@@ -446,9 +466,9 @@
                                         // Handle the response
                                         // Optionally, reload the page
                                         firstModalBody1.classList.add('d-none');
-                                       secondModalBody1.classList.remove('d-none');
+                                        secondModalBody1.classList.remove('d-none');
                                         window.location.reload();
-                                        
+
                                     },
                                     error: function(error) {
                                         console.error('AJAX error', error);

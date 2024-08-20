@@ -117,13 +117,13 @@ button {
 }
 .login-label-2{
     font-family: Almarai;
+    display: flex;
     font-size: 24px;
-    /* padding-bottom: 15px; */
-    /* font-weight: 400; */
+  width: 100%;
     line-height: 26.78px;
     text-align: right;
     padding-right: 6px;
-    margin-left: 330px;
+    /* margin-left: 330px; */
     /* padding-top: 20px; */
 }
 

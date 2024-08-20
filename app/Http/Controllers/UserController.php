@@ -457,7 +457,7 @@ class UserController extends Controller
     {
         //
         $user = User::find(Auth::user()->id);
-        $rule = Rule::all();
+        $rule = Rule::where('hidden','!=',"1")->get();
         $flag = $id;
         $grade = grade::all();
         $job = job::all();
@@ -466,16 +466,26 @@ class UserController extends Controller
         $sector = Sector::all();
         $qualifications = Qualification::all();
         // dd($user->department_id);
-        if ($flag == "0") {
-            $alldepartment = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
-        } else {
-            $alldepartment = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
-        }
+        // if ($flag == "0") {
+        //     $alldepartment = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+        // } else {
+        //     $alldepartment = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
+        // }
 
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $alluser = User::where('flag', 'employee')->get();
         } else {
             $alluser = User::where('flag', 'employee')->where('department_id', $user->department_id)->get();
+        }
+
+        if ($user->department_id == "NULL") {
+            $department = departements::all();
+        } else {
+            if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
+                $alldepartment = departements::all();
+            } else {
+                $alldepartment = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
+            }
         }
         // $alluser = User::where('department_id',$user->department_id)->where('flag','employee')->get();
 
@@ -685,7 +695,7 @@ class UserController extends Controller
     {
         //
         $user = User::find($id);
-        $rule = Rule::all();
+        $rule = Rule::where('hidden','!=',"1")->get();
         $grade = grade::all();
         $joining_date = Carbon::parse($user->joining_date);
         $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);
@@ -714,7 +724,7 @@ class UserController extends Controller
     {
         //
         $user = User::find($id);
-        $rule = Rule::all();
+        $rule = Rule::where('hidden','!=',"1")->get();
         $grade = grade::all();
         $joining_date = Carbon::parse($user->joining_date);
         $end_of_serviceUnit = $joining_date->addYears($user->length_of_service);

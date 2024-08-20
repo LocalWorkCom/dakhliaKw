@@ -88,7 +88,8 @@
         font-size: 22px;
         line-height: 24.78px;
         padding-right: 5px;
-        margin-left: 309px;
+        width: 100%;
+        /* margin-left: 309px; */
     }
 
     .login-p {
@@ -138,7 +139,8 @@
         font-size: 22px;
         line-height: 20.78px;
         padding-right: 5px;
-        margin-left: 235px;
+        width: 100%;
+        /* margin-left: 235px; */
     }
     .btn1 {
         height: 37px;
@@ -180,7 +182,8 @@
         font-size: 20px;
         line-height: 20.78px;
         padding-right: 5px;
-        margin-left: 145px;
+        width: 100%;
+        /* margin-left: 145px; */
     }
     .btn1{
         height: 40px;
@@ -222,6 +225,7 @@
     .login-label {
         font-size: 20px;
         line-height: 13.78px;
+        width: 100%;
     }
     .login-input {
         height: 45px;
@@ -286,7 +290,8 @@
     .login-label {
         font-size: 23px;
         line-height: 26.78px;
-        margin-left: 35px;
+        width: 100%;
+        /* margin-left: 35px; */
     }
     .btn1 {
         width: 145px;
@@ -327,7 +332,8 @@
     .login-label {
         font-size: 20px;
         line-height: 26.78px;
-        margin-left: 22px;
+        width: 100%;
+        /* margin-left: 22px; */
     }
     .login-h2 {
         padding-left: 95px;
@@ -377,7 +383,8 @@
     .login-label {
         font-size: 19px;
         line-height: 26.78px;
-        margin-left: 10px;
+        width: 100%;
+        /* margin-left: 10px; */
     }
 
     #toggleIcon {
@@ -433,7 +440,8 @@
     .login-label {
         font-size: 18px;
         line-height: 26.78px;
-        margin-left: -8px;
+        width: 100%;
+        /* margin-left: -8px; */
     }
     .login-input {
         height: 32px;
