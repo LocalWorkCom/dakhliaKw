@@ -34,7 +34,7 @@ class ViolationController  extends Controller
         $type = $request->type;
         $allViolationType = ViolationTypes::whereJsonContains('type_id', $type)->get();
         if ($allViolationType->isNotEmpty()) {
-            $grade = grade::all();
+            $grade = ViolationTypes::where('type_id', '0')->get();
             if ($grade->isNotEmpty()) {
                 $success['grade'] = $grade->map(function ($item) {
                     return $item->only(['id', 'name']);
