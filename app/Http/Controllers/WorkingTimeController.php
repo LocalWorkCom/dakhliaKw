@@ -123,9 +123,9 @@ class WorkingTimeController extends Controller
     public function update(Request $request)
     {
         $messages = [
-            'name_edit.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
-            'start_time_edit.required' => 'بداية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
-            'end_time_edit.required' => 'نهاية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
+            'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+            'start_time_edit.required' => 'بداية فترة العمل مطلوبة ولا يمكن تركها فارغة.',
+            'end_time_edit.required' => 'نهاية فترة العمل مطلوبة ولا يمكن تركها فارغة.',
         ];
 
         $validatedData = Validator::make($request->all(), [
@@ -134,7 +134,6 @@ class WorkingTimeController extends Controller
             'end_time_edit' => 'required',
         ], $messages);
 
-        // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
@@ -145,7 +144,7 @@ class WorkingTimeController extends Controller
             $WorkingTimeitem->start_time = $request->start_time_edit;
             $WorkingTimeitem->end_time = $request->end_time_edit;
 
-            // Check if the color is null and generate a new random color if needed
+            // Generate a new random color if the color is null
             if (is_null($WorkingTimeitem->color)) {
                 do {
                     $color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
@@ -157,11 +156,12 @@ class WorkingTimeController extends Controller
 
             $WorkingTimeitem->save();
 
-            return view('working_time.index')->with('success', 'Permission updated successfully.');
+            return redirect()->route('working_time.index')->with('success', 'Permission updated successfully.');
         } catch (\Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
 
     // public function update(Request $request)
     // {
