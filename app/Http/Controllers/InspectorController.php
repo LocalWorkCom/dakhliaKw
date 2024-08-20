@@ -89,6 +89,7 @@ class InspectorController extends Controller
 
         $userDepartmentId = Auth::user()->department_id;
         if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
+           
             $data = Inspector::with('user')
          ->orderBy('id', 'desc')
             ->get();
@@ -146,13 +147,14 @@ class InspectorController extends Controller
         $department = departements::find($departmentId);
         $departmentId = auth()->user()->department_id;
         $inspectorUserIds = Inspector::pluck('user_id')->toArray();
-
+        $allmangers = departements::pluck('manger')->toArray();
         $userDepartmentId = Auth::user()->department_id;
         if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
             $users = User::where('id', '!=', auth()->user()->id)
             ->whereNotIn('id', $inspectorUserIds)
+            ->whereNotIn('id', $allmangers)
             ->get();
-        }else{
+        }else{ 
             $users = User::where('department_id', $departmentId)
             ->where('id', '!=', $department->manger)
             ->where('id', '!=', auth()->user()->id)
