@@ -6,14 +6,14 @@
 @section('content')
     <section>
 
- <!-- *************** for drag and drop example *************** -->
-    <!-- <tr>
-        <td id="cell1" draggable="true" style=" cursor: move;">drag</td>
-        <td id="cell2" draggable="true" style=" cursor: move;">drop</td>
-    </tr> -->
+        <!-- *************** for drag and drop example *************** -->
+        <!-- <tr>
+            <td id="cell1" draggable="true" style=" cursor: move;">drag</td>
+            <td id="cell2" draggable="true" style=" cursor: move;">drop</td>
+        </tr> -->
 
 
- <!-- *************** end of drag and drop example *************** -->
+        <!-- *************** end of drag and drop example *************** -->
 
         <div class="row ">
             <div class="container welcome col-11">
@@ -23,17 +23,27 @@
 
                     <!-- Print Button and Legend -->
                     <div class="d-flex ">
-                        <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;" onclick="printDiv()">
+                        <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;"
+                            onclick="printDiv()">
                             <img src="{{ asset('frontend/images/print.svg') }}" alt=""> طباعة
                         </button>
 
+
+
                         <div class="colors  d-flex mx-5">
                             <div class="only rounded p-1 px-2 mx-1"> فريق به مفتش فقط</div>
-                            <div class="night rounded p-1 px-2 mx-1"> ليل</div>
+                            {{-- <div class="night rounded p-1 px-2 mx-1"> ليل</div> --}}
                             <div class="task rounded p-1 px-2 mx-1"> مهمة</div>
                             <div class="urgent rounded p-1 px-2 mx-1"> أمر فوري</div>
-                            <div class="morning  rounded p-1 px-2 mx-1 ">صبح</div>
-                            <div class="afternoon rounded p-1 px-2 mx-1">عصر</div>
+                            @foreach ($working_times as $time)
+                                <div class="{{ $time->class_name }} rounded p-1 px-2 mx-1"
+                                    style="background-color: {{ $time->color }}; color: white;">
+                                    {{ $time->name }}
+                                </div>
+                            @endforeach
+
+                            {{-- <div class="morning  rounded p-1 px-2 mx-1 ">صبح</div> --}}
+                            {{-- <div class="afternoon rounded p-1 px-2 mx-1">عصر</div> --}}
                             <div class="change rounded p-1 px-2 mx-1">منقول</div>
                             <div class="dayoff rounded p-1 px-2 mx-1">راحه</div>
                             <div class="rest rounded p-1 px-2 mx-1">اجازات</div>
@@ -113,7 +123,7 @@
                                                         @endphp
 
                                                         <!-- Mission Details -->
-                                                         
+
                                                         <td class="{{ $class }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
 
@@ -127,10 +137,11 @@
                                                             @else
                                                                 <ul style="list-style:none;">
                                                                     <!-- Mission Points -->
-                                                                  
+
                                                                     @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
                                                                         @foreach ($inspector['points'][$index2] as $point)
-                                                                            <li style="color: white;font-weight: bold">
+                                                                            <li style="color: white;font-weight: bold"
+                                                                                draggable="true">
                                                                                 {{ $point->name }}
                                                                             </li>
                                                                         @endforeach
@@ -157,7 +168,7 @@
                                                                             </li>
                                                                         @endforeach
                                                                     @endif
-                                                                    
+
                                                                 </ul>
                                                             @endif
                                                         </td>
@@ -221,7 +232,7 @@
     });
 
     document.addEventListener('dragover', (event) => {
-        event.preventDefault(); 
+        event.preventDefault();
     });
 
     document.addEventListener('drop', (event) => {
