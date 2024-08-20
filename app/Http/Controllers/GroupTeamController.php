@@ -621,7 +621,8 @@ class GroupTeamController extends Controller
     {
         // Retrieve all Groups
         $Groups = Groups::all();
-
+        // Retrieve all working times
+        $working_times = WorkingTime::all();
         foreach ($Groups as $Group) {
             // Initialize an array to hold teams associated with the group
             $group_teams = [];
@@ -833,6 +834,6 @@ class GroupTeamController extends Controller
         });
         // dd($Groups);
         // Return the view with the Groups data
-        return view('inspectorMission.index', compact('Groups'));
+        return view('inspectorMission.index', compact('Groups','working_times'));
     }
 }
