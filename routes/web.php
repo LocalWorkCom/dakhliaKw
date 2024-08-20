@@ -7,7 +7,7 @@ use App\Http\Controllers\outgoingController;
 use App\Http\Controllers\dashboard\VacationController;
 use App\Http\Controllers\dashboard\WorkingTreeController;
 use App\Http\Controllers\governmentController;
-use App\Http\Controllers\groupPointsController;
+use App\Http\Controllers\GroupPointsController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
 use App\Http\Controllers\SettingsController;
