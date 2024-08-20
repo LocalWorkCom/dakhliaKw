@@ -30,7 +30,7 @@ class WorkingTimeController extends Controller
 
             return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
-        ->rawColumns(['action'])
+            ->rawColumns(['action'])
             ->make(true);
     }
 
@@ -74,7 +74,7 @@ class WorkingTimeController extends Controller
             $WorkingTime->name = $request->name;
             $WorkingTime->start_time = $request->start_time;
             $WorkingTime->end_time = $request->end_time;
-             // Generate a random color that is not in the database
+            // Generate a random color that is not in the database
             do {
                 $color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
                 $existColors = ['#000000ab', '#ffffff', '#d6d6d6', '#fdfdfdc2', '#c9f5f9', '#4edfd0ba'];
@@ -115,7 +115,6 @@ class WorkingTimeController extends Controller
         } else {
             return response()->json(['success' => false, 'message' => 'Record not found'], 404);
         }
-        
     }
 
     /**
@@ -123,33 +122,76 @@ class WorkingTimeController extends Controller
      */
     public function update(Request $request)
     {
-        // dd($request);
         $messages = [
             'name_edit.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
             'start_time_edit.required' => 'بداية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
             'end_time_edit.required' => 'نهاية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
         ];
+
         $validatedData = Validator::make($request->all(), [
             'name_edit' => 'required',
             'start_time_edit' => 'required',
             'end_time_edit' => 'required',
         ], $messages);
+
         // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
+
         try {
             $WorkingTimeitem = WorkingTime::findOrFail($request->id_edit);
             $WorkingTimeitem->name = $request->name_edit;
             $WorkingTimeitem->start_time = $request->start_time_edit;
             $WorkingTimeitem->end_time = $request->end_time_edit;
+
+            // Check if the color is null and generate a new random color if needed
+            if (is_null($WorkingTimeitem->color)) {
+                do {
+                    $color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+                    $existColors = ['#000000ab', '#ffffff', '#d6d6d6', '#fdfdfdc2', '#c9f5f9', '#4edfd0ba'];
+                } while (WorkingTime::where('color', $color)->whereNotIn('color', $existColors)->exists());
+
+                $WorkingTimeitem->color = $color;
+            }
+
             $WorkingTimeitem->save();
-            // Dynamically create model instance based on the model class string
-            return view('working_time.index')->with('success', 'Permission created successfully.');
+
+            return view('working_time.index')->with('success', 'Permission updated successfully.');
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }
     }
+
+    // public function update(Request $request)
+    // {
+    //     // dd($request);
+    //     $messages = [
+    //         'name_edit.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+    //         'start_time_edit.required' => 'بداية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
+    //         'end_time_edit.required' => 'نهاية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
+    //     ];
+    //     $validatedData = Validator::make($request->all(), [
+    //         'name_edit' => 'required',
+    //         'start_time_edit' => 'required',
+    //         'end_time_edit' => 'required',
+    //     ], $messages);
+    //     // Handle validation failure
+    //     if ($validatedData->fails()) {
+    //         return redirect()->back()->withErrors($validatedData)->withInput();
+    //     }
+    //     try {
+    //         $WorkingTimeitem = WorkingTime::findOrFail($request->id_edit);
+    //         $WorkingTimeitem->name = $request->name_edit;
+    //         $WorkingTimeitem->start_time = $request->start_time_edit;
+    //         $WorkingTimeitem->end_time = $request->end_time_edit;
+    //         $WorkingTimeitem->save();
+    //         // Dynamically create model instance based on the model class string
+    //         return view('working_time.index')->with('success', 'Permission created successfully.');
+    //     } catch (\Exception $e) {
+    //         return response()->json($e->getMessage());
+    //     }
+    // }
 
     /**
      * Remove the specified resource from storage.
