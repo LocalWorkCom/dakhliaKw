@@ -34,6 +34,7 @@ class ViolationController  extends Controller
         $type = $request->type;
         $allViolationType = ViolationTypes::whereJsonContains('type_id', $type)->get();
         if ($allViolationType->isNotEmpty()) {
+            $type = ViolationTypes::where('type_id', '0')->get();
             $grade = grade::all();
             if ($grade->isNotEmpty()) {
                 $success['grade'] = $grade->map(function ($item) {
@@ -41,6 +42,13 @@ class ViolationController  extends Controller
                 });
             } else {
                 $success['grade'] = "لا يوجد بيانات";
+            }
+            if ($type->isNotEmpty()) {
+                $success['type'] = $type->map(function ($item) {
+                    return $item->only(['id', 'name']);
+                });
+            } else {
+                $success['type'] = "لا يوجد بيانات";
             }
             $success['ViolationType'] = $allViolationType->map(function ($item) {
                 return $item->only(['id', 'name']);

@@ -109,7 +109,7 @@
                         </div>
                     </li> --}}
                 </div>
-
+                
                 <div>
                     <li class="nav-item btn5" onclick="toggleDropdown5(event)">
                         <a href="#">
@@ -136,11 +136,11 @@
                                     <a href="{{ route('instant_mission.index') }}"> الاوامر الفورية</a>
                                 </li>
 
-                                <li>
+                                <!-- <li>
                                     <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo"
                                         style="margin-left: 7px;">
                                     <a href="{{ route('inspector.mission') }}">الجدول العام</a>
-                                </li>
+                                </li> -->
                                 <li>
                                     <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
                                         style="margin-left: 7px;">
@@ -154,7 +154,12 @@
                     </li>
                 </div>
 
-
+                <li class="nav-item">
+                    <a href="{{ route('inspector.mission') }}">
+                        <img src="{{ asset('frontend/images/table.svg') }}" alt="logo" style="height:35px; width:35px;">
+                        <h6>الجدول العام</h6>
+                    </a>
+                </li>
                 {{-- @php
                     use App\Models\departements;
                     $checksubDepartment = departements::find(Auth::user()->department_id);
