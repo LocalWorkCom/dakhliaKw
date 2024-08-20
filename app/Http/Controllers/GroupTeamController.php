@@ -169,7 +169,17 @@ class GroupTeamController extends Controller
         $team = GroupTeam::find($id);
         $group_id = $team->group_id;
         $workTrees  = WorkingTree::all();
-        $inspectors = Inspector::where('group_id', $team->group_id)->orwhereNull('group_id')->get();
+
+        $departmentId = auth()->user()->department_id; // Or however you determine the department ID
+
+        $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+            ->where('users.department_id', $departmentId)
+            ->where(function ($query) use ($team) {
+                $query->where('inspectors.group_id', $team->group_id)
+                    ->orWhereNull('inspectors.group_id');
+            })
+            ->select("inspectors.*")->get();
+        // $inspectors = Inspector::where('group_id', $team->group_id)->orwhereNull('group_id')->get();
         $inspectorGroups = collect();
         $selectedInspectors = [];
         foreach ($inspectors as $inspector) {
@@ -177,6 +187,7 @@ class GroupTeamController extends Controller
             $check = GroupTeam::where('group_id', $group_id)
                 ->whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])
                 ->exists();
+
             if (!$check) {
 
                 $inspector_ids = GroupTeam::where('group_id', $group_id)->where('id', $id)->first()->inspector_ids;
@@ -195,7 +206,7 @@ class GroupTeamController extends Controller
                     $inspector_ids = GroupTeam::where('group_id', $group_id)->where('id', $id)->first()->inspector_ids;
                     $selectedInspectors = explode(',', $inspector_ids);
                     $groupTeamIds = $groupTeams->pluck('id', 'name')->toArray();
-
+                   
                     $inspectorGroups->push([
                         'inspector_id' => $inspector,
                         'group_team_ids' => $groupTeamIds
@@ -742,7 +753,7 @@ class GroupTeamController extends Controller
 
                                     if ($date->toDateString() <= $EmployeeVacation->end_date) {
                                         $vacations[] = 'متجاوزة';
-                                    } else if ($EmployeeVacation->is_exceeded && $today <= $date->toDateString()) {
+                                    } else if ($EmployeeVacation->is_exceeded && $today >= $date->toDateString()) {
                                         $vacations[] = 'متجاوزة';
                                     } else {
                                         $vacations[] = null;
