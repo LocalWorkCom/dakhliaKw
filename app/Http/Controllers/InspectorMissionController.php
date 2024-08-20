@@ -78,7 +78,7 @@ class InspectorMissionController extends Controller
           //  dd($mission->ids_instant_mission);
             // Count the number of group points
             $groupPointCount = count($idsGroupPoint);
-          
+            $count+=$groupPointCount;
             // dd($groupPointCount);
            /**
             * Normal mission assigned to inspectors
@@ -91,8 +91,8 @@ class InspectorMissionController extends Controller
                 //dd($groupPoint);
                 if ($groupPoint) {
                     $idsPoints = is_array($groupPoint->points_ids) ? $groupPoint->points_ids : explode(',', $groupPoint->points_ids);
-                 $groupPointCount=count($idsPoints);
-                 $count+=$groupPointCount;
+              //   $groupPointCount=count($idsPoints);
+                
                     foreach($idsPoints as $pointId)
                     {
                         $point = Point::with('government')->find($pointId);
