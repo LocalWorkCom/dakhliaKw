@@ -26,7 +26,7 @@ class ViolationTypesController extends Controller
 
     public function getviolations()
     {
-        $data = ViolationTypes::all();
+        $data = ViolationTypes::where('type_id','!=','0')->get();
 
         foreach ($data as $item) {
             $item->type_names = departements::whereIn('id', $item->type_id)->pluck('name')->implode(', ');
