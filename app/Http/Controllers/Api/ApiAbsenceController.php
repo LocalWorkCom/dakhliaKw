@@ -8,6 +8,7 @@ use App\Models\Absence;
 use App\Models\Inspector;
 use App\Models\AbsenceType;
 use Illuminate\Http\Request;
+use App\Models\ViolationTypes;
 use App\Models\AbsenceEmployee;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -21,7 +22,7 @@ class ApiAbsenceController extends Controller
     {
         //
         $absenceType = AbsenceType::all();
-        $grade = grade::all();
+        $grade = ViolationTypes::where('type_id', '0')->get();
         if ($grade->isNotEmpty()) {
             $success['grade'] = $grade->map(function ($item) {
                 return $item->only(['id', 'name']);
