@@ -1479,3 +1479,7 @@ margin-inline: 5px;
 height: 150px;
 width: 250px;border: 1px solid black;
     }
+
+td.dragging {
+    background-color: #f0f0f0;
+}
