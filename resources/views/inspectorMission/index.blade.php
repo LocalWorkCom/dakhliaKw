@@ -6,14 +6,14 @@
 @section('content')
     <section>
 
-        <!-- *************** for drag and drop example *************** -->
-        <!-- <tr>
-                                <td id="cell1" draggable="true" style=" cursor: move;">drag</td>
-                                <td id="cell2" draggable="true" style=" cursor: move;">drop</td>
-                            </tr> -->
+ <!-- *************** for drag and drop example *************** -->
+    <!-- <tr>
+        <td id="cell1" draggable="true" style=" cursor: move;">drag</td>
+        <td id="cell2" draggable="true" style=" cursor: move;">drop</td>
+    </tr> -->
 
 
-        <!-- *************** end of drag and drop example *************** -->
+ <!-- *************** end of drag and drop example *************** -->
 
         <div class="row ">
             <div class="container welcome col-11">
@@ -23,27 +23,17 @@
 
                     <!-- Print Button and Legend -->
                     <div class="d-flex ">
-                        <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;"
-                            onclick="printDiv()">
+                        <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;" onclick="printDiv()">
                             <img src="{{ asset('frontend/images/print.svg') }}" alt=""> طباعة
                         </button>
 
-
-
                         <div class="colors  d-flex mx-5">
                             <div class="only rounded p-1 px-2 mx-1"> فريق به مفتش فقط</div>
-                            {{-- <div class="night rounded p-1 px-2 mx-1"> ليل</div> --}}
+                            <div class="night rounded p-1 px-2 mx-1"> ليل</div>
                             <div class="task rounded p-1 px-2 mx-1"> مهمة</div>
                             <div class="urgent rounded p-1 px-2 mx-1"> أمر فوري</div>
-                            @foreach ($working_times as $time)
-                                <div class="{{ $time->class_name }} rounded p-1 px-2 mx-1"
-                                    style="background-color: {{ $time->color }}; color: white;">
-                                    {{ $time->name }}
-                                </div>
-                            @endforeach
-
-                            {{-- <div class="morning  rounded p-1 px-2 mx-1 ">صبح</div> --}}
-                            {{-- <div class="afternoon rounded p-1 px-2 mx-1">عصر</div> --}}
+                            <div class="morning  rounded p-1 px-2 mx-1 ">صبح</div>
+                            <div class="afternoon rounded p-1 px-2 mx-1">عصر</div>
                             <div class="change rounded p-1 px-2 mx-1">منقول</div>
                             <div class="dayoff rounded p-1 px-2 mx-1">راحه</div>
                             <div class="rest rounded p-1 px-2 mx-1">اجازات</div>
@@ -100,33 +90,19 @@
                                         </tr>
 
                                         <!-- Inspectors and Their Missions -->
-                                        <!-- Inspectors and Their Missions -->
                                         @foreach ($team['inspectors'] as $index => $inspector)
                                             <tr>
                                                 <!-- Inspector Number -->
                                                 <td style="background-color: #a5d0ffbd">{{ $count }}</td>
 
-
-                                                    <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;" draggable="true">
-                                                            @if ($inspector->user && $inspector->user->grade)
-                                                                {{ $inspector->user->grade->name }} /
-                                                           
-                                                            @endif
-                                                            {{ $inspector->name }}
-
-
-                                                    </td>
-
-{{-- 
-                                                <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;"
-                                                    draggable="true">
-                                                    {{ $inspector->user->grade->name }}
+                                                <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;">
                                                     {{ $inspector->name }}
-                                                </td> --}}
+                                                </td>
 
                                                 <!-- Loop through each mission of the inspector -->
                                                 @foreach ($inspector['missions'] as $index2 => $mission)
                                                     @if ($mission)
+                                                        <!-- Determine Class Based on Mission Type -->
                                                         @php
                                                             $class = '';
                                                             if ($mission->day_off) {
@@ -137,29 +113,27 @@
                                                         @endphp
 
                                                         <!-- Mission Details -->
+                                                         
                                                         <td class="{{ $class }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
+
                                                             @if (!$mission->day_off && isset($inspector['vacations'][$index2]))
                                                                 <ul>
-                                                                    <li style="color: white; font-weight: bold;">
+
+                                                                    <li style="color: white;font-weight: bold">
                                                                         {{ $inspector['vacations'][$index2] }}
                                                                     </li>
                                                                 </ul>
                                                             @else
-                                                                <ul style="list-style: none;">
+                                                                <ul style="list-style:none;">
                                                                     <!-- Mission Points -->
+                                                                  
                                                                     @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
-                                                                        <ul>
-                                                                            @foreach ($inspector['points'][$index2] as $point)
-                                                                                <li class="draggable-item"
-                                                                                    style="color: white; font-weight: bold;"
-                                                                                    draggable="true">
-                                                                                    {{ $point->name }}
-                                                                                </li>
-
-                                                                            @endforeach
-
-                                                                        </ul>
+                                                                        @foreach ($inspector['points'][$index2] as $point)
+                                                                            <li style="color: white;font-weight: bold">
+                                                                                {{ $point->name }}
+                                                                            </li>
+                                                                        @endforeach
                                                                     @endif
 
                                                                     <!-- Instant Missions -->
@@ -173,8 +147,6 @@
                                                                             </li>
                                                                         @endforeach
                                                                     @endif
-
-                                                                    <!-- Personal Missions -->
                                                                     @if (
                                                                         !$mission->day_off &&
                                                                             isset($inspector['personal_missions'][$index2]) &&
@@ -185,6 +157,7 @@
                                                                             </li>
                                                                         @endforeach
                                                                     @endif
+                                                                    
                                                                 </ul>
                                                             @endif
                                                         </td>
@@ -192,6 +165,8 @@
                                                         <td style="background-color: #d6d6d6"></td>
                                                     @endif
                                                 @endforeach
+
+
                                             </tr>
                                             <?php $count++; ?>
                                         @endforeach
@@ -233,86 +208,42 @@
         }, 10);
     }
 </script>
+
+<!-- script for drag and drop in cells  -->
 <script>
     let draggedElement = null;
 
-    // Handle drag start
-    document.addEventListener('dragstart', (event) => {
-        if (event.target.classList.contains('draggable-item') || event.target.classList.contains('draggable-inspector')) {
-            draggedElement = event.target;
-            draggedElement.classList.add('dragging');
-            console.log('Dragging:', draggedElement); // Debugging log
-        }
-    });
-
-    // Handle drag over
-    document.addEventListener('dragover', (event) => {
-        event.preventDefault(); // This allows dropping
-    });
-
-    // Handle drop
-    document.addEventListener('drop', (event) => {
-        event.preventDefault();
-        const target = event.target;
-
-        if (draggedElement) {
-            if (target.tagName === 'TD') {
-                // Swap content if target is a <td>
-                const temp = target.innerHTML;
-                target.innerHTML = draggedElement.innerHTML;
-                draggedElement.innerHTML = temp;
-            } else if (target.tagName === 'UL' || target.tagName === 'LI') {
-                // Handle dropping into a <ul> or <li>
-                target.appendChild(draggedElement);
-            }
-            // Remove dragging class
-            draggedElement.classList.remove('dragging');
-            draggedElement = null;
-        }
-    });
-
-    // Handle drag end
-    document.addEventListener('dragend', (event) => {
-        if (event.target.classList.contains('draggable-item') || event.target.classList.contains('draggable-inspector')) {
-            event.target.classList.remove('dragging');
-            console.log('Drag end:', event.target); // Debugging log
-        }
-    });
-</script>
-
-
-
-
-
-<!-- script for drag and drop in cells  -->
-{{-- <script>
-    let draggedElement = null;
     document.addEventListener('dragstart', (event) => {
         if (event.target.tagName === 'TD') {
             draggedElement = event.target;
             event.target.classList.add('dragging');
         }
     });
+
     document.addEventListener('dragover', (event) => {
-        event.preventDefault();
+        event.preventDefault(); 
     });
+
     document.addEventListener('drop', (event) => {
         if (event.target.tagName === 'TD') {
             event.preventDefault();
             const targetCell = event.target;
             const sourceCell = draggedElement;
+
             // Swap content
             const temp = targetCell.innerHTML;
             targetCell.innerHTML = sourceCell.innerHTML;
             sourceCell.innerHTML = temp;
+
             // Remove dragging class
             sourceCell.classList.remove('dragging');
             draggedElement = null;
         }
     });
+
     document.addEventListener('dragend', (event) => {
         if (event.target.tagName === 'TD') {
             event.target.classList.remove('dragging');
         }
     });
-</script> --}}
+</script>
