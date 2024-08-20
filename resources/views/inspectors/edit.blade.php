@@ -1,5 +1,7 @@
 @extends('layout.main')
-
+@section('title')
+اضافة مفتش
+@endsection
 @section('content')
 
 
@@ -108,66 +110,67 @@
                 </table>
             </div>
         </div>
-
         <div class="container moftsh col-11 mt-5 p-0 pb-2 mb-3">
             <h3 class="pt-3  px-md-5 px-3 "> اختر المفتش </h3>
             <div class="form-row mx-md-5 mx-2 mb-2 d-block justify-content-start" dir="rtl">
-                {{-- <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" @if ($inspector->type == 'in') checked @endif
-                            value="in" required>
-                        <label for="intern">مفتش</label>
-                    </div>
-                </div>
-
+                @if(Auth::user()->rule->name == 'localworkadmin' || Auth::user()->rule->name == 'superadmin')
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" @if ($inspector->type == 'trainee') checked @endif
-                            value="trainee" required>
-                        <label for="intern">مفتش متدرب</label>
-                    </div>
-                </div>
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" @if ($inspector->type == 'Buildings') checked @endif
-                            value="Buildings" required>
-                        <label for="intern">مفتش مباني </label>
-                    </div>
-                </div> --}}
-                @if (Auth::user()->department_id == 1)
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="in" @if ($inspector->type == 'in') checked @endif required>
+                        <input type="radio" id="intern" name="type" @if($inspector->type == 'in') checked @endif value="in" required>
                         <label for="intern">مفتش سلوك أنضباطى</label>
                     </div>
                 </div>
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="trainee" @if ($inspector->type == 'trainee') checked @endif required>
+                        <input type="radio" id="intern" name="type" @if($inspector->type == 'trainee') checked @endif  value="trainee" required>
                         <label for="intern">مفتش متدرب</label>
                     </div>
                 </div>
-            @else
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="Buildings" @if ($inspector->type == 'Buildings') checked @endif required>
+                        <input type="radio" id="intern" name="type" @if($inspector->type == 'Buildings') checked @endif  value="Buildings" required>
                         <label for="intern">مفتش مباني </label>
                     </div>
                 </div>
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="trainee" @if ($inspector->type == 'trainee') checked @endif required>
-                        <label for="intern">مفتش متدرب</label>
+                @elseif (strpos(Auth::user()->department->name, 'السلوك') !== false)
+
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="intern" name="type" @if($inspector->type == 'in') checked @endif  value="in" required>
+                            <label for="intern">مفتش سلوك أنضباطى</label>
+                        </div>
                     </div>
-                </div>
-            @endif
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="intern" name="type" @if($inspector->type == 'trainee') checked @endif  value="trainee" required>
+                            <label for="intern">مفتش متدرب</label>
+                        </div>
+                    </div>
+                @elseif (strpos(Auth::user()->department->name, 'مبانى') !== false)
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="intern" name="type" @if($inspector->type == 'Buildings') checked @endif  value="Buildings" required>
+                            <label for="intern">مفتش مباني </label>
+                        </div>
+                    </div>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="intern" name="type" @if($inspector->type == 'trainee') checked @endif  value="trainee" required>
+                            <label for="intern">مفتش متدرب</label>
+                        </div>
+                    </div>
+                @endif
+
+
+
+
 
                 <div class="container col-11 ">
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
 
                         <button type="submit" class="btn-blue">
                             <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img" height="20px"
-                                width="20px"> تعديل
+                                width="20px"> اضافة
                         </button>
                     </div>
                 </div>

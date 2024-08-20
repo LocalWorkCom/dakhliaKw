@@ -108,19 +108,19 @@
                 @if(Auth::user()->rule->name == 'localworkadmin' || Auth::user()->rule->name == 'superadmin')
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="in" required>
+                        <input type="radio" id="intern" name="type"  value="in" required>
                         <label for="intern">مفتش سلوك أنضباطى</label>
                     </div>
                 </div>
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="trainee" required>
+                        <input type="radio" id="intern" name="type"  value="trainee" required>
                         <label for="intern">مفتش متدرب</label>
                     </div>
                 </div>
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" checked value="Buildings" required>
+                        <input type="radio" id="intern" name="type"  value="Buildings" required>
                         <label for="intern">مفتش مباني </label>
                     </div>
                 </div>
@@ -128,26 +128,26 @@
 
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type" checked value="in" required>
+                            <input type="radio" id="intern" name="type"  value="in" required>
                             <label for="intern">مفتش سلوك أنضباطى</label>
                         </div>
                     </div>
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type" checked value="trainee" required>
+                            <input type="radio" id="intern" name="type"  value="trainee" required>
                             <label for="intern">مفتش متدرب</label>
                         </div>
                     </div>
                 @elseif (strpos(Auth::user()->department->name, 'مبانى') !== false)
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type" checked value="Buildings" required>
+                            <input type="radio" id="intern" name="type"  value="Buildings" required>
                             <label for="intern">مفتش مباني </label>
                         </div>
                     </div>
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type" checked value="trainee" required>
+                            <input type="radio" id="intern" name="type"  value="trainee" required>
                             <label for="intern">مفتش متدرب</label>
                         </div>
                     </div>
