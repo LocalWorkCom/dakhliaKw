@@ -61,8 +61,10 @@
                         @foreach ($Groups as $Group)
                             <thead>
                                 <tr id="group-tr{{ $Group->id }}">
-                                    <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;">العدد</th>
-                                    <th scope="col" rowspan="2" style="background-color: #97b8dd;">{{ $Group->name }}
+                                  
+                                    <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;" >العدد</th>
+                                    
+                                    <th scope="col" rowspan="2" style="background-color: #97b8dd;" >{{ $Group->name }}
                                     </th>
                                     @foreach ($Group['days_name'] as $day)
                                         <th scope="col" class="{{ $day }}" style="background-color: #e4f1ffbd;">
@@ -71,6 +73,7 @@
                                 </tr>
                                 <tr>
                                     @foreach ($Group['days_num'] as $num)
+                                   
                                         <th scope="col" class="{{ $num }}" style="background-color: #e4f1ffbd;">
                                             {{ $num }}</th>
                                     @endforeach
@@ -79,20 +82,22 @@
                             <tbody>
                                 @if ($Group['teams'])
                                     @foreach ($Group['teams'] as $team)
-                                        <tr class="group-table" id="group-{{ $Group->id }}-team-tr{{ $team->id }}">
-                                            <td colspan="2"
+                                        <tr class="group-table" id="group-{{ $Group->id }}-team-tr{{ $team->id }}" >
+                                          
+                                            <td colspan="3"
                                                 style="text-align: center; color:black; background-color: {{ count($team['inspectors']) == 1 ? '#4edfd0ba' : '#11509bb3' }};">
                                                 {{ $team->name }}
                                             </td>
                                             @foreach ($Group['days_num'] as $index => $num)
                                                 <td class="group-table-num{{ $num }}"
-                                                    style="background-color:{{ $team['colors'][$index] }}"></td>
+                                                    style="background-color:{{ $team['colors'][$index] }}" ></td>
                                             @endforeach
                                         </tr>
                                         @foreach ($team['inspectors'] as $index => $inspector)
                                             <tr id="group-{{ $Group->id }}-team-inspector-tr{{ $inspector->id }}">
+                                               
                                                 <td style="background-color: #a5d0ffbd">{{ $count }}</td>
-                                                <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;">
+                                                <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;"colspan="2">
                                                     @if ($inspector->user && $inspector->user->grade)
                                                         {{ $inspector->user->grade->name }} /
                                                     @endif

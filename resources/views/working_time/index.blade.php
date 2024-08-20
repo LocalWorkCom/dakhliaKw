@@ -96,11 +96,13 @@
                                         name: 'color',
                                         render: function(data, type, row) {
                                             if (type === 'display') {
+
                                                 if (data === null || data === '') {
                                                     return 'لا يوجد لون';
                                                 } else {
                                                     return `<div style="width: 20px; height: 20px; background-color: ${data}; border: 1px solid #000;"></div>`;
                                                 }
+
                                             }
                                             return data;
                                         }
