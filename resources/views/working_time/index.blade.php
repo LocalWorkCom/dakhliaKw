@@ -95,7 +95,7 @@
                                         name: 'color',
                                         render: function(data, type, row) {
                                             if (type === 'display') {
-                                                return `<div style="width: 20px; height: 20px; background-color: ${data}; border: 1px solid #000;"></div>`;
+                                                return `<div style="width: 25px; height: 25px; border-radius:50%; background-color: ${data}; border: 1px solid #000;" class="d-flex justify-content-center align-items-center"></div>`;
                                             }
                                             return data;
                                         }
