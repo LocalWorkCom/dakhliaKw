@@ -48,11 +48,12 @@
                                 class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
-                                        <th>الاسم</th>
+                                        <th>اسم النقطة</th>
+                                        <th> أسم المجموعه  بالنقطه</th>
                                         <th>القطاع </th>
                                         <th>المحافظه</th>
                                         <th>المنطقه</th>
-                                        <th>المجموعه الخاصه بالنقطه</th>
+                                     
                                         <th>دوام النقطه</th>
                                         <th style="width:150px;">العمليات</th>
                                     </tr>
@@ -82,6 +83,10 @@
                         name: 'name'
                     },
                     {
+                        data: 'group_name',
+                        name: 'group_name'
+                    },
+                    {
                         data: 'sector_name',
                         name: 'sector_name'
                     },
@@ -93,10 +98,7 @@
                         data: 'region_name',
                         name: 'region_name'
                     },
-                    {
-                        data: 'group_name',
-                        name: 'group_name'
-                    },
+                   
                     {
                         data: 'work_type',
                         name: 'work_type'
