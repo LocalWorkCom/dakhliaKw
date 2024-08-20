@@ -157,8 +157,9 @@ class InspectorController extends Controller
         $department = departements::find($departmentId);
         $departmentId = auth()->user()->department_id;
         $inspectorUserIds = Inspector::pluck('user_id')->toArray();
-        $allmangers = departements::pluck('manger')->toArray();
+        $allmangers = departements::whereNotNull('manger')->pluck('manger')->toArray();
         $userDepartmentId = Auth::user()->department_id;
+        dd($allmangers);
         if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
             $users = User::where('id', '!=', auth()->user()->id)
             ->whereNotIn('id', $inspectorUserIds)
