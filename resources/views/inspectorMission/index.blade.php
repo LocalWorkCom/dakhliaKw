@@ -63,15 +63,15 @@
                                 <tr id="group-tr{{ $Group->id }}">
                                   
                                     <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;" >العدد</th>
-                                    
-                                    <th scope="col" rowspan="2" style="background-color: #97b8dd;" >{{ $Group->name }}
+                                    <th style=" background-color: #97b8dd; border:none;"></th>
+                                    <th scope="col" rowspan="2" style="background-color: #97b8dd; border:none;" >{{ $Group->name }}
                                     </th>
                                     @foreach ($Group['days_name'] as $day)
                                         <th scope="col" class="{{ $day }}" style="background-color: #e4f1ffbd;">
                                             {{ $day }}</th>
                                     @endforeach
                                 </tr>
-                                <tr>
+                                <tr> <th style=" background-color: #97b8dd; border:none;"></th>
                                     @foreach ($Group['days_num'] as $num)
                                    
                                         <th scope="col" class="{{ $num }}" style="background-color: #e4f1ffbd;">

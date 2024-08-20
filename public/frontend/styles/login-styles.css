@@ -114,7 +114,7 @@ button {
   line-height: 26.78px;
   text-align: right;
   padding-right: 6px;
-  margin-left: 364px;
+  /* margin-left: 364px; */
   /* padding-top: 20px; */
 }
 .login-label-2{
