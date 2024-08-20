@@ -169,16 +169,24 @@ class GroupTeamController extends Controller
         $team = GroupTeam::find($id);
         $group_id = $team->group_id;
         $workTrees  = WorkingTree::all();
-
         $departmentId = auth()->user()->department_id; // Or however you determine the department ID
+        if (auth()->user()->rule_id == 2) {
+            $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+                ->where(function ($query) use ($team) {
+                    $query->where('inspectors.group_id', $team->group_id)
+                        ->orWhereNull('inspectors.group_id');
+                })
+                ->select("inspectors.*")->get();
+        } else {
+            $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+                ->where('users.department_id', $departmentId)
+                ->where(function ($query) use ($team) {
+                    $query->where('inspectors.group_id', $team->group_id)
+                        ->orWhereNull('inspectors.group_id');
+                })
+                ->select("inspectors.*")->get();
+        }
 
-        $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
-            ->where('users.department_id', $departmentId)
-            ->where(function ($query) use ($team) {
-                $query->where('inspectors.group_id', $team->group_id)
-                    ->orWhereNull('inspectors.group_id');
-            })
-            ->select("inspectors.*")->get();
         // $inspectors = Inspector::where('group_id', $team->group_id)->orwhereNull('group_id')->get();
         $inspectorGroups = collect();
         $selectedInspectors = [];
@@ -206,7 +214,7 @@ class GroupTeamController extends Controller
                     $inspector_ids = GroupTeam::where('group_id', $group_id)->where('id', $id)->first()->inspector_ids;
                     $selectedInspectors = explode(',', $inspector_ids);
                     $groupTeamIds = $groupTeams->pluck('id', 'name')->toArray();
-                   
+
                     $inspectorGroups->push([
                         'inspector_id' => $inspector,
                         'group_team_ids' => $groupTeamIds
@@ -579,9 +587,22 @@ class GroupTeamController extends Controller
     {
         // Initialize an array to store the IDs of selected inspectors.
         $selectedInspectors = [];
+        $departmentId = auth()->user()->department_id; // Or however you determine the department ID
+        if (auth()->user()->rule_id == 2) {
+            $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+                ->where('group_id', $group_id)
+                ->select("inspectors.*")->get();
+                
+        } else {
+            $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+                ->where('users.department_id', $departmentId)
+                ->where('group_id', $group_id)
+                ->select("inspectors.*")->get();
+        }
 
         // Fetch all inspectors belonging to the specified group along with their associated user data.
-        $inspectors = Inspector::with('user')->where('group_id', $group_id)->get();
+        // $inspectors = Inspector::with('user')->where('group_id', $group_id)->get();
+
 
         // Initialize a collection to hold the inspector groups and their associated group team IDs.
         $inspectorGroups = collect();
@@ -799,8 +820,8 @@ class GroupTeamController extends Controller
                             if ($inspector_mission->personal_mission_ids) {
                                 // $missions = $inspector_mission->personal_mission_ids;
                                 $missions = is_array($inspector_mission->personal_mission_ids)
-                                ? $inspector_mission->personal_mission_ids
-                                : explode(',', $inspector_mission->personal_mission_ids);
+                                    ? $inspector_mission->personal_mission_ids
+                                    : explode(',', $inspector_mission->personal_mission_ids);
                                 $personalMissions = PersonalMission::whereIn('id', $missions)->get();
                             } else {
                                 $personalMissions = null;
@@ -860,6 +881,6 @@ class GroupTeamController extends Controller
         });
         // dd($Groups);
         // Return the view with the Groups data
-        return view('inspectorMission.index', compact('Groups', 'working_times' ,'inspectors'));
+        return view('inspectorMission.index', compact('Groups', 'working_times', 'inspectors'));
     }
 }
