@@ -188,22 +188,7 @@ class VacationController extends Controller
      */
     public function create($id = 0)
     {
-        // this employees that in teams
-        // $employees = getEmployees()->filter(function ($employee) {
-        //     // Get the inspector_id and group_id from the inspectors table based on the employee's user_id
-        //     $inspector = \App\Models\Inspector::where('user_id', $employee->id)->first();
-        //     $groupId = $inspector ? $inspector->group_id : null;
-        //     $inspectorId = $inspector ? $inspector->id : null;
-
-        //     // Check if the groupId exists in groupTeams and if the inspector_id is part of that group
-        //     return $groupId && $inspectorId &&
-        //            \App\Models\GroupTeam::where('group_id', $groupId)
-        //                                 ->whereRaw('FIND_IN_SET(?, inspector_ids)', [$inspectorId])
-        //                                 ->exists();
-        // });
-        // all employees
-
-        // dd($employees);        
+            
         $employees = getEmployees();
         $vacation_types = getVactionTypes();
         if ($id) {

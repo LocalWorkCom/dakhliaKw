@@ -77,7 +77,8 @@ class WorkingTimeController extends Controller
              // Generate a random color that is not in the database
             do {
                 $color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-            } while (WorkingTime::where('color', $color)->exists());
+                $existColors = ['#000000ab', '#ffffff', '#d6d6d6', '#fdfdfdc2', '#c9f5f9', '#4edfd0ba'];
+            } while (WorkingTime::where('color', $color)->whereNotIn('color', $existColors)->exists());
 
             $WorkingTime->color = $color;
             $WorkingTime->save();

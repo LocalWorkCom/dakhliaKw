@@ -256,7 +256,9 @@ function CheckUploadIoFiles($id)
 }
 function getEmployees()
 {
-    return User::all();
+    $departmentId = auth()->user()->department_id; // Or however you determine the department ID
+    return User::where('users.department_id', $departmentId)
+    ->where('users.id', '<>' ,auth()->user()->id)->get();
 }
 function getDepartments()
 {
