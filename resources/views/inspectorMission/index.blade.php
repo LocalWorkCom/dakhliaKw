@@ -5,6 +5,16 @@
 
 @section('content')
     <section>
+
+ <!-- *************** for drag and drop example *************** -->
+    <!-- <tr>
+        <td id="cell1" draggable="true" style=" cursor: move;">drag</td>
+        <td id="cell2" draggable="true" style=" cursor: move;">drop</td>
+    </tr> -->
+
+
+ <!-- *************** end of drag and drop example *************** -->
+
         <div class="row ">
             <div class="container welcome col-11">
                 <div class="d-flex justify-content-between">
@@ -103,6 +113,7 @@
                                                         @endphp
 
                                                         <!-- Mission Details -->
+                                                         
                                                         <td class="{{ $class }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
 
@@ -196,4 +207,43 @@
             newWin.close();
         }, 10);
     }
+</script>
+
+<!-- script for drag and drop in cells  -->
+<script>
+    let draggedElement = null;
+
+    document.addEventListener('dragstart', (event) => {
+        if (event.target.tagName === 'TD') {
+            draggedElement = event.target;
+            event.target.classList.add('dragging');
+        }
+    });
+
+    document.addEventListener('dragover', (event) => {
+        event.preventDefault(); 
+    });
+
+    document.addEventListener('drop', (event) => {
+        if (event.target.tagName === 'TD') {
+            event.preventDefault();
+            const targetCell = event.target;
+            const sourceCell = draggedElement;
+
+            // Swap content
+            const temp = targetCell.innerHTML;
+            targetCell.innerHTML = sourceCell.innerHTML;
+            sourceCell.innerHTML = temp;
+
+            // Remove dragging class
+            sourceCell.classList.remove('dragging');
+            draggedElement = null;
+        }
+    });
+
+    document.addEventListener('dragend', (event) => {
+        if (event.target.tagName === 'TD') {
+            event.target.classList.remove('dragging');
+        }
+    });
 </script>
