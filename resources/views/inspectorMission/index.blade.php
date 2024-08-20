@@ -67,7 +67,7 @@
                                 <tr>
                                     <!-- Table Headers for Group -->
                                     <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;">العدد</th>
-                                    <th scope="col" rowspan="2" style="background-color: #97b8dd;">
+                                    <th scope="col" rowspan="2" style="background-color: #97b8dd; width:400px;">
                                         {{ $Group->name }}</th>
                                     @foreach ($Group['days_name'] as $day)
                                         <th scope="col" class="{{ $day }}" style="background-color: #e4f1ffbd;">
