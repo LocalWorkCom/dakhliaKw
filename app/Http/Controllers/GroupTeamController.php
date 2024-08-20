@@ -765,7 +765,10 @@ class GroupTeamController extends Controller
 
                             // Retrieve the instant missions associated with the mission
                             if ($inspector_mission->ids_instant_mission) {
-                                $missions = $inspector_mission->ids_instant_mission;
+                                // $missions = $inspector_mission->ids_instant_mission;
+                                $missions = is_array($inspector_mission->ids_instant_mission)
+                                    ? $inspector_mission->ids_instant_mission
+                                    : explode(',', $inspector_mission->ids_instant_mission);
                                 $InstantMissions = instantmission::whereIn('id', $missions)->get();
                             } else {
                                 $InstantMissions = null;
@@ -774,7 +777,10 @@ class GroupTeamController extends Controller
                             $instantArray[] = $InstantMissions;
                             // Retrieve the instant missions associated with the mission
                             if ($inspector_mission->personal_mission_ids) {
-                                $missions = $inspector_mission->personal_mission_ids;
+                                // $missions = $inspector_mission->personal_mission_ids;
+                                $missions = is_array($inspector_mission->personal_mission_ids)
+                                ? $inspector_mission->personal_mission_ids
+                                : explode(',', $inspector_mission->personal_mission_ids);
                                 $personalMissions = PersonalMission::whereIn('id', $missions)->get();
                             } else {
                                 $personalMissions = null;
@@ -834,6 +840,6 @@ class GroupTeamController extends Controller
         });
         // dd($Groups);
         // Return the view with the Groups data
-        return view('inspectorMission.index', compact('Groups','working_times'));
+        return view('inspectorMission.index', compact('Groups', 'working_times'));
     }
 }
