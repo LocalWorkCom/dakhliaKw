@@ -159,7 +159,7 @@ class InspectorController extends Controller
         $inspectorUserIds = Inspector::pluck('user_id')->toArray();
         $allmangers = departements::whereNotNull('manger')->pluck('manger')->toArray();
         $userDepartmentId = Auth::user()->department_id;
-        dd($allmangers);
+       // dd($allmangers);
         if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
             $users = User::where('id', '!=', auth()->user()->id)
             ->whereNotIn('id', $inspectorUserIds)
