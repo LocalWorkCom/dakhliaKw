@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="{{ asset('frontend/styles/login-responsive.css') }}" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('frontend/images/favicon/apple-touch-icon.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('frontend/images/favicon/favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('frontend/images/favicon/favicon-16x16.png')}}">
+    <link rel="manifest" href="{{ asset('frontend/images/favicon/site.webmanifest')}}">
 </head>
 <body>
     <div class="container pt-5 pb-5">
@@ -51,7 +55,7 @@
                             <i id="toggleIcon" class="fa fa-eye"></i>
                         </label>
                     </div>
-                    <a href="{{ route('forget_password') }}" class="forget-pass-a" style="text-decoration:underline !important;">نسيت كلمة المرور؟</a>
+                    <a href="{{ route('forget_password') }}" class="forget-pass-a" style="text-decoration:underline !important;">هل نسيت كلمة المرور؟</a>
                     <div class="btns">
                         <button class="btn1" type="submit">تسجيل دخول</button>
                     </div>

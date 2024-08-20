@@ -157,8 +157,9 @@ class InspectorController extends Controller
         $department = departements::find($departmentId);
         $departmentId = auth()->user()->department_id;
         $inspectorUserIds = Inspector::pluck('user_id')->toArray();
-        $allmangers = departements::pluck('manger')->toArray();
+        $allmangers = departements::whereNotNull('manger')->pluck('manger')->toArray();
         $userDepartmentId = Auth::user()->department_id;
+       // dd($allmangers);
         if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
             $users = User::where('id', '!=', auth()->user()->id)
             ->whereNotIn('id', $inspectorUserIds)
@@ -208,8 +209,12 @@ class InspectorController extends Controller
         $user = User::findOrFail($request->user_id);
         //dd($user->flag);
         if($user->flag === "employee"){
-            $user->flag = "user";
+          //  $user->flag = "user";
             $user->password =  Hash::make('123456');
+            $user->save();
+        }else{
+            $user->flag = "employee";
+          //  $user->password =  Hash::make('123456');
             $user->save();
         }
         $inspector = new Inspector();
@@ -222,8 +227,7 @@ class InspectorController extends Controller
 
         $inspector->user_id = $request->user_id;
         $inspector->Id_number = $user->Civil_number;
-
-
+        $inspector->department_id = $user->department_id;
         $inspector->save();
 
         //   dd($departements);

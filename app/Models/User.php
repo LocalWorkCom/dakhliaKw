@@ -108,7 +108,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(grade::class, 'grade_id'); // Assuming 'grade_id' is the foreign key
     }
-
+    
     // public function inspectors()
     // {
     //     return $this->belongsTo(grade::class, 'id'); // Assuming 'grade_id' is the foreign key
