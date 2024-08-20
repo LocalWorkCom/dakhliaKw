@@ -68,7 +68,14 @@ class GroupsController extends Controller
 
     public function groupCreateInspectors($id)
     {
-        $inspectors = Inspector::whereNull('group_id')->get();
+        // $inspectors = Inspector::whereNull('group_id')->get();
+        $departmentId = auth()->user()->department_id; // Or however you determine the department ID
+
+        $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+            ->where('users.department_id', $departmentId)
+            ->whereNull('inspectors.group_id')
+            ->select("inspectors.*")->get();
+
         $inspectorsIngroup = Inspector::where('group_id', $id)->get();
         return view('group.inspector', compact('inspectors', 'inspectorsIngroup', 'id'));
     }
@@ -82,6 +89,26 @@ class GroupsController extends Controller
                     $inspector = Inspector::findOrFail($row_id);
                     $inspector->group_id = null;
                     $inspector->save();
+                    $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->first();
+                    // if($GroupTeam){
+                    //  $inspector_ids=   explode(',', $GroupTeam->inspector_ids);
+                    // }
+                    if ($GroupTeam) {
+                        // Get the current list of inspector IDs
+                        $inspector_ids = explode(',', $GroupTeam->inspector_ids);
+
+                        // Remove the specific inspector ID
+                        $inspector_ids = array_filter($inspector_ids, function ($id) use ($inspector) {
+                            return $id != $inspector->id;
+                        });
+
+                        // Rebuild the comma-separated string of inspector IDs
+                        $new_inspector_ids = implode(',', $inspector_ids);
+
+                        // Update the record with the new list of inspector IDs
+                        $GroupTeam->inspector_ids = $new_inspector_ids;
+                        $GroupTeam->save();
+                    }
                 }
             }
         }
@@ -101,6 +128,26 @@ class GroupsController extends Controller
                 foreach ($inspectorsCheck as $inspector) {
                     $inspector->group_id = null;
                     $inspector->save();
+                    $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->first();
+                    // if($GroupTeam){
+                    //  $inspector_ids=   explode(',', $GroupTeam->inspector_ids);
+                    // }
+                    if ($GroupTeam) {
+                        // Get the current list of inspector IDs
+                        $inspector_ids = explode(',', $GroupTeam->inspector_ids);
+
+                        // Remove the specific inspector ID
+                        $inspector_ids = array_filter($inspector_ids, function ($id) use ($inspector) {
+                            return $id != $inspector->id;
+                        });
+
+                        // Rebuild the comma-separated string of inspector IDs
+                        $new_inspector_ids = implode(',', $inspector_ids);
+
+                        // Update the record with the new list of inspector IDs
+                        $GroupTeam->inspector_ids = $new_inspector_ids;
+                        $GroupTeam->save();
+                    }
                 }
             }
         }
@@ -145,7 +192,7 @@ class GroupsController extends Controller
             $group = new Groups();
             $group->name = $request->name;
             $group->points_inspector = $request->points_inspector;
-            $group->sector_id= $request->sector_id;
+            $group->sector_id = $request->sector_id;
             $group->save();
             session()->flash('success', 'تم اضافه مجموعة بنجاح.');
 

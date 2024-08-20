@@ -138,14 +138,16 @@
                                                                 <ul style="list-style:none;">
                                                                     <!-- Mission Points -->
 
-                                                                    @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
-                                                                        @foreach ($inspector['points'][$index2] as $point)
-                                                                            <li style="color: white;font-weight: bold"
-                                                                                draggable="true">
-                                                                                {{ $point->name }}
-                                                                            </li>
-                                                                        @endforeach
-                                                                    @endif
+                                                                    <ul>
+                                                                        @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
+                                                                            @foreach ($inspector['points'][$index2] as $point)
+                                                                                <li class="draggable-item" draggable="true" style="color: white; font-weight: bold;">
+                                                                                    {{ $point->name }}
+                                                                                </li>
+                                                                            @endforeach
+                                                                        @endif
+                                                                    </ul>
+                                                                    
 
                                                                     <!-- Instant Missions -->
                                                                     @if (
@@ -222,39 +224,47 @@
 
 <!-- script for drag and drop in cells  -->
 <script>
-    let draggedElement = null;
+    let draggedItem = null;
 
     document.addEventListener('dragstart', (event) => {
-        if (event.target.tagName === 'TD') {
-            draggedElement = event.target;
+        if (event.target.classList.contains('draggable-item')) {
+            draggedItem = event.target;
             event.target.classList.add('dragging');
         }
     });
 
     document.addEventListener('dragover', (event) => {
-        event.preventDefault();
+        if (event.target.classList.contains('draggable-item')) {
+            event.preventDefault();
+        }
     });
 
     document.addEventListener('drop', (event) => {
-        if (event.target.tagName === 'TD') {
+        if (event.target.classList.contains('draggable-item')) {
             event.preventDefault();
-            const targetCell = event.target;
-            const sourceCell = draggedElement;
+            const targetItem = event.target;
 
-            // Swap content
-            const temp = targetCell.innerHTML;
-            targetCell.innerHTML = sourceCell.innerHTML;
-            sourceCell.innerHTML = temp;
+            // Swap the positions of dragged and target items
+            const parent = targetItem.parentNode;
+            const draggingIndex = [...parent.children].indexOf(draggedItem);
+            const targetIndex = [...parent.children].indexOf(targetItem);
+
+            if (draggingIndex < targetIndex) {
+                parent.insertBefore(draggedItem, targetItem.nextSibling);
+            } else {
+                parent.insertBefore(draggedItem, targetItem);
+            }
 
             // Remove dragging class
-            sourceCell.classList.remove('dragging');
-            draggedElement = null;
+            draggedItem.classList.remove('dragging');
+            draggedItem = null;
         }
     });
 
     document.addEventListener('dragend', (event) => {
-        if (event.target.tagName === 'TD') {
+        if (event.target.classList.contains('draggable-item')) {
             event.target.classList.remove('dragging');
         }
     });
 </script>
+
