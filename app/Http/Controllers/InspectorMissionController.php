@@ -38,7 +38,7 @@ class InspectorMissionController extends Controller
            //  ->get();
         //   $instantmissions =$missions->ids_instant_mission;
              $instantmissioncount = 0;//$instantmissions->count();
-        $missionCount = $missions->count();
+        $missionCount = 0;//$missions->count();
         
         // // Group the missions by some criteria (e.g., date or group type)
         // $groupedMissions = $missions->groupBy('group_id'); // or another appropriate attribute
@@ -63,16 +63,22 @@ class InspectorMissionController extends Controller
             // }
 
         // return response()->json(['mission_groups' => $missionGroups]);
-$count=0;
+        $count=0;
         $missionData = [];
 
         foreach ($missions as $mission) {
             $idsGroupPoint = is_array($mission->ids_group_point) ? $mission->ids_group_point : explode(',', $mission->ids_group_point);
-            $instantMissions= is_array($mission->ids_instant_mission) ? $mission->ids_instant_mission : explode(',', $mission->ids_instant_mission);
-          //  dd($idsGroupPoint);
+            if (!is_null($mission->ids_instant_mission)) {
+                // The variable is null
+                $instantMissions= is_array($mission->ids_instant_mission) ? $mission->ids_instant_mission : explode(',', $mission->ids_instant_mission);
+            }else {
+                $instantMissions=$mission->ids_instant_mission;
+            }
+        
+          //  dd($mission->ids_instant_mission);
             // Count the number of group points
             $groupPointCount = count($idsGroupPoint);
-            $instantmissioncount=count($instantMissions);
+          
             // dd($groupPointCount);
            /**
             * Normal mission assigned to inspectors
@@ -85,8 +91,8 @@ $count=0;
                 //dd($groupPoint);
                 if ($groupPoint) {
                     $idsPoints = is_array($groupPoint->points_ids) ? $groupPoint->points_ids : explode(',', $groupPoint->points_ids);
-                 $missionCount=count($idsPoints);
-                 $count+=$missionCount;
+                 $groupPointCount=count($idsPoints);
+                 $count+=$groupPointCount;
                     foreach($idsPoints as $pointId)
                     {
                         $point = Point::with('government')->find($pointId);
@@ -104,14 +110,14 @@ $count=0;
                     } 
 
             
-                $groupPointsData[] = [
-                    'point_id' => $point->id,
-                    'point_name' => $point->name,
-                    'point_governate' => $point->government->name, // Assuming government name is the location
-                    'point_time' => $inspectionTime, // Assuming 'time' is the attribute for time
-                    'point_location' => $point->google_map, // Assuming 'time' is the attribute for time
+                        $groupPointsData[] = [
+                            'point_id' => $point->id,
+                            'point_name' => $point->name,
+                            'point_governate' => $point->government->name, // Assuming government name is the location
+                            'point_time' => $inspectionTime, // Assuming 'time' is the attribute for time
+                            'point_location' => $point->google_map, // Assuming 'time' is the attribute for time
 
-                ];
+                        ];
                     }
                     // Fetch and format the working time
                // $workingTime = $mission->workingTime;
@@ -130,13 +136,20 @@ $count=0;
             /**
              * Instant Mission Data
              */
-          
+            //dd($instantMissions);
+        //    $instantmissioncount=count($instantMissions);
+          //  dd($instantmissioncount);
+           
+            $instantMissionData = [];
+            if (!is_null($mission->ids_instant_mission)) {
              foreach ($instantMissions as $instant) {
-                $instantMissionData = [];
+                $instantmissioncount++;
                 $instantmission =  instantmission::find($instant);
                 //dd( $instabtMi);
+                
                 if($instantmission)
               {  $instantMissionData[] = [
+
                     'instant_mission_id' => $instantmission->id,
                     'name' => $instantmission->label,  // Assuming description field
                     'location' => $instantmission->location,  
@@ -144,9 +157,12 @@ $count=0;
                     'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
                     'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name ,
                     'date' => $instantmission->created_at->format('Y-m-d'),
+                   
                 ];}
              }
+            }
         }
+        $count+=$instantmissioncount;
 
         // Include the instant missions in the response
      //   $instantMissionData = [];
@@ -165,8 +181,11 @@ $count=0;
 */
         $responseData = [
             'date'=>date('Y-m-d'),
-            'mission_count'=>$groupPointCount,
+            'mission_count'=>$count,
+            'instant_mission_count' => $instantmissioncount,
+            'groupPointCount'=>$groupPointCount,
             'missions' => $missionData,
+          
             'instant_missions' => $instantMissionData,
         ];
         // $success['ViolationType'] = $missionData->map(function ($item) {
