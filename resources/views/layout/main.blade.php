@@ -7,6 +7,10 @@
     <title>
         @yield('title')
     </title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('frontend/images/favicon/apple-touch-icon.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('frontend/images/favicon/favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('frontend/images/favicon/favicon-16x16.png')}}">
+    <link rel="manifest" href="{{ asset('frontend/images/favicon/site.webmanifest')}}">
     <script type="application/javascript" src="{{ asset('frontend/js/bootstrap.min.js')}}"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
