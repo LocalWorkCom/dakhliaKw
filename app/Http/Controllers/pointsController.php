@@ -61,7 +61,7 @@ class pointsController extends Controller
     }
     public function getpoints()
     {
-        $data = Point::with(['sector', 'government', 'region'])->orderBy('created_at','desc')->get();
+        $data = Point::with(['sector', 'government', 'region'])->orderBy('created_at', 'desc')->get();
 
         return DataTables::of($data)
             ->addColumn('sector_name', function ($row) {
@@ -111,7 +111,22 @@ class pointsController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     */
+     */ function extractLatLongFromUrl($url)
+    {
+        // Regex pattern to match latitude and longitude in the Google Maps URL
+        $pattern = "/@(-?\d+\.\d+),(-?\d+\.\d+)/";
+
+        // Check if the pattern matches the URL
+        if (preg_match($pattern, $url, $matches)) {
+            // Return latitude and longitude as an array
+            return [
+                'latitude' => $matches[1],
+                'longitude' => $matches[2]
+            ];
+        }
+
+        return null; // Return null if no match is found
+    }
     public function store(Request $request)
     {
         //dd($request->all());
@@ -142,7 +157,7 @@ class pointsController extends Controller
             'region.required' => 'يجب اختيار المنطقه الخاصه بالنقطه',
             'time_type.required' => 'يجب ادخال نظام العمل',
             'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
-            'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
+            // 'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
 
         ];
 
@@ -152,11 +167,20 @@ class pointsController extends Controller
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
+        
+        // Extract the latitude and longitude
+       
+
+        // if ($coordinates) {
+        //     dd( $coordinates['latitude']  , $coordinates['longitude']);
+        // }
         DB::transaction(function () use ($request) {
             $dayNames = $request->input('day_name');
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
-
+            $googleMapsUrl = $request->map_link;
+            $coordinates = getLatLongFromUrl($googleMapsUrl);
+            //dd($coordinates);
             // Storing the point data
             $point = new Point();
             $point->name = $request->name;
@@ -164,10 +188,16 @@ class pointsController extends Controller
             $point->region_id = $request->region;
             $point->sector_id = $request->sector_id;
             $point->google_map = $request->map_link;
-            $point->lat = $request->Lat;
-            $point->long = $request->long;
+            if($request->map_link){
+                $point->lat = $request->Lat ? $request->Lat : $coordinates['latitude'] ;
+                $point->long = $request->long ? $request->long : $coordinates['longitude'];
+            }else{
+                $point->lat = $request->Lat ;
+                $point->long = $request->long;
+            }
+            
             $point->work_type = $request->time_type;
-            $point->days_work = $request->time_type == 0 ? json_encode($dayNames) : null; // Assigning array directly
+            $point->days_work = $request->time_type == 0 ? $dayNames : null;
             $point->created_by = auth()->id(); // Use auth() helper
             $point->note = $request->note;
             $point->save();
@@ -177,6 +207,7 @@ class pointsController extends Controller
             $pointgroups->name = $point->name;
             $pointgroups->points_ids = [json_encode($point->id)]; // Store as JSON array
             $pointgroups->government_id = $request->governorate;
+            $pointgroups->sector_id  = $request->sector_id;
             $pointgroups->flag = 0;
             $pointgroups->save();
 
@@ -272,9 +303,9 @@ class pointsController extends Controller
             //dd($validatedData->messages());
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
-//dd($request->day_name);
+        //dd($request->day_name);
         DB::transaction(function () use ($request) {
-            $dayNames =$request->day_name;
+            $dayNames = $request->day_name;
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
             $pointId = $request->input('id');
@@ -288,8 +319,8 @@ class pointsController extends Controller
             $point->lat = $request->Lat;
             $point->long = $request->long;
             $point->work_type = $request->time_type;
-            $point->days_work = $request->time_type == 0 ? json_encode($dayNames , true) : null; 
-            $point->created_by = auth()->id(); 
+            $point->days_work = $request->time_type == 0 ? json_encode($dayNames, true) : null;
+            $point->created_by = auth()->id();
             $point->note = $request->note;
             $point->save();
 

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Government;
 use App\Models\Grouppoint;
 use App\Models\Point;
+use App\Models\Sector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -59,10 +61,13 @@ class GroupPointsController extends Controller
 
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
+        $sector_id = Sector::whereJsonContains('governments_IDs',$request->governorate)->value('id');
+       // dd($sector_id ,$request->governorate );
         $points = new Grouppoint();
         $points->name = $request->name;
         $points->points_ids = $request->pointsIDs;
         $points->government_id  = $request->governorate;
+        $points->sector_id  = $sector_id ;
         $points->flag  = 1;
 
         $points->save();
@@ -75,13 +80,14 @@ class GroupPointsController extends Controller
                 }
             })
             ->get();
-
+            //dd( $deleted);
         // Optional: Perform actions with the retrieved records
         foreach ($deleted as $record) {
             // Example action: Delete the record
-            $record->delete();
+            $record->deleted=1;
+            $record->save();
         }
-        return redirect()->route('points.index')->with('message', 'تم أضافه قطاع جديد');
+        return redirect()->route('points.index')->with('message', 'تم أضافه مجموعه');
     }
 
     /**
@@ -164,11 +170,12 @@ class GroupPointsController extends Controller
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
+       // dd($id);
         $points = Grouppoint::find($request->id);
         $oldPointsIDs = $points->points_ids;
         $points->name = $request->name;
         $points->points_ids = $request->pointsIDs;
-        $points->government_id = $points->government_id;
+        $points->government_id = $request->government_id;
         $points->flag = 1;
         $points->save();
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class InspectorController extends Controller
 {
@@ -24,10 +25,28 @@ class InspectorController extends Controller
      */
     public function index()
     {
-        // $inspectors = Inspector::all();
-        $assignedInspectors = Inspector::whereNotNull('group_id')->count();
-        $unassignedInspectors = Inspector::whereNull('group_id')->count();
-        return view('inspectors.index', compact('assignedInspectors', 'unassignedInspectors'));
+        $userDepartmentId = Auth::user()->department_id;
+        if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
+            $all = Inspector::count();
+            $assignedInspectors = Inspector::whereNotNull('group_id')->count();
+            $unassignedInspectors = Inspector::whereNull('group_id')->count();
+        }else{
+            $all = Inspector::with('user')
+            ->whereHas('user', function ($query) use ($userDepartmentId) {
+                $query->where('department_id', $userDepartmentId);
+            })
+            ->count();
+            $assignedInspectors = Inspector::with('user')
+            ->whereHas('user', function ($query) use ($userDepartmentId) {
+                $query->where('department_id', $userDepartmentId);
+            })->whereNotNull('group_id')->count();
+            $unassignedInspectors = Inspector::with('user')
+            ->whereHas('user', function ($query) use ($userDepartmentId) {
+                $query->where('department_id', $userDepartmentId);
+            })->whereNull('group_id')->count();
+        }
+     
+        return view('inspectors.index', compact('assignedInspectors', 'unassignedInspectors','all'));
     }
     public function addToGroup(Request $request)
     {
@@ -69,12 +88,19 @@ class InspectorController extends Controller
     {
 
         $userDepartmentId = Auth::user()->department_id;
-        $data = Inspector::with('user')
+        if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
+            $data = Inspector::with('user')
+         ->orderBy('id', 'desc')
+            ->get();
+        }else{
+            $data = Inspector::with('user')
             ->whereHas('user', function ($query) use ($userDepartmentId) {
                 $query->where('department_id', $userDepartmentId);
             })
             ->orderBy('id', 'desc')
             ->get();
+        }
+       
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             if ($row->group_id !=  null) {
@@ -83,7 +109,7 @@ class InspectorController extends Controller
             } else {
                 $group_permission = '<a class="btn btn-sm"  style="background-color: green;"  onclick="openAddModal(' . $row->id . ',0)">   <i class="fa fa-plus"></i> أضافه</a>';
             }
-            $show_permission = '<a href="${departmentShow}" class="btn btn-sm " style="background-color: #274373;">
+            $show_permission = '<a href="'.route('inspectors.show', $row->id).'" class="btn btn-sm " style="background-color: #274373;">
                             <i class="fa fa-eye"></i>عرض</a>';
                             $edit_permission=  '<a href="'.route('inspectors.edit', $row->id).'" class="btn btn-sm"  style="background-color: #F7AF15;">
                                             <i class="fa fa-edit"></i> تعديل 
@@ -99,6 +125,16 @@ class InspectorController extends Controller
             ->addColumn('phone', function ($row) {
                 return $row->phone ?? 'لا يوجد هاتف'; // Assuming 'name' is the column in external_users
             })
+            ->addColumn('type', function ($row) {
+                if($row->type == 'Buildings' ){
+                    $result=  'مفتش مباني ' ; 
+                }elseif($row->type == 'trainee'){
+                    $result=  'مفتش متدرب' ; 
+                }else{
+                    $result=  'مفتش سلوك أنضباطى' ; 
+                }
+                return $result; // Assuming 'name' is the column in external_users
+            })
             ->rawColumns(['action'])
             ->make(true);
     }
@@ -111,13 +147,19 @@ class InspectorController extends Controller
         $departmentId = auth()->user()->department_id;
         $inspectorUserIds = Inspector::pluck('user_id')->toArray();
 
-        $users = User::where('flag', 'user')
-            ->where('department_id', $departmentId)
-            ->where('id', '!=', $department->manger)
-            ->where('id', '!=', auth()->user()->id)
-
+        $userDepartmentId = Auth::user()->department_id;
+        if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
+            $users = User::where('id', '!=', auth()->user()->id)
             ->whereNotIn('id', $inspectorUserIds)
             ->get();
+        }else{
+            $users = User::where('department_id', $departmentId)
+            ->where('id', '!=', $department->manger)
+            ->where('id', '!=', auth()->user()->id)
+            ->whereNotIn('id', $inspectorUserIds)
+            ->get();
+        }
+      
         //dd($users);
         return view('inspectors.create', compact('users'));
     }
@@ -130,15 +172,8 @@ class InspectorController extends Controller
       //  dd($request->all());
 
         $rules = [
-            // 'Id_number' => [
-            //     'required',
-            //     'string',
-            // ],
             'user_id' => 'required|exists:users,id',
-            // 'position' => 'required',
-            // 'name' => 'required|string',
             'type' => 'required|string',
-            // 'phone' => 'nullable|string',
         ];
 
         // Define custom messages
@@ -159,6 +194,12 @@ class InspectorController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         $user = User::findOrFail($request->user_id);
+        //dd($user->flag);
+        if($user->flag === "employee"){
+            $user->flag = "user";
+            $user->password =  Hash::make('123456');
+            $user->save();
+        }
         $inspector = new Inspector();
         $inspector->name = $request->name;
         $inspector->phone = $request->phone;

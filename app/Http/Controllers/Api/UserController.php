@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\grade;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -125,6 +126,7 @@ class UserController extends Controller
       }
 
         $user = User::where('military_number', $request->military_number)->first();
+        
 
         if (!$user) {
           return $this->respondError('Validation Error.', ['milltary_number'=> ['الرقم العسكري لا يتطابق مع سجلاتنا']], 400);
@@ -138,15 +140,27 @@ class UserController extends Controller
         if (Hash::check($request->password, $user->password) == true) {
           return $this->respondError('Validation Error.', ['password'=> ['لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية'] ], 400);
         }
-
+        $grade = grade::where('id',$user->grade_id)->first();
         // Update password and set token for first login if applicable
         Auth::login($user); // Log the user in
         $user->device_token = $request->device_token;
         $user->password = Hash::make($request->password);
         $user->save();
+        // $success['token'] = $token;//->token;
+        // $token =$user->createToken('auth_token')->accessToken;
         $success['token'] = $user->createToken('MyApp')->accessToken;
         // $user->image = $user->image;
-        $success['user'] = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
+        $userData = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
+        if($grade)
+        {
+            $gradeData = ['grade' => $grade->name];
+        }
+        else
+        {
+            $gradeData = ['grade' => 'لا يوجد بيانات'];
+        }
+        
+        $success['user'] = array_merge($userData, $gradeData);
         return $this->respondSuccess($success, 'reset password successfully.');
     }
 
@@ -227,7 +241,7 @@ class UserController extends Controller
         }
         
          else {
-            return $this->respondError('user not found', ['military_number' => ['مستخدم غير مسجل لدينا']], 200);
+            return $this->respondError('user not found', ['military_number' => ['مستخدم غير مسجل لدينا']], 400);
         }
     }
 

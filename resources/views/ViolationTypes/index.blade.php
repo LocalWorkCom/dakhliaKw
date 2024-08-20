@@ -5,13 +5,12 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
 @push('style')
-<style>
-.selected-option {
-    background-color: #e7e7e7;
-    color: black;
-}
-</style>
-
+    <style>
+        .selected-option {
+            background-color: #e7e7e7;
+            color: black;
+        }
+    </style>
 @endpush
 @section('title')
     أنواع المخالفات
@@ -19,36 +18,22 @@
 @section('content')
     <section>
         <div class="row">
-
             <div class="container welcome col-11">
-            <div class="d-flex justify-content-between">
-                <p> أنواع المخالفـــات</p>
-                {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
+                <div class="d-flex justify-content-between">
+                    <p> أنواع المخالفـــات</p>
+                    {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
+                    <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
 
-<button class="btn-all px-3" style="color: #274373;" onclick="openadd()" data-bs-toggle="modal"
-    data-bs-target="#myModal1">
-    اضافة مخالفه    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">
-</button>
-{{-- @endif --}}
+                            اضافة مخالفه <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        </button>
+                    {{-- @endif --}}
+                </div>
             </div>
         </div>
-        </div>
+
         <br>
         <div class="row">
-        <div class="container  col-11 mt-3 p-0 pt-5 pb-4">
-
-                <!-- <div class="row " dir="rtl">
-                    <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
-                        {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
-
-                        <button class="btn-all px-3" style="color: #274373;" onclick="openadd()" data-bs-toggle="modal"
-                            data-bs-target="#myModal1">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">
-                            اضافة مخالفه
-                        </button>
-                        {{-- @endif --}}
-                    </div>
-                </div> -->
+            <div class="container  col-11 mt-3 p-0 pt-5 pb-4">
                 <div class="col-lg-12">
                     <div class="bg-white ">
                         @if (session()->has('message'))
@@ -77,7 +62,7 @@
         </div>
     </section>
     {{-- this for add form --}}
-    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -94,7 +79,8 @@
                         <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
                             <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                                 <div class="form-group mt-4 mb-3">
-                                    <label class="d-flex justify-content-start pt-3 pb-2" for="name" style=" flex-direction: row-reverse;"> اسم
+                                    <label class="d-flex justify-content-start pt-3 pb-2" for="name"
+                                        style=" flex-direction: row-reverse;"> اسم
                                         المخالفه</label>
                                     <input type="text" id="nameadd" name="nameadd" class="form-control"
                                         placeholder="اسم المخالفه" dir="rtl" required>
@@ -118,11 +104,11 @@
                                             </div>
                                             @foreach (getDepartments() as $department)
                                                 <div class="option" style="    display: flex; justify-content: flex-end;">
-                                                <label for="option{{ $department->id }}"> {{ $department->name }}
-                                                </label>
+                                                    <label for="option{{ $department->id }}"> {{ $department->name }}
+                                                    </label>
                                                     <input type="checkbox" id="option{{ $department->id }}"
                                                         value="{{ $department->id }}" name="types[]">
-                                                   
+
                                                 </div>
                                             @endforeach
 
@@ -179,13 +165,15 @@
                         <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
                             <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                                 <div class="form-group mt-4 mb-3">
-                                    <label class="d-flex justify-content-start pt-3 pb-2" for="nameedit" style=" flex-direction: row-reverse;">اسم
+                                    <label class="d-flex justify-content-start pt-3 pb-2" for="nameedit"
+                                        style=" flex-direction: row-reverse;">اسم
                                         المخالفه</label>
                                     <input type="text" id="nameedit" name="nameedit" class="form-control"
                                         placeholder="اسم المخالفه" required>
                                 </div>
                                 <div class="form-group  mb-3">
-                                    <label class="d-flex justify-content-start pb-2" for="types" style=" flex-direction: row-reverse;">
+                                    <label class="d-flex justify-content-start pb-2" for="types"
+                                        style=" flex-direction: row-reverse;">
                                         الاداره الخاصه بالمخالفه</label>
                                     <select class="w-100 px-2" name="types[]" id="types" multiple
                                         style="border: 0.2px solid rgb(199, 196, 196);" required dir="rtl">
@@ -196,29 +184,7 @@
                                     </select>
 
                                 </div>
-                                {{-- <div class="form-group mb-3">
-                                    <div class="select-wrapper">
-                                        <div class="select-box d-flex justify-content-between" id="select-box">
-                                            <p>الاداره الخاصه بالمخالفه</p>
-                                            <i class="fa-solid fa-angle-down" style="color: #A3A1A1;"></i>
-                                        </div>
-                                        <div class="options" id="options">
-                                            <div class="search-box">
-                                                <input type="text" id="search-input" placeholder="ابحث هنا ....."
-                                                    style="width: 100% !important;">
-                                            </div>
-                                            @foreach (getDepartments() as $department)
-                                                <div class="option">
-                                                    <input type="checkbox" id="option{{ $department->id }}"
-                            value="{{ $department->id }}" name="types[]">
-                            <label for="option{{ $department->id }}" > {{ $department->name }}
-                            </label>
-                        </div>
-                        @endforeach
-                    </div>
-            </div>
-            <div id="selected-values" class="mt-2"></div>
-        </div> --}}
+
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2" dir="rtl">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn">
@@ -243,6 +209,8 @@
             </div>
         </div>
     </div>
+
+    
 @endsection
 @push('scripts')
     <script>
@@ -272,7 +240,7 @@
             console.log('options:', options);
             // Set new selections
             for (let i = 0; i < options.length; i++) {
-                
+
                 // let optionValue = parseInt(options[i].value);
                 let optionValue = options[i].value;
                 // console.log('options:', options);

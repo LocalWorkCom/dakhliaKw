@@ -6,6 +6,7 @@ use App\Models\Government;
 use App\Models\Groups;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
+use App\Models\Sector;
 use App\Models\WorkingTime;
 
 use App\Models\WorkingTree;
@@ -28,13 +29,14 @@ class GroupsController extends Controller
         // $workTimes = WorkingTime::all();
         // $inspector = Inspector::where('group_id',$id)->get();
         // dd($workTimes);
-        $governments = Government::all();
-        return view('group.view', compact('governments'));
+        $sectors = Sector::all();
+        return view('group.view', compact('sectors'));
     }
 
     public function getgroups()
     {
-        $data = Groups::with('government')->get();
+        $data = Groups::with('sector')->get();
+        // dd($data);
         // $data = Groups::all();
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
@@ -66,7 +68,14 @@ class GroupsController extends Controller
 
     public function groupCreateInspectors($id)
     {
-        $inspectors = Inspector::whereNull('group_id')->get();
+        // $inspectors = Inspector::whereNull('group_id')->get();
+        $departmentId = auth()->user()->department_id; // Or however you determine the department ID
+
+        $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+            ->where('users.department_id', $departmentId)
+            ->whereNull('inspectors.group_id')
+            ->select("inspectors.*")->get();
+
         $inspectorsIngroup = Inspector::where('group_id', $id)->get();
         return view('group.inspector', compact('inspectors', 'inspectorsIngroup', 'id'));
     }
@@ -80,6 +89,26 @@ class GroupsController extends Controller
                     $inspector = Inspector::findOrFail($row_id);
                     $inspector->group_id = null;
                     $inspector->save();
+                    $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->first();
+                    // if($GroupTeam){
+                    //  $inspector_ids=   explode(',', $GroupTeam->inspector_ids);
+                    // }
+                    if ($GroupTeam) {
+                        // Get the current list of inspector IDs
+                        $inspector_ids = explode(',', $GroupTeam->inspector_ids);
+
+                        // Remove the specific inspector ID
+                        $inspector_ids = array_filter($inspector_ids, function ($id) use ($inspector) {
+                            return $id != $inspector->id;
+                        });
+
+                        // Rebuild the comma-separated string of inspector IDs
+                        $new_inspector_ids = implode(',', $inspector_ids);
+
+                        // Update the record with the new list of inspector IDs
+                        $GroupTeam->inspector_ids = $new_inspector_ids;
+                        $GroupTeam->save();
+                    }
                 }
             }
         }
@@ -99,6 +128,26 @@ class GroupsController extends Controller
                 foreach ($inspectorsCheck as $inspector) {
                     $inspector->group_id = null;
                     $inspector->save();
+                    $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->first();
+                    // if($GroupTeam){
+                    //  $inspector_ids=   explode(',', $GroupTeam->inspector_ids);
+                    // }
+                    if ($GroupTeam) {
+                        // Get the current list of inspector IDs
+                        $inspector_ids = explode(',', $GroupTeam->inspector_ids);
+
+                        // Remove the specific inspector ID
+                        $inspector_ids = array_filter($inspector_ids, function ($id) use ($inspector) {
+                            return $id != $inspector->id;
+                        });
+
+                        // Rebuild the comma-separated string of inspector IDs
+                        $new_inspector_ids = implode(',', $inspector_ids);
+
+                        // Update the record with the new list of inspector IDs
+                        $GroupTeam->inspector_ids = $new_inspector_ids;
+                        $GroupTeam->save();
+                    }
                 }
             }
         }
@@ -120,14 +169,14 @@ class GroupsController extends Controller
         $messages = [
             'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'points_inspector.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
-            'government_id.required' => 'المحافظة مطلوبة ولا يمكن تركه فارغا'
+            'sector_id.required' => 'القطاع مطلوب ولا يمكن تركه فارغا'
 
         ];
 
         $validatedData = Validator::make($request->all(), [
             'name' => 'required',
             'points_inspector' => 'required',
-            'government_id' => 'required',
+            'sector_id' => 'required|exists:sectors,id',
 
         ], $messages);
 
@@ -139,13 +188,11 @@ class GroupsController extends Controller
 
             // return redirect()->back();
         }
-
         try {
             $group = new Groups();
             $group->name = $request->name;
             $group->points_inspector = $request->points_inspector;
-            $group->government_id = $request->government_id;
-
+            $group->sector_id = $request->sector_id;
             $group->save();
             session()->flash('success', 'تم اضافه مجموعة بنجاح.');
 
@@ -239,47 +286,96 @@ class GroupsController extends Controller
         $messages = [
             'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
-            'government_id.required' => 'المحافظة مطلوبة ولا يمكن تركه فارغا'
-
+            'sector_id.required' => 'القطاع مطلوب ولا يمكن تركه فارغا'
         ];
 
         $validatedData = Validator::make($request->all(), [
             'name_edit' => 'required',
             'points_inspector_edit' => 'required',
-            'government_id' => 'required|integer',
-
+            'sector_id' => 'required|integer',
         ], $messages);
 
-        // // Handle validation failure
-        // if ($validatedData->fails()) {
-        //     return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
-        // }
         if ($validatedData->fails()) {
-            // session()->flash('errors', $validatedData->errors());
             return redirect()->back()->withErrors($validatedData)->withInput()->with('editModal', true);
-
-            // return redirect()->back();
         }
-        
+
         $group = Groups::find($request->id_edit);
 
-        
-        $group->name = $request->name_edit;
-        $group->points_inspector = $request->points_inspector_edit;
-        $group->government_id = $request->government_id;
+        $updated = false;
 
+        // Check each field individually to see if it has changed
+        if ($group->name !== $request->name_edit) {
+            $group->name = $request->name_edit;
+            $updated = true;
+        }
 
-        // if ($group->name === $request->name_edit && $group->points_inspector == $request->points_inspector_edit && $group->government_id === $request->government_id) {
-        //     return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.'])->withInput()->with('editModal', true);
+        if ($group->points_inspector !== $request->points_inspector_edit) {
+            $group->points_inspector = $request->points_inspector_edit;
+            $updated = true;
+        }
 
-        // }
+        if ($group->sector_id !== $request->sector_id) {
+            $group->sector_id = $request->sector_id;
+            $updated = true;
+        }
+
+        // If nothing was updated, return with an error and show the modal again
+        if (!$updated) {
+            return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.'])->withInput()->with('editModal', true);
+        }
 
         $group->save();
+
         session()->flash('success', 'تم تعديل مجموعة بنجاح.');
 
         return redirect()->back();
     }
 
+    // public function update(Request $request)
+    // {
+    //     $messages = [
+    //         'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+    //         'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
+    //         'government_id.required' => 'المحافظة مطلوبة ولا يمكن تركه فارغا'
+
+    //     ];
+
+    //     $validatedData = Validator::make($request->all(), [
+    //         'name_edit' => 'required',
+    //         'points_inspector_edit' => 'required',
+    //         'government_id' => 'required|integer',
+
+    //     ], $messages);
+
+    //     // // Handle validation failure
+    //     // if ($validatedData->fails()) {
+    //     //     return redirect()->back()->withErrors($validatedData)->withInput()->with('editeModal', true);
+    //     // }
+    //     if ($validatedData->fails()) {
+    //         // session()->flash('errors', $validatedData->errors());
+    //         return redirect()->back()->withErrors($validatedData)->withInput()->with('editModal', true);
+
+    //         // return redirect()->back();
+    //     }
+
+    //     $group = Groups::find($request->id_edit);
+
+
+    //     $group->name = $request->name_edit;
+    //     $group->points_inspector = $request->points_inspector_edit;
+    //     $group->government_id = $request->government_id;
+
+
+    //     // if ($group->name === $request->name_edit && $group->points_inspector == $request->points_inspector_edit && $group->government_id === $request->government_id) {
+    //     //     return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.'])->withInput()->with('editModal', true);
+
+    //     // }
+
+    //     $group->save();
+    //     session()->flash('success', 'تم تعديل مجموعة بنجاح.');
+
+    //     return redirect()->back();
+    // }
     /**
      * Remove the specified resource from storage.
      */

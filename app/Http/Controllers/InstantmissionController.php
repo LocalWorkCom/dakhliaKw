@@ -93,6 +93,7 @@ class InstantmissionController extends Controller
             'label.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
             'group_team_id.required' => ' الفرقة  مطلوب ولا يمكن تركه فارغاً.',
             'group_id.required' => ' المجموعة مطلوب ولا يمكن تركه فارغاً.',
+            'location.required' => ' الموقع مطلوب ولا يمكن تركه فارغاً.',
             // Add more custom messages here
         ];
 
@@ -100,6 +101,7 @@ class InstantmissionController extends Controller
             'label' => 'required|string',
             'group_team_id' => 'required',
             'group_id' => 'required',
+            'location' => 'required',
         ], $messages);
 
         // Handle validation failure
@@ -107,6 +109,18 @@ class InstantmissionController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
 
+        $coordinates = getLatLongFromUrl($request->location);
+        // dd($coordinates);
+        if($coordinates == null)
+        {
+            $lat= null;
+            $long= null;
+        }
+        else
+        {
+            $lat = $coordinates["latitude"];
+            $long = $coordinates["longitude"];
+        }
         $new = new instantmission();
         $new->label = $request->label;
         $new->location = $request->location;
@@ -114,6 +128,8 @@ class InstantmissionController extends Controller
         $new->group_team_id = $request->group_team_id;
         $new->inspector_id = $request->inspectors;
         $new->description = $request->description;
+        $new->latitude = $lat;
+        $new->longitude = $long;
         $new->save();
 
         if ($request->hasFile('images')) {
@@ -178,6 +194,8 @@ class InstantmissionController extends Controller
             'group_team_id' => 'required',
             'group_id' => 'required',
         ], $messages);
+
+        $coordinates = getLatLongFromUrl($request->location);
         $instantmission = instantmission::find($id);
         // Update the instantmission record
         $instantmission->label = $request->label;
@@ -185,6 +203,8 @@ class InstantmissionController extends Controller
         $instantmission->group_id = $request->group_id;
         $instantmission->group_team_id = $request->group_team_id;
         $instantmission->description = $request->description;
+        $instantmission->latitude = $coordinates["latitude"];
+        $instantmission->longitude = $coordinates["longitude"];
         $instantmission->save();
 
         // Handle file uploads

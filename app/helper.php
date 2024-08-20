@@ -160,6 +160,44 @@ function generateUniqueNumber($counter)
     return ['formattedNumber' => $formattedNumber, 'counter' => $counter + 1];
 }
 
+function getLatLongFromUrl($url) {
+
+    $shortenerDomains = [
+        'bit.ly',
+        'goo.gl',
+        't.co',
+        'tinyurl.com',
+        'ow.ly',
+        'buff.ly',
+        'is.gd',
+        'tiny.cc',
+        'maps.app.goo.gl'
+    ];
+
+    // Parse the domain from the URL
+    $host = parse_url($url, PHP_URL_HOST);
+    if(in_array($host, $shortenerDomains) == true)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // Follow redirects
+        curl_exec($ch);
+        $url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+        curl_close($ch);
+    }
+
+    $pattern = '/@([-+]?[\d]*\.?[\d]+),([-+]?[\d]*\.?[\d]+)/';
+    preg_match($pattern, $url, $matches);
+    if (isset($matches[1]) && isset($matches[2])) {
+        return [
+            'latitude' => $matches[1],
+            'longitude' => $matches[2]
+        ];
+    }
+    return null;
+}
+
 
 function UploadFilesWithoutReal($path, $image, $model, $request)
 {
@@ -218,7 +256,9 @@ function CheckUploadIoFiles($id)
 }
 function getEmployees()
 {
-    return User::all();
+    $departmentId = auth()->user()->department_id; // Or however you determine the department ID
+    return User::where('users.department_id', $departmentId)
+    ->where('users.id', '<>' ,auth()->user()->id)->get();
 }
 function getDepartments()
 {

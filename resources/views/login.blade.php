@@ -51,7 +51,7 @@
                             <i id="toggleIcon" class="fa fa-eye"></i>
                         </label>
                     </div>
-                    <a href="{{ route('forget_password') }}" class="forget-pass-a">تذكر كلمة المرور</a>
+                    <a href="{{ route('forget_password') }}" class="forget-pass-a" style="text-decoration:underline !important;">نسيت كلمة المرور؟</a>
                     <div class="btns">
                         <button class="btn1" type="submit">تسجيل دخول</button>
                     </div>

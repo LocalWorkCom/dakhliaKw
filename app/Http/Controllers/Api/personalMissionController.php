@@ -20,13 +20,13 @@ class personalMissionController extends Controller
 
         $today = Carbon::today()->toDateString();
         $daysOfWeek = [
-            "السبت",  // Saturday
-            "الأحد",  // Sunday
-            "الإثنين",  // Monday
-            "الثلاثاء",  // Tuesday
-            "الأربعاء",  // Wednesday
-            "الخميس",  // Thursday
-            "الجمعة",  // Friday
+            "السبت",  // 0
+            "الأحد",  // 1
+            "الإثنين",  // 2
+            "الثلاثاء",  // 3
+            "الأربعاء",  // 4
+            "الخميس",  // 5
+            "الجمعة",  // 6
         ];
         $dayWeek = Carbon::now()->locale('ar')->dayName;
         $index = array_search($dayWeek, $daysOfWeek);
@@ -50,7 +50,7 @@ class personalMissionController extends Controller
                 ->whereNotIn('id', $inspector_points)
                 ->get();
         
-            $All_points = []; // Initialize $All_points array
+            $All_points = []; 
         
             // Process available group points
             $availablegroup_points->each(function ($grouppoint) use (&$All_points, $daysOfWeek, $index, $dayWeek) {
@@ -71,13 +71,6 @@ class personalMissionController extends Controller
                                 'point_GroupName' => $name ?? 'Unknown',
                                 'point_time' => 'طوال اليوم',
                                 'point_location' => $available_point->google_map,
-                                // 'point_work_days' => array_map(function ($dayIndex) use ($daysOfWeek, $is_off) {
-                                //     $index = intval($dayIndex); // Convert to integer to get the index
-                                //     return [
-                                //         'name' => isset($daysOfWeek[$index]) ? $daysOfWeek[$index] : 'Unknown',
-                                //         'is_thisDay_off' => $is_off,
-                                //     ];
-                                // }, $available_point->days_work),
                             ];
                         }
                     } else {

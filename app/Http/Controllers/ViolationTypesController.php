@@ -43,9 +43,9 @@ class ViolationTypesController extends Controller
                     $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit(' . $row->id . ', \'' . $name. '\', \'' . htmlspecialchars($typesJson, ENT_QUOTES, 'UTF-8') . '\')"><i class="fa fa-edit"></i> تعديل</a>';
                     // }
                 // if (Auth::user()->hasPermission('view item')) {
-                $show_permission = '<a class="btn btn-sm" style="background-color: #274373;"  href=' . route('violations.show', $row->id) . '> <i class="fa fa-eye"></i>عرض</a>';
+                // $show_permission = '<a class="btn btn-sm" style="background-color: #274373;"  href=' . route('violations.show', $row->id) . '> <i class="fa fa-eye"></i>عرض</a>';
                 // }
-                return $show_permission . ' ' . $edit_permission;
+                return  $edit_permission;
             })
             ->addColumn('type_name', function ($row) {
                 return $row->type_names;
@@ -66,7 +66,7 @@ class ViolationTypesController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+        // dd($request->all());
         $rules = [
             'nameadd' => 'required|string',
             'types' => 'required|array|exists:departements,id',
@@ -117,7 +117,7 @@ class ViolationTypesController extends Controller
     public function update(Request $request)
     {
       
-        dd($request);
+       // dd($request);
     $request->validate([
         'nameedit' => 'required|string|max:255',
         'types' => 'array'

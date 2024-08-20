@@ -3,47 +3,41 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 @section('title')
-    النقاط
+    نقاط الوزاره
 @endsection
 @section('content')
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('points.index') }}">النقاط</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('points.index') }}">نقاط الوزاره</a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> أنشاء مجموعه للنقاط</a></li>
             </ol>
         </nav>
     </div>
-    
-    {{-- <div class="row ">
-        <div class="container welcome col-11">
-            <p> القطــــاعات </p>
-        </div>
-    </div> --}}
-    {{-- {{ dd($governments) }} --}}
- 
+
+
     <br>
-    <form class="edit-grade-form" id="Qta3-form" action="{{ route('grouppoints.update',$data->id) }}" method="POST">
+    <form class="edit-grade-form" id="Qta3-form" action="{{ route('grouppoints.update', $data->id) }}" method="POST">
         @csrf
         <div class="row" dir="rtl">
             <div id="first-container" class="container moftsh col-11 mt-3 p-0 pb-3">
                 <div class="form-row mx-2 mb-2">
                     <h3 class="pt-3 px-md-5 px-3">اضف مجموعه</h3>
                     @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="name">ادخل اسم المجموعه</label>
                         <input type="text" id="name" name="name" value="{{ $data->name }}" class="form-control"
@@ -67,7 +61,9 @@
                     <div class="form-group moftsh px-md-5 px-3 pt-3">
                         <h4 style="color: #274373; font-size: 24px;">حدد المحافظات المراد اضافتها</h4>
                     </div>
-<input hidden value="{{ $data->government_id }}" name="government_id">
+                    <input hidden value="{{ $data->id }}" name="group_id">
+
+                    <input hidden value="{{ $data->government_id }}" name="government_id">
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
                         <label class="pb-3" for="governorate">أختر المحافظه الخاصه لمجوعه النقاط</label>
                         <select name="governorate" id="governorate" disabled
@@ -90,7 +86,7 @@
                         style="border: 0.2px solid rgb(199, 196, 196);">
                         <option value="" selected disabled>اختر</option>
                         @foreach ($selectedPoints as $points)
-                            <option value="{{ $points->id }}" @if(in_array($points->id, $data->points_ids ?? [])) selected @endif>
+                            <option value="{{ $points->id }}" @if (in_array($points->id, $data->points_ids ?? [])) selected @endif>
                                 {{ $points->name }}</option>
                         @endforeach
 
