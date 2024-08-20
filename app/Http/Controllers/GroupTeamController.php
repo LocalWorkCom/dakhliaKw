@@ -634,6 +634,15 @@ class GroupTeamController extends Controller
         $Groups = Groups::all();
         // Retrieve all working times
         $working_times = WorkingTime::all();
+
+        $inspectors = Inspector::with('user.grade')->get();
+
+        // foreach ($inspectors as $inspector) {
+        //     if ($inspector->user && $inspector->user->grade) {
+        //         return $inspector->user->grade->name;
+        //     }
+        // }
+
         foreach ($Groups as $Group) {
             // Initialize an array to hold teams associated with the group
             $group_teams = [];
@@ -845,6 +854,6 @@ class GroupTeamController extends Controller
         });
         // dd($Groups);
         // Return the view with the Groups data
-        return view('inspectorMission.index', compact('Groups', 'working_times'));
+        return view('inspectorMission.index', compact('Groups', 'working_times' ,'inspectors'));
     }
 }

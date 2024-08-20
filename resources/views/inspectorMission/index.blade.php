@@ -8,9 +8,9 @@
 
         <!-- *************** for drag and drop example *************** -->
         <!-- <tr>
-            <td id="cell1" draggable="true" style=" cursor: move;">drag</td>
-            <td id="cell2" draggable="true" style=" cursor: move;">drop</td>
-        </tr> -->
+                                <td id="cell1" draggable="true" style=" cursor: move;">drag</td>
+                                <td id="cell2" draggable="true" style=" cursor: move;">drop</td>
+                            </tr> -->
 
 
         <!-- *************** end of drag and drop example *************** -->
@@ -100,19 +100,33 @@
                                         </tr>
 
                                         <!-- Inspectors and Their Missions -->
+                                        <!-- Inspectors and Their Missions -->
                                         @foreach ($team['inspectors'] as $index => $inspector)
                                             <tr>
                                                 <!-- Inspector Number -->
                                                 <td style="background-color: #a5d0ffbd">{{ $count }}</td>
 
-                                                <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;">
+
+                                                    <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;" draggable="true">
+                                                            @if ($inspector->user && $inspector->user->grade)
+                                                                {{ $inspector->user->grade->name }} /
+                                                           
+                                                            @endif
+                                                            {{ $inspector->name }}
+
+
+                                                    </td>
+
+{{-- 
+                                                <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;"
+                                                    draggable="true">
+                                                    {{ $inspector->user->grade->name }}
                                                     {{ $inspector->name }}
-                                                </td>
+                                                </td> --}}
 
                                                 <!-- Loop through each mission of the inspector -->
                                                 @foreach ($inspector['missions'] as $index2 => $mission)
                                                     @if ($mission)
-                                                        <!-- Determine Class Based on Mission Type -->
                                                         @php
                                                             $class = '';
                                                             if ($mission->day_off) {
@@ -123,31 +137,30 @@
                                                         @endphp
 
                                                         <!-- Mission Details -->
-
                                                         <td class="{{ $class }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
-
                                                             @if (!$mission->day_off && isset($inspector['vacations'][$index2]))
                                                                 <ul>
-
-                                                                    <li style="color: white;font-weight: bold">
+                                                                    <li style="color: white; font-weight: bold;">
                                                                         {{ $inspector['vacations'][$index2] }}
                                                                     </li>
                                                                 </ul>
                                                             @else
-                                                                <ul style="list-style:none;">
+                                                                <ul style="list-style: none;">
                                                                     <!-- Mission Points -->
-
-                                                                    <ul>
-                                                                        @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
+                                                                    @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
+                                                                        <ul>
                                                                             @foreach ($inspector['points'][$index2] as $point)
-                                                                                <li class="draggable-item" draggable="true" style="color: white; font-weight: bold;">
+                                                                                <li class="draggable-item"
+                                                                                    style="color: white; font-weight: bold;"
+                                                                                    draggable="true">
                                                                                     {{ $point->name }}
                                                                                 </li>
+
                                                                             @endforeach
-                                                                        @endif
-                                                                    </ul>
-                                                                    
+
+                                                                        </ul>
+                                                                    @endif
 
                                                                     <!-- Instant Missions -->
                                                                     @if (
@@ -160,6 +173,8 @@
                                                                             </li>
                                                                         @endforeach
                                                                     @endif
+
+                                                                    <!-- Personal Missions -->
                                                                     @if (
                                                                         !$mission->day_off &&
                                                                             isset($inspector['personal_missions'][$index2]) &&
@@ -170,7 +185,6 @@
                                                                             </li>
                                                                         @endforeach
                                                                     @endif
-
                                                                 </ul>
                                                             @endif
                                                         </td>
@@ -178,8 +192,6 @@
                                                         <td style="background-color: #d6d6d6"></td>
                                                     @endif
                                                 @endforeach
-
-
                                             </tr>
                                             <?php $count++; ?>
                                         @endforeach
@@ -221,50 +233,86 @@
         }, 10);
     }
 </script>
-
-<!-- script for drag and drop in cells  -->
 <script>
-    let draggedItem = null;
+    let draggedElement = null;
 
+    // Handle drag start
     document.addEventListener('dragstart', (event) => {
-        if (event.target.classList.contains('draggable-item')) {
-            draggedItem = event.target;
-            event.target.classList.add('dragging');
+        if (event.target.classList.contains('draggable-item') || event.target.classList.contains('draggable-inspector')) {
+            draggedElement = event.target;
+            draggedElement.classList.add('dragging');
+            console.log('Dragging:', draggedElement); // Debugging log
         }
     });
 
+    // Handle drag over
     document.addEventListener('dragover', (event) => {
-        if (event.target.classList.contains('draggable-item')) {
-            event.preventDefault();
-        }
+        event.preventDefault(); // This allows dropping
     });
 
+    // Handle drop
     document.addEventListener('drop', (event) => {
-        if (event.target.classList.contains('draggable-item')) {
-            event.preventDefault();
-            const targetItem = event.target;
+        event.preventDefault();
+        const target = event.target;
 
-            // Swap the positions of dragged and target items
-            const parent = targetItem.parentNode;
-            const draggingIndex = [...parent.children].indexOf(draggedItem);
-            const targetIndex = [...parent.children].indexOf(targetItem);
-
-            if (draggingIndex < targetIndex) {
-                parent.insertBefore(draggedItem, targetItem.nextSibling);
-            } else {
-                parent.insertBefore(draggedItem, targetItem);
+        if (draggedElement) {
+            if (target.tagName === 'TD') {
+                // Swap content if target is a <td>
+                const temp = target.innerHTML;
+                target.innerHTML = draggedElement.innerHTML;
+                draggedElement.innerHTML = temp;
+            } else if (target.tagName === 'UL' || target.tagName === 'LI') {
+                // Handle dropping into a <ul> or <li>
+                target.appendChild(draggedElement);
             }
-
             // Remove dragging class
-            draggedItem.classList.remove('dragging');
-            draggedItem = null;
+            draggedElement.classList.remove('dragging');
+            draggedElement = null;
         }
     });
 
+    // Handle drag end
     document.addEventListener('dragend', (event) => {
-        if (event.target.classList.contains('draggable-item')) {
+        if (event.target.classList.contains('draggable-item') || event.target.classList.contains('draggable-inspector')) {
             event.target.classList.remove('dragging');
+            console.log('Drag end:', event.target); // Debugging log
         }
     });
 </script>
 
+
+
+
+
+<!-- script for drag and drop in cells  -->
+{{-- <script>
+    let draggedElement = null;
+    document.addEventListener('dragstart', (event) => {
+        if (event.target.tagName === 'TD') {
+            draggedElement = event.target;
+            event.target.classList.add('dragging');
+        }
+    });
+    document.addEventListener('dragover', (event) => {
+        event.preventDefault();
+    });
+    document.addEventListener('drop', (event) => {
+        if (event.target.tagName === 'TD') {
+            event.preventDefault();
+            const targetCell = event.target;
+            const sourceCell = draggedElement;
+            // Swap content
+            const temp = targetCell.innerHTML;
+            targetCell.innerHTML = sourceCell.innerHTML;
+            sourceCell.innerHTML = temp;
+            // Remove dragging class
+            sourceCell.classList.remove('dragging');
+            draggedElement = null;
+        }
+    });
+    document.addEventListener('dragend', (event) => {
+        if (event.target.tagName === 'TD') {
+            event.target.classList.remove('dragging');
+        }
+    });
+</script> --}}
