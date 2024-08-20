@@ -198,8 +198,12 @@ class InspectorController extends Controller
         $user = User::findOrFail($request->user_id);
         //dd($user->flag);
         if($user->flag === "employee"){
-            $user->flag = "user";
+          //  $user->flag = "user";
             $user->password =  Hash::make('123456');
+            $user->save();
+        }else{
+            $user->flag = "employee";
+          //  $user->password =  Hash::make('123456');
             $user->save();
         }
         $inspector = new Inspector();
