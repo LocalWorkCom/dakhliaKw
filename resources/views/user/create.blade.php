@@ -313,9 +313,10 @@
                 <div class="form-group col-md-10 mx-2">
                     <label for="input24"> الرتبة</label>
                     <select id="input24" name="grade_id" class="form-control select2" placeholder="الرتبة">
+                        <option selected disabled>اختار من القائمة</option>
                         @foreach ($grade as $item)
 
-                        <option value="{{ $item->id }}" {{ $item->name == "عسكرى" ? 'selected':'' }}  {{ old('grade_id') == $item->id ? 'selected' : '' }}> {{ $item->name }}
+                        <option value="{{ $item->id }}"   {{ old('grade_id') == $item->id ? 'selected' : '' }}> {{ $item->name }}
                         </option>
                         @endforeach
                     </select>

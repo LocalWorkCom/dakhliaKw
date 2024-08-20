@@ -212,8 +212,7 @@ class InspectorController extends Controller
 
         $inspector->user_id = $request->user_id;
         $inspector->Id_number = $user->Civil_number;
-
-
+        $inspector->department_id = $user->department_id;
         $inspector->save();
 
         //   dd($departements);

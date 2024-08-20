@@ -53,7 +53,7 @@ class DepartmentController extends Controller
             $data = departements::withCount('iotelegrams')
                 ->withCount('outgoings')
                 ->withCount('children')
-                ->where('parent_id', Auth::user()->department_id)
+                ->where('id', Auth::user()->department_id)
                 ->with(['children'])
                 ->orderBy('id', 'desc')->get();
         }
