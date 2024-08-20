@@ -14,7 +14,7 @@
     <div class="row">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
-                <p> المفتــــــشون</p>
+                <p id="inspector-heading"> المفتــــــشون</p>
                 {{-- <p> المفتــــــشون ({{\App\Models\Inspector::count()}})</p> --}}
                 {{-- @if (Auth::user()->hasPermission('edit grade')) --}}
                     <button type="button" class="btn-all  "
@@ -34,7 +34,7 @@
             <div class="row d-flex justify-content-between " dir="rtl">
                 <div class="form-group moftsh mt-4  mx-4  d-flex">
                     <p class="filter "> تصفية حسب:</p>
-                    <button class="btn-all px-3 mx-2 btn-filter" data-filter="all" style="color: #274373;">
+                    <button class="btn-all px-3 mx-2 btn-filter btn-active" data-filter="all" style="color: #274373;">
                         الكل ({{ $all }})
                     </button>
                     <button class="btn-all px-3 mx-2 btn-filter" data-filter="assigned" style="color: #274373;">
@@ -252,16 +252,26 @@
             "pagingType": "full_numbers"
         });
 
+        $(document).ready(function() {
+        // Set default text on page load
+        var defaultFilterButton = $('.btn-filter[data-filter="all"]');
+        var defaultFilterText = defaultFilterButton.text().trim();
+        $('#inspector-heading').text('المفتــــــشون - ' + defaultFilterText);
+
+        // Button click event
         $('.btn-filter').click(function() {
-    filter = $(this).data('filter');
+            var filter = $(this).data('filter');
+            var filterText = $(this).text().trim(); // Get the text of the active button
 
-    $('.btn-filter').removeClass('btn-active');
-    $(this).addClass('btn-active');
+            $('.btn-filter').removeClass('btn-active');
+            $(this).addClass('btn-active');
 
-    table.page(0).draw(true); // Force a full redraw and reset pagination
-    table.ajax.reload(); 
-});
+            $('#inspector-heading').text('المفتــــــشون - ' + filterText); // Update the <p> content
 
+            table.page(0).draw(true); // Force a full redraw and reset pagination
+            table.ajax.reload(); 
+        });
+    });
 
         // Filter button click event listeners
         // $('.btn-filter').click(function() {
