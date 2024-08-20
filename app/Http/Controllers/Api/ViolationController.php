@@ -57,15 +57,26 @@ class ViolationController  extends Controller
     {
         $messages = [
             'type.required' => 'type required',
+            'flag_instantmission.required' => 'flag instantmission required',
         ];
         $validatedData = Validator::make($request->all(), [
             'type' => 'required',
+            'flag_instantmission' => 'required',
         ], $messages);
 
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-
+        // 1=> this violation of instant mission
+        if($request->flag_instantmission == "1")
+        {
+            $point_id = Null;
+        }
+        else
+        {
+            $point_id = $request->point_id;
+        }
+        // 1 => مخالفة سلوك
         if ($request->type == "1") {
             // dd($request);
             $messages = [
@@ -76,7 +87,7 @@ class ViolationController  extends Controller
                'image.required' => 'المرفقات مطلوبة',
                 'violation_type.required' => 'نوع المخالفة مطلوب',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
-                'point_id.required' => 'رقم النقطة  مطلوب',
+                'point_id.required_if' => 'رقم النقطة  مطلوب',
                 'mission_id.required' => 'رقم المهمة  مطلوب',
             ];
             $validatedData = Validator::make($request->all(), [
@@ -86,7 +97,7 @@ class ViolationController  extends Controller
                 'image' => 'required',
                 'violation_type' => 'required',
                 'Civil_number' => 'required',
-                'point_id' => 'required',
+                 'point_id' => ['required_if:flag_instantmission,0'],
                 'mission_id' => 'required',
                 
             ], $messages);
@@ -104,8 +115,9 @@ class ViolationController  extends Controller
             $new->Civil_number = $request->Civil_number;
             $new->grade = $request->grade;
             $new->mission_id = $request->mission_id;
-            $new->point_id = $request->point_id;
+            $new->point_id = $point_id;
             $new->violation_type = $cleanedString;
+            $new->flag_instantmission = $request->flag_instantmission;
             $new->user_id = auth()->user()->id;
             // $new->user_id = 1;
             $new->save();
@@ -125,10 +137,15 @@ class ViolationController  extends Controller
             $messages = [    
                 'image.required' => 'المرفقات مطلوبة',
                 'violation_type.required' => 'نوع المخالفة مطلوب',
+                'point_id.required_if' => 'رقم النقطة  مطلوب',
+                'mission_id.required' => 'رقم المهمة  مطلوب',
             ];
             $validatedData = Validator::make($request->all(), [
                 'image' => 'required',
                 'violation_type' => 'required',
+                // 'point_id' => 'required',
+                'point_id' => ['required_if:flag_instantmission,0'],
+                'mission_id' => 'required',
             ], $messages);
 
             if ($validatedData->fails()) {
@@ -142,6 +159,9 @@ class ViolationController  extends Controller
             // $new->grade = $request->grade;
             // // $new->image = $request->image;
             $new->violation_type = json_encode($request->violation_type);
+            $new->flag_instantmission = $request->flag_instantmission;
+            $new->mission_id = $request->mission_id;
+            $new->point_id = $point_id;
             // // $new->user_id = auth()->user()->id;
             $new->user_id = 1;
             $new->save();
