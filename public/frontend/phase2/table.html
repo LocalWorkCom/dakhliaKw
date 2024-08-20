@@ -33,6 +33,20 @@
       width: 100%; /* Ensure the table takes the full width of its parent container */
     }
   </style>
+     <style>
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          cursor: move; /* Indicate that the cell is draggable */
+      }
+      td.dragging {
+          background-color: #f0f0f0;
+      }
+  </style>
 </head>
 
 <body>
@@ -706,8 +720,47 @@
         
         <tr>
           <!-- <td>1</td> -->
-          <td>1</td>
-          <td>احمد</td>
+          <tr>
+            <td id="cell1" draggable="true">1</td>
+            <td id="cell2" draggable="true">احمد</td>
+        </tr>
+        <script>
+          let draggedElement = null;
+      
+          document.addEventListener('dragstart', (event) => {
+              if (event.target.tagName === 'TD') {
+                  draggedElement = event.target;
+                  event.target.classList.add('dragging');
+              }
+          });
+      
+          document.addEventListener('dragover', (event) => {
+              event.preventDefault(); // Necessary to allow dropping
+          });
+      
+          document.addEventListener('drop', (event) => {
+              if (event.target.tagName === 'TD') {
+                  event.preventDefault();
+                  const targetCell = event.target;
+                  const sourceCell = draggedElement;
+      
+                  // Swap content
+                  const temp = targetCell.innerHTML;
+                  targetCell.innerHTML = sourceCell.innerHTML;
+                  sourceCell.innerHTML = temp;
+      
+                  // Remove dragging class
+                  sourceCell.classList.remove('dragging');
+                  draggedElement = null;
+              }
+          });
+      
+          document.addEventListener('dragend', (event) => {
+              if (event.target.tagName === 'TD') {
+                  event.target.classList.remove('dragging');
+              }
+          });
+      </script>
           <td class="rest">طارئه</td>
           <td class="rest">طارئه</td>
           <td>عاصمة 2</td>
