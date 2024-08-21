@@ -94,8 +94,8 @@
                     </div>
                     <div>
                         <label for=""> اسم الدولة :</label>
-                        <input type="text" style="border: 0.1px solid rgb(230, 228, 227);"
-                            value="{{ $vacation->country ? $vacation->country->country_name_ar : '' }}" disabled>
+                        <div style="border: 0.1px solid rgb(230, 228, 227);"
+                            value="{{ $vacation->country ? $vacation->country->country_name_ar : '' }}" ></div>
                     </div>
                 </div>
 
