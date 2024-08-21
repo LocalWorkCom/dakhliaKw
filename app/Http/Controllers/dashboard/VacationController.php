@@ -526,6 +526,14 @@ class VacationController extends Controller
         // Return the view with the data to be printed
         return view('vacation.returnback', compact('vacation'));
     }
+    public function permitVacation($id)
+    {
+        // Fetch the vacation record based on the provided ID
+        $vacation = EmployeeVacation::find($id);
+        // Return the view with the data to be printed
+        return view('vacation.requestVacation', compact('vacation'));
+    }
+    
 
     // public function printVacation($id)
     // {
