@@ -78,4 +78,8 @@ class InspectorMission extends Model
     {
         return $this->belongsTo(GroupTeam::class, 'group_team_id');
     }
+    public function absences()
+    {
+        return $this->hasMany(Absence::class, 'mission_id');
+    }
 }
