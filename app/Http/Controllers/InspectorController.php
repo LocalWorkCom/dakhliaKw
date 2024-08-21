@@ -159,21 +159,23 @@ class InspectorController extends Controller
         $inspectorUserIds = Inspector::pluck('user_id')->toArray();
         $allmangers = departements::whereNotNull('manger')->pluck('manger')->toArray();
         $userDepartmentId = Auth::user()->department_id;
-       // dd($allmangers);
+    //    dd($inspectorUserIds);
         if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
             $users = User::where('id', '!=', auth()->user()->id)
             ->whereNotIn('id', $inspectorUserIds)
             ->whereNotIn('id', $allmangers)
             ->get();
-        }else{ 
+        }else{
+            // dd("dd"); 
             $users = User::where('department_id', $departmentId)
             ->where('id', '!=', $department->manger)
             ->where('id', '!=', auth()->user()->id)
             ->whereNotIn('id', $inspectorUserIds)
-            ->get();
+            ->get();       
+            //  dd($users);
+
         }
       
-        //dd($users);
         return view('inspectors.create', compact('users'));
     }
 
@@ -195,7 +197,6 @@ class InspectorController extends Controller
             'user_id.required'=>'يجب ادخال الموظف المراد تحويله لمفتش',
             'position.required'=>'يجب ادخال الرتبه',
             'Id_number.required'=>'يجب ادخال رقم الهويه ',
-
             'type.required'=>'يجب اختيار نوع المفتش',
 
         ];

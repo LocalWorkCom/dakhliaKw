@@ -41,4 +41,8 @@ class Point extends Model
     {
         return $this->belongsTo(Grouppoint::class);
     }
+    public function absences()
+    {
+        return $this->hasMany(Absence::class, 'point_id');
+    }
 }
