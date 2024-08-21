@@ -93,11 +93,11 @@
                 {{-- <div class="form-row   mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="fromTime"> موعد البدايه </label>
-                        <input type="time" id="fromTime"   value="{{ $data->to ? date('H:i', strtotime($data->to)) : '' }}"  name="from" class="form-control" required />
+                        <input type="text" id="fromTime"   value="{{ $data->to ? date('H:i', strtotime($data->to)) : '' }}"  name="from" class="form-control" required />
                     </div>
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="toTime"> موعد النهايه </label>
-                        <input type="time" id="toTime" name="to"  value="{{ $data->to ? date('H:i', strtotime($data->to)) : '' }}"   class="form-control" required />
+                        <input type="text" id="toTime" name="to"  value="{{ $data->to ? date('H:i', strtotime($data->to)) : '' }}"   class="form-control" required />
                     </div>
                 </div>
 

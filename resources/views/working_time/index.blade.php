@@ -172,13 +172,12 @@
                                             <div class="form-group mb-3">
                                                 <label class="d-flex justify-content-start pb-2" for="start_time"> بداية
                                                     فترة العمل</label>
-                                                <input type="time" id="start_time" name="start_time"
-                                                    class="form-control" required>
+                                                    <input type="text" id="start_time" class="form-control" placeholder="Select time">
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label class="d-flex justify-content-start pb-2" for="end_time"> نهاية
                                                     فترة العمل</label>
-                                                <input type="time" id="end_time" name="end_time"
+                                                <input type="text" id="end_time" name="end_time"
                                                     class="form-control" required>
                                             </div>
                                             <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
@@ -238,13 +237,13 @@
                                             <div class="form-group mb-3">
                                                 <label class="d-flex justify-content-start pb-2"
                                                     for="start_time_edit">بداية فترة العمل</label>
-                                                <input type="time" id="start_time_edit" name="start_time_edit"
+                                                <input type="text" id="start_time_edit" name="start_time_edit"
                                                     class="form-control" required>
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label class="d-flex justify-content-start pb-2"
                                                     for="end_time_edit">نهاية فترة العمل</label>
-                                                <input type="time" id="end_time_edit" name="end_time_edit"
+                                                <input type="text" id="end_time_edit" name="end_time_edit"
                                                     class="form-control" required>
                                             </div>
                                             <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
@@ -302,14 +301,14 @@
                                         <div class="form-group mb-3">
                                             <label class="d-flex justify-content-start pb-2" for="start_time_show">
                                                 بداية فترة العمل</label>
-                                            <input type="time" id="start_time_show" name="start_time_show"
+                                            <input type="text" id="start_time_show" name="start_time_show"
                                                 class="form-control" disabled>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label class="d-flex justify-content-start pb-2" for="end_time_show">
                                                 نهاية
                                                 فترة العمل</label>
-                                            <input type="time" id="end_time_show" name="end_time_show"
+                                            <input type="text" id="end_time_show" name="end_time_show"
                                                 class="form-control" disabled>
                                         </div>
 
@@ -506,4 +505,5 @@
         </div>
     </div>
 </div>
+
 @endsection
