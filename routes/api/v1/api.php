@@ -28,11 +28,11 @@ Route::group(['middleware' => 'auth:api'], function () {
   
 Route::any('/Violation_type', 'App\Http\Controllers\Api\ViolationController@get_Violation_type');
 Route::post('/add_Violation', 'App\Http\Controllers\Api\ViolationController@add_Violation');
-Route::get('/get_all_instantMission', 'App\Http\Controllers\Api\ViolationController@get_all_instantMission');
+Route::any('/get_voilation_instantMission', 'App\Http\Controllers\Api\ViolationController@get_voilation_instantMission');
+Route::any('/get_all_violation', 'App\Http\Controllers\Api\ViolationController@get_all_violation');
 Route::any('/get_absence', 'App\Http\Controllers\Api\ApiAbsenceController@index');
 Route::post('/add_absence', 'App\Http\Controllers\Api\ApiAbsenceController@store');
 Route::get('/inspector/missions', [InspectorMissionController::class, 'getMissionsByInspector']);
-
 Route::post('/inspector/add/mission', [personalMissionController::class, 'addPersonalMission']);
 Route::get('/getAll/points', [personalMissionController::class, 'getAllPoints']);
 

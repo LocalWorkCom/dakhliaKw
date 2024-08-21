@@ -117,8 +117,8 @@ class InspectorMissionController extends Controller
                     'point_governate' => $point->government->name, // Assuming government name is the location
                     'point_time' => $inspectionTime, // Assuming 'time' is the attribute for time
                     'point_location' => $point->google_map, // Assuming 'time' is the attribute for time
-                    'latitude'=> $point->latitude, 
-                    'longitude'=> $point->longitude, 
+                    'latitude'=> $point->lat, 
+                    'longitude'=> $point->long, 
 
                         ];
                     }
