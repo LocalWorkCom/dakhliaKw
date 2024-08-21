@@ -535,6 +535,7 @@ class GroupTeamController extends Controller
                             $vacation_days = $EmployeeVacation->days_number; //3
                         }
                     }
+                    // $getCurrentPoints = InspectorMission::where('group_id', $currentGroup->group_id)->where('group_team_id', $currentGroup->id)->where('date', $date)->first()->ids_group_point;
                     // Update the inspector's mission details
                     $inspector_mission->inspector_id = $inspectorId;
                     $inspector_mission->group_id = $currentGroup->group_id;
