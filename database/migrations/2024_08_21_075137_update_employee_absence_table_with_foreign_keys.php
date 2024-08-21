@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('absence_employees', function (Blueprint $table) {
             $table->unsignedBigInteger('grade')->change();
 
-            $table->foreign('grade')->nullable()->references('id')->on('grades');
+            $table->foreign('grade')->nullable()->references('id')->on('grades')->onDelete('restrict')->onUpdate('cascade');
         });
     }
 
@@ -27,4 +27,7 @@ return new class extends Migration
             $table->dropForeign(['grade']);
         });
     }
+
+
+    
 };

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->unsignedBigInteger('inspector_id')->change();
 
             // Add the foreign key constraints
-            $table->foreign('point_id')->nullable()->references('id')->on('points');
-            $table->foreign('mission_id')->nullable()->references('id')->on('inspector_mission');
-            $table->foreign('inspector_id')->nullable()->references('id')->on('inspectors');
+            $table->foreign('point_id')->nullable()->references('id')->on('points')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('mission_id')->nullable()->references('id')->on('inspector_mission')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('inspector_id')->nullable()->references('id')->on('inspectors')->onDelete('restrict')->onUpdate('cascade');
         });
     }
 
