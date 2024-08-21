@@ -71,11 +71,12 @@ class inspector_mission extends Command
                     $user_id  = Inspector::find($Inspector)->user_id;
                     if ($vacation_days == 0) {
 
-                        $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first();
+                        $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first(); //1/9/2024
                         if ($EmployeeVacation) {
-                            $vacation_days = $EmployeeVacation->days_number;
+                            $vacation_days = $EmployeeVacation->days_number; //3
                         }
                     }
+
                     // insert data for monthly
                     $inspectorMission = new InspectorMission();
                     $inspectorMission->inspector_id = $Inspector;
@@ -85,11 +86,16 @@ class inspector_mission extends Command
                     $inspectorMission->working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
                     $inspectorMission->date = $date;
                     if ($vacation_days != 0) {
+                      
+
                         $inspectorMission->vacation_id = $EmployeeVacation->id;
                     }
                     $inspectorMission->day_off = $is_day_off ? 1 : 0;
                     $inspectorMission->save();
-                    $vacation_days--;
+                    if ($vacation_days != 0) {
+
+                        $vacation_days--;
+                    }
 
                     // Move to the next day
                     $date = date('Y-m-d', strtotime($date . ' +1 day'));
