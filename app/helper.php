@@ -160,7 +160,8 @@ function generateUniqueNumber($counter)
     return ['formattedNumber' => $formattedNumber, 'counter' => $counter + 1];
 }
 
-function getLatLongFromUrl($url) {
+function getLatLongFromUrl($url)
+{
 
     $shortenerDomains = [
         'bit.ly',
@@ -176,8 +177,7 @@ function getLatLongFromUrl($url) {
 
     // Parse the domain from the URL
     $host = parse_url($url, PHP_URL_HOST);
-    if(in_array($host, $shortenerDomains) == true)
-    {
+    if (in_array($host, $shortenerDomains) == true) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -257,8 +257,13 @@ function CheckUploadIoFiles($id)
 function getEmployees()
 {
     $departmentId = auth()->user()->department_id; // Or however you determine the department ID
-    return User::where('users.department_id', $departmentId)
-    ->where('users.id', '<>' ,auth()->user()->id)->get();
+    if (auth()->user()->rule_id == 2) {
+
+        return User::all();
+    } else {
+        return User::where('users.department_id', $departmentId)
+            ->where('users.id', '<>', auth()->user()->id)->get();
+    }
 }
 function getDepartments()
 {

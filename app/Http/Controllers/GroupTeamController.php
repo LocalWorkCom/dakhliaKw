@@ -335,6 +335,7 @@ class GroupTeamController extends Controller
 
         // Generate missions for added or changed inspectors
         foreach ($changeArr as $Inspector) {
+            $vacation_days = 0;
             $date = $start_day_date; // Start from the current date
             $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$Inspector])->first();
 
@@ -373,6 +374,16 @@ class GroupTeamController extends Controller
                         $day_off = $is_day_off ? 1 : 0;
                         $working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
                     }
+
+                    $user_id  = Inspector::find($Inspector)->user_id;
+
+                    if ($vacation_days == 0) {
+
+                        $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first(); //1/9/2024
+                        if ($EmployeeVacation) {
+                            $vacation_days = $EmployeeVacation->days_number; //3
+                        }
+                    }
                     $inspectorMission = new InspectorMission();
                     $inspectorMission->inspector_id = $Inspector;
                     $inspectorMission->group_id = $GroupTeam->group_id;
@@ -382,8 +393,13 @@ class GroupTeamController extends Controller
                     $inspectorMission->date = $date;
                     $inspectorMission->ids_group_point = $points;
                     $inspectorMission->day_off = $day_off;
+                    if ($vacation_days != 0) {
+                        $inspectorMission->vacation_id = $EmployeeVacation->id;
+                    }
                     $inspectorMission->save();
-
+                    if ($vacation_days != 0) {
+                        $vacation_days--;
+                    }
                     // Move to the next day
                     $date = date('Y-m-d', strtotime($date . ' +1 day'));
                 }
@@ -464,6 +480,8 @@ class GroupTeamController extends Controller
 
         // Only update inspector missions for transferred inspectors
         foreach ($transferredInspectors as $inspectorId) {
+            $vacation_days = 0;
+
             // Get current missions for the inspector starting from today
             $inspector_missions = InspectorMission::where('inspector_id', $inspectorId)->where('date', '>=', today())->get();
             // Get the current group and its working tree
@@ -508,6 +526,15 @@ class GroupTeamController extends Controller
                         $day_off = $is_day_off ? 1 : 0;
                         $working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
                     }
+                    $user_id  = Inspector::find($inspectorId)->user_id;
+
+                    if ($vacation_days == 0) {
+
+                        $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first(); //1/9/2024
+                        if ($EmployeeVacation) {
+                            $vacation_days = $EmployeeVacation->days_number; //3
+                        }
+                    }
                     // Update the inspector's mission details
                     $inspector_mission->inspector_id = $inspectorId;
                     $inspector_mission->group_id = $currentGroup->group_id;
@@ -517,8 +544,13 @@ class GroupTeamController extends Controller
                     $inspector_mission->date = $date;
                     $inspector_mission->ids_group_point = $points;
                     $inspector_mission->day_off = $day_off;
+                    if ($vacation_days != 0) {
+                        $inspector_mission->vacation_id = $EmployeeVacation->id;
+                    }
                     $inspector_mission->save();
-
+                    if ($vacation_days != 0) {
+                        $vacation_days--;
+                    }
                     // Move to the next day
                     $date = date('Y-m-d', strtotime($date . ' +1 day'));
                     $day_of_month++;
@@ -563,6 +595,15 @@ class GroupTeamController extends Controller
                             $day_off = $is_day_off ? 1 : 0;
                             $working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
                         }
+                        $user_id  = Inspector::find($inspectorId)->user_id;
+
+                        if ($vacation_days == 0) {
+
+                            $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first(); //1/9/2024
+                            if ($EmployeeVacation) {
+                                $vacation_days = $EmployeeVacation->days_number; //3
+                            }
+                        }
                         // Create a new inspector mission
                         $inspectorMission = new InspectorMission();
                         $inspectorMission->inspector_id = $inspectorId;
@@ -571,10 +612,15 @@ class GroupTeamController extends Controller
                         $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
                         $inspectorMission->working_time_id = $working_time_id;
                         $inspectorMission->date = $date;
+                        if ($vacation_days != 0) {
+                            $inspectorMission->vacation_id = $EmployeeVacation->id;
+                        }
                         $inspectorMission->ids_group_point = $points;
                         $inspectorMission->day_off = $day_off;
                         $inspectorMission->save();
-
+                        if ($vacation_days != 0) {
+                            $vacation_days--;
+                        }
                         // Move to the next day
                         $date = date('Y-m-d', strtotime($date . ' +1 day'));
                     }
