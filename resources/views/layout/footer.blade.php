@@ -326,3 +326,15 @@
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- for input time  -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+        flatpickr("#start_time, #end_time, #fromTime,#toTime, #start_time_edit, #end_time_edit, #start_time_show, #end_time_show, #fromTime, #toTime", {
+            enableTime: true,        // Enable time picker
+            noCalendar: true,        // Disable calendar view
+            dateFormat: "h:i K",     // Set format for 12-hour time with AM/PM
+            time_24hr: false,        // Use 12-hour format (set to true for 24-hour format)
+            minuteIncrement: 1       // Set minute increment step
+        });
+    </script>
