@@ -72,7 +72,8 @@
             </div>
 
             @include('inc.flash')
-
+            <!-- Form to print return vacation -->
+            
             <div class="col-lg-12">
                 <table id="users-table" class="display table table-responsive-sm table-bordered table-hover dataTable">
                     <thead>
@@ -121,7 +122,13 @@
                         </div>
                     </div>
                 </div>
-
+                @foreach($vacations as $vacation)
+                    <script>
+                        let vacationId = @json($vacation->id);
+                        // JavaScript code to append buttons, using vacationId
+                    </script>
+                @endforeach
+                
                 <!-- Script for DataTables and modal behavior -->
                 <script>
                     function UpdateDate() {
@@ -264,8 +271,12 @@
                                     }
 
                                     if (row.VacationStatus == 'منتهية') {
-                                        buttons +=
-                                            `<a href="" class="edit btn btn-sm" style="background-color: #2099c5;"><i class="fa-solid fa-print"></i> طباعة العودة</a>`;
+                                        buttons += `
+                                        <form id="print_returnVacation" action="{{ route('vacation.print_return', ['id' => $vacation->id]) }}" method="POST" style="display:inline;">@csrf
+                                                    <a href="#" class="edit btn btn-sm" style="background-color: #2099c5;" onclick="document.getElementById(\'print_returnVacation\').submit();">
+                                                        <i class="fa-solid fa-print"></i> طباعة العودة
+                                                    </a>
+                                                </form>`
                                         if (!row.end_date) {
                                             buttons +=
                                                 `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c96f3d;" onclick="update_type('direct_work', '${row.id}')"><i class="fa-brands fa-stack-overflow"></i> مباشرة العمل</a>`;

@@ -53,7 +53,6 @@ class VacationController extends Controller
         //         })
         //         ->make(true);
         // }
-
         $vacationCount = $vacations->count();
         $vacations = $vacations->with('employee', 'vacation_type')->orderby('created_at', 'desc')->get();
         $EmployeeVacations = EmployeeVacation::all();
@@ -108,7 +107,7 @@ class VacationController extends Controller
             $EmployeeVacations = EmployeeVacation::where('employee_id', $id)
                 ->with('employee', 'vacation_type')
                 ->orderby('created_at', 'desc')
-            ->get();
+                ->get();
             foreach ($EmployeeVacations->clone()->get() as  $EmployeeVacation) {
                 # code...
                 $EmployeeVacation['StartVacation'] = CheckStartVacationDate($EmployeeVacation->id);
@@ -188,7 +187,7 @@ class VacationController extends Controller
      */
     public function create($id = 0)
     {
-            
+
         $employees = getEmployees();
         $vacation_types = getVactionTypes();
         if ($id) {
@@ -519,4 +518,25 @@ class VacationController extends Controller
         }
         return true;
     }
+
+    public function print_returnVacation($id)
+    {
+        // Fetch the vacation record based on the provided ID
+        $vacation = EmployeeVacation::find($id);
+        // Return the view with the data to be printed
+        return view('vacation.returnback', compact('vacation'));
+    }
+
+    // public function printVacation($id)
+    // {
+    //     // Fetch the vacation record based on the provided ID
+    //     $vacation = EmployeeVacation::find($id);
+
+    //     // Prepare any data needed for the view, such as related employee, vacation type, etc.
+    //     // $relatedData = ...
+
+    //     // Return the view with the data to be printed
+    //     return view('vacation.returnback', compact('vacation'));
+    // }
+
 }
