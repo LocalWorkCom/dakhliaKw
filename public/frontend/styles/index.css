@@ -1492,3 +1492,20 @@ td.dragging {
 input::placeholder {
     text-align: right;
 }
+
+
+.nav-item.active a h6{
+    color: #07509e; /* Change color to your desired active color */
+    font-weight: bold; /* Optional: Make the text bold */
+    text-decoration: underline;
+}
+.dropdown-menu,
+.dropdown-menu2,
+.dropdown-menu4,
+.dropdown-menu5 {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+}
