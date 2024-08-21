@@ -31,6 +31,7 @@ Route::post('/add_Violation', 'App\Http\Controllers\Api\ViolationController@add_
 Route::any('/get_absence', 'App\Http\Controllers\Api\ApiAbsenceController@index');
 Route::post('/add_absence', 'App\Http\Controllers\Api\ApiAbsenceController@store');
 Route::get('/inspector/missions', [InspectorMissionController::class, 'getMissionsByInspector']);
+Route::get('/inspector/missions', [InspectorMissionController::class, 'getMissionsByInspector']);
 
 Route::post('/inspector/add/mission', [personalMissionController::class, 'addPersonalMission']);
 Route::get('/getAll/points', [personalMissionController::class, 'getAllPoints']);
