@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\departements;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
+use App\Models\Rule;
 use App\Models\User;
 use Yajra\DataTables\DataTables;
 
@@ -207,17 +208,21 @@ class InspectorController extends Controller
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
+        $rule= Rule::where('name','inspector')->first();
         $user = User::findOrFail($request->user_id);
         //dd($user->flag);
         if($user->flag === "employee"){
           //  $user->flag = "user";
             $user->password =  Hash::make('123456');
+            $user->rule_id = $rule->id;
             $user->save();
         }else{
             $user->flag = "employee";
+            $user->rule_id = $rule->id;
           //  $user->password =  Hash::make('123456');
             $user->save();
         }
+        
         $inspector = new Inspector();
         $inspector->name = $request->name;
         $inspector->phone = $request->phone;
@@ -225,7 +230,7 @@ class InspectorController extends Controller
         $inspector->type = $request->type;
 
         $inspector->position = $request->position;
-
+        
         $inspector->user_id = $request->user_id;
         $inspector->Id_number = $user->Civil_number;
         $inspector->department_id = $user->department_id;
