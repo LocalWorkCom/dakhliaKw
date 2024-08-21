@@ -10,7 +10,7 @@ class AbsenceEmployee extends Model
     use HasFactory;
     public function gradeName()
     {
-        return $this->belongsTo(Grade::class, 'grade'); // Assuming 'grade' is the foreign key column
+        return $this->belongsTo(grade::class, 'grade'); // Assuming 'grade' is the foreign key column
     }
 
     // Define the relationship to the AbsenceType model
