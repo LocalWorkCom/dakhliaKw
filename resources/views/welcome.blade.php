@@ -70,7 +70,7 @@
                       <img src="{{ asset('frontend/images/management-card.svg')}}" alt="">
                   </div>
               </div>
-              <div class=" card1 col-md-6 col-12 d-flex col-sm-10 d-flex mx-lg-3 mx-md-2 sm-mb-2" style="background-color:#FFF4DE;">
+              <div class=" card1 col-md-6 col-12 d-flex col-sm-10 d-flex mx-lg-4 mx-md-2 sm-mb-2" style="background-color:#FFF4DE;">
          <div class="details">
                       <p>الموظفين</p>
                       <p>98224</p>
@@ -93,7 +93,7 @@
                       <img src="{{ asset('frontend/images/imports-card.svg')}}" alt="">
                   </div>
               </div>
-              <div class="card4 col-md-6 col-12 d-flex col-sm-10 d-flex mx-lg-3 mx-md-2 mb-5 sm-mb-2" style="background-color:#E8F0FF;">
+              <div class="card4 col-md-6 col-12 d-flex col-sm-10 d-flex mx-lg-4 mx-md-2 mb-5 sm-mb-2" style="background-color:#E8F0FF;">
               <div class="details ">
                       <p>الوارد &nbsp; </p>
                       <p>21025</p>
