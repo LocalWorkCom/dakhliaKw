@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>header</title>
-    <script type="application/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="application/javascript" src="{{asset('frontend/js/bootstrap.min')}}.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
@@ -15,9 +15,9 @@
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Bootstrap-->
-    <link href="../styles/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <link rel="stylesheet" href="../styles/index.css">
-    <link rel="stylesheet" href="../styles/responsive.css">
+    <link href="{{ asset('frontend/styles/bootstrap.min') }}.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="{{ asset('frontend/styles/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/styles/responsive.css') }}">
 </head>
 
 
@@ -27,14 +27,14 @@
             <div class="header mx-5 mt-5">
                 <div class="row d-flex justify-content-between ">
                     <div class=" request-headeer ">
-                        <img src="../images/apply.png" alt="">
+                        <img src="{{ asset('frontend/images/apply.png') }}" alt="">
                     </div>
                     <div class=" logo-request my-5 ">
-                        <img src="../images/logo.svg" alt="">
+                        <img src="{{ asset('frontend/images/logo.svg') }}" alt="">
                         <p class="my-2">المدير العام</p>
                     </div>
                     <div class=" request-headeer">
-                        <img src="../images/return.png" alt="">
+                        <img src="{{ asset('frontend/images/return.png') }}" alt="">
                     </div>
                 </div>
                 <div class="row d-flex justify-content-center mb-5">
@@ -51,44 +51,51 @@
 
                 <div class="row d-flex justify-content-center ">
                     <div class="text-request">
-                        <p> الموضوع / مدني 123 / داليا </p>
+                        <p>
+                            @if ($vacation->employee && $vacation->employee->grade)
+                                {{ $vacation->employee->grade->name }}
+                            @endif
+                            / {{ $vacation->employee->name }}
+                        </p>
                     </div>
                 </div>
                 <div class="row d-flex justify-content-center mb-5">
                     <div class="text-request mb-5">
-                        <p>رقم الملف / 111</p>
+                        <p>رقم الملف / {{ $vacation->employee->file_number }} </p>
                     </div>
                 </div>
 
                 <div class="row qoute " dir="rtl">
                     <p class=" "> يرجى التكرم بالموافقة علي اجازه
-                        <span> ( سنوية )</span>
+                        <span> ( {{ $vacation->vacation_type->name }} )</span>
                         للمذكور اعلاه و لمدة
-                        <span> ( 5 )</span>
+                        <span> ( {{ $vacation->days_number }} )</span>
                         ايام و الممنوحة له بالنشرة رقم
                         <span> ( 2020/12 )</span>
                         على ان تبدأ من تاريخ
 
 
                     </p>
-                    <p><span> ( 2020/12/21 )</span>
+                    <p><span> ( {{ date('Y-m-d', strtotime($vacation->start_date)) }} )</span>
                         حتى تاريخ
-                        <span> ( 2020 /12/26 )</span>
+                        <span>( {{ date('Y-m-d', strtotime(ExpectedEndDate($vacation)[0])) }} )</span>
                     </p>
                 </div>
                 <br>
                 <div class="row inputs-request d-flex justify-content-around " dir="rtl">
                     <div>
-                        <input type="checkbox">
+                        <input type="checkbox" disabled @if (!$vacation->country) checked @endif>
                         <label for=""> داخل الكويت</label>
                     </div>
                     <div>
-                        <input type="checkbox" height="30" width="30">
+                        <input type="checkbox" height="30" width="30" disabled
+                            @if ($vacation->country) checked @endif>
                         <label for=""> خارج الكويت</label>
                     </div>
                     <div>
                         <label for=""> اسم الدولة :</label>
-                        <input type="text" style="border: 0.1px solid rgb(230, 228, 227);">
+                        <input type="text" style="border: 0.1px solid rgb(230, 228, 227);"
+                            value="{{ $vacation->country ? $vacation->country->country_name_ar : '' }}" disabled>
                     </div>
                 </div>
 
