@@ -63,10 +63,17 @@ class GroupTeamController extends Controller
                 if ($inspector_ids) {
 
                     $inspectorIds = explode(',', $inspector_ids);
+                    $departmentId = auth()->user()->department_id; // Or however you determine the department ID
 
                     // Count the number of inspectors
+                    if (auth()->user()->rule_id == 2) {
+                        $count = count($inspectorIds);
+                    } else {
 
-                    $count = count($inspectorIds);
+                        $count = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+                            ->where('users.department_id', $departmentId)
+                            ->where('users.id', '<>', auth()->user()->id)->whereIn('inspectors.id', $inspectorIds)->count();
+                    }
                 } else {
                     $count = 0;
                 }
@@ -184,6 +191,7 @@ class GroupTeamController extends Controller
                     $query->where('inspectors.group_id', $team->group_id)
                         ->orWhereNull('inspectors.group_id');
                 })
+                ->where('users.id', '<>', auth()->user()->id)
                 ->select("inspectors.*")->get();
         }
 
@@ -592,11 +600,11 @@ class GroupTeamController extends Controller
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                 ->where('group_id', $group_id)
                 ->select("inspectors.*")->get();
-                
         } else {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                 ->where('users.department_id', $departmentId)
                 ->where('group_id', $group_id)
+                ->where('users.id', '<>', auth()->user()->id)
                 ->select("inspectors.*")->get();
         }
 
