@@ -88,7 +88,7 @@ class ApiAbsenceController extends Controller
         $abs = $request->total_number - $request->actual_number;
         if($request->total_number != $request->actual_number && $abs !=  count($request->AbsenceEmployee))
         {
-            return $this->respondError('عدد الموظفين  المدخل لا يتوافق مع عددهم', ['absence_number' => [' عدد الموظفين  المدخل لا يتوافق مع عددهم']], 400);
+            return $this->respondError('يرجى ادخال باقى الموظفين', ['absence_number' => [' عدد الموظفين  المدخل لا يتوافق مع عددهم']], 400);
         }
         else
         {
