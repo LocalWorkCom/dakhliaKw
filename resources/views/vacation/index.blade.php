@@ -73,7 +73,7 @@
 
             @include('inc.flash')
             <!-- Form to print return vacation -->
-            
+
             <div class="col-lg-12">
                 <table id="users-table" class="display table table-responsive-sm table-bordered table-hover dataTable">
                     <thead>
@@ -122,13 +122,8 @@
                         </div>
                     </div>
                 </div>
-                @foreach($vacations as $vacation)
-                    <script>
-                        let vacationId = @json($vacation->id);
-                        // JavaScript code to append buttons, using vacationId
-                    </script>
-                @endforeach
-                
+
+
                 <!-- Script for DataTables and modal behavior -->
                 <script>
                     function UpdateDate() {
@@ -272,7 +267,7 @@
 
                                     if (row.VacationStatus == 'منتهية') {
                                         buttons += `
-                                        <form id="print_returnVacation" action="{{ route('vacation.print_return', ['id' => $vacation->id]) }}" method="POST" style="display:inline;">@csrf
+                                        <form id="print_returnVacation" action="${urls.printReturn}" method="POST" style="display:inline;">@csrf
                                                     <a href="#" class="edit btn btn-sm" style="background-color: #2099c5;" onclick="document.getElementById(\'print_returnVacation\').submit();">
                                                         <i class="fa-solid fa-print"></i> طباعة العودة
                                                     </a>
@@ -287,9 +282,9 @@
                                         buttons +=
                                             `<form id="rejectForm" action="${urls.reject}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('rejectForm').submit();"><i class="fa fa-times"></i> رفض</a></form>`;
                                         buttons +=
-                                            `<form id="permitForm" action="${urls.permit}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('permitForm').submit();"><i class="fa fa-times"></i> تصريح</a></form>`;
-                                        buttons +=
-                                            `<form id="printForm" action="${urls.print}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('printForm').submit();"><i class="fa fa-times"></i> طباعة</a></form>`;
+                                            `<form id="permitForm" action="${urls.permit}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #a335dc;" onclick="document.getElementById('permitForm').submit();"> <i class="fa-solid fa-print"></i> تصريح</a></form>`;
+                                        // buttons +=
+                                            // `<form id="printForm" action="${urls.print}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('printForm').submit();"><i class="fa fa-times"></i> طباعة</a></form>`;
                                     } else if (row.VacationStatus == 'متجاوزة') {
                                         buttons +=
                                             `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #9dad1f;" onclick="update_type('direct_exceed', '${row.id}')"><i class="fa fa-eye"></i> باشر بعد التجاوز</a>`;
@@ -369,6 +364,7 @@
                         // });
 
                     });
+                    
 
 
                     $(document).ready(function() {

@@ -68,14 +68,14 @@ class ApiAbsenceController extends Controller
             'actual_number.required' => 'الرقم الفعلى  مطلوب ولا يمكن تركه فارغاً.',
             'point_id.required' => 'رقم النقطة  مطلوب .',
             'mission_id.required' => 'رقم المهمة مطلوبة',
-            // 'date.required' => 'التاريخ مطلوبة',
+            // 'AbsenceEmployee.required_if' => 'التاريخ مطلوبة',
         ];
         $validatedData = Validator::make($request->all(), [
             'total_number' => 'required',
             'actual_number' => 'required',
             'point_id' => 'required',
             'mission_id' => 'required',
-            // 'date'=> 'required' 
+            // 'AbsenceEmployee'=> ['required_if:total_number -actual_number ,0']
         ], $messages);
         
         if ($validatedData->fails()) {
@@ -86,9 +86,9 @@ class ApiAbsenceController extends Controller
         //  dd(auth()->user()->inspectors);
         $today = Carbon::today()->toDateString();
         $abs = $request->total_number - $request->actual_number;
-        if( $abs !=  count($request->AbsenceEmployee))
+        if($request->total_number != $request->actual_number && $abs !=  count($request->AbsenceEmployee))
         {
-            return $this->respondError('failed to save', ['absence_number' => [' عدد الموظفين  المدخل لا يتوافق مع عددهم']], 400);
+            return $this->respondError('عدد الموظفين  المدخل لا يتوافق مع عددهم', ['absence_number' => [' عدد الموظفين  المدخل لا يتوافق مع عددهم']], 400);
         }
         else
         {
@@ -104,10 +104,10 @@ class ApiAbsenceController extends Controller
     
     
                 if($new)
-                {
-                    if($request->has('AbsenceEmployee'))
+                {$array=[];
+                    if($request->has('AbsenceEmployee') &&($request->total_number > $request->actual_number))
                     {
-                        $array=[];
+                        
                         foreach($request->AbsenceEmployee as $item)
                         {
                             $Emp = new AbsenceEmployee();
