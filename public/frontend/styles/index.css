@@ -115,7 +115,7 @@ ul {
     margin-top: 5px;
 } */
 .first-section {
-    margin-left: -125px;
+    /* margin-left: -125px; */
 }
 .first-section img{
     height:70px;
@@ -312,7 +312,7 @@ color: #FFFFFF;
     height: 44px;
 }
 .second-section input::placeholder{
-text-align: end;
+/* text-align: end; */
 padding-inline: 10px;
 }
 li:hover{
@@ -358,7 +358,7 @@ font-size: 38px;
 font-weight: 700;
 line-height: 44.64px;
 text-align: right;
-padding-right: 90px;
+/* padding-right: 90px; */
 
 }
 footer{
@@ -839,7 +839,7 @@ input[type="radio"]{
 }
 .welcome p{
     position: absolute;
-    right: -100px;
+    /* right: -100px; */
     animation: welcome-text 1s forwards;
 }
 
@@ -886,8 +886,10 @@ background-color: #F4F7FD;
     border: 1.5px solid #cfc8c8;
     height: 38px;
     margin-bottom: 10px;
-    text-align: center !important;
+    text-align: right !important;
     color: #9b9999 !important;
+    direction: rtl !important;
+    padding-right: 15px !important;
 }
 .dataTables_wrapper .dataTables_filter input {
     margin-left: 0em !important;
@@ -1482,4 +1484,28 @@ width: 250px;border: 1px solid black;
 
 td.dragging {
     background-color: #f0f0f0;
+}
+.change-place {
+    color: black;
+    font-weight: 700;
+}
+input::placeholder {
+    text-align: right;
+}
+
+
+.nav-item.active a h6{
+    color: #07509e; /* Change color to your desired active color */
+    font-weight: bold; /* Optional: Make the text bold */
+    text-decoration: underline;
+}
+.dropdown-menu,
+.dropdown-menu2,
+.dropdown-menu4,
+.dropdown-menu5 {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
 }

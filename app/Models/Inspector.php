@@ -28,4 +28,8 @@ class Inspector extends Model
     {
         return $this->belongsTo(GroupTeam::class,'inspector_ids');
     }
+    public function absences()
+    {
+        return $this->hasMany(Absence::class, 'inspector_id');
+    }
 }

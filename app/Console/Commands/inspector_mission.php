@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\EmployeeVacation;
 use App\Models\Groups;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
@@ -39,9 +40,9 @@ class inspector_mission extends Command
         $start_day_date = date('Y-m-01');
         $num_days = date('t', strtotime($start_day_date)); // Get the number of days in the month
         $Inspectors = Inspector::pluck('id')->toArray(); // get inspectors ids
-
         // to get inspectors ids
         foreach ($Inspectors as $Inspector) {
+            $vacation_days = 0;
             $date = $start_day_date; // Start from the 1st of the month
             $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$Inspector])->first(); //to get team for inspector
             // if team exist
@@ -67,6 +68,15 @@ class inspector_mission extends Command
                         ->where('day_num', $day_in_cycle)
                         ->first()
                         : null;
+                    $user_id  = Inspector::find($Inspector)->user_id;
+                    if ($vacation_days == 0) {
+
+                        $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first(); //1/9/2024
+                        if ($EmployeeVacation) {
+                            $vacation_days = $EmployeeVacation->days_number; //3
+                        }
+                    }
+
                     // insert data for monthly
                     $inspectorMission = new InspectorMission();
                     $inspectorMission->inspector_id = $Inspector;
@@ -75,8 +85,17 @@ class inspector_mission extends Command
                     $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
                     $inspectorMission->working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
                     $inspectorMission->date = $date;
+                    if ($vacation_days != 0) {
+                      
+
+                        $inspectorMission->vacation_id = $EmployeeVacation->id;
+                    }
                     $inspectorMission->day_off = $is_day_off ? 1 : 0;
                     $inspectorMission->save();
+                    if ($vacation_days != 0) {
+
+                        $vacation_days--;
+                    }
 
                     // Move to the next day
                     $date = date('Y-m-d', strtotime($date . ' +1 day'));

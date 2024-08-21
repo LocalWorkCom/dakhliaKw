@@ -144,7 +144,8 @@
                                 console.log('Success:', data);
                                 // Optionally, you can close the modal and refresh the DataTable
                                 $('#representative').modal('hide');
-                                $('#users-table').DataTable().ajax.reload();
+                                // $('#users-table').DataTable().ajax.reload();
+                                window.location.reload();
                             },
                             error: function(xhr, status, error) {
                                 console.log('Error:', error);

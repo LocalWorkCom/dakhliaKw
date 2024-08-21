@@ -44,10 +44,12 @@ class UserController extends Controller
         }
 
         // Check if the user has the correct flag
-        if ($user->flag !== 'user') {
+
+       /*  if ($user->flag !== 'user') {
           //  return back()->with('error', 'لا يسمح لك بدخول الهيئة');
           return $this->respondError('Validation Error.', ['not authorized'=> ['لا يسمح لك بدخول الهيئة']], 400);
-        }
+        } */
+
 
         $credentials = $request->only('military_number', 'password');
         //DD(Auth::attempt($credentials));

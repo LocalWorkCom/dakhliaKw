@@ -46,7 +46,7 @@
                     @if(session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-                    <label for="username" class="login-label">رقم العسكري</label> <br>
+                    <label for="username" class="login-label">اسم المستخدم</label> <br>
                     <input type="text" name="military_number" id="username" class="login-input"> <br>
                     <label for="password" class="login-label">كلمة المرور</label> <br>
                     <div class="password-container">

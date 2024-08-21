@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 
-class GroupPointsController extends Controller
+class groupPointsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -110,7 +110,7 @@ class GroupPointsController extends Controller
 
         // Get unique government IDs from the selected points
         $governmentIds = $selectedPoints->pluck('government_id')->unique();
-
+       // dd($governmentIds);
         // Fetch all points for the same government
         $allPoints = Point::whereIn('government_id', $governmentIds)->get();
 
@@ -200,18 +200,17 @@ class GroupPointsController extends Controller
             ->get();
 
         foreach ($deleted as $record) {
-            // Optional: Perform actions with the retrieved records
-            $record->delete();
+            $record->deleted=1;
+            $record->save();
         }
         // Add removed values to Grouppoint with flag = 0
         foreach ($removedPointsIDs as $removedID) {
-            $pointNew= Point::find($removedID);
-            Grouppoint::create([
-                'name' => $pointNew->name, 
-                'points_ids' => [$removedID],
-                'government_id' => $points->government_id,
-                'flag' => 0,
-            ]);
+           $idpoint= Grouppoint::where('flag', 0)
+            ->whereJsonContains('points_ids', $removedID)
+             ->first();
+             //dd($idpoint);
+          $idpoint->deleted=0;
+          $idpoint->save();
         }
         return redirect()->route('points.index')->with('message', 'تم تعديل مجموعه ');
     }

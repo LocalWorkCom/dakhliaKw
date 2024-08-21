@@ -7,7 +7,7 @@ use App\Http\Controllers\outgoingController;
 use App\Http\Controllers\dashboard\VacationController;
 use App\Http\Controllers\dashboard\WorkingTreeController;
 use App\Http\Controllers\governmentController;
-use App\Http\Controllers\groupPointsController;
+use App\Http\Controllers\GroupPointsController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RuleController;
 use App\Http\Controllers\SettingsController;
@@ -336,12 +336,12 @@ Route::middleware(['auth'])->group(function () {
     //End points
 
     //Start GroupPoints
-    Route::get('points/create/group', [GroupPointsController::class, 'create'])->name('grouppoints.create');
-    Route::post('points/add/group', [GroupPointsController::class, 'store'])->name('grouppoints.store');
-    Route::get('points/edit/group/{id}', [GroupPointsController::class, 'edit'])->name('grouppoints.edit');
-    Route::post('points/update/group/{id}', [GroupPointsController::class, 'update'])->name('grouppoints.update');
+    Route::get('points/create/group', [groupPointsController::class, 'create'])->name('grouppoints.create');
+    Route::post('points/add/group', [groupPointsController::class, 'store'])->name('grouppoints.store');
+    Route::get('points/edit/group/{id}', [groupPointsController::class, 'edit'])->name('grouppoints.edit');
+    Route::post('points/update/group/{id}', [groupPointsController::class, 'update'])->name('grouppoints.update');
 
-     Route::get('trstssss', [governmentController::class, 'index']);
+     Route::get('trstssss', [governmentController::class, 'test']);
 
     //End GroupPoints
     Route::get('/get-governorates/{sector}', [pointsController::class, 'getGovernorates']);

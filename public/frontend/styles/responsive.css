@@ -62,9 +62,9 @@
     #users-table th ,  #users-table td{
         font-size: 20px;
     }
-    .first-section {
+    /* .first-section {
         margin-left: -130px;
-    }
+    } */
     .first-section h2 {
         font-family: Almarai;
         font-size: 22px;
@@ -179,7 +179,7 @@
     .welcome p {
         font-size: 29px;
         line-height: 46.64px;
-        padding-right: 55px;
+        /* padding-right: 55px; */
     }
     .card1, .card2, .card3, .card4 {
         /* width: 233px; */
@@ -345,9 +345,9 @@
         height: 175px;
         width: 153px !important;
     }
-    .first-section {
+    /* .first-section {
         margin-left: -110px;
-    }
+    } */
     .container-responsive {
         display: none;
     }
@@ -415,7 +415,7 @@
     .welcome p {
         font-size: 28px;
         line-height: 37.64px;
-        padding-right: 20px;
+        /* padding-right: 20px; */
     }
     .container .icon {
         height: 60px;
@@ -513,9 +513,9 @@
         padding-left: 55px;
         padding-right: 55px;
     }
-    .first-section {
+    /* .first-section {
         margin-left: -115px;
-    }
+    } */
     .container-responsive {
         display: none;
     }
@@ -658,9 +658,9 @@
         line-height: 80px;
         margin-right: 8px;
     }
-    .first-section {
+    /* .first-section {
         margin-left: -73px;
-    }
+    } */
    .dropdown-menu3 {
         top: 100%;
         left: -30px;
@@ -800,9 +800,9 @@
         font-size: 23px;
     }
    
-    .first-section {
+    /* .first-section {
         margin-left: -72px;
-    }
+    } */
    
     .input-group button {
         width: 27px;
@@ -930,9 +930,9 @@
         height: 127px;
         width: 135px !important;
     }
-    .first-section {
+    /* .first-section {
         margin-left: -92px;
-    }
+    } */
     .navbar-nav{
         display: flex;
         flex-wrap: wrap;
@@ -973,7 +973,7 @@
     .welcome p {
         font-size: 20px;
         line-height: 19.64px;
-        padding-right: 15px;
+        /* padding-right: 15px; */
     }
     .card1, .card2, .card3, .card4 {
         height: 152px;
@@ -1101,9 +1101,9 @@
     top: 14px;
     right: 330px;
 }
-.first-section {
+/* .first-section {
     margin-left: -58px;
-}
+} */
 .second-section .btn-2 {
     font-size: 14px;
     line-height: 40.32px;
@@ -1154,9 +1154,9 @@
         width: 110px;
         margin-left: 20px;
     }
-    .first-section {
+    /* .first-section {
         margin-left: -149px;
-    }
+    } */
     .first-section img {
         height: 55px;
         width: 55px;
@@ -1231,7 +1231,7 @@
     .welcome p {
         font-size: 22px;
         line-height: 19.64px;
-        padding-right: 15px;
+        /* padding-right: 15px; */
     }
 
     .progress {
@@ -1406,9 +1406,9 @@ footer {
         height: 191px;
         width: 266px !important;
     }
-    .first-section {
+    /* .first-section {
         margin-left: 0px;
-    }
+    } */
     .first-section img {
         height: 50px;
         width: 50px;

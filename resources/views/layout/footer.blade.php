@@ -284,6 +284,45 @@
             fileList.appendChild(listItem);
         }
     }
+    function toggleDropdown4(event) {
+        event.stopPropagation();
+        const menu4 = document.getElementById('dropdownMenu4');
+        const menu5 = document.getElementById('dropdownMenu5');
+        
+        if (menu4.style.display === 'block') {
+            menu4.style.display = 'none';
+        } else {
+            menu4.style.display = 'block';
+            menu5.style.display = 'none'; 
+        }
+    }
+
+    function toggleDropdown5(event) {
+        event.stopPropagation();
+        const menu4 = document.getElementById('dropdownMenu4');
+        const menu5 = document.getElementById('dropdownMenu5');
+        
+        if (menu5.style.display === 'block') {
+            menu5.style.display = 'none';
+        } else {
+            menu5.style.display = 'block';
+            menu4.style.display = 'none'; 
+        }
+    }
+
+
+    document.addEventListener('click', function(event) {
+        const menu4 = document.getElementById('dropdownMenu4');
+        const menu5 = document.getElementById('dropdownMenu5');
+
+        if (!event.target.closest('.btn4') && !event.target.closest('#dropdownMenu4')) {
+            menu4.style.display = 'none';
+        }
+
+        if (!event.target.closest('.btn5') && !event.target.closest('#dropdownMenu5')) {
+            menu5.style.display = 'none';
+        }
+    });
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
