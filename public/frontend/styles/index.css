@@ -1459,7 +1459,7 @@ height:25px ;
 width: 25px;
 margin-inline: 5px;
 }
-.inputs-request input[type="text"]{
+.inputs-request div{
     height:35px ;
     width: 350px;
     margin-inline: 5px;
@@ -1509,3 +1509,25 @@ input::placeholder {
     border: 1px solid #ccc;
     z-index: 1000;
 }
+
+
+/* For WebKit-based browsers (Chrome, Safari) */
+#custom-scroll-table::-webkit-scrollbar {
+    width:5px; 
+    height: 10px;
+}
+
+#custom-scroll-table::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Track color */
+}
+
+#custom-scroll-table::-webkit-scrollbar-thumb {
+    background: #cacaca; 
+    border-radius: 6px;
+}
+
+#custom-scroll-table::-webkit-scrollbar-thumb:hover {
+    background: #929292; 
+}
+
+

@@ -56,7 +56,7 @@
         <div class="row col-12" id="days-table">
             <div class="container col-11">
                 <div class="col-12 pt-5 pb-5" dir="rtl">
-                    <table class="table table-bordered table-responsive table-container" border="1" dir="rtl">
+                    <table  id="custom-scroll-table" class="table table-bordered table-responsive table-container" border="1" dir="rtl">
                         <?php $count = 1; ?>
                         @foreach ($Groups as $Group)
                             <thead>
