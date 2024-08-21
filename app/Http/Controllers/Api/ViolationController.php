@@ -5,12 +5,16 @@ namespace App\Http\Controllers\Api;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\grade;
+use App\Models\GroupTeam;
+use App\Models\Inspector;
 use App\Models\Violation;
 use Illuminate\Http\Request;
+use App\Models\instantmission;
 use App\Models\ViolationTypes;
 use App\Models\InspectorMission;
 use App\Http\Controllers\Controller;
-use App\Models\instantmission;
+use App\Models\Point;
+use App\Models\WorkingTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -209,43 +213,78 @@ class ViolationController  extends Controller
     {
         $messages = [
             'point_id.required' => 'point_id required',
-            'mission_id.required' => 'mission_id required',
+            // 'mission_id.required' => 'mission_id required',
         ];
         $validatedData = Validator::make($request->all(), [
             'point_id' => 'required',
+            // 'mission_id' => 'required',
+        ], $messages);
+
+        if ($validatedData->fails()) {
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+        }
+        $today = Carbon::today()->toDateString();
+        // Retrieve the inspector ID for the authenticated user
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
+        // shift
+        $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
+        if ($inspector != null) {
+            $working_time = WorkingTime::find($inspector->working_time_id);
+        } else {
+            $working_time = null;
+        }
+
+
+        // Get the team name where the inspector is listed in `inspector_ids`
+        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
+        // Get all the inspector IDs associated with the team(s) the user is part of
+        $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])
+            ->pluck('inspector_ids')->toArray();
+
+        // Flatten the array and convert the inspector IDs to individual IDs
+        $inspectorIds = array_unique(explode(',', implode(',', $teamInspectors)));
+
+        // Find user IDs corresponding to the inspector IDs
+        $userIds = Inspector::whereIn('id', $inspectorIds)->pluck('user_id')->toArray();
+        $violation = Violation::where('point_id', $request->point_id)->where('flag_instantmission', "0")->whereIn('user_id', $userIds)->whereDate('created_at', $today)->get();
+        $pointName = Point::find($request->point_id);
+        $success['date'] = $today;
+        $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
+        $success['teamName'] = $teamName;
+        $success['pointName'] = $pointName->only(['id', 'name']);
+        $success['violation'] = $violation;
+        // $allviolation = Violation::where('point_id', $request->point_id)->get();
+        return $this->respondSuccess($success, 'Data returned successfully.');
+    }
+    public function get_voilation_instantMission(Request $request)
+    {
+        $messages = [
+            'mission_id.required' => 'mission_id required',
+        ];
+        $validatedData = Validator::make($request->all(), [
             'mission_id' => 'required',
         ], $messages);
 
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-
-        $allviolation = Violation::where('point_id',$request->point_id)->get();
-    }
-    public function get_all_instantMission()
-    {
-        // $messages = [
-        //     'inspectorId.required' => 'inspectorId required',
-        // ];
-        // $validatedData = Validator::make($request->all(), [
-        //     'inspectorId' => 'required',
-        // ], $messages);
-
-        // if ($validatedData->fails()) {
-        //     return $this->respondError('Validation Error.', $validatedData->errors(), 400);
-        // }
         $today = Carbon::today()->toDateString();
-        $violation = Violation::where('user_id',Auth()->user()->id)->where('flag_instantmission',"1")->whereDate('created_at',$today)->get();
-        // $allviolation = InspectorMission::where('inspector_id',$request->inspectorId)->where('date',$today)->first();
-       // Extract the mission_id values from the violations.
-        $missionIds = $violation->pluck('mission_id')->toArray();
+         // Retrieve the inspector ID for the authenticated user
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
+        // shift
+        $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
+        if ($inspector != null) {
+            $working_time = WorkingTime::find($inspector->working_time_id);
+        } else {
+            $working_time = null;
+        }
 
-        // Fetch the corresponding instant missions using the extracted mission IDs.
-        $instantMissions = instantmission::whereIn('id', $missionIds)->get();
-       
-        // dd($instantMissions);
+        $instantMissions = instantmission::where('id', $request->mission_id)->get();
+        $violation = Violation::where('mission_id', $request->mission_id)->where('flag_instantmission', "1")->where('user_id', auth()->user()->id)->whereDate('created_at', $today)->get();
+        $success['date'] = $today;
+        $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
         $success['instantMissions'] = $instantMissions;
         $success['violation'] = $violation;
-        return $this->respondSuccess($success, 'Data Saved successfully.');
+        return $this->respondSuccess($success, 'Data returned successfully.');
     }
 }
