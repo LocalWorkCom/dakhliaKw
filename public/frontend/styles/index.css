@@ -886,8 +886,9 @@ background-color: #F4F7FD;
     border: 1.5px solid #cfc8c8;
     height: 38px;
     margin-bottom: 10px;
-    text-align: center !important;
+    text-align: right !important;
     color: #9b9999 !important;
+    direction: rtl !important;
 }
 .dataTables_wrapper .dataTables_filter input {
     margin-left: 0em !important;
