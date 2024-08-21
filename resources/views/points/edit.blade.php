@@ -353,7 +353,7 @@
                     ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day,
                         index) => {
                             const option = document.createElement('option');
-                            option.value = index;
+                            option.value = ind ex;
                             option.text = day;
                             select.appendChild(option);
                         });
