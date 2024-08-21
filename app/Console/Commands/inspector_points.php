@@ -67,7 +67,7 @@ class inspector_points extends Command
     
         foreach ($allSectors as $sector) {
             // Get all points available for this sector
-            $allAvailablePoints = Grouppoint::where('sector_id', $sector)
+            $allAvailablePoints = Grouppoint::where('sector_id', $sector)->where('deleted',0)
                 ->select('government_id', 'id', 'points_ids')
                 ->get();
     
