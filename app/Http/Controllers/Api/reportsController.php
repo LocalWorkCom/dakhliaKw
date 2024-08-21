@@ -31,7 +31,7 @@ class reportsController extends Controller
                 }
             }],
         ], $messages);
-        
+         
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }

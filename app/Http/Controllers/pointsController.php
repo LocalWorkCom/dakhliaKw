@@ -52,8 +52,8 @@ class pointsController extends Controller
     public function getAllPoints($governorate)
     {
         // Fetch regions based on the selected governorate
-        $regions = Point::where('government_id', $governorate)->get();
-        return response()->json($regions);
+        $points = Grouppoint::where('government_id', $governorate)->where('deleted',0)->where('flag',0)->get();
+        return response()->json($points);
     }
     public function index()
     {
