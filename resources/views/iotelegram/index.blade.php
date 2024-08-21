@@ -15,15 +15,15 @@
                     @if (Auth::user()->hasPermission('create Iotelegram'))
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('iotelegrams.add') }}'">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                            اضافة جديد
+                        
+                            اضافة جديد     <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </button>
                     @endif
                     @if (Auth::user()->hasPermission('archive Iotelegram'))
                         <button type="button" class="btn-all mx-3 "
                             onclick="window.location.href='{{ route('iotelegram.archives') }}'" style="color: #C1920C;">
-                            <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
-                            عرض الارشيف
+                           
+                            عرض الارشيف  <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
                         </button>
                     @endif
                 </div>

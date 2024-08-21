@@ -115,7 +115,7 @@ ul {
     margin-top: 5px;
 } */
 .first-section {
-    margin-left: -125px;
+    /* margin-left: -125px; */
 }
 .first-section img{
     height:70px;
@@ -312,7 +312,7 @@ color: #FFFFFF;
     height: 44px;
 }
 .second-section input::placeholder{
-text-align: end;
+/* text-align: end; */
 padding-inline: 10px;
 }
 li:hover{
@@ -358,7 +358,7 @@ font-size: 38px;
 font-weight: 700;
 line-height: 44.64px;
 text-align: right;
-padding-right: 90px;
+/* padding-right: 90px; */
 
 }
 footer{
@@ -839,7 +839,7 @@ input[type="radio"]{
 }
 .welcome p{
     position: absolute;
-    right: -100px;
+    /* right: -100px; */
     animation: welcome-text 1s forwards;
 }
 
@@ -886,8 +886,10 @@ background-color: #F4F7FD;
     border: 1.5px solid #cfc8c8;
     height: 38px;
     margin-bottom: 10px;
-    text-align: center !important;
+    text-align: right !important;
     color: #9b9999 !important;
+    direction: rtl !important;
+    padding-right: 15px !important;
 }
 .dataTables_wrapper .dataTables_filter input {
     margin-left: 0em !important;
@@ -1486,4 +1488,7 @@ td.dragging {
 .change-place {
     color: black;
     font-weight: 700;
+}
+input::placeholder {
+    text-align: right;
 }

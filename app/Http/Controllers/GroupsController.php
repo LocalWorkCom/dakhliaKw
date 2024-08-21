@@ -42,7 +42,17 @@ class GroupsController extends Controller
             return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
             ->addColumn('num_inspectors', function ($row) {
-                $count = Inspector::where('group_id', $row->id)->count();
+                if (auth()->user()->rule_id == 2) {
+
+                    $count = Inspector::where('group_id', $row->id)->count();
+                } else {
+                    $departmentId = auth()->user()->department_id; // Or however you determine the department ID
+
+                    $count = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+                        ->where('users.department_id', $departmentId)
+                        ->where('users.id', '<>', auth()->user()->id)->where('group_id', $row->id)
+                        ->count();
+                }
 
                 if ($count == 0) {
                     $btn = '<a class="btn btn-sm"  style="background-color: #F7AF15; padding-inline: 15px;" href=' . route('group.groupcreateInspectors', $row->id) . '> ' . $count . '</a>';
@@ -74,14 +84,18 @@ class GroupsController extends Controller
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                 ->whereNull('inspectors.group_id')
                 ->select("inspectors.*")->get();
+            $inspectorsIngroup = Inspector::where('group_id', $id)->get();
         } else {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                 ->where('users.department_id', $departmentId)
                 ->whereNull('inspectors.group_id')
                 ->select("inspectors.*")->get();
+            $inspectorsIngroup = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+                ->where('users.department_id', $departmentId)
+                ->where('users.id', '<>', auth()->user()->id)->where('group_id', $id)
+                ->get();
         }
 
-        $inspectorsIngroup = Inspector::where('group_id', $id)->get();
         return view('group.inspector', compact('inspectors', 'inspectorsIngroup', 'id'));
     }
     public function groupAddInspectors(Request $request, $id)
