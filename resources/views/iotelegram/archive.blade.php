@@ -124,7 +124,7 @@
                                     showUrl = showUrl.replace(':id', row.id);
                                     if (showIotelegram) {
                                         showButton =
-                                            `<a href="${showUrl}" class="edit btn btn-info btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i></a>`;
+                                            `<a href="${showUrl}" class="edit btn btn-info btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i>عرض</a>`;
                                     }
                                     return `${showButton}`;
 

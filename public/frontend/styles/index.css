@@ -312,7 +312,7 @@ color: #FFFFFF;
     height: 44px;
 }
 .second-section input::placeholder{
-text-align: end;
+/* text-align: end; */
 padding-inline: 10px;
 }
 li:hover{
@@ -358,7 +358,7 @@ font-size: 38px;
 font-weight: 700;
 line-height: 44.64px;
 text-align: right;
-padding-right: 90px;
+/* padding-right: 90px; */
 
 }
 footer{
@@ -839,7 +839,7 @@ input[type="radio"]{
 }
 .welcome p{
     position: absolute;
-    right: -100px;
+    /* right: -100px; */
     animation: welcome-text 1s forwards;
 }
 
@@ -1486,4 +1486,7 @@ td.dragging {
 .change-place {
     color: black;
     font-weight: 700;
+}
+input::placeholder {
+    text-align: right;
 }

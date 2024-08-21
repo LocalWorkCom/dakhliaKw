@@ -179,7 +179,7 @@
     .welcome p {
         font-size: 29px;
         line-height: 46.64px;
-        padding-right: 55px;
+        /* padding-right: 55px; */
     }
     .card1, .card2, .card3, .card4 {
         /* width: 233px; */
@@ -415,7 +415,7 @@
     .welcome p {
         font-size: 28px;
         line-height: 37.64px;
-        padding-right: 20px;
+        /* padding-right: 20px; */
     }
     .container .icon {
         height: 60px;
@@ -973,7 +973,7 @@
     .welcome p {
         font-size: 20px;
         line-height: 19.64px;
-        padding-right: 15px;
+        /* padding-right: 15px; */
     }
     .card1, .card2, .card3, .card4 {
         height: 152px;
@@ -1231,7 +1231,7 @@
     .welcome p {
         font-size: 22px;
         line-height: 19.64px;
-        padding-right: 15px;
+        /* padding-right: 15px; */
     }
 
     .progress {

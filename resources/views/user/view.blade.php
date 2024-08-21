@@ -20,8 +20,8 @@
                                 @if (Auth::user()->hasPermission('create User'))
                                     <button type="button" class="wide-btn"
                                         onclick="window.location.href='{{ route('user.create', $id) }}'">
-                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                        اضافة جديد
+                                  
+                                        اضافة جديد       <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                                     </button>
                                 @endif
                             </div>
@@ -35,8 +35,8 @@
                                 @if (Auth::user()->hasPermission('add_employee User'))
                                 <button type="button" class="wide-btn"
                                         onclick="window.location.href='{{ route('user.create', $id) }}'">
-                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                        اضافة جديد
+                                       
+                                        اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                                     </button>
                                 @endif
                             </div>

@@ -88,7 +88,7 @@
                             <div class="d-flex justify-content-between">
                                 <label for="from_departement">القطاع </label>
                                 @if (Auth::user()->hasPermission('create ExternalDepartment'))
-                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 "
+                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="" class="mx-2 mb-2"
                                         style="display: none" data-bs-toggle="modal" id="extern-department-dev"
                                         data-bs-target="#extern-department" data-dismiss="modal">
                                 @endif
@@ -118,7 +118,7 @@
                                 </select>
                             </div>
                         @endif
-                        <div class="form-group col-md-5 mx-md-2">
+                        <div class="form-group col-md-10 mx-md-2">
                             <label for="recieved_by">الموظف المستلم</label>
                             <select id="recieved_by" name="recieved_by" class="form-control" required>
                                 <option value="">اختر الموظف</option>
