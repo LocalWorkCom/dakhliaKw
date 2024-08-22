@@ -64,12 +64,12 @@
                     @endif
 
                     <input type="hidden" name="code" value="{{ $code }}">
-                    <input type="hidden" name="military_number" value="{{ $military_number }}">
+                    <input type="hidden" name="number" value="{{ $number }}">
                     <input type="hidden" name="password" value="{{ $password }}">
                     <h4> ادخل كود التفعيل</h1>
                         <p>تم ارسال كود لرقم الهاتف المسجل وهو :</p>
                         @php
-                            $user = App\Models\User::where('military_number', $military_number)->first();
+                            $user = App\Models\User::where('military_number', $number)->orwhere('Civil_number',$number)->first();
                         @endphp
 
                         <h6>{{ $user->phone }}</h6>
@@ -104,7 +104,7 @@
                  
                     <form id="resendForm" action="{{ route('resend_code') }}" method="POST">
                               @csrf
-                              <input type="hidden" name="military_number" value="{{ $military_number }}">
+                              <input type="hidden" name="number" value="{{ $number }}">
                               <input type="hidden" name="password" value="{{ $password }}">
                               <a href="#" class="resend-pass-a" onclick="document.getElementById('resendForm').submit(); return false;">
                                   إعادة إرسال
