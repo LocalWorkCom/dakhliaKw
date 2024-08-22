@@ -212,12 +212,12 @@
                                     name: 'vacation_type.name'
                                 },
                                 {
-                                    data: 'start_date',
-                                    name: 'start_date'
+                                    data: 'startDate',
+                                    name: 'startDate'
                                 },
                                 {
-                                    data: 'days_number',
-                                    name: 'days_number'
+                                    data: 'daysNumber',
+                                    name: 'daysNumber'
                                 },
                                 {
                                     data: 'EndDate',
@@ -265,13 +265,13 @@
                                             `<a href="${urls.show}" class="edit btn btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
                                     }
 
-                                    if (row.VacationStatus == 'منتهية') {
+                                    if (row.VacationStatus === 'منتهية') {
                                         buttons += `
-                                        <form id="print_returnVacation" action="${urls.printReturn}" method="POST" style="display:inline;">@csrf
-                                                    <a href="#" class="edit btn btn-sm" style="background-color: #2099c5;" onclick="document.getElementById(\'print_returnVacation\').submit();">
+                                                <form id="print_returnVacation_${row.id}" action="${urls.printReturn}" method="POST" style="display:inline;">@csrf
+                                                    <a href="#" class="edit btn btn-sm" style="background-color: #2099c5;" onclick="document.getElementById('print_returnVacation_${row.id}').submit();">
                                                         <i class="fa-solid fa-print"></i> طباعة العودة
                                                     </a>
-                                                </form>`
+                                                </form>`;
                                         if (!row.end_date) {
                                             buttons +=
                                                 `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c96f3d;" onclick="update_type('direct_work', '${row.id}')"><i class="fa-brands fa-stack-overflow"></i> مباشرة العمل</a>`;
@@ -284,7 +284,7 @@
                                         buttons +=
                                             `<form id="permitForm" action="${urls.permit}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #a335dc;" onclick="document.getElementById('permitForm').submit();"> <i class="fa-solid fa-print"></i> تصريح</a></form>`;
                                         // buttons +=
-                                            // `<form id="printForm" action="${urls.print}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('printForm').submit();"><i class="fa fa-times"></i> طباعة</a></form>`;
+                                        // `<form id="printForm" action="${urls.print}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('printForm').submit();"><i class="fa fa-times"></i> طباعة</a></form>`;
                                     } else if (row.VacationStatus == 'متجاوزة') {
                                         buttons +=
                                             `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #9dad1f;" onclick="update_type('direct_exceed', '${row.id}')"><i class="fa fa-eye"></i> باشر بعد التجاوز</a>`;
@@ -342,10 +342,10 @@
                             table.ajax.reload(); // Reload data with the new filter and ordering
                         });
 
-                        
+
 
                     });
-                    
+
 
 
                     $(document).ready(function() {

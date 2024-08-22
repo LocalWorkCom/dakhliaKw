@@ -32,7 +32,7 @@
                             <img src="{{ asset('frontend/images/print.svg') }}" alt=""> طباعة
                         </button>
                         <div class="colors d-flex mx-5">
-                            <div class="only rounded p-1 px-2 mx-1">فريق به مفتش فقط</div>
+                            <div class="only rounded p-1 px-2 mx-1">دورية به مفتش فقط</div>
                             <div class="task rounded p-1 px-2 mx-1">مهمة</div>
                             <div class="urgent rounded p-1 px-2 mx-1">أمر فوري</div>
                             @foreach ($working_times as $time)

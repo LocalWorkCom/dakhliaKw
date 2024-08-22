@@ -42,7 +42,7 @@
                             <th scope="row"style="background: #f5f6fa;">نوع الاجازة:</th>
                             <td>{{ $vacation->vacation_type->name }}</td>
                         </tr>
-                        
+
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">اسم الموظف:</th>
                             <td>
@@ -57,17 +57,17 @@
                         @endif
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">تاريخ البداية:</th>
-                            <td>{{ $vacation->start_date }}</td>
+                            <td>{{ $vacation->status == 'Rejected' ? '__________' : $vacation->start_date }}</td>
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> تاريخ النهاية:</th>
                             <td>
-                                <?php echo ExpectedEndDate($vacation)[0]; ?></td>
+                                <?php echo $vacation->status == 'Rejected' ? '____________' : ExpectedEndDate($vacation)[0]; ?></td>
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> تاريخ المباشرة:</th>
                             <td>
-                                <?php echo ExpectedEndDate($vacation)[1]; ?></td>
+                                <?php echo $vacation->status == 'Rejected' ? '____________' : ExpectedEndDate($vacation)[1]; ?></td>
                         </tr>
                         @if ($vacation->report_image && $vacation->vacation_type_id == 2)
                             <tr>
