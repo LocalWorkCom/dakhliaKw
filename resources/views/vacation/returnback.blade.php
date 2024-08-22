@@ -103,7 +103,7 @@
                 <div class="row inputs-request-handprint d-flex justify-content-between " style="  color:#04209b;"
                     dir="rtl">
                     <div class="d-block mb-4">
-                        <p class="mt-4 mb-1">
+                        <p class="mt-3 mb-1">
                             توقيع رئيس القسم
                         </p>
                         <div class="handprint">
@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="d-block mb-4">
-                        <p class="mt-4 mb-1">
+                        <p class="mt-3 mb-1">
                             توقيع مدير ادارة العمليات
 
                         </p>
@@ -125,7 +125,7 @@
                     <p class="my-5 "> تعقيب / مدير ادارة الخدمات المالية و الادارية : </p>
                 </div>
 
-                <div class=" col-12 mt-3" style="border: 2px solid rgba(0, 0, 0, 0.61); border-radius:20px;">
+                <div class=" col-12 mt-2" style="border: 2px solid rgba(0, 0, 0, 0.61); border-radius:20px;">
                     <div class="row qoute d-flex justify-content-center " dir="rtl">
                         <p class="pt-2 ">اجراءات ادارة الخدمات المالية</p>
                     </div>
