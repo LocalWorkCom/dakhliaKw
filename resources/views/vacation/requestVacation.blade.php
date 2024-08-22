@@ -92,11 +92,15 @@
                             @if ($vacation->country) checked @endif>
                         <label for=""> خارج الكويت</label>
                     </div>
-                    <div>
+                    <div class="d-flex">
+                        <label for="c-name"> اسم الدولة :</label>
+                        <p id="c-name" style="width: 200px; "  value="{{ $vacation->country ? $vacation->country->country_name_ar : '' }}"></p>
+                    </div>
+                    <!-- <div>
                         <label for=""> اسم الدولة :</label>
                         <div style="border: 0.1px solid rgb(230, 228, 227);"
                             value="{{ $vacation->country ? $vacation->country->country_name_ar : '' }}" ></div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="row qoute " dir="rtl">

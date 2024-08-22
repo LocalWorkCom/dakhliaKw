@@ -37,6 +37,8 @@
     border: 0.2px solid #d9d4d4;
     border-radius: 10px;
     background-color: #f8f8f8;
+    direction: rtl;
+    display: flex !important;
 }
 .select2-container--default .select2-selection--multiple  {
     height: 45px;
@@ -45,6 +47,17 @@
     border-radius: 10px;
     background-color: #f8f8f8;
     direction:rtl;
+}
+.select2-results__option--selectable {
+    cursor: pointer;
+    display: flex !important;
+}
+.custom-select{
+    width: 100%;
+}
+.select2-container--default .select2-results__option--disabled {
+    color: #999;
+    display: flex !important;
 }
     </style>
 </head>

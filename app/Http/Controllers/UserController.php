@@ -69,7 +69,9 @@ class UserController extends Controller
                     ->whereHas('rule', function ($query) {
                         $query->where('hidden', false);
                     })->get();
+                  
             }
+
         } else {
             if (is_null($parentDepartment->parent_id)) {
                 $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();

@@ -126,7 +126,8 @@
                 <div class="form-row   mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="time_type"> اختر نظام العمل </label>
-                        <select name="time_type" id="time_type" style="border: 0.2px solid rgb(199, 196, 196);" required>
+                        <select name="time_type" id="time_type" class=" form-control custom-select custom-select-lg mb-3 select2 "
+                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
                             <option value="0">نظام 24 ساعه</option>
                             <option value="1">نظام دوام جزئى </option>
 
@@ -212,9 +213,11 @@
                 label.textContent = 'اختر اليوم';
 
                 const select = document.createElement('select');
+                select.className = 'form-control custom-select custom-select-lg mb-3 select2 ';
                 select.name = 'day_name[]';
                 select.id = `day_name_${i}`;
-                select.style.border = '0.2px solid rgb(199, 196, 196)';
+                select.style = '0.2px solid rgb(199, 196, 196)';
+                select.style.border = 'border: 0.2px solid rgb(199, 196, 196); width:100% !important;';
                 select.required = true;
 
                 const option = document.createElement('option');
@@ -471,7 +474,7 @@
                         // Handle AJAX errors
                         console.error('AJAX request failed', xhr);
                         $('#governorate').empty().append(
-                            '<option disabled>حدث خطأ في تحميل النقاط</option>');
+                            '<option disabled>حدث خطأ في تحميل البيانات</option>');
                             $('#governorate').prop('disabled', false);
 
                         // Update Select2 component
@@ -479,7 +482,7 @@
                     }
                 });
             } else {
-                $('#governorate').empty().append('<option value="" selected disabled>اختر</option>').prop(
+                $('#governorate').empty().append('<option value="" selected disabled>اختر المحافظه </option>').prop(
                     'disabled', false);
 
                 // Update Select2 component
@@ -510,7 +513,7 @@
                             } else {
                                 // Show a message if no data is available
                                 $('#region').append(
-                                    '<option disabled>عفوا لا يوجد منطقه  لهذا المحافظه   بعد</option>'
+                                    '<option disabled>عفوا لا يوجد منطقه  لهذه المحافظه   بعد</option>'
                                 );
                                 $('#region').prop('disabled', true);
                             }
@@ -529,7 +532,7 @@
                         // Handle AJAX errors
                         console.error('AJAX request failed', xhr);
                         $('#region').empty().append(
-                            '<option disabled>حدث خطأ في تحميل النقاط</option>');
+                            '<option disabled>حدث خطأ في تحميل البيانات</option>');
                             $('#region').prop('disabled', false);
 
                         // Update Select2 component
@@ -537,7 +540,7 @@
                     }
                 });
             } else {
-                $('#region').empty().append('<option value="" selected disabled>اختر</option>').prop(
+                $('#region').empty().append('<option value="" selected disabled>اختر المنطقه </option>').prop(
                     'disabled', false);
 
                 // Update Select2 component

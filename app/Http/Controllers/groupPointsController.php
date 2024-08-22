@@ -78,7 +78,7 @@ class groupPointsController extends Controller
         $deleted = Grouppoint::where('flag', 0)
             ->whereIn('id', $request->pointsIDs)
             ->get();
-           //dd($deleted);
+
         // Optional: Perform actions with the retrieved records
         foreach ($deleted as $record) {
             // Example action: Delete the record
