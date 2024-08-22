@@ -15,7 +15,7 @@
                     <p> أنواع الاجـــــازات</p>
                     @if (Auth::user()->hasPermission('create VacationType'))
                         <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
-                            اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
 
                         </button>
                     @endif

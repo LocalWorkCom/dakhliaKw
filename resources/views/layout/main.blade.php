@@ -67,6 +67,10 @@
     color: #999;
     display: flex !important;
 }
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+   
+    top: -9px !important;
+}
     </style>
 </head>
 <body >
