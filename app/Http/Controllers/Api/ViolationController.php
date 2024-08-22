@@ -246,13 +246,33 @@ class ViolationController  extends Controller
 
         // Find user IDs corresponding to the inspector IDs
         $userIds = Inspector::whereIn('id', $inspectorIds)->pluck('user_id')->toArray();
-        $violation = Violation::where('point_id', $request->point_id)->where('flag_instantmission', "0")->whereIn('user_id', $userIds)->whereDate('created_at', $today)->get();
+       
+        $violation = Violation::with('user')->where('point_id', $request->point_id)->where('flag_instantmission', "0")->whereIn('user_id', $userIds)->whereDate('created_at', $today)->get();
+        // dd($violation);
         $pointName = Point::find($request->point_id);
         $success['date'] = $today;
         $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
         $success['teamName'] = $teamName;
         $success['pointName'] = $pointName->only(['id', 'name']);
-        $success['violation'] = $violation;
+        // $success['violation'] = $violation;
+        $success['violation'] = $violation->map(function ($violation) {
+            return [
+                'id' => $violation->id,
+                'InspectorName' => $violation->user->name ?? null,
+                'military_number' => $violation->military_number ?? null,
+                'Civil_number' => $violation->Civil_number ?? null,
+                'grade' => grade::where('id',$violation->grade)->select('id','name')->first() ?? null,
+                'image' => $violation->image,
+                'violation_type' => ViolationTypes::whereIn('id',explode(',',$violation->violation_type))->select('id','name')->get(),
+                'civil_military' => empty(grade::where('id',$violation->grade)->select('id','name')->first()) ? "civil" :"military",
+                // 'user_id' => $violation->user_id,
+                'created_at' => $violation->created_at,
+                'updated_at' => $violation->updated_at,
+                'mission_id' => $violation->mission_id,
+                'point_id' => $violation->point_id,
+                'flag_instantmission' => $violation->flag_instantmission,
+            ];
+        });
         // $allviolation = Violation::where('point_id', $request->point_id)->get();
         return $this->respondSuccess($success, 'Data returned successfully.');
     }
