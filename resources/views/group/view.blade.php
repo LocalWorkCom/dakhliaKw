@@ -52,10 +52,11 @@
                                     <tr>
                                         <th>رقم التسلسلي</th>
                                         <th>اسم المجموعة</th>
-                                        <th>عدد الفرق</th>
+                                        <th>اسم قطاع</th>
+                                        <th>عدد الدوريات</th>
                                         <th>عدد المفتشيين</th>
                                         <th>عدد النقاط لكل فريق فى اليوم</th>
-                                        <th>اسم قطاع</th>
+                                       
                                         <th style="width:150px !important;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -78,6 +79,10 @@
                                                 data: 'name',
                                                 name: 'name'
                                             },
+                                            {
+                                                data: 'sector.name',
+                                                name: 'sector.name'
+                                            },
 
                                             {
                                                 data: 'num_team',
@@ -92,10 +97,7 @@
                                                 data: 'points_inspector',
                                                 name: 'points_inspector'
                                             },
-                                            {
-                                                data: 'sector.name',
-                                                name: 'sector.name'
-                                            },
+                                           
                                             {
                                                 data: 'action',
                                                 name: 'action',
