@@ -1461,7 +1461,7 @@ margin-inline: 5px;
 }
 .inputs-request div{
     height:35px ;
-    width: 350px;
+    /* width: 350px; */
     margin-inline: 5px;
     }
     .inputs-request label{

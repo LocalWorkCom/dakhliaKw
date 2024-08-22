@@ -140,7 +140,7 @@
                     <p class="my-5 "> تعقيب / مدير ادارة الخدمات المالية و الادارية : </p>
                 </div>
 
-                <div class="container col-12 mt-3" style="border: 2px solid rgba(0, 0, 0, 0.61);">
+                <div class=" col-12 mt-3" style="border: 2px solid rgba(0, 0, 0, 0.61);  border-radius:20px;">
                     <div class="row qoute d-flex justify-content-center " dir="rtl">
                         <p class="pt-2 ">اجراءات ادارة الخدمات المالية</p>
                     </div>
