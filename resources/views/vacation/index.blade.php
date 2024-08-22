@@ -212,12 +212,12 @@
                                     name: 'vacation_type.name'
                                 },
                                 {
-                                    data: 'start_date',
-                                    name: 'start_date'
+                                    data: 'startDate',
+                                    name: 'startDate'
                                 },
                                 {
-                                    data: 'days_number',
-                                    name: 'days_number'
+                                    data: 'daysNumber',
+                                    name: 'daysNumber'
                                 },
                                 {
                                     data: 'EndDate',
