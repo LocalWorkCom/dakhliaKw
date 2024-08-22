@@ -342,26 +342,7 @@
                             table.ajax.reload(); // Reload data with the new filter and ordering
                         });
 
-                        // $('.btn-all').click(function() {
-                        //     filter = $(this).data('filter'); // Update the filter based on the clicked button
-
-                        //     // Remove 'btn-active' class from all buttons and add to the clicked one
-                        //     $('.btn-all').removeClass('btn-active');
-                        //     $(this).addClass('btn-active');
-
-                        //     if (filter === 'all') {
-                        //         // Apply ordering by ID in descending order and show 10 records per page
-                        //         table.order([0, 'desc']).page.len(10); // Assuming 10 records per page for 'all' filter
-                        //     } else {
-                        //         // Reset any ordering and show 10 records per page for other filters
-                        //         table.order([]).page.len(1); // Show 10 records per page with no specific order
-                        //     }
-                        //     // table.ajax.reload(); // Reload data with the new filter and ordering
-                        //     table.ajax.reload(); // Reload data with the new filter
-
-                        //     // Go to the first page to ensure data is shown
-                        //     // table.page('first');
-                        // });
+                        
 
                     });
                     
