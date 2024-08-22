@@ -24,21 +24,7 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
-            <!-- <div class="row justify-content-center" dir="rtl">
-                                                                                    <div class="form-group mt-4  mx-5 col-10 d-flex ">
-                                                                                        <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
-                                                                                            data-bs-target="#extern-user" style="color: #0D992C;">
-                                                                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                                                                            اضافة شخص خارجى
-                                                                                        </button>
-
-                                                                                        <button type="button" class="btn-all mx-3 " data-bs-toggle="modal" id="extern-department-dev"
-                                                                                            data-bs-target="#extern-department" style="color: #0D992C;">
-                                                                                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                                                                            اضافة أداره خارجيه
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </div> -->
+         
             <div class="container col-10 mt-1 mb-5 pb-5 pt-4 mt-5" style="border:0.5px solid #C7C7CC;">
                 @include('inc.flash')
                 <form action="{{ route('Export.store') }}" method="POST" enctype="multipart/form-data"
@@ -55,7 +41,8 @@
                                         data-bs-toggle="modal" id="extern-user-dev" data-bs-target="#extern-user">
                                 @endif
                             </div>
-                            <select id="select-person-to" name="person_to" class="form-control js-example-basic-single">
+                            <select id="select-person-to" name="person_to"  class=" form-control custom-select custom-select-lg mb-3 select2 "
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" >
                                 <option value="" disabled selected> اختر من القائمه</option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}">
@@ -99,10 +86,11 @@
                                 @endif
                             </div>
                             <!-- <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" style="display: none"
-                                                                                id="extern-department-dev" data-bs-target="#extern-department">
-                                                                                <i class="fa fa-plus"></i>
-                                                                            </button> -->
-                            <select id="from_departement" name="from_departement" class="form-control">
+                                                                                    id="extern-department-dev" data-bs-target="#extern-department">
+                                                                                    <i class="fa fa-plus"></i>
+                                                                                </button> -->
+                            <select id="from_departement" name="from_departement" class=" form-control custom-select custom-select-lg mb-3 select2 "
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;">
                                 <option value="">اختر القطاع</option>
                                 @foreach ($departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -161,16 +149,16 @@
                     @endif
 
                     <!-- <div class="form-row d-flex  justify-content-center" dir="rtl">
-                                                                        <div class="form-group d-flex justify-content-start col-md-10 "> -->
+                                                                            <div class="form-group d-flex justify-content-start col-md-10 "> -->
                     <!-- <button type="button" class="btn-all  mx-md-3" data-bs-toggle="modal" id="extern-user-dev"
-                                                                                data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
-                                                                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف
-                                                                            </button> -->
+                                                                                    data-bs-target="#extern-user" style="background-color: #FAFBFD; border: none;">
+                                                                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">اضافة موظف
+                                                                                </button> -->
                     <!-- <button type="button" class="btn-all" data-bs-toggle="modal" id="extern-department-dev"
-                                                                                data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
-                                                                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة الجهه
+                                                                                    data-bs-target="#extern-department" style="background-color: #FAFBFD; border: none; ">
+                                                                                    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt=""> اضافة الجهه
 
-                                                                            </button> -->
+                                                                                </button> -->
                     <!-- </div> -->
 
                     <!-- </div><br> -->
@@ -290,8 +278,14 @@
 
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
+       
+           
         <script>
+             $('.select2').select2({
+                dir: "rtl"
+            });
             document.addEventListener('DOMContentLoaded', (event) => {
                 let dateInput = document.getElementById('date');
                 let dateInputValue = dateInput.value;
