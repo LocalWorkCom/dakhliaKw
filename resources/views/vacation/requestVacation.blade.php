@@ -23,8 +23,8 @@
 
 <body>
     <div id="return-back" class="container col-10 py-3 mt-5 mb-5" style="border: 0.1px solid rgba(161, 161, 161, 0.61);">
-        <div class="container col-12  pt-5 mt-2 mb-2  pb-5" style="border: 0.1px solid rgba(110, 156, 241, 0.795); ">
-            <div class="header mx-5 mt-5">
+        <div class="container col-12  pt-4 mt-2 mb-2  pb-5" style="border: 0.1px solid rgba(110, 156, 241, 0.795); ">
+            <div class="header mx-5 mt-2">
                 <div class="row d-flex justify-content-between ">
                     <div class=" request-headeer ">
                         <img src="{{ asset('frontend/images/apply.png') }}" alt="">
@@ -37,8 +37,8 @@
                         <img src="{{ asset('frontend/images/return.png') }}" alt="">
                     </div>
                 </div>
-                <div class="row d-flex justify-content-center mb-5">
-                    <div class="background-request mb-5">
+                <div class="row d-flex justify-content-center mb-4">
+                    <div class="background-request mb-4">
                         <p> طلب تحديد اجازة</p>
                     </div>
                 </div>
@@ -59,8 +59,8 @@
                         </p>
                     </div>
                 </div>
-                <div class="row d-flex justify-content-center mb-5">
-                    <div class="text-request mb-5">
+                <div class="row d-flex justify-content-center mb-4">
+                    <div class="text-request mb-4">
                         <p>رقم الملف / {{ $vacation->employee->file_number }} </p>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
                 </div>
 
                 <div class="row qoute " dir="rtl">
-                    <p class="my-5 "> تعقيب / مدير ادارة الخدمات المالية و الادارية : </p>
+                    <p class="my-4 "> تعقيب / مدير ادارة الخدمات المالية و الادارية : </p>
                 </div>
 
                 <div class=" col-12 mt-3" style="border: 2px solid rgba(0, 0, 0, 0.61);  border-radius:20px;">
