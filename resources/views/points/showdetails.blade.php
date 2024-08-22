@@ -80,7 +80,7 @@
                                         @elseif($day->name == 6)
                                             الجمعه
                                         @endif
-                                     
+
                                         , "موعد بدايه العمل " : -
                                         {{ formatTime($day->from) }}
                                         - "موعد نهايه العمل " : -
@@ -93,11 +93,13 @@
                         @endif
                         <tr>
                             <th scope="row"> رابط جوجل ماب </th>
-                            <td >
-                                <div style="width: 90%">
-                                    {{ $data->google_map ? $data->google_map : 'لا يوجد رابط جوجل ماب' }}
+                            <td>
+                                @if ($data->google_map)
+                                    <a href="{{ $data->google_map }}" target="_blank">عرض الموقع</a>
+                                @else
+                                لا يوجد موقع للنقطه
+                                @endif
 
-                                </div>
                             </td>
                         </tr>
 

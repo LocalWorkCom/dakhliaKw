@@ -341,7 +341,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('points/edit/group/{id}', [groupPointsController::class, 'edit'])->name('grouppoints.edit');
     Route::post('points/update/group/{id}', [groupPointsController::class, 'update'])->name('grouppoints.update');
 
-     Route::get('trstssss', [governmentController::class, 'test']);
+    //Route::get('trstssss', [governmentController::class, 'test']);
 
     //End GroupPoints
     Route::get('/get-governorates/{sector}', [pointsController::class, 'getGovernorates']);
