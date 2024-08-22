@@ -390,8 +390,8 @@ Route::middleware(['auth'])->group(function () {
     // Route::post('vacation/exceed/{id}', [VacationController::class, 'exceedVacation'])->name('vacation.exceed');
     // Route::post('vacation/direct_exceed/{id}', [VacationController::class, 'direct_exceedVacation'])->name('vacation.direct_exceed');
     // Route::post('vacation/direct_work/{id}', [VacationController::class, 'direct_workVacation'])->name('vacation.direct_work');
-    Route::post('vacation/permit/{id}', [VacationController::class, 'permitVacation'])->name('vacation.permit');
-    Route::post('vacation/print_return/{id}', [VacationController::class, 'print_returnVacation'])->name('vacation.print_return');
+    Route::get('vacation/permit/{id}', [VacationController::class, 'permitVacation'])->name('vacation.permit');
+    Route::get('vacation/print_return/{id}', [VacationController::class, 'print_returnVacation'])->name('vacation.print_return');
     Route::post('vacation/print/{id}', [VacationController::class, 'printVacation'])->name('vacation.print');
     
     

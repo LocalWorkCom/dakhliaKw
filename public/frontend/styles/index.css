@@ -1281,7 +1281,7 @@ text-align: right;
         -webkit-print-color-adjust: exact !important; /* Chrome, Safari */
         color-adjust: exact !important; /* Firefox */
     }
-    #users-table, #users-table * {
+    #users-table, #users-table ,#return-back * {
         visibility: visible;
     }
  
