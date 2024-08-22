@@ -47,7 +47,7 @@
                         </tr>
                         <tr>
                             <th scope="row"> نوع المفتش </th>@if ($inspector->type == 'in')
-                            <td>مفتش </td>
+                            <td>مفتش سلوك أنضباطى</td>
 
                             @elseif ($inspector->type == 'trainee')
                             <td>مفتش متدرب </td>
