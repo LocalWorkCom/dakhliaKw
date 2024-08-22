@@ -17,7 +17,7 @@
                     <p> المنـــاطق</p>
                     {{-- @if (Auth::user()->hasPermission('create Region')) --}}
                     <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
-                        اضافة منطقة جديدة  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        اضافة منطقة جديدة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
                     {{-- @endif --}}
                 </div>
@@ -32,16 +32,16 @@
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
                         <!-- {{-- @if (Auth::user()->hasPermission('create Region')) --}}
 
-                            <button type="button" class="btn-all  "
-                            onclick="openadd()" style="color: #0D992C;">
-                               
-                                اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                            </button>
-                            {{-- @endif --}} -->
+                                        <button type="button" class="btn-all  "
+                                        onclick="openadd()" style="color: #0D992C;">
+                                           
+                                            اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                        </button>
+                                        {{-- @endif --}} -->
 
                         <div class="form-group moftsh  mx-3  d-flex">
                             <h4 style="    line-height: 1.8;"> التصنيف حسب المحافظة :</h4>
-                            <select name="government-select" id="government-select"  onchange="filterRegions()"
+                            <select name="government-select" id="government-select" onchange="filterRegions()"
                                 class=" form-group mx-md-2 btn-all  custom-select custom-select-lg mb-3 select2 "
                                 style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
                                 <option value="">اختر المحافظه</option>
@@ -240,18 +240,18 @@
 
             // form.submit();
 
-        } 
+        }
 
         function openadd() {
-         
+
             $('#add').modal('show');
-            $('#exampleModal').on('shown.bs.modal', function () {
-                    $('#government-select').select2({
-                        width: 'resolve',
-                        placeholder: 'اختر المحافظه',
-                        allowClear: true
-                    });
+            $('#exampleModal').on('shown.bs.modal', function() {
+                $('#government-select').select2({
+                    width: 'resolve',
+                    placeholder: 'اختر المحافظه',
+                    allowClear: true
                 });
+            });
         }
 
         function confirmAdd() {
@@ -263,11 +263,11 @@
 
         }
         var table;
+
         $(document).ready(function() {
             $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
-            government_id = $('#government-select').val();
-            console.log(government_id);
-            var table = $('#users-table').DataTable({
+
+            table = $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -275,7 +275,7 @@
                     data: function(d) {
                         d.government_id = $('#government-select').val(); // Add government_id to request
                     }
-                }, // Correct URL concatenation
+                },
                 columns: [{
                         data: 'name',
                         name: 'name'
@@ -304,19 +304,10 @@
                     "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
                     "sZeroRecords": 'نأسف لا توجد نتيجة',
                     "oPaginate": {
-                        "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
-                        "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
-                        "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
-                        "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
-                    }
-
-
-                },
-                layout: {
-                    bottomEnd: {
-                        paging: {
-                            firstLast: false
-                        }
+                        "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>',
+                        "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>',
+                        "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>',
+                        "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>'
                     }
                 },
                 "pagingType": "full_numbers"
@@ -327,13 +318,9 @@
             });
         });
 
-
         function filterRegions() {
-            var government_id = $('#government-select').val();
-
-            if (window.table) {
-                // console.log('d');
-                window.table.ajax.reload(); // Reload DataTable with new filter
+            if (table) {
+                table.ajax.reload(); // Reload DataTable with new filter
             }
         }
     </script>

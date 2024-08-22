@@ -287,7 +287,6 @@ class pointsController extends Controller
             'region.required' => 'يجب اختيار المنطقه الخاصه بالنقطه',
             'time_type.required' => 'يجب ادخال نظام العمل',
             'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
-            'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
 
         ];
 
