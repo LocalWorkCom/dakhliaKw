@@ -68,7 +68,7 @@
                         <span class="text-danger">{{ $errors->first('working_tree_id') }}</span>
                     @endif
                 </div>
-                <div class="form-group mt-4 mb-3">
+                <div class="form-group mt-5 mx-4 col-10 mt-4 mb-3">
 
                     <div class="check-one d-flex justify-content-start inspector-item">
                         <input type="checkbox" class="toggle-radio-buttons mx-2" value="1"

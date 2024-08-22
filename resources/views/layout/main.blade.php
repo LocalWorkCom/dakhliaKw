@@ -55,6 +55,10 @@
 .custom-select{
     width: 100%;
 }
+.select2-container--default .select2-results__option--disabled {
+    color: #999;
+    display: flex !important;
+}
     </style>
 </head>
 <body >
