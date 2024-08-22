@@ -85,6 +85,12 @@ class GroupTeamController extends Controller
                 }
                 // dd($btn);
                 return  $btn;
+            })->addColumn('service_order', function ($row) {
+                if ($row->service_order) {
+                    return  'نعم';
+                } else {
+                    return  'لا';
+                }
             })
             ->rawColumns(['action', 'inspectorCount'])
             ->make(true);
@@ -133,6 +139,7 @@ class GroupTeamController extends Controller
             $grouptemItem->name = $request->groupTeam_name;
             $grouptemItem->group_id = $id;
             $grouptemItem->working_tree_id = $request->working_tree_id;
+            $grouptemItem->service_order = ($request->service_order) ? $request->service_order : 0;
             $grouptemItem->save();
 
             return redirect()->back()->with('success', 'تم الاضافة بنجاح');
@@ -275,11 +282,13 @@ class GroupTeamController extends Controller
         // Check if the team exists
         if (!$team) {
             // Redirect back with an error if the team is not found
-            return redirect()->back()->withErrors(['team_not_found' => 'فريق العمل غير موجود.']);
+            return redirect()->back()->withErrors(['team_not_found' => 'دورية العمل غير موجود.']);
         }
 
         // Retrieve the new name and inspector IDs from the request
         $newName = $request->name;
+        $service_order = $request->service_order;
+
         $newInspectors = $request->inspectors_ids ? (array) $request->inspectors_ids : [];
         $oldInspectorIds = $team->inspector_ids ? explode(',', $team->inspector_ids) : [];
 
@@ -300,13 +309,14 @@ class GroupTeamController extends Controller
         $removedArr = array_diff($oldInspectorIds, $newInspectors);
 
         // Check if there are any changes; if not, return with a message
-        if (empty($changeArr) && empty($removedArr) && $team->name === $newName && $team->working_tree_id == $request->working_tree_id) {
+        if (empty($changeArr) && empty($removedArr) && $team->name === $newName && $team->working_tree_id == $request->working_tree_id && $service_order == $team->service_order) {
             return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.']);
         }
 
         // Update the team name and working tree ID
         $team->name = $newName;
         $team->working_tree_id = $request->working_tree_id;
+        $team->service_order = ($service_order) ? $service_order : 0;
 
         // Update inspector_ids if provided; otherwise, clear the field
         if (!empty($newInspectors)) {

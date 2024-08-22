@@ -90,6 +90,14 @@
                                         <span class="text-danger">{{ $errors->first('working_tree_id') }}</span>
                                     @endif
                                 </div>
+                                <div class="form-group mt-4 mb-3">
+
+                                    <div class="check-one d-flex justify-content-start inspector-item">
+                                        <input type="checkbox" class="toggle-radio-buttons mx-2" value="1"
+                                            id="service_order" name="service_order">
+                                        <label for="service_order">امر خدمة</label>
+                                    </div>
+                                </div>
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;">
@@ -156,6 +164,7 @@
                                     <th>نظام العمل</th>
 
                                     <th>المجموعة</th>
+                                    <th>امر خدمة</th>
                                     <th style="width:150px;">العمليات</th>
                                 </tr>
                             </thead>
@@ -193,6 +202,10 @@
                 {
                     data: 'group.name',
                     sname: 'group.name'
+                },
+                {
+                    data: 'service_order',
+                    sname: 'service_order'
                 },
                 {
                     data: 'action',
