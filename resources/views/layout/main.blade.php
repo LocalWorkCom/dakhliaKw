@@ -37,6 +37,16 @@
     border: 0.2px solid #d9d4d4;
     border-radius: 10px;
     background-color: #f8f8f8;
+    direction: rtl;
+    display: flex !important;
+    padding-top: 8px !important;
+
+}
+.select2-container--default[dir="rtl"] .select2-selection--single .select2-selection__arrow {
+    left: 1px;
+    right: auto;
+    padding-top: 5px !important;
+    top: 9px !important;
 }
 .select2-container--default .select2-selection--multiple  {
     height: 45px;
@@ -46,6 +56,21 @@
     background-color: #f8f8f8;
     direction:rtl;
 }
+.select2-results__option--selectable {
+    cursor: pointer;
+    display: flex !important;
+}
+.custom-select{
+    width: 100%;
+}
+.select2-container--default .select2-results__option--disabled {
+    color: #999;
+    display: flex !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+   
+    top: -9px !important;
+}
     </style>
 </head>
 <body >
@@ -54,6 +79,7 @@
 <main>
         @yield('content')
     </main>
+
 
     @include('layout.footer')
 </body>

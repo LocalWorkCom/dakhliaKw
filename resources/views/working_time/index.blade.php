@@ -12,9 +12,9 @@
     <div class="container welcome col-11">
         <div class="d-flex justify-content-between">
             <p> فترة العمل</p>
-            <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
+            <button class="btn-all px-3" style="color: #0D992C;" data-bs-toggle="modal" data-bs-target="#myModal1" >
 
-                اضافة فترة <img src="{{ asset('frontend/images/time.svg') }}" alt="">
+                اضافة فترة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">
             </button>
         </div>
 

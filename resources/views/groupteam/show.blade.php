@@ -33,13 +33,13 @@
                     </a>
                 </button>
                 {{-- <button class="btn-all px-3 mx-2" style="color: #259240;">
-                        <a href="{{ route('group.groupcreateInspectors', $id) }}" style="color: #259240">
+                        <a href="{{ route('group.groupcreateInspectors', $id) }}" style="    color: #0D992C;">
 
-                            اضافة مفتش جديد <img src="{{ asset('frontend/images/add-green.svg') }}" class="mx-1">
+                            اضافة مفتش جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </a>
                     </button> --}}
                 <button class="btn-all px-3 mx-2" style="color: #259240;" data-bs-toggle="modal"
-                    data-bs-target="#myModal1">
+                    data-bs-target="#myModal1" style="color: #0D992C;">
                     اضافة دورية <img src="{{ asset('frontend/images/green-group.svg') }}" class="mx-1">
                 </button>
             </div>
@@ -78,7 +78,7 @@
                                 <div class="form-group mt-4 mb-3">
                                     <label for="working_tree_id" class="d-flex justify-content-start pt-3 pb-2">اختر
                                         نظام العمل</label>
-                                    <select class="form-control" name="working_tree_id" id="working_tree_id">
+                                    <select class="form-control select2" style="border: 0.2px solid rgb(199, 196, 196);width:100%;" name="working_tree_id" id="working_tree_id">
                                         <option selected disabled>اختار من القائمة</option>
                                         @foreach ($workTrees as $workTree)
                                             <option value="{{ $workTree->id }}"
@@ -89,6 +89,14 @@
                                     @if ($errors->has('working_tree_id'))
                                         <span class="text-danger">{{ $errors->first('working_tree_id') }}</span>
                                     @endif
+                                </div>
+                                <div class="form-group mt-4 mb-3">
+
+                                    <div class="check-one d-flex justify-content-start inspector-item">
+                                        <input type="checkbox" class="toggle-radio-buttons mx-2" value="1"
+                                            id="service_order" name="service_order">
+                                        <label for="service_order">امر خدمة</label>
+                                    </div>
                                 </div>
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 p-2"
@@ -156,6 +164,7 @@
                                     <th>نظام العمل</th>
 
                                     <th>المجموعة</th>
+                                    <th>امر خدمة</th>
                                     <th style="width:150px;">العمليات</th>
                                 </tr>
                             </thead>
@@ -193,6 +202,10 @@
                 {
                     data: 'group.name',
                     sname: 'group.name'
+                },
+                {
+                    data: 'service_order',
+                    sname: 'service_order'
                 },
                 {
                     data: 'action',
@@ -248,6 +261,12 @@
 
         });
     });
+    
+</script>
+<script>
+$('.select2').select2({
+                // dir: "rtl"
+            });
 </script>
 @endsection
 {{-- <a href="` + permissionedit + `" class="btn btn-primary btn-sm">تعديل</a> --}}

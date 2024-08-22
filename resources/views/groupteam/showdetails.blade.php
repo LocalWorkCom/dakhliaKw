@@ -34,10 +34,14 @@
                             <td>{{ $team->name }}</td>
                         </tr>
                         <tr>
+                            <th scope="row" style="background-color:#f5f6fa;">امر خدمة</th>
+                            <td>{{ $team->service_order ? 'نعم' : 'لا' }}</td>
+                        </tr>
+                        <tr>
                             <th scope="row" style="background-color:#f5f6fa;">اسم نظام العمل</th>
                             <td>{{ $team->working_tree->name }}</td>
                         </tr>
-                     
+
                         <tr style="background-color:#f5f6fa;">
                             <th colspan="7">المفتشـــــون</th>
                         </tr>

@@ -19,9 +19,9 @@
             <div class="container welcome col-11">
                 <div class="d-flex justify-content-between">
                     <p> المجــــــــموعات</p>
-                    <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
+                    <button class="btn-all px-3" data-bs-toggle="modal" data-bs-target="#myModal1" style="color: #0D992C;">
                         اضافة مجموعة جديده
-                        <img src="{{ asset('frontend/images/group-add.svg') }}" alt="">
+                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                                         <th>عدد الدوريات</th>
                                         <th>عدد المفتشيين</th>
                                         <th>عدد النقاط لكل دورية فى اليوم</th>
-                                       
+
                                         <th style="width:150px !important;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -97,7 +97,7 @@
                                                 data: 'points_inspector',
                                                 name: 'points_inspector'
                                             },
-                                           
+
                                             {
                                                 data: 'action',
                                                 name: 'action',
@@ -175,9 +175,9 @@
                                 <div class="form-group mt-4 mb-3">
                                     <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر
                                         القطاع </label>
-                                    <select name="sector_id" id="sector_id" class="form-control"
-                                        style="border: 0.2px solid rgb(199, 196, 196);">
-                                        <option value="">قطاع </option>
+                                    <select name="sector_id" id="sector_id" class="form-control select2"
+                                        style="border: 0.2px solid rgb(199, 196, 196);width:100%;">
+                                        <option value="" >قطاع </option>
                                         @foreach ($sectors as $sector)
                                             <option value="{{ $sector->id }}">{{ $sector->name }} </option>
                                         @endforeach
@@ -272,11 +272,11 @@
                                     placeholder="اكتب المجموعة" disabled>
                             </div>
                             <div class="form-group mt-4 mb-3">
-                                <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر المحافظة
+                                <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر القطاع
                                 </label>
-                                <select name="sector_id" id="sector_show_id" class="form-control" disabled
+                                <select name="sector_id" id="sector_show_id" class="form-control " disabled
                                     style="border: 0.2px solid rgb(199, 196, 196);">
-                                    <option value="">محافظه </option>
+                                    <option value="">قطاع </option>
                                     @foreach ($sectors as $sector)
                                         <option value="{{ $sector->id }}">{{ $sector->name }} </option>
                                     @endforeach
@@ -284,7 +284,8 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label class="d-flex justify-content-start pb-2" for="points_inspector_show">
-                                    عدد النقاط لكل دورية فى اليوم  </label>
+                                    عدد النقاط لكل دورية فى اليوم </label>
+
 
                                 <input type="number" id="points_inspector_show" name="points_inspector_show"
                                     class="form-control" disabled>
@@ -331,9 +332,9 @@
                                 <div class="form-group mt-4 mb-3">
                                     <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر
                                         القطاع </label>
-                                    <select name="sector_id" id="sector_edit_id" class="form-control"
-                                        style="border: 0.2px solid rgb(199, 196, 196);">
-                                        <option value="">القطاع </option>
+                                    <select name="sector_id" id="sector_edit_id" class="form-control select2"
+                                        style="border: 0.2px solid rgb(199, 196, 196); width:100%;"  >
+                                        <option value="" disabled >القطاع </option>
                                         @foreach ($sectors as $sector)
                                             <option value="{{ $sector->id }}">{{ $sector->name }} </option>
                                         @endforeach
@@ -341,7 +342,7 @@
                                     @if ($errors->has('sector_id'))
                                         <span class="text-danger">{{ $errors->first('sector_id') }}</span>
                                     @endif
-                                </div> 
+                                </div>
 
                                 <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
@@ -402,7 +403,7 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
-                        <h5 class="modal-title"> اضافة فريق لمجموعة</h5>
+                        <h5 class="modal-title"> اضافة دورية لمجموعة</h5>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                 </div>
@@ -414,9 +415,9 @@
                                 <input type="hidden" name="group_id" id="group_id">
                                 <div class="form-group mt-4 mb-3">
                                     <label for="groupTeam_name" class="d-flex justify-content-start pt-3 pb-2">ادخل اسم
-                                        الفريق</label>
+                                        الدورية</label>
                                     <input type="text" id="groupTeam_name" name="groupTeam_name" class="form-control"
-                                        placeholder="فريق أ" required>
+                                        placeholder="دورية أ" required>
                                 </div>
 
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
@@ -617,6 +618,9 @@
         // });
     </script>
     <script>
+        $('.select2').select2({
+            // dir: "rtl"
+        });
         document.addEventListener('DOMContentLoaded', function() {
             // Get elements
             var openSecondModalBtn = document.getElementById('openSecondModalBtn');

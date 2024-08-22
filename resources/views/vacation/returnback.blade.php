@@ -69,21 +69,29 @@
 
                 <div class="row qoute " dir="rtl">
                     <p class=" "> نحيطكم علما بأن المذكؤر أعلاه
-                    <p>قد باشر العمل لدينا بتاريخ <span> {{ convertToArabicNumerals(\Carbon\Carbon::parse($vacation->end_date)->translatedFormat('l j F Y') )}}
+                    <p>قد باشر العمل لدينا بتاريخ <span>
+                            {{ convertToArabicNumerals(\Carbon\Carbon::parse($vacation->end_date)->translatedFormat('l j F Y')) }}
                         </span></p>
                     <p>بعد حصوله على أجازة <span>{{ $vacation->vacation_type->name }}</span> مدتها
-                        <span>{{ convertToArabicNumerals($vacation->days_number )}}</span> أيام
+                        <?php
+                        $startDate = \Carbon\Carbon::parse($vacation->start_date);
+                        $endDate = \Carbon\Carbon::parse($vacation->endDate);
+                        $daysLeft = $startDate->diffInDays($endDate, false);
+                        
+                        ?>
+                        <span>{{ convertToArabicNumerals($daysLeft) }}</span> أيام
                     </p>
                     <!-- Continue with your HTML structure -->
                     </p>
                     <p>
                         و الممنوحة له بالنشرة رقم :
                         <span> ( 1111222 )</span>
-                        بدأت بتاريخ <span>{{ convertToArabicNumerals(\Carbon\Carbon::parse($vacation->start_date)->translatedFormat('l j F Y') )}}
+                        بدأت بتاريخ
+                        <span>{{ convertToArabicNumerals(\Carbon\Carbon::parse($vacation->start_date)->translatedFormat('l j F Y')) }}
                         </span>
                     </p>
 
-                    
+
                 </div>
                 <br>
 
@@ -117,7 +125,7 @@
                     <p class="my-5 "> تعقيب / مدير ادارة الخدمات المالية و الادارية : </p>
                 </div>
 
-                <div class="container col-12 mt-3" style="border: 2px solid rgba(0, 0, 0, 0.61);">
+                <div class=" col-12 mt-3" style="border: 2px solid rgba(0, 0, 0, 0.61); border-radius:20px;">
                     <div class="row qoute d-flex justify-content-center " dir="rtl">
                         <p class="pt-2 ">اجراءات ادارة الخدمات المالية</p>
                     </div>
@@ -133,4 +141,5 @@
         </div>
     </div>
 </body>
+
 </html>

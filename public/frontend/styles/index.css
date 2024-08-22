@@ -985,6 +985,10 @@ table.dataTable.no-footer {
     margin-inline: 2px;
     margin-block: 4px;
 }
+#users-table td a i {
+    padding-left: 5px;
+    font-size: 14px;
+}
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     color: #333 !important;
     border: 0.5px solid #979797 !important;
@@ -1281,7 +1285,7 @@ text-align: right;
         -webkit-print-color-adjust: exact !important; /* Chrome, Safari */
         color-adjust: exact !important; /* Firefox */
     }
-    #users-table, #users-table * {
+    #users-table, #users-table ,#return-back * {
         visibility: visible;
     }
  
@@ -1461,7 +1465,7 @@ margin-inline: 5px;
 }
 .inputs-request div{
     height:35px ;
-    width: 350px;
+    /* width: 350px; */
     margin-inline: 5px;
     }
     .inputs-request label{

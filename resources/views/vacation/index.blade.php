@@ -14,9 +14,9 @@
                 <p> الاجــــــازات </p>
                 {{-- ( {{ $vacationCount }} ) --}}
                 @if (Auth::user()->hasPermission('create EmployeeVacation'))
-                    <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;"
+                    <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #0D992C;"
                         onclick="window.location.href='{{ route('vacation.add', $id) }}'">
-                        اضافة جديد <img src="{{ asset('frontend/images/time.svg') }}" alt="img">
+                        اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
                 @endif
             </div>
@@ -212,12 +212,12 @@
                                     name: 'vacation_type.name'
                                 },
                                 {
-                                    data: 'start_date',
-                                    name: 'start_date'
+                                    data: 'startDate',
+                                    name: 'startDate'
                                 },
                                 {
-                                    data: 'days_number',
-                                    name: 'days_number'
+                                    data: 'daysNumber',
+                                    name: 'daysNumber'
                                 },
                                 {
                                     data: 'EndDate',
@@ -267,24 +267,21 @@
 
                                     if (row.VacationStatus == 'منتهية') {
                                         buttons += `
-                                        <form id="print_returnVacation" action="${urls.printReturn}" method="POST" style="display:inline;">@csrf
-                                                    <a href="#" class="edit btn btn-sm" style="background-color: #2099c5;" onclick="document.getElementById(\'print_returnVacation\').submit();">
-                                                        <i class="fa-solid fa-print"></i> طباعة العودة
-                                                    </a>
-                                                </form>`
+                                      
+                                        <a href="#" class="edit btn btn-sm" style="background-color: #2099c5;" onclick="openAndPrint('${urls.printReturn}'); return false;">
+                                            <i class="fa-solid fa-print"></i> طباعة العودة
+                                        </a>`
                                         if (!row.end_date) {
                                             buttons +=
                                                 `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c96f3d;" onclick="update_type('direct_work', '${row.id}')"><i class="fa-brands fa-stack-overflow"></i> مباشرة العمل</a>`;
                                         }
                                     } else if (row.VacationStatus == 'مقدمة') {
                                         buttons +=
-                                            `<form id="acceptForm" action="${urls.accept}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #28a745;" onclick="document.getElementById('acceptForm').submit();"><i class="fa fa-check"></i> موافقة</a></form>`;
+                                            `<form id="acceptForm" action="${urls.accept}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #14a736;" onclick="document.getElementById('acceptForm').submit();"><i class="fa fa-check"></i> موافقة</a></form>`;
                                         buttons +=
-                                            `<form id="rejectForm" action="${urls.reject}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('rejectForm').submit();"><i class="fa fa-times"></i> رفض</a></form>`;
+                                            `<form id="rejectForm" action="${urls.reject}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color:#bf2433;" onclick="document.getElementById('rejectForm').submit();"><i class="fa fa-times"></i> رفض</a></form>`;
                                         buttons +=
-                                            `<form id="permitForm" action="${urls.permit}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #a335dc;" onclick="document.getElementById('permitForm').submit();"> <i class="fa-solid fa-print"></i> تصريح</a></form>`;
-                                        // buttons +=
-                                            // `<form id="printForm" action="${urls.print}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #dc3545;" onclick="document.getElementById('printForm').submit();"><i class="fa fa-times"></i> طباعة</a></form>`;
+                                            `<a href="#" class="edit btn btn-sm" style="background-color: #2b837b;" onclick="openAndPrint('${urls.permit}'); return false;">  <i class="fa-solid fa-print"></i> تصريح</a>`;
                                     } else if (row.VacationStatus == 'متجاوزة') {
                                         buttons +=
                                             `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #9dad1f;" onclick="update_type('direct_exceed', '${row.id}')"><i class="fa fa-eye"></i> باشر بعد التجاوز</a>`;
@@ -342,7 +339,26 @@
                             table.ajax.reload(); // Reload data with the new filter and ordering
                         });
 
-                        
+                        // $('.btn-all').click(function() {
+                        //     filter = $(this).data('filter'); // Update the filter based on the clicked button
+
+                        //     // Remove 'btn-active' class from all buttons and add to the clicked one
+                        //     $('.btn-all').removeClass('btn-active');
+                        //     $(this).addClass('btn-active');
+
+                        //     if (filter === 'all') {
+                        //         // Apply ordering by ID in descending order and show 10 records per page
+                        //         table.order([0, 'desc']).page.len(10); // Assuming 10 records per page for 'all' filter
+                        //     } else {
+                        //         // Reset any ordering and show 10 records per page for other filters
+                        //         table.order([]).page.len(1); // Show 10 records per page with no specific order
+                        //     }
+                        //     // table.ajax.reload(); // Reload data with the new filter and ordering
+                        //     table.ajax.reload(); // Reload data with the new filter
+
+                        //     // Go to the first page to ensure data is shown
+                        //     // table.page('first');
+                        // });
 
                     });
                     
@@ -362,8 +378,39 @@
                         $('#end_date').attr('value', today);
                     });
                 </script>
+<script>
+    function openAndPrint(url) {
+        
+        // var url = "${urls.printReturn}?id=" + encodeURIComponent(rowId);
 
+        // فتح الصفحة في نافذة جديدة
+        var newWindow = window.open(url, '_blank');
+
+     
+        newWindow.onload = function() {
+            newWindow.print();
+        };
+    }
+</script>
             </div>
         </div>
     </div>
 @endsection
+
+
+<!-- toqa code for print  -->
+<!-- <a href="#" class="edit btn btn-sm" style="background-color: #2099c5;" onclick="openAndPrint(); return false;">
+    <i class="fa-solid fa-print"></i> طباعة العودة
+</a>
+
+<script>
+    function openAndPrint() {
+      
+        var printWindow = window.open('${urls.printReturn}', '_blank');
+
+   
+        printWindow.onload = function() {
+            printWindow.print();
+        };
+    }
+</script> -->

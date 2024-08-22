@@ -29,11 +29,6 @@
             </ol>
         </nav>
     </div>
-    {{-- <div class="row ">
-    <div class="container welcome col-11">
-        <p> نقاط الوزاره </p>
-    </div>
-</div> --}}
     <br>
     <form class="edit-grade-form" id="Points-form" action=" {{ route('points.update') }}" method="POST">
         @csrf
@@ -61,7 +56,9 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="sector_id"> اختر القطاع </label>
-                        <select name="sector_id" id="sector_id" style="border: 0.2px solid rgb(199, 196, 196);" required>
+                        <select name="sector_id" id="sector_id"
+                            class=" form-control custom-select custom-select-lg mb-3 select2 "
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
                             <option value="">قطاع </option>
 
                             @foreach (getsectores() as $sector)
@@ -76,7 +73,8 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="governorate"> اختر المحافظة </label>
-                        <select name="governorate" id="governorate" style="border: 0.2px solid rgb(199, 196, 196);"
+                        <select name="governorate" id="governorate"  class=" form-control custom-select custom-select-lg mb-3 select2 "
+                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" 
                             required>
                             <option value="">محافظه </option>
                         </select>
@@ -85,7 +83,8 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="region"> اختر المنطقة </label>
-                        <select name="region" id="region" style="border: 0.2px solid rgb(199, 196, 196);" required>
+                        <select name="region" id="region"  class=" form-control custom-select custom-select-lg mb-3 select2 "
+                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;"  required>
                             <option value="">منطقه </option>
                         </select>
                     </div>
@@ -113,7 +112,7 @@
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                         <label class="pb-3" for="map_link"> رابط جوجل ماب </label>
                         <input type="text" id="map_link" name="map_link" class="form-control" placeholder=" ادخل الرابط"
-                            dir="rtl" value="{{ $data->google_map }}" />
+                            dir="rtl" value="{{ $data->google_map }}" required />
                     </div>
                 </div>
                 <div class="form-row   mx-2 mb-2 ">
@@ -132,7 +131,8 @@
                 <div class="form-row   mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
                         <label class="pb-3" for="time_type"> اختر نظام العمل </label>
-                        <select name="time_type" id="time_type" style="border: 0.2px solid rgb(199, 196, 196);" required>
+                        <select name="time_type" id="time_type" class=" form-control custom-select custom-select-lg mb-3 select2 "
+                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;"  required>
                             <option value="0" @if ($data->work_type == 0) selected @endif>نظام 24 ساعه</option>
                             <option value="1" @if ($data->work_type == 1) selected @endif>نظام دوام جزئى
                             </option>
@@ -253,250 +253,258 @@
 @endsection
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
     <script>
-       document.addEventListener('DOMContentLoaded', function() {
-    let oldValue = document.getElementById('time_type').value;
-    let savedHTML = ''; // Store previous state
-
-    const timeTypeSelect = document.getElementById('time_type');
-    const daysNumInput = document.getElementById('days_num');
-    const dynamicInputContainer = document.getElementById('dynamic-input-container');
-
-    timeTypeSelect.addEventListener('change', handleSelectChange);
-    daysNumInput.addEventListener('input', handleDaysInput);
-
-    function handleSelectChange() {
-        const timeType = timeTypeSelect.value;
-
-        if (timeType === oldValue && savedHTML) {
-            dynamicInputContainer.innerHTML = savedHTML;
-        } else {
-            savedHTML = dynamicInputContainer.innerHTML;
-            updateForm();
-        }
-        oldValue = timeType;
-    }
-
-    function handleDaysInput() {
-        updateForm();
-    }
-
-    function updateForm() {
-        const timeType = timeTypeSelect.value;
-        const daysNum = parseInt(daysNumInput.value, 10);
-
-        dynamicInputContainer.innerHTML = ''; // Clear the container
-
-        if (isNaN(daysNum) || daysNum <= 0) {
-            dynamicInputContainer.style.display = 'none';
-            return;
-        }
-
-        dynamicInputContainer.style.display = 'block';
-
-        if (timeType === '0') {
-            createSelectDays(daysNum);
-        } else if (timeType === '1') {
-            createSelectDaysWithTime(daysNum);
-        }
-
-        savedHTML = dynamicInputContainer.innerHTML; // Save the current state
-    }
-
-    function createSelectDays(daysNum) {
-        const timeType = timeTypeSelect.value;
-        for (let i = 0; i < daysNum; i++) {
-            const mainDiv = document.createElement('div');
-            mainDiv.className = 'form-row col-md-12 px-md-4 mb-2';
-
-            const inputGroup = document.createElement('div');
-            inputGroup.className = 'input-group moftsh2 px-md-3 px-3 pt-3';
-            inputGroup.id = `day_name-container_${i}`;
-
-            const label = document.createElement('label');
-            label.className = 'pb-3';
-            label.setAttribute('for', `day_name_${i}`);
-            label.textContent = 'اختر اليوم';
-
-            const select = document.createElement('select');
-            select.name = 'day_name[]';
-            select.id = `day_name_${i}`;
-            select.style.border = '0.2px solid rgb(199, 196, 196)';
-            select.required = true;
-
-            const option = document.createElement('option');
-            option.value = '';
-            option.text = "اختر يوم ";
-            option.disabled = true;
-            option.selected = true;
-            select.appendChild(option);
-
-            ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.text = day;
-                select.appendChild(option);
-            });
-
-            const errorSpan = document.createElement('span');
-            errorSpan.className = 'text-danger span-error';
-            errorSpan.id = `day_name_${i}-error`;
-
-            inputGroup.appendChild(label);
-            inputGroup.appendChild(select);
-            inputGroup.appendChild(errorSpan);
-
-            mainDiv.appendChild(inputGroup);
-
-            dynamicInputContainer.appendChild(mainDiv);
-        }
-
-        // Add event listeners to the new selects
-        addDayChangeListeners();
-    }
-
-    function createSelectDaysWithTime(daysNum) {
-        const timeType = timeTypeSelect.value;
-        for (let i = 0; i < daysNum; i++) {
-            const mainDiv = document.createElement('div');
-            mainDiv.className = 'form-row col-md-12 px-md-4 mb-2';
-
-            const inputGroup = document.createElement('div');
-            inputGroup.className = 'input-group moftsh2 px-md-3 px-3 pt-3';
-            inputGroup.id = `day_name-container_${i}`;
-
-            const label = document.createElement('label');
-            label.className = 'pb-3';
-            label.setAttribute('for', `day_name_${i}`);
-            label.textContent = 'اختر اليوم';
-
-            const select = document.createElement('select');
-            select.name = 'day_name[]';
-            select.id = `day_name_${i}`;
-            select.style.border = '0.2px solid rgb(199, 196, 196)';
-            select.required = true;
-
-            const option = document.createElement('option');
-            option.value = '';
-            option.text = "اختر يوم ";
-            option.disabled = true;
-            option.selected = true;
-            select.appendChild(option);
-
-            ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.text = day;
-                select.appendChild(option);
-            });
-
-            const errorSpan = document.createElement('span');
-            errorSpan.className = 'text-danger span-error';
-            errorSpan.id = `day_name_${i}-error`;
-
-            inputGroup.appendChild(label);
-            inputGroup.appendChild(select);
-            inputGroup.appendChild(errorSpan);
-
-            mainDiv.appendChild(inputGroup);
-
-            const timeInputRow = document.createElement('div');
-            timeInputRow.className = 'form-row col-md-12 mx-2 mb-2';
-
-            const fromTimeGroup = document.createElement('div');
-            fromTimeGroup.className = 'input-group moftsh2 px-md-3 px-3 pt-3 col-6';
-
-            const fromTimeLabel = document.createElement('label');
-            fromTimeLabel.className = 'pb-3';
-            fromTimeLabel.setAttribute('for', `fromTime_${i}`);
-            fromTimeLabel.textContent = 'موعد البدايه';
-
-            const fromTimeInput = document.createElement('input');
-            fromTimeInput.type = 'time';
-            fromTimeInput.id = `fromTime_${i}`;
-            fromTimeInput.name = 'from[]';
-            fromTimeInput.className = 'form-control';
-            fromTimeInput.required = true;
-
-            fromTimeGroup.appendChild(fromTimeLabel);
-            fromTimeGroup.appendChild(fromTimeInput);
-
-            const toTimeGroup = document.createElement('div');
-            toTimeGroup.className = 'input-group moftsh2 px-md-3 px-3 pt-3 col-6';
-
-            const toTimeLabel = document.createElement('label');
-            toTimeLabel.className = 'pb-3';
-            toTimeLabel.setAttribute('for', `toTime_${i}`);
-            toTimeLabel.textContent = 'موعد النهايه';
-
-            const toTimeInput = document.createElement('input');
-            toTimeInput.type = 'time';
-            toTimeInput.id = `toTime_${i}`;
-            toTimeInput.name = 'to[]';
-            toTimeInput.className = 'form-control';
-            toTimeInput.required = true;
-
-            toTimeGroup.appendChild(toTimeLabel);
-            toTimeGroup.appendChild(toTimeInput);
-
-            timeInputRow.appendChild(fromTimeGroup);
-            timeInputRow.appendChild(toTimeGroup);
-
-            mainDiv.appendChild(timeInputRow);
-
-            dynamicInputContainer.appendChild(mainDiv);
-              // Initialize Flatpickr after appending inputs
-        if (timeType == '1') {
-            flatpickr(`#fromTime_${i}`, {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "h:i K",
-                time_24hr: false,
-                minuteIncrement: 1
-            });
-
-            flatpickr(`#toTime_${i}`, {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "h:i K",
-                time_24hr: false,
-                minuteIncrement: 1
-            });
-        }
-        }
-
-        // Add event listeners to the new selects
-        addDayChangeListeners();
-    }
-
-    function addDayChangeListeners() {
-        const allSelects = document.querySelectorAll('select[name="day_name[]"]');
-        allSelects.forEach(select => {
-            select.addEventListener('change', handleDayChange);
+        $('.select2').select2({
+            dir: "rtl"
         });
+        document.addEventListener('DOMContentLoaded', function() {
+            let oldValue = document.getElementById('time_type').value;
+            let savedHTML = ''; // Store previous state
 
-        handleDayChange(); // Initial call to update options
-    }
+            const timeTypeSelect = document.getElementById('time_type');
+            const daysNumInput = document.getElementById('days_num');
+            const dynamicInputContainer = document.getElementById('dynamic-input-container');
 
-    function handleDayChange() {
-        const allSelects = document.querySelectorAll('select[name="day_name[]"]');
-        const selectedValues = Array.from(allSelects).map(select => select.value);
+            timeTypeSelect.addEventListener('change', handleSelectChange);
+            daysNumInput.addEventListener('input', handleDaysInput);
 
-        allSelects.forEach(select => {
-            Array.from(select.options).forEach(option => {
-                if (selectedValues.includes(option.value) && option.value !== select.value) {
-                    option.disabled = true;
-                    option.classList.add('disabled-option');
+            function handleSelectChange() {
+                const timeType = timeTypeSelect.value;
+
+                if (timeType === oldValue && savedHTML) {
+                    dynamicInputContainer.innerHTML = savedHTML;
                 } else {
-                    option.disabled = false;
-                    option.classList.remove('disabled-option');
+                    savedHTML = dynamicInputContainer.innerHTML;
+                    updateForm();
                 }
-            });
-        });
-    }
-});
+                oldValue = timeType;
+            }
 
+            function handleDaysInput() {
+                updateForm();
+            }
+
+            function updateForm() {
+                const timeType = timeTypeSelect.value;
+                const daysNum = parseInt(daysNumInput.value, 10);
+
+                dynamicInputContainer.innerHTML = ''; // Clear the container
+
+                if (isNaN(daysNum) || daysNum <= 0) {
+                    dynamicInputContainer.style.display = 'none';
+                    return;
+                }
+
+                dynamicInputContainer.style.display = 'block';
+
+                if (timeType === '0') {
+                    createSelectDays(daysNum);
+                } else if (timeType === '1') {
+                    createSelectDaysWithTime(daysNum);
+                }
+
+                savedHTML = dynamicInputContainer.innerHTML; // Save the current state
+            }
+
+            function createSelectDays(daysNum) {
+                const timeType = timeTypeSelect.value;
+                for (let i = 0; i < daysNum; i++) {
+                    const mainDiv = document.createElement('div');
+                    mainDiv.className = 'form-row col-md-12 px-md-4 mb-2';
+
+                    const inputGroup = document.createElement('div');
+                    inputGroup.className = 'input-group moftsh2 px-md-3 px-3 pt-3';
+                    inputGroup.id = `day_name-container_${i}`;
+
+                    const label = document.createElement('label');
+                    label.className = 'pb-3';
+                    label.setAttribute('for', `day_name_${i}`);
+                    label.textContent = 'اختر اليوم';
+
+                    const select = document.createElement('select');
+                    select.name = 'day_name[]';
+                    select.id = `day_name_${i}`;
+                    select.style.border = '0.2px solid rgb(199, 196, 196)';
+                    select.required = true;
+
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.text = "اختر يوم ";
+                    option.disabled = true;
+                    option.selected = true;
+                    select.appendChild(option);
+
+                    ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day,
+                        index) => {
+                        const option = document.createElement('option');
+                        option.value = index;
+                        option.text = day;
+                        select.appendChild(option);
+                    });
+
+                    const errorSpan = document.createElement('span');
+                    errorSpan.className = 'text-danger span-error';
+                    errorSpan.id = `day_name_${i}-error`;
+
+                    inputGroup.appendChild(label);
+                    inputGroup.appendChild(select);
+                    inputGroup.appendChild(errorSpan);
+
+                    mainDiv.appendChild(inputGroup);
+
+                    dynamicInputContainer.appendChild(mainDiv);
+                }
+
+                // Add event listeners to the new selects
+                addDayChangeListeners();
+            }
+
+            function createSelectDaysWithTime(daysNum) {
+                const timeType = timeTypeSelect.value;
+                for (let i = 0; i < daysNum; i++) {
+                    const mainDiv = document.createElement('div');
+                    mainDiv.className = 'form-row col-md-12 px-md-4 mb-2';
+
+                    const inputGroup = document.createElement('div');
+                    inputGroup.className = 'input-group moftsh2 px-md-3 px-3 pt-3';
+                    inputGroup.id = `day_name-container_${i}`;
+
+                    const label = document.createElement('label');
+                    label.className = 'pb-3';
+                    label.setAttribute('for', `day_name_${i}`);
+                    label.textContent = 'اختر اليوم';
+
+                    const select = document.createElement('select');
+                    select.name = 'day_name[]';
+                    select.id = `day_name_${i}`;
+                    select.style.border = '0.2px solid rgb(199, 196, 196)';
+                    select.required = true;
+
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.text = "اختر يوم ";
+                    option.disabled = true;
+                    option.selected = true;
+                    select.appendChild(option);
+
+                    ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day,
+                        index) => {
+                        const option = document.createElement('option');
+                        option.value = index;
+                        option.text = day;
+                        select.appendChild(option);
+                    });
+
+                    const errorSpan = document.createElement('span');
+                    errorSpan.className = 'text-danger span-error';
+                    errorSpan.id = `day_name_${i}-error`;
+
+                    inputGroup.appendChild(label);
+                    inputGroup.appendChild(select);
+                    inputGroup.appendChild(errorSpan);
+
+                    mainDiv.appendChild(inputGroup);
+
+                    const timeInputRow = document.createElement('div');
+                    timeInputRow.className = 'form-row col-md-12 mx-2 mb-2';
+
+                    const fromTimeGroup = document.createElement('div');
+                    fromTimeGroup.className = 'input-group moftsh2 px-md-3 px-3 pt-3 col-6';
+
+                    const fromTimeLabel = document.createElement('label');
+                    fromTimeLabel.className = 'pb-3';
+                    fromTimeLabel.setAttribute('for', `fromTime_${i}`);
+                    fromTimeLabel.textContent = 'موعد البدايه';
+
+                    const fromTimeInput = document.createElement('input');
+                    fromTimeInput.type = 'time';
+                    fromTimeInput.id = `fromTime_${i}`;
+                    fromTimeInput.name = 'from[]';
+                    fromTimeInput.className = 'form-control';
+                    fromTimeInput.required = true;
+
+                    fromTimeGroup.appendChild(fromTimeLabel);
+                    fromTimeGroup.appendChild(fromTimeInput);
+
+                    const toTimeGroup = document.createElement('div');
+                    toTimeGroup.className = 'input-group moftsh2 px-md-3 px-3 pt-3 col-6';
+
+                    const toTimeLabel = document.createElement('label');
+                    toTimeLabel.className = 'pb-3';
+                    toTimeLabel.setAttribute('for', `toTime_${i}`);
+                    toTimeLabel.textContent = 'موعد النهايه';
+
+                    const toTimeInput = document.createElement('input');
+                    toTimeInput.type = 'time';
+                    toTimeInput.id = `toTime_${i}`;
+                    toTimeInput.name = 'to[]';
+                    toTimeInput.className = 'form-control';
+                    toTimeInput.required = true;
+
+                    toTimeGroup.appendChild(toTimeLabel);
+                    toTimeGroup.appendChild(toTimeInput);
+
+                    timeInputRow.appendChild(fromTimeGroup);
+                    timeInputRow.appendChild(toTimeGroup);
+
+                    mainDiv.appendChild(timeInputRow);
+
+                    dynamicInputContainer.appendChild(mainDiv);
+                    // Initialize Flatpickr after appending inputs
+                    if (timeType == '1') {
+                        flatpickr(`#fromTime_${i}`, {
+                            enableTime: true,
+                            noCalendar: true,
+                            dateFormat: "h:i K",
+                            time_24hr: false,
+                            minuteIncrement: 1
+                        });
+
+                        flatpickr(`#toTime_${i}`, {
+                            enableTime: true,
+                            noCalendar: true,
+                            dateFormat: "h:i K",
+                            time_24hr: false,
+                            minuteIncrement: 1
+                        });
+                    }
+                }
+
+                // Add event listeners to the new selects
+                addDayChangeListeners();
+            }
+
+            function addDayChangeListeners() {
+                const allSelects = document.querySelectorAll('select[name="day_name[]"]');
+                allSelects.forEach(select => {
+                    select.addEventListener('change', handleDayChange);
+                });
+
+                handleDayChange(); // Initial call to update options
+            }
+
+            function handleDayChange() {
+                const allSelects = document.querySelectorAll('select[name="day_name[]"]');
+                const selectedValues = Array.from(allSelects).map(select => select.value);
+
+                allSelects.forEach(select => {
+                    Array.from(select.options).forEach(option => {
+                        if (selectedValues.includes(option.value) && option.value !== select
+                            .value) {
+                            option.disabled = true;
+                            option.classList.add('disabled-option');
+                        } else {
+                            option.disabled = false;
+                            option.classList.remove('disabled-option');
+                        }
+                    });
+                });
+            }
+        });
     </script>
+
     <script>
         $(document).ready(function() {
             var currentGovernorateId = {{ $data->government_id }};
@@ -511,20 +519,39 @@
                         dataType: 'json',
                         success: function(data) {
                             $('#governorate').empty().append(
-                                '<option value="">اختر المحافظة</option>');
-                            $.each(data, function(key, value) {
-                                var selected = value.id == currentGovernorateId ?
-                                    'selected' : '';
-                                $('#governorate').append('<option value="' + value.id +
-                                    '" ' + selected + '>' + value.name + '</option>'
-                                );
-                            });
-                            $('#governorate').prop('disabled', false);
-
-                            // Trigger change to load regions if currentGovernorateId is set
-                            if (currentGovernorateId) {
-                                $('#governorate').trigger('change');
+                                '<option value="" disabled >اختر المحافظه </option>'
+                            );
+                            if (Array.isArray(data)) {
+                                if (data.length > 0) {
+                                    $.each(data, function(key, value) {
+                                        var selected = value.id ==
+                                            currentGovernorateId ?
+                                            'selected' : '';
+                                        $('#governorate').append('<option value="' +
+                                            value.id +
+                                            '" ' + selected + '>' + value.name +
+                                            '</option>'
+                                        );
+                                    });
+                                    $('#governorate').prop('disabled', false);
+                                } else {
+                                    // Show a message if no data is available
+                                    $('#governorate').append(
+                                        '<option disabled>عفوا لا يوجد محافظه لهذا القطاع   بعد</option>'
+                                    );
+                                    $('#governorate').prop('disabled', true);
+                                }
+                            } else {
+                                $('#region').empty().append(
+                                        '<option value=""disabled selected>اختر المنطقه </option>'
+                                        )
+                                    .prop(
+                                        'disabled', true);
+                                $('#region').prop('disabled', false);
                             }
+
+                            // Update Select2 component
+                            $('#governorate').trigger('change');
                         },
                         error: function(xhr) {
                             console.error('AJAX request failed', xhr);
@@ -535,6 +562,7 @@
                         'disabled', true);
                     $('#region').empty().append('<option value="">اختر المنطقة</option>').prop('disabled',
                         true);
+                    $('#governorate').trigger('change');
                 }
             });
 
@@ -569,6 +597,122 @@
 
             // Trigger change event to prepopulate data
             $('#sector_id').trigger('change');
+        });
+        $('#sector_id').change(function() {
+            var sectorId = $(this).val();
+            if (sectorId) {
+                $.ajax({
+                    url: '/get-governorates/' + sectorId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#governorate').empty().append(
+                                '<option value="" disabled selected>اختر المحافظه </option>'
+                            );
+
+                        // Check if data is an array
+                        if (Array.isArray(data)) {
+                            if (data.length > 0) {
+                                $.each(data, function(key, value) {
+                                    $('#governorate').append('<option value="' + value
+                                        .id + '">' + value.name + '</option>');
+                                });
+                                $('#governorate').prop('disabled', false);
+                            } else {
+                                // Show a message if no data is available
+                                $('#governorate').append(
+                                    '<option disabled>عفوا لا يوجد محافظه لهذا القطاع   بعد</option>'
+                                );
+                                $('#governorate').prop('disabled', true);
+                            }
+                        } else {
+                            $('#region').empty().append(
+                                    '<option value=""disabled selected>اختر المنطقه </option>')
+                                .prop(
+                                    'disabled', true);
+                                    $('#region').prop('disabled', false);
+                        }
+
+                        // Update Select2 component
+                        $('#governorate').trigger('change');
+                    },
+                    error: function(xhr) {
+                        // Handle AJAX errors
+                        console.error('AJAX request failed', xhr);
+                        $('#governorate').empty().append(
+                            '<option disabled>حدث خطأ في تحميل البيانات</option>');
+                            $('#governorate').prop('disabled', false);
+
+                        // Update Select2 component
+                        $('#governorate').trigger('change');
+                    }
+                });
+            } else {
+                $('#governorate').empty().append('<option value="" selected disabled>اختر المحافظه </option>').prop(
+                    'disabled', false);
+
+                // Update Select2 component
+                $('#governorate').trigger('change');
+            }
+        });
+        $('#governorate').change(function() {
+            var governorateId = $(this).val();
+            if (governorateId) {
+                $.ajax({
+                    url: '/get-regions/' + governorateId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#region').empty().append(
+                                '<option value="" disabled selected>اختر المنطقه </option>'
+                            );
+
+                        // Check if data is an array
+                        if (Array.isArray(data)) {
+                            if (data.length > 0) {
+                                $.each(data, function(key, value) {
+                                    $('#region').append('<option value="' + value
+                                        .id + '">' + value.name + '</option>');
+                                });
+                                $('#region').prop('disabled', false);
+                            } else {
+                                // Show a message if no data is available
+                                $('#region').append(
+                                    '<option disabled>عفوا لا يوجد منطقه  لهذه المحافظه   بعد</option>'
+                                );
+                                $('#region').prop('disabled', true);
+                            }
+                        } else {
+                            $('#region').empty().append(
+                                    '<option value=""disabled selected>اختر المنطقه </option>')
+                                .prop(
+                                    'disabled', true);
+                                    $('#region').prop('disabled', false);
+                        }
+
+                        // Update Select2 component
+                        $('#region').trigger('change');
+                    },
+                    error: function(xhr) {
+                        // Handle AJAX errors
+                        console.error('AJAX request failed', xhr);
+                        $('#region').empty().append(
+                            '<option disabled>حدث خطأ في تحميل البيانات</option>');
+                            $('#region').prop('disabled', false);
+
+                        // Update Select2 component
+                        $('#region').trigger('change');
+                    }
+                });
+            } else {
+                $('#region').empty().append('<option value="" selected disabled>اختر المنطقه </option>').prop(
+                    'disabled', false);
+
+                // Update Select2 component
+                $('#region').trigger('change');
+            }
         });
     </script>
 @endpush

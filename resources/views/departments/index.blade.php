@@ -16,7 +16,7 @@
                 <p> الادارات </p>
                 <div class="form-group">
                     <button type="button" class="wide-btn "
-                        onclick="window.location.href='{{ route('departments.create') }}'">
+                        onclick="window.location.href='{{ route('departments.create') }}'" style="    color: #0D992C;">
               اضافة جديد
               <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
@@ -24,7 +24,7 @@
                   <!--   <button type="button" class="wide-btn mx-md-3 mx-1"
                         onclick="window.location.href='{{ route('postmans.create') }}'">
                         اضافة مندوب
-                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                       <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button> -->
                     @endif
                 </div>

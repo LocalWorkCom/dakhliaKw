@@ -19,9 +19,9 @@
                             <div class="form-group">
                                 @if (Auth::user()->hasPermission('create User'))
                                     <button type="button" class="wide-btn"
-                                        onclick="window.location.href='{{ route('user.create', $id) }}'">
+                                        onclick="window.location.href='{{ route('user.create', $id) }}'" style="color: #0D992C;">
                                   
-                                        اضافة جديد       <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                        اضافة جديد      <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                                     </button>
                                 @endif
                             </div>
@@ -34,9 +34,9 @@
                         <div class="form-group">
                                 @if (Auth::user()->hasPermission('add_employee User'))
                                 <button type="button" class="wide-btn"
-                                        onclick="window.location.href='{{ route('user.create', $id) }}'">
+                                        onclick="window.location.href='{{ route('user.create', $id) }}'" style="color: #0D992C;">
                                        
-                                        اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                        اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                                     </button>
                                 @endif
                             </div>
