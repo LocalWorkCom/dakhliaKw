@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 use App\Models\PersonalMission;
 use Carbon\Carbon;
 
@@ -11,6 +11,7 @@ use App\Models\InspectorMission;
 use App\Models\Inspector;
 use App\Models\Point;
 use App\Models\PointDays;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;

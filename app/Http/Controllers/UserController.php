@@ -70,7 +70,7 @@ class UserController extends Controller
                         $query->where('hidden', false);
                     })->get();
             }
-        } else {
+        } else { 
             if (is_null($parentDepartment->parent_id)) {
                 $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();
 
@@ -111,7 +111,7 @@ class UserController extends Controller
             }
         }
 
-
+     
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 

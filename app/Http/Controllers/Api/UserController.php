@@ -37,7 +37,7 @@ class UserController extends Controller
         $password = $request->password;
 
         // Check if the user exists
-        $user = User::where('military_number', $military_number)->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId')->first();
+        $user = User::where('military_number', $military_number)->orWhere('Civil_number', $military_number)->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId')->first();
 
         if (!$user) {
           return $this->respondError('Validation Error.', ['military_number'=> ['الرقم العسكري لا يتطابق مع سجلات المفتشين']], 400);

@@ -5,7 +5,7 @@ use App\Http\Controllers\Api\reportsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\InspectorMissionController;
+use App\Http\Controllers\Api\InspectorMissionController;
 
 /*
 |--------------------------------------------------------------------------

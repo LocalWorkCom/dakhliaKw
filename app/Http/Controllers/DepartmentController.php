@@ -31,7 +31,7 @@ class DepartmentController extends Controller
         $users = User::where('flag', 'employee')->where('department_id', NULL)->get();
         $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
 
-        // Get the children of the parent department
+        // Get the children of the parent department 
         $departments = $parentDepartment ? $parentDepartment->children : collect();
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $subdepartments = departements::with('children')->get();
