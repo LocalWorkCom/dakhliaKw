@@ -333,8 +333,8 @@
                                     <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر
                                         القطاع </label>
                                     <select name="sector_id" id="sector_edit_id" class="form-control select2"
-                                        style="border: 0.2px solid rgb(199, 196, 196);">
-                                        <option value="">القطاع </option>
+                                        style="border: 0.2px solid rgb(199, 196, 196); width:100%;"  >
+                                        <option value="" >القطاع </option>
                                         @foreach ($sectors as $sector)
                                             <option value="{{ $sector->id }}">{{ $sector->name }} </option>
                                         @endforeach

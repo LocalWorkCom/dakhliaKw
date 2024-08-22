@@ -637,3 +637,17 @@
     border-radius: 10px !important;
     background-color: #f8f8f8 !important;
 }
+.select2-results__option--selectable {
+    cursor: pointer;
+    display: flex !important;
+}
+
+.select2-container .select2-selection--single {
+    height: 45px;
+    font-size: 14px;
+    border: 0.2px solid #d9d4d4;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    direction: rtl;
+    display: flex !important;
+}
