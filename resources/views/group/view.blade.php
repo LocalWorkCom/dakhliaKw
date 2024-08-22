@@ -286,6 +286,7 @@
                                 <label class="d-flex justify-content-start pb-2" for="points_inspector_show">
                                     عدد النقاط لكل دورية فى اليوم </label>
 
+
                                 <input type="number" id="points_inspector_show" name="points_inspector_show"
                                     class="form-control" disabled>
                             </div>

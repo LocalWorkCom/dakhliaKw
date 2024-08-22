@@ -95,7 +95,7 @@
             <div class="form-row mx-2 mb-2 ">
                 <div class="input-group moftsh2 px-md-5 px-3 pt-3">
                     <label class="pb-3" for="map_link"> رابط جوجل ماب </label>
-                    <input type="text" id="map_link" name="map_link" class="form-control" placeholder=" ادخل الرابط" />
+                    <input type="text" id="map_link" name="map_link" class="form-control" placeholder=" ادخل الرابط" required/>
                 </div>
             </div>
             <div class="form-row   mx-2 mb-2 ">

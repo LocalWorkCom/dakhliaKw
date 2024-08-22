@@ -22,7 +22,7 @@ class reportsController extends Controller
             'point_id.required' => 'يجب اختيار النقطه المضاف لها المهمه',
             'point_id.exists' => 'عفوا هذه النقطه غير متاحه',
         ];
-        
+
         $validatedData = Validator::make($request->all(), [
             'point_id' => ['required', function ($attribute, $value, $fail) {
                 $exists = Grouppoint::whereJsonContains('points_ids', (string) $value)->exists();
@@ -31,7 +31,7 @@ class reportsController extends Controller
                 }
             }],
         ], $messages);
-         
+
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
@@ -39,12 +39,12 @@ class reportsController extends Controller
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
         $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
-        
+
         $inspectorIdsArray = [];
         foreach ($teamInspectors as $inspectorIds) {
             $inspectorIdsArray = array_merge($inspectorIdsArray, explode(',', $inspectorIds));
         }
-        
+
         $daysOfWeek = [
             "السبت",  // 0
             "الأحد",  // 1
@@ -56,14 +56,14 @@ class reportsController extends Controller
         ];
         $dayWeek = Carbon::now()->locale('ar')->dayName;
         $index = array_search($dayWeek, $daysOfWeek);
-        
+
         $absences = Absence::whereIn('inspector_id', $inspectorIdsArray)
             ->where('point_id', $request->point_id)
             ->where('date', $today)
             ->get();
-        
+
         $response = [];  // Initialize the response array
-        
+
         foreach ($absences as $absence) {
             $time = null;
             if ($absence->point->work_type != 0) {
@@ -71,11 +71,11 @@ class reportsController extends Controller
                     ->where('name', $index)
                     ->first();
             }
-        
+
             $employees_absence = AbsenceEmployee::with(['gradeName', 'absenceType'])
                 ->where('absences_id', $absence->id)
                 ->get();
-        
+
             $absence_members = [];
             foreach ($employees_absence as $employee_absence) {
                 // $grade=$employee_absence->grade != null ? $employee_absence->grade->name : 'لا يوجد رتبه';
@@ -87,7 +87,7 @@ class reportsController extends Controller
                     'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name : 'غير متوفر',
                 ];
             }
-        
+
             $response[] = [
                 'abcence_day' => $absence->date,
                 'point_name' => $absence->point->name,
@@ -99,15 +99,31 @@ class reportsController extends Controller
                 'absence_members' => $absence_members,
             ];
         }
-        
+
         $success['report'] = $response;
-        
-        
+
+
         if ($response) {
-            return $this->respondSuccess($success, 'Data saved successfully.');
+            return $this->respondSuccess($success, 'Data get successfully.');
         } else {
-            return $this->respondError('Failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+           
+            return $this->apiResponse(true, 'Data get successfully.', null, 200);
         }
-        
+    }
+    protected function apiResponse($status, $message, $data, $code, $errorData = null)
+    {
+        $response = [
+            'code' => $code,
+            'status' => $status,
+            'message' => $message,
+            'data' => $data,
+        ];
+
+        // Only include 'errorData' if it is not null
+        if ($errorData !== null) {
+            $response['errorData'] = $errorData;
+        }
+
+        return response()->json($response, $code);
     }
 }

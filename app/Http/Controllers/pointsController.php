@@ -52,8 +52,8 @@ class pointsController extends Controller
     public function getAllPoints($governorate)
     {
         // Fetch regions based on the selected governorate
-        $points = Grouppoint::where('government_id', $governorate)->where('deleted',0)->where('flag',0)->get();
-        return response()->json($points);
+        $regions = Grouppoint::where('government_id', $governorate)->where('deleted',0)->where('flag',0)->get();
+        return response()->json($regions);
     }
     public function index()
     {
@@ -216,8 +216,8 @@ class pointsController extends Controller
                 foreach ($dayNames as $index => $dayName) {
                     PointDays::create([
                         'name' => $dayName,
-                        'from' => $fromTimes[$index],
-                        'to' => $toTimes[$index],
+                        'from' => date('H:i:s', strtotime($fromTimes[$index])),
+                        'to' => date('H:i:s', strtotime($toTimes[$index])),
                         'point_id' => $point->id,
                         'created_by' => auth()->id(),
                     ]);
@@ -333,8 +333,8 @@ class pointsController extends Controller
                 foreach ($dayNames as $index => $dayName) {
                     PointDays::create([
                         'name' => $dayName,
-                        'from' => $fromTimes[$index],
-                        'to' => $toTimes[$index],
+                        'from' => date('H:i:s', strtotime($fromTimes[$index])),
+                        'to' => date('H:i:s', strtotime($toTimes[$index])),
                         'point_id' => $point->id,
                         'created_by' => auth()->id(),
                     ]);
