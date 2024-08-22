@@ -18,13 +18,13 @@
                     <div class="d-flex justify-content-between">
                         {{-- @if (Auth::user()->hasPermission('create Point')) --}}
                         <button type="button" class="btn-all mr-2" onclick="window.location.href='{{ route('points.create') }}'"
-                            style="color: #0D992C;">
+                            style="    color: #0D992C;">
                             اضافة نقطة جديدة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </button>
                         {{-- @endif --}}
                         {{-- @if (Auth::user()->hasPermission('create Point')) --}}
                         <button type="button" class="btn-all  "
-                            onclick="window.location.href='{{ route('grouppoints.create') }}'" style="color: #0D992C;">
+                            onclick="window.location.href='{{ route('grouppoints.create') }}'" style="    color: #0D992C;">
                             اضافة نقاط لمجموعه  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </button>
                         {{-- @endif --}}

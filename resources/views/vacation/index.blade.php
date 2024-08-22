@@ -14,9 +14,9 @@
                 <p> الاجــــــازات </p>
                 {{-- ( {{ $vacationCount }} ) --}}
                 @if (Auth::user()->hasPermission('create EmployeeVacation'))
-                    <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #274373;"
+                    <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #0D992C;"
                         onclick="window.location.href='{{ route('vacation.add', $id) }}'">
-                        اضافة جديد <img src="{{ asset('frontend/images/time.svg') }}" alt="img">
+                        اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
                 @endif
             </div>

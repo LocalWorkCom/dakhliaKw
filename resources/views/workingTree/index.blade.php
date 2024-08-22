@@ -11,7 +11,7 @@
         <div class="container welcome col-11">
         <div class="d-flex justify-content-between">
             <p> نظام العمــــــــــل </p>
-            <button type="button" class="wide-btn" style="color:#259240;"
+            <button type="button" class="wide-btn" style="color: #0D992C;"
                         onclick="window.location.href='{{ route('working_tree.add') }}'">
                      
                         اضافة نظام عمل جديد   <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
