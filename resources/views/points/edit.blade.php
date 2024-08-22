@@ -598,5 +598,121 @@
             // Trigger change event to prepopulate data
             $('#sector_id').trigger('change');
         });
+        $('#sector_id').change(function() {
+            var sectorId = $(this).val();
+            if (sectorId) {
+                $.ajax({
+                    url: '/get-governorates/' + sectorId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#governorate').empty().append(
+                                '<option value="" disabled selected>اختر المحافظه </option>'
+                            );
+
+                        // Check if data is an array
+                        if (Array.isArray(data)) {
+                            if (data.length > 0) {
+                                $.each(data, function(key, value) {
+                                    $('#governorate').append('<option value="' + value
+                                        .id + '">' + value.name + '</option>');
+                                });
+                                $('#governorate').prop('disabled', false);
+                            } else {
+                                // Show a message if no data is available
+                                $('#governorate').append(
+                                    '<option disabled>عفوا لا يوجد محافظه لهذا القطاع   بعد</option>'
+                                );
+                                $('#governorate').prop('disabled', true);
+                            }
+                        } else {
+                            $('#region').empty().append(
+                                    '<option value=""disabled selected>اختر المنطقه </option>')
+                                .prop(
+                                    'disabled', true);
+                                    $('#region').prop('disabled', false);
+                        }
+
+                        // Update Select2 component
+                        $('#governorate').trigger('change');
+                    },
+                    error: function(xhr) {
+                        // Handle AJAX errors
+                        console.error('AJAX request failed', xhr);
+                        $('#governorate').empty().append(
+                            '<option disabled>حدث خطأ في تحميل البيانات</option>');
+                            $('#governorate').prop('disabled', false);
+
+                        // Update Select2 component
+                        $('#governorate').trigger('change');
+                    }
+                });
+            } else {
+                $('#governorate').empty().append('<option value="" selected disabled>اختر المحافظه </option>').prop(
+                    'disabled', false);
+
+                // Update Select2 component
+                $('#governorate').trigger('change');
+            }
+        });
+        $('#governorate').change(function() {
+            var governorateId = $(this).val();
+            if (governorateId) {
+                $.ajax({
+                    url: '/get-regions/' + governorateId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#region').empty().append(
+                                '<option value="" disabled selected>اختر المنطقه </option>'
+                            );
+
+                        // Check if data is an array
+                        if (Array.isArray(data)) {
+                            if (data.length > 0) {
+                                $.each(data, function(key, value) {
+                                    $('#region').append('<option value="' + value
+                                        .id + '">' + value.name + '</option>');
+                                });
+                                $('#region').prop('disabled', false);
+                            } else {
+                                // Show a message if no data is available
+                                $('#region').append(
+                                    '<option disabled>عفوا لا يوجد منطقه  لهذه المحافظه   بعد</option>'
+                                );
+                                $('#region').prop('disabled', true);
+                            }
+                        } else {
+                            $('#region').empty().append(
+                                    '<option value=""disabled selected>اختر المنطقه </option>')
+                                .prop(
+                                    'disabled', true);
+                                    $('#region').prop('disabled', false);
+                        }
+
+                        // Update Select2 component
+                        $('#region').trigger('change');
+                    },
+                    error: function(xhr) {
+                        // Handle AJAX errors
+                        console.error('AJAX request failed', xhr);
+                        $('#region').empty().append(
+                            '<option disabled>حدث خطأ في تحميل البيانات</option>');
+                            $('#region').prop('disabled', false);
+
+                        // Update Select2 component
+                        $('#region').trigger('change');
+                    }
+                });
+            } else {
+                $('#region').empty().append('<option value="" selected disabled>اختر المنطقه </option>').prop(
+                    'disabled', false);
+
+                // Update Select2 component
+                $('#region').trigger('change');
+            }
+        });
     </script>
 @endpush
