@@ -31,17 +31,18 @@
                 <div class="row " dir="rtl">
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
                         <!-- {{-- @if (Auth::user()->hasPermission('create Region')) --}}
+
                             <button type="button" class="btn-all  "
                             onclick="openadd()" style="color: #0D992C;">
                                
                                 اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                             </button>
                             {{-- @endif --}} -->
+
                         <div class="form-group moftsh  mx-3  d-flex">
                             <h4 style="    line-height: 1.8;"> التصنيف حسب المحافظة :</h4>
-                            <select name="government-select" id="government-select" class="form-group mx-md-2 btn-all "
-
-                                onchange="filterRegions()"
+                            <select name="government-select" id="government-select"  onchange="filterRegions()"
+                                class=" form-group mx-md-2 btn-all  custom-select custom-select-lg mb-3 select2 "
                                 style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
                                 <option value="">اختر المحافظه</option>
                                 @foreach (getgovernments() as $government)
@@ -52,6 +53,11 @@
                         </div>
                     </div>
                 </div>
+                {{-- <script>
+                    $('#government-select').click(
+                        $('#governorate').trigger('change');
+                    );
+                </script> --}}
                 <div class="col-lg-12">
                     <div class="bg-white">
                         @if (session()->has('message'))
@@ -105,7 +111,9 @@
 
                             <div class="form-group">
                                 <label for="governmentid">المحافظات </label>
-                                <select name="governmentid" id="governmentid" class="form-group col-md-12 " required>
+                                <select name="governmentid" id="governmentid"
+                                    class=" form-group col-md-12 custom-select custom-select-lg mb-3 select2 "
+                                    style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
                                     <option value="">اختر المحافظه</option>
                                     @foreach (getgovernments() as $government)
                                         <option value="{{ $government->id }}">{{ $government->name }}</option>
@@ -207,19 +215,12 @@
     </div> --}}
 @endsection
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
     <script>
-        // function opendelete(id) {
-        //     document.getElementById('id').value = id;
-        //     $('#delete').modal('show');
-        // }
-
-        // function confirmDelete() {
-        //     var id = document.getElementById('id').value;
-        //     var form = document.getElementById('delete-form');
-
-        //     form.submit();
-
-        // }
+        $('.select2').select2({
+            dir: "rtl"
+        });
 
         function openedit(id, name, government) {
             document.getElementById('nameedit').value = name;
@@ -239,10 +240,18 @@
 
             // form.submit();
 
-        }
+        } 
 
         function openadd() {
+         
             $('#add').modal('show');
+            $('#exampleModal').on('shown.bs.modal', function () {
+                    $('#government-select').select2({
+                        width: 'resolve',
+                        placeholder: 'اختر المحافظه',
+                        allowClear: true
+                    });
+                });
         }
 
         function confirmAdd() {

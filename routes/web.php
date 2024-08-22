@@ -28,6 +28,7 @@ use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\GroupTeamController;
 use App\Http\Controllers\InstantmissionController;
 use App\Http\Controllers\ViolationTypesController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -341,7 +342,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('points/edit/group/{id}', [groupPointsController::class, 'edit'])->name('grouppoints.edit');
     Route::post('points/update/group/{id}', [groupPointsController::class, 'update'])->name('grouppoints.update');
 
-     Route::get('trstssss', [governmentController::class, 'test']);
+    //Route::get('trstssss', [governmentController::class, 'test']);
 
     //End GroupPoints
     Route::get('/get-governorates/{sector}', [pointsController::class, 'getGovernorates']);
@@ -414,6 +415,14 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
+
+    /**
+     * Search From Home
+     */
+    Route::get('/search/{search}/{q}', [SearchController::class, 'index'])->name('search');
+    Route::get('/searchUsers/users/{q}/{id}', [SearchController::class, 'getUsers'])->name('search.users')->middleware('check.permission:view User');
+    Route::get('/searchDept/departments/{q}', [SearchController::class,'getDepartments'])->name('search.departments');
+    
 });
 
 Route::get('api/Inspectors', [InspectorController::class, 'getInspectors'])->name('api.inspector');

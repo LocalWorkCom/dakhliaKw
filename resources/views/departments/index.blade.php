@@ -65,11 +65,21 @@
 <script>
     $(document).ready(function() {
         $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
-
+        @php
+                                        $Dataurl= url('api/department') ;
+                                        if(isset($mode)){
+                                            if($mode=='search')
+                                                 $Dataurl=url('searchDept/departments')."/".$q;
+                                        }
+                                       // dd($Dataurl);
+                                                                        
+                                        @endphp  
+                                        console.log('Rasha',"{{$Dataurl}}")  
         $('#users-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ url('api/department') }}',
+             ajax: '{{$Dataurl}}/',
+            
             columns: [{
                     data: 'id',
                     sWidth: '50px',

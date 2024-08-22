@@ -122,4 +122,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(PointDays::class, 'created_by');
     }
+    public function violations()
+    {
+        return $this->hasMany(Violation::class, 'user_id');
+    }
 }
