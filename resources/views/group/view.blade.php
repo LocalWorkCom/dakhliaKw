@@ -175,9 +175,9 @@
                                 <div class="form-group mt-4 mb-3">
                                     <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر
                                         القطاع </label>
-                                    <select name="sector_id" id="sector_id" class="form-control"
-                                        style="border: 0.2px solid rgb(199, 196, 196);">
-                                        <option value="">قطاع </option>
+                                    <select name="sector_id" id="sector_id" class="form-control select2"
+                                        style="border: 0.2px solid rgb(199, 196, 196);width:100%;">
+                                        <option value="" >قطاع </option>
                                         @foreach ($sectors as $sector)
                                             <option value="{{ $sector->id }}">{{ $sector->name }} </option>
                                         @endforeach
@@ -334,7 +334,7 @@
                                         القطاع </label>
                                     <select name="sector_id" id="sector_edit_id" class="form-control select2"
                                         style="border: 0.2px solid rgb(199, 196, 196); width:100%;"  >
-                                        <option value="" >القطاع </option>
+                                        <option value="" disabled >القطاع </option>
                                         @foreach ($sectors as $sector)
                                             <option value="{{ $sector->id }}">{{ $sector->name }} </option>
                                         @endforeach
