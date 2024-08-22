@@ -79,7 +79,7 @@
                         $daysLeft = $startDate->diffInDays($endDate, false);
                         
                         ?>
-                        <span>{{ convertToArabicNumerals($daysLeft) }}</span> أيام
+                        <span>{{ convertToArabicNumerals($daysLeft+1) }}</span> أيام
                     </p>
                     <!-- Continue with your HTML structure -->
                     </p>
