@@ -64,7 +64,7 @@
                     @endif
                     <h4 style="color: #032F70; font-size: 30px; font-weight: 700;">استرجاع كلمة المرور</h1>
                         <label for="username" class="login-label">اسم المستخدم</label> <br>
-                        <input type="text" name="military_number" id="username" class="login-input"><br>
+                        <input type="text" name="number" id="username" class="login-input"><br>
                             {{-- @php
                                 $user = App\Models\User::where('token', $token)->first();
                              @endphp --}}

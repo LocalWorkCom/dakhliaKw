@@ -61,7 +61,7 @@
                 </div>
                 <div class="row d-flex justify-content-center mb-5">
                     <div class="text-request mb-5">
-                        <p>رقم الملف / {{ $vacation->employee->file_number }} </p>
+                        <p>رقم الملف / {{ convertToArabicNumerals($vacation->employee->file_number) }} </p>
                     </div>
                 </div>
 
@@ -69,16 +69,16 @@
                     <p class=" "> يرجى التكرم بالموافقة علي اجازه
                         <span> ( {{ $vacation->vacation_type->name }} )</span>
                         للمذكور اعلاه و لمدة
-                        <span> ( {{ $vacation->days_number }} )</span>
+                        <span> ( {{convertToArabicNumerals($vacation->days_number) }} )</span>
                         ايام و الممنوحة له بالنشرة رقم
                         <span> ( 2020/12 )</span>
                         على ان تبدأ من تاريخ
 
 
                     </p>
-                    <p><span> ( {{ date('Y-m-d', strtotime($vacation->start_date)) }} )</span>
+                    <p><span> ( {{ convertToArabicNumerals(\Carbon\Carbon::parse($vacation->start_date)->translatedFormat('l j F Y'))}} )</span>
                         حتى تاريخ
-                        <span>( {{ date('Y-m-d', strtotime(ExpectedEndDate($vacation)[0])) }} )</span>
+                        <span>( {{ convertToArabicNumerals(\Carbon\Carbon::parse(ExpectedEndDate($vacation)[0])->translatedFormat('l j F Y') )}} )</span>
                     </p>
                 </div>
                 <br>

@@ -69,7 +69,7 @@
                     @endif
 
                     <input type="hidden" name="firstlogin" value="{{ $firstlogin }}">
-                    <input type="hidden" name="military_number" value="{{ $military_number }}">
+                    <input type="hidden" name="number" value="{{ $number }}">
 
                     <label for="username" class="login-label-2">ادخل كلمه المرور</label> <br>
                     <input type="password" name="password" id="username" class="login-input"><br>
