@@ -14,9 +14,9 @@
                 <div class="form-group  ">
                     @if (Auth::user()->hasPermission('create Iotelegram'))
                         <button type="button" class="wide-btn"
-                            onclick="window.location.href='{{ route('iotelegrams.add') }}'">
+                            onclick="window.location.href='{{ route('iotelegrams.add') }}'" style= "    color: #0D992C;">
                         
-                            اضافة جديد     <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            اضافة جديد    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </button>
                     @endif
                     @if (Auth::user()->hasPermission('archive Iotelegram'))

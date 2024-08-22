@@ -33,13 +33,13 @@
                     </a>
                 </button>
                 {{-- <button class="btn-all px-3 mx-2" style="color: #259240;">
-                        <a href="{{ route('group.groupcreateInspectors', $id) }}" style="color: #259240">
+                        <a href="{{ route('group.groupcreateInspectors', $id) }}" style="    color: #0D992C;">
 
-                            اضافة مفتش جديد <img src="{{ asset('frontend/images/add-green.svg') }}" class="mx-1">
+                            اضافة مفتش جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </a>
                     </button> --}}
                 <button class="btn-all px-3 mx-2" style="color: #259240;" data-bs-toggle="modal"
-                    data-bs-target="#myModal1">
+                    data-bs-target="#myModal1" style="color: #0D992C;">
                     اضافة دورية <img src="{{ asset('frontend/images/green-group.svg') }}" class="mx-1">
                 </button>
             </div>

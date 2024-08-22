@@ -21,7 +21,7 @@
 
 <button class="btn-all px-3" style="color: #274373;" onclick="openadd()" data-bs-toggle="modal"
     data-bs-target="#myModal1">
-    اضافة مخالفه     <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">
+    اضافة مخالفه    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
 </button>
 {{-- @endif --}}
         </div>

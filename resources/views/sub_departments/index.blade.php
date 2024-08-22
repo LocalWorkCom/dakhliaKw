@@ -24,8 +24,8 @@
                     <div class="form-group mt-4 mx-2 col-12 d-flex">
                         <button type="button" class="wide-btn" data-bs-toggle="modal"
                             data-bs-target="#Department" data-dismiss="modal" id="representative-dev"
-                            >
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img"> اضافة ادارة
+                            style="color: #0D992C;">
+                             اضافة ادارة  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </button>
 
                     </div>

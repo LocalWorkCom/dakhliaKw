@@ -65,8 +65,8 @@
                                 <div class="col-auto">
                                     <button type="button" class="wide-btn  " data-bs-toggle="modal" id="extern-user-dev"
                                         data-bs-target="#add-job" style="color: #0D992C;">
-                                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                        اضافة وظيفه
+                                        
+                                        اضافة وظيفه  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                                     </button>
                                 </div>
                             </div>
