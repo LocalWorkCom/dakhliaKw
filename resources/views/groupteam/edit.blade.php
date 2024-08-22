@@ -17,7 +17,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('group.view') }}">المجموعات </a></li>
-                <li class="breadcrumb-item"><a href="{{ route('groupTeam.index', $group_id) }}">الفرق </a></li>
+                <li class="breadcrumb-item"><a href="{{ route('groupTeam.index', $group_id) }}">الدوريات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل </a></li>
             </ol>
         </nav>
@@ -25,7 +25,7 @@
     <div class="row ">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
-                <p>تعديل الفرق او اضافه مفتش
+                <p>تعديل الدورية او اضافه مفتش
                 <p></p>
 
             </div>
@@ -36,7 +36,7 @@
     <div class="row" dir="rtl">
 
         <div class="container moftsh col-11 mt-3 pt-3 pb-3 ">
-            <h3 class="pt-3 px-md-5 px-3"> من فضلك قم باضافة المفتشون الى لفريق</h3>
+            <h3 class="pt-3 px-md-5 px-3"> من فضلك قم باضافة المفتشون الى الدورية</h3>
 
             <form class="edit-grade-form" id="" action="{{ route('groupTeam.update', $id) }}" method="POST">
                 @csrf

@@ -16,14 +16,14 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('group.view') }}">المجموعات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> الفرق</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> الدوريات</a></li>
             </ol>
         </nav>
     </div>
     <div class="container welcome col-11">
         <div class="d-flex justify-content-between">
 
-            <p>الفرق</p>
+            <p>الدوريات</p>
             <p></p>
             <div class="second mx-4">
                 <button class="btn-all px-3 mx-2" style="color: #274373;">
@@ -40,7 +40,7 @@
                     </button> --}}
                 <button class="btn-all px-3 mx-2" style="color: #259240;" data-bs-toggle="modal"
                     data-bs-target="#myModal1">
-                    اضافة فريق <img src="{{ asset('frontend/images/green-group.svg') }}" class="mx-1">
+                    اضافة دورية <img src="{{ asset('frontend/images/green-group.svg') }}" class="mx-1">
                 </button>
             </div>
         </div>
@@ -53,7 +53,7 @@
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
                         <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
-                        <h5 class="modal-title"> اضافة فريق</h5>
+                        <h5 class="modal-title"> اضافة دورية</h5>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                 </div>
@@ -65,10 +65,10 @@
                                 @csrf
                                 <div class="form-group mt-4 mb-3">
                                     <label class="d-flex justify-content-start pt-3 pb-2" for="groupTeam_name"> ادخل اسم
-                                        الفريق </label>
+                                        الدورية </label>
                                     <input type="text" id="groupTeam_name" name="groupTeam_name"
                                         class="form-control @error('groupTeam_name') is-invalid @enderror"
-                                        placeholder="ادخل الفريق" value="{{ old('groupTeam_name') }}">
+                                        placeholder="ادخل الدورية" value="{{ old('groupTeam_name') }}">
                                     @error('groupTeam_name')
                                         <div class="invalid-feedback">
                                             {{ $message }}

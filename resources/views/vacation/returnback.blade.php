@@ -62,26 +62,28 @@
                 </div>
                 <div class="row d-flex justify-content-center mb-5">
                     <div class="text-request mb-5">
-                        <p>رقم الملف / {{ $vacation->employee->file_number }} </p>
+                        <p>رقم الملف / {{ convertToArabicNumerals($vacation->employee->file_number) }}
+                        </p>
                     </div>
                 </div>
 
                 <div class="row qoute " dir="rtl">
-                    <p class=" "> نحيطكم علما بأن المذكؤر أعلاه قد باشر العمل لدينا بتاريخ
-                    <p>قد باشر العمل لدينا بتاريخ <span> {{ $vacation->end_date }}
+                    <p class=" "> نحيطكم علما بأن المذكؤر أعلاه
+                    <p>قد باشر العمل لدينا بتاريخ <span> {{ convertToArabicNumerals(\Carbon\Carbon::parse($vacation->end_date)->translatedFormat('l j F Y') )}}
                         </span></p>
                     <p>بعد حصوله على أجازة <span>{{ $vacation->vacation_type->name }}</span> مدتها
-                        <span>{{ $vacation->days_number }}</span> يوم
+                        <span>{{ convertToArabicNumerals($vacation->days_number )}}</span> أيام
                     </p>
                     <!-- Continue with your HTML structure -->
-
                     </p>
-
                     <p>
                         و الممنوحة له بالنشرة رقم :
                         <span> ( 1111222 )</span>
-                        بدأت بتاريخ <span>{{ $vacation->start_date }}</span>
+                        بدأت بتاريخ <span>{{ convertToArabicNumerals(\Carbon\Carbon::parse($vacation->start_date)->translatedFormat('l j F Y') )}}
+                        </span>
                     </p>
+
+                    
                 </div>
                 <br>
 

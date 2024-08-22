@@ -52,10 +52,11 @@
                                     <tr>
                                         <th>رقم التسلسلي</th>
                                         <th>اسم المجموعة</th>
-                                        <th>عدد الفرق</th>
-                                        <th>عدد المفتشيين</th>
-                                        <th>عدد النقاط لكل فريق فى اليوم</th>
                                         <th>اسم قطاع</th>
+                                        <th>عدد الدوريات</th>
+                                        <th>عدد المفتشيين</th>
+                                        <th>عدد النقاط لكل دورية فى اليوم</th>
+                                       
                                         <th style="width:150px !important;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -78,6 +79,10 @@
                                                 data: 'name',
                                                 name: 'name'
                                             },
+                                            {
+                                                data: 'sector.name',
+                                                name: 'sector.name'
+                                            },
 
                                             {
                                                 data: 'num_team',
@@ -92,10 +97,7 @@
                                                 data: 'points_inspector',
                                                 name: 'points_inspector'
                                             },
-                                            {
-                                                data: 'sector.name',
-                                                name: 'sector.name'
-                                            },
+                                           
                                             {
                                                 data: 'action',
                                                 name: 'action',
@@ -188,7 +190,7 @@
 
                                 <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد النقاط
-                                        لكل فريق فى اليوم</label>
+                                        لكل دورية فى اليوم</label>
                                     <input type="number" id="points_inspector" name="points_inspector" class="form-control"
                                         placeholder="1"
                                         value="{{ old('points_inspector') ? old('points_inspector') : 1 }}">
@@ -282,7 +284,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label class="d-flex justify-content-start pb-2" for="points_inspector_show">
-                                    عدد النقاط لكل فريق فى اليوم  </label>
+                                    عدد النقاط لكل دورية فى اليوم  </label>
 
                                 <input type="number" id="points_inspector_show" name="points_inspector_show"
                                     class="form-control" disabled>
@@ -343,7 +345,7 @@
 
                                 <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
-                                        النقاط لكل فريق فى اليوم </label>
+                                        النقاط لكل دورية فى اليوم </label>
                                     <input type="number" id="points_inspector_edit" name="points_inspector_edit"
                                         class="form-control" value="{{ old('points_inspector_edit') }}">
                                     @if ($errors->has('points_inspector_edit'))

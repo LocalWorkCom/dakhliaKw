@@ -78,7 +78,7 @@ class groupPointsController extends Controller
         $deleted = Grouppoint::where('flag', 0)
             ->whereIn('id', $request->pointsIDs)
             ->get();
-           dd($deleted);
+           //dd($deleted);
         // Optional: Perform actions with the retrieved records
         foreach ($deleted as $record) {
             // Example action: Delete the record
@@ -120,16 +120,23 @@ class groupPointsController extends Controller
             })
             ->flatten()
             ->unique();
-
         // Filter points to include only those that are not already in another group
-        $availablePoints = $allPoints->filter(function ($point) use ($pointsInGroup) {
+        $availablePoints = $allPoints->where('deleted',0)->filter(function ($point) use ($pointsInGroup) {
             return !$pointsInGroup->contains($point->id);
         });
-        $mergedPoints = $pointsInGroup->merge($availablePoints->pluck('id')->toArray());
+   
+
+        $mergedPoints =  $selectedPoints->merge($availablePoints->pluck('id')->toArray());
 
         // Ensure uniqueness after merging
         $mergedPoints = $mergedPoints->unique();
-        $points = Point::whereIn('id', $mergedPoints)->get();
+        // dd($mergedPoints);
+        // if(count($mergedPoints) <1){
+        //     $points = Point::where('id', $mergedPoints)->get();
+        // }else{    
+        //         $points = Point::whereIn('id', $mergedPoints)->get();
+
+        // }
 
         //dd($mergedPoints);
 
@@ -138,7 +145,7 @@ class groupPointsController extends Controller
 
         return view('grouppoints.edit', [
             'data' => $data,
-            'selectedPoints' => $points
+            'selectedPoints' => $mergedPoints
         ]);
     }
 

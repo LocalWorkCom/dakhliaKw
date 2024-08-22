@@ -386,3 +386,10 @@ function formatTime($time)
     $toDay = str_replace(['AM', 'PM'], ['ص', 'م'], $to);
     return $toDay;
 }
+function convertToArabicNumerals($number)
+{
+    $westernArabicNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    $easternArabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    return str_replace($westernArabicNumerals, $easternArabicNumerals, $number);
+}
