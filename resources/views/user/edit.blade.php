@@ -183,7 +183,7 @@
                             </div>
                         </div>
 
-                        @if ($user->flag == "user")
+                        @if ($user->flag == "user" || Auth::user()->rule->name == "inspector")
                         <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
 
                             <div class="form-group col-md-5 mx-2">
