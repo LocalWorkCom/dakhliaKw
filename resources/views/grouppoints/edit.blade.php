@@ -72,7 +72,7 @@
                         <label class="pb-3 col-12" for="governorate">أختر المحافظه الخاصه لمجوعه النقاط</label>
                         <select name="governorate" id="governorate" disabled
                             class="custom-select custom-select-lg mb-3 select2 col-12"
-                            style="border: 0.2px solid rgb(199, 196, 196); width:100%;">
+                            style="border: 0.2px solid rgb(199, 196, 196); ">
                             <option value="" selected disabled>اختر</option>
 
                             <option value="{{ $data->government_id }}" selected>
