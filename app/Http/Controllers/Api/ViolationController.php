@@ -259,6 +259,7 @@ class ViolationController  extends Controller
             return [
                 'id' => $violation->id,
                 'InspectorName' => $violation->user->name ?? null,
+                'Inspectorgrade' => $violation->user->grade->name ?? null,
                 'military_number' => $violation->military_number ?? null,
                 'Civil_number' => $violation->Civil_number ?? null,
                 'grade' => grade::where('id',$violation->grade)->select('id','name')->first() ?? null,
