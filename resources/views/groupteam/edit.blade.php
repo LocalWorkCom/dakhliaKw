@@ -76,6 +76,10 @@
                         <label for="service_order">امر خدمة</label>
                     </div>
                 </div>
+                <div class="form-group mt-5 mx-4 col-10 mt-4 mb-3">
+                <div class="check-one d-flex justify-content-start inspector-item">
+                <h3 class="pt-3">   قم بتحديد المفتشون :</h3>
+                     </div>  </div>
                 @foreach ($inspectorGroups as $index => $inspectorGroup)
                     <div class="select-boxes mt-5 mx-4 col-10" dir="rtl">
                         <div class="check-one d-flex justify-content-start">

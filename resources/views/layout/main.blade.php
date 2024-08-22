@@ -39,6 +39,14 @@
     background-color: #f8f8f8;
     direction: rtl;
     display: flex !important;
+    padding-top: 8px !important;
+
+}
+.select2-container--default[dir="rtl"] .select2-selection--single .select2-selection__arrow {
+    left: 1px;
+    right: auto;
+    padding-top: 5px !important;
+    top: 9px !important;
 }
 .select2-container--default .select2-selection--multiple  {
     height: 45px;
@@ -67,6 +75,7 @@
 <main>
         @yield('content')
     </main>
+
 
     @include('layout.footer')
 </body>

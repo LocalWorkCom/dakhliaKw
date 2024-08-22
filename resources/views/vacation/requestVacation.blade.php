@@ -22,7 +22,7 @@
 
 
 <body>
-    <div class="container col-10 py-3 mt-5 mb-5" style="border: 0.1px solid rgba(161, 161, 161, 0.61);">
+    <div id="return-back" class="container col-10 py-3 mt-5 mb-5" style="border: 0.1px solid rgba(161, 161, 161, 0.61);">
         <div class="container col-12  pt-5 mt-2 mb-2  pb-5" style="border: 0.1px solid rgba(110, 156, 241, 0.795); ">
             <div class="header mx-5 mt-5">
                 <div class="row d-flex justify-content-between ">
@@ -61,7 +61,7 @@
                 </div>
                 <div class="row d-flex justify-content-center mb-5">
                     <div class="text-request mb-5">
-                        <p>رقم الملف / {{ $vacation->employee->file_number }} </p>
+                        <p>رقم الملف / {{ convertToArabicNumerals($vacation->employee->file_number) }} </p>
                     </div>
                 </div>
 
@@ -69,16 +69,16 @@
                     <p class=" "> يرجى التكرم بالموافقة علي اجازه
                         <span> ( {{ $vacation->vacation_type->name }} )</span>
                         للمذكور اعلاه و لمدة
-                        <span> ( {{ $vacation->days_number }} )</span>
+                        <span> ( {{convertToArabicNumerals($vacation->days_number) }} )</span>
                         ايام و الممنوحة له بالنشرة رقم
                         <span> ( 2020/12 )</span>
                         على ان تبدأ من تاريخ
 
 
                     </p>
-                    <p><span> ( {{ date('Y-m-d', strtotime($vacation->start_date)) }} )</span>
+                    <p><span> ( {{ convertToArabicNumerals(\Carbon\Carbon::parse($vacation->start_date)->translatedFormat('l j F Y'))}} )</span>
                         حتى تاريخ
-                        <span>( {{ date('Y-m-d', strtotime(ExpectedEndDate($vacation)[0])) }} )</span>
+                        <span>( {{ convertToArabicNumerals(\Carbon\Carbon::parse(ExpectedEndDate($vacation)[0])->translatedFormat('l j F Y') )}} )</span>
                     </p>
                 </div>
                 <br>
@@ -140,7 +140,7 @@
                     <p class="my-5 "> تعقيب / مدير ادارة الخدمات المالية و الادارية : </p>
                 </div>
 
-                <div class="container col-12 mt-3" style="border: 2px solid rgba(0, 0, 0, 0.61);">
+                <div class=" col-12 mt-3" style="border: 2px solid rgba(0, 0, 0, 0.61);  border-radius:20px;">
                     <div class="row qoute d-flex justify-content-center " dir="rtl">
                         <p class="pt-2 ">اجراءات ادارة الخدمات المالية</p>
                     </div>
