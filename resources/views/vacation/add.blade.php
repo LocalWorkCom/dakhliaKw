@@ -33,7 +33,7 @@
                         <div class="form-group col-md-5 mx-md-2 ">
                             <label for="vacation_type_id" style=" display: flex; justify-content: flex-start;">نوع
                                 الاجازة</label>
-                            <select id="vacation_type_id" name="vacation_type_id" class="form-control" >
+                            <select id="vacation_type_id" name="vacation_type_id" class="form-control  select2">
                                 <option value="">اختر النوع</option>
                                 @foreach ($vacation_types as $vacation_type)
                                     <option value="{{ $vacation_type->id }}">{{ $vacation_type->name }}</option>
@@ -42,7 +42,7 @@
                         </div>
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="employee_id" style=" display: flex; justify-content: flex-start;">اسم الموظف</label>
-                            <select id="employee_id" name="employee_id" class="form-control" 
+                            <select id="employee_id" name="employee_id" class="form-control  select2"
                                 @if ($id) disabled @endif>
                                 <option value="">اختر الموظف</option>
                                 @foreach ($employees as $item)
@@ -63,7 +63,7 @@
 
                         <div class="form-group col-md-5 mx-2">
                             <label for="start_date">تاريخ البداية</label>
-                            <input type="date" id="start_date" name="start_date" class="form-control" >
+                            <input type="date" id="start_date" name="start_date" class="form-control">
                         </div>
                     </div>
                     <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
@@ -72,7 +72,7 @@
                             <label for="toggleCheckbox"> دولة خارجية </label>
                         </div>
                     </div>
-                    
+
                     <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-10 mx-2" style="display: none" id="toggleDiv">
                             <label for="country_id" style="display: flex;">الدولة</label>
@@ -97,6 +97,11 @@
 
 
     @push('scripts')
+        <script>
+            $('.select2').select2({
+                // dir: "rtl"
+            });
+        </script>
         <script>
             document.getElementById('toggleCheckbox').addEventListener('change', function() {
                 var toggleDiv = document.getElementById('toggleDiv');

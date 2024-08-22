@@ -56,7 +56,7 @@
                 <div class="form-group col-md-11 mx-4">
                     <label for="working_tree_id" class="d-flex justify-content-start pt-3 pb-2">اختر
                         نظام العمل</label>
-                    <select class="form-control" name="working_tree_id" id="working_tree_id">
+                    <select class="form-control select2" style="border: 0.2px solid rgb(199, 196, 196);width:100%;"name="working_tree_id" id="working_tree_id">
                         <option selected disabled>اختار من القائمة</option>
                         @foreach ($workTrees as $workTree)
                             <option value="{{ $workTree->id }}"
@@ -115,4 +115,10 @@
                     });
                 });
             </script> --}}
+            <script>
+                $('.select2').select2({
+                // dir: "rtl"
+            });
+            </script>
+            
         @endpush

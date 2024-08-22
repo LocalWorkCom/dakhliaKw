@@ -99,7 +99,7 @@
                                                 <label for="group_id" style="    justify-content: flex-end;">اختر
                                                     المجموعه
                                                 </label>
-                                                <select class="form-control" name="group_id" id="group_id" required>
+                                                <select class="form-control select2"  style="border: 0.2px solid rgb(199, 196, 196);width:100%;" name="group_id" id="group_id" required>
                                                     <option selected disabled>اختار من القائمة</option>
                                                     @foreach (getgroups() as $group)
                                                         <option value="{{ $group->id }}">{{ $group->name }}</option>
@@ -320,5 +320,10 @@
             }
         }
     }
+</script>
+<script>
+    $('.select2').select2({
+    // dir: "rtl"
+});
 </script>
 @endpush
