@@ -15,7 +15,11 @@
             </ol>
         </nav>
     </div>
-
+    <div class="row ">
+    <div class="container welcome col-11">
+        <p> نـــقــاط الوزارة </p>
+    </div>
+</div>
 
     <br>
     <form class="edit-grade-form" id="Qta3-form" action="{{ route('grouppoints.update', $data->id) }}" method="POST">
@@ -65,10 +69,10 @@
 
                     <input hidden value="{{ $data->government_id }}" name="government_id">
                     <div class="input-group moftsh px-md-5 px-3 pt-3">
-                        <label class="pb-3" for="governorate">أختر المحافظه الخاصه لمجوعه النقاط</label>
+                        <label class="pb-3 col-12" for="governorate">أختر المحافظه الخاصه لمجوعه النقاط</label>
                         <select name="governorate" id="governorate" disabled
                             class="custom-select custom-select-lg mb-3 select2 col-12"
-                            style="border: 0.2px solid rgb(199, 196, 196);">
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100%;">
                             <option value="" selected disabled>اختر</option>
 
                             <option value="{{ $data->government_id }}" selected>
@@ -80,10 +84,10 @@
                 </div>
                 {{-- {{ dd($governments== ''? 't' :'f') }} --}}
                 <div class="input-group moftsh px-md-5 px-3 pt-3">
-                    <label class="pb-3" for="pointsIDs">أختر النقاط</label>
+                    <label class="pb-3 col-12" for="pointsIDs">أختر النقاط</label>
                     <select name="pointsIDs[]" id="pointsIDs" multiple
                         class="custom-select custom-select-lg mb-3 select2 col-12"
-                        style="border: 0.2px solid rgb(199, 196, 196);">
+                        style="border: 0.2px solid rgb(199, 196, 196); width:100%;" dir="rtl">
                         <option value="" selected disabled>اختر</option>
                         @foreach ($selectedPoints as $points)
                             <option value="{{ $points->id }}" @if (in_array($points->id, $data->points_ids ?? [])) selected @endif>
@@ -93,13 +97,13 @@
                     </select>
                 </div>
                 <span class="text-danger span-error" id="governmentIDS-error"></span>
-                <div class="container col-11">
-                    <div class="form-row d-flex justify-content-end mt-4 mb-3">
+                <div class="container col-12">
+                    <div class="form-row d-flex justify-content-end mt-5 mb-3">
                         <button type="submit" class="btn-blue">
                             <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img" height="20px"
                                 width="20px"> اضافة
                         </button>
-                        <button type="button" id="back-button" class="btn-back mx-2">
+                        <button type="button" id="back-button" class="btn-back mx-5">
                             <img src="{{ asset('frontend/images/previous.svg') }}" alt="img" height="20px"
                                 width="20px"> السابق</button>
 
