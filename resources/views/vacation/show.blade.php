@@ -32,12 +32,7 @@
             <div class="form-row mx-2 ">
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
-                        @if ($vacation->vacation_type_id == 3)
-                            <tr>
-                                <th scope="row"style="background: #f5f6fa;">اسم الاجازة:</th>
-                                <td>{{ $vacation->name }}</td>
-                            </tr>
-                        @endif
+                    
                         <tr>
                             <th scope="row"style="background: #f5f6fa;">نوع الاجازة:</th>
                             <td>{{ $vacation->vacation_type->name }}</td>

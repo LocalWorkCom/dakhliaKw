@@ -42,7 +42,40 @@
                             </div>
                 </div>
             </div>
+            @elseif ($id == 0)
+            <div class="container welcome col-11">
+                <div class="d-flex justify-content-between">
+                        <p>المستخـــــــــــدمين</p>
+                    
+                            <div class="form-group">
+                                @if (Auth::user()->hasPermission('create User'))
+                                    <button type="button" class="wide-btn"
+                                        onclick="window.location.href='{{ route('user.create', $id) }}'">
+                                  
+                                        اضافة جديد       <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                    </button>
+                                @endif
+                            </div>
+                </div>
+            </div>
+            @elseif($id==1)
+            <div class="container welcome col-11">
+                <div class="d-flex justify-content-between">
+                        <p>المـــــــــــوظفين</p>
+                        <div class="form-group">
+                                @if (Auth::user()->hasPermission('add_employee User'))
+                                <button type="button" class="wide-btn"
+                                        onclick="window.location.href='{{ route('user.create', $id) }}'">
+                                       
+                                        اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                    </button>
+                                @endif
+                            </div>
+                </div>
+            </div>
         @endif
+      
+        
     </div>
 
 
@@ -78,10 +111,20 @@
                                 $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
 
                                 var id = {{ $id }};
+                            
+                                        @php
+                                        $Dataurl= url('api/users') ;
+                                        if(isset($mode)){
+                                            if($mode=='search')
+                                                 $Dataurl=url('searchUsers/users')."/".$q;
+                                        }
+                                       // dd($Dataurl);
+                                                                        
+                                        @endphp                            
                                 $('#users-table').DataTable({
                                     processing: true,
                                     serverSide: true,
-                                    ajax: '{{ url('api/users') }}/' + id, // Correct URL concatenation
+                                    ajax: '{{$Dataurl}}/' + id, // Correct URL concatenation
                                     bAutoWidth: false,
                                     columns: [{
                                             data: 'id',

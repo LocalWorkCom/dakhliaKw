@@ -39,18 +39,18 @@
                 <hr>
             </div>
             <div class="input-group mx-2">
-                <button type="button" class="btn mt-4" data-mdb-ripple-init>
+                <button type="button" id="search-btn" class="btn mt-4" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
                 </button>
                 <div class="form-outline mt-4">
-                    <input type="search" id="" class="form-control" placeholder="بحث" />
+                    <input type="search" id="q" name="q" class="form-control" placeholder="بحث" @isset($q)  value="{{$q}}"@endisset/>
                 </div>
-                <select name="#" id="#" class="mt-4" style="direction:rtl;">
-                    <option value="#">المستخدمين</option>
-                    <option value="{{ route('departments.index') }}">الادارات</option>
-                    <option value="#">الموظفين</option>
-                    <option value="{{ route('Export.index') }}">الصادر</option>
-                    <option value="#">الوارد</option>
+                <select name="search" id="search" class="mt-4" style="direction:rtl;">
+                    <option value="users"  @isset($search) @if($search=='users') selected @endif @endisset>المستخدمين</option>
+                    <option value="dept"  @isset($search) @if($search=='dept') selected @endif @endisset>الادارات</option>
+                    <option value="emps"  @isset($search) @if($search=='emps') selected @endif @endisset>الموظفين</option>
+                 <!--    <option value="export">الصادر</option>
+                    <option value="import">الوارد</option> -->
                 </select>
             </div>
         </div>
@@ -72,14 +72,14 @@
                         <h6>الرئيسية</h6>
                     </a>
                 </li>
-                <li class="nav-item {{ request()->routeIs('user.index') ? 'active' : '' }}">
-                    <a href="{{ route('user.index', 0) }}">
+                <li class="nav-item {{ request()->routeIs('user.index') ? 'active' : '' }} ">
+                    <a href="{{ route('user.index', 0) }}" >
                         <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
-                        <h6>المستخدمين</h6>
+                        <h6>المستخدمين </h6>
                     </a>
                 </li>
-                <li class="nav-item {{ request()->routeIs('user.employees') ? 'active' : '' }} btn3" onclick="toggleDropdown3(event)">
-                    <a href="{{ route('user.employees', 1) }}">
+                <li class="nav-item {{ request()->routeIs('user.employees') ? 'active' : '' }} btn3  @isset($search) @if($search=='emps') active @endif @endisset" onclick="toggleDropdown3(event)">
+                    <a href="{{ route('user.employees', 1) }}"  >
                         <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
                         <h6 class="btn3">الموظفين</h6>
                     </a>
@@ -117,7 +117,7 @@
                     </a>
                 </li>
                 @if (Auth::user()->hasPermission('view departements'))
-                    <li class="nav-item {{ request()->routeIs('departments.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('departments.index') ? 'active' : '' }} @isset($search) @if($search=='dept') active @endif @endisset">
                         <a href="{{ route('departments.index') }}">
                             <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
                             <h6>الادارات</h6>
@@ -240,7 +240,7 @@
     </div>
 </div>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     // Close dropdowns on page load
     document.getElementById('dropdownMenu').style.display = 'none';
     document.getElementById('dropdownMenu2').style.display = 'none';
@@ -260,41 +260,73 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script>
-function toggleDropdown() {
-    var dropdown = document.getElementById('dropdownMenu');
-    dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
-}
+    function toggleDropdown() {
+        var dropdown = document.getElementById('dropdownMenu');
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+    }
 
-function toggleDropdown2() {
-    var dropdown = document.getElementById('dropdownMenu2');
-    dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
-}
+    function toggleDropdown2() {
+        var dropdown = document.getElementById('dropdownMenu2');
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+    }
 
-function toggleDropdown3(event) {
-    var dropdown = document.getElementById('dropdownMenu3');
-    dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
-    event.stopPropagation(); // Prevent closing other dropdowns
-}
+    function toggleDropdown3(event) {
+        var dropdown = document.getElementById('dropdownMenu3');
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+        event.stopPropagation(); // Prevent closing other dropdowns
+    }
 
-function toggleDropdown4(event) {
-    var dropdown = document.getElementById('dropdownMenu4');
-    dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
-    event.stopPropagation(); // Prevent closing other dropdowns
-}
+    function toggleDropdown4(event) {
+        var dropdown = document.getElementById('dropdownMenu4');
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+        event.stopPropagation(); // Prevent closing other dropdowns
+    }
 
-function toggleDropdown5(event) {
-    var dropdown = document.getElementById('dropdownMenu5');
-    dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
-    event.stopPropagation(); // Prevent closing other dropdowns
-}
+    function toggleDropdown5(event) {
+        var dropdown = document.getElementById('dropdownMenu5');
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+        event.stopPropagation(); // Prevent closing other dropdowns
+    }
 
-// Close dropdowns if clicked outside
-document.addEventListener('click', function(event) {
-    let dropdowns = document.querySelectorAll('.dropdown-menu, .dropdown-menu2, .dropdown-menu4, .dropdown-menu5');
-    dropdowns.forEach(function(dropdown) {
-        if (!dropdown.contains(event.target) && !event.target.closest('.btn')) {
-            dropdown.style.display = 'none';
+    // Close dropdowns if clicked outside
+    document.addEventListener('click', function(event) {
+        let dropdowns = document.querySelectorAll('.dropdown-menu, .dropdown-menu2, .dropdown-menu4, .dropdown-menu5');
+        dropdowns.forEach(function(dropdown) {
+            if (!dropdown.contains(event.target) && !event.target.closest('.btn')) {
+                dropdown.style.display = 'none';
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+    $('#search-btn').on('click', function() {
+        var query = $('#q').val();
+        var search = $('#search').val();
+        console.log(query);
+        // Perform an AJAX request to search
+    
+        document.location="{{url('search')}}/"+search+"/"+query;
+       /*  $.ajax({
+           // Replace with your search endpoint
+            type: 'GET',
+            data: { q: query,search:search },
+            success: function(data) {
+                // Assuming data is the HTML or JSON response with search results
+                $('#searchResults').html(data);
+            },
+            error: function(xhr, status, error) {
+                console.log('Search failed: ', error);
+            }
+        }); */
+    });
+
+    // Optional: Trigger search on 'Enter' key press
+    $('#q').on('keypress', function(e) {
+        if (e.which === 13) { // 13 is the Enter key code
+            $('#search-btn').click();
         }
     });
 });
-</script>
+
+    </script>
