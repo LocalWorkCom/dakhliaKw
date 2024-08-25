@@ -70,7 +70,7 @@
                 </div>
 
                 <div id="selected-values-container">
-                    @for ($i = 1; $i <= $workingTree->working_days_num; $i++)
+                    @for ($i = 1; $i <= $workingTree->working_days_num + $workingTree->holiday_days_num; $i++)
                         @php
                             // Find the WorkingTreeTime entry for the current day
                             $workingTreeTime = $workingTree->workingTreeTimes->firstWhere('day_num', $i);

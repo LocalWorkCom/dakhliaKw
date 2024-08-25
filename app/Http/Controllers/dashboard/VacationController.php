@@ -520,7 +520,9 @@ class VacationController extends Controller
                         $end_date = $request->end_date;
                         $end_date = Carbon::parse($end_date);
                         $start_date =  Carbon::parse($vacation->start_date);
-                        $daysNumber = $start_date->diffInDays($end_date, false) + 1; // Ensure this field exists in your EmployeeVacation model
+                        $daysNumber = $start_date->diffInDays($end_date, false) + 1;
+                        $vacation->days_number = $daysNumber;
+                        $vacation->save(); // Ensure this field exists in your EmployeeVacation model
                         foreach ($inspectorMissions as $index => $mission) {
                             // Check if the mission date is within the vacation period
 
@@ -563,6 +565,8 @@ class VacationController extends Controller
                         $end_date = Carbon::parse($end_date);
                         $start_date =  Carbon::parse($vacation->start_date);
                         $daysNumber = $start_date->diffInDays($end_date, false) + 1;
+                        $vacation->days_number = $daysNumber;
+                        $vacation->save(); 
                         // Ensure this field exists in your EmployeeVacation model
                         foreach ($inspectorMissions as $index => $mission) {
                             // Check if the mission date is within the vacation period
