@@ -1,5 +1,7 @@
 @extends('layout.main')
-
+@section('title')
+عرض
+@endsection
 @section('content')
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
@@ -26,16 +28,16 @@
                     <tbody>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">الاسم</th>
-                            <td style="background: #f5f6fa;">{{ $inspector->name }}</td>
+                            <td style="background: #f5f6fa;">{{ $inspector->user->name}}</td>
                         </tr>
 
                         <tr>
                             <th scope="row">الرتبه</th>
-                            <td>{{ $inspector->position ?: 'لا توجد رتبه لهذا المفتش' }}</td>
+                            <td>{{ $inspector->user->grade_id ?  $inspector->user->grade->name : 'لا توجد رتبه لهذا المفتش' }}</td>
                         </tr>
                         <tr>
                             <th scope="row">رقم الهويه</th>
-                            <td>{{ $inspector->Id_number ?: 'لا يوجد رقم هويه لهذا المفتش' }}</td>
+                            <td>{{ $inspector->user->Civil_number ?: 'لا يوجد رقم هويه لهذا المفتش' }}</td>
                         </tr>
                         <tr>
                             <th scope="row"> اسم المجموعه</th>
@@ -43,16 +45,20 @@
                         </tr>
                         <tr>
                             <th scope="row"> الهاتف</th>
-                            <td>{{ $inspector->phone ?: 'لا يوجد هاتف لهذا المفتش' }}</td>
+                            <td>{{ $inspector->user->phone ?: 'لا يوجد هاتف لهذا المفتش' }}</td>
                         </tr>
                         <tr>
-                            <th scope="row"> نوع المفتش </th>@if ($inspector->type == 'in')
-                            <td>مفتش سلوك أنضباطى</td>
-
-                            @elseif ($inspector->type == 'trainee')
-                            <td>مفتش متدرب </td>
-                            @else
+                            <th scope="row"> نوع المفتش </th>
+                          @if ($inspector->type == 'Buildings')
                             <td>مفتش مباني </td>
+
+                            @elseif ($inspector->type == 'internbilding')
+                            <td>مفتش متدرب مبانى </td>
+                            @elseif ($inspector->type == 'internslok')
+                            <td>مفتش  متدرب سلوك أنضباطى</td>
+
+                            @else
+                            <td>مفتش سلوك أنضباطى</td>
                             @endif
                         </tr>
                     </tbody>

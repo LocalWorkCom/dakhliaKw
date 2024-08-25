@@ -4,6 +4,7 @@
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
 
 @section('content')
 @section('title')
@@ -164,6 +165,9 @@
 
 @endsection
 @push('scripts')
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
 
 <script>
     $(document).ready(function() {
@@ -220,7 +224,10 @@
             order: [
                 [1, 'desc']
             ],
-
+            dom: 'Bfrtip', // Add this to include buttons
+            buttons: [
+                'print'
+            ],
             "oLanguage": {
                 "sSearch": "",
                 "sSearchPlaceholder": "بحث",
@@ -246,7 +253,7 @@
             },
             "pagingType": "full_numbers"
         });
-      
+
         var defaultFilterButton = $('.btn-filter[data-filter="all"]');
         var defaultFilterText = defaultFilterButton.text().trim();
         $('#inspector-heading').text('المفتــــــشون - ' + defaultFilterText);
@@ -267,6 +274,18 @@
     });
 </script>
 <script>
+    function printData() {
+    var divToPrint = document.getElementById("users-table");
+    var newWin = window.open("");
+    newWin.document.write(divToPrint.outerHTML);
+    newWin.print();
+    newWin.close();
+}
+
+document.querySelector(".btn-all.px-3").addEventListener("click", function() {
+    printData();
+});
+
     $(document).ready(function() {
         $('#add-form').on('submit', function(event) {
             const groupId = $('#group_id').val();
