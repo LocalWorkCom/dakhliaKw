@@ -337,10 +337,10 @@ Route::middleware(['auth'])->group(function () {
     //End points
 
     //Start GroupPoints
-    Route::get('points/create/group', [groupPointsController::class, 'create'])->name('grouppoints.create');
-    Route::post('points/add/group', [groupPointsController::class, 'store'])->name('grouppoints.store');
-    Route::get('points/edit/group/{id}', [groupPointsController::class, 'edit'])->name('grouppoints.edit');
-    Route::post('points/update/group/{id}', [groupPointsController::class, 'update'])->name('grouppoints.update');
+    Route::get('points/create/group', [GroupPointsController::class, 'create'])->name('grouppoints.create');
+    Route::post('points/add/group', [GroupPointsController::class, 'store'])->name('grouppoints.store');
+    Route::get('points/edit/group/{id}', [GroupPointsController::class, 'edit'])->name('grouppoints.edit');
+    Route::post('points/update/group/{id}', [GroupPointsController::class, 'update'])->name('grouppoints.update');
 
     //Route::get('trstssss', [governmentController::class, 'test']);
 
