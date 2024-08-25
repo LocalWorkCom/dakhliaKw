@@ -1285,7 +1285,7 @@ text-align: right;
         -webkit-print-color-adjust: exact !important; /* Chrome, Safari */
         color-adjust: exact !important; /* Firefox */
     }
-    #users-table, #users-table ,#return-back * {
+    #users-table, #users-table * {
         visibility: visible;
     }
  
@@ -1293,6 +1293,9 @@ text-align: right;
         position: absolute;
         left: 0;
         top: 0;
+    }
+    #return-back, #return-back * {
+        visibility: visible;
     }
     #days-table, #days-table * {
         visibility: visible;
