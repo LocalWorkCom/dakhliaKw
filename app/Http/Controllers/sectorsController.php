@@ -7,6 +7,7 @@ use App\Models\Government;
 use App\Models\Sector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,20 +25,20 @@ class sectorsController extends Controller
     {
         $governmentIds = Government::pluck('id')->toArray(); // Get all government IDs
         $sectors = Sector::all(); // Retrieve all sectors
-        
+
         $sectorGovernmentIds = []; // Initialize an array to hold the sector government IDs
-        
+
         foreach ($sectors as $sector) {
             // Merge the current sector's government IDs into the $sectorGovernmentIds array
             $sectorGovernmentIds = array_merge($sectorGovernmentIds, $sector->governments_IDs);
         }
-            // dd($governmentIds);
+        // dd($governmentIds);
         // Now $sectorGovernmentIds contains all the IDs from all sectors
-        
+
         // Check if all sector government IDs exist in the government IDs list
         $allExist = !array_diff($governmentIds, $sectorGovernmentIds);
-        
-         //dd($allExist);
+
+        //dd($allExist);
         return view("sectors.index", compact('allExist'));
     }
 
@@ -94,23 +95,32 @@ class sectorsController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+        // dd($request->all());
         $rules = [
             'name' => 'required|string',
+            'order' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) use ($request) {   
+                    if (DB::table('sectors')->whereNot('id', $request->id)->where('order', $value)->exists()) {
+                        $fail('عفوا هذا الترتيب خاص بقطاع اخر');
+                    }
+                },
+            ],
             'governmentIDS' => 'required|array|exists:governments,id',
         ];
 
         // // Define custom messages
         $messages = [
+            'order.required' => 'يجب تحديد ترتيب القطاع',
+            'order.exists' => 'عفوا هذا الترتيب خاص بقطاع اخر',
             'name.required' => 'يجب ادخال اسم القطاع',
             'name.string' => 'يجب ان لا يحتوى اسم القطاع على رموز',
-            'governmentIDS.required' => 'يجب اختيار محافظه واحده على الاقل'
+            'governmentIDS.required' => 'يجب اختيار محافظه واحده على الاقل',
         ];
 
-        // // Validate the request
         $validatedData = Validator::make($request->all(), $rules, $messages);
-        // // Validate the request
-        // $request->validate($rules, $messages);
+
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
@@ -174,28 +184,40 @@ class sectorsController extends Controller
      */
     public function update(Request $request)
     {
-        //dd($request->all());
+
         $rules = [
             'name' => 'required|string',
-            'order' => 'required|string',
+            'order' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) use ($request) {   
+                    if (DB::table('sectors')->whereNot('id', $request->id)->where('order', $value)->exists()) {
+                        $fail('عفوا هذا الترتيب خاص بقطاع اخر');
+                    }
+                },
+            ],
             'governmentIDS' => 'required|array|exists:governments,id',
         ];
 
         // // Define custom messages
         $messages = [
+            'order.required' => 'يجب تحديد ترتيب القطاع',
+            'order.exists' => 'عفوا هذا الترتيب خاص بقطاع اخر',
             'name.required' => 'يجب ادخال اسم القطاع',
             'name.string' => 'يجب ان لا يحتوى اسم القطاع على رموز',
-            'order.required' => 'يجب تحديد ترتيب القطاع',
-            // 'order.string' => '',
-            'governmentIDS.required' => 'يجب اختيار محافظه واحده على الاقل'
+            'governmentIDS.required' => 'يجب اختيار محافظه واحده على الاقل',
         ];
-        // // Validate the request
+
         $validatedData = Validator::make($request->all(), $rules, $messages);
-        // // Validate the request
+
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
+
         $sector = Sector::find($request->id);
+        if (!$sector) {
+            return redirect()->back()->with('error', 'القطاع المطلوب غير موجود');
+        }
         $sector->name = $request->name;
         $sector->order = $request->order;
         $sector->governments_IDs = $request->governmentIDS;

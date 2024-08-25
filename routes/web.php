@@ -422,17 +422,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search/{search}/{q}', [SearchController::class, 'index'])->name('search');
     Route::get('/searchUsers/users/{q}/{id}', [SearchController::class, 'getUsers'])->name('search.users')->middleware('check.permission:view User');
     Route::get('/searchDept/departments/{q}', [SearchController::class,'getDepartments'])->name('search.departments');
-    
+
+    Route::get('api/Inspectors', [InspectorController::class, 'getInspectors'])->name('api.inspector');
+    Route::get('/Inspectors', [InspectorController::class, 'index'])->name('inspectors.index');
+    Route::get('/Inspectors/create', [InspectorController::class, 'create'])->name('inspectors.create');
+    Route::get('/Inspectors/show/{Inspector}', [InspectorController::class, 'show'])->name('inspectors.show');
+    Route::post('/Inspectors', [InspectorController::class, 'store'])->name('inspectors.store');
+    Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit');
+    Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
+    Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');    
+    Route::get('/Inspectors/TransferToEmployee/{id}', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove');    
 });
 
-Route::get('api/Inspectors', [InspectorController::class, 'getInspectors'])->name('api.inspector');
-Route::get('/Inspectors', [InspectorController::class, 'index'])->name('inspectors.index');
-Route::get('/Inspectors/create', [InspectorController::class, 'create'])->name('inspectors.create');
-Route::get('/Inspectors/show/{Inspector}', [InspectorController::class, 'show'])->name('inspectors.show');
-Route::post('/Inspectors', [InspectorController::class, 'store'])->name('inspectors.store');
-Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit');
-Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
-Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');
+
 
 
 

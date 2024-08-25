@@ -43,6 +43,8 @@
                                 <thead>
                                     <tr>
                                         <th>الاسم</th>
+                                        <th>نوع</th>
+
                                         <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -76,7 +78,19 @@
                             <div class="form-group">
                                 <label for="name">الاسم</label>
                                 <input type="text" id="nameadd" name="nameadd" class="form-control" required>
-                                <span class="text-danger span-error" id="Civil_number-error" dir="rtl"></span>
+                                <span class="text-danger span-error" id="nameadd-error" dir="rtl"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="typeadd">نوع الرتبه</label>
+                                <select name="typeadd" id="typeadd" aria-placeholder="اختر نوع الرتبه"
+                                    class="form-control" required>
+                                    <option value="" selected disabled>اختر نوع الرتبه</option>
+                                    <option value="0">ظابط</option>
+                                    <option value="1">صف ظابط</option>
+
+                                </select>
+                                <span class="text-danger span-error" id="typeadd-error" dir="rtl"></span>
 
                             </div>
                             <!-- Save button -->
@@ -113,6 +127,18 @@
                                     class="form-control">
 
                             </div>
+                            <div class="form-group">
+                                <label for="typeedit">نوع الرتبه</label>
+                                <select name="typeedit" id="typeedit" aria-placeholder="اختر نوع الرتبه"
+                                    class="form-control">
+                                    <option value="" selected disabled>اختر نوع الرتبه</option>
+                                    <option value="0">ظابط</option>
+                                    <option value="1">صف ظابط</option>
+
+                                </select>
+                                <span class="text-danger span-error" id="typeedit-error" dir="rtl"></span>
+
+                            </div>
                             <!-- Save button -->
                             <div class="text-end">
                                 <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
@@ -139,10 +165,11 @@
                         <form id="delete-form" action="{{ route('grads.delete') }}" method="POST">
                             @csrf
                             <div class="form-group d-flex justify-content-center ">
-                                <h5 class="modal-title "  id="deleteModalLabel"> هل تريد حذف هذه الرتبه ؟</h5>
+                                <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الرتبه ؟</h5>
 
 
-                                <input type="text" id="id" hidden name="id" class="form-control" dir="rtl">
+                                <input type="text" id="id" hidden name="id" class="form-control"
+                                    dir="rtl">
                             </div>
                             <!-- Save button -->
                             <div class="text-end">
@@ -161,7 +188,6 @@
             </div>
         </div>
     </div>
-    
 @endsection
 @push('scripts')
     <script>
@@ -187,9 +213,11 @@
             form.submit();
         }
 
-        function openedit(id, name) {
+        function openedit(id, name , type) {
             document.getElementById('nameedit').value = name;
             document.getElementById('idedit').value = id;
+            document.getElementById('typeedit').value = type;  // Set the value for type
+
             $('#edit').modal('show');
         }
 
@@ -235,6 +263,10 @@
                 columns: [{
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
                     },
                     {
                         data: 'action',
