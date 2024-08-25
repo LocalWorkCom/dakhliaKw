@@ -42,7 +42,7 @@
                     @endif
                 </div>
                 <div class="form-row mx-2 mb-2">
-                    <div class="input-group  px-md-5 px-3 pt-3 col-6 workings">
+                    <div class="input-group  px-md-5 px-3 pt-3 col-12 workings">
                         <label class="pb-3" for="working_days_num">عدد ايام </label>
                         <select name="working_days_num" id="working_days_num"
                             style="border: 0.2px solid rgb(199, 196, 196);">
@@ -114,39 +114,47 @@
                     selectedValuesContainer.innerHTML = '';
 
                     for (let i = 1; i <= selectedValue; i++) {
-                        const newDiv = templateDiv.cloneNode(true);
-                        newDiv.style.display = 'block';
-                        newDiv.classList.remove('holidays-template');
+    const newDiv = templateDiv.cloneNode(true);
+    newDiv.style.display = 'block';
+    newDiv.classList.remove('holidays-template');
 
-                        const label = newDiv.querySelector('label');
-                        const select = newDiv.querySelector('select');
+    const label = newDiv.querySelector('label');
+    const select = newDiv.querySelector('select');
 
-                        label.setAttribute('for', `period${i}`);
-                        label.textContent = `اليوم ${i}`;
+    label.setAttribute('for', `period${i}`);
+   
 
-                        select.setAttribute('name', `period${i}`);
-                        select.setAttribute('id', `period${i}`);
-                        select.removeAttribute('required');
+    select.setAttribute('name', `period${i}`);
+    select.setAttribute('id', `period${i}`);
+    select.removeAttribute('required');
 
-                        const checkboxLabel = document.createElement('label');
-                        checkboxLabel.setAttribute('for', `holiday_checkbox${i}`);
-                        checkboxLabel.textContent = ' عطلة';
+    const checkboxLabel = document.createElement('label');
+    checkboxLabel.setAttribute('for', `holiday_checkbox${i}`);
+    label.textContent = `    اليوم ${i} / حدد اذا كان عطلة `;
 
-                        const checkboxContainer = document.createElement('div');
-                        checkboxContainer.classList.add('checkbox-container');
+    const checkboxContainer = document.createElement('div');
+    checkboxContainer.classList.add('checkbox-container');
 
-                        const checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.style.height = '20px';
-                        checkbox.setAttribute('name', `holiday_checkbox${i}`);
-                        checkbox.setAttribute('id', `holiday_checkbox${i}`);
-                        checkbox.classList.add('holiday-check');
-                        checkboxContainer.appendChild(checkbox);
-                        checkboxContainer.appendChild(checkboxLabel);
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.style.height = '25px !important';
+    checkbox.style.width = '25px !important';
+    checkbox.setAttribute('name', `holiday_checkbox${i}`);
+    checkbox.setAttribute('id', `holiday_checkbox${i}`);
+    checkbox.classList.add('holiday-check');
+    
 
-                        label.parentNode.insertBefore(checkboxContainer, label);
-                        selectedValuesContainer.appendChild(newDiv);
-                    }
+    checkboxContainer.style.display = 'flex';
+    checkboxContainer.style.alignItems = 'center';
+    checkboxContainer.style.marginRight = '10px'; 
+
+    checkboxContainer.appendChild(checkbox);
+    checkboxContainer.appendChild(checkboxLabel);
+
+    label.parentNode.insertBefore(checkboxContainer, label);
+    selectedValuesContainer.appendChild(newDiv);
+}
+
                 });
 
                 $(document).on('click', '.holiday-check', function() {

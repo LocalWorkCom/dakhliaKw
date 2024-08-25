@@ -39,7 +39,7 @@
                     @endif
                 </div>
                 <div class="form-row mx-2 mb-2">
-                    <div class="input-group moftsh px-md-5 px-3 pt-3 col-6 workings">
+                    <div class="input-group moftsh px-md-5 px-3 pt-3 col-12 workings">
                         <label class="pb-3" for="working_days_num">عدد ايام </label>
                         <select name="working_days_num" id="working_days_num"
                             style="border: 0.2px solid rgb(199, 196, 196);">
@@ -83,10 +83,10 @@
                                     <input type="checkbox" name="holiday_checkbox{{ $i }}"
                                         id="holiday_checkbox{{ $i }}" class="holiday-check"
                                         style="height: 20px;" @if ($isHolidayChecked) checked @endif>
-                                    <label for="holiday_checkbox{{ $i }}"> عطلة</label>
+                                        <label for="holiday_checkbox{{ $i }}">  اليوم   {{ $i }} / حدد اذا كان عطلة </label>
                                 </div>
-                                <label class="pb-3" for="period{{ $i }}"> اليوم
-                                    {{ $i }}</label>
+                                <!-- <label class="pb-3" for="period{{ $i }}"> اليوم
+                                    {{ $i }}</label> -->
                                 @if (!$isHolidayChecked)
                                     <select name="period{{ $i }}" id="period{{ $i }}"
                                         style="border: 0.2px solid rgb(199, 196, 196);">

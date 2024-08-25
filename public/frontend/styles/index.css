@@ -1538,3 +1538,17 @@ input::placeholder {
 }
 
 
+#selected-values-container .checkbox-container .holiday-check {
+margin-left: 10px;
+height: 25px !important;
+width: 25px !important;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center; 
+}
+#selected-values-container .input-group label {
+    padding-top: 20px !important;
+}
+
