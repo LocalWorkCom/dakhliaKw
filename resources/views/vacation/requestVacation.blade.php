@@ -59,15 +59,9 @@
                         </p>
                     </div>
                 </div>
-<<<<<<< HEAD
-                <div class="row d-flex justify-content-center mb-4">
-                    <div class="text-request mb-4">
-                        <p>رقم الملف / {{ $vacation->employee->file_number }} </p>
-=======
                 <div class="row d-flex justify-content-center mb-5">
                     <div class="text-request mb-5">
                         <p>رقم الملف / {{ convertToArabicNumerals($vacation->employee->file_number) }} </p>
->>>>>>> 18f6862c0bffcab9266d5ff8a087187d1981b25e
                     </div>
                 </div>
 
