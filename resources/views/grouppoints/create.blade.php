@@ -60,7 +60,7 @@
 
         <div class="row" dir="rtl">
             <div id="second-container" class="container moftsh col-11 mt-3 p-0 pb-3 hidden">
-                <h3 class="pt-3 px-md-5 px-3">اضف محافظات داخل قطاع</h3>
+                <h3 class="pt-3 px-md-5 px-3">أضف نقاط للمجموعه </h3>
                 <div class="form-row mx-2">
                     <!-- <div class="form-group moftsh px-md-5 px-3 pt-3">
                         <h4 style="color: #274373; font-size: 24px;">حدد المحافظات المراد اضافتها</h4>
@@ -143,7 +143,7 @@
 
             nextButton.addEventListener('click', function() {
                 if (nameInput.value.trim() === '') {
-                    nameError.textContent = 'يرجى إدخال اسم القطاع';
+                    nameError.textContent = 'يرجى إدخال اسم المجموعه';
                 } else {
                     nameError.textContent = ''; // Clear any previous error message
                     document.getElementById('first-container').classList.add('hidden');
@@ -191,7 +191,7 @@
                                 } else {
                                     // Show a message if no data is available
                                     pointsSelect.append(
-                                        '<option disabled>عفوا لا يوجد نقاط لهذه المافظه بعد</option>'
+                                        '<option disabled>عفوا لا يوجد نقاط لهذه المحافظه بعد</option>'
                                         );
                                     pointsSelect.prop('disabled', false);
                                 }

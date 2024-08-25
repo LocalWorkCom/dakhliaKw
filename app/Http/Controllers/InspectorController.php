@@ -136,23 +136,26 @@ class InspectorController extends Controller
             return  $show_permission . ' ' . $edit_permission. ' '. $group_permission;
         })
             ->addColumn('group_id', function ($row) {
-                return $row->group_id ? $row->group->name : 'لا يوجد مجموعه للمفتش'; // Assuming 'name' is the column in external_users
+                return $row->group_id ? $row->group->name : 'لا يوجد مجموعه للمفتش'; 
             })
             ->addColumn('position', function ($row) {
-                return $row->position ?? 'لا يوجد رتبه'; // Assuming 'name' is the column in external_users
+                return $row->position ?? 'لا يوجد رتبه';
             })
             ->addColumn('phone', function ($row) {
-                return $row->phone ?? 'لا يوجد هاتف'; // Assuming 'name' is the column in external_users
+                return $row->phone ?? 'لا يوجد هاتف'; 
             })
             ->addColumn('type', function ($row) {
+             //Buildings => مفتش مبانى  , internbilding =>مفتش متدرب مبانى   , internslok=> مفتس متدرب سلوك انضباطى   ,slok=>  مفتش سلوك 
                 if($row->type == 'Buildings' ){
                     $result=  'مفتش مباني ' ; 
-                }elseif($row->type == 'trainee'){
-                    $result=  'مفتش متدرب' ; 
+                }elseif($row->type == 'internbilding'){
+                    $result=  'مفتش متدرب مبانى ' ; 
+                }elseif($row->type == 'internslok'){
+                    $result=  'مفتش  متدرب سلوك أنضباطى' ; 
                 }else{
                     $result=  'مفتش سلوك أنضباطى' ; 
                 }
-                return $result; // Assuming 'name' is the column in external_users
+                return $result; 
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -233,7 +236,7 @@ class InspectorController extends Controller
         $inspector = new Inspector();
         $inspector->name = $request->name;
         $inspector->phone = $request->phone;
-
+        //Buildings => مفتش مبانى  , internbilding =>مفتش متدرب مبانى   , internslok=> مفتس متدرب سلوك انضباطى   ,slok=>  مفتش سلوك 
         $inspector->type = $request->type;
 
         $inspector->position = $request->position;
@@ -308,6 +311,7 @@ class InspectorController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         $inspector = Inspector::find($id);
+        //Buildings => مفتش مبانى  , internbilding =>مفتش متدرب مبانى   , internslok=> مفتس متدرب سلوك انضباطى   ,slok=>  مفتش سلوك 
         $inspector->update($request->only(['position', 'name', 'phone', 'type']));
         // $inspector->save();
         // dd($inspector->id);
