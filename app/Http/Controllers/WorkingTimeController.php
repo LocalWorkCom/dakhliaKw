@@ -74,6 +74,7 @@ class WorkingTimeController extends Controller
             $WorkingTime->name = $request->name;
             $WorkingTime->start_time = $request->start_time;
             $WorkingTime->end_time = $request->end_time;
+            // dd($WorkingTime);
             // Generate a random color that is not in the database
             do {
                 $color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
