@@ -43,7 +43,7 @@
                 </div>
                 <div class="form-row mx-2 mb-2">
                     <div class="input-group  px-md-5 px-3 pt-3 col-6 workings">
-                        <label class="pb-3" for="working_days_num">عدد ايام العمل</label>
+                        <label class="pb-3" for="working_days_num">عدد ايام </label>
                         <select name="working_days_num" id="working_days_num"
                             style="border: 0.2px solid rgb(199, 196, 196);">
                             <option value="">اختر</option>
