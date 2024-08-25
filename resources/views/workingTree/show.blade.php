@@ -36,14 +36,14 @@
                             <td colspan="7">{{ $WorkingTree->name }}</td>
                         </tr>
 
-                        <tr>
+                        {{-- <tr>
                             <th scope="row" style="background: #f5f6fa;"> عدد ايام الاجازات:</th>
                             <td colspan="7">{{ $WorkingTree->holiday_days_num }}</td>
-                        </tr>
+                        </tr> --}}
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;"> عدد ايام العمل:</th>
+                            <th scope="row" style="background: #f5f6fa;"> عدد ايام :</th>
                             <td colspan="7">
-                                {{ $WorkingTree->working_days_num }}
+                                {{ $WorkingTree->working_days_num+$WorkingTree->holiday_days_num }}
                             </td>
                         </tr>
                         @if (isset($WorkingTree->workingTreeTimes))
@@ -51,12 +51,18 @@
                                 <tr>
                                     <th scope="row" style="background: #f5f6fa;">ترتيب اليوم</th>
                                     <th>اليوم {{ $item->day_num }}</th>
+                                    @if($item->is_holiday)
+                                    <th>
+                                        اجازة
+                                    </th>
+                                    @else
                                     <th scope="row" style="background: #f5f6fa;">اسم الفترة</th>
                                     <td>{{ $item->workingTime->name }}</td>
                                     <th scope="row" style="background: #f5f6fa;">وقت البداية</th>
                                     <td>{{ $item->workingTime->start_time }}</td>
                                     <th scope="row" style="background: #f5f6fa;">وقت النهاية</th>
                                     <td>{{ $item->workingTime->end_time }}</td>
+                                    @endif
                                 </tr>
                             @endforeach
                         @endif

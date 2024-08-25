@@ -150,7 +150,7 @@ class settingController extends Controller
             $edit_permission= null;
             $delete_permission=null;
             if(Auth::user()->hasPermission('edit grade')){
-                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
+                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.','.$row->type.')">  <i class="fa fa-edit"></i> تعديل </a>';
                 
             }
             if(Auth::user()->hasPermission('delete grade')){
@@ -159,10 +159,10 @@ class settingController extends Controller
             }
             $uploadButton = $edit_permission . $delete_permission;
             return $uploadButton;
-            // return '<a class="btn  btn-sm" style="background-color: #259240;" onclick="openedit('.$row->id.','.$name.')"> <i class="fa fa-edit"></i> </a>
-            // <a class="btn  btn-sm" style="background-color: #C91D1D;"  onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> </a>' ;
-            // <a class="btn  btn-sm" href=' . route('grads.show', $row->id) . '>التفاصيل</a>
 
+        })
+        ->addColumn('type', function ($row) {
+            return $row->type ==0 ? 'ظابط' : 'صف ظابط';
         })
         ->rawColumns(['action'])
         ->make(true);
@@ -182,9 +182,10 @@ class settingController extends Controller
             return response()->json(['success' => false, 'message' => $validatedData->errors()]);
         }
         $requestinput=$request->except('_token');
-        $job = new grade();
-        $job->name=$request->nameadd;
-        $job->save();
+        $grade = new grade();
+        $grade->name=$request->nameadd;
+        $grade->type=$request->typeadd;
+        $grade->save();
         $message="تم اضافه الرتبه";
         return redirect()->route('grads.index',compact('message'));
         //return redirect()->back()->with(compact('activeTab','message'));
@@ -203,13 +204,14 @@ class settingController extends Controller
     }
      //update GRAD
      public function updategrads(Request $request ){
-        $job = grade::find($request->id);
+        $grade = grade::find($request->id);
 
-        if (!$job) {
+        if (!$grade) {
             return response()->json(['error' => 'عفوا هذه الرتبه غير موجوده'], 404);
         }
-        $job->name=$request->name;
-        $job->save();
+        $grade->name=$request->name;
+        $grade->type=$request->typeedit;
+        $grade->save();
         $message='تم تعديل الرتبه';
         return redirect()->route('grads.index',compact('message'));
        // return redirect()->back()->with(compact('activeTab'));

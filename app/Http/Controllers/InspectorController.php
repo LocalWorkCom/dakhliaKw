@@ -31,31 +31,31 @@ class InspectorController extends Controller
 
         if ($user->rule->name == "localworkadmin" || $user->rule->name == "superadmin") {
             $all = Inspector::count();
-            $assignedInspectors = Inspector::whereNotNull('group_id')->count();
-            $unassignedInspectors = Inspector::whereNull('group_id')->count();
+            $assignedInspectors = Inspector::whereNotNull('group_id')->where('flag',0)->count();
+            $unassignedInspectors = Inspector::whereNull('group_id')->where('flag',0)->count();
         } else {
             // Ensure manager cannot see inspectors in their own department
-            $all = Inspector::with('user')
+            $all = Inspector::with('user')->where('flag',0)
                 ->whereHas('user', function ($query) use ($userDepartmentId) {
                     $query->where('department_id', $userDepartmentId);
                 })
                 ->count();
 
-            $assignedInspectors = Inspector::with('user')
+            $assignedInspectors = Inspector::with('user')->where('flag',0)
                 ->whereHas('user', function ($query) use ($userDepartmentId) {
                     $query->where('department_id', $userDepartmentId);
                 })
                 ->whereNotNull('group_id')
                 ->count();
 
-            $unassignedInspectors = Inspector::with('user')
+            $unassignedInspectors = Inspector::with('user')->where('flag',0)
                 ->whereHas('user', function ($query) use ($userDepartmentId) {
                     $query->where('department_id', $userDepartmentId);
                 })
                 ->whereNull('group_id')
                 ->count();
         }
-     
+
         return view('inspectors.index', compact('assignedInspectors', 'unassignedInspectors', 'all'));
     }
 
@@ -102,9 +102,9 @@ class InspectorController extends Controller
         $userRole = Auth::user()->rule->name;
 
         if ($userRole == "localworkadmin" || $userRole == "superadmin") {
-            $data = Inspector::with('user')->orderBy('id', 'desc');
+            $data = Inspector::with('user')->where('flag',0)->orderBy('id', 'desc');
         } else {
-            $data = Inspector::with('user')
+            $data = Inspector::with('user')->where('flag',0)
                 ->whereHas('user', function ($query) use ($userDepartmentId) {
                     $query->where('department_id', $userDepartmentId);
                 })
@@ -133,13 +133,16 @@ class InspectorController extends Controller
             $edit_permission =  '<a href="' . route('inspectors.edit', $row->id) . '" class="btn btn-sm"  style="background-color: #F7AF15;">
                                             <i class="fa fa-edit"></i> تعديل 
                                         </a>';
-            return  $show_permission . ' ' . $edit_permission . ' ' . $group_permission;
-        }) 
-        ->addColumn('name', function ($row) {
-            return $row->user->name ? $row->user->name: 'لا يوجد أسم'; 
-        }) ->addColumn('Id_number', function ($row) {
-            return $row->user->Civil_number ? $row->user->Civil_number : 'لا يوجد رقم هويه'; 
+            $remove_permission =  '<a href="' . route('inspectors.remove', $row->id) . '" class="btn btn-sm"  style="background-color:#bf2433;">
+                                        <i class="fa fa-trash"></i> تحويل لموظف 
+                                    </a>';
+            return  $show_permission . ' ' . $edit_permission . ' ' . $group_permission .' '. $remove_permission;
         })
+            ->addColumn('name', function ($row) {
+                return $row->user->name ? $row->user->name : 'لا يوجد أسم';
+            })->addColumn('Id_number', function ($row) {
+                return $row->user->Civil_number ? $row->user->Civil_number : 'لا يوجد رقم هويه';
+            })
             ->addColumn('group_id', function ($row) {
                 return $row->group_id ? $row->group->name : 'لا يوجد مجموعه للمفتش';
             })
@@ -159,7 +162,7 @@ class InspectorController extends Controller
                 return $types[$row->type] ?? 'مفتش سلوك انضباطي';
             })
             ->rawColumns(['action'])
-            
+
             ->make(true);
     }
 
@@ -169,32 +172,36 @@ class InspectorController extends Controller
 
         $department = departements::find($departmentId);
         $departmentId = auth()->user()->department_id;
-        $inspectorUserIds = Inspector::pluck('user_id')->toArray();
+        $inspectorUserIds = Inspector::where('flag',0)->pluck('user_id')->toArray();
+    
         $allmangers = departements::whereNotNull('manger')->pluck('manger')->toArray();
         $userDepartmentId = Auth::user()->department_id;
-        //    dd($inspectorUserIds);
+        
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $users = User::where('id', '!=', auth()->user()->id)
                 ->whereNotIn('id', $inspectorUserIds)
                 ->whereNotIn('id', $allmangers)
                 ->get();
         } else {
-            // dd("dd"); 
             $users = User::where('department_id', $departmentId)
                 ->where('id', '!=', $department->manger)
                 ->where('id', '!=', auth()->user()->id)
                 ->whereNotIn('id', $inspectorUserIds)
                 ->get();
-            //  dd($users);
-
         }
-
+        //dd($users);
         return view('inspectors.create', compact('users'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
+    public function TransferToEmployee($id){
+        $inspector = Inspector::find($id);
+        $inspector->flag = 1 ;
+        $inspector->save();
+        return redirect()->back()->with('تم تحويل المفتش لموظف');
+    }
     public function store(Request $request)
     {
         //  dd($request->all());
@@ -282,17 +289,9 @@ class InspectorController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request);
         $rules = [
-            // 'Id_number' => [
-            //     'required',
-            //     'string',
-            // ],
             'user_id' => 'required',
-            // 'position' => 'required',
-            // 'name' => 'required|string',
             'type' => 'required|string',
-            // 'phone' => 'nullable|string',
         ];
 
         // Define custom messages

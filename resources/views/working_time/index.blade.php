@@ -172,7 +172,7 @@
                                             <div class="form-group mb-3">
                                                 <label class="d-flex justify-content-start pb-2" for="start_time"> بداية
                                                     فترة العمل</label>
-                                                    <input type="text" id="start_time" class="form-control" placeholder="Select time">
+                                                    <input type="text" id="start_time" class="form-control" placeholder="Select time" name="start_time">
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label class="d-flex justify-content-start pb-2" for="end_time"> نهاية
@@ -390,7 +390,7 @@
 
                             var isValid1 = createForm.checkValidity();
                             if (isValid1) {
-                                console.log('Form is valid');
+                                console.log(createForm);
 
                                 // Perform AJAX form submission
                                 $.ajax({
