@@ -1,5 +1,7 @@
 @extends('layout.main')
-
+@section('title')
+    أضافه
+@endsection
 @section('content')
     <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
@@ -19,23 +21,23 @@
     <form id="inspector-form" action="{{ route('inspectors.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row" dir="rtl">
-           
+
             <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
                 <h3 class="pt-3  px-md-5  px-3 "> أضافه مفتش</h3>
                 @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="form-row mx-2 mb-2 pb-4">
                     <label class="px-md-5 px-3 col-12 " for=""> الرقم المدني / رقم الهوية</label>
                     <div class="input-group px-md-5 px-3 pt-3">
@@ -49,13 +51,21 @@
                                     <input name="Id_number" type="text" id="search-input" placeholder="ابحث هنا ....."
                                         style="width: 100% !important;">
                                 </div>
-                                @foreach ($users as $user)
-                                    <div class="option" data-id="{{ $user->id }}" data-name="{{ $user->name }}"
-                                        data-phone="{{ $user->phone }}"  data-department="{{ $user->department_id ? $user->department->name : 'لا يوجد قصم للموظف '}}"
-                                        data-grade_id="{{ $user->grade ? $user->grade->name : '' }}">
-                                        {{ $user->name }} ( رقم الهويه:{{ $user->Civil_number }})
-                                    </div>
-                                @endforeach
+                                @if ($users->isNotEmpty())
+                                    @foreach ($users as $user)
+                                        <div class="option" data-id="{{ $user->id }}" data-name="{{ $user->name }}"
+                                            data-phone="{{ $user->phone }}"
+                                            data-department="{{ $user->department_id ? $user->department->name : 'لا يوجد قصم للموظف ' }}"
+                                            data-grade_id="{{ $user->grade ? $user->grade->name : '' }}">
+                                            {{ $user->name }} ( رقم الهويه:{{ $user->Civil_number }})
+                                        </div>
+                                    @endforeach
+                                @else
+                                <p  class="pt-1  px-md-2 px-3 " style="color: gray;    font-size: medium;">    
+                                    لا يوجد موظفين متاحين
+                                </p>
+
+                                @endif
 
                             </div>
                         </div>
@@ -110,55 +120,54 @@
         <div class="container moftsh col-11 mt-5 p-0 pb-2 mb-3">
             <h3 class="pt-3  px-md-5 px-3 "> اختر المفتش </h3>
             <div class="form-row mx-md-5 mx-2 mb-2 d-block justify-content-start" dir="rtl">
-                @if(Auth::user()->rule->name == 'localworkadmin' || Auth::user()->rule->name == 'superadmin')
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="slok" name="type"  value="slok" required>
-                        <label for="slok">مفتش سلوك أنضباطى</label>
-                    </div>
-                </div>
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="internslok" name="type"  value="internslok" required>
-                        <label for="internslok">مفتش متدرب سلوك أنضباطى</label>
-                    </div>
-                </div>
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="internbilding" name="type"  value="internbilding" required>
-                        <label for="internbilding">مفتش متدرب مبانى</label>
-                    </div>
-                </div>
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="Buildings" name="type"  value="Buildings" required>
-                        <label for="Buildings">مفتش مباني </label>
-                    </div>
-                </div>
-                @elseif (strpos(Auth::user()->department->name, 'السلوك') !== false)
-
+                @if (Auth::user()->rule->name == 'localworkadmin' || Auth::user()->rule->name == 'superadmin')
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="slok" name="type"  value="slok" required>
+                            <input type="radio" id="slok" name="type" value="slok" required>
                             <label for="slok">مفتش سلوك أنضباطى</label>
                         </div>
                     </div>
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="internslok" name="type"  value="internslok" required>
+                            <input type="radio" id="internslok" name="type" value="internslok" required>
+                            <label for="internslok">مفتش متدرب سلوك أنضباطى</label>
+                        </div>
+                    </div>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="internbilding" name="type" value="internbilding" required>
+                            <label for="internbilding">مفتش متدرب مبانى</label>
+                        </div>
+                    </div>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="Buildings" name="type" value="Buildings" required>
+                            <label for="Buildings">مفتش مباني </label>
+                        </div>
+                    </div>
+                @elseif (strpos(Auth::user()->department->name, 'السلوك') !== false)
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="slok" name="type" value="slok" required>
+                            <label for="slok">مفتش سلوك أنضباطى</label>
+                        </div>
+                    </div>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="internslok" name="type" value="internslok" required>
                             <label for="internslok">مفتش متدرب سلوك أنضباطى</label>
                         </div>
                     </div>
                 @elseif (strpos(Auth::user()->department->name, 'مبانى') !== false)
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="Buildings" name="type"  value="Buildings" required>
+                            <input type="radio" id="Buildings" name="type" value="Buildings" required>
                             <label for="Buildings">مفتش مباني </label>
                         </div>
                     </div>
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="internbilding" name="type"  value="internbilding" required>
+                            <input type="radio" id="internbilding" name="type" value="internbilding" required>
                             <label for="internbilding">مفتش متدرب مبانى</label>
                         </div>
                     </div>
@@ -219,7 +228,7 @@
         const hiddenPhone = document.getElementById('hidden-phone');
         const hiddenDepartment = document.getElementById('hidden-department');
         const userDepartment = document.getElementById('user-department');
-       
+
         const userDetailsSection = document.getElementById('user-details-section');
 
         selectBox.addEventListener('click', function() {

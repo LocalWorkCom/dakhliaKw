@@ -1,6 +1,6 @@
 @extends('layout.main')
 @section('title')
-اضافة مفتش
+   تعديل
 @endsection
 @section('content')
 
@@ -46,7 +46,7 @@
                 <div class="form-row mx-2 mb-2 pb-4">
                     <label class="px-md-5 px-3 col-12 " for=""> الرقم المدني / رقم الهوية</label>
                     <div class="input-group px-md-5 px-3 pt-3">
-                        <input name="Id_number" disabled value="{{ $inspector->Id_number }}" disabled type="text"
+                        <input name="Id_number" disabled value="{{ $inspector->user->Civil_number }}" disabled type="text"
                             id="search-input" placeholder="ابحث هنا ....." style="width: 100% !important;">
                         <input type="hidden" name="user_id" value="{{ $inspector->user_id }}">
                         {{-- <div class="select-wrapper">
@@ -89,23 +89,23 @@
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">الرتبه</th>
                             <td style="background: #f5f6fa;" id="user-grade_id">
-                                {{ $inspector->position != '' ? $inspector->position : 'لا يوجد رتبه' }}
+                                {{ $inspector->user->grade != '' ? $inspector->user->grade->name : 'لا يوجد رتبه' }}
                             </td>
                         </tr>
                         <input type="hidden" name="id" value="{{ $inspector->id }}" id="hidden-position">
 
-                        <input type="hidden" name="position" value="{{ $inspector->position }}" id="hidden-position">
+                        <input type="hidden" name="position" value="{{ $inspector->user->grade_id }}" id="hidden-position">
                         <tr>
                             <th scope="row">الاسم</th>
-                            <td id="user-name">{{ $inspector->name != ' ' ? $inspector->name : 'لايوجد اسم' }}</td>
+                            <td id="user-name">{{ $inspector->user->name != ' ' ? $inspector->user->name : 'لايوجد اسم' }}</td>
                         </tr>
-                        <input type="hidden" name="name" value="{{ $inspector->name }}" id="hidden-name">
+                        <input type="hidden" name="name" value="{{ $inspector->user->name }}" id="hidden-name">
                         <tr>
                             <th scope="row">رقم الهاتف</th>
                             <td id="user-phone">
-                                {{ $inspector->phone != '' ? $inspector->phone : 'لا يوجد هاتف' }}</td>
+                                {{ $inspector->user->phone != '' ? $inspector->user->phone : 'لا يوجد هاتف' }}</td>
                         </tr>
-                        <input type="hidden" name="phone" value="{{ $inspector->phone }}" id="hidden-phone">
+                        <input type="hidden" name="phone" value="{{ $inspector->user->phone }}" id="hidden-phone">
                     </tbody>
                 </table>
             </div>
@@ -113,52 +113,57 @@
         <div class="container moftsh col-11 mt-5 p-0 pb-2 mb-3">
             <h3 class="pt-3  px-md-5 px-3 "> اختر المفتش </h3>
             <div class="form-row mx-md-5 mx-2 mb-2 d-block justify-content-start" dir="rtl">
-                @if(Auth::user()->rule->name == 'localworkadmin' || Auth::user()->rule->name == 'superadmin')
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" @if($inspector->type == 'in') checked @endif value="in" required>
-                        <label for="intern">مفتش سلوك أنضباطى</label>
+                @if (Auth::user()->rule->name == 'localworkadmin' || Auth::user()->rule->name == 'superadmin')
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="slok"   @if ($inspector->type == 'slok') checked @endif name="type" value="slok" required>
+                            <label for="slok">مفتش سلوك أنضباطى</label>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" @if($inspector->type == 'trainee') checked @endif  value="trainee" required>
-                        <label for="intern">مفتش متدرب</label>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="internslok"   @if ($inspector->type == 'internslok') checked @endif name="type" value="internslok" required>
+                            <label for="internslok">مفتش متدرب سلوك أنضباطى</label>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type" @if($inspector->type == 'Buildings') checked @endif  value="Buildings" required>
-                        <label for="intern">مفتش مباني </label>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="internbilding"   @if ($inspector->type == 'internbilding') checked @endif name="type" value="internbilding" required>
+                            <label for="internbilding">مفتش متدرب مبانى</label>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group d-flex">
+                        <div class="radio-btn  d-flex">
+                            <input type="radio" id="Buildings"   @if ($inspector->type == 'Buildings') checked @endif name="type" value="Buildings" required>
+                            <label for="Buildings">مفتش مباني </label>
+                        </div>
+                    </div>
                 @elseif (strpos(Auth::user()->department->name, 'السلوك') !== false)
-
-                    <div class="form-group d-flex">
-                        <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type" @if($inspector->type == 'in') checked @endif  value="in" required>
-                            <label for="intern">مفتش سلوك أنضباطى</label>
-                        </div>
+                <div class="form-group d-flex">
+                    <div class="radio-btn  d-flex">
+                        <input type="radio" id="slok" @if ($inspector->type == 'slok') checked @endif name="type" value="slok" required>
+                        <label for="slok">مفتش سلوك أنضباطى</label>
                     </div>
-                    <div class="form-group d-flex">
-                        <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type" @if($inspector->type == 'trainee') checked @endif  value="trainee" required>
-                            <label for="intern">مفتش متدرب</label>
-                        </div>
+                </div>
+                <div class="form-group d-flex">
+                    <div class="radio-btn  d-flex"> 
+                        <input type="radio" id="internslok"   @if ($inspector->type == 'internslok') checked @endif name="type" value="internslok" required>
+                        <label for="internslok">مفتش متدرب سلوك أنضباطى</label>
                     </div>
+                </div>
                 @elseif (strpos(Auth::user()->department->name, 'مبانى') !== false)
-                    <div class="form-group d-flex">
-                        <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type" @if($inspector->type == 'Buildings') checked @endif  value="Buildings" required>
-                            <label for="intern">مفتش مباني </label>
-                        </div>
+                <div class="form-group d-flex">
+                    <div class="radio-btn  d-flex">
+                        <input type="radio" id="Buildings"   @if ($inspector->type == 'Buildings') checked @endif name="type" value="Buildings" required>
+                        <label for="Buildings">مفتش مباني </label>
                     </div>
-                    <div class="form-group d-flex">
-                        <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type" @if($inspector->type == 'trainee') checked @endif  value="trainee" required>
-                            <label for="intern">مفتش متدرب</label>
-                        </div>
+                </div>
+                <div class="form-group d-flex">
+                    <div class="radio-btn  d-flex">
+                        <input type="radio" id="internbilding"   @if ($inspector->type == 'internbilding') checked @endif name="type" value="internbilding" required>
+                        <label for="internbilding">مفتش متدرب مبانى</label>
                     </div>
+                </div>
                 @endif
 
 
@@ -260,7 +265,7 @@
 
         // Check if there is a flash message for showing the modal
         document.addEventListener('DOMContentLoaded', function() {
-            if (session('showModal')){
+            if (session('showModal')) {
                 const modal = new bootstrap.Modal(document.getElementById('myModal'));
                 modal.show();
             }
