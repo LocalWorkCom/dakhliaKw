@@ -260,6 +260,7 @@ class ViolationController  extends Controller
                 'id' => $violation->id,
                 'InspectorName' => $violation->user->name ?? null,
                 'Inspectorgrade' => $violation->user->grade->name ?? null,
+                'name'=>$violation->name,
                 'military_number' => $violation->military_number ?? null,
                 'Civil_number' => $violation->Civil_number ?? null,
                 'grade' => grade::where('id',$violation->grade)->select('id','name')->first() ?? null,
@@ -302,10 +303,30 @@ class ViolationController  extends Controller
 
         $instantMissions = instantmission::where('id', $request->mission_id)->get();
         $violation = Violation::where('mission_id', $request->mission_id)->where('flag_instantmission', "1")->where('user_id', auth()->user()->id)->whereDate('created_at', $today)->get();
+        $success['violation'] = $violation->map(function ($violation) {
+            return [
+                'id' => $violation->id,
+                'InspectorName' => $violation->user->name ?? null,
+                'Inspectorgrade' => $violation->user->grade->name ?? null,
+                'name'=>$violation->name,
+                'military_number' => $violation->military_number ?? null,
+                'Civil_number' => $violation->Civil_number ?? null,
+                'grade' => grade::where('id',$violation->grade)->select('id','name')->first() ?? null,
+                'image' => $violation->image,
+                'violation_type' => ViolationTypes::whereIn('id',explode(',',$violation->violation_type))->select('id','name')->get(),
+                'civil_military' => empty(grade::where('id',$violation->grade)->select('id','name')->first()) ? "civil" :"military",
+                // 'user_id' => $violation->user_id,
+                'created_at' => $violation->created_at,
+                'updated_at' => $violation->updated_at,
+                'mission_id' => $violation->mission_id,
+                'point_id' => $violation->point_id,
+                'flag_instantmission' => $violation->flag_instantmission,
+            ];
+        });
         $success['date'] = $today;
         $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
         $success['instantMissions'] = $instantMissions;
-        $success['violation'] = $violation;
+     //   $success['violation'] = $violation;
         return $this->respondSuccess($success, 'Data returned successfully.');
     }
 }

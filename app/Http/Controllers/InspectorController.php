@@ -99,20 +99,27 @@ class InspectorController extends Controller
     {
 
         $userDepartmentId = Auth::user()->department_id;
-        if(Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin"){
-           
+        $userRole = Auth::user()->rule->name;
+    
+        if ($userRole == "localworkadmin" || $userRole == "superadmin") {
+            $data = Inspector::with('user')->orderBy('id', 'desc');
+        } else {
             $data = Inspector::with('user')
-         ->orderBy('id', 'desc')
-            ->get();
-        }else{
-            $data = Inspector::with('user')
-            ->whereHas('user', function ($query) use ($userDepartmentId) {
-                $query->where('department_id', $userDepartmentId);
-            })
-            ->orderBy('id', 'desc')
-            ->get();
+                ->whereHas('user', function ($query) use ($userDepartmentId) {
+                    $query->where('department_id', $userDepartmentId);
+                })
+                ->orderBy('id', 'desc');
         }
-       
+    
+        $filter = request('filter');
+        
+        if ($filter == 'assigned') {
+            $data->whereNotNull('group_id');
+        } elseif ($filter == 'unassigned') {
+            $data->whereNull('group_id');
+        }
+    
+        $data = $data->get();
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             if ($row->group_id !=  null) {
