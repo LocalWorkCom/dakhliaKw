@@ -55,6 +55,7 @@
                                 <tr>
                                     <th>الاسم</th>
                                     <th>المحافظه التابعه لها</th>
+                                    <th>ترتيبه</th>
                                     <th style="width:150px;">العمليات</th>
                                 </tr>
                             </thead>
@@ -84,6 +85,10 @@
                     {
                         data: 'government_name',
                         name: 'government_name'
+                    },
+                    {
+                        data: 'order',
+                        name: 'order'
                     },
                     {
                         data: 'action',

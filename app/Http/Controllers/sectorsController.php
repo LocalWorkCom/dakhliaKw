@@ -116,6 +116,7 @@ class sectorsController extends Controller
         }
         $sector = new Sector();
         $sector->name = $request->name;
+        $sector->order = $request->order;
         $sector->governments_IDs = $request->governmentIDS;
         $sector->created_by = Auth::id();
         $sector->updated_by = Auth::id();
@@ -176,6 +177,7 @@ class sectorsController extends Controller
         //dd($request->all());
         $rules = [
             'name' => 'required|string',
+            'order' => 'required|string',
             'governmentIDS' => 'required|array|exists:governments,id',
         ];
 
@@ -183,6 +185,8 @@ class sectorsController extends Controller
         $messages = [
             'name.required' => 'يجب ادخال اسم القطاع',
             'name.string' => 'يجب ان لا يحتوى اسم القطاع على رموز',
+            'order.required' => 'يجب تحديد ترتيب القطاع',
+            // 'order.string' => '',
             'governmentIDS.required' => 'يجب اختيار محافظه واحده على الاقل'
         ];
         // // Validate the request
@@ -193,6 +197,7 @@ class sectorsController extends Controller
         }
         $sector = Sector::find($request->id);
         $sector->name = $request->name;
+        $sector->order = $request->order;
         $sector->governments_IDs = $request->governmentIDS;
         // $sector->created_by = Auth::id();
         // $sector->updated_by = Auth::id();

@@ -59,7 +59,6 @@
                         </p>
                     </div>
                 </div>
-
                 <div class="row d-flex justify-content-center mb-5">
                     <div class="text-request mb-5">
                         <p>رقم الملف / {{ convertToArabicNumerals($vacation->employee->file_number) }} </p>
