@@ -51,7 +51,7 @@
                                 </div>
                                 @foreach ($users as $user)
                                     <div class="option" data-id="{{ $user->id }}" data-name="{{ $user->name }}"
-                                        data-phone="{{ $user->phone }}"
+                                        data-phone="{{ $user->phone }}"  data-department="{{ $user->department_id ? $user->department->name : 'لا يوجد قصم للموظف '}}"
                                         data-grade_id="{{ $user->grade ? $user->grade->name : '' }}">
                                         {{ $user->name }} ( رقم الهويه:{{ $user->Civil_number }})
                                     </div>
@@ -97,58 +97,69 @@
                             <td id="user-phone">###</td>
                         </tr>
                         <input type="hidden" name="phone" id="hidden-phone">
+                        <tr>
+                            <th scope="row">القسم التابع له</th>
+                            <td id="user-department">###</td>
+                        </tr>
+                        <input type="hidden" name="department" id="hidden-department">
+
                     </tbody>
                 </table>
             </div>
         </div>
-{{-- {{ dd(Auth::user()->department_id) }} --}}
         <div class="container moftsh col-11 mt-5 p-0 pb-2 mb-3">
             <h3 class="pt-3  px-md-5 px-3 "> اختر المفتش </h3>
             <div class="form-row mx-md-5 mx-2 mb-2 d-block justify-content-start" dir="rtl">
                 @if(Auth::user()->rule->name == 'localworkadmin' || Auth::user()->rule->name == 'superadmin')
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type"  value="in" required>
-                        <label for="intern">مفتش سلوك أنضباطى</label>
+                        <input type="radio" id="slok" name="type"  value="slok" required>
+                        <label for="slok">مفتش سلوك أنضباطى</label>
                     </div>
                 </div>
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type"  value="trainee" required>
-                        <label for="intern">مفتش متدرب</label>
+                        <input type="radio" id="internslok" name="type"  value="internslok" required>
+                        <label for="internslok">مفتش متدرب سلوك أنضباطى</label>
                     </div>
                 </div>
                 <div class="form-group d-flex">
                     <div class="radio-btn  d-flex">
-                        <input type="radio" id="intern" name="type"  value="Buildings" required>
-                        <label for="intern">مفتش مباني </label>
+                        <input type="radio" id="internbilding" name="type"  value="internbilding" required>
+                        <label for="internbilding">مفتش متدرب مبانى</label>
+                    </div>
+                </div>
+                <div class="form-group d-flex">
+                    <div class="radio-btn  d-flex">
+                        <input type="radio" id="Buildings" name="type"  value="Buildings" required>
+                        <label for="Buildings">مفتش مباني </label>
                     </div>
                 </div>
                 @elseif (strpos(Auth::user()->department->name, 'السلوك') !== false)
 
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type"  value="in" required>
-                            <label for="intern">مفتش سلوك أنضباطى</label>
+                            <input type="radio" id="slok" name="type"  value="slok" required>
+                            <label for="slok">مفتش سلوك أنضباطى</label>
                         </div>
                     </div>
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type"  value="trainee" required>
-                            <label for="intern">مفتش متدرب</label>
+                            <input type="radio" id="internslok" name="type"  value="internslok" required>
+                            <label for="internslok">مفتش متدرب سلوك أنضباطى</label>
                         </div>
                     </div>
                 @elseif (strpos(Auth::user()->department->name, 'مبانى') !== false)
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type"  value="Buildings" required>
-                            <label for="intern">مفتش مباني </label>
+                            <input type="radio" id="Buildings" name="type"  value="Buildings" required>
+                            <label for="Buildings">مفتش مباني </label>
                         </div>
                     </div>
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
-                            <input type="radio" id="intern" name="type"  value="trainee" required>
-                            <label for="intern">مفتش متدرب</label>
+                            <input type="radio" id="internbilding" name="type"  value="internbilding" required>
+                            <label for="internbilding">مفتش متدرب مبانى</label>
                         </div>
                     </div>
                 @endif
@@ -206,6 +217,9 @@
         const hiddenName = document.getElementById('hidden-name');
         const userPhone = document.getElementById('user-phone');
         const hiddenPhone = document.getElementById('hidden-phone');
+        const hiddenDepartment = document.getElementById('hidden-department');
+        const userDepartment = document.getElementById('user-department');
+       
         const userDetailsSection = document.getElementById('user-details-section');
 
         selectBox.addEventListener('click', function() {
@@ -227,13 +241,16 @@
                 userId.textContent = this.dataset.id;
                 userId.value = this.dataset.id;
 
+                userDepartment.textContent = this.dataset.department;
                 userPosition.textContent = this.dataset.grade_id;
+
                 hiddenPosition.value = this.dataset.grade_id;
                 userName.textContent = this.dataset.name;
                 hiddenName.value = this.dataset.name;
                 userPhone.textContent = this.dataset.phone;
                 hiddenPhone.value = this.dataset.phone;
-
+                hiddenDepartment.value = this.dataset.department;
+                console.log(hiddenDepartment.value);
                 // Show the user details section
                 userDetailsSection.style.display = 'block';
 
