@@ -186,7 +186,7 @@
                                             .name + '</option>';
                                         pointsSelect.append(optionHtml);
                                     });
-                                    console.log( value.name);
+                                    console.log(value.name);
                                     pointsSelect.prop('disabled', false);
                                 } else {
                                     // Show a message if no data is available
