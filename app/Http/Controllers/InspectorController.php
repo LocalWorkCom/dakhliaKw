@@ -134,7 +134,7 @@ class InspectorController extends Controller
                                             <i class="fa fa-edit"></i> تعديل 
                                         </a>';
             return  $show_permission . ' ' . $edit_permission . ' ' . $group_permission;
-        })
+        }) 
         ->addColumn('name', function ($row) {
             return $row->user->name ? $row->user->name: 'لا يوجد أسم'; 
         }) ->addColumn('Id_number', function ($row) {
@@ -150,19 +150,16 @@ class InspectorController extends Controller
                 return $row->user->phone ?? 'لا يوجد هاتف';
             })
             ->addColumn('type', function ($row) {
-                //Buildings => مفتش مبانى  , internbilding =>مفتش متدرب مبانى   , internslok=> مفتس متدرب سلوك انضباطى   ,slok=>  مفتش سلوك 
-                if ($row->type == 'Buildings') {
-                    $result =  'مفتش مباني ';
-                } elseif ($row->type == 'internbilding') {
-                    $result =  'مفتش متدرب مبانى ';
-                } elseif ($row->type == 'internslok') {
-                    $result =  'مفتش  متدرب سلوك أنضباطى';
-                } else {
-                    $result =  'مفتش سلوك أنضباطى';
-                }
-                return $result;
+                $types = [
+                    'Buildings' => 'مفتش مباني',
+                    'internbilding' => 'مفتش متدرب مباني',
+                    'internslok' => 'مفتش متدرب سلوك انضباطي',
+                    'slok' => 'مفتش سلوك انضباطي'
+                ];
+                return $types[$row->type] ?? 'مفتش سلوك انضباطي';
             })
             ->rawColumns(['action'])
+            
             ->make(true);
     }
 

@@ -35,6 +35,16 @@
 
                     </div>
                 </div>
+                <div class="form-row mx-2 mb-2">
+                    {{-- <h3 class="pt-3 px-md-5 px-3">حدد ترتيب القطاع</h3> --}}
+                    <div class="input-group moftsh px-md-5 px-3 pt-3">
+                        <label class="pb-3" for="order">حدد ترتيب القطاع</label>
+                        <input type="number" id="order" name="order" class="form-control"
+                            required />
+                        <span class="text-danger span-error" id="order-error"></span>
+
+                    </div>
+                </div>
                 <div class="container col-11">
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
                         <button type="button" id="next-button" class="btn-blue">التالى</button>
@@ -106,11 +116,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var nameInput = document.getElementById('name');
+            var orderInput = document.getElementById('order');
             var nextButton = document.getElementById('next-button');
             var nameError = document.getElementById('name-error');
+            var orderError = document.getElementById('order-error');
 
             nameInput.addEventListener('input', function() {
                 if (nameInput.value.trim() !== '') {
+                    nextButton.disabled = false;
+                } else {
+                    nextButton.disabled = true;
+                }
+            });
+            orderInput.addEventListener('input', function() {
+                if (orderInput.value.trim() !== '') {
                     nextButton.disabled = false;
                 } else {
                     nextButton.disabled = true;
@@ -125,8 +144,19 @@
                     document.getElementById('first-container').classList.add('hidden');
                     document.getElementById('second-container').classList.remove('hidden');
                 }
+                
             });
-
+            nextButton.addEventListener('click', function() {
+                if (orderInput.value.trim() === '') {
+                    orderError.textContent = 'يرجى إدخال ترتيب القطاع ';
+                } else {
+                    orderError.textContent = ''; // Clear any previous error message
+                    document.getElementById('first-container').classList.add('hidden');
+                    document.getElementById('second-container').classList.remove('hidden');
+                }
+                
+            });
+           
             document.getElementById('back-button').addEventListener('click', function() {
                 document.getElementById('second-container').classList.add('hidden');
                 document.getElementById('first-container').classList.remove('hidden');
