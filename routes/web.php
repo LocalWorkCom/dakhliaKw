@@ -140,7 +140,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/groups/update', [GroupsController::class, 'update'])->name('group.update');
     Route::any('/groups/edit/{id}', [GroupsController::class, 'edit'])->name('group.edit');
 
-    Route::any('/groupTeam/team/{id}', [GroupTeamController::class, 'team'])->name('groupTeam.team');
+    // Route::any('/groupTeam/team/{id}', [GroupTeamController::class, 'team'])->name('groupTeam.team');
     Route::any('/groupTeam/store/{id}', [GroupTeamController::class, 'store'])->name('groupTeam.store');
     Route::any('/groupTeam/show/{id}', [GroupTeamController::class, 'index'])->name('groupTeam.index');
     Route::any('/groupTeam/showdetails/{id}', [GroupTeamController::class, 'show'])->name('groupTeam.show');

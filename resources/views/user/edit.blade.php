@@ -284,7 +284,7 @@
                                     placeholder="  المحافظة" value="{{ $user->Provinces }}"> --}}
 
                                     <select id="Provinces" name="Provinces" class="form-control select2" placeholder="المحافظة">
-                                        <option  disabled>اختار من القائمة</option>
+                                        <option  value="null" >اختار من القائمة</option>
                                         @foreach ($govermnent as $item)
                                             <option value="{{ $item->id }}" {{ $user->Provinces == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
                                         @endforeach
@@ -295,7 +295,7 @@
                                 {{-- <input type="text" id="region" name="region" class="form-control"
                                     placeholder="  المنطقة" value="{{ $user->region }}"> --}}
                                     <select id="region" name="region" class="form-control select2" placeholder="المنطقة">
-                                        <option disabled >اختار من القائمة</option>
+                                        <option value="null" >اختار من القائمة</option>
                                         @foreach ($area as $item)
                                             <option value="{{ $item->id }}" {{ $user->region == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
                                         @endforeach
@@ -304,7 +304,7 @@
 
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input22">مدة الخدمة</label>
-                                <input type="date" id="input22" name="end_of_service" class="form-control"
+                                <input type="text" id="input22" name="end_of_service" class="form-control"
                                     placeholder="مدة الخدمة " value="{{ $user->length_of_service }}">
                             </div>
                         </div>
@@ -411,6 +411,9 @@
                                 <label for="input23">الصورة</label>
                                 <input type="file" class="form-control" name="image" id="input23"
                                     placeholder="الصورة" value="{{ $user->image }}">
+                            </div>
+
+                            <div style="background-image: $user->image ">
                             </div>
                         </div>
 

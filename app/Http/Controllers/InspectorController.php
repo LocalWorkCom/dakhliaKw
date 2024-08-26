@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\departements;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
+use App\Models\InspectorMission;
 use App\Models\Rule;
 use App\Models\User;
 use Yajra\DataTables\DataTables;
@@ -31,24 +32,24 @@ class InspectorController extends Controller
 
         if ($user->rule->name == "localworkadmin" || $user->rule->name == "superadmin") {
             $all = Inspector::count();
-            $assignedInspectors = Inspector::whereNotNull('group_id')->where('flag',0)->count();
-            $unassignedInspectors = Inspector::whereNull('group_id')->where('flag',0)->count();
+            $assignedInspectors = Inspector::whereNotNull('group_id')->where('flag', 0)->count();
+            $unassignedInspectors = Inspector::whereNull('group_id')->where('flag', 0)->count();
         } else {
             // Ensure manager cannot see inspectors in their own department
-            $all = Inspector::with('user')->where('flag',0)
+            $all = Inspector::with('user')->where('flag', 0)
                 ->whereHas('user', function ($query) use ($userDepartmentId) {
                     $query->where('department_id', $userDepartmentId);
                 })
                 ->count();
 
-            $assignedInspectors = Inspector::with('user')->where('flag',0)
+            $assignedInspectors = Inspector::with('user')->where('flag', 0)
                 ->whereHas('user', function ($query) use ($userDepartmentId) {
                     $query->where('department_id', $userDepartmentId);
                 })
                 ->whereNotNull('group_id')
                 ->count();
 
-            $unassignedInspectors = Inspector::with('user')->where('flag',0)
+            $unassignedInspectors = Inspector::with('user')->where('flag', 0)
                 ->whereHas('user', function ($query) use ($userDepartmentId) {
                     $query->where('department_id', $userDepartmentId);
                 })
@@ -102,9 +103,9 @@ class InspectorController extends Controller
         $userRole = Auth::user()->rule->name;
 
         if ($userRole == "localworkadmin" || $userRole == "superadmin") {
-            $data = Inspector::with('user')->where('flag',0)->orderBy('id', 'desc');
+            $data = Inspector::with('user')->where('flag', 0)->orderBy('id', 'desc');
         } else {
-            $data = Inspector::with('user')->where('flag',0)
+            $data = Inspector::with('user')->where('flag', 0)
                 ->whereHas('user', function ($query) use ($userDepartmentId) {
                     $query->where('department_id', $userDepartmentId);
                 })
@@ -136,7 +137,7 @@ class InspectorController extends Controller
             $remove_permission =  '<a href="' . route('inspectors.remove', $row->id) . '" class="btn btn-sm"  style="background-color:#bf2433;">
                                         <i class="fa fa-trash"></i> تحويل لموظف 
                                     </a>';
-            return  $show_permission . ' ' . $edit_permission . ' ' . $group_permission .' '. $remove_permission;
+            return  $show_permission . ' ' . $edit_permission . ' ' . $group_permission . ' ' . $remove_permission;
         })
             ->addColumn('name', function ($row) {
                 return $row->user->name ? $row->user->name : 'لا يوجد أسم';
@@ -172,11 +173,11 @@ class InspectorController extends Controller
 
         $department = departements::find($departmentId);
         $departmentId = auth()->user()->department_id;
-        $inspectorUserIds = Inspector::where('flag',0)->pluck('user_id')->toArray();
-    
+        $inspectorUserIds = Inspector::where('flag', 0)->pluck('user_id')->toArray();
+
         $allmangers = departements::whereNotNull('manger')->pluck('manger')->toArray();
         $userDepartmentId = Auth::user()->department_id;
-        
+
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $users = User::where('id', '!=', auth()->user()->id)
                 ->whereNotIn('id', $inspectorUserIds)
@@ -196,10 +197,42 @@ class InspectorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function TransferToEmployee($id){
+    public function TransferToEmployee($id)
+    {
         $inspector = Inspector::find($id);
-        $inspector->flag = 1 ;
+        $inspector->flag = 1;
         $inspector->save();
+        $inspectorIds[] = $id;
+        $removedInspectors = [];
+
+        $currentGroups = GroupTeam::where('group_id', $inspector->group_id)->get();
+
+        // First, handle transfers and track removed inspectors
+        foreach ($currentGroups as $currentGroup) {
+            $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
+
+            // Identify inspectors that are no longer in the new list
+            $inspectorsToRemove = array_diff($currentInspectorIds, $inspectorIds);
+
+            // Remove these inspectors from the current group
+            foreach ($inspectorsToRemove as $inspectorId) {
+
+                $currentGroup->inspector_ids = implode(',', array_diff($currentInspectorIds, [$inspectorId]));
+                $currentGroup->save();
+
+                // If the inspector was a manager, clear the manager field
+                if ($currentGroup->inspector_manager == $inspectorId) {
+                    $currentGroup->inspector_manager = null;
+                    $currentGroup->save();
+                }
+            }
+        }
+
+        $inspector_missions = InspectorMission::where('inspector_id', $id)->where('date', '>=', today())->get();
+        foreach ($inspector_missions as  $inspector_mission) {
+            $inspector_mission->delete();
+        }
+
         return redirect()->back()->with('تم تحويل المفتش لموظف');
     }
     public function store(Request $request)

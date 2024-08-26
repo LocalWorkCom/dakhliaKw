@@ -1,16 +1,17 @@
 <?php
 
-use App\Models\Country;
-use App\Models\departements;
-use App\Models\EmployeeVacation;
-use App\Models\Government;
-use App\Models\Groups;
-use App\Models\Io_file;
-use App\Models\Sector;
-use App\Models\User;
-use App\Models\VacationType;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Groups;
+use App\Models\Sector;
+use App\Models\Country;
+use App\Models\Io_file;
+use App\Models\Government;
+use App\Models\departements;
+use App\Models\VacationType;
+use App\Models\EmployeeVacation;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -173,13 +174,15 @@ function getLatLongFromUrl($url)
         'buff.ly',
         'is.gd',
         'tiny.cc',
-        'maps.app.goo.gl'
+        'maps.app.goo.gl',
+        // 'gis.paci.gov.kw'
     ];
 
     // Parse the domain from the URL
     $host = parse_url($url, PHP_URL_HOST);
     if (in_array($host, $shortenerDomains) == true) {
         $ch = curl_init();
+        // dd($ch);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // Follow redirects
@@ -187,15 +190,17 @@ function getLatLongFromUrl($url)
         $url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
     }
-
+    
     $pattern = '/@([-+]?[\d]*\.?[\d]+),([-+]?[\d]*\.?[\d]+)/';
     preg_match($pattern, $url, $matches);
+    dd($matches);
     if (isset($matches[1]) && isset($matches[2])) {
         return [
             'latitude' => $matches[1],
             'longitude' => $matches[2]
         ];
     }
+   
     return null;
 }
 

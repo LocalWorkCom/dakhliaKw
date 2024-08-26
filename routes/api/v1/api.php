@@ -37,6 +37,10 @@ Route::get('/inspector/missions', [InspectorMissionController::class, 'getMissio
 Route::any('/absenceReport', [reportsController::class, 'getAbsence']);
 Route::post('/inspector/add/mission', [personalMissionController::class, 'addPersonalMission']);
 Route::get('/getAll/points', [personalMissionController::class, 'getAllPoints']);
+/**
+ * /Lizam
+ */
+Route::any('/lizamat', [InspectorMissionController::class,'get_shift']);
 
 });
 

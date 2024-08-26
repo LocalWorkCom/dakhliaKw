@@ -162,7 +162,7 @@ class InstantmissionController extends Controller
         // ;
         $results = Event::dispatch(new MissionCreated($new));
         // $results = event(new MissionCreated($new));
-// dd($results);
+dd($results);
         if (!empty($results) && in_array(true, $results, true)) {
             return redirect()->route('instant_mission.index')->with('message', "تمت اضافة المهمة بنجاح");
         } else {
