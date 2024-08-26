@@ -31,7 +31,7 @@ class InspectorController extends Controller
         $userDepartmentId = $user->department_id;
 
         if ($user->rule->name == "localworkadmin" || $user->rule->name == "superadmin") {
-            $all = Inspector::count();
+            $all = Inspector::where('flag', 0)->count();
             $assignedInspectors = Inspector::whereNotNull('group_id')->where('flag', 0)->count();
             $unassignedInspectors = Inspector::whereNull('group_id')->where('flag', 0)->count();
         } else {

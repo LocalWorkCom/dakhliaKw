@@ -188,7 +188,7 @@ class GroupTeamController extends Controller
         $departmentId = auth()->user()->department_id; // Or however you determine the department ID
         if (auth()->user()->rule_id == 2) {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
-            ->where('inspectors.flag', 0)
+                ->where('inspectors.flag', 0)
                 ->where(function ($query) use ($team) {
                     $query->where('inspectors.group_id', $team->group_id)
                         ->orWhereNull('inspectors.group_id');
@@ -196,7 +196,7 @@ class GroupTeamController extends Controller
                 ->select("inspectors.*")->get();
         } else {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
-            ->where('inspectors.flag', 0)
+                ->where('inspectors.flag', 0)
                 ->where('users.department_id', $departmentId)
                 ->where(function ($query) use ($team) {
                     $query->where('inspectors.group_id', $team->group_id)
@@ -257,7 +257,7 @@ class GroupTeamController extends Controller
         $team = GroupTeam::with('group')->with('working_tree')->where('id', $id)->first();
         $inspectorIds = explode(',', $team->inspector_ids);
         $inspectors = Inspector::whereIn('id', $inspectorIds)
-        ->where('inspectors.flag', 0)->get();
+            ->where('inspectors.flag', 0)->get();
         $group_id = $team->group_id;
 
         return view('groupteam.showdetails', compact('team', 'inspectors', 'group_id'));
@@ -325,6 +325,31 @@ class GroupTeamController extends Controller
         }
 
         // Update the team name and working tree ID
+        if ($team->working_tree_id != $request->working_tree_id) {
+            $data_mission = InspectorMission::where('date', '>=', today())->where('working_tree_id', $team->working_tree_id)->get();
+            $old_work_tree = WorkingTree::find($team->working_tree_id);
+            $new_work_tree = WorkingTree::find($request->working_tree_id);
+            $old_total_days = $old_work_tree->working_days_num + $old_work_tree->holiday_days_num;
+            $new_total_days = $new_work_tree->working_days_num + $new_work_tree->holiday_days_num;
+            $count = 0;
+            foreach ($data_mission as $data) {
+                if ($data->day_number > $old_total_days) {
+                    $count++;
+                } else {
+                    $count = $data->day_number;
+                }
+                if ($count == $new_total_days) {
+                    $count = 1;
+                }
+                $work_tree_time = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)->where('day_num', $count)->first();
+
+                $data->working_tree_id = $request->working_tree_id;
+                $data->working_time_id = $work_tree_time->working_time_id;
+                $data->day_off = ($work_tree_time->working_time_id) ? 0 : 1;
+                $data->save();
+            }
+        }
+
         $team->name = $newName;
         if (in_array($inspector_manager, $removedArr)) {
             $team->inspector_manager = null;
@@ -420,6 +445,7 @@ class GroupTeamController extends Controller
                     $inspectorMission->date = $date;
                     $inspectorMission->ids_group_point = $points;
                     $inspectorMission->day_off = $day_off;
+                    $inspectorMission->day_number = $day_in_cycle;
                     if ($vacation_days != 0) {
                         $inspectorMission->vacation_id = $EmployeeVacation->id;
                     }
@@ -887,6 +913,7 @@ class GroupTeamController extends Controller
                         $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
                         $inspectorMission->working_time_id = $working_time_id;
                         $inspectorMission->date = $date;
+                        $inspectorMission->day_number = $day_in_cycle;
                         if ($vacation_days != 0) {
                             $inspectorMission->vacation_id = $EmployeeVacation->id;
                         }
@@ -927,7 +954,7 @@ class GroupTeamController extends Controller
         $departmentId = auth()->user()->department_id; // Or however you determine the department ID
         if (auth()->user()->rule_id == 2) {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
-            ->where('inspectors.flag', 0)
+                ->where('inspectors.flag', 0)
                 ->where('group_id', $group_id)
                 ->select("inspectors.*")->get();
         } else {
@@ -996,7 +1023,7 @@ class GroupTeamController extends Controller
         $working_times = WorkingTime::all();
 
         $inspectors = Inspector::with('user.grade')
-        ->where('inspectors.flag', 0)->get();
+            ->where('inspectors.flag', 0)->get();
 
         // foreach ($inspectors as $inspector) {
         //     if ($inspector->user && $inspector->user->grade) {
@@ -1055,7 +1082,7 @@ class GroupTeamController extends Controller
                 // Retrieve all inspectors associated with the team in the current group
                 $inspectorIds = InspectorMission::where('group_id', $Group->id)
                     ->where('group_team_id', $Team->id)
-      
+
                     ->groupBy('inspector_id')
                     ->pluck('inspector_id');
                 // Get the inspector objects
