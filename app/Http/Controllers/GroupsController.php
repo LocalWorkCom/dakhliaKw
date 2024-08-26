@@ -78,31 +78,38 @@ class GroupsController extends Controller
 
     public function groupCreateInspectors($id)
     {
+        $group = Groups::find($id);
         // $inspectors = Inspector::whereNull('group_id')->get();
         $departmentId = auth()->user()->department_id; // Or however you determine the department ID
         if (auth()->user()->rule_id == 2) {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                 ->whereNull('inspectors.group_id')
+                ->where('inspectors.flag', 0)
                 ->select("inspectors.*")->get();
-            $inspectorsIngroup = Inspector::where('group_id', $id)->get();
+            $inspectorsIngroup = Inspector::where('group_id', $id)
+            ->where('inspectors.flag', 0)->get();
         } else {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                 ->where('users.department_id', $departmentId)
                 ->whereNull('inspectors.group_id')
+                ->where('inspectors.flag', 0)
                 ->select("inspectors.*")->get();
             $inspectorsIngroup = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                 ->where('users.department_id', $departmentId)
+                ->where('inspectors.flag', 0)
                 ->where('users.id', '<>', auth()->user()->id)->where('group_id', $id)
                 ->get();
         }
 
-        return view('group.inspector', compact('inspectors', 'inspectorsIngroup', 'id'));
+        return view('group.inspector', compact('inspectors', 'inspectorsIngroup', 'id', 'group'));
     }
     public function groupAddInspectors(Request $request, $id)
     {
         if (isset($request->inspectorein)) {
 
-            $allExist  = Inspector::where('group_id', $id)->pluck('id');
+            $allExist  = Inspector::where('group_id', $id)
+                ->where('inspectors.flag', 0)
+                ->pluck('id');
             foreach ($allExist as $row_id) {
                 if (!in_array($row_id, $request->inspectorein)) {
                     $inspector = Inspector::findOrFail($row_id);
@@ -141,7 +148,9 @@ class GroupsController extends Controller
             }
         } else {
 
-            $inspectorsCheck = Inspector::where('group_id', $id)->get();
+            $inspectorsCheck = Inspector::where('group_id', $id)
+            ->where('inspectors.flag', 0)
+            ->get();
             if ($inspectorsCheck->count()) {
 
                 foreach ($inspectorsCheck as $inspector) {
