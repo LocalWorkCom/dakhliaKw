@@ -250,24 +250,24 @@ class UserController extends Controller
                 return redirect()->route('home');
             }
             //end code
-            if ($user->updated_at >= $twoHoursAgo) {
-                if ($user->token == null) {
-                    $firstlogin = 1;
+            // if ($user->updated_at >= $twoHoursAgo) {
+            //     if ($user->token == null) {
+            //         $firstlogin = 1;
 
-                    $set = '123456789';
-                    $code = substr(str_shuffle($set), 0, 4);
+            //         $set = '123456789';
+            //         $code = substr(str_shuffle($set), 0, 4);
 
-                    $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
-                    $response = send_sms_code($msg, $user->phone, $user->country_code);
-                    $result = json_decode($response, true);
+            //         $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+            //         $response = send_sms_code($msg, $user->phone, $user->country_code);
+            //         $result = json_decode($response, true);
 
-                    // if (isset($result['sent']) && $result['sent'] === 'true') {
-                    //     return view('verfication_code', compact('code', 'military_number', 'password'));
-                    // } else {
-                    //     return back()->with('error', 'سجل الدخول مرة أخرى')->withInput();
-                    // }
-                }
-            }
+            //         // if (isset($result['sent']) && $result['sent'] === 'true') {
+            //         //     return view('verfication_code', compact('code', 'military_number', 'password'));
+            //         // } else {
+            //         //     return back()->with('error', 'سجل الدخول مرة أخرى')->withInput();
+            //         // }
+            //     }
+            // }
 
             Auth::login($user); // Log the user in
             return redirect()->route('home');
@@ -283,17 +283,19 @@ class UserController extends Controller
         $code = substr(str_shuffle($set), 0, 4);
         // $msg = trans('message.please verified your account') . "\n" . trans('message.code activation') . "\n" . $code;
         $msg  = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
-        $user = User::where('military_number', $request->military_number)->first();
+        $user = User::where('military_number', $request->number)->orwhere('Civil_number', $request->number)->first();
         // Send activation code via WhatsApp (assuming this is your preferred method)
         $response = send_sms_code($msg, $user->phone, $user->country_code);
         $result = json_decode($response, true);
         // $code = $request->code;
-        $military_number = $request->military_number;
+        $military_number = $request->military_number;    
+        $number = $request->number;
         $password = $request->password;
         $sent = $result['sent'];
         if ($sent === 'true') {
             // dd("true");
-            return  view('verfication_code', compact('code', 'military_number', 'password'));
+            return  view('verfication_code', compact('code', 'number','military_number', 'password'));
+
         } else {
 
             return back()->with('error', 'سجل الدخول مرة أخرى');
