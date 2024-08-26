@@ -170,7 +170,7 @@
                         const select = newDiv.querySelector('select');
 
                         label.setAttribute('for', `period${i}`);
-                        label.textContent = `اليوم ${i}`;
+                        label.textContent = `    اليوم ${i} / حدد اذا كان عطلة `;
 
                         select.setAttribute('name', `period${i}`);
                         select.setAttribute('id', `period${i}`);
@@ -178,14 +178,15 @@
 
                         const checkboxLabel = document.createElement('label');
                         checkboxLabel.setAttribute('for', `holiday_checkbox${i}`);
-                        checkboxLabel.textContent = ' عطلة';
+                        // checkboxLabel.textContent = ' عطلة';
 
                         const checkboxContainer = document.createElement('div');
                         checkboxContainer.classList.add('checkbox-container');
 
                         const checkbox = document.createElement('input');
                         checkbox.type = 'checkbox';
-                        checkbox.style.height = '20px';
+                        checkbox.style.height = '25px !important';
+                        checkbox.style.width = '25px !important';
                         checkbox.setAttribute('name', `holiday_checkbox${i}`);
                         checkbox.setAttribute('id', `holiday_checkbox${i}`);
                         checkbox.classList.add('holiday-check');
