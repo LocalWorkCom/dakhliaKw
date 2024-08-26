@@ -532,7 +532,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+        dd($request);
         // validation
 
         if ($request->type == "0") {
@@ -585,7 +585,7 @@ class UserController extends Controller
                     'nullable',
                 ],
             ];
-            if ($request->has('solderORcivil') && $request->solderORcivil == "military") {
+            if ($request->has('type_military') && $request->type_military == "police") {
                 // dd("dd");
                 if ($request->has('military_number')) {
                     $rules['military_number'] = [
@@ -774,7 +774,7 @@ class UserController extends Controller
             'military_number.required_if' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
             'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
             'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-            // 'file_number.string' => 'رقم الملف يجب أن يكون نصاً.',
+            'email.required' => 'الايميل مطلوب',
             'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
         ];
 
@@ -806,6 +806,7 @@ class UserController extends Controller
                 new UniqueNumberInUser($user),
             ],
             'email' => [
+                'required',
                 // 'max:255',
                 // ValidationRule::unique('permissions', 'name'),
                 new UniqueNumberInUser($user),

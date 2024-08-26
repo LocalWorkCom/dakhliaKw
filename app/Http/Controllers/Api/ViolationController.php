@@ -273,6 +273,7 @@ class ViolationController  extends Controller
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'flag_instantmission' => $violation->flag_instantmission,
+                'violation_mode'=>  $violation->military_number != null ? "1" : "2",,
             ];
         });
         // $allviolation = Violation::where('point_id', $request->point_id)->get();
@@ -321,6 +322,7 @@ class ViolationController  extends Controller
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'flag_instantmission' => $violation->flag_instantmission,
+                'violation_mode'=>  $violation->military_number != null ? "1" : "2",
             ];
         });
         $success['date'] = $today;

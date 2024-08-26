@@ -101,7 +101,7 @@
                             </div>
                     </div>
                 @else
-                    <div class="form-group col-md-5 mx-2">
+                    {{-- <div class="form-group col-md-5 mx-2">
                         <label for="job"> الوظيفة</label>
                         <select class="custom-select custom-select-lg mb-3 select2" name="job" id="job">
                             <option selected disabled>اختار من القائمة</option>
@@ -109,7 +109,23 @@
                                 <option value="{{ $item->id }}" {{ old('job') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
                             @endforeach
                         </select>
-                        {{-- <input type="text" id="job" name="job" class="form-control" required> --}}
+                   
+                    </div> --}}
+                    <div class="form-group col-md-5 mx-2 type_military_id" style="display: none;" id="type_military_id">
+                        <div class="radio-btns mx-md-4 ">
+                            <input type="radio" class="form-check-input" id="police" name="type_military"
+                                value="police" style="height:20px; width:20px;" >
+                            <label class="form-check-label mx-2" for="police">ضابط</label>
+                        </div>
+                        <div class="radio-btns mx-md-4">
+                            <input type="radio" class="form-check-input" id="police_" name="type_military"
+                                value="police_" style="height:20px; width:20px;" checked>
+                            <label class="form-check-label mx-2" for="police" >صف ضابط</label>
+                        </div>
+                        <label for="type_military" class="mx-3">نوع العسكرى</label>
+                        
+                    
+                   
                     </div>
                     <div class="form-group col-md-5 mx-2">
                         <label for="nameus"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> الاسم</label>
@@ -155,21 +171,20 @@
                             placeholder=" البريد الالكترونى" value="{{ old('email') }}">
                     </div>
                     
-                    <div class="form-group col-md-5 mx-2">
+                    {{-- <div class="form-group col-md-5 mx-2">
                         <label for="sector">قطاع </label>
-                        {{-- <input type="text" id="input66" name="sector" class="form-control"
-                            placeholder="قطاع " value="{{ old('sector') }}" > --}}
+                   
                             <select id="sector" name="sector" class="form-control select2" placeholder="المنطقة">
                                 <option selected >اختار من القائمة</option>
                                 @foreach ($sector as $item)
                                     <option value="{{ $item->id }}" {{ old('sector') == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
                                 @endforeach
                             </select>
-                    </div>
-                </div>
+                    </div> --}}
+                {{-- </div>
 
                 
-                <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
+                <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse"> --}}
                     <div class="form-group col-md-5 mx-2">
                         <label for="region"> المنطقة</label>
                         {{-- <input type="text" id="input44" name="region" class="form-control"
@@ -183,17 +198,17 @@
                             </select>
                     </div>
 
-                    <div class="form-group col-md-5 mx-2">
+                    {{-- <div class="form-group col-md-5 mx-2">
                         <label for="Provinces"> المحافظة</label>
-                        {{-- <input type="text" id="input44" name="Provinces" class="form-control"
-                            placeholder="  المحافظة" value="{{ old('Provinces') }}"> --}}
+                        <input type="text" id="input44" name="Provinces" class="form-control"
+                            placeholder="  المحافظة" value="{{ old('Provinces') }}">
                             <select id="Provinces" name="Provinces" class="form-control select2" placeholder="المحافظة">
                                 <option selected disabled>اختار من القائمة</option>
                                 @foreach ($govermnent as $item)
                                     <option value="{{ $item->id }}" {{ old('Provinces') == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
                                 @endforeach
                             </select>
-                    </div>
+                    </div> --}}
                     
                 </div>
                 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
@@ -202,11 +217,11 @@
                         <input type="text" id="input44" name="address_1" class="form-control"
                             placeholder="  العنوان" value="{{ old('address_1') }}">
                     </div>
-                    <div class="form-group col-md-5 mx-2">
+                    {{-- <div class="form-group col-md-5 mx-2">
                         <label for="input44">العنوان 2</label>
                         <input type="text" id="input44" name="address_2" class="form-control"
                             placeholder="  العنوان" value="{{ old('address_2') }}">
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
@@ -251,11 +266,11 @@
                     </div>
                 </div>
                 <div class="form-row  mx-md-3 d-flex justify-content-center flex-row-reverse">
-                    <div class="form-group col-md-5 mx-2">
+                    {{-- <div class="form-group col-md-5 mx-2">
                         <label for="input14">الاقدامية</label>
                         <input type="text" id="input14" name="seniority" class="form-control"
                             placeholder="الاقدامية" value="{{ old('seniority') }}">
-                    </div>
+                    </div> --}}
 
                     <div class="form-group col-md-5 mx-2">
                         <label for="input15"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  الادارة </label>
@@ -270,7 +285,7 @@
                         </select>
                     </div>
                 </div>
-
+{{-- 
                 <div class="form-row mx-md-3  d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
                         <label for="input16">موقع العمل</label>
@@ -279,8 +294,8 @@
                     </div>
                     <div class="form-group col-md-5 mx-2">
                         <label for="input18">المؤهل</label>
-                        {{-- <input type="text" id="input18" name="qualification" class="form-control"
-                            placeholder="المؤهل" value="{{ old('qualification') }}"> --}}
+                        <input type="text" id="input18" name="qualification" class="form-control"
+                            placeholder="المؤهل" value="{{ old('qualification') }}">
                             <select id="qualification" name="qualification" class="form-control" placeholder="المجموعة">
                                 <option selected disabled>اختار من القائمة</option>
                                 @foreach ($qualifications as $item)
@@ -290,7 +305,7 @@
                                 @endforeach
                             </select>
                     </div>
-                </div>
+                </div> --}}
 
             <div class="form-row mx-md-3  d-flex justify-content-center flex-row-reverse">
                 <div class="form-group col-md-5 mx-2">
@@ -325,7 +340,7 @@
 
                 <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-10">
-                        <label for="input5"> الوصف</label>
+                        <label for="input5"> الملاحظات</label>
                         <textarea type="text" id="input5" name="description" class="form-control" placeholder="الوصف"
                             rows="3" value="{{ old('description') }}"></textarea>
                     </div>
@@ -527,6 +542,43 @@
 // });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const radios = document.getElementsByName('solderORcivil');
+    let selectedValue;
+
+    // Function to show/hide the military section based on the selected value
+    function toggleMilitarySection(value) {
+        const militarySection = document.getElementById('type_military_id');
+        if (value === "military") {
+            militarySection.style.display = "block";
+        } else {
+            militarySection.style.display = "none";
+        }
+    }
+
+    // Check initial selection
+    for (let i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            selectedValue = radios[i].value;
+            break;
+        }
+    }
+    
+    // Call the function to toggle visibility based on initial selection
+    toggleMilitarySection(selectedValue);
+
+    // Handle change event
+    radios.forEach((radio) => {
+        radio.addEventListener('change', function() {
+            if (radio.checked) {
+                toggleMilitarySection(radio.value);
+            }
+        });
+    });
+});
+
+</script>
 
 
 {{-- <script>

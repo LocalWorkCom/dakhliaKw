@@ -130,7 +130,8 @@
                         </tr>
                         <tr>
                             <th scope="row"> مدة الخدمه </th>
-                            <td> {{ $end_of_service }} </td>
+                            {{-- <td> {{ $end_of_service }} </td> --}}
+                            <td> {{ $user->length_of_service }} </td>
                         </tr>
                         <tr>
                             <th scope="row"> الرتبه </th>
@@ -251,11 +252,10 @@
                         @endif
 
 
-                        <tr>
+                        {{-- <tr>
                             <th> قطاع</th>
                             <td>
-                                {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
-                                    disabled> --}}
+                          
                                 @foreach ($sector as $item)
                                     @if ($user->sector == $item->id)
                                         <label>
@@ -263,9 +263,9 @@
                                         </label>
                                     @endif
                                 @endforeach
-                                {{-- </select> --}}
+                               
                             </td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <th> قطاع</th>
                             <td>
