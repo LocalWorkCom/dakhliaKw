@@ -33,7 +33,7 @@
                             <th scope="row" style="background-color:#f5f6fa;">الاسم</th>
                             <td>{{ $team->name }}</td>
                         </tr>
-                        <tr>
+                        <tr hidden>
                             <th scope="row" style="background-color:#f5f6fa;">امر خدمة</th>
                             <td>{{ $team->service_order ? 'نعم' : 'لا' }}</td>
                         </tr>

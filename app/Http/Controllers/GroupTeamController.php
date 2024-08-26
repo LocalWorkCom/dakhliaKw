@@ -86,13 +86,14 @@ class GroupTeamController extends Controller
                 }
                 // dd($btn);
                 return  $btn;
-            })->addColumn('service_order', function ($row) {
-                if ($row->service_order) {
-                    return  'نعم';
-                } else {
-                    return  'لا';
-                }
             })
+            // ->addColumn('service_order', function ($row) {
+            //     if ($row->service_order) {
+            //         return  'نعم';
+            //     } else {
+            //         return  'لا';
+            //     }
+            // })
             ->rawColumns(['action', 'inspectorCount'])
             ->make(true);
     }
@@ -151,30 +152,30 @@ class GroupTeamController extends Controller
     /**
      * team a newly created resource in storage.
      */
-    public function team($id)
-    {
-        $arrayInspector = [];
-        $inspector = Inspector::where('group_id', $id)->get();
-        foreach ($inspector as $item) {
-            $check = GroupTeam::where('group_id', $id)
-                ->whereRaw('find_in_set(?, inspector_ids)', [$item->id])
-                ->exists();
-            if (!$check) {
-                $arrayInspector[] = $item;
-            }
-        }
+    // public function team($id)
+    // {
+    //     $arrayInspector = [];
+    //     $inspector = Inspector::where('group_id', $id)->get();
+    //     foreach ($inspector as $item) {
+    //         $check = GroupTeam::where('group_id', $id)
+    //             ->whereRaw('find_in_set(?, inspector_ids)', [$item->id])
+    //             ->exists();
+    //         if (!$check) {
+    //             $arrayInspector[] = $item;
+    //         }
+    //     }
 
-        // At this point, $arrayInspector contains the inspectors that do not exist in the inspector_ids column of GroupTeam
-        $data = $arrayInspector;
+    //     // At this point, $arrayInspector contains the inspectors that do not exist in the inspector_ids column of GroupTeam
+    //     $data = $arrayInspector;
 
 
-        // dd($group);
-        if ($inspector) {
-            return response()->json(['success' => true, 'data' => $data]);
-        } else {
-            return response()->json(['success' => false, 'message' => 'Record not found'], 404);
-        }
-    }
+    //     // dd($group);
+    //     if ($inspector) {
+    //         return response()->json(['success' => true, 'data' => $data]);
+    //     } else {
+    //         return response()->json(['success' => false, 'message' => 'Record not found'], 404);
+    //     }
+    // }
 
     /**
      * Display the specified resource.
@@ -187,6 +188,7 @@ class GroupTeamController extends Controller
         $departmentId = auth()->user()->department_id; // Or however you determine the department ID
         if (auth()->user()->rule_id == 2) {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+            ->where('inspectors.flag', 0)
                 ->where(function ($query) use ($team) {
                     $query->where('inspectors.group_id', $team->group_id)
                         ->orWhereNull('inspectors.group_id');
@@ -194,6 +196,7 @@ class GroupTeamController extends Controller
                 ->select("inspectors.*")->get();
         } else {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+            ->where('inspectors.flag', 0)
                 ->where('users.department_id', $departmentId)
                 ->where(function ($query) use ($team) {
                     $query->where('inspectors.group_id', $team->group_id)
@@ -253,7 +256,8 @@ class GroupTeamController extends Controller
 
         $team = GroupTeam::with('group')->with('working_tree')->where('id', $id)->first();
         $inspectorIds = explode(',', $team->inspector_ids);
-        $inspectors = Inspector::whereIn('id', $inspectorIds)->get();
+        $inspectors = Inspector::whereIn('id', $inspectorIds)
+        ->where('inspectors.flag', 0)->get();
         $group_id = $team->group_id;
 
         return view('groupteam.showdetails', compact('team', 'inspectors', 'group_id'));
@@ -289,10 +293,17 @@ class GroupTeamController extends Controller
         // Retrieve the new name and inspector IDs from the request
         $newName = $request->name;
         $service_order = $request->service_order;
+        $inspector_manager = $request->inspector_manager;
 
         $newInspectors = $request->inspectors_ids ? (array) $request->inspectors_ids : [];
         $oldInspectorIds = $team->inspector_ids ? explode(',', $team->inspector_ids) : [];
+        // dd($newInspectors, $oldInspectorIds);
+        if ($inspector_manager != $team->inspector_manager) {
 
+            if (!in_array($inspector_manager, $newInspectors)) {
+                $newInspectors[] = $inspector_manager;
+            }
+        }
         // Update group ID for each inspector in the new inspectors list
         foreach ($newInspectors as $key) {
             $value = Inspector::find($key);
@@ -308,14 +319,19 @@ class GroupTeamController extends Controller
         // Determine which inspectors were added or removed
         $changeArr = array_diff($newInspectors, $oldInspectorIds);
         $removedArr = array_diff($oldInspectorIds, $newInspectors);
-
         // Check if there are any changes; if not, return with a message
-        if (empty($changeArr) && empty($removedArr) && $team->name === $newName && $team->working_tree_id == $request->working_tree_id && $service_order == $team->service_order) {
+        if (empty($changeArr) && empty($removedArr) && $team->name === $newName && $team->working_tree_id == $request->working_tree_id && $service_order == $team->service_order &&  $inspector_manager == $team->inspector_manager) {
             return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.']);
         }
 
         // Update the team name and working tree ID
         $team->name = $newName;
+        if (in_array($inspector_manager, $removedArr)) {
+            $team->inspector_manager = null;
+        } else {
+
+            $team->inspector_manager = $inspector_manager;
+        }
         $team->working_tree_id = $request->working_tree_id;
         $team->service_order = ($service_order) ? $service_order : 0;
 
@@ -425,72 +441,319 @@ class GroupTeamController extends Controller
     /**
      * updateTransfer the inspector from team to team.
      */
+    // public function updateTransfer(Request $request, $group_id)
+    // {
+    //     // Get the inspectors' IDs and team IDs from the request
+    //     $inspectorIds = $request->inspectors_ids;
+    //     $teams = $request->team_id;
+
+    //     // Prepare an array to keep track of transferred inspectors
+    //     $transferredInspectors = [];
+    //     $points = [];
+
+    //     // Iterate over each inspector ID
+    //     foreach ($inspectorIds as $inspectorId) {
+    //         // Get the new team ID for the current inspector
+    //         $newTeamId = $teams[$inspectorId];
+    //         // Get the current group information based on group ID and team ID
+    //         $currentGroup = GroupTeam::where('group_id', $group_id)->where('id', $newTeamId)->first();
+
+    //         // Check if the inspector is already in a different group
+    //         $existingGroupQuery = GroupTeam::where('group_id', $group_id)
+    //             ->whereRaw('find_in_set(?, inspector_ids)', [$inspectorId]);
+
+    //         // If the inspector is found in another group
+    //         if ($existingGroupQuery->exists()) {
+    //             $existingGroup = $existingGroupQuery->first();
+
+    //             // If the inspector is not already in the new team, transfer them
+    //             if ($existingGroup->id != $newTeamId) {
+    //                 // Mark this inspector as transferred
+    //                 $transferredInspectors[] = $inspectorId;
+
+    //                 // Remove inspector from the old group
+    //                 $oldInspectorIds = explode(',', $existingGroup->inspector_ids);
+    //                 $updatedOldInspectorIds = array_diff($oldInspectorIds, [$inspectorId]);
+    //                 $existingGroup->inspector_ids = implode(',', $updatedOldInspectorIds);
+
+    //                 $existingGroup->save();
+
+    //                 //check if exist in team manager 
+    //                 if ($existingGroup->inspector_manager == $inspectorId) {
+    //                     $existingGroup->inspector_manager = null;
+    //                     $existingGroup->save();
+    //                 }
+
+    //                 // Add inspector to the new group
+    //                 if (empty($currentGroup->inspector_ids)) {
+    //                     // If the new group has no inspectors, simply add the inspector
+    //                     $currentGroup->inspector_ids = $inspectorId;
+    //                 } else {
+    //                     // Otherwise, append the inspector to the existing list
+    //                     $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
+    //                     $currentInspectorIds[] = $inspectorId;
+    //                     $currentGroup->inspector_ids = implode(',', $currentInspectorIds);
+    //                 }
+    //                 $currentGroup->save();
+    //             }
+    //         } else {
+    //             // If the inspector is not already assigned to a group
+    //             if (empty($currentGroup->inspector_ids)) {
+    //                 // If the new group has no inspectors, add the inspector
+    //                 $currentGroup->inspector_ids = $inspectorId;
+    //                 $transferredInspectors[] = $inspectorId;
+    //             } else {
+    //                 // Otherwise, append the inspector to the existing list
+    //                 $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
+    //                 $currentInspectorIds[] = $inspectorId;
+    //                 $currentGroup->inspector_ids = implode(',', $currentInspectorIds);
+    //             }
+    //             $currentGroup->save();
+    //         }
+    //     }
+    //     // $changeArr = array_diff($inspectorIds, $oldInspectorIds);
+    //     // Only update inspector missions for transferred inspectors
+    //     foreach ($transferredInspectors as $inspectorId) {
+    //         dd(1);
+
+    //         $vacation_days = 0;
+
+    //         // Get current missions for the inspector starting from today
+    //         $inspector_missions = InspectorMission::where('inspector_id', $inspectorId)->where('date', '>=', today())->get();
+    //         // Get the current group and its working tree
+    //         $currentGroup = GroupTeam::where('group_id', $group_id)->where('id', $teams[$inspectorId])->first();
+    //         $WorkingTree = WorkingTree::find($currentGroup->working_tree_id);
+    //         $start_day_date = date('Y-m-d'); // Start from today's date
+    //         $currentDate = Carbon::now();
+
+    //         // Determine the total number of days in the current month
+    //         $totalDaysInMonth = $currentDate->endOfMonth()->day;
+
+    //         // Calculate the number of days left in the month
+    //         $num_days = $totalDaysInMonth - now()->day;
+    //         $day_of_month = 1;
+
+    //         // If there are existing missions for the inspector
+    //         if (count($inspector_missions)) {
+    //             $date = $start_day_date; // Start from today's date
+    //             foreach ($inspector_missions as $inspector_mission) {
+    //                 // Calculate the cycle of work and holidays
+    //                 $total_days_in_cycle = $WorkingTree->working_days_num + $WorkingTree->holiday_days_num;
+    //                 // Calculate which day in the cycle this is
+    //                 $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
+    //                 // Determine if the day is a day off
+    //                 $is_day_off = $day_in_cycle > $WorkingTree->working_days_num;
+    //                 // Get the working tree time if it's not a day off
+    //                 $WorkingTreeTime = !$is_day_off
+    //                     ? WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
+    //                     ->where('day_num', $day_in_cycle)
+    //                     ->first()
+    //                     : null;
+
+    //                 $getExistPoints = InspectorMission::where('group_team_id', $currentGroup->id)->where('group_id', $currentGroup->group_id)
+    //                     ->where('working_tree_id', $currentGroup->working_tree_id)
+    //                     ->where('date', $date)->first();
+    //                 // dd($getExistPoints);
+    //                 if ($getExistPoints) {
+    //                     $points = $getExistPoints->ids_group_point;
+    //                     $day_off = $getExistPoints->day_off;
+    //                     $working_time_id = $getExistPoints->working_time_id;
+    //                 } else {
+    //                     $day_off = $is_day_off ? 1 : 0;
+    //                     $working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+    //                 }
+    //                 $user_id  = Inspector::find($inspectorId)->user_id;
+
+    //                 if ($vacation_days == 0) {
+
+    //                     $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first(); //1/9/2024
+    //                     if ($EmployeeVacation) {
+    //                         $vacation_days = $EmployeeVacation->days_number; //3
+    //                     }
+    //                 }
+    //                 // $getCurrentPoints = InspectorMission::where('group_id', $currentGroup->group_id)->where('group_team_id', $currentGroup->id)->where('date', $date)->first()->ids_group_point;
+    //                 // Update the inspector's mission details
+    //                 $inspector_mission->inspector_id = $inspectorId;
+    //                 $inspector_mission->group_id = $currentGroup->group_id;
+    //                 $inspector_mission->group_team_id = $currentGroup->id;
+    //                 $inspector_mission->working_tree_id = $currentGroup->working_tree_id;
+    //                 $inspector_mission->working_time_id = $working_time_id;
+    //                 $inspector_mission->date = $date;
+    //                 $inspector_mission->ids_group_point = $points;
+    //                 $inspector_mission->day_off = $day_off;
+    //                 if ($vacation_days != 0) {
+    //                     $inspector_mission->vacation_id = $EmployeeVacation->id;
+    //                 }
+    //                 $inspector_mission->save();
+    //                 if ($vacation_days != 0) {
+    //                     $vacation_days--;
+    //                 }
+    //                 // Move to the next day
+    //                 $date = date('Y-m-d', strtotime($date . ' +1 day'));
+    //                 $day_of_month++;
+    //             }
+    //         } else {
+    //             // If there are no existing missions, create new ones
+    //             $date = $start_day_date; // Start from today's date
+    //             $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->first();
+
+    //             if ($GroupTeam) {
+    //                 // Validate working tree and group team existence
+    //                 $WorkingTree = WorkingTree::find($GroupTeam->working_tree_id);
+    //                 if (!$WorkingTree || !$GroupTeam) {
+    //                     Log::warning("Inspector ID $inspectorId does not have a valid working tree or group team.");
+    //                     continue;
+    //                 }
+
+    //                 // Calculate the total days in the working cycle
+    //                 $total_days_in_cycle = $WorkingTree->working_days_num + $WorkingTree->holiday_days_num;
+
+    //                 // Loop through the remaining days of the month
+    //                 for ($day_of_month = 1; $day_of_month <= $num_days + 1; $day_of_month++) {
+    //                     // Calculate which day in the cycle this is
+    //                     $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
+    //                     // Determine if the day is a day off
+    //                     $is_day_off = $day_in_cycle > $WorkingTree->working_days_num;
+    //                     // Get the working tree time if it's not a day off
+    //                     $WorkingTreeTime = !$is_day_off
+    //                         ? WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
+    //                         ->where('day_num', $day_in_cycle)
+    //                         ->first()
+    //                         : null;
+
+    //                     $getExistPoints = InspectorMission::where('group_team_id', $GroupTeam->id)->where('group_id', $GroupTeam->group_id)
+    //                         ->where('working_tree_id', $GroupTeam->working_tree_id)->where('working_time_id', $WorkingTreeTime->working_time_id)
+    //                         ->where('date', $date)->first();
+    //                     if ($getExistPoints) {
+    //                         $points = $getExistPoints->ids_group_point;
+    //                         $day_off = $getExistPoints->day_off;
+    //                         $working_time_id = $getExistPoints->working_time_id;
+    //                     } else {
+    //                         $day_off = $is_day_off ? 1 : 0;
+    //                         $working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+    //                     }
+    //                     $user_id  = Inspector::find($inspectorId)->user_id;
+
+    //                     if ($vacation_days == 0) {
+
+    //                         $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first(); //1/9/2024
+    //                         if ($EmployeeVacation) {
+    //                             $vacation_days = $EmployeeVacation->days_number; //3
+    //                         }
+    //                     }
+    //                     // Create a new inspector mission
+    //                     $inspectorMission = new InspectorMission();
+    //                     $inspectorMission->inspector_id = $inspectorId;
+    //                     $inspectorMission->group_id = $GroupTeam->group_id;
+    //                     $inspectorMission->group_team_id = $GroupTeam->id;
+    //                     $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
+    //                     $inspectorMission->working_time_id = $working_time_id;
+    //                     $inspectorMission->date = $date;
+    //                     if ($vacation_days != 0) {
+    //                         $inspectorMission->vacation_id = $EmployeeVacation->id;
+    //                     }
+    //                     $inspectorMission->ids_group_point = $points;
+    //                     $inspectorMission->day_off = $day_off;
+    //                     $inspectorMission->save();
+    //                     if ($vacation_days != 0) {
+    //                         $vacation_days--;
+    //                     }
+    //                     // Move to the next day
+    //                     $date = date('Y-m-d', strtotime($date . ' +1 day'));
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     // Redirect back to the group team index with a success message
+    //     return redirect()->route('groupTeam.index', $group_id)->with('success', 'تم التعديل بنجاح');
+    // }
     public function updateTransfer(Request $request, $group_id)
     {
         // Get the inspectors' IDs and team IDs from the request
         $inspectorIds = $request->inspectors_ids;
         $teams = $request->team_id;
 
-        // Prepare an array to keep track of transferred inspectors
+        // Prepare arrays to keep track of transferred and removed inspectors
         $transferredInspectors = [];
-        $points = [];
+        $removedInspectors = [];
 
-        // Iterate over each inspector ID
-        foreach ($inspectorIds as $inspectorId) {
-            // Get the new team ID for the current inspector
-            $newTeamId = $teams[$inspectorId];
-            // Get the current group information based on group ID and team ID
-            $currentGroup = GroupTeam::where('group_id', $group_id)->where('id', $newTeamId)->first();
+        // Retrieve all current GroupTeam records for the given group
+        $currentGroups = GroupTeam::where('group_id', $group_id)->get();
 
-            // Check if the inspector is already in a different group
-            $existingGroupQuery = GroupTeam::where('group_id', $group_id)
-                ->whereRaw('find_in_set(?, inspector_ids)', [$inspectorId]);
+        // First, handle transfers and track removed inspectors
+        foreach ($currentGroups as $currentGroup) {
+            $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
 
-            // If the inspector is found in another group
-            if ($existingGroupQuery->exists()) {
-                $existingGroup = $existingGroupQuery->first();
+            // Identify inspectors that are no longer in the new list
+            $inspectorsToRemove = array_diff($currentInspectorIds, $inspectorIds);
 
-                // If the inspector is not already in the new team, transfer them
-                if ($existingGroup->id != $newTeamId) {
-                    // Mark this inspector as transferred
-                    $transferredInspectors[] = $inspectorId;
+            // Remove these inspectors from the current group
+            foreach ($inspectorsToRemove as $inspectorId) {
+                $removedInspectors[] = $inspectorId;
+                $currentGroup->inspector_ids = implode(',', array_diff($currentInspectorIds, [$inspectorId]));
+                $currentGroup->save();
 
-                    // Remove inspector from the old group
-                    $oldInspectorIds = explode(',', $existingGroup->inspector_ids);
-                    $updatedOldInspectorIds = array_diff($oldInspectorIds, [$inspectorId]);
-                    $existingGroup->inspector_ids = implode(',', $updatedOldInspectorIds);
-                    $existingGroup->save();
+                // If the inspector was a manager, clear the manager field
+                if ($currentGroup->inspector_manager == $inspectorId) {
+                    $currentGroup->inspector_manager = null;
+                    $currentGroup->save();
+                }
+            }
 
-                    // Add inspector to the new group
+            // Handle transfers for inspectors that are in the request
+            foreach ($inspectorIds as $inspectorId) {
+                $newTeamId = $teams[$inspectorId];
+                $currentGroup = GroupTeam::where('group_id', $group_id)->where('id', $newTeamId)->first();
+
+                $existingGroupQuery = GroupTeam::where('group_id', $group_id)
+                    ->whereRaw('find_in_set(?, inspector_ids)', [$inspectorId]);
+
+                if ($existingGroupQuery->exists()) {
+                    $existingGroup = $existingGroupQuery->first();
+
+                    if ($existingGroup->id != $newTeamId) {
+                        $transferredInspectors[] = $inspectorId;
+
+                        // Remove inspector from the old group
+                        $oldInspectorIds = explode(',', $existingGroup->inspector_ids);
+                        $updatedOldInspectorIds = array_diff($oldInspectorIds, [$inspectorId]);
+                        $existingGroup->inspector_ids = implode(',', $updatedOldInspectorIds);
+
+                        $existingGroup->save();
+
+                        if ($existingGroup->inspector_manager == $inspectorId) {
+                            $existingGroup->inspector_manager = null;
+                            $existingGroup->save();
+                        }
+
+                        // Add inspector to the new group
+                        if (empty($currentGroup->inspector_ids)) {
+                            $currentGroup->inspector_ids = $inspectorId;
+                        } else {
+                            $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
+                            $currentInspectorIds[] = $inspectorId;
+                            $currentGroup->inspector_ids = implode(',', $currentInspectorIds);
+                        }
+                        $currentGroup->save();
+                    }
+                } else {
                     if (empty($currentGroup->inspector_ids)) {
-                        // If the new group has no inspectors, simply add the inspector
                         $currentGroup->inspector_ids = $inspectorId;
+                        $transferredInspectors[] = $inspectorId;
                     } else {
-                        // Otherwise, append the inspector to the existing list
                         $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
                         $currentInspectorIds[] = $inspectorId;
                         $currentGroup->inspector_ids = implode(',', $currentInspectorIds);
                     }
                     $currentGroup->save();
                 }
-            } else {
-                // If the inspector is not already assigned to a group
-                if (empty($currentGroup->inspector_ids)) {
-                    // If the new group has no inspectors, add the inspector
-                    $currentGroup->inspector_ids = $inspectorId;
-                    $transferredInspectors[] = $inspectorId;
-                } else {
-                    // Otherwise, append the inspector to the existing list
-                    $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
-                    $currentInspectorIds[] = $inspectorId;
-                    $currentGroup->inspector_ids = implode(',', $currentInspectorIds);
-                }
-                $currentGroup->save();
             }
         }
 
-        // Only update inspector missions for transferred inspectors
+        // Handle the missions update for transferred inspectors
         foreach ($transferredInspectors as $inspectorId) {
+
             $vacation_days = 0;
 
             // Get current missions for the inspector starting from today
@@ -640,6 +903,14 @@ class GroupTeamController extends Controller
             }
         }
 
+        // Handle the removal of inspectors from missions or other cleanup if necessary
+        foreach ($removedInspectors as $inspectorId) {
+            $inspector_missions = InspectorMission::where('inspector_id', $inspectorId)->where('date', '>=', today())->get();
+            foreach ($inspector_missions as  $inspector_mission) {
+                $inspector_mission->delete();
+            }
+        }
+
         // Redirect back to the group team index with a success message
         return redirect()->route('groupTeam.index', $group_id)->with('success', 'تم التعديل بنجاح');
     }
@@ -656,11 +927,13 @@ class GroupTeamController extends Controller
         $departmentId = auth()->user()->department_id; // Or however you determine the department ID
         if (auth()->user()->rule_id == 2) {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+            ->where('inspectors.flag', 0)
                 ->where('group_id', $group_id)
                 ->select("inspectors.*")->get();
         } else {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                 ->where('users.department_id', $departmentId)
+                ->where('inspectors.flag', 0)
                 ->where('group_id', $group_id)
                 ->where('users.id', '<>', auth()->user()->id)
                 ->select("inspectors.*")->get();
@@ -722,7 +995,8 @@ class GroupTeamController extends Controller
         // Retrieve all working times
         $working_times = WorkingTime::all();
 
-        $inspectors = Inspector::with('user.grade')->get();
+        $inspectors = Inspector::with('user.grade')
+        ->where('inspectors.flag', 0)->get();
 
         // foreach ($inspectors as $inspector) {
         //     if ($inspector->user && $inspector->user->grade) {
@@ -781,6 +1055,7 @@ class GroupTeamController extends Controller
                 // Retrieve all inspectors associated with the team in the current group
                 $inspectorIds = InspectorMission::where('group_id', $Group->id)
                     ->where('group_team_id', $Team->id)
+      
                     ->groupBy('inspector_id')
                     ->pluck('inspector_id');
                 // Get the inspector objects
