@@ -5,7 +5,8 @@
 @endsection
 
 @section('content')
-    <div class="row col-11" dir="rtl">
+<div class="row " dir="rtl">
+<div class="container  col-11" style="background-color:transparent;">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
@@ -13,6 +14,7 @@
                 <li class="breadcrumb-item" aria-current="page"> <a href=""> تعديل </a></li>
             </ol>
         </nav>
+</div>
     </div>
     @include('inc.flash')
     <div class="row">
@@ -23,13 +25,13 @@
     <br>
     <div class="row" dir="rtl">
         <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
-            <h3 class="pt-3  px-md-5 px-3 "> من فضلك ادخل البيانات </h3>
+            <h3 class="pt-3  px-md-4 px-3 "> من فضلك ادخل البيانات </h3>
             <form action="{{ route('working_tree.update', $workingTree->id) }}" method="POST"
                 enctype="multipart/form-data">
                 @csrf
 
                 <div class="form-row mx-2 mb-2">
-                    <div class="input-group moftsh px-md-5 px-3 pt-3">
+                    <div class="input-group moftsh px-md-4 px-3 pt-3">
                         <label class="pb-3" for="name">اسم نظام العمل</label>
                         <input type="text" id="name" name="name" class="form-control" dir="rtl"
                             value="{{ $workingTree->name }}" placeholder="ادخل نظام العمل" />
@@ -39,7 +41,7 @@
                     @endif
                 </div>
                 <div class="form-row mx-2 mb-2">
-                    <div class="input-group moftsh px-md-5 px-3 pt-3 col-12 workings">
+                    <div class="input-group moftsh px-md-4 px-3 pt-3 col-12 workings">
                         <label class="pb-3" for="working_days_num">عدد ايام </label>
                         <select name="working_days_num" id="working_days_num"
                             style="border: 0.2px solid rgb(199, 196, 196);">
@@ -53,7 +55,7 @@
                             <span class="text-danger">{{ $errors->first('working_days_num') }}</span>
                         @endif
                     </div>
-                    <div class="input-group moftsh px-md-5 px-3 pt-3 col-6" hidden>
+                    <div class="input-group moftsh px-md-4 px-3 pt-3 col-6" hidden>
                         <label class="pb-3" for="holiday_days_num">عدد ايام الاجازات</label>
                         <select name="holiday_days_num" id="holiday_days_num"
                             style="border: 0.2px solid rgb(199, 196, 196);">
@@ -78,7 +80,7 @@
                             $isHolidayChecked = $workingTreeTime ? $workingTreeTime->is_holiday : 0;
                         @endphp
                         <div class="form-row mx-2 mb-2">
-                            <div class="input-group moftsh px-md-5 px-3 pt-3">
+                            <div class="input-group moftsh px-md-4 px-3 pt-3">
                                 <div class="checkbox-container">
                                     <input type="checkbox" name="holiday_checkbox{{ $i }}"
                                         id="holiday_checkbox{{ $i }}" class="holiday-check"
