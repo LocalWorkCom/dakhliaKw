@@ -4,7 +4,8 @@
     اضافة
 @endsection
 @section('content')
-    <div class="row col-11" dir="rtl">
+<div class="row " dir="rtl">
+<div class="container  col-11" style="background-color:transparent;">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسية</a></li>
@@ -16,6 +17,7 @@
             </ol>
         </nav>
     </div>
+</div>
     @include('inc.flash')
     <div class="row">
         <div class="container welcome col-11">
