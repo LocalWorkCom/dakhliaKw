@@ -153,11 +153,28 @@ class InspectorMissionController extends Controller
                 //dd( $instabtMi);
                 
                 if($instantmission)
-              {  $instantMissionData[] = [
+              {  
+
+                if (str_contains($instantmission->location, 'gis.paci.gov.kw'))
+                    {
+                        // dd("yes");
+                        $location = null;
+                        $kwFinder = $instantmission->location;
+                    }
+                    else
+                    {
+                        $location = $instantmission->location;
+                        $kwFinder = null; 
+                    }
+
+
+                $instantMissionData[] = [
 
                     'instant_mission_id' => $instantmission->id,
                     'name' => $instantmission->label,  // Assuming description field
-                    'location' => $instantmission->location,  
+                    // 'location' => $instantmission->location,  
+                    'location' => $location,  
+                    'KWfinder' => $kwFinder,  
                     'description' => $instantmission->description,  
                     'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
                     'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name ,

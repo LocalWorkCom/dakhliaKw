@@ -112,6 +112,7 @@ class InstantmissionController extends Controller
             'group_team_id.required' => ' الفرقة  مطلوب ولا يمكن تركه فارغاً.',
             'group_id.required' => ' المجموعة مطلوب ولا يمكن تركه فارغاً.',
             'location.required' => ' الموقع مطلوب ولا يمكن تركه فارغاً.',
+            'date.required' => ' التاريخ مطلوب ولا يمكن تركه فارغاً.',
             // Add more custom messages here
         ];
 
@@ -120,6 +121,7 @@ class InstantmissionController extends Controller
             'group_team_id' => 'required',
             'group_id' => 'required',
             'location' => 'required',
+            'date' => 'required',
         ], $messages);
 
         // Handle validation failure
@@ -148,6 +150,7 @@ class InstantmissionController extends Controller
         $new->description = $request->description;
         $new->latitude = $lat;
         $new->longitude = $long;
+        $new->date = $request->date;
         $new->save();
 
         if ($request->hasFile('images')) {
@@ -161,8 +164,8 @@ class InstantmissionController extends Controller
         }
         // ;
         $results = Event::dispatch(new MissionCreated($new));
+        
         // $results = event(new MissionCreated($new));
-dd($results);
         if (!empty($results) && in_array(true, $results, true)) {
             return redirect()->route('instant_mission.index')->with('message', "تمت اضافة المهمة بنجاح");
         } else {

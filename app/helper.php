@@ -192,7 +192,7 @@ function getLatLongFromUrl($url)
     
     $pattern = '/@([-+]?[\d]*\.?[\d]+),([-+]?[\d]*\.?[\d]+)/';
     preg_match($pattern, $url, $matches);
-    dd($matches);
+    // dd($matches);
     if (isset($matches[1]) && isset($matches[2])) {
         return [
             'latitude' => $matches[1],
