@@ -275,18 +275,26 @@ class InspectorController extends Controller
             $user->save();
         }
 
-        $inspector = new Inspector();
-        $inspector->name = $user->name;
-        $inspector->phone = $user->phone;
-        //Buildings => مفتش مبانى  , internbilding =>مفتش متدرب مبانى   , internslok=> مفتس متدرب سلوك انضباطى   ,slok=>  مفتش سلوك 
-        $inspector->type = $request->type;
-
-        $inspector->position = $user->position;
-
-        $inspector->user_id = $request->user_id;
-        $inspector->Id_number = $user->Civil_number;
-        $inspector->department_id = $user->department_id;
-        $inspector->save();
+        $is_hashistory = Inspector::where('user_id',$request->user_id)->value('id');
+        if($is_hashistory ){
+            $inspector=Inspector::findOrFail($is_hashistory);
+            $inspector->flag = 0;
+            $inspector->save();
+        }else{
+            $inspector = new Inspector();
+            $inspector->name = $user->name;
+            $inspector->phone = $user->phone;
+            //Buildings => مفتش مبانى  , internbilding =>مفتش متدرب مبانى   , internslok=> مفتس متدرب سلوك انضباطى   ,slok=>  مفتش سلوك 
+            $inspector->type = $request->type;
+    
+            $inspector->position = $user->position;
+    
+            $inspector->user_id = $request->user_id;
+            $inspector->Id_number = $user->Civil_number;
+            $inspector->department_id = $user->department_id;
+            $inspector->save();
+        }
+      
 
         //   dd($departements);
         return redirect()->route('inspectors.index')->with('success', 'Inspector created successfully.')->with('showModal', true);

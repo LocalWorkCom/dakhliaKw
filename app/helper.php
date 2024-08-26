@@ -161,6 +161,7 @@ function generateUniqueNumber($counter)
     return ['formattedNumber' => $formattedNumber, 'counter' => $counter + 1];
 }
 
+
 function getLatLongFromUrl($url)
 {
 
