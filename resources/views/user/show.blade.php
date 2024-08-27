@@ -79,7 +79,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"> الوصف </th>
+                            <th scope="row"> الملاحظات </th>
                             <td> {{ $user->description }} </td>
                         </tr>
                         <tr>
@@ -87,7 +87,7 @@
                             <td> {{ $user->military_number }} </td>
                         </tr>
 
-                        <tr>
+                        {{-- <tr>
                             <th scope="row">الوظيفة</th>
                             @foreach ($job as $item)
                                 @if ($user->job_id == $item->id)
@@ -95,7 +95,7 @@
                                 @endif
                             @endforeach
 
-                        </tr>
+                        </tr> --}}
 
 
                         <tr>
@@ -111,7 +111,7 @@
                             <th scope="row"> الرقم المدني </th>
                             <td> {{ $user->Civil_number }} </td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <th scope="row"> المؤهل </th>
 
                             <td>
@@ -121,7 +121,7 @@
                                     @endif
                                 @endforeach
                             </td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <th scope="row"> تاريخ الميلاد </th>
                             <td> {{ $user->date_of_birth }} </td>
@@ -229,10 +229,10 @@
                             </td>
                         </tr>
 
-                        <tr>
+                        {{-- <tr>
                             <th scope="row"> موقع العمل </th>
                             <td> {{ $user->work_location }} </td>
-                        </tr>
+                        </tr> --}}
 
                         @if ($user->image)
                             <tr>
@@ -269,10 +269,9 @@
                             </td>
                         </tr> --}}
                         <tr>
-                            <th> قطاع</th>
-                            <td>
-                                {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
-                                    disabled> --}}
+                            {{-- <th> قطاع</th> --}}
+                            {{-- <td>
+                                
                                 @foreach ($sector as $item)
                                     @if ($user->sector == $item->id)
                                         <label>
@@ -280,14 +279,13 @@
                                         </label>
                                     @endif
                                 @endforeach
-                                {{-- </select> --}}
-                            </td>
+                      
+                            </td> --}}
                         </tr>
                         <tr>
                             <th> المحافظة</th>
-                            <td>
-                                {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
-                                    disabled> --}}
+                            {{-- <td>
+                                
                                 @foreach ($govermnent as $item)
                                     @if ($user->Provinces == $item->id)
                                         <label>
@@ -295,14 +293,13 @@
                                         </label>
                                     @endif
                                 @endforeach
-                                {{-- </select> --}}
-                            </td>
+                              
+                            </td> --}}
                         </tr>
                         <tr>
                             <th> المنطقة</th>
                             <td>
-                                {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
-                                    disabled> --}}
+                             
                                 @foreach ($area as $item)
                                     @if ($user->region == $item->id)
                                         <label>
@@ -310,7 +307,7 @@
                                         </label>
                                     @endif
                                 @endforeach
-                                {{-- </select> --}}
+                             
                             </td>
                         </tr>
 

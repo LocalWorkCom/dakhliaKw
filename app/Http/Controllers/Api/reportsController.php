@@ -126,4 +126,51 @@ class reportsController extends Controller
 
         return response()->json($response, $code);
     }
+
+    public function allReportInspector(Request $request){
+        $messages = [
+            'point_id.exists' => 'عفوا هذه النقطه غير متاحه',
+        ];
+
+        $validatedData = Validator::make($request->all(), [
+            'point_id' => ['nullable', function ($attribute, $value, $fail) {
+                $exists = Grouppoint::whereJsonContains('points_ids', (string) $value)->exists();
+                if (!$exists) {
+                    $fail('عفوا هذه النقطه غير متاحه');
+                }
+            }],
+        ], $messages);
+
+        if ($validatedData->fails()) {
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+        }
+        $today = Carbon::today()->toDateString();
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
+        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
+        $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
+
+        $inspectorIdsArray = [];
+        foreach ($teamInspectors as $inspectorIds) {
+            $inspectorIdsArray = array_merge($inspectorIdsArray, explode(',', $inspectorIds));
+        }
+
+        $daysOfWeek = [
+            "السبت",  // 0
+            "الأحد",  // 1
+            "الإثنين",  // 2
+            "الثلاثاء",  // 3
+            "الأربعاء",  // 4
+            "الخميس",  // 5
+            "الجمعة",  // 6
+        ];
+        $dayWeek = Carbon::now()->locale('ar')->dayName;
+        $index = array_search($dayWeek, $daysOfWeek);
+
+        $absences = Absence::whereIn('inspector_id', $inspectorIdsArray)
+            ->where('date', $today)
+            ->get();
+
+        $response = [];  // Initialize the response array
+        dd($absences);
+    }   
 }
