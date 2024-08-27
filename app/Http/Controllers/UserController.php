@@ -532,7 +532,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
         // validation
 
         if ($request->type == "0") {
@@ -552,7 +552,7 @@ class UserController extends Controller
             $messages = [
                 'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
                 'name.string' => 'الاسم  يجب أن يكون نصاً.',
-                'military_number.required' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                'military_number.required_if' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
                 'Civil_number.unique' => 'رقم المدنى الذي أدخلته موجود بالفعل.',
                 'file_number.unique' => 'رقم الملف الذي أدخلته موجود بالفعل.',
@@ -582,14 +582,14 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'file_number'),
                 ],
                 'military_number' => [
-                    'nullable',
+                   'required_if:type_military,police',
                 ],
             ];
             if ($request->has('type_military') && $request->type_military == "police") {
                 // dd("dd");
                 if ($request->has('military_number')) {
                     $rules['military_number'] = [
-                        'required',
+                        'required_if:type_military,police',
                         'string',
                         'max:255',
                         ValidationRule::unique('users', 'military_number'),
@@ -661,6 +661,7 @@ class UserController extends Controller
             $newUser->length_of_service = $request->end_of_service;
             $newUser->description = $request->description;
             $newUser->file_number = $request->file_number;
+            $newUser->type_military = $request->type_military;
             // 
             $newUser->employee_type = $request->solderORcivil;
             $newUser->flag = "employee";
@@ -782,7 +783,8 @@ class UserController extends Controller
             // 'military_number' => 'required|string|max:255',
             'military_number' => [
                 // 'required',
-                'required_if:solderORcivil,military',
+                // 'required_if:solderORcivil,military',
+                'required_if:type_military,police',
                 // 'string',
                 'max:255',
 
@@ -853,14 +855,15 @@ class UserController extends Controller
         $user->date_of_birth = $request->date_of_birth;
         $user->joining_date = $request->joining_date;
         $user->employee_type = $request->solderORcivil;
+        $user->type_military = $request->type_military;
         $user->type = $request->gender;
 
         $user->age = Carbon::parse($request->input('date_of_birth'))->age;
 
         $joining_dateDate = Carbon::parse($request->input('joining_date'));
         $end_of_serviceDate = Carbon::parse($request->input('end_of_service'));
-        $user->length_of_service = $end_of_serviceDate->year - $joining_dateDate->year;
-
+        // $user->length_of_service = $end_of_serviceDate->year - $joining_dateDate->year;
+        $user->length_of_service = $request->input('end_of_service');
         if ($request->has('grade_id')) {
             $user->grade_id = $request->grade_id;
         }

@@ -244,8 +244,8 @@
 </div> --}}
 <!-- </div> -->
 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
-    <div class="form-group col-md-5 mx-2">
-        <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم العسكرى</label>
+    <div class="form-group col-md-5 mx-2" style="display: none;" id="military_number_id">
+        <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;" ></i> رقم العسكرى</label>
         <input type="text" id="input6" name="military_number" class="form-control" placeholder="رقم العسكرى"
             value="{{ old('military_number') }}">
     </div>
@@ -370,7 +370,7 @@
     <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
         <div class="form-group col-md-10">
             <label for="input5"> الملاحظات</label>
-            <textarea type="text" id="input5" name="description" class="form-control" placeholder="الوصف" rows="3"
+            <textarea type="text" id="input5" name="description" class="form-control" placeholder="الملاحظات" rows="3"
                 value="{{ old('description') }}"></textarea>
         </div>
     </div>
@@ -609,6 +609,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const radios = document.getElementsByName('type_military');
+        let selectedValue;
+    
+        // Function to show/hide the military section based on the selected value
+        function toggleMilitarySection(value) {
+            const militarySection = document.getElementById('military_number_id');
+            if (value === "police") {
+                militarySection.style.display = "block";
+            } else {
+                militarySection.style.display = "none";
+            }
+        }
+    
+        // Check initial selection
+        for (let i = 0; i < radios.length; i++) {
+            if (radios[i].checked) {
+                selectedValue = radios[i].value;
+                break;
+            }
+        }
+    
+        // Call the function to toggle visibility based on initial selection
+        toggleMilitarySection(selectedValue);
+    
+        // Handle change event
+        radios.forEach((radio) => {
+            radio.addEventListener('change', function() {
+                if (radio.checked) {
+                    toggleMilitarySection(radio.value);
+                }
+            });
+        });
+    });
+    </script>
 
 
 {{-- <script>
