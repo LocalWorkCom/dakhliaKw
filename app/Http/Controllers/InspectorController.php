@@ -134,9 +134,9 @@ class InspectorController extends Controller
             $edit_permission =  '<a href="' . route('inspectors.edit', $row->id) . '" class="btn btn-sm"  style="background-color: #F7AF15;">
                                             <i class="fa fa-edit"></i> تعديل 
                                         </a>';
-            $remove_permission =  '<a href="' . route('inspectors.remove', $row->id) . '" class="btn btn-sm"  style="background-color:#bf2433;">
-                                        <i class="fa fa-trash"></i> تحويل لموظف 
-                                    </a>';
+            $remove_permission =  '<a href="' . route('inspectors.remove', $row->id) . '" class="btn btn-sm"  style=" background-color: #E3641E;">
+                                       <i class="fa-solid fa-user-tie"></i> تحويل لموظف 
+                                    </a>';  
             return  $show_permission . ' ' . $edit_permission . ' ' . $group_permission . ' ' . $remove_permission;
         })
             ->addColumn('name', function ($row) {

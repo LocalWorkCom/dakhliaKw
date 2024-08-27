@@ -7,7 +7,7 @@
 @endpush
 
 @section('title')
-    الوظـــــائف
+    المسمى الوظيفى
 @endsection
 @section('content')
     <section>
@@ -15,7 +15,7 @@
 
         <div class="container welcome col-11">
         <div class="d-flex justify-content-between">
-                <p> الوظـــــائف</p>
+                <p>   المسمى الوظيفى</p>
                 @if (Auth::user()->hasPermission('edit job'))
                         <button type="button" class="btn-all  " onclick="openadd()" style="    color: #0D992C;">
                          
@@ -70,7 +70,7 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> أضافه وظيفه جديد</h5>
+                        <h5 class="modal-title" id="lable"> أضافه مسمى وظيفى جديد</h5>
 
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
@@ -102,7 +102,7 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> تعديل اسم الوظيفه ؟</h5>
+                        <h5 class="modal-title" id="lable"> تعديل على مسمى الوظيفه ؟</h5>
 
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
@@ -143,7 +143,7 @@
                         <form id="delete-form" action="{{ route('job.delete') }}" method="POST">
                             @csrf
                             <div class="form-group d-flex justify-content-center ">
-                                <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الوظيفه ؟</h5>
+                                <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذا المسمى ؟</h5>
 
 
                                 <input type="text" id="id" hidden name="id" class="form-control">

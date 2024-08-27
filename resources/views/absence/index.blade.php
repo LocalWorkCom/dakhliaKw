@@ -7,14 +7,14 @@
 
 @section('content')
 @section('title')
-    انواع الغياب
+مسميات العجز
 @endsection
 <section>
     <div class="row">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
                 <p>
-                    انواع الغياب
+                    مسميات العجز
                 </p>
                 <button type="button" class="wide-btn" data-bs-toggle="modal" data-bs-target="#myModal1"
                     style="    color: #0D992C;">
