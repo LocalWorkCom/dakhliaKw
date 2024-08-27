@@ -69,19 +69,19 @@
                                     style="height:20px; width:20px;">
                                 <label class="form-check-label mx-2" for="female">انثى</label>
                             </div>
-                            <label for="input44 " class="mx-3">الفئة </label>
+                            <label for="input44 " class="input44-none mx-3">الفئة </label>
 
                         </div>
                         <div class="form-group d-flex  justify-content-end col-md-5 mx-2">
                             <div class="radio-btns mx-md-4 ">
                                 <input type="radio" class="form-check-input" id="solder" name="solderORcivil"
                                     value="military" style="height:20px; width:20px;">
-                                <label class="form-check-label mx-2" for="solder">عسكرى</label>
+                                <label class="form-check-label mx-md-2" for="solder">عسكرى</label>
                             </div>
                             <div class="radio-btns mx-md-4">
                                 <input type="radio" class="form-check-input" id="civil" name="solderORcivil"
                                     value="civil" style="height:20px; width:20px;" checked>
-                                <label class="form-check-label mx-2" for="civil">مدنى</label>
+                                <label class="form-check-label mx-md-2" for="civil">مدنى</label>
                             </div>
                             <label for="input44" class="mx-3">التصنيف</label>
                         </div>

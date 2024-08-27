@@ -6,8 +6,7 @@
     التفاصيل
 @endsection
 @section('content')
-<div class="row " dir="rtl">
-<div class="container  col-11" style="background-color:transparent;">
+    <div class="row col-11" dir="rtl">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
@@ -15,7 +14,6 @@
                 <li class="breadcrumb-item active" aria-current="page"> <a> تفاصيل</a></li>
             </ol>
         </nav>
-</div>
     </div>
     <div class="row ">
         <div class="container welcome col-11">
@@ -82,14 +80,14 @@
                                         @elseif($day->name == 6)
                                             الجمعه
                                         @endif
-                                        , "موعد بدايه العمل " : -
+                                        {{-- , "موعد بدايه العمل " : -
                                         {{ formatTime('08:00:00') }}
                                         - "موعد نهايه العمل " : -
-                                        {{ formatTime('14:00:00') }}
-                                        {{-- , "موعد بدايه العمل " : -
+                                        {{ formatTime('08:00:00') }} --}}
+                                        , "موعد بدايه العمل " : -
                                         {{ formatTime($day->from) }}
                                         - "موعد نهايه العمل " : -
-                                        {{ formatTime($day->to) }} --}}
+                                        {{ formatTime($day->to) }}
 
                                     </td>
 
