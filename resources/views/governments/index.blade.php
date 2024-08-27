@@ -238,7 +238,15 @@
                                                 }
                                             }
                                         },
-                                         "pagingType": "full_numbers"
+                                         "pagingType": "full_numbers",
+                                         "fnDrawCallback": function(oSettings) {
+                                            console.log($('#users-table tr').length);
+                                            if ($('#users-table tr').length < 11) {
+                                            //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                                $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+
+                                            }
+                                    }
             });
 
 

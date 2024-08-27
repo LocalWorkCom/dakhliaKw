@@ -161,7 +161,7 @@
                                         render: function(data, type, row) {
 
 
-                                            console.log("dalia", data);
+                                          //  console.log("dalia", data);
                                             // Using route generation correctly in JavaScript
                                             var useredit = '{{ route('user.edit', ':id') }}';
                                             useredit = useredit.replace(':id', row.id);
@@ -209,6 +209,14 @@
                                         }
                                     },
                                     "pagingType": "full_numbers",
+                                    "fnDrawCallback": function(oSettings) {
+                                        console.log($('#users-table tr').length);
+                                        if ($('#users-table tr').length < 11) {
+                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+
+                                        }
+                                    }
                                 });
                             });
                         </script>

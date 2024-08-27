@@ -132,7 +132,15 @@
                                                 "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
                                             }
                                         },
-                                        pagingType: "full_numbers"
+                                        pagingType: "full_numbers",
+                                        "fnDrawCallback": function(oSettings) {
+                                        console.log($('#users-table tr').length);
+                                        if ($('#users-table tr').length < 11) {
+                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+
+                                        }
+                                    }
                                     });
                                 });
                             </script>
@@ -201,11 +209,11 @@
                                     @endif
                                 </div>
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                    <button type="submit" class="btn-all mx-2 p-2"
+                                    <button type="submit" class="btn-all mx-2 "
                                         style="background-color: #274373; color: #ffffff;">
                                         <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
                                     </button>
-                                    <button type="button" class="btn-all p-2"
+                                    <button type="button" class="btn-all "
                                         style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
                                         data-bs-dismiss="modal" aria-label="Close">
                                         <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
@@ -363,11 +371,11 @@
                                 </span>
 
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                    <button type="submit" class="btn-all mx-2 p-2"
+                                    <button type="submit" class="btn-all mx-2 "
                                         style="background-color: #274373; color: #ffffff;">
                                         <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
                                     </button>
-                                    <button type="button" class="btn-all p-2"
+                                    <button type="button" class="btn-all "
                                         style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
                                         data-bs-dismiss="modal" aria-label="Close">
                                         <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
@@ -423,11 +431,11 @@
                                 </div>
 
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                    <button type="submit" class="btn-all mx-2 p-2"
+                                    <button type="submit" class="btn-all mx-2 "
                                         style="background-color: #274373; color: #ffffff;">
                                         <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> الاضافة
                                     </button>
-                                    <button type="button" class="btn-all p-2"
+                                    <button type="button" class="btn-all "
                                         style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
                                         data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
                                         <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
