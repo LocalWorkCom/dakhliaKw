@@ -177,163 +177,166 @@
             dir: "rtl"
         });
         document.getElementById('time_type').addEventListener('change', updateForm);
-        document.getElementById('days_num').addEventListener('input', updateForm);
+document.getElementById('days_num').addEventListener('input', updateForm);
 
-        function updateForm() {
-            const timeType = document.getElementById('time_type').value;
-            const daysNum = parseInt(document.getElementById('days_num').value, 10);
-            const dynamicInputContainer = document.getElementById('dynamic-input-container');
+function updateForm() {
+    const timeType = document.getElementById('time_type').value;
+    const daysNum = parseInt(document.getElementById('days_num').value, 10);
+    const dynamicInputContainer = document.getElementById('dynamic-input-container');
 
-            // Clear previous dynamic inputs
-            dynamicInputContainer.innerHTML = '';
+    // Clear previous dynamic inputs
+    dynamicInputContainer.innerHTML = '';
 
-            if (isNaN(daysNum) || daysNum <= 0) {
-                dynamicInputContainer.style.display = 'none';
-                return;
-            }
+    if (isNaN(daysNum) || daysNum <= 0) {
+        dynamicInputContainer.style.display = 'none';
+        return;
+    }
 
-            dynamicInputContainer.style.display = 'block';
+    dynamicInputContainer.style.display = 'block';
 
-            // Create divs dynamically based on the selected value and the number entered
-            for (let i = 0; i < daysNum; i++) {
-                const mainDiv = document.createElement('div');
-                mainDiv.className = 'form-row col-12 mb-2';
+    // Create divs dynamically based on the selected value and the number entered
+    for (let i = 0; i < daysNum; i++) {
+        const mainDiv = document.createElement('div');
+        mainDiv.className = 'form-row col-12 mb-2';
 
-                const dayNameContainer = document.createElement('div');
-                dayNameContainer.className = 'form-row col-12 mb-2';
+        const dayNameContainer = document.createElement('div');
+        dayNameContainer.className = 'form-row col-12 mb-2';
 
-                const inputGroup = document.createElement('div');
-                inputGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3';
-                inputGroup.id = `day_name-container_${i}`;
+        const inputGroup = document.createElement('div');
+        inputGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3';
+        inputGroup.id = `day_name-container_${i}`;
 
-                // Create day_name select
-                const label = document.createElement('label');
-                label.className = 'pb-3';
-                label.setAttribute('for', `day_name_${i}`);
-                label.textContent = 'اختر اليوم';
+        // Create day_name select
+        const label = document.createElement('label');
+        label.className = 'pb-3';
+        label.setAttribute('for', `day_name_${i}`);
+        label.textContent = 'اختر اليوم';
 
-                const select = document.createElement('select');
-                select.className = 'form-control custom-select custom-select-lg mb-3 select2 ';
-                select.name = 'day_name[]';
-                select.id = `day_name_${i}`;
-                select.style = '0.2px solid rgb(199, 196, 196)';
-                select.style.border = 'border: 0.2px solid rgb(199, 196, 196); width:100% !important;';
-                select.required = true;
+        const select = document.createElement('select');
+        select.className = 'form-control custom-select custom-select-lg mb-3 select2';
+        select.name = 'day_name[]';
+        select.id = `day_name_${i}`;
+        select.style = 'border: 0.2px solid rgb(199, 196, 196); width:100% !important;';
+        select.required = true;
 
-                const option = document.createElement('option');
-                option.value = '';
-                option.text = "اختر يوم";
-                option.disabled = true;
-                option.selected = true;
-                select.appendChild(option);
+        const option = document.createElement('option');
+        option.value = '';
+        option.text = "اختر يوم";
+        option.disabled = true;
+        option.selected = true;
+        select.appendChild(option);
 
-                // Add options to select
-                ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day, index) => {
-                    const option = document.createElement('option');
-                    option.value = index;
-                    option.text = day;
-                    select.appendChild(option);
-                });
+        // Add options to select
+        ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.text = day;
+            select.appendChild(option);
+        });
 
-                select.addEventListener('change', handleDayChange);
+        select.addEventListener('change', handleDayChange);
 
-                const errorSpan = document.createElement('span');
-                errorSpan.className = 'text-danger span-error';
-                errorSpan.id = `day_name_${i}-error`;
+        const errorSpan = document.createElement('span');
+        errorSpan.className = 'text-danger span-error';
+        errorSpan.id = `day_name_${i}-error`;
 
-                inputGroup.appendChild(label);
-                inputGroup.appendChild(select);
-                inputGroup.appendChild(errorSpan);
+        inputGroup.appendChild(label);
+        inputGroup.appendChild(select);
+        inputGroup.appendChild(errorSpan);
 
-                dayNameContainer.appendChild(inputGroup);
-                mainDiv.appendChild(dayNameContainer);
+        dayNameContainer.appendChild(inputGroup);
+        mainDiv.appendChild(dayNameContainer);
 
-                // If timeType == 1, add fromTime and toTime inputs
-                if (timeType == '1') {
-                    const timeInputRow = document.createElement('div');
-                    timeInputRow.className = 'form-row col-12 mx-2 mb-2';
+        // If timeType == 1, add fromTime and toTime inputs
+        if (timeType == '1') {
+            const timeInputRow = document.createElement('div');
+            timeInputRow.className = 'form-row col-12 mx-2 mb-2';
 
-                    const fromTimeGroup = document.createElement('div');
-                    fromTimeGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3 col-6';
+            const fromTimeGroup = document.createElement('div');
+            fromTimeGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3 col-6';
 
-                    const fromTimeLabel = document.createElement('label');
-                    fromTimeLabel.className = 'pb-3';
-                    fromTimeLabel.setAttribute('for', `fromTime_${i}`);
-                    fromTimeLabel.textContent = 'موعد البدايه';
+            const fromTimeLabel = document.createElement('label');
+            fromTimeLabel.className = 'pb-3';
+            fromTimeLabel.setAttribute('for', `fromTime_${i}`);
+            fromTimeLabel.textContent = 'موعد البدايه';
 
-                    const fromTimeInput = document.createElement('input');
-                    fromTimeInput.type = 'text';
-                    fromTimeInput.id = `fromTime_${i}`;
-                    fromTimeInput.name = 'from[]';
-                    fromTimeInput.className = 'form-control';
-                    fromTimeInput.required = true;
+            const fromTimeInput = document.createElement('input');
+            fromTimeInput.type = 'text';
+            fromTimeInput.id = `fromTime_${i}`;
+            fromTimeInput.name = 'from[]';
+            fromTimeInput.className = 'form-control';
+            fromTimeInput.required = true;
 
-                    fromTimeGroup.appendChild(fromTimeLabel);
-                    fromTimeGroup.appendChild(fromTimeInput);
+            fromTimeGroup.appendChild(fromTimeLabel);
+            fromTimeGroup.appendChild(fromTimeInput);
 
-                    const toTimeGroup = document.createElement('div');
-                    toTimeGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3 col-6';
+            const toTimeGroup = document.createElement('div');
+            toTimeGroup.className = 'input-group moftsh2 px-md-5 px-3 pt-3 col-6';
 
-                    const toTimeLabel = document.createElement('label');
-                    toTimeLabel.className = 'pb-3';
-                    toTimeLabel.setAttribute('for', `toTime_${i}`);
-                    toTimeLabel.textContent = 'موعد النهايه';
+            const toTimeLabel = document.createElement('label');
+            toTimeLabel.className = 'pb-3';
+            toTimeLabel.setAttribute('for', `toTime_${i}`);
+            toTimeLabel.textContent = 'موعد النهايه';
 
-                    const toTimeInput = document.createElement('input');
-                    toTimeInput.type = 'text';
-                    toTimeInput.id = `toTime_${i}`;
-                    toTimeInput.name = 'to[]';
-                    toTimeInput.className = 'form-control';
-                    toTimeInput.required = true;
+            const toTimeInput = document.createElement('input');
+            toTimeInput.type = 'text';
+            toTimeInput.id = `toTime_${i}`;
+            toTimeInput.name = 'to[]';
+            toTimeInput.className = 'form-control';
+            toTimeInput.required = true;
 
-                    toTimeGroup.appendChild(toTimeLabel);
-                    toTimeGroup.appendChild(toTimeInput);
+            toTimeGroup.appendChild(toTimeLabel);
+            toTimeGroup.appendChild(toTimeInput);
 
-                    timeInputRow.appendChild(fromTimeGroup);
-                    timeInputRow.appendChild(toTimeGroup);
+            timeInputRow.appendChild(fromTimeGroup);
+            timeInputRow.appendChild(toTimeGroup);
 
-                    mainDiv.appendChild(timeInputRow);
-                }
-
-                dynamicInputContainer.appendChild(mainDiv);
-
-                // Initialize Flatpickr after appending inputs
-                if (timeType == '1') {
-                    flatpickr(`#fromTime_${i}`, {
-                        enableTime: true,
-                        noCalendar: true,
-                        dateFormat: "h:i K",
-                        time_24hr: false,
-                        minuteIncrement: 1
-                    });
-
-                    flatpickr(`#toTime_${i}`, {
-                        enableTime: true,
-                        noCalendar: true,
-                        dateFormat: "h:i K",
-                        time_24hr: false,
-                        minuteIncrement: 1
-                    });
-                }
-            }
+            mainDiv.appendChild(timeInputRow);
         }
 
-        function handleDayChange() {
-            const allSelects = document.querySelectorAll('select[name="day_name[]"]');
-            const selectedValues = Array.from(allSelects).map(select => select.value);
+        dynamicInputContainer.appendChild(mainDiv);
 
-            allSelects.forEach(select => {
-                Array.from(select.options).forEach(option => {
-                    if (selectedValues.includes(option.value) && option.value !== select.value) {
-                        option.disabled = true;
-                        option.classList.add('disabled-option');
-                    } else {
-                        option.disabled = false;
-                        option.classList.remove('disabled-option');
-                    }
-                });
+        // Initialize Flatpickr after appending inputs
+        if (timeType == '1') {
+            flatpickr(`#fromTime_${i}`, {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "h:i K",
+                time_24hr: false,
+                minuteIncrement: 1
+            });
+
+            flatpickr(`#toTime_${i}`, {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "h:i K",
+                time_24hr: false,
+                minuteIncrement: 1
             });
         }
+    }
+
+    // Call handleDayChange to handle initial state of options
+    handleDayChange();
+}
+
+function handleDayChange() {
+    const allSelects = document.querySelectorAll('select[name="day_name[]"]');
+    const selectedValues = Array.from(allSelects).map(select => select.value);
+
+    allSelects.forEach(select => {
+        Array.from(select.options).forEach(option => {
+            if (selectedValues.includes(option.value) && option.value !== select.value) {
+                option.disabled = true;
+                option.classList.add('disabled-option');
+            } else {
+                option.disabled = false;
+                option.classList.remove('disabled-option');
+            }
+        });
+    });
+}
+
     </script>
 
     <script>

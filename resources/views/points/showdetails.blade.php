@@ -80,11 +80,14 @@
                                         @elseif($day->name == 6)
                                             الجمعه
                                         @endif
-
                                         , "موعد بدايه العمل " : -
+                                        {{ formatTime('08:00:00') }}
+                                        - "موعد نهايه العمل " : -
+                                        {{ formatTime('14:00:00') }}
+                                        {{-- , "موعد بدايه العمل " : -
                                         {{ formatTime($day->from) }}
                                         - "موعد نهايه العمل " : -
-                                        {{ formatTime($day->to) }}
+                                        {{ formatTime($day->to) }} --}}
 
                                     </td>
 
