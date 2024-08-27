@@ -72,7 +72,7 @@
                                     <div class="radio-btns mx-md-4 ">
                                         <input type="radio" class="form-check-input" id="female" name="gender"
                                             value="female" style="height:20px; width:20px;">
-                                        <label class="form-check-label mx-2" for="female">انثى</label>
+                                        <label class="form-check-label mx-md-2" for="female">انثى</label>
                                     </div>
                                 @else
                                     <div class="radio-btns mx-md-4 ">
@@ -83,7 +83,7 @@
                                     <div class="radio-btns mx-md-4 ">
                                         <input type="radio" class="form-check-input" id="female" name="gender"
                                             value="female" style="height:20px; width:20px;" checked>
-                                        <label class="form-check-label mx-2" for="female">انثى</label>
+                                        <label class="form-check-label mx-md-2" for="female">انثى</label>
                                     </div>
                                 @endif
                                 <label for="input44">الفئة</label>
