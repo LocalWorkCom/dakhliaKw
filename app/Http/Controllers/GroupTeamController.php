@@ -327,25 +327,41 @@ class GroupTeamController extends Controller
         // Update the team name and working tree ID
         if ($team->working_tree_id != $request->working_tree_id) {
             $data_mission = InspectorMission::where('date', '>=', today())->where('working_tree_id', $team->working_tree_id)->get();
-            $old_work_tree = WorkingTree::find($team->working_tree_id);
-            $new_work_tree = WorkingTree::find($request->working_tree_id);
-            $old_total_days = $old_work_tree->working_days_num + $old_work_tree->holiday_days_num;
-            $new_total_days = $new_work_tree->working_days_num + $new_work_tree->holiday_days_num;
-            $count = 0;
-            foreach ($data_mission as $data) {
-                if ($data->day_number > $old_total_days) {
-                    $count++;
-                } else {
-                    $count = $data->day_number;
-                }
-                if ($count == $new_total_days) {
-                    $count = 1;
-                }
-                $work_tree_time = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)->where('day_num', $count)->first();
+            // $old_work_tree = WorkingTree::find($team->working_tree_id);
+            // $new_work_tree = WorkingTree::find($request->working_tree_id);
+            // $old_total_days = $old_work_tree->working_days_num + $old_work_tree->holiday_days_num;
+            // $new_total_days = $new_work_tree->working_days_num + $new_work_tree->holiday_days_num;
+            // $count = 0;
 
-                $data->working_tree_id = $request->working_tree_id;
-                $data->working_time_id = $work_tree_time->working_time_id;
-                $data->day_off = ($work_tree_time->working_time_id) ? 0 : 1;
+            foreach ($data_mission as $data) {
+                $new_data_mission = InspectorMission::where('date', '=', $data->date)->where('working_tree_id', $request->working_tree_id)->first();
+               
+                // if ($data->day_number > $new_total_days && $count < $new_total_days) {
+                //     $count++;
+                // } else {
+                //     if ($count == $new_total_days) {
+                //         $count = 1;
+                //     } else if ($data->day_number < $new_total_days) {
+                //         $count = $data->day_number;
+                //     } else if ($count < $new_total_days) {
+
+                //         $count++;
+                //     }
+                // }
+                // if ($count > 5) {
+                //     dd($data->date);
+                // //     $count = 1;
+                // }
+                // $work_tree_time = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)->where('day_num', $count)->first();
+                // if ($work_tree_time == null) {
+
+                //     dd($count, $data->day_number);
+                // }
+
+                $data->working_tree_id = $new_data_mission->working_tree_id;
+                $data->working_time_id = $new_data_mission->working_time_id;
+                $data->day_off = ($new_data_mission->working_time_id) ? 0 : 1;
+                $data->day_number = $new_data_mission->day_number;
                 $data->save();
             }
         }
