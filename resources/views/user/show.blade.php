@@ -5,7 +5,8 @@
 @endsection
 {{-- <body> --}}
 <section>
-    <div class="row col-11" dir="rtl">
+<div class="row " dir="rtl">
+<div class="container  col-11" style="background-color:transparent;">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
@@ -20,6 +21,7 @@
 
         </nav>
     </div>
+</div>
     <div class="row ">
         <div class="container welcome col-11">
             @if ($user->flag == 'user')
@@ -130,7 +132,8 @@
                         </tr>
                         <tr>
                             <th scope="row"> مدة الخدمه </th>
-                            <td> {{ $end_of_service }} </td>
+                            {{-- <td> {{ $end_of_service }} </td> --}}
+                            <td> {{ $user->length_of_service }} </td>
                         </tr>
                         <tr>
                             <th scope="row"> الرتبه </th>
@@ -251,11 +254,10 @@
                         @endif
 
 
-                        <tr>
+                        {{-- <tr>
                             <th> قطاع</th>
                             <td>
-                                {{-- <select id="input7" name="rule_id" class="form-control" placeholder="قطاع"
-                                    disabled> --}}
+                          
                                 @foreach ($sector as $item)
                                     @if ($user->sector == $item->id)
                                         <label>
@@ -263,9 +265,9 @@
                                         </label>
                                     @endif
                                 @endforeach
-                                {{-- </select> --}}
+                               
                             </td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <th> قطاع</th>
                             <td>

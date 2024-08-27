@@ -8,7 +8,8 @@
 التفاصيل
 @endsection
 @section('content')
-<section style="direction: rtl;">
+<div class="row " dir="rtl">
+<div class="container  col-11" style="background-color:transparent;">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#">الرئيسيه</a></li>
         <li class="breadcrumb-item active"><a href="{{ route('Export.index') }}">الصادرات </a></li>
@@ -16,6 +17,7 @@
         <li class="breadcrumb-item active">تفاصيل الصادر</li>
 
     </ol>
+</div>
     
     <div class="container-fluid" style="text-align: center">
         <div class="col-lg-12">

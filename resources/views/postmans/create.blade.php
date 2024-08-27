@@ -4,7 +4,8 @@
 @endsection
 @section('content')
 <main>
-    <div class="row col-11" dir="rtl">
+<div class="row " dir="rtl">
+<div class="container  col-11" style="background-color:transparent;">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="{{ route('home') }}">الرئيسيه</a></li>
@@ -14,6 +15,7 @@
             </ol>
         </nav>
     </div>
+</div>
     <div class="row ">
         <div class="container welcome col-11">
             <p> المندوب </p>

@@ -153,11 +153,28 @@ class InspectorMissionController extends Controller
                 //dd( $instabtMi);
                 
                 if($instantmission)
-              {  $instantMissionData[] = [
+              {  
+
+                if (str_contains($instantmission->location, 'gis.paci.gov.kw'))
+                    {
+                        // dd("yes");
+                        $location = null;
+                        $kwFinder = $instantmission->location;
+                    }
+                    else
+                    {
+                        $location = $instantmission->location;
+                        $kwFinder = null; 
+                    }
+
+
+                $instantMissionData[] = [
 
                     'instant_mission_id' => $instantmission->id,
                     'name' => $instantmission->label,  // Assuming description field
-                    'location' => $instantmission->location,  
+                    // 'location' => $instantmission->location,  
+                    'location' => $location,  
+                    'KWfinder' => $kwFinder,  
                     'description' => $instantmission->description,  
                     'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
                     'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name ,
@@ -185,7 +202,7 @@ class InspectorMissionController extends Controller
                 'date' => $instantmission->created_at->format('Y-m-d'),
             ];
         }
-*/
+        */
         $responseData = [
             'date'=>date('Y-m-d'),
             'mission_count'=>$count,
@@ -200,6 +217,36 @@ class InspectorMissionController extends Controller
         // });
         // return response()->json($missionData);
         return $this->respondSuccess($responseData, 'Get Data successfully.');
+    }
+
+
+    /**
+     * Lizamat
+    */
+    public function get_shift(Request $request)
+    {
+        $inspector = Inspector::where('user_id',Auth::id())->first();
+      // $inspector=Auth::user()->inspectorId;
+        //dd($inspector);
+        $todayMission=InspectorMission::with('workingTime','workingTree')->where('date',date('Y-m-d'))->where('inspector_id',$inspector->id)->first();
+      /*   if($todayMission->day_off==1)
+        {
+            $success['dayOff'] = 1;
+            return $this->respondSuccess(json_decode('{"dayOff":1}'), 'يوم راحة لايوجد دوام');
+
+        }else{ */
+            $success['dayOff'] = 0;  
+            $success['name'] =$todayMission->workingTree->name ; 
+            $success['workdays'] =$todayMission->workingTree->working_days_num ; 
+            $success['holidaydays'] =$todayMission->workingTree->holiday_days_num ; 
+            $success['todayTimes_start'] =$todayMission->workingTime->start_time ; 
+            $success['todayTimes_end'] =$todayMission->workingTime->end_time ; 
+
+            return $this->respondSuccess($success, 'بيانات اللازم اليوم');
+
+
+
+       // }
     }
     
 }

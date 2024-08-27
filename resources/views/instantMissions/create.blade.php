@@ -41,7 +41,8 @@
     اضافة
 @endsection
 
-<div class="row col-11" dir="rtl">
+<div class="row " dir="rtl">
+<div class="container  col-11" style="background-color:transparent;">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
@@ -52,6 +53,7 @@
         </ol>
 
     </nav>
+</div>
 </div> 
 <div class="row ">
     <div class="container welcome col-11">
@@ -90,6 +92,11 @@
                 <div class="container col-10 mt-4 p-4" style="border:0.5px solid #C7C7CC;">
                     <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-5 mx-2">
+                            <label for="input22">التاريخ</label>
+                            <input type="date" id="input2"2 name="date" class="form-control" placeholder="التاريخ"
+                                value="{{ old('label') }}">
+                        </div>
+                        <div class="form-group col-md-5 mx-2">
                             <label for="input2">الاسم</label>
                             <input type="text" id="input2" name="label" class="form-control" placeholder="الاسم"
                                 value="{{ old('label') }}">
@@ -126,7 +133,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group col-md-10 mx-2">
+                        <div class="form-group col-md-5 mx-2">
                             <label for="inspectors">المفتش</label>
                             <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش">
                                 <option selected disabled>اختار من القائمة</option>
@@ -138,8 +145,8 @@
                             </select>
                         </div>
                         
-                        <div class="form-group col-md-10 mx-md-2">
-                            <label for="description">الوصف </label>
+                        <div class="form-group col-md-5 mx-md-2">
+                            <label for="description">الملاجظات </label>
                             <input type="text" name="description" class="form-control"
                                 value="{{ old('description') }}">
                             {{-- @error('description')
