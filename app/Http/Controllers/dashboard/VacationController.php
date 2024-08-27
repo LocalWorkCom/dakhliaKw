@@ -178,7 +178,7 @@ class VacationController extends Controller
 
                 $EmployeeVacation['VacationStatus'] = GetEmployeeVacationType($EmployeeVacation);
 
-                if ($EmployeeVacation->status == 'Rejected') {
+                if ($EmployeeVacation->status == 'Rejected' || $EmployeeVacation->status == 'Pending') {
                     // If status is 'Rejected' and end_date is not set, use a placeholder
                     $EmployeeVacation['StartVacation'] = '______________';
                 } else {
@@ -189,7 +189,7 @@ class VacationController extends Controller
                 if ($EmployeeVacation->end_date) {
                     // If end_date is set, add 1 day to it
                     $EmployeeVacation['EndDate'] = $EmployeeVacation->end_date;
-                } elseif ($EmployeeVacation->status == 'Rejected') {
+                } elseif ($EmployeeVacation->status == 'Rejected' || $EmployeeVacation->status == 'Pending') {
                     // If status is 'Rejected' and end_date is not set, use a placeholder
                     $EmployeeVacation['EndDate'] = '______________';
                 } else {
@@ -199,7 +199,7 @@ class VacationController extends Controller
                 if ($EmployeeVacation->end_date) {
                     // If end_date is set, add 1 day to it
                     $EmployeeVacation['StartWorkDate'] = AddDays($EmployeeVacation->end_date, 1);
-                } elseif ($EmployeeVacation->status == 'Rejected') {
+                } elseif ($EmployeeVacation->status == 'Rejected' || $EmployeeVacation->status == 'Pending') {
                     // If status is 'Rejected' and end_date is not set, use a placeholder
                     $EmployeeVacation['StartWorkDate'] = '______________';
                 } else {
@@ -221,7 +221,7 @@ class VacationController extends Controller
 
                 $daysLeft = VacationDaysLeft($EmployeeVacation);
                 $currentDate = date('Y-m-d');
-                if ($EmployeeVacation->status == 'Rejected') {
+                if ($EmployeeVacation->status == 'Rejected' || $EmployeeVacation->status == 'Pending') {
                     $EmployeeVacation['DaysLeft'] = '______________';
                 } else {
                     if ($EmployeeVacation->start_date > $currentDate) {
@@ -308,6 +308,10 @@ class VacationController extends Controller
             $employee_id = $request->employee_id;
         } else {
             $employee_id = $id;
+        }
+        $check_vacation = EmployeeVacation::where('employee_id', $employee_id)->where('start_date', $request->start_date)->first();
+        if ($check_vacation) {
+            return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخري بنفس تاريخ البدايه لنفس الموظف']);
         }
 
         $employee_vacation = new EmployeeVacation();
@@ -566,7 +570,7 @@ class VacationController extends Controller
                         $start_date =  Carbon::parse($vacation->start_date);
                         $daysNumber = $start_date->diffInDays($end_date, false) + 1;
                         $vacation->days_number = $daysNumber;
-                        $vacation->save(); 
+                        $vacation->save();
                         // Ensure this field exists in your EmployeeVacation model
                         foreach ($inspectorMissions as $index => $mission) {
                             // Check if the mission date is within the vacation period
