@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <script type="application/javascript" src="../js/bootstrap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Bootstrap-->
+    <link href="../styles/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="../styles/responsive.css">
+</head>
+
+<body>
+    <div class="form-row mx-2 mb-2">
+        <div class="moftsh2 px-md-4 px-3 pt-3 col-6">
+            <label class="pb-3" for="long">عدد ايام العمل</label>
+            <input type="number" id="long" class="form-control" placeholder="1" />
+        </div>
+        <div class="moftsh2 px-md-4 px-3 pt-3 col-6">
+            <label class="pb-3" for="lat">اختر نظام العمل </label>
+            <select id="optionSelect" class="form-control" style="border: 0.2px solid rgb(199, 196, 196);">
+                <option value="" disabled selected>نظام 24 ساعة</option>
+                <option value="one">نظام 24 ساعة</option>
+                <option value="two">نظام دوام جزئي</option>
+            </select>
+        </div>
+    </div>
+    <div id="dynamicFieldsContainer"></div>
+    <script>
+        document.getElementById('optionSelect').addEventListener('change', updateFields);
+        document.getElementById('long').addEventListener('input', updateFields);
+        
+        function updateFields() {
+            const numberInput = document.getElementById('long');
+            const optionSelect = document.getElementById('optionSelect');
+            const container = document.getElementById('dynamicFieldsContainer');
+        
+            // Clear existing fields
+            container.innerHTML = '';
+        
+            // Get the selected option and the number input value
+            const optionValue = optionSelect.value;
+            const numberOfFields = parseInt(numberInput.value, 10);
+        
+            if (!numberOfFields || isNaN(numberOfFields)) {
+                return; // Do nothing if the number is not valid
+            }
+        
+            // Generate inputs based on the selected option
+            for (let i = 0; i < numberOfFields; i++) {
+                if (optionValue === 'one') {
+                    // Generate just the input field
+                    const inputField = document.createElement('select');
+                    inputField.type = 'text';
+                    inputField.className = 'form-control my-2';
+                    inputField.placeholder = `Input ${i + 1}`;
+                    container.appendChild(inputField);
+                } else if (optionValue === 'two') {
+                    // Generate input field with start and end date
+                    const inputField = document.createElement('input');
+                    inputField.type = 'text';
+                    inputField.className = 'form-control my-2';
+                    inputField.placeholder = `Input ${i + 1}`;
+                    
+                    const startDateField = document.createElement('input');
+                    startDateField.type = 'time';
+                    startDateField.className = 'form-control my-2';
+                    
+                    const endDateField = document.createElement('input');
+                    endDateField.type = 'time';
+                    endDateField.className = 'form-control my-2';
+                    
+                    container.appendChild(inputField);
+                    container.appendChild(startDateField);
+                    container.appendChild(endDateField);
+                }
+            }
+        }
+        </script>
+            
+</body>
+</html>
