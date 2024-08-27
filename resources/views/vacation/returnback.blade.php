@@ -75,7 +75,7 @@
                     <p>بعد حصوله على أجازة <span>{{ $vacation->vacation_type->name }}</span> مدتها
                         <?php
                         $startDate = \Carbon\Carbon::parse($vacation->start_date);
-                        $endDate = \Carbon\Carbon::parse($vacation->endDate);
+                        $endDate = \Carbon\Carbon::parse($vacation->end_date);
                         $daysLeft = $startDate->diffInDays($endDate, false);
                         
                         ?>

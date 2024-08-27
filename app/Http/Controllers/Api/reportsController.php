@@ -9,6 +9,7 @@ use App\Models\Grouppoint;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
 use App\Models\PointDays;
+use App\Models\Violation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -106,7 +107,7 @@ class reportsController extends Controller
         if ($response) {
             return $this->respondSuccess($success, 'Data get successfully.');
         } else {
-           
+
             return $this->apiResponse(true, 'Data get successfully.', null, 200);
         }
     }
@@ -127,9 +128,11 @@ class reportsController extends Controller
         return response()->json($response, $code);
     }
 
-    public function allReportInspector(Request $request){
+    public function allReportInspector(Request $request)
+    {
         $messages = [
             'point_id.exists' => 'عفوا هذه النقطه غير متاحه',
+            'date.date_format' => 'يرجى إدخال التاريخ بصيغه صحيحه yyyy-mm-dd',
         ];
 
         $validatedData = Validator::make($request->all(), [
@@ -139,38 +142,54 @@ class reportsController extends Controller
                     $fail('عفوا هذه النقطه غير متاحه');
                 }
             }],
-        ], $messages);
+            'date' => ['nullable', 'date', 'date_format:Y-m-d'] // Specify the date format
+         ], $messages);
 
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-        $today = Carbon::today()->toDateString();
-        $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
-        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
-        $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
+        $today = $request->date ? $request->date : Carbon::today()->toDateString();
 
-        $inspectorIdsArray = [];
-        foreach ($teamInspectors as $inspectorIds) {
-            $inspectorIdsArray = array_merge($inspectorIdsArray, explode(',', $inspectorIds));
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
+        // $daysOfWeek = [
+        //     "السبت",  // 0
+        //     "الأحد",  // 1
+        //     "الإثنين",  // 2
+        //     "الثلاثاء",  // 3
+        //     "الأربعاء",  // 4
+        //     "الخميس",  // 5
+        //     "الجمعة",  // 6
+        // ];
+        // $dayWeek = Carbon::now()->locale('ar')->dayName;
+        // $index = array_search($dayWeek, $daysOfWeek);
+        $pointId = $request->input('point_id');
+
+        // Build the absences query
+        $absencesQuery = Absence::where('inspector_id', $inspectorId)
+            ->whereDate('created_at', $today);  // Compare only the date part of created_at
+
+        if ($pointId) {
+            // Add the point_id condition if it's present in the request
+            $absencesQuery->where('point_id', $pointId);
         }
 
-        $daysOfWeek = [
-            "السبت",  // 0
-            "الأحد",  // 1
-            "الإثنين",  // 2
-            "الثلاثاء",  // 3
-            "الأربعاء",  // 4
-            "الخميس",  // 5
-            "الجمعة",  // 6
-        ];
-        $dayWeek = Carbon::now()->locale('ar')->dayName;
-        $index = array_search($dayWeek, $daysOfWeek);
+        // Execute the query
+        $absences = $absencesQuery->get();
+        $absences_count = $absences->count();
 
-        $absences = Absence::whereIn('inspector_id', $inspectorIdsArray)
-            ->where('date', $today)
-            ->get();
+        // Build the violations query
+        $violationQuery = Violation::where('user_id', auth()->user()->id)
+            ->whereDate('created_at', $today);  // Compare only the date part of created_at
 
+        if ($pointId) {
+            // Add the point_id condition if it's present in the request
+            $violationQuery->where('point_id', $pointId);
+        }
+
+        // Execute the query
+        $violations = $violationQuery->get();
+        $violations_count = $violations->count();
         $response = [];  // Initialize the response array
-        dd($absences);
-    }   
+        dd($violations);
+    }
 }
