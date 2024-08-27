@@ -8,8 +8,8 @@
 
 @section('content')
 
-    <div class="row ">
-        <div class="container welcome col-11">
+<div class="row " dir="rtl">
+<div class="container  col-11" style="background-color:transparent;">
             <div class="d-flex justify-content-between">
                 <p> الاجــــــازات </p>
                 {{-- ( {{ $vacationCount }} ) --}}

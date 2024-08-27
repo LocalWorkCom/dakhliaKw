@@ -6,7 +6,8 @@
     نقاط الوزاره
 @endsection
 @section('content')
-    <div class="row col-11" dir="rtl">
+<div class="row " dir="rtl">
+<div class="container  col-11" style="background-color:transparent;">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
@@ -14,6 +15,7 @@
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> أنشاء مجموعه للنقاط</a></li>
             </ol>
         </nav>
+</div>
     </div>
  <div class="row ">
         <div class="container welcome col-11">
@@ -27,7 +29,7 @@
         <div class="row" dir="rtl">
             <div id="first-container" class="container moftsh col-11 mt-3 p-0 pb-3">
                 <div class="form-row mx-2 mb-2">
-                    <h3 class="pt-3 px-md-5 px-3">اضف مجموعه</h3>
+                    <h3 class="pt-3 px-md-4 px-3">اضف مجموعه</h3>
                     @if (session('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}
@@ -42,7 +44,7 @@
                         </ul>
                     </div>
                 @endif
-                    <div class="input-group moftsh px-md-5 px-3 pt-3">
+                    <div class="input-group moftsh px-md-4 px-3 pt-3">
                         <label class="pb-3" for="name">ادخل اسم المجموعه</label>
                         <input type="text" id="name" name="name" class="form-control" placeholder="قطاع واحد"
                             required />
@@ -60,13 +62,13 @@
 
         <div class="row" dir="rtl">
             <div id="second-container" class="container moftsh col-11 mt-3 p-0 pb-3 hidden">
-                <h3 class="pt-3 px-md-5 px-3">أضف نقاط للمجموعه </h3>
+                <h3 class="pt-3 px-md-4 px-3">أضف نقاط للمجموعه </h3>
                 <div class="form-row mx-2">
                     <!-- <div class="form-group moftsh px-md-5 px-3 pt-3">
                         <h4 style="color: #274373; font-size: 24px;">حدد المحافظات المراد اضافتها</h4>
                     </div> -->
 
-                    <div class="input-group moftsh  px-md-5 px-3 pt-3">
+                    <div class="input-group moftsh  px-md-4 px-3 pt-3">
                         <label class="pb-3" for="governorate">أختر المحافظه الخاصه لمجوعه النقاط</label>
                         <select name="governorate" id="governorate"
                             class=" form-control custom-select custom-select-lg mb-3 select2 "
@@ -80,7 +82,7 @@
                     </div>
                 </div>
                 {{-- {{ dd($governments== ''? 't' :'f') }} --}}
-                <div class="input-group moftsh px-md-5 px-3 pt-4">
+                <div class="input-group moftsh px-md-4 px-3 pt-4">
                     <label class=" d-flex pb-3" for="pointsIDs" >أختر النقاط</label>
                     <select name="pointsIDs[]" id="pointsIDs" multiple class=" form-control custom-select custom-select-lg mb-3 select2 col-12"
                         style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;">

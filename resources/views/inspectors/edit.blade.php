@@ -5,7 +5,8 @@
 @section('content')
 
 
-    <div class="row col-11" dir="rtl">
+<div class="row " dir="rtl">
+<div class="container  col-11" style="background-color:transparent;">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
@@ -14,6 +15,7 @@
             </ol>
         </nav>
     </div>
+</div>
 
     <div class="row ">
         <div class="container welcome col-11">
@@ -28,7 +30,7 @@
         <div class="row" dir="rtl">
 
             <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
-                <h3 class="pt-3  px-md-5  px-3 "> تعديل مفتش</h3>
+                <h3 class="pt-3  px-md-4  px-3 "> تعديل مفتش</h3>
                 @if (session('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}
@@ -43,9 +45,9 @@
                         </ul>
                     </div>
                 @endif
-                <div class="form-row mx-2 mb-2 pb-4">
-                    <label class="px-md-5 px-3 col-12 " for=""> الرقم المدني / رقم الهوية</label>
-                    <div class="input-group px-md-5 px-3 pt-3">
+                <div class="form-row  mb-2 pb-4">
+                    <label class="px-md-4 px-3 col-12 " for=""> الرقم المدني / رقم الهوية</label>
+                    <div class="input-group px-md-4 px-3 pt-3">
                         <input name="Id_number" disabled value="{{ $inspector->user->Civil_number }}" disabled type="text"
                             id="search-input" placeholder="ابحث هنا ....." style="width: 100% !important;">
                         <input type="hidden" name="user_id" value="{{ $inspector->user_id }}">
@@ -82,8 +84,8 @@
         <!--********** الجزأده مش هيظهر غير بعد ما يعمل سيرش********** -->
 
         <div class="container moftsh col-11 mt-5 p-0 pb-3 " id="user-details-section">
-            <h3 class="pt-3  px-md-5 px-3 "> عرض النتائج </h3>
-            <div class="form-row  mx-md-5 mx-1 mb-2 pb-4">
+            <h3 class="pt-3  px-md-4 px-3 "> عرض النتائج </h3>
+            <div class="form-row  mx-md-4 mx-1 mb-2 pb-4">
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
                         <tr>
@@ -111,8 +113,8 @@
             </div>
         </div>
         <div class="container moftsh col-11 mt-5 p-0 pb-2 mb-3">
-            <h3 class="pt-3  px-md-5 px-3 "> اختر المفتش </h3>
-            <div class="form-row mx-md-5 mx-2 mb-2 d-block justify-content-start" dir="rtl">
+            <h3 class="pt-3  px-md-4 px-3 "> اختر المفتش </h3>
+            <div class="form-row mx-md-4 mx-2 mb-2 d-block justify-content-start" dir="rtl">
                 @if (Auth::user()->rule->name == 'localworkadmin' || Auth::user()->rule->name == 'superadmin')
                     <div class="form-group d-flex">
                         <div class="radio-btn  d-flex">
@@ -170,7 +172,7 @@
 
 
 
-                <div class="container col-11 ">
+                <div class="container col-12 ">
                     <div class="form-row d-flex justify-content-end mt-4 mb-3">
 
                         <button type="submit" class="btn-blue">

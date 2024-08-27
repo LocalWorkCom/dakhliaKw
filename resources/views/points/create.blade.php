@@ -19,7 +19,8 @@
     النقاط
 @endsection
 @section('content')
-    <div class="row col-11" dir="rtl">
+<div class="row " dir="rtl">
+<div class="container  col-11" style="background-color:transparent;">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
@@ -27,6 +28,7 @@
                 <li class="breadcrumb-item active" aria-current="page"> <a> أضافه</a></li>
             </ol>
         </nav>
+    </div>
     </div>
     <br>
     <div class="bg-white">
@@ -44,9 +46,9 @@
         <div class="row" dir="rtl">
 
             <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
-                <h3 class="pt-3  px-md-5 px-3 "> اضافة نقطة </h3>
+                <h3 class="pt-3  px-md-4 px-3 "> اضافة نقطة </h3>
                 <div class="form-row mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="name"> اسم النقطة </label>
                         <input type="text" id="name" class="form-control" name="name" placeholder=" اسم النقطه"
                             required />
@@ -54,7 +56,7 @@
 
                     </div>
                 </div>
-                {{-- <div class="input-group moftsh  px-md-5 px-3 pt-3">
+                {{-- <div class="input-group moftsh  px-md-4 px-3 pt-3">
                     <label class="pb-3" for="governorate">أختر المحافظه الخاصه لمجوعه النقاط</label>
                     <select name="sector_id" id="sector_id"
                         class=" form-control custom-select custom-select-lg mb-3 select2 "
@@ -68,7 +70,7 @@
                 </div> --}}
 
                 <div class="form-row mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="sector_id"> اختر القطاع </label>
                         <select name="sector_id" id="sector_id"
                             class=" form-control custom-select custom-select-lg mb-3 select2 "
@@ -84,7 +86,7 @@
                     </div>
                 </div>
                 <div class="form-row mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="governorate"> اختر المحافظة </label>
                         <select name="governorate" id="governorate"  class=" form-control custom-select custom-select-lg mb-3 select2 "
                             style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;"
@@ -94,7 +96,7 @@
                     </div>
                 </div>
                 <div class="form-row mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="region"> اختر المنطقة </label>
                         <select name="region" id="region"  class=" form-control custom-select custom-select-lg mb-3 select2 "
                         style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
@@ -105,26 +107,26 @@
                 {{-- <div id="error-message" class="error"></div> --}}
 
                 <div class="form-row mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="map_link"> رابط جوجل ماب </label>
                         <input type="text" id="map_link" name="map_link" class="form-control" placeholder=" ادخل الرابط"
                             required />
                     </div>
                 </div>
                 <div class="form-row   mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3 col-6">
                         <label class="pb-3" for="long"> خطوط الطول </label>
                         <input type="text" id="long" name="long" class="form-control"
                             placeholder="  خطوط الطول " />
                     </div>
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3 col-6">
                         <label class="pb-3" for="lat"> خطوط العرض </label>
                         <input type="text" id="lat" name="Lat" class="form-control"
                             placeholder="  خطوط العرض " />
                     </div>
                 </div>
                 <div class="form-row   mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3 col-6">
                         <label class="pb-3" for="time_type"> اختر نظام العمل </label>
                         <select name="time_type" id="time_type" class=" form-control custom-select custom-select-lg mb-3 select2 "
                         style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
@@ -135,7 +137,7 @@
                         <span class="text-danger span-error" id="time_type-error"></span>
 
                     </div>
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3 col-6">
                         <label class="pb-3" for="days_num">عدد أيام العمل</label>
                         <input type="number" id="days_num" name="days_num" class="form-control" max="7"
                             min="1" required />
@@ -145,14 +147,14 @@
                 <div id="dynamic-input-container">
                 </div>
                 <div class="form-row   mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3 col-6">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3 col-6">
                         <span class="text-danger span-error" id="error-message" style="font-weight: bold;"></span>
                     </div>
                 </div>
                 <div class="form-row mx-2 mb-2 ">
-                    <div class="input-group moftsh2 px-md-5 px-3 pt-3">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-1">
                         <label class="pb-3" for="note"> اضف ملاحظتك </label>
-                        <textarea type="text" id="note" name="note" class="form-control note" placeholder="ملاحظتك"></textarea>
+                        <textarea type="text" id="note" name="note" class="form-control note" placeholder="ملاحظتك" style="border-radius:20px;"></textarea>
                     </div>
                 </div>
                 <div class="container col-11 ">
