@@ -52,7 +52,7 @@ class pointsController extends Controller
     public function getAllPoints($governorate)
     {
         // Fetch regions based on the selected governorate
-        $regions = Grouppoint::where('government_id', $governorate)->where('deleted',0)->where('flag',0)->get();
+        $regions = Grouppoint::where('government_id', $governorate)->where('deleted', 0)->where('flag', 0)->get();
         return response()->json($regions);
     }
     public function index()
@@ -111,7 +111,7 @@ class pointsController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     */ 
+     */
     // function extractLatLongFromUrl($url)
     // {
     //     // Regex pattern to match latitude and longitude in the Google Maps URL
@@ -140,7 +140,7 @@ class pointsController extends Controller
             'sector_id' => 'required|exists:sectors,id',
             'governorate' => 'required|exists:governments,id',
             'region' => 'required|exists:regions,id',
-            'map_link' => 'required|string',
+            'map_link' => 'required|url',
             'Lat' => 'nullable|string',
             'long' => 'nullable|string',
             'time_type' => 'required',
@@ -159,7 +159,7 @@ class pointsController extends Controller
             'time_type.required' => 'يجب ادخال نظام العمل',
             'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
             'map_link.required' => 'يجب ادخال الموقع',
-
+            'map_link.url' => 'عفوا يجب ان يكون الموقع رابط لجوجل ماب',
         ];
 
         // Validate the request
@@ -168,14 +168,14 @@ class pointsController extends Controller
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
-        
+
         DB::transaction(function () use ($request) {
             $dayNames = $request->input('day_name');
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
             $googleMapsUrl = $request->map_link;
             $coordinates = getLatLongFromUrl($googleMapsUrl);
-           
+
             // Storing the point data
             $point = new Point();
             $point->name = $request->name;
@@ -183,14 +183,14 @@ class pointsController extends Controller
             $point->region_id = $request->region;
             $point->sector_id = $request->sector_id;
             $point->google_map = $request->map_link;
-            if($request->map_link){
-                $point->lat = $request->Lat ? $request->Lat : $coordinates['latitude'] ;
+            if ($request->map_link) {
+                $point->lat = $request->Lat ? $request->Lat : $coordinates['latitude'];
                 $point->long = $request->long ? $request->long : $coordinates['longitude'];
-            }else{
-                $point->lat = $request->Lat ;
+            } else {
+                $point->lat = $request->Lat;
                 $point->long = $request->long;
             }
-            
+
             $point->work_type = $request->time_type;
             $point->days_work = $request->time_type == 0 ? $dayNames : null;
             $point->created_by = auth()->id(); // Use auth() helper
@@ -312,11 +312,11 @@ class pointsController extends Controller
             $point->region_id = $request->region;
             $point->sector_id = $request->sector_id;
             $point->google_map = $request->map_link;
-            if($request->map_link){
-                $point->lat = $request->Lat ? $request->Lat : $coordinates['latitude'] ;
+            if ($request->map_link) {
+                $point->lat = $request->Lat ? $request->Lat : $coordinates['latitude'];
                 $point->long = $request->long ? $request->long : $coordinates['longitude'];
-            }else{
-                $point->lat = $request->Lat ;
+            } else {
+                $point->lat = $request->Lat;
                 $point->long = $request->long;
             }
             $point->work_type = $request->time_type;
