@@ -101,11 +101,7 @@
                             <input type="text" id="input2" name="label" class="form-control" placeholder="الاسم"
                                 value="{{ old('label') }}">
                         </div>
-                        <div class="form-group col-md-5 mx-2">
-                            <label for="input44"> الموقع</label>
-                            <input type="text" id="input44" name="location" class="form-control"
-                                placeholder="الموقع" value="{{ old('location') }}">
-                        </div>
+                       
 
                     </div>
 
@@ -146,14 +142,19 @@
                         </div>
                         
                         <div class="form-group col-md-5 mx-md-2">
-                            <label for="description">الملاجظات </label>
+                        <label for="input44"> الموقع</label>
+                            <input type="text" id="input44" name="location" class="form-control"
+                                placeholder="الموقع" value="{{ old('location') }}">
+                          
+                        </div>
+                        <div class="form-group col-md-10 mx-2">
+                        <label for="description">الملاجظات </label>
                             <input type="text" name="description" class="form-control"
                                 value="{{ old('description') }}">
                             {{-- @error('description')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror --}}
                         </div>
-
                         <div class="form-group col-md-10">
                             <label for="images"> اختار الملفات</label>
                             <div class="form-group file-input-container">

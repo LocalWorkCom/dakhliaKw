@@ -70,12 +70,12 @@
                                         placeholder="الاسم " required>
                                 </div>
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                    <button type="submit" class="btn-all mx-2 p-2"
+                                    <button type="submit" class="btn-all mx-2 "
                                         style="background-color: #274373; color: #ffffff;"
                                         id="openSecondModalBtncreate">
                                         <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
                                     </button>
-                                    <button type="button" class="btn-all p-2"
+                                    <button type="button" class="btn-all "
                                         style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
                                         data-bs-dismiss="modal" aria-label="Close">
                                         <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
@@ -121,11 +121,11 @@
                                 </div>
 
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
-                                    <button type="submit" class="btn-all mx-2 p-2"
+                                    <button type="submit" class="btn-all mx-2 "
                                         style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn1">
                                         <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
                                     </button>
-                                    <button type="button" class="btn-all p-2"
+                                    <button type="button" class="btn-all "
                                         style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
                                         data-bs-dismiss="modal" aria-label="Close">
                                         <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء

@@ -106,7 +106,7 @@
 
                     <div class="form-row pt-2 mx-md-3 d-flex justify-content-center">
                         @if (Auth::user()->hasPermission('create Io_file'))
-                            <div class="form-group col-md-5 mx-md-2">
+                            <div class="form-group col-md-10 mx-md-2">
                                 <label for="files_num"> عدد الكتب</label>
 
                                 <select id="files_num" name="files_num" class="form-control"
