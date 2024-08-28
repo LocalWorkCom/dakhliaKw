@@ -134,13 +134,13 @@
                                         },
                                         pagingType: "full_numbers",
                                         "fnDrawCallback": function(oSettings) {
-                                        console.log($('#users-table tr').length);
-                                        if ($('#users-table tr').length < 11) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                                            console.log($('#users-table tr').length);
+                                            if ($('#users-table tr').length < 11) {
+                                                //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                                $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
+                                            }
                                         }
-                                    }
                                     });
                                 });
                             </script>
@@ -202,7 +202,7 @@
                                     <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد النقاط
                                         لكل دورية فى اليوم</label>
                                     <input type="number" id="points_inspector" name="points_inspector" class="form-control"
-                                        placeholder="1"
+                                        min="1" placeholder="1"
                                         value="{{ old('points_inspector') ? old('points_inspector') : 1 }}">
                                     @if ($errors->has('points_inspector'))
                                         <span class="text-danger">{{ $errors->first('points_inspector') }}</span>
@@ -342,7 +342,7 @@
                                 <div class="form-group mt-4 mb-3">
                                     <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر
                                         القطاع </label>
-                                    <select name="sector_id" id="sector_edit_id" class="form-control select2"
+                                    <select name="sector_id" id="sector_edit_id" class="form-control"
                                         style="border: 0.2px solid rgb(199, 196, 196); width:100%;">
                                         <option value="" disabled>القطاع </option>
                                         @foreach ($sectors as $sector)
@@ -358,7 +358,7 @@
                                     <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
                                         النقاط لكل دورية فى اليوم </label>
                                     <input type="number" id="points_inspector_edit" name="points_inspector_edit"
-                                        class="form-control" value="{{ old('points_inspector_edit') }}">
+                                        min="1" class="form-control" value="{{ old('points_inspector_edit') }}">
                                     @if ($errors->has('points_inspector_edit'))
                                         <span class="text-danger">{{ $errors->first('points_inspector_edit') }}</span>
                                     @endif
@@ -517,43 +517,24 @@
         }
 
         function openEditModal(id, name) {
-
             $.ajax({
                 url: '/groups/edit/' + id,
                 method: 'GET',
                 success: function(response) {
                     if (response.success) {
                         var data = response.data;
+
                         // Populate modal fields with data
                         document.getElementById('name_edit').value = data.group.name;
                         document.getElementById('points_inspector_edit').value = data.group.points_inspector;
                         document.getElementById('id_edit').value = data.group.id;
 
-                        // let select = document.getElementById('types');
-                        // let options = select.options;
-
-                        // // Clear previous selections
-                        // for (let i = 0; i < options.length; i++) {
-                        //     options[i].selected = false;
-                        // }
-
-                        // // Set new selections
-                        // for (let i = 0; i < options.length; i++) {
-                        //     console.log('Option value:', options[i].value); // Debugging
-                        //     if (types.includes(parseInt(options[i].value))) {
-                        //         options[i].selected = true;
-                        //         console.log('Option value:', options[i].value); // Debugging
-
-                        //     }
-                        // }
-
-                        document.getElementById('sector_edit_id').value = data.group.sector_id;
-                        $('#sector_edit_id').val(data.group.sector_id).change();
+                        // Set the selected sector in the dropdown
+                        $('#sector_edit_id').val(data.group.sector_id).trigger('change');
+                        // $('#sector_edit_id').select2(); // Initialize Select2
 
 
-                        // Select the option in the dropdown
-
-
+                        // Show the modal
                         $('#edit').modal('show');
                     } else {
                         alert(response.message);
@@ -563,8 +544,6 @@
                     alert('Error retrieving data');
                 }
             });
-
-
         }
 
 

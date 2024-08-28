@@ -73,7 +73,7 @@ class WorkingTreeController extends Controller
         // $working_days_num = $request->input('working_days_num');
         // for ($i = 1; $i <= $working_days_num; $i++) {
         //     $rules["period{$i}"] = 'nullable|exists:working_times,id'; // Only required if not checked
-        //     if ($request->input("holiday_checkbox{$i}") !== 'on') {
+        //     if ($request->input("holiday_checkbox{$i}") != 'on') {
         //         $rules["period{$i}"] = 'required|exists:working_times,id'; // Required if not holiday
         //     }
         // }

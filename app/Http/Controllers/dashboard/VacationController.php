@@ -206,14 +206,14 @@ class VacationController extends Controller
                     // If neither condition is met, use the expected end date from another function
                     $EmployeeVacation['StartWorkDate'] = ExpectedEndDate($EmployeeVacation)[1];
                 }
-                if ($EmployeeVacation->status == 'Rejected') {
+                // if ($EmployeeVacation->status == 'Rejected') {
 
-                    $EmployeeVacation['startDate'] = '________';
-                    $EmployeeVacation['daysNumber'] = '________';
-                } else {
-                    $EmployeeVacation['startDate'] = $EmployeeVacation->start_date;
-                    $EmployeeVacation['daysNumber'] = $EmployeeVacation->days_number;
-                }
+                //     $EmployeeVacation['startDate'] = '________';
+                //     $EmployeeVacation['daysNumber'] = '________';
+                // } else {
+                $EmployeeVacation['startDate'] = $EmployeeVacation->start_date;
+                $EmployeeVacation['daysNumber'] = $EmployeeVacation->days_number;
+                // }
 
 
 
@@ -309,10 +309,33 @@ class VacationController extends Controller
         } else {
             $employee_id = $id;
         }
-        $check_vacation = EmployeeVacation::where('employee_id', $employee_id)->where('start_date', $request->start_date)->first();
-        if ($check_vacation) {
-            return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخري بنفس تاريخ البدايه لنفس الموظف']);
+
+        $check_vacation = EmployeeVacation::where('employee_id', $employee_id)->get();
+        // pending
+        foreach ($check_vacation as $value) {
+            if ($value->status == 'Pending') {
+                $ExpectedEndDate = ExpectedEndDate($value)[0];
+
+                if ($ExpectedEndDate >= $request->start_date && $value->start_date <= $request->start_date) {
+                    return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
+                }
+            } elseif ($value->status != 'Rejected' && $value->end_date) {
+                if ($value->end_date <= $request->start_date && $value->start_date <= $request->start_date) {
+                    return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
+                }
+            }
+            //not rejected
+            elseif ($value->status != 'Rejected' && !$value->end_date) {
+                $currentDate = date('Y-m-d');
+                $ExpectedEndDate = ExpectedEndDate($value)[0];
+
+                if ($currentDate <= $request->start_date && $value->start_date <= $request->start_date && $ExpectedEndDate >= $request->start_date) {
+                    return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
+                }
+            }
         }
+
+
 
         $employee_vacation = new EmployeeVacation();
         $employee_vacation->vacation_type_id = $request->vacation_type_id;
@@ -549,16 +572,19 @@ class VacationController extends Controller
                         session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
                     }
                 }
-
                 $vacation->is_cut = 1;
+
+                $vacation->end_date = $request->end_date;
             } else if ($request->type == 'exceed') {
                 $vacation->is_exceed = 1;
+                $vacation->end_date = Carbon::parse($request->end_date)->subDay();
             } elseif ($request->type == 'direct_exceed') {
                 $inspector = Inspector::where('user_id', $vacation->employee_id)->first();
 
                 if ($inspector) {
                     // Fetch InspectorMission records for the found inspector ID
                     $inspectorMissions = InspectorMission::where('inspector_id', $inspector->id)
+
                         ->whereDate('date', '>=', $vacation->start_date)
                         ->get();
 
@@ -593,10 +619,13 @@ class VacationController extends Controller
                         }
                     }
                 }
+                $vacation->end_date = Carbon::parse($request->end_date)->subDay();
+            }elseif ($request->type == 'direct_work') {
+                $vacation->end_date = Carbon::parse($request->end_date)->subDay();
             }
-            $vacation->end_date = $request->end_date;
+
+
             $vacation->save();
-        } else {
         }
         return true;
     }

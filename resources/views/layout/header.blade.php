@@ -172,7 +172,10 @@
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
                                             <a href="{{ route('sectors.index') }}">القطاعات</a>
                                         </li>
-                                       
+                                        <li class="{{ request()->routeIs('points.index') ? 'active' : '' }}">
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
+                                            <a href="{{ route('points.index') }}">النقاط</a>
+                                        </li>
                                     </div>
                                     <div class="col-6">
                                         @if (Auth::user()->hasPermission('view VacationType'))
@@ -211,10 +214,7 @@
                                             </a>
                                         </li>
 
-                                        <li class="{{ request()->routeIs('points.index') ? 'active' : '' }}">
-                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
-                                            <a href="{{ route('points.index') }}">النقاط</a>
-                                        </li>
+                                      
                                     </div>
                                 </div>
                             </ul>

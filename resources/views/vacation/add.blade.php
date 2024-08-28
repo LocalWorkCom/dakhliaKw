@@ -4,20 +4,20 @@
     اضافة
 @endsection
 @section('content')
-<div class="row " dir="rtl">
-<div class="container  col-11" style="background-color:transparent;">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسية</a></li>
-                @if ($id)
-                    <li class="breadcrumb-item "><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
-                @endif
-                <li class="breadcrumb-item"><a href="{{ route('vacations.list', $id) }}">الاجازات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة </a></li>
-            </ol>
-        </nav>
+    <div class="row " dir="rtl">
+        <div class="container  col-11" style="background-color:transparent;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="/">الرئيسية</a></li>
+                    @if ($id)
+                        <li class="breadcrumb-item "><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
+                    @endif
+                    <li class="breadcrumb-item"><a href="{{ route('vacations.list', $id) }}">الاجازات </a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة </a></li>
+                </ol>
+            </nav>
+        </div>
     </div>
-</div>
     @include('inc.flash')
     <div class="row">
         <div class="container welcome col-11">
@@ -65,8 +65,12 @@
 
                         <div class="form-group col-md-5 mx-2">
                             <label for="start_date">تاريخ البداية</label>
-                            <input type="date" id="start_date" name="start_date" class="form-control">
+                            <input type="date" id="start_date" name="start_date" class="form-control"
+                                oninput="this.type='text'; this.type='date';">
                         </div>
+
+
+
                     </div>
                     <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
                         <div class="form-group col-md-10 mx-md-md-2  d-flex" dir="rtl">
@@ -99,6 +103,11 @@
 
 
     @push('scripts')
+        <script>
+            document.getElementById('start_date').addEventListener('keydown', function(event) {
+                event.preventDefault();
+            });
+        </script>
         <script>
             $('.select2').select2({
                 // dir: "rtl"
