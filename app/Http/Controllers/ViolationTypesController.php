@@ -21,7 +21,17 @@ class ViolationTypesController extends Controller
     }
     public function index()
     {
-        return view("ViolationTypes.index");
+      /*   $type=array();
+        $type[0]['id']='1';
+        $type[0]['name']='السلوك الانظباطي'; 
+        
+        $type[1]['id']='2'; 
+        $type[1]['name']='مباني';  */
+        $type[]=array('id'=>'1','name'=>'السلوك الانظباطي');
+        $type[]=array('id'=>'2','name'=>'مباني');
+      //  $type=json_encode($type);
+      // dd($type);
+        return view("ViolationTypes.index",compact('type'));
     }
 
     public function getviolations()
