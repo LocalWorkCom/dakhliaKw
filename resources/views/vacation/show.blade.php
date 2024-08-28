@@ -4,17 +4,17 @@
     اضافة
 @endsection
 @section('content')
-<div class="row " dir="rtl">
-<div class="container  col-11" style="background-color:transparent;">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسية</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('vacations.list') }}">الاجازات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href="">عرض</a></li>
-            </ol>
-        </nav>
+    <div class="row " dir="rtl">
+        <div class="container  col-11" style="background-color:transparent;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="/">الرئيسية</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('vacations.list') }}">الاجازات </a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> <a href="">عرض</a></li>
+                </ol>
+            </nav>
+        </div>
     </div>
-</div>
     <div class="row ">
         <div class="container welcome col-11">
             <p> الاجـــــــــازات </p>
@@ -34,7 +34,7 @@
             <div class="form-row mx-2 ">
                 <table class="table table-bordered" dir="rtl">
                     <tbody>
-                    
+
                         <tr>
                             <th scope="row"style="background: #f5f6fa;">نوع الاجازة:</th>
                             <td>{{ $vacation->vacation_type->name }}</td>
@@ -56,16 +56,21 @@
                             <th scope="row" style="background: #f5f6fa;">تاريخ البداية:</th>
                             <td>{{ $vacation->status == 'Rejected' ? '__________' : $vacation->start_date }}</td>
                         </tr>
+
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;"> تاريخ النهاية:</th>
+                            <th scope="row" style="background: #f5f6fa;">تاريخ النهاية:</th>
                             <td>
-                                <?php echo $vacation->status == 'Rejected' ? '____________' : ExpectedEndDate($vacation)[0]; ?></td>
+                                {{ $vacation->status == 'Rejected' || $vacation->status == 'Pending' ? '____________' : ExpectedEndDate($vacation)[0] }}
+                            </td>
                         </tr>
                         <tr>
-                            <th scope="row" style="background: #f5f6fa;"> تاريخ المباشرة:</th>
+                            <th scope="row" style="background: #f5f6fa;">تاريخ المباشرة:</th>
                             <td>
-                                <?php echo $vacation->status == 'Rejected' ? '____________' : ExpectedEndDate($vacation)[1]; ?></td>
+                                {{ $vacation->status == 'Rejected' || $vacation->status == 'Pending' ? '____________' : ExpectedEndDate($vacation)[1] }}
+                            </td>
                         </tr>
+
+
                         @if ($vacation->report_image && $vacation->vacation_type_id == 2)
                             <tr>
                                 <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>

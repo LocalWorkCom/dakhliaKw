@@ -309,10 +309,33 @@ class VacationController extends Controller
         } else {
             $employee_id = $id;
         }
-        $check_vacation = EmployeeVacation::where('employee_id', $employee_id)->where('start_date', $request->start_date)->first();
-        if ($check_vacation) {
-            return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخري بنفس تاريخ البدايه لنفس الموظف']);
+
+        $check_vacation = EmployeeVacation::where('employee_id', $employee_id)->get();
+        // pending
+        foreach ($check_vacation as $value) {
+            if ($value->status == 'Pending') {
+                $ExpectedEndDate = ExpectedEndDate($value)[0];
+
+                if ($ExpectedEndDate >= $request->start_date && $value->start_date <= $request->start_date) {
+                    return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
+                }
+            } elseif ($value->status != 'Rejected' && $value->end_date) {
+                if ($value->end_date <= $request->start_date && $value->start_date <= $request->start_date) {
+                    return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
+                }
+            }
+            //not rejected
+            elseif ($value->status != 'Rejected' && !$value->end_date) {
+                $currentDate = date('Y-m-d');
+                $ExpectedEndDate = ExpectedEndDate($value)[0];
+
+                if ($currentDate <= $request->start_date && $value->start_date <= $request->start_date && $ExpectedEndDate >= $request->start_date) {
+                    return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
+                }
+            }
         }
+
+
 
         $employee_vacation = new EmployeeVacation();
         $employee_vacation->vacation_type_id = $request->vacation_type_id;
