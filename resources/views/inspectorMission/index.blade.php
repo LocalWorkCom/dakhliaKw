@@ -271,7 +271,7 @@
             const targetTr = event.target.closest('tr');
             const targetGroupId = extractGroupId(targetTr.id);
 
-            if (originalGroup !== targetGroupId) {
+            if (originalGroup != targetGroupId) {
                 return;
             }
 
