@@ -54,7 +54,7 @@
                         @endif
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">تاريخ البداية:</th>
-                            <td>{{ $vacation->status == 'Rejected' ? '__________' : $vacation->start_date }}</td>
+                            <td>{{ $vacation->start_date }}</td>
                         </tr>
 
                         <tr>
