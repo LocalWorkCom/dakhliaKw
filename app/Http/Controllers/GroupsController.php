@@ -87,7 +87,7 @@ class GroupsController extends Controller
                 ->where('inspectors.flag', 0)
                 ->select("inspectors.*")->get();
             $inspectorsIngroup = Inspector::where('group_id', $id)
-            ->where('inspectors.flag', 0)->get();
+                ->where('inspectors.flag', 0)->get();
         } else {
             $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                 ->where('users.department_id', $departmentId)
@@ -103,92 +103,96 @@ class GroupsController extends Controller
 
         return view('group.inspector', compact('inspectors', 'inspectorsIngroup', 'id', 'group'));
     }
+
     public function groupAddInspectors(Request $request, $id)
     {
         if (isset($request->inspectorein)) {
-
-            $allExist  = Inspector::where('group_id', $id)
+            $allExist = Inspector::where('group_id', $id)
                 ->where('inspectors.flag', 0)
                 ->pluck('id');
+
+            // Remove inspectors who are not in the new list
             foreach ($allExist as $row_id) {
                 if (!in_array($row_id, $request->inspectorein)) {
                     $inspector = Inspector::findOrFail($row_id);
                     $inspector->group_id = null;
                     $inspector->save();
-                    $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->first();
-                    // if($GroupTeam){
-                    //  $inspector_ids=   explode(',', $GroupTeam->inspector_ids);
-                    // }
-                    if ($GroupTeam) {
-                        // Get the current list of inspector IDs
-                        $inspector_ids = explode(',', $GroupTeam->inspector_ids);
 
-                        // Remove the specific inspector ID
+                    // Remove from GroupTeam if exists
+                    $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->first();
+                    if ($GroupTeam) {
+                        $inspector_ids = explode(',', $GroupTeam->inspector_ids);
                         $inspector_ids = array_filter($inspector_ids, function ($id) use ($inspector) {
                             return $id != $inspector->id;
                         });
-
-                        // Rebuild the comma-separated string of inspector IDs
                         $new_inspector_ids = implode(',', $inspector_ids);
-
-                        // Update the record with the new list of inspector IDs
                         $GroupTeam->inspector_ids = $new_inspector_ids;
                         $GroupTeam->save();
                     }
+
+                    // Add history record for removal
+                    addInspectorHistory($inspector->id, null,  null, 0);
                 }
             }
         }
+
         if (isset($request->inspectorein)) {
-
             foreach ($request->inspectorein as $row_id) {
-
                 $inspector = Inspector::findOrFail($row_id);
-                $inspector->group_id = $id;
-                $inspector->save();
+                if ($inspector->group_id != $id) {
+                    $inspector->group_id = $id;
+                    $inspector->save();
+
+                    // Add history record for addition
+                    $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->first();
+                    addInspectorHistory($inspector->id, $id, $GroupTeam ? $GroupTeam->id : null, 1);
+                }
             }
         } else {
-
+            // Remove all inspectors from the group if none are selected
             $inspectorsCheck = Inspector::where('group_id', $id)
-            ->where('inspectors.flag', 0)
-            ->get();
+                ->where('inspectors.flag', 0)
+                ->get();
             if ($inspectorsCheck->count()) {
-
                 foreach ($inspectorsCheck as $inspector) {
                     $inspector->group_id = null;
                     $inspector->save();
-                    $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->first();
-                    // if($GroupTeam){
-                    //  $inspector_ids=   explode(',', $GroupTeam->inspector_ids);
-                    // }
-                    if ($GroupTeam) {
-                        // Get the current list of inspector IDs
-                        $inspector_ids = explode(',', $GroupTeam->inspector_ids);
 
-                        // Remove the specific inspector ID
+                    // Remove from GroupTeam if exists
+                    $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->first();
+                    if ($GroupTeam) {
+                        $inspector_ids = explode(',', $GroupTeam->inspector_ids);
                         $inspector_ids = array_filter($inspector_ids, function ($id) use ($inspector) {
                             return $id != $inspector->id;
                         });
-
-                        // Rebuild the comma-separated string of inspector IDs
                         $new_inspector_ids = implode(',', $inspector_ids);
-
-                        // Update the record with the new list of inspector IDs
                         $GroupTeam->inspector_ids = $new_inspector_ids;
                         $GroupTeam->save();
                     }
+
+                    // Add history record for removal
+                    addInspectorHistory($inspector->id, null, null, 0);
                 }
             }
         }
-        if (isset($request->inspectore)) {
 
+        if (isset($request->inspectore)) {
             foreach ($request->inspectore as $row_id) {
                 $inspector = Inspector::findOrFail($row_id);
-                $inspector->group_id = $id;
-                $inspector->save();
+                if ($inspector->group_id != $id) {
+                    $inspector->group_id = $id;
+                    $inspector->save();
+
+                    // Add history record for addition
+                    $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspector->id])->first();
+                    addInspectorHistory($inspector->id, $id, $GroupTeam ? $GroupTeam->id : null, 1);
+                }
             }
         }
+
         return redirect()->route('group.view')->with('success', 'تم اضافه مفتشين بنجاح.');
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -222,6 +226,7 @@ class GroupsController extends Controller
             $group->points_inspector = $request->points_inspector;
             $group->sector_id = $request->sector_id;
             $group->save();
+            addGroupHistory($group->id, $group->sector_id);
             session()->flash('success', 'تم اضافه مجموعة بنجاح.');
 
             return redirect()->route('group.view');
@@ -232,34 +237,6 @@ class GroupsController extends Controller
         }
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // return view("group.add");
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         // Add other validation rules as needed
-    //     ]);
-
-    //     Groups::create([
-    //         'name' => $request->name,
-    //         'work_time_id' => $request->work_time_id,
-    //         'points_inspector' => $request->points_inspector,
-    //                     // Add other fields as needed
-    //     ]);
-
-    //     return redirect()->route('group.view')->with('message', 'Group created successfully');
-    // }
 
     /**
      * Display the specified resource.
@@ -291,7 +268,6 @@ class GroupsController extends Controller
     {
         $group = Groups::find($group);
         $working_time = WorkingTree::find($group->work_time_id);
-
 
         $data =
             [
@@ -332,19 +308,21 @@ class GroupsController extends Controller
         $updated = false;
 
         // Check each field individually to see if it has changed
-        if ($group->name !== $request->name_edit) {
+        if ($group->name != $request->name_edit) {
             $group->name = $request->name_edit;
             $updated = true;
         }
 
-        if ($group->points_inspector !== $request->points_inspector_edit) {
+        if ($group->points_inspector != $request->points_inspector_edit) {
             $group->points_inspector = $request->points_inspector_edit;
             $updated = true;
         }
 
-        if ($group->sector_id !== $request->sector_id) {
+        if ($group->sector_id != $request->sector_id) {
             $group->sector_id = $request->sector_id;
             $updated = true;
+            addGroupHistory($group->id, $group->sector_id);
+
         }
 
         // If nothing was updated, return with an error and show the modal again
@@ -353,6 +331,7 @@ class GroupsController extends Controller
         }
 
         $group->save();
+
 
         session()->flash('success', 'تم تعديل مجموعة بنجاح.');
 

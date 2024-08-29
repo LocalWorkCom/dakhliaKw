@@ -32,7 +32,7 @@ class ViolationController  extends Controller
         ];
         $validatedData = Validator::make($request->all(), [
             'type' => 'required',
-        ], $messages);
+        ], $messages); 
 
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);

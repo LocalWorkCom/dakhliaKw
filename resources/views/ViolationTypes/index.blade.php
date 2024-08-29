@@ -24,8 +24,8 @@
                     {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
                     <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
 
-                            اضافة مخالفه  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                        </button>
+                        اضافة مخالفه <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                    </button>
                     {{-- @endif --}}
                 </div>
             </div>
@@ -102,15 +102,15 @@
                                                     style="width: 100% !important;" dir="rtl">
 
                                             </div>
-                                            @foreach (getDepartments() as $department)
+                                            @for ($i = 0; $i < count($type); $i++)
                                                 <div class="option" style="    display: flex; justify-content: flex-end;">
-                                                    <label for="option{{ $department->id }}"> {{ $department->name }}
+                                                    <label for="option{{ $type[$i]['id'] }}"> {{ $type[$i]['name'] }}
                                                     </label>
-                                                    <input type="checkbox" id="option{{ $department->id }}"
-                                                        value="{{ $department->id }}" name="types[]">
+                                                    <input type="checkbox" id="option{{ $type[$i]['id'] }}"
+                                                        value="{{ $type[$i]['id'] }}" name="types[]">
 
                                                 </div>
-                                            @endforeach
+                                            @endfor
 
                                         </div>
                                     </div>
@@ -209,8 +209,6 @@
             </div>
         </div>
     </div>
-
-    
 @endsection
 @push('scripts')
     <script>
@@ -328,13 +326,13 @@
                 },
                 "pagingType": "full_numbers",
                 "fnDrawCallback": function(oSettings) {
-                                        console.log($('#users-table tr').length);
-                                        if ($('#users-table tr').length < 11) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                    console.log($('#users-table tr').length);
+                    if ($('#users-table tr').length < 11) {
+                        //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
-                                        }
-                                    }
+                    }
+                }
 
             });
 

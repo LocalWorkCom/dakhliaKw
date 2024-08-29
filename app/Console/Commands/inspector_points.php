@@ -98,11 +98,11 @@ class inspector_points extends Command
             "الخميس",
             "الجمعة",
         ];
-    
+
         $todayDate = Carbon::parse($today);
         $dayWeek = $todayDate->locale('ar')->dayName;
         $index = array_search($dayWeek, $daysOfWeek);
-    
+        $groupGovernmentIds = array();
         $allSectors = Sector::pluck('id')->toArray();
         $groupGovernmentIds=[];
         foreach ($allSectors as $sector) {
@@ -141,101 +141,96 @@ class inspector_points extends Command
                             }
                         }
                     }
+                    // dd($groupGovernmentIds);
                 }
                 // dd($groupGovernmentIds);
                 $allGroupsForSector = Groups::where('sector_id', $sector)
                     ->select('id', 'points_inspector')
                     ->get();
-    
-                foreach ($allGroupsForSector as $group) {
-                    $teams = GroupTeam::where('group_id', $group->id)->pluck('id')->toArray();
+
+                if ($groupTeams->isEmpty()) {
                     $groupTeams = InspectorMission::where('group_id', $group->id)->whereIn('group_team_id', $teams)
                         ->select('group_team_id', 'ids_group_point')
-                        ->whereDate('date', $yesterday)
+                        ->whereDate('date', $today)
                         ->distinct('group_team_id')
                         ->get();
-    
-                    if ($groupTeams->isEmpty()) {
-                        $groupTeams = InspectorMission::where('group_id', $group->id)->whereIn('group_team_id', $teams)
-                            ->select('group_team_id', 'ids_group_point')
-                            ->whereDate('date', $today)
-                            ->distinct('group_team_id')
-                            ->get();
+                }
+
+                $teamPointsYesterday = [];
+                $teamPointsToday = [];
+                $dayOffTeams = [];
+
+                foreach ($groupTeams as $groupTeam) {
+                    $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ? $groupTeam->ids_group_point : [];
+                    $pointPerTeam = $group->points_inspector;
+
+                    $teamsWorkingTime = InspectorMission::with('workingTime')
+                        ->where('group_id', $group->id)
+                        ->where('group_team_id', $groupTeam->group_team_id)
+                        ->whereDate('date', $today)
+                        ->where('day_off', 0)
+                        ->distinct('group_team_id')
+                        ->get();
+
+                    $teamTimePeriods = $teamsWorkingTime->map(function ($mission) {
+                        return [$mission->workingTime->start_time, $mission->workingTime->end_time];
+                    })->toArray();
+
+                    $teamsWithDayOff = InspectorMission::where('group_id', $group->id)
+                        ->where('group_team_id', $groupTeam->group_team_id)
+                        ->whereDate('date', $today)
+                        ->where('day_off', 1)
+                        ->pluck('id')
+                        ->toArray();
+
+                    if (!empty($teamsWithDayOff)) {
+                        $dayOffTeams = array_merge($dayOffTeams, $teamsWithDayOff);
+                        continue;
                     }
-    
-                    $teamPointsYesterday = [];
-                    $teamPointsToday = [];
-                    $dayOffTeams = [];
-    
-                    foreach ($groupTeams as $groupTeam) {
-                        $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ? $groupTeam->ids_group_point : [];
-                        $pointPerTeam = $group->points_inspector;
-    
-                        $teamsWorkingTime = InspectorMission::with('workingTime')
-                            ->where('group_id', $group->id)
-                            ->where('group_team_id', $groupTeam->group_team_id)
-                            ->whereDate('date', $today)
-                            ->where('day_off', 0)
-                            ->distinct('group_team_id')
-                            ->get();
-    
-                        $teamTimePeriods = $teamsWorkingTime->map(function ($mission) {
-                            return [$mission->workingTime->start_time, $mission->workingTime->end_time];
-                        })->toArray();
-    
-                        $teamsWithDayOff = InspectorMission::where('group_id', $group->id)
-                            ->where('group_team_id', $groupTeam->group_team_id)
-                            ->whereDate('date', $today)
-                            ->where('day_off', 1)
-                            ->pluck('id')
-                            ->toArray();
-    
-                        if (!empty($teamsWithDayOff)) {
-                            $dayOffTeams = array_merge($dayOffTeams, $teamsWithDayOff);
-                            continue;
+                    // if (!$groupGovernmentIds) {
+
+                    // dd($groupGovernmentIds);
+                    // }
+                    $filteredAvailablePoints = array_filter($groupGovernmentIds, function ($point) use ($group) {
+                        return $point['government_id'] == $group->government_id;
+                    });
+
+                    if (empty($filteredAvailablePoints)) {
+                        $firstGovernmentId = reset($groupGovernmentIds)['government_id'] ?? null;
+
+                        if ($firstGovernmentId) {
+                            $filteredAvailablePoints = array_filter($groupGovernmentIds, function ($point) use ($firstGovernmentId) {
+                                return $point['government_id'] == $firstGovernmentId;
+                            });
                         }
-    
-                        $filteredAvailablePoints = array_filter($groupGovernmentIds, function ($point) use ($group) {
-                            return $point['government_id'] == $group->government_id;
-                        });
-    
-                        if (empty($filteredAvailablePoints)) {
-                            $firstGovernmentId = reset($groupGovernmentIds)['government_id'] ?? null;
-    
-                            if ($firstGovernmentId) {
-                                $filteredAvailablePoints = array_filter($groupGovernmentIds, function ($point) use ($firstGovernmentId) {
-                                    return $point['government_id'] == $firstGovernmentId;
-                                });
-                            }
+                    }
+
+                    $availablePoints = array_keys($filteredAvailablePoints);
+                    $availablePoints = array_diff($availablePoints, $teamPointsYesterday[$groupTeam->group_team_id] ?? []);
+                    if (!empty($availablePoints)) {
+                        $possibleNewValues = array_splice($availablePoints, 0, $pointPerTeam);
+
+                        $pointGovernmentIds = array_map(function ($pointId) use ($groupGovernmentIds) {
+                            return $groupGovernmentIds[$pointId]['government_id'] ?? null;
+                        }, $possibleNewValues);
+
+                        if (count(array_unique($pointGovernmentIds)) > 1) {
+                            $possibleNewValues = array_slice($availablePoints, 0, $pointPerTeam);
                         }
-    
-                        $availablePoints = array_keys($filteredAvailablePoints);
-                        $availablePoints = array_diff($availablePoints, $teamPointsYesterday[$groupTeam->group_team_id] ?? []);
-                        if (!empty($availablePoints)) {
-                            $possibleNewValues = array_splice($availablePoints, 0, $pointPerTeam);
-    
-                            $pointGovernmentIds = array_map(function ($pointId) use ($groupGovernmentIds) {
-                                return $groupGovernmentIds[$pointId]['government_id'] ?? null;
-                            }, $possibleNewValues);
-    
-                            if (count(array_unique($pointGovernmentIds)) > 1) {
-                                $possibleNewValues = array_slice($availablePoints, 0, $pointPerTeam);
-                            }
-    
-                            $validPoints = [];
-                            foreach ($possibleNewValues as $pointId) {
-                                if (isset($groupGovernmentIds[$pointId])) {
-                                    $point = $groupGovernmentIds[$pointId];
-    
-                                    if ($point['work_type'] == 0) {
-                                        $validPoints[] = $pointId;
-                                    } else {
-                                        $pointTimeRange = $point['point_time'] ?? [];
-                                        foreach ($teamTimePeriods as $teamTime) {
-                                            if ($this->overlaps($pointTimeRange, $teamTime)) {
-                                                $validPoints[] = $pointId;
-                                                break;
-                                            }
+
+                        $validPoints = [];
+                        foreach ($possibleNewValues as $pointId) {
+                            if (isset($groupGovernmentIds[$pointId])) {
+                                $point = $groupGovernmentIds[$pointId];
+
+                                if ($point['work_type'] == 0) {
+                                    $validPoints[] = $pointId;
+                                } else {
+                                    $pointTimeRange = $point['point_time'] ?? [];
+                                    foreach ($teamTimePeriods as $teamTime) {
+                                        if ($this->overlaps($pointTimeRange, $teamTime)) {
+                                            $validPoints[] = $pointId;
+                                            break;
                                         }
                                     }
                                 }
@@ -271,11 +266,33 @@ class inspector_points extends Command
                                 return !in_array($point['id'], $validPoints);
                             });
                         }
+
+                        $teamPointsToday[$groupTeam->group_team_id] = $validPoints;
+
+                        $updatedMissions = InspectorMission::where('group_id', $group->id)
+                            ->where('group_team_id', $groupTeam->group_team_id)
+                            ->whereDate('date', $today)
+                            ->where('day_off', 0)
+                            ->pluck('id')
+                            ->toArray();
+
+                        foreach ($updatedMissions as $updatedMission) {
+                            $updated = InspectorMission::where('id', $updatedMission)->where('vacation_id', null)->first();
+                            if ($updated) {
+                                $updated->ids_group_point = array_map('strval', $validPoints);
+                                $updated->save();
+                            }
+                        }
+
+                        $groupGovernmentIds = array_filter($groupGovernmentIds, function ($point) use ($validPoints) {
+                            return !in_array($point['id'], $validPoints);
+                        });
                     }
                 }
+            }
             // }
         }
-    }
+    
 
     // public function handle()
     // {
@@ -305,7 +322,7 @@ class inspector_points extends Command
 
     //     // Get all sectors
     //     $allSectors = Sector::pluck('id')->toArray();
-     
+
     //     foreach ($allSectors as $sector) {
     //         // Get all points available for this sector
     //         $allAvailablePoints = Grouppoint::where('sector_id', $sector)->where('deleted', 0)
