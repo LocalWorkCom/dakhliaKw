@@ -323,9 +323,6 @@ class GroupsController extends Controller
             $group->sector_id = $request->sector_id;
             $updated = true;
             addGroupHistory($group->id, $group->sector_id);
-            $startOfMonth = Carbon::now();
-            $endOfMonth = Carbon::now()->endOfMonth();
-            dispatch(new assignPointsFrom($startOfMonth, $endOfMonth));
         }
 
         // If nothing was updated, return with an error and show the modal again
@@ -335,7 +332,9 @@ class GroupsController extends Controller
 
         $group->save();
 
-
+        $startOfMonth = Carbon::now();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        dispatch(new assignPointsFrom($startOfMonth, $endOfMonth));
         session()->flash('success', 'تم تعديل مجموعة بنجاح.');
 
         return redirect()->back();
