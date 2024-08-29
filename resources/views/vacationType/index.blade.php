@@ -290,8 +290,10 @@
                 },
                 "pagingType": "full_numbers",
                 "fnDrawCallback": function(oSettings) {
+                                        console.log('Page '+this.api().page.info().pages)
+                                        var page=this.api().page.info().pages;
                                         console.log($('#users-table tr').length);
-                                        if ($('#users-table tr').length < 11) {
+                                        if (page ==1) {
                                          //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
                                             $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
 
