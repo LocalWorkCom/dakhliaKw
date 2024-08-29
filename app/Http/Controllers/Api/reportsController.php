@@ -35,7 +35,9 @@ class reportsController extends Controller
     }
 
     public function  getAbsence(Request $request)
-    {
+    { 
+      
+       
         $messages = [
             'point_id.required' => 'يجب اختيار النقطه المضاف لها المهمه',
             'point_id.exists' => 'عفوا هذه النقطه غير متاحه',
@@ -249,6 +251,7 @@ class reportsController extends Controller
                         'team_name' => $teamName,
                         'total_number' => $absence->total_number,
                         'actual_number' => $absence->actual_number,
+                        'disability'=> $absence->total_number - $absence->actual_number,
                         'absence_members' => $absenceMembers,
                     ];
                 }

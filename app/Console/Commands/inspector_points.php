@@ -34,7 +34,7 @@ class inspector_points extends Command
     /**
      * Execute the console command.
      */
-    public function __construct()
+     public function __construct()
     {
         parent::__construct();
     }
@@ -104,54 +104,48 @@ class inspector_points extends Command
         $index = array_search($dayWeek, $daysOfWeek);
         $groupGovernmentIds = array();
         $allSectors = Sector::pluck('id')->toArray();
-
+        $groupGovernmentIds=[];
         foreach ($allSectors as $sector) {
             // if($sector == 1) { // Fixed condition check
-            $allAvailablePoints = Grouppoint::where('sector_id', $sector)
-                ->where('deleted', 0)
-                ->select('government_id', 'id', 'points_ids')
-                ->get();
-
-            foreach ($allAvailablePoints as $grouppoint) {
-                $available_points = Point::with('pointDays')->whereIn('id', $grouppoint->points_ids)->get();
-                foreach ($available_points as $available_point) {
-                    if ($available_point->work_type == 0) {
-                        $is_off = in_array($index, $available_point->days_work);
-                        // dd($available_points);
-                        if ($is_off) {
-                            // Assign point if work_type is 0
-                            $groupGovernmentIds[$available_point->id] = [
-                                'id' => $available_point->id,
-                                'government_id' => $available_point->government_id,
-                                'work_type' => 0,
-                            ];
-                        }
-                    } else {
-                        $pointDay = $available_point->pointDays->where('name', $index)->first();
-                        if ($pointDay) {
-                            // Assign point if work_type is 1
-                            $groupGovernmentIds[$available_point->id] = [
-                                'id' => $available_point->id,
-                                'government_id' => $available_point->government_id,
-                                'work_type' => 1,
-                                'point_time' => [$pointDay->from, $pointDay->to],
-                            ];
+                $allAvailablePoints = Grouppoint::where('sector_id', $sector)
+                    ->where('deleted', 0)
+                    ->select('government_id', 'id', 'points_ids')
+                    ->get();
+    
+                foreach ($allAvailablePoints as $grouppoint) {
+                    $available_points = Point::with('pointDays')->whereIn('id', $grouppoint->points_ids)->get();
+    
+                    foreach ($available_points as $available_point) {
+                        if ($available_point->work_type == 0) {
+                            $is_off = in_array($index, $available_point->days_work);
+                            if ($is_off) {
+                                // Assign point if work_type is 0
+                                $groupGovernmentIds[$available_point->id] = [
+                                    'id' => $available_point->id,
+                                    'government_id' => $available_point->government_id,
+                                    'grouppoint_id' => $grouppoint->id,
+                                    'work_type' => 0,
+                                ];
+                            }
+                        } else {
+                            $pointDay = $available_point->pointDays->where('name', $index)->first();
+                            if ($pointDay) {
+                                // Assign point if work_type is 1
+                                $groupGovernmentIds[$available_point->id] = [
+                                    'id' => $available_point->id,
+                                    'government_id' => $available_point->government_id,
+                                    'grouppoint_id' => $grouppoint->id,
+                                    'work_type' => 1,
+                                    'point_time' => [$pointDay->from, $pointDay->to],
+                                ];
+                            }
                         }
                     }
                     // dd($groupGovernmentIds);
                 }
-            }
-
-            $allGroupsForSector = Groups::where('sector_id', $sector)
-                ->select('id', 'points_inspector')
-                ->get();
-
-            foreach ($allGroupsForSector as $group) {
-                $teams = GroupTeam::where('group_id', $group->id)->pluck('id')->toArray();
-                $groupTeams = InspectorMission::where('group_id', $group->id)->whereIn('group_team_id', $teams)
-                    ->select('group_team_id', 'ids_group_point')
-                    ->whereDate('date', $yesterday)
-                    ->distinct('group_team_id')
+                // dd($groupGovernmentIds);
+                $allGroupsForSector = Groups::where('sector_id', $sector)
+                    ->select('id', 'points_inspector')
                     ->get();
 
                 if ($groupTeams->isEmpty()) {
@@ -241,6 +235,36 @@ class inspector_points extends Command
                                     }
                                 }
                             }
+                            $availableGrouppointIds = [];
+
+                            foreach ($validPoints as $pointId) {
+                                if (isset($groupGovernmentIds[$pointId])) {
+                                    $availableGrouppointIds[] = $groupGovernmentIds[$pointId]['grouppoint_id'];
+                                }
+                            }
+                            
+                            // Now $availableGrouppointIds contains only the grouppoint_ids without point_ids.
+                            $availableGrouppointIds = array_unique($availableGrouppointIds); // Ensure unique grouppoint_ids
+                            $teamPointsToday[$groupTeam->group_team_id] = $availableGrouppointIds;
+    
+                            $updatedMissions = InspectorMission::where('group_id', $group->id)
+                                ->where('group_team_id', $groupTeam->group_team_id)
+                                ->whereDate('date', $today)
+                                ->where('day_off', 0)
+                                ->pluck('id')
+                                ->toArray();
+    
+                            foreach ($updatedMissions as $updatedMission) {
+                                $updated = InspectorMission::where('id', $updatedMission)->where('vacation_id', null)->first();
+                                if ($updated) {
+                                    $updated->ids_group_point = array_map('strval', $availableGrouppointIds);
+                                    $updated->save();
+                                }
+                            }
+    
+                            $groupGovernmentIds = array_filter($groupGovernmentIds, function ($point) use ($validPoints) {
+                                return !in_array($point['id'], $validPoints);
+                            });
                         }
 
                         $teamPointsToday[$groupTeam->group_team_id] = $validPoints;
@@ -268,7 +292,7 @@ class inspector_points extends Command
             }
             // }
         }
-    }
+    
 
     // public function handle()
     // {
