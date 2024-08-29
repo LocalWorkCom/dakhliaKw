@@ -110,7 +110,7 @@
                                 <input type="hidden" name="type" id="type">
                                 <input type="hidden" name="id" id="id">
                                 <div class="form-group">
-                                    <label for="end_date">تاريخ النهاية</label>
+                                    <label for="end_date" id="end_date_label">تاريخ النهاية</label>
                                     <input type="date" id="end_date" name="end_date" class="form-control"
                                         oninput="this.type='text'; this.type='date';" required>
                                     <span class="text-danger span-error" id="end-date-error"></span>
@@ -166,6 +166,9 @@
                     function update_type(type, id) {
                         $('#type').val(type);
                         $('#id').val(id);
+                        if (type != 'cut') {
+                            $('#end_date_label').html('تاريخ المباشرة');
+                        }
                     }
 
                     $(document).ready(function() {
@@ -326,13 +329,13 @@
                             },
                             pagingType: "full_numbers",
                             "fnDrawCallback": function(oSettings) {
-                                        console.log($('#users-table tr').length);
-                                        if ($('#users-table tr').length < 11) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                                console.log($('#users-table tr').length);
+                                if ($('#users-table tr').length < 11) {
+                                    //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                    $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
-                                        }
-                                    }
+                                }
+                            }
                         });
 
                         // Update filter based on button click
