@@ -175,7 +175,7 @@
                                     <label class="d-flex justify-content-start pb-2" for="types"
                                         style=" flex-direction: row-reverse;">
                                         الاداره الخاصه بالمخالفه</label>
-                                    <select class="w-100 px-2" name="types[]" id="types" multiple
+                                    <select class="w-100 px-2 select2" name="types[]" id="types" multiple
                                         style="border: 0.2px solid rgb(199, 196, 196);" required dir="rtl">
                                         @foreach (getDepartments() as $department)
                                             <option value="{{ $department->id }}"> {{ $department->name }}</option>
@@ -212,6 +212,7 @@
 @endsection
 @push('scripts')
     <script>
+        
         function openedit(id, name, types) {
             document.getElementById('nameedit').value = name;
             document.getElementById('idedit').value = id;
