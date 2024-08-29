@@ -51,6 +51,7 @@ class inspector_mission extends Command
             if ($GroupTeam) {
                 $ids_inspector = $GroupTeam->inspector_ids;
                 $ids_inspector_arr = explode(",", $ids_inspector);
+                sort($ids_inspector_arr);
                 $WorkingTree = WorkingTree::find($GroupTeam->working_tree_id);
                 if (!$WorkingTree || !$GroupTeam) {
                     Log::warning("Inspector ID $Inspector does not have a valid working tree or group team.");
@@ -88,6 +89,7 @@ class inspector_mission extends Command
                     }
 
 
+                
                     // insert data for monthly
                     $inspectorMission = new InspectorMission();
                     $inspectorMission->inspector_id = $Inspector;
