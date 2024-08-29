@@ -376,7 +376,7 @@ class GroupTeamController extends Controller
             ->where('working_tree_id', $team->working_tree_id)
             ->where('group_team_id', $id)
             ->get();
-            // dd($data_missions);
+        // dd($data_missions);
         $again = false;
         $k = 1;
         // Iterate through each mission
@@ -384,9 +384,9 @@ class GroupTeamController extends Controller
             // Attempt to find a mission with the new working_tree_id for the same date
             $new_data_mission = InspectorMission::where('date', $data->date)
                 ->where('working_tree_id', $request->working_tree_id)
-                ->where('group_team_id', $id)
                 ->first();
 
+  
             if ($new_data_mission && !$again) {
                 // Update mission with new working_tree_id details if it exists
                 $data->working_tree_id = $new_data_mission->working_tree_id;
@@ -395,7 +395,7 @@ class GroupTeamController extends Controller
                 $data->day_number = $new_data_mission->day_number;
             } else {
                 // If no matching new_data_mission, fetch the working_tree_time for the new working_tree_id
-            
+
                 $new_work_tree = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
                     ->where('day_num', $k)
                     ->first();
