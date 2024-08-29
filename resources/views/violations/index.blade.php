@@ -8,7 +8,7 @@
 
 @endpush
 @section('title')
-أنواع المخالفات
+سجل المخالفات
 @endsection
 @section('content')
 <section>
@@ -16,14 +16,8 @@
 
         <div class="container welcome col-11">
         <div class="d-flex justify-content-between">
-            <p> أنواع المخالفـــات</p>
-            {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
-
-<button class="btn-all px-3" style="color: #274373;" onclick="openadd()" data-bs-toggle="modal"
-    data-bs-target="#myModal1">
-    اضافة مخالفه    <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-</button>
-{{-- @endif --}}
+            <p> سجل المخالفـــات</p>
+         
         </div>
     </div>
     </div>
@@ -31,18 +25,61 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
 
-            <!-- <div class="row " dir="rtl">
-                <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
-                    {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
-
-                    <button class="btn-all px-3" style="color: #274373;" onclick="openadd()" data-bs-toggle="modal"
-                        data-bs-target="#myModal1">
-                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="">
-                        اضافة مخالفه
+        <div class="row d-flex justify-content-between " dir="rtl">
+                <div class="form-group moftsh mt-4  mx-4  d-flex">
+                    <p class="filter "> تصفية حسب:</p>
+                    <div class="form-group moftsh  mx-3  d-flex">
+                            <h4 style="    line-height: 1.8;"> التاريخ :</h4>
+                          <input type="date" name="date" id="date" value="{{($date)?$date:date('Y-m-d')}}">
+                        </div>
+                        <div class="form-group moftsh  mx-3  d-flex">
+                        <h4 style=" line-height: 1.8;"> المجموعة :</h4>
+                            <select id="group_id" name="group_id" class="form-control" placeholder="المجموعة">
+                                <option selected disabled>اختار من القائمة</option>
+                                @foreach ($groups as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ $group == $item->id ? 'selected' : '' }}> {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group moftsh  mx-3  d-flex">
+                        <h4 style=" line-height: 1.8;"> الفريق :</h4>
+                        <select id="group_team_id" name="group_team_id" class="form-control" placeholder="الفرق">
+                                <option selected disabled>اختار من القائمة</option>
+                                @foreach ($groupTeams as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ $team == $item->id ? 'selected' : '' }}> {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group moftsh  mx-3  d-flex">
+                             <h4 style=" line-height: 1.8;"> المفتش :</h4>
+                            <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش">
+                                    <option selected disabled>اختار من القائمة</option>
+                                    @foreach ($inspectors as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{$inspector == $item->id ? 'selected' : '' }}> {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                        </div>
+                        <div class="form-group moftsh  mx-3  d-flex">
+                        <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;"
+                        onclick="search()">
+                        <i class="fa fa-search" aria-hidden="true"></i> بحث  
                     </button>
-                    {{-- @endif --}}
+                        </div>
                 </div>
-            </div> -->
+                <div class="form-group mt-4 mx-4  d-flex justify-content-end ">
+                    <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;"
+                        onclick="window.print()">
+                        <img src="{{ asset('frontend/images/print.svg') }}" alt=""> طباعة
+                    </button>
+                </div>
+            </div>
+
             <div class="col-lg-12">
                 <div class="bg-white ">
                     @if (session()->has('message'))
@@ -55,6 +92,7 @@
                             class="display table table-responsive-sm  table-bordered table-hover dataTable">
                             <thead>
                                 <tr>
+                                     <th>النوع </th>
                                     <th>الاسم</th>
                                     <th>نوع المخالفه</th>
 
@@ -70,356 +108,135 @@
 
     </div>
 </section>
-{{-- this for add form --}}
-<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header d-flex justify-content-center">
-                <div class="title d-flex flex-row align-items-center ">
-                    <h5 class="modal-title"> اضافة مخالفه </h5>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    &times;
-                </button>
-            </div>
-            <div class="modal-body" >
-                <form class="edit-grade-form" id="add-form" action=" {{ route('violations.store') }}" method="POST">
-                    @csrf
-                    <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
-                        <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
-                            <div class="form-group mt-4 mb-3">
-                                <label class="d-flex justify-content-start pt-3 pb-2" for="name" 
-                                style=" flex-direction:column-reverse;"> اسم
-                                    المخالفه</label>
-                                <input type="text" id="name" name="name" class="form-control" placeholder="اسم المخالفه"
-                                    required>
-
-                            </div>
-
-                            <div class="form-group  mb-3">
-                                <div class="select-wrapper">
-                                    <div class="select-box d-flex justify-content-between" id="select-box">
-                                        <p> قسم الخاص بالمخالفه</p>
-                                        <i class="fa-solid fa-angle-down" style="color: #A3A1A1;"></i>
-                                    </div>
-                                    <div class="options" id="options">
-                                        <div class="search-box">
-                                            <input type="text" id="search-input" placeholder="ابحث هنا ....."
-                                                style="width: 100% !important;" >
-                                        </div>
-                                        @foreach (getDepartments() as $department)
-                                        <div class="option">
-                                            <input type="checkbox" id="option{{ $department->id }}"
-                                                value="{{ $department->id }}" name="types[]">
-                                            <label for="option{{ $department->id }}"    style="display:flex ; flex-direction:column-reverse;"> {{ $department->name }}
-                                            </label>
-                                        </div>
-                                        @endforeach
-
-                                    </div>
-                                </div>
-                                <div id="selected-values" class="mt-2"></div>
-                            </div> 
-                            <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2" dir="rtl">
-                                <button type="submit" class="btn-all mx-2 p-2"
-                                    style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn">
-                                    <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
-                                </button>
-                                <button type="button" class="btn-all p-2"
-                                    style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
-                                    data-bs-dismiss="modal" aria-label="Close">
-                                    <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-                <!-- Second Modal Body (Initially Hidden) -->
-                <div id="secondModalBody" class="d-none">
-                    <div class="body-img-modal d-block mb-4">
-                        <img src="{{ asset('frontend/images/ordered.svg') }}" alt="">
-                        <p>تمت الاضافه بنجاح</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{{-- this for edit form --}}
-<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header d-flex justify-content-center">
-                <div class="title d-flex flex-row align-items-center">
-                    <h5 class="modal-title">تعديل المخالفه</h5>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form class="edit-grade-form" id="edit-form" action="{{ route('violations.update') }}" method="POST">
-                    @csrf
-                    <input type="hidden" id="idedit" name="id">
-                    <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
-                        <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
-                            <div class="form-group mt-4 mb-3">
-                                <label class="d-flex justify-content-start pt-3 pb-2" for="nameedit"    
-                                style="display:flex ; flex-direction:column-reverse;">اسم
-                                    المخالفه</label>
-                                <input type="text" id="nameedit" name="name" class="form-control"
-                                    placeholder="اسم المخالفه" required dir="rtl">
-                            </div>
-                            <div class="form-group  mb-3" dir="rtl">
-                                <label class="d-flex justify-content-start pb-2" for="types"    
-                                style="display:flex ; flex-direction:column-reverse;">
-                                    الاداره الخاصه بالمخالفه</label>
-                                <select class="w-100 px-2" name="types[]" id="types" multiple
-                                    style="border: 0.2px solid rgb(199, 196, 196);" required>
-                                    @foreach (getDepartments() as $department)
-
-                                    <option value="{{ $department->id }}"> {{ $department->name }}</option>
-                                    @endforeach
-
-                                </select>
-
-                            </div>
-                            {{-- <div class="form-group mb-3">
-                                    <div class="select-wrapper">
-                                        <div class="select-box d-flex justify-content-between" id="select-box">
-                                            <p>الاداره الخاصه بالمخالفه</p>
-                                            <i class="fa-solid fa-angle-down" style="color: #A3A1A1;"></i>
-                                        </div>
-                                        <div class="options" id="options">
-                                            <div class="search-box">
-                                                <input type="text" id="search-input" placeholder="ابحث هنا ....."
-                                                    style="width: 100% !important;" dir="rtl">
-                                            </div>
-                                            @foreach (getDepartments() as $department)
-                                                <div class="option">
-                                                    <input type="checkbox" id="option{{ $department->id }}"
-                            value="{{ $department->id }}" name="types[]">
-                            <label for="option{{ $department->id }}"> {{ $department->name }}
-                            </label>
-                        </div>
-                        @endforeach
-                    </div>
-            </div>
-            <div id="selected-values" class="mt-2"></div>
-        </div> --}}
-        <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2" dir="rtl">
-            <button type="submit" class="btn-all mx-2 p-2" style="background-color: #274373; color: #ffffff;"
-                id="openSecondModalBtn">
-                <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
-            </button>
-            <button type="button" class="btn-all p-2"
-                style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
-                data-bs-dismiss="modal" aria-label="Close">
-                <img src="{{ asset('frontend/images/red-close.svg') }}" alt="img"> الغاء
-            </button>
-        </div>
-    </div>
-</div>
-</form>
-<div id="secondModalBody" class="d-none">
-    <div class="body-img-modal d-block mb-4">
-        <img src="{{ asset('frontend/images/ordered.svg') }}" alt="">
-        <p>تمت الاضافه بنجاح</p>
-    </div>
-</div>
-</div>
-</div>
-</div>
-</div>
 
 
-{{-- <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-flex justify-content-center">
-                    <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> تعديل اسم الأجازه ؟</h5>
 
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
-                    </button>
-                </div>
-                <div class="modal-body mt-3 mb-5">
-                    <form class="edit-grade-form" id="edit-form" action=" {{ route('vacationType.update') }}"
-method="POST">
-@csrf
-<div class="form-group">
-    <label for="name">الاسم</label>
-    <input type="text" id="nameedit" value="" name="name" class="form-control" required>
-    <input type="text" id="idedit" value="" name="id" hidden class="form-control">
-
-</div>
-<!-- Save button -->
-<div class="text-end">
-    <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
-</div>
-</form>
-</div>
-</div>
-</div>
-</div> --}}
-{{-- model for delete form --}}
-<div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header d-flex justify-content-center">
-                <div class="title d-flex flex-row align-items-center">
-                    <h5 class="modal-title" id="deleteModalLabel"> !تنبــــــيه</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
-                    </button>
-                </div>
-            </div>
-            <form id="delete-form" action="{{ route('vacationType.delete') }}" method="POST">
-                @csrf
-                <div class="modal-body  d-flex justify-content-center mt-5 mb-5">
-                    <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الاجازه ؟</h5>
-
-
-                    <input type="text" id="id" value="" hidden name="id" class="form-control">
-                </div>
-                <div class="modal-footer mx-2 d-flex justify-content-center">
-                    <div class="text-end">
-                        <button type="button" class="btn-blue" id="closeButton">لا</button>
-                    </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 @endsection
 @push('scripts')
 <script>
+ $(document).ready(function() {
+    $('#group_id').on('change', function() {
+        var group_id = $(this).val();
+       
+
+        if (group_id) {
+            $.ajax({
+                url: '/getGroups/' + group_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#group_team_id').empty();
+                    $('#group_team_id').append('<option selected disabled> اختار من القائمة </option>');
+                    $.each(data, function(key, employee) {               
+                        console.log(employee);   
+                        $('#group_team_id').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                    });                 
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#group_team_id').empty();
+        }
+    });
+});
+
 $(document).ready(function() {
-    function closeModal() {
-        $('#delete').modal('hide');
+    $('#group_team_id').on('change', function() {
+        var group_team_id = $(this).val();
+        var group_id = $('#group_id').val();
+        console.log(group_team_id);
+       
 
-    }
-
-    $('#closeButton').on('click', function() {
-        closeModal();
+        if (group_id) {
+            $.ajax({
+                url: '/getInspector/' + group_team_id +'/'+  group_id ,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#inspectors').empty();
+                    $('#inspectors').append('<option selected disabled> اختار من القائمة </option>');
+                    $.each(data, function(key, employee) {               
+                        // console.log(employee);   
+                        $('#inspectors').append('<option value="' + employee.id + '">' + employee.name + '</option>');
+                    });                 
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#inspectors').empty();
+        }
     });
 });
 </script>
 <script>
-function opendelete(id) {
-    document.getElementById('id').value = id;
-    $('#delete').modal('show');
-}
 
-function confirmDelete() {
-    var id = document.getElementById('id').value;
-    console.log(id);
-    var form = document.getElementById('delete-form');
-
-    form.submit();
-
-}
-
-function openedit(id, name, types) {
-    document.getElementById('nameedit').value = name;
-    document.getElementById('idedit').value = id;
-
-    // Ensure types is an array
-    if (typeof types === 'string') {
-        try {
-            types = JSON.parse(types);
-        } catch (e) {
-            console.error('Error parsing types:', e);
-            types = [];
-        }
+function search()
+{
+    var url="{{url('viollation')}}";
+    var dateItem=$('#date').val();
+    var group=$('#group_id').val();
+    var team=$('#group_team_id').val();
+    var inspectors=$('#inspectors').val();
+    var addurl='';
+    if(dateItem!='' || dateItem!=null)
+    {
+        if(addurl=='')addurl+='?';else addurl+='&';
+        addurl+='date='+dateItem;
     }
-
-    console.log('Types:', types); // Debugging
-
-    let select = document.getElementById('types');
-    let options = select.options;
-
-    // Clear previous selections
-    for (let i = 0; i < options.length; i++) {
-        options[i].selected = false;
+    if(group)
+    {
+        if(addurl=='')addurl+='?';else addurl+='&';
+        addurl+='group='+group;
     }
-
-    // Set new selections
-    for (let i = 0; i < options.length; i++) {
-        console.log('Option value:', options[i].value); // Debugging
-        if (types.includes(parseInt(options[i].value))) {
-            options[i].selected = true;
-            console.log('Option value:', options[i].value); // Debugging
-
-        }
+    if(team)
+    {
+        if(addurl=='')addurl+='?';else addurl+='&';
+        addurl+='team='+team;
     }
-
-    $('#edit').modal('show');
-}
-
-
-
-function confirmEdit() {
-    var id = document.getElementById('id').value;
-    document.getElementById('types').value = types;
-
-    var form = document.getElementById('edit-form');
-
-    // form.submit();
-
-}
-
-function openadd() {
-    $('#add').modal('show');
-}
-
-// function confirmAdd() {
-//     var name = document.getElementById('nameadd').value;
-//     var form = document.getElementById('add-form');
-
-//     form.submit();
-
-// }
-function confirmAdd() {
-    var name = document.getElementById('nameadd').value;
-
-    var form = document.getElementById('add-form');
-    var inputs = form.querySelectorAll('[required]');
-    var valid = true;
-
-    inputs.forEach(function(input) {
-        if (!input.value) {
-            valid = false;
-            input.style.borderColor = 'red'; // Optional: highlight empty inputs
-        } else {
-            input.style.borderColor = ''; // Reset border color if input is filled
-        }
-    });
-
-    if (valid) {
-        form.submit();
+    if(inspectors)
+    {
+        if(addurl=='')addurl+='?';else addurl+='&';
+        addurl+='inspector='+inspectors;
     }
+    document.location=url+addurl;
 }
+
 $(document).ready(function() {
 
 
     $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
-
+    @php
+                                        $Dataurl= url('violation/getAll') ;
+                                        $url="";
+                                      
+                                        
+                                       // dd($Dataurl);
+                                                                        
+                                        @endphp    
     $('#users-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('violations.getAllviolations') }}', // Correct URL concatenation
+        ajax: '{{ route('violations.getAll') }}', // Correct URL concatenation
         columns: [{
+                data: 'Type',
+                sWidth: '50px',
+                name: 'Type'
+            },
+            {
                 data: 'name',
                 sWidth: '50px',
                 name: 'name'
             },
             {
-                data: 'type_name',
+                data: 'ViolationType',
                 sWidth: '50px',
-                name: 'type_name'
+                name: 'ViolationType'
             },
 
             {
