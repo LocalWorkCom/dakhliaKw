@@ -88,7 +88,7 @@
             <form action="{{ route('instant_mission.store') }}" method="post" class="text-right"
                 enctype="multipart/form-data">
                 @csrf
-
+ 
                 <div class="container col-10 mt-4 p-4" style="border:0.5px solid #C7C7CC;">
                     <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-5 mx-2">
