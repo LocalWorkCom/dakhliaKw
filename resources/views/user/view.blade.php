@@ -101,6 +101,16 @@
                                     <th style="width:150px !important;">العمليات</th>
                                 </tr>
                             </thead>
+                           <!--  <tfoot>
+                                    <tr>
+                                        <th>رقم التعريف</th>
+                                        <th>الاسم</th>
+                                        <th>القسم</th>
+                                        <th>الهاتف</th>
+                                        <th>الرقم العسكري</th>
+                                        <th style="width:150px !important;"></th>
+                                    </tr>
+                         </tfoot> -->
                         </table>
 
 
@@ -120,8 +130,17 @@
                                         }
                                        // dd($Dataurl);
                                                                         
-                                        @endphp                            
-                                $('#users-table').DataTable({
+                                        @endphp    
+                                      /*   
+                                        $('#users-table tfoot th').each(function (i) {
+                                            var title = $('#users-table thead th')
+                                                .eq($(this).index())
+                                                .text();
+                                            $(this).html(
+                                                '<input type="text" placeholder="' + title + '" data-index="' + i + '" />'
+                                            );
+                                        }); */
+                                var table=$('#users-table').DataTable({
                                     processing: true,
                                     serverSide: true,
                                     ajax: '{{$Dataurl}}/' + id, // Correct URL concatenation
@@ -218,6 +237,13 @@
                                         }
                                     }
                                 });
+
+                                $(table.table().container()).on('keyup', 'tfoot input', function () {
+                                        table
+                                            .column($(this).data('index'))
+                                            .search(this.value)
+                                            .draw();
+                                    });
                             });
                         </script>
 

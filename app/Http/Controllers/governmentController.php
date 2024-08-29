@@ -101,9 +101,10 @@ class governmentController extends Controller
                             $is_off = in_array($index, $available_point->days_work);
                             if ($is_off) {
                                 // Assign point if work_type is 0
-                                $groupGovernmentIds[$available_point->id] = [
+                                 $groupGovernmentIds[$available_point->id] = [
                                     'id' => $available_point->id,
                                     'government_id' => $available_point->government_id,
+                                    'grouppoint_id' => $grouppoint->id,
                                     'work_type' => 0,
                                 ];
                             }
@@ -114,6 +115,7 @@ class governmentController extends Controller
                                 $groupGovernmentIds[$available_point->id] = [
                                     'id' => $available_point->id,
                                     'government_id' => $available_point->government_id,
+                                    'grouppoint_id' => $grouppoint->id,
                                     'work_type' => 1,
                                     'point_time' => [$pointDay->from, $pointDay->to],
                                 ];
@@ -121,7 +123,7 @@ class governmentController extends Controller
                         }
                     }
                 }
-    
+         // dd($groupGovernmentIds);
                 $allGroupsForSector = Groups::where('sector_id', $sector)
                     ->select('id', 'points_inspector')
                     ->get();
@@ -177,7 +179,7 @@ class governmentController extends Controller
                         $filteredAvailablePoints = array_filter($groupGovernmentIds, function ($point) use ($group) {
                             return $point['government_id'] == $group->government_id;
                         });
-    
+                     
                         if (empty($filteredAvailablePoints)) {
                             $firstGovernmentId = reset($groupGovernmentIds)['government_id'] ?? null;
     
@@ -187,9 +189,10 @@ class governmentController extends Controller
                                 });
                             }
                         }
-    
+                    
                         $availablePoints = array_keys($filteredAvailablePoints);
                         $availablePoints = array_diff($availablePoints, $teamPointsYesterday[$groupTeam->group_team_id] ?? []);
+                        
                         if (!empty($availablePoints)) {
                             $possibleNewValues = array_splice($availablePoints, 0, $pointPerTeam);
     
@@ -202,6 +205,7 @@ class governmentController extends Controller
                             }
     
                             $validPoints = [];
+                           
                             foreach ($possibleNewValues as $pointId) {
                                 if (isset($groupGovernmentIds[$pointId])) {
                                     $point = $groupGovernmentIds[$pointId];
@@ -219,8 +223,18 @@ class governmentController extends Controller
                                     }
                                 }
                             }
-    
-                            $teamPointsToday[$groupTeam->group_team_id] = $validPoints;
+                            $availableGrouppointIds = [];
+
+                            foreach ($validPoints as $pointId) {
+                                if (isset($groupGovernmentIds[$pointId])) {
+                                    $availableGrouppointIds[] = $groupGovernmentIds[$pointId]['grouppoint_id'];
+                                }
+                            }
+                            
+                            // Now $availableGrouppointIds contains only the grouppoint_ids without point_ids.
+                            $availableGrouppointIds = array_unique($availableGrouppointIds); // Ensure unique grouppoint_ids
+                            // dd($availableGrouppointIds);
+                            $teamPointsToday[$groupTeam->group_team_id] = $availableGrouppointIds;
     
                             $updatedMissions = InspectorMission::where('group_id', $group->id)
                                 ->where('group_team_id', $groupTeam->group_team_id)
@@ -232,7 +246,7 @@ class governmentController extends Controller
                             foreach ($updatedMissions as $updatedMission) {
                                 $updated = InspectorMission::where('id', $updatedMission)->where('vacation_id', null)->first();
                                 if ($updated) {
-                                    $updated->ids_group_point = array_map('strval', $validPoints);
+                                    $updated->ids_group_point = array_map('strval', $availableGrouppointIds);
                                     $updated->save();
                                 }
                             }

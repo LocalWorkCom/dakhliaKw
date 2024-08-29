@@ -34,7 +34,7 @@ class inspector_points extends Command
     /**
      * Execute the console command.
      */
-    public function __construct()
+     public function __construct()
     {
         parent::__construct();
     }
@@ -104,7 +104,7 @@ class inspector_points extends Command
         $index = array_search($dayWeek, $daysOfWeek);
     
         $allSectors = Sector::pluck('id')->toArray();
-    
+        $groupGovernmentIds=[];
         foreach ($allSectors as $sector) {
             // if($sector == 1) { // Fixed condition check
                 $allAvailablePoints = Grouppoint::where('sector_id', $sector)
@@ -123,6 +123,7 @@ class inspector_points extends Command
                                 $groupGovernmentIds[$available_point->id] = [
                                     'id' => $available_point->id,
                                     'government_id' => $available_point->government_id,
+                                    'grouppoint_id' => $grouppoint->id,
                                     'work_type' => 0,
                                 ];
                             }
@@ -133,6 +134,7 @@ class inspector_points extends Command
                                 $groupGovernmentIds[$available_point->id] = [
                                     'id' => $available_point->id,
                                     'government_id' => $available_point->government_id,
+                                    'grouppoint_id' => $grouppoint->id,
                                     'work_type' => 1,
                                     'point_time' => [$pointDay->from, $pointDay->to],
                                 ];
@@ -140,7 +142,7 @@ class inspector_points extends Command
                         }
                     }
                 }
-    
+                // dd($groupGovernmentIds);
                 $allGroupsForSector = Groups::where('sector_id', $sector)
                     ->select('id', 'points_inspector')
                     ->get();
@@ -238,8 +240,17 @@ class inspector_points extends Command
                                     }
                                 }
                             }
-    
-                            $teamPointsToday[$groupTeam->group_team_id] = $validPoints;
+                            $availableGrouppointIds = [];
+
+                            foreach ($validPoints as $pointId) {
+                                if (isset($groupGovernmentIds[$pointId])) {
+                                    $availableGrouppointIds[] = $groupGovernmentIds[$pointId]['grouppoint_id'];
+                                }
+                            }
+                            
+                            // Now $availableGrouppointIds contains only the grouppoint_ids without point_ids.
+                            $availableGrouppointIds = array_unique($availableGrouppointIds); // Ensure unique grouppoint_ids
+                            $teamPointsToday[$groupTeam->group_team_id] = $availableGrouppointIds;
     
                             $updatedMissions = InspectorMission::where('group_id', $group->id)
                                 ->where('group_team_id', $groupTeam->group_team_id)
@@ -251,7 +262,7 @@ class inspector_points extends Command
                             foreach ($updatedMissions as $updatedMission) {
                                 $updated = InspectorMission::where('id', $updatedMission)->where('vacation_id', null)->first();
                                 if ($updated) {
-                                    $updated->ids_group_point = array_map('strval', $validPoints);
+                                    $updated->ids_group_point = array_map('strval', $availableGrouppointIds);
                                     $updated->save();
                                 }
                             }
