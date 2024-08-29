@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\assignPointsFrom;
 use App\Models\Government;
 use App\Models\Groups;
 use App\Models\GroupTeam;
@@ -10,7 +11,7 @@ use App\Models\Sector;
 use App\Models\WorkingTime;
 
 use App\Models\WorkingTree;
-
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -322,7 +323,9 @@ class GroupsController extends Controller
             $group->sector_id = $request->sector_id;
             $updated = true;
             addGroupHistory($group->id, $group->sector_id);
-
+            $startOfMonth = Carbon::now();
+            $endOfMonth = Carbon::now()->endOfMonth();
+            dispatch(new assignPointsFrom($startOfMonth, $endOfMonth));
         }
 
         // If nothing was updated, return with an error and show the modal again
