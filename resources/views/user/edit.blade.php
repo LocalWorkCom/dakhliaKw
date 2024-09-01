@@ -195,12 +195,12 @@
 
                         <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
                            
-                            <div class="form-group col-md-5 mx-2"  style="display: none;" id="military_number_id">
+                            <div class="form-group col-md-10 mx-2"  style="display: none;" id="military_number_id">
                                 <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  رقم العسكرى</label>
                                 <input type="text" id="input6" name="military_number" class="form-control"
                                     placeholder="رقم العسكرى" value="{{ $user->military_number }}" dir="rtl">
                             </div>
-                            <div class="form-group col-md-5 mx-2"  id="input12Div">
+                            <div class="form-group col-md-10 mx-2"  id="input12Div">
                                 <label for="input12"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم الملف</label>
                                 <input type="text" id="input12" name="file_number" class="form-control"
                                     placeholder="رقم الملف" value="{{ $user->file_number }}" dir="rtl">
@@ -286,6 +286,24 @@
                                     <textarea id="input44" name="address_1" class="form-control"
                                     placeholder="  العنوان" value="{{ $user->address1 }}">{{ $user->address1 }}</textarea>
                             </div>
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input15"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  الادارة </label>
+                                <select id="input15" name="public_administration" class="form-control select2"
+
+                                        placeholder="الادارة ">
+                                    @if ($user->department_id == null)
+                                    <option selected  disabled>اختار من القائمة</option>
+                                    @endif
+
+
+                                    @foreach ($department as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ $user->department_id == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name }}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
                             {{-- <div class="form-group col-md-5 mx-md-2">
                                 <label for="input44">العنوان 2</label>
                                 <input type="text" id="input44" name="address_2" class="form-control"
@@ -343,24 +361,7 @@
                             </div> --}}
 
                             {{-- {{dd($department)}} --}}
-                            <div class="form-group col-md-5 mx-2">
-                                <label for="input15"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  الادارة </label>
-                                <select id="input15" name="public_administration" class="form-control select2"
-
-                                        placeholder="الادارة ">
-                                    @if ($user->department_id == null)
-                                    <option selected  disabled>اختار من القائمة</option>
-                                    @endif
-
-
-                                    @foreach ($department as $item)
-                                        <option value="{{ $item->id }}"
-                                            {{ $user->department_id == $item->id ? 'selected' : '' }}>
-                                            {{ $item->name }}</option>
-                                    @endforeach
-
-                                </select>
-                            </div>
+                           
                         </div>
 
                         <div class="form-row mx-2 mx-3 d-flex justify-content-center flex-row-reverse">
