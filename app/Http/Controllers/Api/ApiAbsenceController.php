@@ -112,8 +112,11 @@ class ApiAbsenceController extends Controller
                         {
                             $Emp = new AbsenceEmployee();
                             $Emp->name = $item["name"];
-                            $Emp->grade = $item["grade"];
-                            $Emp->absence_types_id  = $item["type"];
+                            $Emp->grade = $item["grade"] ?? null;
+                            $Emp->military_number  = $item["military_number"] ?? null;
+                            $Emp->civil_number  = $item["civil_number"] ?? null;
+                            $Emp->absence_types_id  = $item["absence_types"] ?? null;
+                            $Emp->type_employee = $item["type_employee"] ?? null;
                             $Emp->absences_id  = $new->id;
                             $Emp->save();
                             if($Emp)

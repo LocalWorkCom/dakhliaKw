@@ -32,7 +32,7 @@ use App\Http\Controllers\ViolationTypesController;
 // use App\Http\Controllers\dashboard\IoTelegramController;
 // use App\Http\Controllers\dashboard\WorkingTreeController;
 
-use App\Http\Controllers\SearchController;
+// use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ViollationController;
 
 
