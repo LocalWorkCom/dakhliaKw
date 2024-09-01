@@ -1556,3 +1556,11 @@ width: 25px !important;
     text-align: right !important;
 
 } */
+.select-box-2 select, .select-box-2 input[type="date"] {
+    font-size: 20px;
+    color: #a5a5a5;
+}
+.select-box-2 option{
+font-size: 18px;
+color: #a5a5a5;
+}
