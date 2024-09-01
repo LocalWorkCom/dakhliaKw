@@ -105,22 +105,22 @@ class ViolationController  extends Controller
             $messages = [
                 'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
                 'name.string' => 'الاسم  يجب أن يكون نصاً.',
-                'military_number.required_if' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
-                'grade.required' => 'الرتبة  مطلوب ولا يمكن تركه فارغاً.',
+                // 'military_number.required_if' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
+                // 'grade.required' => 'الرتبة  مطلوب ولا يمكن تركه فارغاً.',
                 'image.required' => 'المرفقات مطلوبة',
                 'violation_type.required' => 'نوع المخالفة مطلوب',
-                'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
+                // 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
                 'point_id.required_if' => 'رقم النقطة  مطلوب',
                 'mission_id.required' => 'رقم المهمة  مطلوب',
             ];
             $validatedData = Validator::make($request->all(), [
                 // 'military_number' => 'required',
-                'military_number' => ['required_if:civil_military,military'],
+                // 'military_number' => ['required_if:civil_military,military'],
                 'name' => 'required|string',
-                'grade' => ['required_if:civil_military,military'],
+                // 'grade' => ['required_if:civil_military,military'],
                 'image' => 'required',
                 'violation_type' => 'required',
-                'Civil_number' => 'required',
+                // 'Civil_number' => 'required',
                 'point_id' => ['required_if:flag_instantmission,0'],
                 'mission_id' => 'required',
 
@@ -142,6 +142,7 @@ class ViolationController  extends Controller
             $new->point_id = $point_id;
             $new->violation_type = $cleanedString;
             $new->flag_instantmission = $request->flag_instantmission;
+            $new->description = $request->description ?? null;
             $new->user_id = auth()->user()->id;
             // $new->user_id = 1;
             $new->save();
@@ -184,6 +185,7 @@ class ViolationController  extends Controller
             $new->violation_type = json_encode($request->violation_type);
             $new->flag_instantmission = $request->flag_instantmission;
             $new->mission_id = $request->mission_id;
+            $new->description = $request->description ?? null;
             $new->point_id = $point_id;
             // // $new->user_id = auth()->user()->id;
             $new->user_id = 1;
@@ -203,7 +205,7 @@ class ViolationController  extends Controller
 
 
         if ($new) {
-            $success['violation'] = $new->only(['id', 'name', 'military_number', 'Civil_number', 'grade', 'image', 'violation_type', 'user_id']);
+            $success['violation'] = $new->only(['id', 'name', 'military_number', 'Civil_number', 'grade', 'image', 'violation_type', 'user_id','description']);
             return $this->respondSuccess($success, 'Data Saved successfully.');
         } else {
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
