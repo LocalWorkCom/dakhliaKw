@@ -27,21 +27,22 @@
 
         <div class="row d-flex justify-content-between " dir="rtl">
                 <div class="form-group moftsh mt-4  mx-4  d-flex">
-                    <p class="filter "> تصفية حسب:</p>
-                    <div class="form-group moftsh  mx-3  d-flex">
-                            <h4 style="    line-height: 1.8;"> التاريخ :</h4>
-                          <input type="date" name="date" id="date"  value="{{($date)?$date:date('Y-m-d')}}">
-                          <div class="check-one">
-                        <input type="checkbox" onclick="$(this).val('1');" class="mx-2" name="all_date" value="1"  id="all_date" checked >
-                        <label for=""> الكل </label>
+                    <p class="filter "> تصفية حسب :</p>
+                       <div class="check-one d-flex pt-2">
+                        <input type="checkbox" class="mx-2" name="all_date" id="all_date" >
+                        <label for=""> كل الايام </label>
                     </div>
+                    <div class="form-group moftsh select-box-2  mx-3  d-flex">
+                            <!-- <h4 style="    line-height: 1.8;"> التاريخ :</h4> -->
+                          <input type="date" name="date" id="date" value="{{($date)?$date:date('Y-m-d')}}">
+                       
                         </div>
-                        <div class="form-group moftsh  mx-3  d-flex">
-                        <h4 style=" line-height: 1.8;"> المجموعة :</h4>
+                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                        <!-- <h4 style=" line-height: 1.8;"> المجموعة :</h4> -->
                             <select id="group_id" name="group_id" class="form-control" placeholder="المجموعة">
                              
                                 <option value="-1"
-                                       selected> الكل
+                                selected disabled  > المجموعة
                                     </option>
                                 @foreach ($groups as $item)
                                     <option value="{{ $item->id }}"
@@ -50,11 +51,25 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group moftsh  mx-3  d-flex">
-                        <h4 style=" line-height: 1.8;"> الفريق :</h4>
+                        
+                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                             <!-- <h4 style=" line-height: 1.8;"> المفتش :</h4> -->
+                            <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش">
+                                 
+                                    <option value="-1" selected disabled> المفتش
+                                    </option>
+                                    @foreach ($inspectors as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{$inspector == $item->id ? 'selected' : '' }}> {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                        </div>
+                        <div class="form-group moftsh select-box-2  mx-3  d-flex">
+                        <!-- <h4 style=" line-height: 1.8;"> الفريق :</h4> -->
                         <select id="group_team_id" name="group_team_id" class="form-control" placeholder="الفرق">
                              
-                                <option value="-1" selected> الكل
+                                <option value="-1" selected disabled> الفريق
                                     </option>
                                 @foreach ($groupTeams as $item)
                                     <option value="{{ $item->id }}"
@@ -64,22 +79,9 @@
                             </select>
                         </div>
                         <div class="form-group moftsh  mx-3  d-flex">
-                             <h4 style=" line-height: 1.8;"> المفتش :</h4>
-                            <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش">
-                                 
-                                    <option value="-1" selected> الكل
-                                    </option>
-                                    @foreach ($inspectors as $item)
-                                        <option value="{{ $item->id }}"
-                                            {{$inspector == $item->id ? 'selected' : '' }}> {{ $item->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                        </div>
-                        <div class="form-group moftsh  mx-3  d-flex">
-                        <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;"
+                        <button class="btn-all px-3 " style="color: #212529; background-color: #f8f8f8;"
                         onclick="search()">
-                        <i class="fa fa-search" aria-hidden="true"></i> بحث  
+                    بحث  
                     </button>
                         </div>
                 </div>
@@ -336,4 +338,5 @@ $(document).ready(function() {
         });
     });
 </script>
+
 @endpush
