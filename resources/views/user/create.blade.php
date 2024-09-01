@@ -281,12 +281,12 @@
 
 <div class="form-row  mx-md-3 d-flex justify-content-center flex-row-reverse">
    
-    <div class="form-group col-md-5 mx-2" style="display: none;" id="military_number_id">
+    <div class="form-group col-md-10 mx-2" style="display: none;" id="military_number_id">
         <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;" ></i> رقم العسكرى</label>
         <input type="text" id="input6" name="military_number" class="form-control" placeholder="رقم العسكرى"
             value="{{ old('military_number') }}">
     </div>
-    <div class="form-group col-md-5 mx-2" id="input12Div">
+    <div class="form-group col-md-10 mx-2" id="input12Div">
         <label for="input12"><i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>
             رقم الملف
         </label>
