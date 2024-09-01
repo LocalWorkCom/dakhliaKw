@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Government;
 use App\Models\Grouppoint;
+use App\Models\InspectorMission;
 use App\Models\Point;
 use App\Models\PointDays;
 use App\Models\Region;
@@ -307,6 +308,69 @@ class pointsController extends Controller
             $googleMapsUrl = $request->map_link;
             $coordinates = getLatLongFromUrl($googleMapsUrl);
             $point = Point::find($pointId);
+            if($point->sector_id != $request->sector_id){
+                $pointId = '' . $point->id . '';
+
+                $groupPoints = Grouppoint::whereJsonContains('points_ids', $pointId)->get();
+                $government_id=$request->governorate;
+                $sector_id = $request->sector_id;
+                $newName = $request->name;
+                $groupPoints->each(function ($groupPoint) use ($government_id, $sector_id, $newName) {
+                    $groupPoint->government_id = $government_id;
+                    $groupPoint->sector_id = $sector_id;
+                    
+                    if ($groupPoint->flag == 0) {
+                        $groupPoint->name = $newName;
+                    }
+                    
+                    $groupPoint->save();
+                
+                    if ($groupPoint->deleted == 0) {
+                        // Get the ID as a string
+                        $id_Group = (string) $groupPoint->id;
+                        $today=Carbon::now();
+                        $lastDayOfMonth =  Carbon::now()->endOfMonth();
+                        // Find records that contain this ID
+                        $records = InspectorMission::whereJsonContains('ids_group_point', $id_Group)->whereBetween('date', [$today, $lastDayOfMonth])
+                        ->get();
+                
+                        // Remove the ID from each record
+                        $records->each(function ($record) use ($id_Group) {
+                            // Check if ids_group_point is already an array or needs decoding
+                            $idsGroupPoint = is_array($record->ids_group_point) 
+                                ? $record->ids_group_point 
+                                : json_decode($record->ids_group_point, true);
+                
+                            // Remove the ID from the array
+                            $idsGroupPoint = array_filter($idsGroupPoint, function ($id) use ($id_Group) {
+                                return $id !== $id_Group;
+                            });
+                
+                            // Update the record with the modified array
+                            $record->ids_group_point = is_array($record->ids_group_point) 
+                                ? $idsGroupPoint 
+                                : json_encode($idsGroupPoint);
+                            $record->save();
+                        });
+                    }
+                });
+               
+            }else{
+                $pointId = '' . $point->id . '';
+
+                $groupPoints = Grouppoint::whereJsonContains('points_ids', $pointId)->get();
+                $government_id=$request->governorate;
+                $sector_id = $request->sector_id;
+                $newName = $request->name;
+                $groupPoints->each(function ($groupPoint) use ($government_id, $sector_id, $newName) {
+                    $groupPoint->government_id = $government_id; 
+                    $groupPoint->sector_id = $sector_id; 
+                    if ($groupPoint->flag == 0) {
+                        $groupPoint->name = $newName; 
+                    }
+                    $groupPoint->save();
+                }); 
+            }
             $point->name = $request->name;
             $point->government_id = $request->governorate;
             $point->region_id = $request->region;
@@ -324,23 +388,7 @@ class pointsController extends Controller
             $point->created_by = auth()->id();
             $point->note = $request->note;
             $point->save();
-            $pointId = '' . $point->id . '';
-
-            $groupPoints = Grouppoint::whereJsonContains('points_ids', $pointId)->get();
-            $government_id=$request->governorate;
-            $sector_id = $request->sector_id;
-            $newName = $request->name;
-            $groupPoints->each(function ($groupPoint) use ($government_id, $sector_id, $newName) {
-                $groupPoint->government_id = $government_id; 
-                $groupPoint->sector_id = $sector_id; 
-                if ($groupPoint->flag == 0) {
-                    $groupPoint->name = $newName; 
-                }
-                $groupPoint->save();
-                if($groupPoint->deleted == 0){
-                    
-                }
-            });
+            
                     
             // Update or create PointDays records
             if ($request->time_type == 1 && count($dayNames) === count($fromTimes) && count($fromTimes) === count($toTimes)) {
