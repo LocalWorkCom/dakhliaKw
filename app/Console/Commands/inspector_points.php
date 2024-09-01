@@ -236,7 +236,7 @@ class inspector_points extends Command
                 })->toArray();
 
                 $dayOffTeams = [];
-               
+                $pointOfTeam =[];
                 $groupTeams = $groupTeams->shuffle(); // Shuffle to ensure random distribution
 
                 foreach ($groupTeams as $groupTeam) {
