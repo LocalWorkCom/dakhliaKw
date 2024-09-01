@@ -73,21 +73,6 @@ class inspector_points extends Command
         return $index !== false ? $index : null;
     }
 
-    // function addValueToval($array, $key, $value)
-    // {
-    //     if (array_key_exists($key, $array)) {
-    //         if (is_array($array[$key])) {
-    //             $array[$key][] = $value;
-    //         } else {
-    //             $array[$key] = [$array[$key], $value];
-    //         }
-    //     } else {
-    //         $array[$key] = [$value];
-    //     }
-
-    //     return $array;
-    // }
-
     public function getAvailablePoints($index, $sector, $group, $team, $teamTimePeriods, $historyOfTeam, $pointCount, $userToday = null)
     {
         $idsOfHistory = [];
@@ -198,14 +183,6 @@ class inspector_points extends Command
         return $result;
     }
 
-    // function formatTimeInArabic($time)
-    // {
-    //     $dateTime = new DateTime($time);
-    //     $formattedTime = $dateTime->format('g:i');
-    //     $suffix = $dateTime->format('a') === 'am' ? 'صباحا' : 'مساء';
-    //     return $formattedTime . ' ' . $suffix;
-    // }
-
     function isTimeAvailable($pointStart, $pointEnd, $teamStart, $teamEnd)
     {
         $pointStartTimestamp = strtotime($pointStart);
@@ -306,30 +283,11 @@ class inspector_points extends Command
                     // Update team points count
                     $teamPointsCount[$groupTeam->group_team_id] = ($teamPointsCount[$groupTeam->group_team_id] ?? 0) + count($pointOfTeam);
 
-                    // Recheck to balance if needed
-                    $this->balancePointsDistribution($teamPointsCount, $group->id, $today);
                 }
             }
         }
     }
 
-
-    private function balancePointsDistribution($teamPointsCount, $groupId, $date)
-    {
-        // Example logic for rebalancing
-        $totalPoints = array_sum($teamPointsCount);
-        $averagePoints = $totalPoints / count($teamPointsCount);
-
-        foreach ($teamPointsCount as $teamId => $pointsCount) {
-            if ($pointsCount < $averagePoints) {
-                // Add more points to this team
-                // Logic for adding points
-            } else if ($pointsCount > $averagePoints) {
-                // Remove excess points from this team
-                // Logic for redistributing points
-            }
-        }
-    }
 
     // public function handle()
     // {
