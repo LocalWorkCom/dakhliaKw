@@ -121,7 +121,7 @@ class ApiAbsenceController extends Controller
                             $Emp->save();
                             if($Emp)
                             {
-                                $array[]=$Emp->only(['id','name','grade','absence_types_id']);
+                                $array[]=$Emp->only(['id','name','military_number','civil_number','grade','absence_types_id','type_employee']);
                             }
     
                         }
