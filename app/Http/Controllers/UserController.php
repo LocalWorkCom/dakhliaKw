@@ -555,12 +555,12 @@ class UserController extends Controller
                 'military_number.required_if' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
                 'military_number.unique' => 'رقم العسكري الذي أدخلته موجود بالفعل.',
                 'Civil_number.unique' => 'رقم المدنى الذي أدخلته موجود بالفعل.',
-                'file_number.unique' => 'رقم الملف الذي أدخلته موجود بالفعل.',
+                // 'file_number.unique' => 'رقم الملف الذي أدخلته موجود بالفعل.',
                 'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
                 'phone.unique' => 'رقم الهاتف الذي أدخلته موجود بالفعل.',
                 'phone.max' => 'رقم الهاتف اقل من 6 اراقام',
 
-                'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+                // 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
                 'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً   .',
                 // 'department_id.required' => 'القسم  يجب أن يكون نصاً.',
                 // Add more custom messages here
@@ -578,6 +578,7 @@ class UserController extends Controller
                     'max:12',
                     ValidationRule::unique('users', 'Civil_number'),
                 ],
+
                
               /*   'military_number' => [
                    'required_if:type_military,police',
@@ -615,6 +616,7 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'Civil_number'),
                 ];
             }
+
             if ($request->has('file_number')  && $request->type_military == "police") {
                 $rules['file_number'] = [
                     'required',
@@ -783,7 +785,7 @@ class UserController extends Controller
         $messages = [
             'military_number.required_if' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
             'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
-            'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
+            // 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
             'email.required' => 'الايميل مطلوب',
             'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
         ];
@@ -809,13 +811,13 @@ class UserController extends Controller
                 new UniqueNumberInUser($user),
             ],
             // 'file_number' => 'required|string',
-            'file_number' => [
-                'required',
-                // 'string',
-                // 'max:255',
-                // ValidationRule::unique('permissions', 'name'),
-                new UniqueNumberInUser($user),
-            ],
+            // 'file_number' => [
+            //     'required',
+            //     // 'string',
+            //     // 'max:255',
+            //     // ValidationRule::unique('permissions', 'name'),
+            //     new UniqueNumberInUser($user),
+            // ],
             'email' => [
                 'required',
                 // 'max:255',

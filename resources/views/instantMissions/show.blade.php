@@ -91,6 +91,11 @@
                         </div>
                    <!--  <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-5 mx-2">
+                            <label for="input22">التاريخ</label>
+                            <input type="date" id="input2"2 name="date" class="form-control" placeholder="التاريخ"
+                                value="{{ $IM->date }}" disabled>
+                        </div>
+                        <div class="form-group col-md-5 mx-2">
                             <label for="input2">الاسم</label>
                             <input type="text" id="input2" name="label" class="form-control" placeholder="الاسم"
                                 value="{{ $IM->label }}" disabled>
@@ -101,9 +106,11 @@
                                 placeholder="الموقع" value="{{ $IM->location }}" disabled>
                         </div>
 
+
                     </div> -->
 
-                    <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
+
+                    <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse"> --}}
                         <div class="form-group col-md-5 mx-2">
                             <label for="group_id">المجموعة</label>
                             <select id="group_id" name="group_id" class="form-control" placeholder="المجموعة" disabled>
@@ -127,9 +134,11 @@
                             </select>
                         </div>
                         <div class="form-group col-md-5 mx-2">
+
                             <label for="inspectors">المفتش</label>
                             <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش" disabled>
                                 <option selected disabled> كل الفريق </option>
+
                                 @foreach ($inspectors as $item)
                                     <option value="{{ $item->id }}"
                                         {{ $IM->inspector_id == $item->id ? 'selected' : '' }}> {{ $item->name }}
@@ -137,6 +146,7 @@
                                 @endforeach
                             </select>
                         </div>
+
                         
                         <div class="form-group col-md-5 mx-md-2">
                         <label for="input44"> الموقع</label>
@@ -145,7 +155,7 @@
                           
                         </div>
                         <div class="form-group col-md-10 mx-md-2">
-                            <label for="description">الوصف </label>
+                            <label for="description">الملاحظات </label>
                             <input type="text" name="description" class="form-control"
                                 value="{{ $IM->description }}" disabled>
                             {{-- @error('description')

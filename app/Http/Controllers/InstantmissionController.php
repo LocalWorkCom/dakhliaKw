@@ -197,9 +197,11 @@ class InstantmissionController extends Controller
             $inspectors = Inspector::where('department_id',Auth()->user()->department_id)->get();
          }
         $groupTeams = GroupTeam::where('group_id', $IM->group_id)->get();
+
         $inspectors = Inspector::where('id',$IM->inspector_id)->get();
 
         return view('instantMissions.show', compact('groups', 'groupTeams','inspectors', 'IM'));
+
     }
 
     /**
