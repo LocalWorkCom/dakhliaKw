@@ -32,6 +32,7 @@ class InspectorMission extends Model
         'group_team_id',
         'date',
         'day_off',
+        'day_number',
     ];
 
     // Cast the attributes to specific types
