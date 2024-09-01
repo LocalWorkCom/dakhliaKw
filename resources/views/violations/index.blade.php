@@ -35,7 +35,10 @@
                         <div class="form-group moftsh  mx-3  d-flex">
                         <h4 style=" line-height: 1.8;"> المجموعة :</h4>
                             <select id="group_id" name="group_id" class="form-control" placeholder="المجموعة">
-                                <option selected disabled>اختار من القائمة</option>
+                             
+                                <option value="-1"
+                                       selected> الكل
+                                    </option>
                                 @foreach ($groups as $item)
                                     <option value="{{ $item->id }}"
                                         {{ $group == $item->id ? 'selected' : '' }}> {{ $item->name }}
@@ -46,7 +49,9 @@
                         <div class="form-group moftsh  mx-3  d-flex">
                         <h4 style=" line-height: 1.8;"> الفريق :</h4>
                         <select id="group_team_id" name="group_team_id" class="form-control" placeholder="الفرق">
-                                <option selected disabled>اختار من القائمة</option>
+                             
+                                <option value="-1" selected> الكل
+                                    </option>
                                 @foreach ($groupTeams as $item)
                                     <option value="{{ $item->id }}"
                                         {{ $team == $item->id ? 'selected' : '' }}> {{ $item->name }}
@@ -57,7 +62,9 @@
                         <div class="form-group moftsh  mx-3  d-flex">
                              <h4 style=" line-height: 1.8;"> المفتش :</h4>
                             <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش">
-                                    <option selected disabled>اختار من القائمة</option>
+                                 
+                                    <option value="-1" selected> الكل
+                                    </option>
                                     @foreach ($inspectors as $item)
                                         <option value="{{ $item->id }}"
                                             {{$inspector == $item->id ? 'selected' : '' }}> {{ $item->name }}
@@ -119,14 +126,14 @@
         var group_id = $(this).val();
        
 
-        if (group_id) {
+        if (group_id!=-1) {
             $.ajax({
                 url: '/getGroups/' + group_id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     $('#group_team_id').empty();
-                    $('#group_team_id').append('<option selected disabled> اختار من القائمة </option>');
+                    $('#group_team_id').append('<option selected value="-1"> الكل </option>');
                     $.each(data, function(key, employee) {               
                         console.log(employee);   
                         $('#group_team_id').append('<option value="' + employee.id + '">' + employee.name + '</option>');
@@ -150,14 +157,14 @@ $(document).ready(function() {
         console.log(group_team_id);
        
 
-        if (group_id) {
+        if (group_id!=-1) {
             $.ajax({
                 url: '/getInspector/' + group_team_id +'/'+  group_id ,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     $('#inspectors').empty();
-                    $('#inspectors').append('<option selected disabled> اختار من القائمة </option>');
+                    $('#inspectors').append('<option value='-1'> الكل   </option>');
                     $.each(data, function(key, employee) {               
                         // console.log(employee);   
                         $('#inspectors').append('<option value="' + employee.id + '">' + employee.name + '</option>');
@@ -214,15 +221,34 @@ $(document).ready(function() {
     @php
                                         $Dataurl= url('violation/getAll') ;
                                         $url="";
-                                      
-                                        
-                                       // dd($Dataurl);
+                                      if(isset($date) && $date!='-1')
+                                      {
+                                        if($url=='')$url.='?'; else $url.='&';
+                                        $url.='date='.$date;
+                                      }
+                                      if(isset($group) && $group!='-1')
+                                      {
+                                        if($url=='')$url.='?'; else $url.='&';
+                                        $url.='group='.$group;
+                                      }
+                                      if(isset($team) && $team!='-1')
+                                      {
+                                        if($url=='')$url.='?'; else $url.='&';
+                                        $url.='team='.$team;
+                                      }
+                                      if(isset($inspector) && $inspector!='-1')
+                                      {
+                                        if($url=='')$url.='?'; else $url.='&';
+                                        $url.='inspector='.$inspector;
+                                      }
+                                      $Dataurl.=$url;
+                                        //dd($Dataurl);
                                                                         
                                         @endphp    
     $('#users-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('violations.getAll') }}', // Correct URL concatenation
+        ajax: '{{ $Dataurl}}', // Correct URL concatenation
         columns: [{
                 data: 'Type',
                 sWidth: '50px',
