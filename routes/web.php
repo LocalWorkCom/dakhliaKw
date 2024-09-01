@@ -29,6 +29,8 @@ use App\Http\Controllers\GroupTeamController;
 use App\Http\Controllers\InstantmissionController;
 use App\Http\Controllers\ViolationTypesController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ViollationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -422,6 +424,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search/{search}/{q}', [SearchController::class, 'index'])->name('search');
     Route::get('/searchUsers/users/{q}/{id}', [SearchController::class, 'getUsers'])->name('search.users')->middleware('check.permission:view User');
     Route::get('/searchDept/departments/{q}', [SearchController::class,'getDepartments'])->name('search.departments');
+
+    /**
+     * Violation Show
+     */
+    Route::get('/viollation', [ViollationController::class, 'index'])->name('viollation');
+    Route::get('violation/getAll', [ViollationController::class, 'getviolations'])->name('violations.getAll');
+
 
     Route::get('api/Inspectors', [InspectorController::class, 'getInspectors'])->name('api.inspector');
     Route::get('/Inspectors', [InspectorController::class, 'index'])->name('inspectors.index');
