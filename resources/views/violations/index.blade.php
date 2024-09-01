@@ -31,6 +31,10 @@
                     <div class="form-group moftsh  mx-3  d-flex">
                             <h4 style="    line-height: 1.8;"> التاريخ :</h4>
                           <input type="date" name="date" id="date" value="{{($date)?$date:date('Y-m-d')}}">
+                          <div class="check-one">
+                        <input type="checkbox" class="mx-2" name="all_date" id="all_date" >
+                        <label for=""> الكل </label>
+                    </div>
                         </div>
                         <div class="form-group moftsh  mx-3  d-flex">
                         <h4 style=" line-height: 1.8;"> المجموعة :</h4>
