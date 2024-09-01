@@ -1556,6 +1556,9 @@ width: 25px !important;
     text-align: right !important;
 
 } */
+.select-box-2 input[type="date"]{
+    border: 0.1px solid rgb(199, 197, 197);
+}
 .select-box-2 select, .select-box-2 input[type="date"] {
     font-size: 20px;
     color: #a5a5a5;
