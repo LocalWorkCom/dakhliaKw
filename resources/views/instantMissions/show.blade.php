@@ -77,6 +77,11 @@
                 <div class="container col-10 mt-4 p-4" style="border:0.5px solid #C7C7CC;">
                     <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-5 mx-2">
+                            <label for="input22">التاريخ</label>
+                            <input type="date" id="input2"2 name="date" class="form-control" placeholder="التاريخ"
+                                value="{{ $IM->date }}" disabled>
+                        </div>
+                        <div class="form-group col-md-5 mx-2">
                             <label for="input2">الاسم</label>
                             <input type="text" id="input2" name="label" class="form-control" placeholder="الاسم"
                                 value="{{ $IM->label }}" disabled>
@@ -87,9 +92,9 @@
                                 placeholder="الموقع" value="{{ $IM->location }}" disabled>
                         </div>
 
-                    </div>
+                    {{-- </div>
 
-                    <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
+                    <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse"> --}}
                         <div class="form-group col-md-5 mx-2">
                             <label for="group_id">المجموعة</label>
                             <select id="group_id" name="group_id" class="form-control" placeholder="المجموعة" disabled>
@@ -112,9 +117,20 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group col-md-5 mx-2">
+                            <label for="group_team_id">المفتش</label>
+                            <select id="group_team_id" name="group_team_id" class="form-control" placeholder="الفرق" disabled>
+                                <option selected disabled>اختار من القائمة</option>
+                                @foreach ($inspectors as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ $IM->inspector_id == $item->id ? 'selected' : '' }}> {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div class="form-group col-md-10 mx-md-2">
-                            <label for="description">الوصف </label>
+                            <label for="description">الملاحظات </label>
                             <input type="text" name="description" class="form-control"
                                 value="{{ $IM->description }}" disabled>
                             {{-- @error('description')

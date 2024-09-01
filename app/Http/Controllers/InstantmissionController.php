@@ -182,7 +182,9 @@ class InstantmissionController extends Controller
         $IM = instantmission::find($id);
         $groups = Groups::all();
         $groupTeams = GroupTeam::where('group_id', $IM->group_id)->get();
-        return view('instantMissions.show', compact('groups', 'groupTeams', 'IM'));
+        $inspectors = Inspector::where('group_id',$IM->group_id)->get();
+        
+        return view('instantMissions.show', compact('groups', 'groupTeams', 'IM' ,'inspectors'));
     }
 
     /**
