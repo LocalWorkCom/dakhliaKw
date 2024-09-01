@@ -324,7 +324,24 @@ class pointsController extends Controller
             $point->created_by = auth()->id();
             $point->note = $request->note;
             $point->save();
+            $pointId = '' . $point->id . '';
 
+            $groupPoints = Grouppoint::whereJsonContains('points_ids', $pointId)->get();
+            $government_id=$request->governorate;
+            $sector_id = $request->sector_id;
+            $newName = $request->name;
+            $groupPoints->each(function ($groupPoint) use ($government_id, $sector_id, $newName) {
+                $groupPoint->government_id = $government_id; 
+                $groupPoint->sector_id = $sector_id; 
+                if ($groupPoint->flag == 0) {
+                    $groupPoint->name = $newName; 
+                }
+                $groupPoint->save();
+                if($groupPoint->deleted == 0){
+                    
+                }
+            });
+                    
             // Update or create PointDays records
             if ($request->time_type == 1 && count($dayNames) === count($fromTimes) && count($fromTimes) === count($toTimes)) {
                 // Delete existing PointDays records for the point
