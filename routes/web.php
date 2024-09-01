@@ -21,6 +21,9 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\governmentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\AbsenceTypeController;
+use App\Http\Controllers\dashboard\IoTelegramController;
+use App\Http\Controllers\dashboard\VacationController;
+use App\Http\Controllers\dashboard\WorkingTreeController;
 use App\Http\Controllers\GroupPointsController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\qualificationController;
@@ -32,7 +35,8 @@ use App\Http\Controllers\ViolationTypesController;
 // use App\Http\Controllers\dashboard\IoTelegramController;
 // use App\Http\Controllers\dashboard\WorkingTreeController;
 
-// use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ViolationReportController;
+
 use App\Http\Controllers\ViollationController;
 
 

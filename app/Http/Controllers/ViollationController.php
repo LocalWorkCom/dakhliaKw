@@ -52,10 +52,33 @@ class ViollationController extends Controller
         return view('violations.index',compact('groups','groupTeams','inspectors','date','group','team','inspector'));
     }
     public function getviolations(Request $request)
-    {
-        $first = Absence::Join('points','points.id','absences.point_id')->SelectRaw('absences.id,points.`name` as name,CONCAT_WS("\n\r",CONCAT_WS(":","اجمالى القوة",absences.total_number),CONCAT_WS(":","العدد الفعلي",absences.actual_number)) as ViolationType,"غياب" as Type');
+    {   
+        $date=$request->date;
+        $group=$request->group;
+        $team=$request->team;
+        $inspector=$request->inspector;
 
-        $data=Violation::leftJoin('grades','grades.id','violations.grade')->SelectRaw("violations.id,CONCAT_WS('/',violations.name,grades.name)  as name,(Select GROUP_CONCAT(violation_type.`name`) from violation_type where FIND_IN_SET(violation_type.id,violations.violation_type)) AS ViolationType,IF(flag=1,'مخالفة سلوك انظباطي','مخالفة مباني') as Type")->union($first);
+        $first = Absence::leftJoin('points','points.id','absences.point_id')->SelectRaw('absences.id,points.`name` as name,CONCAT_WS("\n\r",CONCAT_WS(":","اجمالى القوة",absences.total_number),CONCAT_WS(":","العدد الفعلي",absences.actual_number)) as ViolationType,"غياب" as Type')->leftJoin('inspector_mission','inspector_mission.id','absences.mission_id');
+        if(isset($date) && $date!='-1')
+            $first->where('absences.date',$date);
+        if(isset($group) && $group!='-1')
+         $first->where('group_id',$group);
+        if(isset($team) && $team!='-1')
+         $first->where('group_team_id',$team);
+         if(isset($inspector) && $inspector!='-1')
+         $first->where('absences.inspector_id',$inspector);
+
+        $data=Violation::leftJoin('grades','grades.id','violations.grade')->SelectRaw("violations.id,CONCAT_WS('/',violations.name,grades.name)  as name,(Select GROUP_CONCAT(violation_type.`name`) from violation_type where FIND_IN_SET(violation_type.id,violations.violation_type)) AS ViolationType,IF(violations.flag=1,'مخالفة سلوك انظباطي','مخالفة مباني') as Type")->leftJoin('inspector_mission','inspector_mission.id','violations.mission_id');
+
+        if(isset($date) && $date!='-1')
+        $data->where('inspector_mission.date',$date);
+    if(isset($group) && $group!='-1')
+     $data->where('inspector_mission.group_id',$group);
+    if(isset($team) &&$team!='-1')
+     $data->where('inspector_mission.group_team_id',$group);
+     if(isset($inspector) && $inspector!='-1')
+     $data->Join('inspectors','inspectors.user_id','violations.user_id')->where('inspectors.id',$inspector);
+        $data->union($first);
 
     /*     foreach ($data as $item) {
             $item->type_names = departements::whereIn('id', $item->type_id)->pluck('name')->implode(', ');
