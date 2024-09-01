@@ -29,7 +29,7 @@
                 <div class="form-group moftsh mt-4  mx-4  d-flex">
                     <p class="filter "> تصفية حسب :</p>
                        <div class="check-one d-flex pt-2">
-                        <input type="checkbox" class="mx-2" name="all_date" id="all_date" >
+                        <input type="checkbox" class="mx-2" name="all_date" checked id="all_date" >
                         <label for=""> كل الايام </label>
                     </div>
                     <div class="form-group moftsh select-box-2  mx-3  d-flex">
