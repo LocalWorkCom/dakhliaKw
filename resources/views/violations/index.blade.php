@@ -79,7 +79,7 @@
                             </select>
                         </div>
                         <div class="form-group moftsh  mx-3  d-flex">
-                        <button class="btn-all px-3 " style="color: #FFFFFF;background-color: #a5a5a5;"
+                        <button class="btn-all px-3 " style="color: #212529; background-color: #f8f8f8;"
                         onclick="search()">
                     بحث  
                     </button>
