@@ -373,5 +373,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkbox = document.getElementById('all_date');
+        const dateInput = document.getElementById('date');
+        
+        function updateDateInputVisibility() {
+            if (checkbox.checked) {
+                dateInput.style.display = 'none'; 
+            } else {
+                dateInput.style.display = 'block'; 
+            }
+        }
+        updateDateInputVisibility();
+        checkbox.addEventListener('change', updateDateInputVisibility);
+    });
 </script>
+
 @endpush
