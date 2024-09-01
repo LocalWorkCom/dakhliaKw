@@ -35,6 +35,10 @@ class Groups extends Model
         return $this->hasMany(Grouppoint::class);
     }
 
+    public function groupTeamsRelation() {
+        return $this->hasMany(GroupTeam::class,'group_id');
+    }
+
     public function groupTeams() {
         return $this->hasMany(GroupTeam::class);
     }
