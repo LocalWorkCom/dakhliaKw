@@ -58,7 +58,7 @@ class ViollationController extends Controller
         $team=$request->team;
         $inspector=$request->inspector;
 
-        $first = Absence::leftJoin('points','points.id','absences.point_id')->SelectRaw('absences.id,points.`name` as name,CONCAT_WS("\n\r",CONCAT_WS(":","اجمالى القوة",absences.total_number),CONCAT_WS(":","العدد الفعلي",absences.actual_number)) as ViolationType,"غياب" as Type')->leftJoin('inspector_mission','inspector_mission.id','absences.mission_id');
+        $first = Absence::leftJoin('points','points.id','absences.point_id')->SelectRaw('absences.id,points.`name` as name,CONCAT_WS("\n\r",CONCAT_WS(":","اجمالى القوة",absences.total_number),CONCAT_WS(":","العدد الفعلي",absences.actual_number)) as ViolationType,"غياب" as Type,"0" as mode')->leftJoin('inspector_mission','inspector_mission.id','absences.mission_id');
         if(isset($date) && $date!='-1')
             $first->where('absences.date',$date);
         if(isset($group) && $group!='-1')
@@ -68,7 +68,7 @@ class ViollationController extends Controller
          if(isset($inspector) && $inspector!='-1')
          $first->where('absences.inspector_id',$inspector);
 
-        $data=Violation::leftJoin('grades','grades.id','violations.grade')->SelectRaw("violations.id,CONCAT_WS('/',violations.name,grades.name)  as name,(Select GROUP_CONCAT(violation_type.`name`) from violation_type where FIND_IN_SET(violation_type.id,violations.violation_type)) AS ViolationType,IF(violations.flag=1,'مخالفة سلوك انظباطي','مخالفة مباني') as Type")->leftJoin('inspector_mission','inspector_mission.id','violations.mission_id');
+        $data=Violation::leftJoin('grades','grades.id','violations.grade')->SelectRaw("violations.id,CONCAT_WS('/',violations.name,grades.name)  as name,(Select GROUP_CONCAT(violation_type.`name`) from violation_type where FIND_IN_SET(violation_type.id,violations.violation_type)) AS ViolationType,IF(violations.flag=1,'مخالفة سلوك انظباطي','مخالفة مباني') as Type,'1' as mode")->leftJoin('inspector_mission','inspector_mission.id','violations.mission_id');
 
         if(isset($date) && $date!='-1')
         $data->where('inspector_mission.date',$date);
@@ -79,6 +79,7 @@ class ViollationController extends Controller
      if(isset($inspector) && $inspector!='-1')
      $data->Join('inspectors','inspectors.user_id','violations.user_id')->where('inspectors.id',$inspector);
         $data->union($first);
+        //dd($data);
 
     /*     foreach ($data as $item) {
             $item->type_names = departements::whereIn('id', $item->type_id)->pluck('name')->implode(', ');
@@ -90,11 +91,12 @@ class ViollationController extends Controller
                 $name ="$row->name";
                 $ViolationType ="$row->ViolationType";
                 $typesJson = json_encode($row->type_id); // Ensure this is an array
+              
 
                 // $edit_permission = null;
                 // $show_permission = null ;
                 // if (Auth::user()->hasPermission('edit item')) {
-                    $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="#"><i class="fa fa-eye"></i> مشاهدة</a>';
+                    $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" href="'.route('violations.details',['type'=>$row->mode,'id'=>$row->id]).'"><i class="fa fa-eye"></i> مشاهدة</a>';
                     // }
                 // if (Auth::user()->hasPermission('view item')) {
                 // $show_permission = '<a class="btn btn-sm" style="background-color: #274373;"  href=' . route('violations.show', $row->id) . '> <i class="fa fa-eye"></i>عرض</a>';
@@ -104,6 +106,22 @@ class ViollationController extends Controller
            
             ->rawColumns(['action'])
             ->make(true);
+
+    }
+    public function violation_detail(Request $request,$type,$id)
+    {
+        if($type==0)//absence
+        {
+            $title="سجل غياب";
+            $data= Absence::leftJoin('points','points.id','absences.point_id')->leftJoin('inspector_mission','inspector_mission.id','absences.mission_id')->where('absences.id',$id)->first();
+            $details=AbsenceEmployee::with('absenceType','gradeName')->where('absences_id',$id)->get();
+            //dd($details);
+        }else{//Violation
+            $title="سجل مخالفات";
+            $data=Violation::leftJoin('grades','grades.id','violations.grade')->SelectRaw("violations.id,CONCAT_WS('/',violations.name,grades.name)  as name,(Select GROUP_CONCAT(violation_type.`name`) from violation_type where FIND_IN_SET(violation_type.id,violations.violation_type)) AS ViolationType,IF(violations.flag=1,'مخالفة سلوك انظباطي','مخالفة مباني') as Type")->leftJoin('inspector_mission','inspector_mission.id','violations.mission_id')->where('violations.id',$id)->first();
+            $details=[];
+        }
+        return view('violations.details',compact('type','id','title','data','details'));
 
     }
 

@@ -83,15 +83,39 @@ class InstantmissionController extends Controller
     public function getGroups($id)
     {
         // $groups = Groups::all();
-        $groupTeams = GroupTeam::where('group_id', $id)->get();
+        if($id!=-1)
+                $groupTeams = GroupTeam::where('group_id', $id)->get();
+         else   $groupTeams = GroupTeam::all();
         return response()->json($groupTeams);
         // return view('instantMissions.create',compact('groups','groupTeams'));
     }
     public function getInspector($team_id,$group_id)
     {
         // $groups = Groups::all();
-        $team = GroupTeam::where('group_id', $group_id)->where('id', $team_id)->first();
-        $inspectorIds = explode(',', $team->inspector_ids);
+        $team = GroupTeam::whereNotNull('created_at') ;
+        if($group_id!=-1)
+        {
+            $team->where('group_id', $group_id);
+            if($team_id!=-1) $team->where('id', $team_id)->get();
+             
+            
+        }else{
+            if($team_id!=-1) $team->where('id', $team_id)->get();
+            
+        }
+        $team=$team->get();
+       /*  echo $group_id."<br>";
+       dd($team_id); */
+       // $team = GroupTeam::where('group_id', $group_id)->where('id', $team_id)->first();
+       $inspector_ids='';
+       foreach($team as $team)
+       {
+        if($inspector_ids!='')$inspector_ids.=',';
+        $inspector_ids.=$team->inspector_ids;
+
+       }
+      // dd($team);
+        $inspectorIds = explode(',', $inspector_ids);
 
         // Retrieve the inspectors based on the ids
         $inspectors = Inspector::whereIn('id', $inspectorIds)->get();

@@ -440,6 +440,7 @@ Route::middleware(['auth'])->group(function () {
      */
     Route::get('/viollation', [ViollationController::class, 'index'])->name('viollation');
     Route::get('violation/getAll', [ViollationController::class, 'getviolations'])->name('violations.getAll');
+    Route::get('violation_details/{type}/{id}', [ViollationController::class, 'violation_detail'])->name('violations.details');
 
 
     Route::get('api/Inspectors', [InspectorController::class, 'getInspectors'])->name('api.inspector');

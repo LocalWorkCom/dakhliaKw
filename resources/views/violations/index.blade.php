@@ -27,17 +27,22 @@
 
         <div class="row d-flex justify-content-between " dir="rtl">
                 <div class="form-group moftsh mt-4  mx-4  d-flex">
-                    <p class="filter "> تصفية حسب:</p>
-                    <div class="form-group moftsh  mx-3  d-flex">
-                            <h4 style="    line-height: 1.8;"> التاريخ :</h4>
+                    <p class="filter "> تصفية حسب :</p>
+                       <div class="check-one d-flex pt-2">
+                        <input type="checkbox" class="mx-2" name="all_date" checked id="all_date" >
+                        <label for=""> كل الايام </label>
+                    </div>
+                    <div class="form-group moftsh select-box-2  mx-3  d-flex">
+                            <!-- <h4 style="    line-height: 1.8;"> التاريخ :</h4> -->
                           <input type="date" name="date" id="date" value="{{($date)?$date:date('Y-m-d')}}">
+                       
                         </div>
-                        <div class="form-group moftsh  mx-3  d-flex">
-                        <h4 style=" line-height: 1.8;"> المجموعة :</h4>
+                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                        <!-- <h4 style=" line-height: 1.8;"> المجموعة :</h4> -->
                             <select id="group_id" name="group_id" class="form-control" placeholder="المجموعة">
                              
                                 <option value="-1"
-                                       selected> الكل
+                                selected   > كل المجموعات
                                     </option>
                                 @foreach ($groups as $item)
                                     <option value="{{ $item->id }}"
@@ -46,11 +51,13 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group moftsh  mx-3  d-flex">
-                        <h4 style=" line-height: 1.8;"> الفريق :</h4>
+                        
+                      
+                        <div class="form-group moftsh select-box-2  mx-3  d-flex">
+                        <!-- <h4 style=" line-height: 1.8;"> الفريق :</h4> -->
                         <select id="group_team_id" name="group_team_id" class="form-control" placeholder="الفرق">
                              
-                                <option value="-1" selected> الكل
+                                <option value="-1" selected > كل الدوريات
                                     </option>
                                 @foreach ($groupTeams as $item)
                                     <option value="{{ $item->id }}"
@@ -59,11 +66,11 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group moftsh  mx-3  d-flex">
-                             <h4 style=" line-height: 1.8;"> المفتش :</h4>
+                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                             <!-- <h4 style=" line-height: 1.8;"> المفتش :</h4> -->
                             <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش">
                                  
-                                    <option value="-1" selected> الكل
+                                    <option value="-1" selected > كل المفتشين
                                     </option>
                                     @foreach ($inspectors as $item)
                                         <option value="{{ $item->id }}"
@@ -73,9 +80,9 @@
                                 </select>
                         </div>
                         <div class="form-group moftsh  mx-3  d-flex">
-                        <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;"
+                        <button class="btn-all px-3 " style="color: #212529; background-color: #f8f8f8;"
                         onclick="search()">
-                        <i class="fa fa-search" aria-hidden="true"></i> بحث  
+                    بحث  
                     </button>
                         </div>
                 </div>
@@ -126,14 +133,14 @@
         var group_id = $(this).val();
        
 
-        if (group_id!=-1) {
+        //if (group_id!=-1) {
             $.ajax({
                 url: '/getGroups/' + group_id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     $('#group_team_id').empty();
-                    $('#group_team_id').append('<option selected value="-1"> الكل </option>');
+                    $('#group_team_id').append('<option selected value="-1"> كل الدوريات </option>');
                     $.each(data, function(key, employee) {               
                         console.log(employee);   
                         $('#group_team_id').append('<option value="' + employee.id + '">' + employee.name + '</option>');
@@ -144,9 +151,9 @@
                     console.log('XHR:', xhr.responseText);
                 }
             });
-        } else {
+        /*} /* else {
             $('#group_team_id').empty();
-        }
+        } */
     });
 });
 
@@ -157,14 +164,14 @@ $(document).ready(function() {
         console.log(group_team_id);
        
 
-        if (group_id!=-1) {
+       // if (group_id!=-1) {
             $.ajax({
                 url: '/getInspector/' + group_team_id +'/'+  group_id ,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     $('#inspectors').empty();
-                    $('#inspectors').append('<option value='-1'> الكل   </option>');
+                    $('#inspectors').append('<option value="-1"> كل المفتشين   </option>');
                     $.each(data, function(key, employee) {               
                         // console.log(employee);   
                         $('#inspectors').append('<option value="' + employee.id + '">' + employee.name + '</option>');
@@ -175,9 +182,9 @@ $(document).ready(function() {
                     console.log('XHR:', xhr.responseText);
                 }
             });
-        } else {
+        /*} else {
             $('#inspectors').empty();
-        }
+        }*/
     });
 });
 </script>
@@ -187,15 +194,19 @@ function search()
 {
     var url="{{url('viollation')}}";
     var dateItem=$('#date').val();
+    var alldate=$('#all_date').val();
     var group=$('#group_id').val();
     var team=$('#group_team_id').val();
     var inspectors=$('#inspectors').val();
     var addurl='';
-    if(dateItem!='' || dateItem!=null)
+        if(all_date==0)
     {
-        if(addurl=='')addurl+='?';else addurl+='&';
-        addurl+='date='+dateItem;
-    }
+        if(dateItem!='' || dateItem!=null)
+        {
+            if(addurl=='')addurl+='?';else addurl+='&';
+            addurl+='date='+dateItem;
+        }
+    } 
     if(group)
     {
         if(addurl=='')addurl+='?';else addurl+='&';
@@ -319,53 +330,14 @@ $(document).ready(function() {
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Get elements
-    var openSecondModalBtn = document.getElementById('openSecondModalBtn');
-    var firstModalBody = document.getElementById('firstModalBody');
-    var secondModalBody = document.getElementById('secondModalBody');
-
-    // Add click event listener
-    openSecondModalBtn.addEventListener('click', function() {
-        // Hide the first modal body
-        firstModalBody.classList.add('d-none');
-
-        // Show the second modal body
-        secondModalBody.classList.remove('d-none');
-    });
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const selectBox = document.getElementById('select-box');
-    const options = document.getElementById('options');
-    const searchInput = document.getElementById('search-input');
-    const selectedValuesContainer = document.getElementById('selected-values');
-    const optionCheckboxes = document.querySelectorAll('.option input[type="checkbox"]');
-    selectBox.addEventListener('click', function() {
-        options.style.display = options.style.display === 'block' ? 'none' : 'block';
-    });
-    document.addEventListener('click', function(event) {
-        if (!event.target.closest('.select-wrapper')) {
-            options.style.display = 'none';
-        }
-    });
-    optionCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const selectedOptions = Array.from(optionCheckboxes)
-                .filter(cb => cb.checked)
-                .map(cb => cb.nextElementSibling.textContent);
-            selectedValuesContainer.innerHTML = selectedOptions.join(', ');
+    $(document).ready(function(){
+        $('#date').on('change', function() {
+            const selectedDate = $(this).val();
+          //  $('#selectedDate').text('Selected Date: ' + selectedDate);
+          $('#all_date').prop('checked',false).val('0');
+            console.log('Date changed to: ', selectedDate);
         });
     });
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        optionCheckboxes.forEach(checkbox => {
-            const optionLabel = checkbox.nextElementSibling.textContent.toLowerCase();
-            checkbox.parentElement.style.display = optionLabel.includes(searchTerm) ?
-                'block' : 'none';
-        });
-    });
-});
 </script>
+
 @endpush
