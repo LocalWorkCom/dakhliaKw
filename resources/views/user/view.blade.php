@@ -101,6 +101,16 @@
                                     <th style="width:150px !important;">العمليات</th>
                                 </tr>
                             </thead>
+                           <!--  <tfoot>
+                                    <tr>
+                                        <th>رقم التعريف</th>
+                                        <th>الاسم</th>
+                                        <th>القسم</th>
+                                        <th>الهاتف</th>
+                                        <th>الرقم العسكري</th>
+                                        <th style="width:150px !important;"></th>
+                                    </tr>
+                         </tfoot> -->
                         </table>
 
 
@@ -120,8 +130,17 @@
                                         }
                                        // dd($Dataurl);
                                                                         
-                                        @endphp                            
-                                $('#users-table').DataTable({
+                                        @endphp    
+                                      /*   
+                                        $('#users-table tfoot th').each(function (i) {
+                                            var title = $('#users-table thead th')
+                                                .eq($(this).index())
+                                                .text();
+                                            $(this).html(
+                                                '<input type="text" placeholder="' + title + '" data-index="' + i + '" />'
+                                            );
+                                        }); */
+                                var table=$('#users-table').DataTable({
                                     processing: true,
                                     serverSide: true,
                                     ajax: '{{$Dataurl}}/' + id, // Correct URL concatenation
@@ -161,7 +180,7 @@
                                         render: function(data, type, row) {
 
 
-                                            console.log("dalia", data);
+                                          //  console.log("dalia", data);
                                             // Using route generation correctly in JavaScript
                                             var useredit = '{{ route('user.edit', ':id') }}';
                                             useredit = useredit.replace(':id', row.id);
@@ -209,7 +228,24 @@
                                         }
                                     },
                                     "pagingType": "full_numbers",
+                                    "fnDrawCallback": function(oSettings) {
+                                        console.log('Page '+this.api().page.info().pages)
+                                        var page=this.api().page.info().pages;
+                                        console.log($('#users-table tr').length);
+                                        if (page ==1) {
+                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+
+                                        }
+                                    }
                                 });
+
+                                $(table.table().container()).on('keyup', 'tfoot input', function () {
+                                        table
+                                            .column($(this).data('index'))
+                                            .search(this.value)
+                                            .draw();
+                                    });
                             });
                         </script>
 

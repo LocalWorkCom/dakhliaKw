@@ -24,8 +24,8 @@
                     {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
                     <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
 
-                            اضافة مخالفه  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                        </button>
+                        اضافة مخالفه <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                    </button>
                     {{-- @endif --}}
                 </div>
             </div>
@@ -102,15 +102,15 @@
                                                     style="width: 100% !important;" dir="rtl">
 
                                             </div>
-                                            @foreach (getDepartments() as $department)
+                                            @for ($i = 0; $i < count($type); $i++)
                                                 <div class="option" style="    display: flex; justify-content: flex-end;">
-                                                    <label for="option{{ $department->id }}"> {{ $department->name }}
+                                                    <label for="option{{ $type[$i]['id'] }}"> {{ $type[$i]['name'] }}
                                                     </label>
-                                                    <input type="checkbox" id="option{{ $department->id }}"
-                                                        value="{{ $department->id }}" name="types[]">
+                                                    <input type="checkbox" id="option{{ $type[$i]['id'] }}"
+                                                        value="{{ $type[$i]['id'] }}" name="types[]">
 
                                                 </div>
-                                            @endforeach
+                                            @endfor
 
                                         </div>
                                     </div>
@@ -175,7 +175,7 @@
                                     <label class="d-flex justify-content-start pb-2" for="types"
                                         style=" flex-direction: row-reverse;">
                                         الاداره الخاصه بالمخالفه</label>
-                                    <select class="w-100 px-2" name="types[]" id="types" multiple
+                                    <select class="w-100 px-2 select2" name="types[]" id="types" multiple
                                         style="border: 0.2px solid rgb(199, 196, 196);" required dir="rtl">
                                         @foreach (getDepartments() as $department)
                                             <option value="{{ $department->id }}"> {{ $department->name }}</option>
@@ -209,11 +209,10 @@
             </div>
         </div>
     </div>
-
-    
 @endsection
 @push('scripts')
     <script>
+        
         function openedit(id, name, types) {
             document.getElementById('nameedit').value = name;
             document.getElementById('idedit').value = id;
@@ -326,7 +325,17 @@
                         }
                     }
                 },
-                "pagingType": "full_numbers"
+                "pagingType": "full_numbers",
+                "fnDrawCallback": function(oSettings) {
+                                     console.log('Page '+this.api().page.info().pages)
+                                        var page=this.api().page.info().pages;
+                                        console.log($('#users-table tr').length);
+                                        if (page ==1) {
+                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+
+                                        }
+                }
 
             });
 

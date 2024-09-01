@@ -12,4 +12,12 @@ class Violation extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function point()
+    {
+        return $this->belongsTo(Point::class, 'point_id');
+    }
+    public function violatType()
+    {
+        return $this->belongsTo(ViolationTypes::class, 'violation_type');
+    }
 }

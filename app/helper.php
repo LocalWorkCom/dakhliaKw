@@ -10,6 +10,8 @@ use App\Models\Government;
 use App\Models\departements;
 use App\Models\VacationType;
 use App\Models\EmployeeVacation;
+use App\Models\GroupSectorHistory;
+use App\Models\InspectorGroupHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Intervention\Image\Facades\Image;
@@ -190,7 +192,7 @@ function getLatLongFromUrl($url)
         $url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
     }
-    
+
     $pattern = '/@([-+]?[\d]*\.?[\d]+),([-+]?[\d]*\.?[\d]+)/';
     preg_match($pattern, $url, $matches);
     // dd($matches);
@@ -200,7 +202,7 @@ function getLatLongFromUrl($url)
             'longitude' => $matches[2]
         ];
     }
-   
+
     return null;
 }
 
@@ -248,7 +250,7 @@ function showUserDepartment()
 
     // Access the department name
     // dd($user->department);
-    $departmentName = $user->department != null ? $user->department->name : '';
+    $departmentName = $user->department != null ? ($user->department->name != null ? $user->department->name : 'القسم الرئيسي') : '';
 
     return $departmentName;
 }
@@ -398,4 +400,25 @@ function convertToArabicNumerals($number)
     $easternArabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
     return str_replace($westernArabicNumerals, $easternArabicNumerals, $number);
+}
+function addInspectorHistory($inspector_id, $group_id, $team_id, $is_working = 1)
+{
+
+    $today = date('Y-m-d');
+    $inspector_group = new InspectorGroupHistory();
+    $inspector_group->inspector_id = $inspector_id;
+    $inspector_group->group_id = $group_id;
+    $inspector_group->group_team_id = $team_id;
+    $inspector_group->date = $today;
+    $inspector_group->is_working = $is_working;
+    $inspector_group->save();
+}
+function addGroupHistory($group_id, $sector_id)
+{
+    $today = date('Y-m-d');
+    $group_sector = new GroupSectorHistory();
+    $group_sector->group_id = $group_id;
+    $group_sector->sector_id = $sector_id;
+    $group_sector->date = $today;
+    $group_sector->save();
 }

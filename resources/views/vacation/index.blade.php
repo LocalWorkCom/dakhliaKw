@@ -8,15 +8,16 @@
 
 @section('content')
 
-<div class="row " dir="rtl">
-<div class="container  col-11" style="background-color:transparent;">
+    <div class="row">
+
+        <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
                 <p> الاجــــــازات </p>
                 {{-- ( {{ $vacationCount }} ) --}}
                 @if (Auth::user()->hasPermission('create EmployeeVacation'))
                     <button type="button" class="btn-all-2 mt-1 px-3 mx-3" style="color: #0D992C;"
                         onclick="window.location.href='{{ route('vacation.add', $id) }}'">
-                        اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
                 @endif
             </div>
@@ -109,10 +110,12 @@
                                 <input type="hidden" name="type" id="type">
                                 <input type="hidden" name="id" id="id">
                                 <div class="form-group">
-                                    <label for="end_date">تاريخ النهاية</label>
-                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                    <label for="end_date" id="end_date_label">تاريخ النهاية</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control"
+                                        oninput="this.type='text'; this.type='date';" required>
                                     <span class="text-danger span-error" id="end-date-error"></span>
                                 </div>
+
                                 <div class="text-end mt-3">
                                     <button type="submit" class="btn-blue" onclick="UpdateDate()">حفظ</button>
                                 </div>
@@ -126,6 +129,10 @@
 
                 <!-- Script for DataTables and modal behavior -->
                 <script>
+                    document.getElementById('end_date').addEventListener('keydown', function(event) {
+                        event.preventDefault();
+                    });
+
                     function UpdateDate() {
                         var end_date = $('#end_date').val();
                         var type = $('#type').val();
@@ -159,6 +166,9 @@
                     function update_type(type, id) {
                         $('#type').val(type);
                         $('#id').val(id);
+                        if (type != 'cut') {
+                            $('#end_date_label').html('تاريخ المباشرة');
+                        }
                     }
 
                     $(document).ready(function() {
@@ -317,7 +327,18 @@
                                     }
                                 }
                             },
-                            pagingType: "full_numbers"
+                            pagingType: "full_numbers",
+                            "fnDrawCallback": function(oSettings) {
+                                        console.log($('#users-table tr').length);
+                                        console.log('Page '+this.api().page.info().pages)
+                                        var page=this.api().page.info().pages;
+                                        console.log($('#users-table tr').length);
+                                        if (page ==1) {
+                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+
+                                }
+                            }
                         });
 
                         // Update filter based on button click
@@ -361,7 +382,7 @@
                         // });
 
                     });
-                    
+
 
 
                     $(document).ready(function() {
@@ -378,20 +399,20 @@
                         $('#end_date').attr('value', today);
                     });
                 </script>
-<script>
-    function openAndPrint(url) {
-        
-        // var url = "${urls.printReturn}?id=" + encodeURIComponent(rowId);
+                <script>
+                    function openAndPrint(url) {
 
-        // فتح الصفحة في نافذة جديدة
-        var newWindow = window.open(url, '_blank');
+                        // var url = "${urls.printReturn}?id=" + encodeURIComponent(rowId);
 
-     
-        newWindow.onload = function() {
-            newWindow.print();
-        };
-    }
-</script>
+                        // فتح الصفحة في نافذة جديدة
+                        var newWindow = window.open(url, '_blank');
+
+
+                        newWindow.onload = function() {
+                            newWindow.print();
+                        };
+                    }
+                </script>
             </div>
         </div>
     </div>
@@ -405,10 +426,10 @@
 
 <script>
     function openAndPrint() {
-      
+
         var printWindow = window.open('${urls.printReturn}', '_blank');
 
-   
+
         printWindow.onload = function() {
             printWindow.print();
         };

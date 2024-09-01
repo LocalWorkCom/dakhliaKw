@@ -104,6 +104,10 @@
                                 <a href="{{ route('instant_mission.index') }}">الأوامر الخدمة</a>
                             </li>
                             <li>
+                                <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo" style="margin-left: 7px;">
+                                <a href="{{ route('viollation') }}"> سجل المخالفات</a>
+                            </li>
+                            <li>
                                 <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo" style="margin-left: 7px;">
                                 <a href="{{ route('vacations.list') }}">الإجازات</a>
                             </li>
@@ -148,15 +152,16 @@
                                         @if (Auth::user()->hasPermission('view job'))
                                             <li class="{{ request()->routeIs('job.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/jobs.svg') }}" alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('job.index') }}">الوظائف</a>
+                                                <a href="{{ route('job.index') }}">المسمى الوظيفى
+                                                </a>
                                             </li>
                                         @endif
-                                        @if (Auth::user()->hasPermission('view Qualification'))
+                                        {{-- @if (Auth::user()->hasPermission('view Qualification'))
                                             <li class="{{ request()->routeIs('qualifications.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
                                                 <a href="{{ route('qualifications.index') }}">المؤهلات</a>
                                             </li>
-                                        @endif
+                                        @endif --}}
                                         @if (Auth::user()->hasPermission('view Government'))
                                             <li class="{{ request()->routeIs('government.all') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
@@ -171,7 +176,10 @@
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
                                             <a href="{{ route('sectors.index') }}">القطاعات</a>
                                         </li>
-                                       
+                                        <li class="{{ request()->routeIs('points.index') ? 'active' : '' }}">
+                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
+                                            <a href="{{ route('points.index') }}">النقاط</a>
+                                        </li>
                                     </div>
                                     <div class="col-6">
                                         @if (Auth::user()->hasPermission('view VacationType'))
@@ -206,13 +214,11 @@
                                         </li>
                                         <li class="{{ request()->routeIs('absence.index') ? 'active' : '' }}">
                                             <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo" style="margin-left: 7px;">
-                                            <a href="{{ route('absence.index') }}">أنواع الغيابات</a>
+                                            <a href="{{ route('absence.index') }}">مسميات العجز
+                                            </a>
                                         </li>
 
-                                        <li class="{{ request()->routeIs('points.index') ? 'active' : '' }}">
-                                            <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
-                                            <a href="{{ route('points.index') }}">النقاط</a>
-                                        </li>
+                                      
                                     </div>
                                 </div>
                             </ul>

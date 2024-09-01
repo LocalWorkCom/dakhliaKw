@@ -898,11 +898,11 @@
     }
     .dropdown-menu4 {
         top: 100%;
-        left: -53px;
+        left: -85px;
         /* padding-inline: 10px; */
         font-size: 21px;
         height: 126px;
-        width: 232px !important;
+        width: 316px !important;
     }
     .second-section .input-group{
         display: none;
@@ -933,6 +933,9 @@
     /* .first-section {
         margin-left: -92px;
     } */
+    .second-section .bell i {
+        font-size: 17px;
+    }
     .navbar-nav{
         display: flex;
         flex-wrap: wrap;
@@ -1091,6 +1094,138 @@
         font-size: 15px !important;
         text-align: center !important;
     }
+    .select2-container .select2-selection--single {
+        height: 35px !important;
+        font-size: 14px;
+        padding-top: 8px !important;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+        font-size: 14px;
+        height: 35px !important;
+    }
+    .form-group label {
+        font-size: 18px;
+        line-height: 26.78px;
+        padding-right: 20px;
+    }
+    .btn-blue {
+        width: 110px;
+        height: 30px;
+        font-size: 19px;
+    }
+    #users-table td a {
+        height: 23px !important;
+        font-size: 14px !important;
+        padding-block: 1px;
+        margin-inline: 1px;
+        margin-block: 3px;
+    }
+    .select-box {
+        height: 35px;
+        padding-inline: 15px;
+        font-size: 16px;
+    }
+    .moftsh h3 {
+        font-size: 22px;
+        line-height: 48px;
+    }
+    input[type="radio"] {
+        width: 18px;
+    }
+    .moftsh label {
+        font-size: 20px;
+    }
+    .breadcrumb a {
+        padding-right: 13px;
+        font-size: 16px;
+    }
+    .nav-item img {
+        height: 20px !important;
+        width: 20px !important;
+    }
+    .option {
+        padding: 5px;
+        font-size: 14px;
+    }
+    .moftsh .input-group input, .moftsh .input-group select {
+        width: 100%;
+        height: 31px;
+    }
+    .select-box p, .search-box i {
+        font-size: 14px;
+        padding-top: 12px;
+    }
+  .btn-blue img, .btn-all img  {
+        height: 18px !important;
+        width: 18px !important;
+    }
+    .moftsh .filter {
+      display: none;
+    }
+    .btn-all {
+        height: 30px;
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+    .table th {
+        font-size: 13px;
+    }
+    .table td {
+        font-size: 13px;
+    }
+    footer p {
+        font-size: 15px;
+    }
+    footer {
+        height: 35px;
+        padding: 8px;
+    }
+    .btn-pagination {
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        margin-inline: 6px;
+    }
+    .modal-header h5 {
+        font-size: 25px;
+    }
+    .dataTables_wrapper .dataTables_info {
+        font-size: 13px;
+    }
+    .moftsh h3 {
+        font-size: 18px;
+        line-height: 48px;
+    }
+    .moftsh h4 {
+        color: #274373;
+        font-size: 18px !important;
+    }
+    .moftsh label {
+        font-size: 18px;
+    }
+    .btn-back {
+        width: 100px;
+        height: 30px;
+        font-size: 15px; 
+    }
+    .select2-container--default .select2-selection--multiple {
+        height: 35px !important;
+        font-size: 12px !important;
+    }
+    #users-table th, #users-table td {
+        font-size: 15px !important;
+    }
+    .radio1 label, .radio2 label {
+        font-family: Almarai;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 36px;
+        text-align: right;
+    }
+    .header-radio {
+        height: 53px;
+    }
+  
 }
 @media (max-width: 578px){
 .input-group{

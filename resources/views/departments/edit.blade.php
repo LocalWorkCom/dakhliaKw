@@ -193,8 +193,8 @@ $(document).ready(function() {
 
 <style>
     .selectedd {
-    background-color: green; /* Change to desired color */
-    color: white; /* Optional: Change text color for better contrast */
+        background-color: #cacacb;
+    color: white; 
 }
 </style>
 @endsection

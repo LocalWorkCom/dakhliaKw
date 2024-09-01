@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+
 class ViolationController  extends Controller
 {
     //
@@ -32,7 +33,7 @@ class ViolationController  extends Controller
         ];
         $validatedData = Validator::make($request->all(), [
             'type' => 'required',
-        ], $messages);
+        ], $messages); 
 
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
@@ -310,7 +311,7 @@ class ViolationController  extends Controller
             // dd("yes");
             $location = null;
             $kwFinder = $instantMissions->location;
-        }
+        } 
         else
         {
             $location = $instantMissions->location;

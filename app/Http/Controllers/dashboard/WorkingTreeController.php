@@ -4,6 +4,7 @@ namespace App\Http\Controllers\dashboard;
 
 use App\DataTables\IoTelegramDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\InspectorMission;
 use App\Models\WorkingTime;
 use App\Models\WorkingTree;
 use App\Models\WorkingTreeTime;
@@ -72,7 +73,7 @@ class WorkingTreeController extends Controller
         // $working_days_num = $request->input('working_days_num');
         // for ($i = 1; $i <= $working_days_num; $i++) {
         //     $rules["period{$i}"] = 'nullable|exists:working_times,id'; // Only required if not checked
-        //     if ($request->input("holiday_checkbox{$i}") !== 'on') {
+        //     if ($request->input("holiday_checkbox{$i}") != 'on') {
         //         $rules["period{$i}"] = 'required|exists:working_times,id'; // Required if not holiday
         //     }
         // }
@@ -120,7 +121,7 @@ class WorkingTreeController extends Controller
         }
 
         $WorkingTree->holiday_days_num = $holiday_days_num;
-        
+
         $WorkingTree->working_days_num = $request->working_days_num - $holiday_days_num;
         $WorkingTree->save();
 
@@ -135,123 +136,104 @@ class WorkingTreeController extends Controller
         $workingTree = WorkingTree::with('workingTreeTimes')->where('id', $id)->first();
         return view('workingTree.edit', compact('workingTimes', 'workingTree'));
     }
+
     public function update(Request $request, $id)
     {
         $rules = [
-
             'name' => 'required|string',
             'working_days_num' => 'required|integer|min:1',
-            // 'holiday_days_num' => 'required|integer|min:0',
         ];
 
         $messages = [
-
             'name.required' => 'يجب ادخال اسم الادارة',
             'name.string' => 'يجب ادخال اسم الادارة',
             'working_days_num.required' => 'يجب ادخال عدد ايام العمل',
             'working_days_num.integer' => 'يجب ادخال رقم في عدد ايام العمل',
-            // 'holiday_days_num.required' => 'يجب ادخال عدد ايام الاجازات',
-            // 'holiday_days_num.integer' => 'يجب ادخال رقم في عدد ايام الاجازات',
-
         ];
+
+        // Dynamically add validation rules for working days periods
         for ($i = 1; $i <= $request->working_days_num; $i++) {
             $holidayCheckbox = "holiday_checkbox" . $i;
             $holidayPeriod = "period" . $i;
 
-            if ($request->has($holidayCheckbox) && $request->input($holidayCheckbox) === 'on') {
-                // If holiday checkbox is checked, working time ID should be null
-                $rules[$holidayPeriod] = 'nullable|exists:working_times,id';  // Allow null or existing working time
-            } else {
-                // If holiday checkbox is not checked, working time ID is required
-                $rules[$holidayPeriod] = 'required|exists:working_times,id';
-            }
+            $rules[$holidayPeriod] = $request->has($holidayCheckbox) && $request->input($holidayCheckbox) === 'on'
+                ? 'nullable|exists:working_times,id'
+                : 'required|exists:working_times,id';
 
-            // Add custom messages for the working time ID validation
             $messages[$holidayPeriod . '.required'] = 'يجب اختيار وقت العمل للمدة ' . $i;
             $messages[$holidayPeriod . '.exists'] = 'وقت العمل المحدد غير موجود.';
         }
+
         $validatedData = Validator::make($request->all(), $rules, $messages);
 
         if ($validatedData->fails()) {
             session()->flash('errors', $validatedData->errors());
             return redirect()->back()->withInput();
         }
+
         $holiday_days_num = 0;
-        $WorkingTree =  WorkingTree::find($id);
+        $WorkingTree = WorkingTree::find($id);
         $WorkingTree->name = $request->name;
         $WorkingTree->working_days_num = $request->working_days_num;
         $WorkingTree->holiday_days_num = $holiday_days_num;
-        // $WorkingTree->created_by = auth()->id();
-        // $WorkingTree->created_departement = auth()->user()->department_id;
         $WorkingTree->save();
-        if ($WorkingTree->working_days_num > $request->working_days_num) {
-            for ($j = 0; $j < $WorkingTree->working_days_num; $j++) {
-                if ($j != 1) {
-                    $checkTimeExistDel = WorkingTreeTime::where('day_num', $j)->where('working_tree_id', $id)->first();
-                    $checkTimeExistDel->delete();
-                }
-            }
-        }
+
+        // Delete old WorkingTreeTime entries that are no longer needed
+        WorkingTreeTime::where('working_tree_id', $id)
+            ->where('day_num', '>', $request->working_days_num)
+            ->delete();
+
+        // Process each working day
         for ($i = 1; $i <= $request->working_days_num; $i++) {
             $holidayCheckbox = "holiday_checkbox" . $i;
             $holidayPeriod = "period" . $i;
+            $workingTimeId = $request->input($holidayPeriod);
+            $isHoliday = $request->has($holidayCheckbox) && $request->input($holidayCheckbox) === 'on';
 
-            // Create WorkingTreeTime entry
-            $checkTimeExist = WorkingTreeTime::where('day_num', $i)->where('working_tree_id', $id)->first();
-            // dd($checkTimeExist);
-            if (!$checkTimeExist) {
-                $WorkingTreeTime = new WorkingTreeTime;
-                $WorkingTreeTime->working_time_id = $request->input("holiday" . $i); // Assuming you want to set working_time_id here
-                $WorkingTreeTime->working_tree_id = $WorkingTree->id;
-                $WorkingTreeTime->day_num = $i;
-                $WorkingTreeTime->created_by = auth()->id();
-                $WorkingTreeTime->created_departement = auth()->user()->department_id;
+            // Update or create WorkingTreeTime entries
+            $workingTreeTime = WorkingTreeTime::updateOrCreate(
+                [
+                    'working_tree_id' => $id,
+                    'day_num' => $i,
+                ],
+                [
+                    'working_time_id' => $isHoliday ? null : $workingTimeId,
+                    'is_holiday' => $isHoliday ? 1 : 0,
+                    'created_by' => auth()->id(),
+                    'created_departement' => auth()->user()->department_id,
+                ]
+            );
 
-                if ($request->has($holidayCheckbox) && $request->input($holidayCheckbox) === 'on') {
-                    $WorkingTreeTime->working_time_id = null;
-                    $WorkingTreeTime->is_holiday = 1; // Or any other logic for holidays
-                    $holiday_days_num++;
-                } else {
-                    $WorkingTreeTime->is_holiday = 0;
-                }
-
-                // Set the period if available
-                if ($request->has($holidayPeriod)) {
-                    $WorkingTreeTime->working_time_id = $request->input($holidayPeriod);
-                }
-
-                $WorkingTreeTime->save();
-            } else {
-                $checkTimeExist->working_time_id = $request->input("holiday" . $i); // Assuming you want to set working_time_id here
-                $checkTimeExist->working_tree_id = $WorkingTree->id;
-                $checkTimeExist->day_num = $i;
-                $checkTimeExist->created_by = auth()->id();
-                $checkTimeExist->created_departement = auth()->user()->department_id;
-
-                if ($request->has($holidayCheckbox) && $request->input($holidayCheckbox) === 'on') {
-                    $checkTimeExist->working_time_id = null;
-                    $checkTimeExist->is_holiday = 1; // Or any other logic for holidays
-                    $holiday_days_num++;
-                } else {
-                    $checkTimeExist->is_holiday = 0;
-                }
-
-                // Set the period if available
-                if ($request->has($holidayPeriod)) {
-                    $checkTimeExist->working_time_id = $request->input($holidayPeriod);
-                }
-
-                $checkTimeExist->save();
+            if ($isHoliday) {
+                $holiday_days_num++;
             }
-            // Check if holiday checkbox is checked
+
+            // Update InspectorMission records
+            $missions = InspectorMission::where('date', '>=', today())
+                ->where('working_tree_id', $id)
+                ->where('day_number', $i)
+                ->get();
+
+            foreach ($missions as $mission) {
+                $mission->working_time_id = $workingTreeTime->working_time_id;
+                $mission->day_off = $workingTreeTime->is_holiday;
+                $mission->save();
+            }
         }
+
+        // Update the holiday_days_num field of the WorkingTree
         $WorkingTree->holiday_days_num = $holiday_days_num;
         $WorkingTree->working_days_num = $request->working_days_num - $holiday_days_num;
         $WorkingTree->save();
+
         session()->flash('success', 'تم التعديل بنجاح.');
 
         return redirect()->route('working_trees.list');
     }
+
+
+
+
     public function show($id)
     {
         $WorkingTree = WorkingTree::find($id);

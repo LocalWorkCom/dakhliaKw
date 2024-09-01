@@ -63,19 +63,19 @@
                             style="background-color:#f5f8fd; border-bottom:0.1px solid lightgray;">
                             <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
                                 {{-- {{ dd($user->type) }} --}}
-                                @if ($user->type == 'man')
+                              <!--   @if ($user->type == 'man') -->
                                     <div class="radio-btns mx-md-4 ">
                                         <input type="radio" class="form-check-input" id="male" name="gender"
-                                            value="man" style="height:20px; width:20px;" checked>
+                                            value="man" style="height:20px; width:20px;" @if ($user->type == 'man') checked @endif>
                                         <label class="form-check-label mx-2" for="male">ذكر</label>
                                     </div>
                                     <div class="radio-btns mx-md-4 ">
                                         <input type="radio" class="form-check-input" id="female" name="gender"
-                                            value="female" style="height:20px; width:20px;">
-                                        <label class="form-check-label mx-2" for="female">انثى</label>
+                                            value="female" style="height:20px; width:20px;" @if ($user->type == 'female') checked @endif>
+                                        <label class="form-check-label mx-md-2" for="female">انثى</label>
                                     </div>
-                                @else
-                                    <div class="radio-btns mx-md-4 ">
+                               <!--  @else -->
+                                    <!-- <div class="radio-btns mx-md-4 ">
                                         <input type="radio" class="form-check-input" id="male" name="gender"
                                             value="man" style="height:20px; width:20px;">
                                         <label class="form-check-label mx-2" for="male">ذكر</label>
@@ -83,36 +83,25 @@
                                     <div class="radio-btns mx-md-4 ">
                                         <input type="radio" class="form-check-input" id="female" name="gender"
                                             value="female" style="height:20px; width:20px;" checked>
-                                        <label class="form-check-label mx-2" for="female">انثى</label>
-                                    </div>
-                                @endif
+                                        <label class="form-check-label mx-md-2" for="female">انثى</label>
+                                    </div> -->
+                              <!--   @endif -->
                                 <label for="input44">الفئة</label>
                             </div>
                             <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
 
-                                @if ($user->employee_type == 'civil')
+                              
                                     <div class="radio-btns mx-md-4 ">
                                         <input type="radio" class="form-check-input" id="solder" name="solderORcivil"
-                                            value="military" style="height:20px; width:20px;">
+                                            value="military" style="height:20px; width:20px;"   @if ($user->employee_type != 'civil') checked @endif>
                                         <label class="form-check-label mx-2" for="solder">عسكرى</label>
                                     </div>
                                     <div class="radio-btns mx-md-4 ">
                                         <input type="radio" class="form-check-input" id="civil" name="solderORcivil"
-                                            value="civil" style="height:20px; width:20px;" checked>
+                                            value="civil" style="height:20px; width:20px;"   @if ($user->employee_type == 'civil') checked @endif>
                                         <label class="form-check-label mx-2" for="civil">مدنى</label>
                                     </div>
-                                @else
-                                    <div class="radio-btns mx-md-4 ">
-                                        <input type="radio" class="form-check-input" id="solder" name="solderORcivil"
-                                            value="military" style="height:20px; width:20px;" checked>
-                                        <label class="form-check-label mx-2" for="solder">عسكرى</label>
-                                    </div>
-                                    <div class="radio-btns mx-md-4 ">
-                                        <input type="radio" class="form-check-input" id="civil" name="solderORcivil"
-                                            value="civil" style="height:20px; width:20px;">
-                                        <label class="form-check-label mx-2" for="civil">مدنى</label>
-                                    </div>
-                                @endif
+                           
                                 <label for="input44"> التصنيف</label>
                             </div>
                         </div>
@@ -169,12 +158,12 @@
                                 <input type="text" id="input4" name="phone" class="form-control"
                                     placeholder=" رقم المحمول" value="{{ $user->phone }}" dir="rtl">
                             </div>
-
-                            <div class="form-group col-md-5 mx-2"  style="display: none;" id="military_number_id">
-                                <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  رقم العسكرى</label>
-                                <input type="text" id="input6" name="military_number" class="form-control"
-                                    placeholder="رقم العسكرى" value="{{ $user->military_number }}" dir="rtl">
+                            <div class="form-group col-md-5 mx-2">
+                                <label for="input11"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  رقم المدنى</label>
+                                <input type="text" id="input11" name="Civil_number" class="form-control"
+                                    placeholder="رقم المدنى" value="{{ $user->Civil_number }}" dir="rtl">
                             </div>
+                          
                         </div>
 
                         {{-- <div class="form-row mx-2 d-flex justify-content-center flex-row-reverse">
@@ -205,12 +194,13 @@
                         </div>
 
                         <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
-                            <div class="form-group col-md-5 mx-2">
-                                <label for="input11"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  رقم المدنى</label>
-                                <input type="text" id="input11" name="Civil_number" class="form-control"
-                                    placeholder="رقم المدنى" value="{{ $user->Civil_number }}" dir="rtl">
+                           
+                            <div class="form-group col-md-5 mx-2"  style="display: none;" id="military_number_id">
+                                <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>  رقم العسكرى</label>
+                                <input type="text" id="input6" name="military_number" class="form-control"
+                                    placeholder="رقم العسكرى" value="{{ $user->military_number }}" dir="rtl">
                             </div>
-                            <div class="form-group col-md-5 mx-2">
+                            <div class="form-group col-md-5 mx-2"  id="input12Div">
                                 <label for="input12"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم الملف</label>
                                 <input type="text" id="input12" name="file_number" class="form-control"
                                     placeholder="رقم الملف" value="{{ $user->file_number }}" dir="rtl">
@@ -291,8 +281,10 @@
                         <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-5 mx-md-2">
                                 <label for="input44">العنوان </label>
-                                <input type="text" id="input44" name="address_1" class="form-control"
-                                    placeholder="  العنوان" value="{{ $user->address1 }}">
+                               <!--  <input type="text" id="input44" name="address_1" class="form-control"
+                                    placeholder="  العنوان" value="{{ $user->address1 }}"> -->
+                                    <textarea id="input44" name="address_1" class="form-control"
+                                    placeholder="  العنوان" value="{{ $user->address1 }}">{{ $user->address1 }}</textarea>
                             </div>
                             {{-- <div class="form-group col-md-5 mx-md-2">
                                 <label for="input44">العنوان 2</label>
@@ -619,10 +611,16 @@ $(document).ready(function() {
         function toggleMilitarySection(value) {
             const militarySection = document.getElementById('type_military_id');
             if (value === "military") {
-                militarySection.style.display = "block";
-            } else {
-                militarySection.style.display = "none";
-            }
+            militarySection.style.display = "block";
+            $('#input12Div').fadeIn('fast');
+           
+        } else {
+            militarySection.style.display = "none";
+            $('#input12Div').fadeOut('fast');
+        }
+            $('#military_number_id').fadeOut('fast');
+       /*  $('#police').prop('checked', false);
+        $('#police_').prop('checked', true); */
         }
     
         // Check initial selection

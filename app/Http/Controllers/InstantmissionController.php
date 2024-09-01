@@ -22,7 +22,7 @@ class InstantmissionController extends Controller
      */
     public function index()
     {
-        return view('instantMissions.view');
+        return view('instantMissions.view'); 
     }
 
     public function getInstantMission()
@@ -59,6 +59,7 @@ class InstantmissionController extends Controller
         
         $inspectors_group = Inspector::where('department_id',Auth()->user()->department_id)->select('group_id')
         ->groupBy('group_id')->pluck('group_id');
+       // dd(Auth::user()->rule->name);
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $groups = Groups::all();
             $groupTeams = GroupTeam::all();
@@ -73,7 +74,7 @@ class InstantmissionController extends Controller
          }
 
      
-
+       //  dd($groups);
         
         
         return view('instantMissions.create', compact('groups', 'groupTeams','inspectors'));
@@ -181,10 +182,26 @@ class InstantmissionController extends Controller
     {
         $IM = instantmission::find($id);
         $groups = Groups::all();
+        $inspectors_group = Inspector::where('department_id',Auth()->user()->department_id)->select('group_id')
+        ->groupBy('group_id')->pluck('group_id');
+        if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
+            $groups = Groups::all();
+            $groupTeams = GroupTeam::all();
+            $inspectors = Inspector::all();
+         }
+         else
+         {
+            $groups = Groups::whereIn('id', $inspectors_group)->get();
+            // dd($groups);
+            $groupTeams = GroupTeam::whereIn('group_id', $inspectors_group)->get();
+            $inspectors = Inspector::where('department_id',Auth()->user()->department_id)->get();
+         }
         $groupTeams = GroupTeam::where('group_id', $IM->group_id)->get();
-        $inspectors = Inspector::where('group_id',$IM->group_id)->get();
-        
-        return view('instantMissions.show', compact('groups', 'groupTeams', 'IM' ,'inspectors'));
+
+        $inspectors = Inspector::where('id',$IM->inspector_id)->get();
+
+        return view('instantMissions.show', compact('groups', 'groupTeams','inspectors', 'IM'));
+
     }
 
     /**

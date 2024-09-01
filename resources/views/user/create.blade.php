@@ -69,19 +69,19 @@
                                     style="height:20px; width:20px;">
                                 <label class="form-check-label mx-2" for="female">انثى</label>
                             </div>
-                            <label for="input44 " class="mx-3">الفئة </label>
+                            <label for="input44 " class="input44-none mx-3">الفئة </label>
 
                         </div>
                         <div class="form-group d-flex  justify-content-end col-md-5 mx-2">
                             <div class="radio-btns mx-md-4 ">
                                 <input type="radio" class="form-check-input" id="solder" name="solderORcivil"
                                     value="military" style="height:20px; width:20px;">
-                                <label class="form-check-label mx-2" for="solder">عسكرى</label>
+                                <label class="form-check-label mx-md-2" for="solder">عسكرى</label>
                             </div>
                             <div class="radio-btns mx-md-4">
                                 <input type="radio" class="form-check-input" id="civil" name="solderORcivil"
                                     value="civil" style="height:20px; width:20px;" checked>
-                                <label class="form-check-label mx-2" for="civil">مدنى</label>
+                                <label class="form-check-label mx-md-2" for="civil">مدنى</label>
                             </div>
                             <label for="input44" class="mx-3">التصنيف</label>
                         </div>
@@ -134,10 +134,11 @@
 
             </div> 
             <div class="form-group col-md-5 mx-2">
-                <label for="input44">العنوان 1</label>
-                <input type="text" id="input44" name="address_1" class="form-control" placeholder="  العنوان"
-                    value="{{ old('address_1') }}">
+                <label for="input2"> البريد الالكتروني</label>
+                <input type="text" id="input2" name="email" class="form-control" placeholder=" البريد الالكترونى"
+                    value="{{ old('email') }}">
             </div>
+           
             <div class="form-group col-md-5 mx-2">
                 <label for="nameus"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>
                     الاسم</label>
@@ -182,11 +183,7 @@
 
         <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
 
-            <div class="form-group col-md-5 mx-2">
-                <label for="input2"> البريد الالكتروني</label>
-                <input type="text" id="input2" name="email" class="form-control" placeholder=" البريد الالكترونى"
-                    value="{{ old('email') }}">
-            </div>
+           
 
             {{-- <div class="form-group col-md-5 mx-2">
                         <label for="sector">قطاع </label>
@@ -203,7 +200,12 @@
 
                 
                 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse"> --}}
-        <div class="form-group col-md-5 mx-2">
+                <div class="form-group col-md-5 mx-2">
+        <label for="input4"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم الهاتف</label>
+        <input type="text" id="input4" name="phone" class="form-control" placeholder=" رقم الهاتف"
+            value="{{ old('phone') }}">
+    </div>
+    <div class="form-group col-md-5 mx-2">
             <label for="region"> المنطقة</label>
             {{-- <input type="text" id="input44" name="region" class="form-control"
                             placeholder="  المنطقة" value="{{ old('region') }}"> --}}
@@ -216,6 +218,8 @@
                 @endforeach
             </select>
         </div>
+              
+       
 
         {{-- <div class="form-group col-md-5 mx-2">
                         <label for="Provinces"> المحافظة</label>
@@ -242,19 +246,23 @@
                         <input type="text" id="input44" name="address_2" class="form-control"
                             placeholder="  العنوان" value="{{ old('address_2') }}">
 </div> --}}
+
 <!-- </div> -->
 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
-    <div class="form-group col-md-5 mx-2" style="display: none;" id="military_number_id">
-        <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;" ></i> رقم العسكرى</label>
-        <input type="text" id="input6" name="military_number" class="form-control" placeholder="رقم العسكرى"
-            value="{{ old('military_number') }}">
+<div class="form-group col-md-5 mx-2">
+                <label for="input44">العنوان</label>
+             <!--    <input type="text" id="input44" name="address_1" class="form-control" placeholder="  العنوان"
+                    value="{{ old('address_1') }}"> -->
+                    <textarea id="input44" name="address_1" class="form-control" placeholder="  العنوان"
+                    value="{{ old('address_1') }}"></textarea>
+            </div>
+            <div class="form-group col-md-5 mx-2">
+        <label for="input11"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم المدنى</label>
+        <input type="text" id="input11" name="Civil_number" class="form-control" placeholder="رقم المدنى"
+            value="{{ old('Civil_number') }}">
     </div>
-    <div class="form-group col-md-5 mx-2">
-        <label for="input4"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم الهاتف</label>
-        <input type="text" id="input4" name="phone" class="form-control" placeholder=" رقم الهاتف"
-            value="{{ old('phone') }}">
-    </div>
-
+  
+   
 </div>
 
 
@@ -272,12 +280,13 @@
 </div>
 
 <div class="form-row  mx-md-3 d-flex justify-content-center flex-row-reverse">
-    <div class="form-group col-md-5 mx-2">
-        <label for="input11"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i> رقم المدنى</label>
-        <input type="text" id="input11" name="Civil_number" class="form-control" placeholder="رقم المدنى"
-            value="{{ old('Civil_number') }}">
+   
+    <div class="form-group col-md-5 mx-2" style="display: none;" id="military_number_id">
+        <label for="input6"> <i class="fa-solid fa-asterisk" style="color:red; font-size:10px;" ></i> رقم العسكرى</label>
+        <input type="text" id="input6" name="military_number" class="form-control" placeholder="رقم العسكرى"
+            value="{{ old('military_number') }}">
     </div>
-    <div class="form-group col-md-5 mx-2">
+    <div class="form-group col-md-5 mx-2" id="input12Div">
         <label for="input12"><i class="fa-solid fa-asterisk" style="color:red; font-size:10px;"></i>
             رقم الملف
         </label>
@@ -583,9 +592,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const militarySection = document.getElementById('type_military_id');
         if (value === "military") {
             militarySection.style.display = "block";
+            $('#input12Div').fadeIn('fast');
+           
         } else {
             militarySection.style.display = "none";
+            $('#input12Div').fadeOut('fast');
         }
+        $('#military_number_id').fadeOut('fast');
+        $('#police').prop('checked', false);
+        $('#police_').prop('checked', true);
     }
 
     // Check initial selection

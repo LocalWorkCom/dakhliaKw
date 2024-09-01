@@ -19,7 +19,7 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $messages = [
-            'military_number.required' => 'رقم العسكري مطلوب.',
+            'military_number.required' => 'رقم الهوية مطلوب.',
             'password.required' => 'كلمة المرور مطلوبة.',
         ];
 
@@ -40,7 +40,7 @@ class UserController extends Controller
         $user = User::where('military_number', $military_number)->orWhere('Civil_number', $military_number)->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId')->first();
 
         if (!$user) {
-          return $this->respondError('Validation Error.', ['military_number'=> ['الرقم العسكري لا يتطابق مع سجلات المفتشين']], 400);
+          return $this->respondError('Validation Error.', ['military_number'=> ['رقم الهوية لا يتطابق مع سجلات المفتشين']], 400);
         }
 
         // Check if the user has the correct flag

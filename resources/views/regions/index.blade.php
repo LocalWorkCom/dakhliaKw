@@ -310,7 +310,17 @@
                         "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>'
                     }
                 },
-                "pagingType": "full_numbers"
+                "pagingType": "full_numbers",
+                "fnDrawCallback": function(oSettings) {
+                                        console.log('Page '+this.api().page.info().pages)
+                                        var page=this.api().page.info().pages;
+                                        console.log($('#users-table tr').length);
+                                        if (page ==1) {
+                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+
+                                        }
+                                    }
             });
 
             $('#government-select').change(function() {
