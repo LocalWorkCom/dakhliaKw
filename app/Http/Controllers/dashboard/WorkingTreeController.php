@@ -173,6 +173,9 @@ class WorkingTreeController extends Controller
 
         $holiday_days_num = 0;
         $WorkingTree = WorkingTree::find($id);
+        $old_work_days = $WorkingTree->working_days_num;
+        $old_holiday_days = $WorkingTree->holiday_days_num;
+        $total_old_days = $old_holiday_days + $old_work_days;
         $WorkingTree->name = $request->name;
         $WorkingTree->working_days_num = $request->working_days_num;
         $WorkingTree->holiday_days_num = $holiday_days_num;
@@ -189,6 +192,7 @@ class WorkingTreeController extends Controller
             $holidayPeriod = "period" . $i;
             $workingTimeId = $request->input($holidayPeriod);
             $isHoliday = $request->has($holidayCheckbox) && $request->input($holidayCheckbox) === 'on';
+
 
             // Update or create WorkingTreeTime entries
             $workingTreeTime = WorkingTreeTime::updateOrCreate(
@@ -208,31 +212,105 @@ class WorkingTreeController extends Controller
                 $holiday_days_num++;
             }
 
-            // Update InspectorMission records
-            $missions = InspectorMission::where('date', '>=', today())
-                ->where('working_tree_id', $id)
-                ->where('day_number', $i)
-                ->get();
-
-            foreach ($missions as $mission) {
-                $mission->working_time_id = $workingTreeTime->working_time_id;
-                $mission->day_off = $workingTreeTime->is_holiday;
-                $mission->save();
-            }
         }
 
         // Update the holiday_days_num field of the WorkingTree
         $WorkingTree->holiday_days_num = $holiday_days_num;
         $WorkingTree->working_days_num = $request->working_days_num - $holiday_days_num;
         $WorkingTree->save();
+        $found = false;
+        $second = false;
+        $total_new_days = $request->working_days_num;
+        if ($total_old_days < $total_new_days) {
+            $diff = $total_new_days - $total_old_days;
+            $temp_diff = $diff;
+            $missions = InspectorMission::where('date', '>=', today())
+                ->where('working_tree_id', $id)
+                ->orderBy('inspector_id')
+                ->orderBy('date')
+                ->get();
+
+            foreach ($missions as $mission) {
+                if ($diff == 0) {
+                    $total_old_days = 1;
+                    $total_new_days = $request->working_days_num;
+                    $diff = $total_new_days - $total_old_days + 1;
+                    $second = true;
+                }
+                if ($mission->day_number == $total_old_days && !$second) {
+                    $found = true; // Set the flag when the first matching mission is found
+                    continue; // Skip this mission as we need to start updating from the next one
+                }
+                if ($found && $diff > 0) {
+                    if (!$second) {
+
+                        $total_old_days++;
+                    }
+                    if ($total_old_days > $total_new_days) {
+                        break;
+                    }
+                    $work_tree_time = WorkingTreeTime::where('working_tree_id', $id)
+                        ->where('day_num', '=', $total_old_days)
+                        ->first();
+                    // $day_number = $work_tree_time->day_num;
+                    if ($work_tree_time) {
+                       
+                        // Update the mission with the corresponding working time data
+                        $mission->update([
+                            'day_off' => $work_tree_time->is_holiday,
+                            'day_number' => $work_tree_time->day_num,
+                            'working_time_id' => $work_tree_time->is_holiday ? null : $work_tree_time->working_time_id,
+                        ]);
+                    }
+
+                    $diff--; // Decrease the remaining difference
+                    if ($second) {
+                        $total_old_days++;
+                    }
+                }
+            }
+        }
+        //  else {
+
+        //     $missions = InspectorMission::where('date', '>=', today())
+        //         ->where('working_tree_id', $id)
+        //         ->orderBy('inspector_id')
+        //         ->orderBy('date')
+        //         ->get();
+
+        //     foreach ($missions as $mission) {
+        //         if ($mission->day_number == $total_new_days) {
+        //             $found = true; // Set the flag when the first matching mission is found
+        //             $total_new_days = 1;
+        //             continue; // Skip this mission as we need to start updating from the next one
+        //         }
+        //         if($mission->day_number > $total_new_days){
+        //             $total_new_days = 1;
+        //         }
+        //         if ($found) {
+
+        //             $work_tree_time = WorkingTreeTime::where('working_tree_id', $id)
+        //                 ->where('day_num', '=', $total_new_days)
+        //                 ->first();
+        //             if ($work_tree_time) {
+                   
+        //                 // Update the mission with the corresponding working time data
+        //                 $mission->update([
+        //                     'day_off' => $work_tree_time->is_holiday,
+        //                     'day_number' => $work_tree_time->day_num,
+        //                     'working_time_id' => $work_tree_time->is_holiday ? null : $work_tree_time->working_time_id,
+        //                 ]);
+        //             }
+
+        //             $total_new_days++;
+        //         }
+        //     }
+        // }
 
         session()->flash('success', 'تم التعديل بنجاح.');
 
         return redirect()->route('working_trees.list');
     }
-
-
-
 
     public function show($id)
     {
