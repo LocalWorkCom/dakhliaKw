@@ -8,6 +8,7 @@ use App\Models\AbsenceEmployee;
 use App\Models\Grouppoint;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
+use App\Models\InspectorMission;
 use App\Models\PointDays;
 use App\Models\Violation;
 use App\Models\ViolationTypes;
@@ -315,6 +316,26 @@ class reportsController extends Controller
         }
     }
    
+    public function getAllstatistics(Request $request){
+        $today = Carbon::now();
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->where('flag', 0)->value('id');
+        if (!$inspectorId) {
+            return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
+        }
+        $mission = InspectorMission::where('inspector_id',$inspectorId)->whereDate('date',$today)->pluck('ids_group_point') ->flatten()
+        ->count();
+        $violation= Violation::where('user_id',auth()->user()->id)->whereDate('created_at', $today)->pluck('id')->flatten()->count();
+        $success = [
+            'mission_count' => $mission ?? 0,
+            'violation_count' => $violation ?? 0,
+        ];
+        if ($success) {
+            return $this->apiResponse(true, 'Data get successfully.', $success, 200);
+        } else {
+
+            return $this->apiResponse(true, 'Data get successfully.', null, 200);
+        }
+    }
     protected function apiResponse($status, $message, $data, $code, $errorData = null)
     {
         $response = [
