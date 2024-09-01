@@ -14,6 +14,7 @@ use App\Models\ViolationTypes;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Constraint\IsFalse;
 
 class reportsController extends Controller
 {
@@ -35,9 +36,10 @@ class reportsController extends Controller
     }
 
     public function  getAbsence(Request $request)
-    { 
-      
-       
+    {
+
+
+        // dd("ss");
         $messages = [
             'point_id.required' => 'يجب اختيار النقطه المضاف لها المهمه',
             'point_id.exists' => 'عفوا هذه النقطه غير متاحه',
@@ -65,21 +67,57 @@ class reportsController extends Controller
             $inspectorIdsArray = array_merge($inspectorIdsArray, explode(',', $inspectorIds));
         }
         $index = $this->dayIndex(Carbon::today()->toDateString());
+
         $absences = Absence::whereIn('inspector_id', $inspectorIdsArray)
             ->where('point_id', $request->point_id)
-            ->where('date', $today)
+            ->whereDate('created_at', $today)
             ->get();
+
+
+            $statusFlag = false;
+
+            $groupedAbsences = $absences->groupBy('mission_id')
+                ->filter(function ($group) use (&$statusFlag) {
+                    foreach ($group as $absence) {
+                        if (is_null($absence->status)) {
+                            $statusFlag = true;
+                            return true; // Keep the group if any absence has a null status
+                        }
+                    }
+                    return false; // Exclude the group if no absence has a null status
+                });
+            
+            // Debugging grouped absences
+            // dd($statusFlag);
+            
+            if (!$statusFlag) {
+                // dd("false");
+                $absences = $absences->filter(function ($absence) {
+                    return $absence->status === 'Accept';
+                });
+            } else {
+               
+                // $absences = $groupedAbsences;
+                $absences = $groupedAbsences->flatten();
+                // dd($absences);
+            }
+
+
+            // $absences = Absence::whereIn('id',$absences->id)->get();
 
         $response = [];  // Initialize the response array
 
         foreach ($absences as $absence) {
+            //
+            // dd($absence->point);
             $time = null;
             if ($absence->point->work_type != 0) {
                 $time = PointDays::where('point_id', $absence->point_id)
                     ->where('name', $index)
                     ->first();
+                    // dd($time);
             }
-
+          
             $employees_absence = AbsenceEmployee::with(['gradeName', 'absenceType'])
                 ->where('absences_id', $absence->id)
                 ->get();
@@ -204,13 +242,13 @@ class reportsController extends Controller
 
         $absenceReport = [];
         $violationReport = [];
-     
+
         foreach ($dates as $date) {
             $today = Carbon::parse($date)->toDateString(); // Handle date
             $index = $this->dayIndex($today);
-        
+
             if ($type === null || $type == 2) {
-               
+
                 // Handle absences
                 $absencesQuery = Absence::where('inspector_id', $inspectorId)
                     ->whereDate('date', $today);
@@ -251,7 +289,7 @@ class reportsController extends Controller
                         'team_name' => $teamName,
                         'total_number' => $absence->total_number,
                         'actual_number' => $absence->actual_number,
-                        'disability'=> $absence->total_number - $absence->actual_number,
+                        'disability' => $absence->total_number - $absence->actual_number,
                         'absence_members' => $absenceMembers,
                     ];
                 }
@@ -281,12 +319,12 @@ class reportsController extends Controller
 
                     // Split the comma-separated image paths into an array
                     $imageArray = explode(',', $imageData);
-                    
+
                     // Count the number of images
                     $imageCount = count($imageArray);
-                    
+
                     // Prepare the formatted image string
-                    $formattedImages = $imageCount.' صور ,' . ' [' . implode(', ', $imageArray) . ']';
+                    $formattedImages = $imageCount . ' صور ,' . ' [' . implode(', ', $imageArray) . ']';
                     $violationReport[] = [
                         'date' => $violation->created_at->format('Y-m-d') . ' ' . 'وقت و تاريخ التفتيش' . ' ' . $violation->created_at->format('H:i:s'),
                         'name' => $violation->name,
@@ -294,9 +332,9 @@ class reportsController extends Controller
                         'military_number' => $violation->military_number ? $violation->military_number : 'لا يوجد رقم مدنى',
                         'grade' => $violation->grade ? $violation->grade : 'لا يوجد رتبه',
                         'violation_type' => $violation->flag == 0 ? 'مخالفة مبانى' : $formattedViolationType,
-                        'point_name'=>$violation->point->name,
-                        'inspector_name'=>$violation->user->name,
-                        'images'=>$formattedImages ,
+                        'point_name' => $violation->point->name,
+                        'inspector_name' => $violation->user->name,
+                        'images' => $formattedImages,
                     ];
                 }
             }
@@ -314,7 +352,7 @@ class reportsController extends Controller
             return $this->apiResponse(true, 'Data get successfully.', null, 200);
         }
     }
-   
+
     protected function apiResponse($status, $message, $data, $code, $errorData = null)
     {
         $response = [
@@ -330,5 +368,43 @@ class reportsController extends Controller
         }
 
         return response()->json($response, $code);
+    }
+
+    public function changeStatus(Request $request)
+    {
+        $messages = [
+            'absence_id.required' => 'point_id required',
+        ];
+        $validatedData = Validator::make($request->all(), [
+            'absence_id' => 'required',
+        ], $messages);
+
+        if ($validatedData->fails()) {
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+        }
+        
+        $abence = Absence::find($request->absence_id);
+        $abence->status = "Accept";
+        $abence->save();
+
+
+        if (!$abence) {
+            return $this->respondError('Absence not found.', [], 404);
+        }
+        else
+        {
+            $all= Absence::where('mission_id',$abence->mission_id)->get();
+
+            foreach($all as $item)
+            {
+                $abence = Absence::find($item->absence_id);
+                $abence->status = "Accept";
+                $abence->save();
+            }
+    
+            return $this->respondSuccess("success", 'Data Updated successfully.');
+        }
+        
+
     }
 }
