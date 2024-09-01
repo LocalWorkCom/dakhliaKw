@@ -333,8 +333,8 @@ class GroupsController extends Controller
         $group->save();
 
         $startOfMonth = Carbon::now();
-        $endOfMonth = Carbon::now()->endOfMonth();
-        dispatch(new assignPointsFrom($startOfMonth, $endOfMonth));
+        $endOfMonth =  Carbon::now()->endOfMonth();
+        dispatch(new assignPointsFrom($startOfMonth, $endOfMonth , $request->sector_id , $group->id));
         session()->flash('success', 'تم تعديل مجموعة بنجاح.');
 
         return redirect()->back();

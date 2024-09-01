@@ -1,35 +1,43 @@
 <?php
 
-use App\Http\Controllers\AbsenceTypeController;
-use App\Http\Controllers\dashboard\IoTelegramController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\outgoingController;
-use App\Http\Controllers\dashboard\VacationController;
-use App\Http\Controllers\dashboard\WorkingTreeController;
-use App\Http\Controllers\governmentController;
-use App\Http\Controllers\GroupPointsController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\RuleController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\UserController;
-
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\PostmanController;
-use App\Http\Controllers\settingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RuleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\pointsController;
-use App\Http\Controllers\qualificationController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\PostmanController;
 use App\Http\Controllers\regionsController;
 use App\Http\Controllers\sectorsController;
-use App\Http\Controllers\InspectorController;
-use App\Http\Controllers\WorkingTimeController;
-use App\Http\Controllers\GroupsController;
+use App\Http\Controllers\settingController;
+use App\Http\Controllers\outgoingController;
+
+use App\Http\Controllers\SettingsController;
+
 use App\Http\Controllers\GroupTeamController;
+use App\Http\Controllers\InspectorController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\governmentController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\AbsenceTypeController;
+use App\Http\Controllers\dashboard\IoTelegramController;
+use App\Http\Controllers\dashboard\VacationController;
+use App\Http\Controllers\dashboard\WorkingTreeController;
+use App\Http\Controllers\GroupPointsController;
+use App\Http\Controllers\WorkingTimeController;
+use App\Http\Controllers\qualificationController;
 use App\Http\Controllers\InstantmissionController;
 use App\Http\Controllers\ViolationTypesController;
-use App\Http\Controllers\SearchController;
+
+// use App\Http\Controllers\ViolationReportController;
+// use App\Http\Controllers\dashboard\VacationController;
+// use App\Http\Controllers\dashboard\IoTelegramController;
+// use App\Http\Controllers\dashboard\WorkingTreeController;
+
+use App\Http\Controllers\ViolationReportController;
 use App\Http\Controllers\ViollationController;
+
 
 
 /*
@@ -70,6 +78,7 @@ Route::any('/reset_password', [UserController::class, 'reset_password'])->name('
 
 //  Auth verfication_code
 Route::middleware(['auth'])->group(function () {
+    Route::get('/violation_report',[ViolationReportController::class, 'getdata'])->name('violation_report.getdata');
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index')->middleware('check.permission:view User');
