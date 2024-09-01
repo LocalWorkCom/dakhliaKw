@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\grade;
+use App\Models\GroupTeam;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -37,7 +38,10 @@ class UserController extends Controller
         $password = $request->password;
 
         // Check if the user exists
-        $user = User::where('military_number', $military_number)->orWhere('Civil_number', $military_number)->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId')->first();
+        $user = User::where('military_number', $military_number)->orWhere('Civil_number', $military_number)->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId','inspectors.*')->first();
+
+        
+
 
         if (!$user) {
           return $this->respondError('Validation Error.', ['military_number'=> ['رقم الهوية لا يتطابق مع سجلات المفتشين']], 400);
@@ -77,9 +81,31 @@ class UserController extends Controller
                 $user->token = $token;//->token;
 
                 $user->save();
+
+                $isManger= false;
+                $groupTeam = GroupTeam::where('group_id',$user->group_id)->whereRaw('find_in_set(?, inspector_ids)', [$user->inspectorId])
+                ->first();
+                
+                if($user->inspectorId == $groupTeam->inspector_manager)
+                {
+                    $isManger= true;
+                }
+                // dd($groupTeam);
                 $success['token'] = $token;//->token;
                 $user->image=$user->image;
                 $success['user'] = $user->only(['id', 'name', 'username', 'military_number', 'phone', 'code','image','inspectorId']);
+                $success['user'] = 
+                [
+                    'id' => $user->id,
+                    'name' => $user->name, 
+                    'username' => $user->username,
+                    'military_number' =>$user->military_number,
+                    'phone' => $user->phone , 
+                    'code'  => $user->code ,
+                    'image' => $user->image ,
+                    'inspectorId' => $user->inspectorId ,
+                    'isManger' => $isManger 
+                ];
                 if($user->grade) $grade=$user->grade->name; else $grade='مدني';
                 $success['user']['grade']=$grade;
               return $this->respondSuccess($success, 'User login successfully.');

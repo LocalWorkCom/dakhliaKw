@@ -251,7 +251,7 @@ class ViolationController  extends Controller
         $userIds = Inspector::whereIn('id', $inspectorIds)->pluck('user_id')->toArray();
        
         $violation = Violation::with('user')->where('point_id', $request->point_id)->where('flag_instantmission', "0")->whereIn('user_id', $userIds)->whereDate('created_at', $today)->get();
-        // dd($violation);
+
         $pointName = Point::find($request->point_id);
         $success['date'] = $today;
         $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
