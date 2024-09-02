@@ -92,9 +92,9 @@ class reportsController extends Controller
                 //dd($grade);
                 $absence_members[] = [
                     'employee_name' => $employee_absence->name,
-                    'employee_grade' => $employee_absence->grade == null ? 'لا يوجد رتبه' : $employee_absence->gradeName->name,
-                    'employee_military_number' => $employee_absence->military_number != null ? $employee_absence->military_number : 'لا يوجد رقم عسكرى',
-                    'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name : 'غير متوفر',
+                    'employee_grade' => $employee_absence->grade == null ? '' : $employee_absence->gradeName->name,
+                    'employee_military_number' => $employee_absence->military_number != null ? $employee_absence->military_number :'',
+                    'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name : '',
                 ];
             }
 
@@ -239,9 +239,9 @@ class reportsController extends Controller
                     foreach ($employeesAbsence as $employeeAbsence) {
                         $absenceMembers[] = [
                             'employee_name' => $employeeAbsence->name,
-                            'employee_grade' => $employeeAbsence->grade == null ? 'لا يوجد رتبه' : $employeeAbsence->gradeName->name,
-                            'employee_military_number' => $employeeAbsence->military_number ?? 'لا يوجد رقم عسكرى',
-                            'employee_type_absence' => $employeeAbsence->absenceType ? $employeeAbsence->absenceType->name : 'غير متوفر',
+                            'employee_grade' => $employeeAbsence->grade == null ? '' : $employeeAbsence->gradeName->name,
+                            'employee_military_number' => $employeeAbsence->military_number ?? '',
+                            'employee_type_absence' => $employeeAbsence->absenceType ? $employeeAbsence->absenceType->name :'',
                         ];
                     }
 
@@ -292,9 +292,9 @@ class reportsController extends Controller
                     $violationReport[] = [
                         'date' => $violation->created_at->format('Y-m-d') . ' ' . 'وقت و تاريخ التفتيش' . ' ' . $violation->created_at->format('H:i:s'),
                         'name' => $violation->name,
-                        'Civil_number' => $violation->Civil_number ? $violation->Civil_number : 'لا يوجد رقم مدنى',
-                        'military_number' => $violation->military_number ? $violation->military_number : 'لا يوجد رقم مدنى',
-                        'grade' => $violation->grade ? $violation->grade : 'لا يوجد رتبه',
+                        'Civil_number' => $violation->Civil_number ? $violation->Civil_number : '',
+                        'military_number' => $violation->military_number ? $violation->military_number :'',
+                        'grade' => $violation->grade ? $violation->grade :'',
                         'violation_type' => $violation->flag == 0 ? 'مخالفة مبانى' : $formattedViolationType,
                         'point_name' => $violation->point->name,
                         'inspector_name' => $violation->user->name,

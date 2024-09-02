@@ -49,14 +49,14 @@ class ViolationController  extends Controller
                     return $item->only(['id', 'name']);
                 });
             } else {
-                $success['grade'] = "لا يوجد بيانات";
+                $success['grade'] = '';
             }
             if ($type->isNotEmpty()) {
                 $success['type'] = $type->map(function ($item) {
                     return $item->only(['id', 'name']);
                 });
             } else {
-                $success['type'] = "لا يوجد بيانات";
+                $success['type'] ='';
             }
             $success['ViolationType'] = $allViolationType->map(function ($item) {
                 return $item->only(['id', 'name']);

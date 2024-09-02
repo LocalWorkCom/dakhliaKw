@@ -170,7 +170,7 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(data) {
                     $('#inspectors').empty();
-                    $('#inspectors').append('<option value='-1'> الكل   </option>');
+                    $('#inspectors').append('<option value="-1"> الكل   </option>');
                     $.each(data, function(key, employee) {               
                         // console.log(employee);   
                         $('#inspectors').append('<option value="' + employee.id + '">' + employee.name + '</option>');
@@ -193,15 +193,19 @@ function search()
 {
     var url="{{url('viollation')}}";
     var dateItem=$('#date').val();
+    var alldate=$('#all_date').val();
     var group=$('#group_id').val();
     var team=$('#group_team_id').val();
     var inspectors=$('#inspectors').val();
     var addurl='';
-    if(dateItem!='' || dateItem!=null)
+        if(all_date==0)
     {
-        if(addurl=='')addurl+='?';else addurl+='&';
-        addurl+='date='+dateItem;
-    }
+        if(dateItem!='' || dateItem!=null)
+        {
+            if(addurl=='')addurl+='?';else addurl+='&';
+            addurl+='date='+dateItem;
+        }
+    } 
     if(group)
     {
         if(addurl=='')addurl+='?';else addurl+='&';
@@ -325,67 +329,13 @@ $(document).ready(function() {
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Get elements
-    var openSecondModalBtn = document.getElementById('openSecondModalBtn');
-    var firstModalBody = document.getElementById('firstModalBody');
-    var secondModalBody = document.getElementById('secondModalBody');
-
-    // Add click event listener
-    openSecondModalBtn.addEventListener('click', function() {
-        // Hide the first modal body
-        firstModalBody.classList.add('d-none');
-
-        // Show the second modal body
-        secondModalBody.classList.remove('d-none');
-    });
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const selectBox = document.getElementById('select-box');
-    const options = document.getElementById('options');
-    const searchInput = document.getElementById('search-input');
-    const selectedValuesContainer = document.getElementById('selected-values');
-    const optionCheckboxes = document.querySelectorAll('.option input[type="checkbox"]');
-    selectBox.addEventListener('click', function() {
-        options.style.display = options.style.display === 'block' ? 'none' : 'block';
-    });
-    document.addEventListener('click', function(event) {
-        if (!event.target.closest('.select-wrapper')) {
-            options.style.display = 'none';
-        }
-    });
-    optionCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const selectedOptions = Array.from(optionCheckboxes)
-                .filter(cb => cb.checked)
-                .map(cb => cb.nextElementSibling.textContent);
-            selectedValuesContainer.innerHTML = selectedOptions.join(', ');
+    $(document).ready(function(){
+        $('#date').on('change', function() {
+            const selectedDate = $(this).val();
+          //  $('#selectedDate').text('Selected Date: ' + selectedDate);
+          $('#all_date').prop('checked',false).val('0');
+            console.log('Date changed to: ', selectedDate);
         });
-    });
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        optionCheckboxes.forEach(checkbox => {
-            const optionLabel = checkbox.nextElementSibling.textContent.toLowerCase();
-            checkbox.parentElement.style.display = optionLabel.includes(searchTerm) ?
-                'block' : 'none';
-        });
-    });
-});
-    document.addEventListener('DOMContentLoaded', function() {
-        const checkbox = document.getElementById('all_date');
-        const dateInput = document.getElementById('date');
-        
-        function updateDateInputVisibility() {
-            if (checkbox.checked) {
-                dateInput.style.display = 'none'; 
-            } else {
-                dateInput.style.display = 'block'; 
-            }
-        }
-        updateDateInputVisibility();
-        checkbox.addEventListener('change', updateDateInputVisibility);
     });
 </script>
 
