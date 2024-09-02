@@ -71,6 +71,7 @@ class ViolationController  extends Controller
 
     public function add_Violation(Request $request)
     {
+        // dd($request->image);
         $messages = [
             'type.required' => 'type required',
             'flag_instantmission.required' => 'flag instantmission required',
@@ -148,11 +149,12 @@ class ViolationController  extends Controller
             $new->save();
 
             if ($request->hasFile('image')) {
+                // dd("ss");
                 $file = $request->image;
                 $path = 'Api/images/violations';
                 // foreach ($file as $image) {
-                UploadFilesWithoutReal($path, 'image', $new, $file);
-                // UploadFilesIM($path, 'attachment', $new, $file);
+                // UploadFilesWithoutReal($path, 'image', $new, $image);
+                UploadFilesIM($path, 'image', $new, $file);
                 // }
 
             }
@@ -251,7 +253,7 @@ class ViolationController  extends Controller
         $userIds = Inspector::whereIn('id', $inspectorIds)->pluck('user_id')->toArray();
        
         $violation = Violation::with('user')->where('point_id', $request->point_id)->where('flag_instantmission', "0")->whereIn('user_id', $userIds)->whereDate('created_at', $today)->get();
-        // dd($violation);
+
         $pointName = Point::find($request->point_id);
         $success['date'] = $today;
         $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
@@ -269,7 +271,7 @@ class ViolationController  extends Controller
                 'grade' => grade::where('id',$violation->grade)->select('id','name')->first() ?? null,
                 'image' => $violation->image,
                 'violation_type' => ViolationTypes::whereIn('id',explode(',',$violation->violation_type))->select('id','name')->get(),
-                'civil_military' => empty(grade::where('id',$violation->grade)->select('id','name')->first()) ? "civil" :"military",
+                'civil_military' => empty(grade::where('id',$violation->grade)->select('id','name')->first()) ? "مدنى" :"عسكرى",
                 // 'user_id' => $violation->user_id,
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
