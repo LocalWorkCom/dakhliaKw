@@ -1102,7 +1102,10 @@ class GroupTeamController extends Controller
         $index = $this->todayIndex($new_date);
         $check =  $this->DragDropHelp($index, $GroupPoint_id, $group_id, $team_id, $new_date);
         if ($check) {
+
+            // insert point in json in this team group in inspector mission
         } else {
+            return false;
         }
     }
     public function todayIndex($today)
