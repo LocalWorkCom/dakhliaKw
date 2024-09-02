@@ -131,6 +131,7 @@ class inspector_points extends Command
                     }
                 }
             } else {
+                ///////
                 $pointDay = $available_point->pointDays->where('name', $index)->first();
 
                 if ($pointDay) {
