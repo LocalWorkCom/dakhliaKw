@@ -13,9 +13,10 @@
             border: 2px dashed #aaa;
             /* Visual cue for drop target */
         }
-        .change-place{
-           color: white;
-           font-weight: bold;
+
+        .change-place {
+            color: white;
+            font-weight: bold;
         }
     </style>
 @endsection
@@ -56,24 +57,26 @@
         <div class="row col-12" id="days-table">
             <div class="container col-11">
                 <div class="col-12 pt-5 pb-5" dir="rtl">
-                    <table  id="custom-scroll-table" class="table table-bordered table-responsive table-container" border="1" dir="rtl">
+                    <table id="custom-scroll-table" class="table table-bordered table-responsive table-container"
+                        border="1" dir="rtl">
                         <?php $count = 1; ?>
                         @foreach ($Groups as $Group)
                             <thead>
                                 <tr id="group-tr{{ $Group->id }}">
-                                  
-                                    <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;" >العدد</th>
+
+                                    <th scope="col" rowspan="2" style="background-color: #a5d0ffbd;">العدد</th>
                                     <th style=" background-color: #97b8dd; border:none;"></th>
-                                    <th scope="col" rowspan="2" style="background-color: #97b8dd; border:none;" >{{ $Group->name }}
+                                    <th scope="col" rowspan="2" style="background-color: #97b8dd; border:none;">
+                                        {{ $Group->name }}
                                     </th>
                                     @foreach ($Group['days_name'] as $day)
                                         <th scope="col" class="{{ $day }}" style="background-color: #e4f1ffbd;">
                                             {{ $day }}</th>
                                     @endforeach
                                 </tr>
-                                <tr> <th style=" background-color: #97b8dd; border:none;"></th>
+                                <tr>
+                                    <th style=" background-color: #97b8dd; border:none;"></th>
                                     @foreach ($Group['days_num'] as $num)
-                                   
                                         <th scope="col" class="{{ $num }}" style="background-color: #e4f1ffbd;">
                                             {{ $num }}</th>
                                     @endforeach
@@ -82,22 +85,23 @@
                             <tbody>
                                 @if ($Group['teams'])
                                     @foreach ($Group['teams'] as $team)
-                                        <tr class="group-table" id="group-{{ $Group->id }}-team-tr{{ $team->id }}" >
-                                          
+                                        <tr class="group-table" id="group-{{ $Group->id }}-team-tr{{ $team->id }}">
+
                                             <td colspan="3"
                                                 style="text-align: center; color:black; background-color: {{ count($team['inspectors']) == 1 ? '#4edfd0ba' : '#11509bb3' }};">
                                                 {{ $team->name }}
                                             </td>
                                             @foreach ($Group['days_num'] as $index => $num)
                                                 <td class="group-table-num{{ $num }}"
-                                                    style="background-color:{{ $team['colors'][$index] }}" ></td>
+                                                    style="background-color:{{ $team['colors'][$index] }}"></td>
                                             @endforeach
                                         </tr>
                                         @foreach ($team['inspectors'] as $index => $inspector)
                                             <tr id="group-{{ $Group->id }}-team-inspector-tr{{ $inspector->id }}">
-                                               
+
                                                 <td style="background-color: #a5d0ffbd">{{ $count }}</td>
-                                                <td style="background-color:#c5d8ed; color:#274373; font-weight: 600;"colspan="2">
+                                                <td
+                                                    style="background-color:#c5d8ed; color:#274373; font-weight: 600;"colspan="2">
                                                     @if ($inspector->user && $inspector->user->grade)
                                                         {{ $inspector->user->grade->name }} /
                                                     @endif
@@ -115,7 +119,7 @@
                                                             }
                                                         @endphp
                                                         <td class="{{ $class }} drop-target"
-                                                            id="day-{{ $index2+1 }}"
+                                                            id="day-{{ $index2 + 1 }}"
                                                             style="background-color: {{ $class != '' ? '' : $inspector['colors'][$index2] }}">
                                                             @if (!$mission->day_off && isset($inspector['vacations'][$index2]))
                                                                 <ul>
@@ -186,7 +190,6 @@
             newWin.close();
         }, 10);
     }
-
     // Script for drag and drop functionality
     let draggedElement = null;
     let originalParent = null;
@@ -231,6 +234,15 @@
         return null;
     }
 
+    function isDuplicateContent(targetElement, content) {
+        const existingItems = targetElement.querySelectorAll('li');
+        for (const item of existingItems) {
+            if (item.innerHTML === content) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     document.addEventListener('dragstart', (event) => {
         if (event.target.tagName === 'LI') {
@@ -257,26 +269,32 @@
             console.log(targetDate);
 
             if (!targetDate) {
-                console.log('Invalid drop target');
+                alert('Invalid drop target');
                 return;
             }
 
-
-
             if (targetDate < today) {
-                console.log('Cannot drop on past days');
+                alert('Cannot drop on past days');
                 return;
             }
 
             const targetTr = event.target.closest('tr');
             const targetGroupId = extractGroupId(targetTr.id);
 
-            if (originalGroup != targetGroupId) {
+            // Allow move only if the target group is the same as the original group
+            if (originalGroup !== targetGroupId) {
+                alert('Cannot move item to a different group');
                 return;
             }
 
             const targetElement = event.target;
             const targetUl = targetElement.querySelector('ul');
+
+            // Check for duplicate content in the target cell
+            if (isDuplicateContent(targetElement, draggedElement.innerHTML)) {
+                alert('Cannot drop item; duplicate content in target cell');
+                return;
+            }
 
             const newLi = document.createElement('li');
             newLi.innerHTML = draggedElement.innerHTML;
@@ -296,6 +314,16 @@
             draggedElement = null;
             originalParent = null;
             originalGroup = null;
+            $.ajax({
+
+                url: "{{ route('point.dragdrop') }}",
+                type: 'get',
+                success: function(response) {
+                    console.log(response);
+
+                },
+
+            });
         }
     });
 </script>

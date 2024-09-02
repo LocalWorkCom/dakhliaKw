@@ -386,7 +386,7 @@ class GroupTeamController extends Controller
                 ->where('working_tree_id', $request->working_tree_id)
                 ->first();
 
-  
+
             if ($new_data_mission && !$again) {
                 // Update mission with new working_tree_id details if it exists
                 $data->working_tree_id = $new_data_mission->working_tree_id;
@@ -1082,19 +1082,6 @@ class GroupTeamController extends Controller
                     $inspector['points'] = $pointsArray;
                     $inspector['instant_missions'] = $instantArray;
                     $inspector['personal_missions'] = $personalArray;
-                    // if ( $inspector->id == 10) {
-
-                    //     dd([
-                    //         'inspector_id' => $inspector->id,
-                    //         'group_id' => $Group->id,
-                    //         'group_team_id' => $Team->id,
-                    //         'inspector_mission' => $inspector_missions,
-                    //         'ids_group_point' => $inspector_mission ? $inspector_mission->ids_group_point : null,
-                    //         'pointsArray' => $pointsArray,
-                    //         'instantArray' => $instantArray, 
-                    //         'inspector'=>$inspector
-                    //     ]);
-                    // }
                 }
             }
         }
@@ -1105,5 +1092,76 @@ class GroupTeamController extends Controller
         // dd($Groups);
         // Return the view with the Groups data
         return view('inspectorMission.index', compact('Groups', 'working_times', 'inspectors'));
+    }
+    public function DragDrop(Request $request)
+    {
+        $group_id = $request->group_id;
+        $team_id = $request->team_id;
+        $new_date = $request->new_date;
+        $GroupPoint_id = $request->GroupPoint_id;
+        $index = $this->todayIndex($new_date);
+        $check =  $this->DragDropHelp($index, $GroupPoint_id, $group_id, $team_id, $new_date);
+        if ($check) {
+
+            // insert point in json in this team group in inspector mission
+        } else {
+            return false;
+        }
+    }
+    public function todayIndex($today)
+    {
+        $daysOfWeek = [
+            "السبت",
+            "الأحد",
+            "الاثنين",
+            "الثلاثاء",
+            "الأربعاء",
+            "الخميس",
+            "الجمعة",
+        ];
+
+        $todayDate = Carbon::parse($today);
+        $dayWeek = $todayDate->locale('ar')->dayName;
+        $index = array_search($dayWeek, $daysOfWeek);
+
+        return $index !== false ? $index : null;
+    }
+    public function DragDropHelp($index, $GroupPoint_id, $group_id, $group_team_id, $new_date)
+    {
+        $teamsWorkingTime = InspectorMission::with('workingTime')
+            ->where('group_id', $group_id)
+            ->where('group_team_id', $group_team_id)
+            ->whereDate('date', $new_date)
+            ->where('day_off', 0)
+            ->distinct('group_team_id')
+            ->get();
+
+        $teamTimePeriods = $teamsWorkingTime->map(function ($mission) {
+            return [$mission->workingTime->start_time, $mission->workingTime->end_time];
+        })->toArray();
+
+        $availablePoints = Grouppoint::find($GroupPoint_id)->points_ids;
+        foreach ($availablePoints as $available_point) {
+            if ($available_point->work_type == 0) {
+                $is_off = in_array($index, $available_point->days_work);
+                if ($is_off) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                ///////
+                $pointDay = $available_point->pointDays->where('name', $index)->first();
+
+                if ($pointDay) {
+                    $is_available = $this->isTimeAvailable($pointDay->from, $pointDay->to, $teamTimePeriods[0][0], $teamTimePeriods[0][1]);
+                    if ($is_available) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
     }
 }

@@ -427,6 +427,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
+    Route::get('/inspectors-mession/drag-drop', [GroupTeamController::class, 'DragDrop'])->name('point.dragdrop');
 
     /**
      * Search From Home
