@@ -39,6 +39,7 @@ Route::any('/reports/inspector', [reportsController::class, 'allReportInspector'
 Route::any('/reports/inspector/points', [reportsController::class, 'getAllPoints']);
 Route::any('/home/statistics', [reportsController::class, 'getAllstatistics']);
 Route::any('/statistics', [reportsController::class, 'getstatistics']);
+Route::any('/accept/abcense/report', [reportsController::class, 'changeStatus']);
 
 
 Route::post('/inspector/add/mission', [personalMissionController::class, 'addPersonalMission']);
