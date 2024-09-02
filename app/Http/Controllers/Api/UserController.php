@@ -38,10 +38,12 @@ class UserController extends Controller
         $password = $request->password;
 
         // Check if the user exists
-        $user = User::where('military_number', $military_number)->orWhere('Civil_number', $military_number)->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId','users.id as userId','inspectors.*')->first();
+        $user = User::where('military_number', $military_number)->orWhere('Civil_number', $military_number)
+        ->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId','inspectors.group_id')
+        ->first();
 
         
-
+        //dd($user);
 
         if (!$user) {
           return $this->respondError('Validation Error.', ['military_number'=> ['رقم الهوية لا يتطابق مع سجلات المفتشين']], 400);
@@ -93,10 +95,10 @@ class UserController extends Controller
                 // dd($groupTeam);
                 $success['token'] = $token;//->token;
                 $user->image=$user->image;
-                $success['user'] = $user->only(['id', 'name', 'username', 'military_number', 'phone', 'code','image','inspectorId','userId']);
+                $success['user'] = $user->only(['id', 'name', 'username', 'military_number', 'phone', 'code','image','inspectorId']);
                 $success['user'] = 
                 [
-                    'id' => $user->userId,
+                    'id' => $user->id,
                     'name' => $user->name, 
                     'username' => $user->username,
                     'military_number' =>$user->military_number,
