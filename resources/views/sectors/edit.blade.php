@@ -55,7 +55,7 @@
                     <div class="input-group moftsh px-md-4 px-3 pt-3">
                         <label class="pb-3" for="order">حدد ترتيب القطاع</label>
                         <input type="number" id="order" value="{{ $data->order }}" name="order" class="form-control"
-                            required />
+                            required disabled/>
                         <span class="text-danger span-error" id="order-error"></span>
 
                     </div>

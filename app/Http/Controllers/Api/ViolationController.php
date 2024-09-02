@@ -14,6 +14,7 @@ use App\Models\ViolationTypes;
 use App\Models\InspectorMission;
 use App\Http\Controllers\Controller;
 use App\Models\Point;
+use App\Models\PointDays;
 use App\Models\WorkingTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,8 +24,35 @@ use Illuminate\Support\Facades\Validator;
 class ViolationController  extends Controller
 {
     //
+    public function todayIndex($today)
+    {
+        $daysOfWeek = [
+            "السبت",
+            "الأحد",
+            "الاثنين",
+            "الثلاثاء",
+            "الأربعاء",
+            "الخميس",
+            "الجمعة",
+        ];
 
+        $todayDate = Carbon::parse($today);
+        $dayWeek = $todayDate->locale('ar')->dayName;
+        $index = array_search($dayWeek, $daysOfWeek);
 
+        return $index !== false ? $index : null;
+    }
+    function isTimeAvailable($pointStart, $pointEnd)
+    {
+        $currentTime = Carbon::now()->format('H:i');
+
+        // Convert the times to Carbon instances for easy comparison
+        $start = Carbon::createFromTimeString($pointStart);
+        $end = Carbon::createFromTimeString($pointEnd);
+        $current = Carbon::createFromTimeString($currentTime);
+
+        return $current->between($start, $end);
+    }
     public function get_Violation_type(Request $request)
     {
         // type_id : department_id
@@ -33,7 +61,7 @@ class ViolationController  extends Controller
         ];
         $validatedData = Validator::make($request->all(), [
             'type' => 'required',
-        ], $messages); 
+        ], $messages);
 
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
@@ -56,7 +84,7 @@ class ViolationController  extends Controller
                     return $item->only(['id', 'name']);
                 });
             } else {
-                $success['type'] ='';
+                $success['type'] = '';
             }
             $success['ViolationType'] = $allViolationType->map(function ($item) {
                 return $item->only(['id', 'name']);
@@ -130,7 +158,24 @@ class ViolationController  extends Controller
             if ($validatedData->fails()) {
                 return $this->respondError('Validation Error.', $validatedData->errors(), 400);
             }
+            $today = Carbon::now()->toDateString();
+            $index = $this->todayIndex($today);
+            // $point=Point::with('pointDays')->where('id',$point_id)->first();
+            $point = Point::find($point_id);
+            // dd($point);
+            if ($point->work_type == 1) {
+                $pointDay = $point->pointDays->where('name', $index)->first();
+                $workTime = PointDays::where('point_id', $point_id)->where('name', $index)->first();
+                $startTime = Carbon::create(date('y-m-d') . ' ' . $workTime->from);
+                $endtTime = Carbon::create(date('y-m-d') . ' ' . $workTime->to);
+                $fromTime = $startTime->format('h:i');
+                $ToTime = $endtTime->format('h:i');
+                $is_avilable = $this->isTimeAvailable($fromTime, $ToTime);
+                if(!$is_avilable){
+                    return $this->respondError('failed to save', ['error' =>'انتهت مواعيد عمل النقطه'], 404);
 
+                }
+            }
             $idsArray = array_map('intval', explode(',', $request->violation_type));
             $cleanedString = implode(",", $idsArray);
 
@@ -199,8 +244,8 @@ class ViolationController  extends Controller
                 $file = $request->image;
                 $path = 'Api/images/violations';
                 // foreach ($file as $image) {
-                UploadFilesWithoutReal($path, 'image', $new, $file);
-                // UploadFilesIM($path, 'attachment', $new, $file);
+                //UploadFilesWithoutReal($path, 'image', $new, $file);
+                UploadFilesIM($path, 'image', $new, $file);
                 // }
 
             }
@@ -209,7 +254,7 @@ class ViolationController  extends Controller
 
 
         if ($new) {
-            $success['violation'] = $new->only(['id', 'name', 'military_number', 'Civil_number', 'grade', 'image', 'violation_type', 'user_id','description']);
+            $success['violation'] = $new->only(['id', 'name', 'military_number', 'Civil_number', 'grade', 'image', 'violation_type', 'user_id', 'description']);
             return $this->respondSuccess($success, 'Data Saved successfully.');
         } else {
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
@@ -253,7 +298,7 @@ class ViolationController  extends Controller
 
         // Find user IDs corresponding to the inspector IDs
         $userIds = Inspector::whereIn('id', $inspectorIds)->pluck('user_id')->toArray();
-       
+
         $violation = Violation::with('user')->where('point_id', $request->point_id)->where('flag_instantmission', "0")->whereIn('user_id', $userIds)->whereDate('created_at', $today)->get();
 
         $pointName = Point::find($request->point_id);
@@ -267,20 +312,20 @@ class ViolationController  extends Controller
                 'id' => $violation->id,
                 'InspectorName' => $violation->user->name ?? null,
                 'Inspectorgrade' => $violation->user->grade->name ?? null,
-                'name'=>$violation->name,
+                'name' => $violation->name,
                 'military_number' => $violation->military_number ?? null,
                 'Civil_number' => $violation->Civil_number ?? null,
-                'grade' => grade::where('id',$violation->grade)->select('id','name')->first() ?? null,
+                'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                 'image' => $violation->image,
-                'violation_type' => ViolationTypes::whereIn('id',explode(',',$violation->violation_type))->select('id','name')->get(),
-                'civil_military' => empty(grade::where('id',$violation->grade)->select('id','name')->first()) ? "مدنى" :"عسكرى",
+                'violation_type' => ViolationTypes::whereIn('id', explode(',', $violation->violation_type))->select('id', 'name')->get(),
+                'civil_military' => empty(grade::where('id', $violation->grade)->select('id', 'name')->first()) ? "مدنى" : "عسكرى",
                 // 'user_id' => $violation->user_id,
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'flag_instantmission' => $violation->flag_instantmission,
-                'violation_mode'=>  $violation->military_number != null ? "1" : "2",
+                'violation_mode' =>  $violation->military_number != null ? "1" : "2",
             ];
         });
         // $allviolation = Violation::where('point_id', $request->point_id)->get();
@@ -300,7 +345,7 @@ class ViolationController  extends Controller
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
         $today = Carbon::today()->toDateString();
-         // Retrieve the inspector ID for the authenticated user
+        // Retrieve the inspector ID for the authenticated user
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         // shift
         $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
@@ -312,16 +357,13 @@ class ViolationController  extends Controller
 
         $instantMissions = instantmission::where('id', $request->mission_id)->first();
         // dd($instantMissions->location);
-        if (str_contains($instantMissions->location, 'gis.paci.gov.kw'))
-        {
+        if (str_contains($instantMissions->location, 'gis.paci.gov.kw')) {
             // dd("yes");
             $location = null;
             $kwFinder = $instantMissions->location;
-        } 
-        else
-        {
+        } else {
             $location = $instantMissions->location;
-            $kwFinder = null; 
+            $kwFinder = null;
         }
         $violation = Violation::where('mission_id', $request->mission_id)->where('flag_instantmission', "1")->where('user_id', auth()->user()->id)->whereDate('created_at', $today)->get();
         $success['violation'] = $violation->map(function ($violation) {
@@ -329,41 +371,41 @@ class ViolationController  extends Controller
                 'id' => $violation->id,
                 'InspectorName' => $violation->user->name ?? null,
                 'Inspectorgrade' => $violation->user->grade->name ?? null,
-                'name'=>$violation->name,
+                'name' => $violation->name,
                 'military_number' => $violation->military_number ?? null,
                 'Civil_number' => $violation->Civil_number ?? null,
-                'grade' => grade::where('id',$violation->grade)->select('id','name')->first() ?? null,
+                'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                 'image' => $violation->image,
-                'violation_type' => ViolationTypes::whereIn('id',explode(',',$violation->violation_type))->select('id','name')->get(),
-                'civil_military' => empty(grade::where('id',$violation->grade)->select('id','name')->first()) ? "civil" :"military",
+                'violation_type' => ViolationTypes::whereIn('id', explode(',', $violation->violation_type))->select('id', 'name')->get(),
+                'civil_military' => empty(grade::where('id', $violation->grade)->select('id', 'name')->first()) ? "civil" : "military",
                 // 'user_id' => $violation->user_id,
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'flag_instantmission' => $violation->flag_instantmission,
-                'violation_mode'=>  $violation->military_number != null ? "1" : "2",
+                'violation_mode' =>  $violation->military_number != null ? "1" : "2",
             ];
         });
         $success['date'] = $today;
         $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
-        
+
         $success['instantMissions'] = [
 
             'instant_mission_id' => $instantMissions->id,
             'name' => $instantMissions->label,  // Assuming description field
-            'location' => $location,  
-            'KWfinder' => $kwFinder,  
-            'description' => $instantMissions->description,  
+            'location' => $location,
+            'KWfinder' => $kwFinder,
+            'description' => $instantMissions->description,
             'group' => $instantMissions->group ? $instantMissions->group->name : 'N/A',  // Include group name
             'team' => $instantMissions->groupTeam ? $instantMissions->groupTeam->name : 'N/A',  // Include group team name ,
             'date' => $instantMissions->created_at->format('Y-m-d'),
-           
-            'latitude'=> $instantMissions->latitude, 
-            'longitude'=> $instantMissions->longitude, 
+
+            'latitude' => $instantMissions->latitude,
+            'longitude' => $instantMissions->longitude,
         ];
-    
-     //   $success['violation'] = $violation;
+
+        //   $success['violation'] = $violation;
         return $this->respondSuccess($success, 'Data returned successfully.');
     }
 }
