@@ -71,6 +71,7 @@ class ViolationController  extends Controller
 
     public function add_Violation(Request $request)
     {
+        // dd($request->image);
         $messages = [
             'type.required' => 'type required',
             'flag_instantmission.required' => 'flag instantmission required',
@@ -148,11 +149,12 @@ class ViolationController  extends Controller
             $new->save();
 
             if ($request->hasFile('image')) {
+                // dd("ss");
                 $file = $request->image;
                 $path = 'Api/images/violations';
                 // foreach ($file as $image) {
-                UploadFilesWithoutReal($path, 'image', $new, $file);
-                // UploadFilesIM($path, 'attachment', $new, $file);
+                // UploadFilesWithoutReal($path, 'image', $new, $image);
+                UploadFilesIM($path, 'image', $new, $file);
                 // }
 
             }
