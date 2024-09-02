@@ -8,6 +8,8 @@ use App\Models\AbsenceEmployee;
 use App\Models\Grouppoint;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
+use App\Models\InspectorMission;
+use App\Models\Point;
 use App\Models\PointDays;
 use App\Models\Violation;
 use App\Models\ViolationTypes;
@@ -39,7 +41,6 @@ class reportsController extends Controller
     {
 
 
-        // dd("ss");
         $messages = [
             'point_id.required' => 'يجب اختيار النقطه المضاف لها المهمه',
             'point_id.exists' => 'عفوا هذه النقطه غير متاحه',
@@ -345,6 +346,134 @@ class reportsController extends Controller
             'violations' => $violationReport ?? [],
         ];
         //end violation Building report
+        if ($success) {
+            return $this->apiResponse(true, 'Data get successfully.', $success, 200);
+        } else {
+
+            return $this->apiResponse(true, 'Data get successfully.', null, 200);
+        }
+    }
+
+
+    public function getAllstatistics(Request $request)
+    {
+        $today = Carbon::now();
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->where('flag', 0)->value('id');
+        if (!$inspectorId) {
+            return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
+        }
+        $mission = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_group_point')->flatten()
+            ->count();
+        $violation = Violation::where('user_id', auth()->user()->id)->whereDate('created_at', $today)->pluck('id')->flatten()->count();
+        $success = [
+            'mission_count' => $mission ?? 0,
+            'violation_count' => $violation ?? 0,
+        ];
+        if ($success) {
+            return $this->apiResponse(true, 'Data get successfully.', $success, 200);
+        } else {
+
+            return $this->apiResponse(true, 'Data get successfully.', null, 200);
+        }
+    }
+    public function getstatistics(Request $request)
+    {
+        $today = Carbon::now();
+        $startOfMonth = $today->startOfMonth()->format('Y-m-d');
+        $endOfMonth = $today->endOfMonth()->format('Y-m-d');
+       
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->where('flag', 0)->value('id');
+        if (!$inspectorId) {
+            return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
+        }
+        $mission_count = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_group_point')->flatten()
+            ->flatten()->count();
+        $violations_bulding_count = Violation::where('user_id', auth()->user()->id)->where('flag',0)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        ->pluck('id')->flatten()->count();
+        $violation_Disciplined_behavior_count = Violation::where('user_id', auth()->user()->id)->where('flag',1)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        ->pluck('id')->flatten()->count();
+
+        // $point_ids = Grouppoint::whereIn('id', $mission)->pluck('points_ids')->flatten()->toArray();
+        // $points_detail = Point::with(['pointDays'])->whereIn('id', $point_ids)->get();
+
+
+        // $availablegroup_points = Grouppoint::where('id', $mission)
+        //     ->get();
+
+        // $All_points = [];
+
+        // // Process available group points
+        // $availablegroup_points->each(function ($grouppoint) use (&$All_points, $daysOfWeek, $index, $dayWeek) {
+        //     // Fetch points related to the group point
+        //     $available_points = Point::with(['pointDays'])->whereIn('id', $grouppoint->points_ids)->get();
+        //     $name = $grouppoint->flag == 0 ? 'لا توجد مجموعه' : $grouppoint->name;
+
+        //     $available_points->each(function ($available_point) use (&$All_points, $daysOfWeek, $index, $dayWeek, $name) {
+        //         if ($available_point->work_type == 0) {
+        //             // Check if today's day is in days_work
+        //             $is_off = in_array($index, $available_point->days_work);
+
+        //             if ($is_off) {
+        //                 $All_points[] = [
+        //                     'point_governate' => $available_point->government->name,
+        //                     'point_id' => $available_point->id,
+        //                     'point_name' => $available_point->name,
+        //                     'point_GroupName' => $name ?? 'Unknown',
+        //                     'point_time' => 'طوال اليوم',
+        //                     'point_location' => $available_point->google_map,
+        //                 ];
+        //             }
+        //         } else {
+        //             $pointDay =  $available_point->pointDays->where('name', $index)->first();
+        //             $All_points[] = [
+        //                 'point_governate' => $available_point->government->name,
+        //                 'point_id' => $available_point->id,
+        //                 'point_name' => $available_point->name,
+        //                 'point_GroupName' => $name ?? 'Unknown',
+        //                 'point_time' => "من {$pointDay->from} " . ($pointDay->from > 12 ? 'مساءا' : 'صباحا') . " الى {$pointDay->to} " . ($pointDay->to > 12 ? 'مساءا' : 'صباحا'),
+
+        //                 'point_location' => $available_point->google_map,
+        //             ];
+        //         }
+        //     });
+        // });
+
+        // $violations = Violation::with(['user', 'point', 'violatType'])->where('user_id', auth()->user()->id)->whereDate('created_at', $today)->get();
+
+        // foreach ($violations as $violation) {
+        //     $violationTypeIds = explode(',', $violation->violation_type); // Convert to array if needed
+        //     $violationTypes = ViolationTypes::whereIn('id', $violationTypeIds)->pluck('name')->toArray();
+        //     // Format names into a string
+        //     $violationTypeNames = implode(', ', $violationTypes);
+        //     $formattedViolationType = $violationTypeNames ? "مخالفة سلوك انضباطى ({$violationTypeNames})" : 'غير متوفر';
+        //     $imageData = $violation->image; // e.g., "/Api/images/violations/1724759522.png,/Api/images/violations/1724759522.png"
+
+        //     // Split the comma-separated image paths into an array
+        //     $imageArray = explode(',', $imageData);
+
+        //     // Count the number of images
+        //     $imageCount = count($imageArray);
+
+        //     // Prepare the formatted image string
+        //     $formattedImages = $imageCount . ' صور ,' . ' [' . implode(', ', $imageArray) . ']';
+        //     $violationReport[] = [
+        //         'date' => $violation->created_at->format('Y-m-d') . ' ' . 'وقت و تاريخ التفتيش' . ' ' . $violation->created_at->format('H:i:s'),
+        //         'name' => $violation->name,
+        //         'Civil_number' => $violation->Civil_number ? $violation->Civil_number : 'لا يوجد رقم مدنى',
+        //         'military_number' => $violation->military_number ? $violation->military_number : 'لا يوجد رقم مدنى',
+        //         'grade' => $violation->grade ? $violation->grade : 'لا يوجد رتبه',
+        //         'violation_type' => $violation->flag == 0 ? 'مخالفة مبانى' : $formattedViolationType,
+        //         'point_name' => $violation->point_id ? $violation->point->name : 'لا يوجد نقطه',
+        //         'inspector_name' => $violation->user->name,
+        //         'images' => $formattedImages,
+        //     ];
+        // }
+        $success = [
+            'mission_count' => $mission_count ?? 0,
+            'violation_Disciplined_behavior' => $violation_Disciplined_behavior_count ??0,
+            'violations_bulding_count' => $violations_bulding_count ??0,
+
+        ];
         if ($success) {
             return $this->apiResponse(true, 'Data get successfully.', $success, 200);
         } else {

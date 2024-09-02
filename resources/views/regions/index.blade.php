@@ -40,11 +40,11 @@
                                         {{-- @endif --}} -->
 
                         <div class="form-group moftsh  mx-3  d-flex">
-                            <h4 style="    line-height: 1.8;"> التصنيف حسب المحافظة :</h4>
+                            <h4 style="margin-left:10px;line-height: 1.8;"> تصفية  حسب   </h4>
                             <select name="government-select" id="government-select" onchange="filterRegions()"
-                                class=" form-group mx-md-2 btn-all  custom-select custom-select-lg mb-3 select2 "
+                                class=" form-group mx-md-2 btn-all  custom-select custom-select-lg mb-3 select2   "
                                 style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
-                                <option value="">اختر المحافظه</option>
+                                <option value="" selected disabled > المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}" @if ($government->id == $id) selected @endif>
                                         {{ $government->name }}</option>
