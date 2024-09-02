@@ -155,6 +155,8 @@ class ViolationController  extends Controller
                 // foreach ($file as $image) {
                 // UploadFilesWithoutReal($path, 'image', $new, $image);
                 UploadFilesIM($path, 'image', $new, $file);
+
+                // 
                 // }
 
             }
