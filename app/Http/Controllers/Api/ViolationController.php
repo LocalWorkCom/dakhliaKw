@@ -155,6 +155,8 @@ class ViolationController  extends Controller
                 // foreach ($file as $image) {
                 // UploadFilesWithoutReal($path, 'image', $new, $image);
                 UploadFilesIM($path, 'image', $new, $file);
+
+                // 
                 // }
 
             }
@@ -271,7 +273,7 @@ class ViolationController  extends Controller
                 'grade' => grade::where('id',$violation->grade)->select('id','name')->first() ?? null,
                 'image' => $violation->image,
                 'violation_type' => ViolationTypes::whereIn('id',explode(',',$violation->violation_type))->select('id','name')->get(),
-                'civil_military' => empty(grade::where('id',$violation->grade)->select('id','name')->first()) ? "مدنى" :"عس",
+                'civil_military' => empty(grade::where('id',$violation->grade)->select('id','name')->first()) ? "مدنى" :"عسكرى",
                 // 'user_id' => $violation->user_id,
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
