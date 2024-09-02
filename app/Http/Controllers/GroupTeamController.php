@@ -1095,6 +1095,7 @@ class GroupTeamController extends Controller
     }
     public function DragDrop(Request $request)
     {
+        return $request;
         $group_id = $request->group_id;
         $team_id = $request->team_id;
         $new_date = $request->new_date;
