@@ -69,33 +69,29 @@ class ApiAbsenceController extends Controller
             'point_id.required' => 'رقم النقطة  مطلوب .',
             'mission_id.required' => 'رقم المهمة مطلوبة',
             'type_employee.required' => 'النوع مطلوب',
-            'absence_types.required' => 'حاله الغياب مطلوبه ',
+            'absence_types.required' => 'حاله الغياب مطلوبه',
+            'name.required'=>'الاسم مطلوب'
             // 'AbsenceEmployee.required_if' => 'التاريخ مطلوبة',
         ];
         $validatedData = Validator::make($request->all(), [
             'total_number' => 'required',
             'actual_number' => 'required',
             'point_id' => 'required',
-            'mission_id' => 'required',
-          /*  'type_employee'=>'required',
-            'absence_types'=>'required'*/
+
             // 'AbsenceEmployee'=> ['required_if:total_number -actual_number ,0']
         ], $messages);
-        
+
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
 
-        $inspectorId = Inspector::where('user_id',auth()->user()->id)->first();
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
         //  dd(auth()->user()->inspectors);
         $today = Carbon::today()->toDateString();
         $abs = $request->total_number - $request->actual_number;
-        if($request->total_number != $request->actual_number && $abs !=  count($request->AbsenceEmployee))
-        {
+        if ($request->total_number != $request->actual_number && $abs !=  count($request->AbsenceEmployee)) {
             return $this->respondError('يرجى ادخال باقى الموظفين', ['absence_number' => [' عدد الموظفين  المدخل لا يتوافق مع عددهم']], 400);
-        }
-        else
-        {
+        } else {
             $new = new Absence();
             $new->date =  $today;
             $new->point_id = $request->point_id;
@@ -104,45 +100,48 @@ class ApiAbsenceController extends Controller
             $new->actual_number = $request->actual_number;
             $new->inspector_id = $inspectorId ? $inspectorId->id : null;
             $new->save();
-    
-    
-    
-                if($new)
-                {$array=[];
-                    if($request->has('AbsenceEmployee') &&($request->total_number > $request->actual_number))
-                    {
-                        
-                        foreach($request->AbsenceEmployee as $item)
-                        {
-                            $Emp = new AbsenceEmployee();
-                            $Emp->name = $item["name"];
-                            $Emp->grade = $item["grade"] ?? null;
-                            $Emp->military_number  = $item["military_number"] ?? null;
-                            $Emp->civil_number  = $item["civil_number"] ?? null;
-                            $Emp->absence_types_id  = $item["absence_types"] ?? null;
-                            $Emp->file_num  = $item["file_num"] ?? null;
 
-                            $Emp->type_employee = $item["type_employee"] ?? null;
-                            $Emp->absences_id  = $new->id;
-                            $Emp->save();
-                            if($Emp)
-                            {
-                                $array[]=$Emp->only(['id','name','military_number','civil_number','file_num','grade','absence_types_id','type_employee']);
-                            }
-    
+
+
+            if ($new) {
+                $array = [];
+                if ($request->has('AbsenceEmployee') && ($request->total_number > $request->actual_number)) {
+                  
+
+                    foreach ($request->AbsenceEmployee as $item) {
+                        $employeeValidator = Validator::make($item, [
+                            'name' => 'required',
+                            'type_employee' => 'required',
+                            'absence_types' => 'required'
+                        ], $messages);
+        
+                        if ($employeeValidator->fails()) {
+                            return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
+                        }
+                        $Emp = new AbsenceEmployee();
+                        $Emp->name = $item["name"];
+                        $Emp->grade = $item["grade"] ?? null;
+                        $Emp->military_number  = $item["military_number"] ?? null;
+                        $Emp->civil_number  = $item["civil_number"] ?? null;
+                        $Emp->absence_types_id  = $item["absence_types"] ?? null;
+                        $Emp->file_num  = $item["file_num"] ?? null;
+
+                        $Emp->type_employee = $item["type_employee"] ?? null;
+                        $Emp->absences_id  = $new->id;
+                        $Emp->save();
+                        if ($Emp) {
+                            $array[] = $Emp->only(['id', 'name', 'military_number', 'civil_number', 'file_num', 'grade', 'absence_types_id', 'type_employee']);
                         }
                     }
-    
-                    $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
-                    $success['AbsenceEmployee'] = $array;
-                    return $this->respondSuccess($success, 'Data Saved successfully.');
                 }
-                else
-                {
-                    return $this->respondError('failed to save', ['error' =>[ 'خطأ فى حفظ البيانات']], 400);
-                }
+
+                $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
+                $success['AbsenceEmployee'] = $array;
+                return $this->respondSuccess($success, 'Data Saved successfully.');
+            } else {
+                return $this->respondError('failed to save', ['error' => ['خطأ فى حفظ البيانات']], 400);
+            }
         }
-       
     }
 
     /**
