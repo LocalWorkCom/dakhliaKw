@@ -68,6 +68,8 @@ class ApiAbsenceController extends Controller
             'actual_number.required' => 'الرقم الفعلى  مطلوب ولا يمكن تركه فارغاً.',
             'point_id.required' => 'رقم النقطة  مطلوب .',
             'mission_id.required' => 'رقم المهمة مطلوبة',
+            'type_employee.required' => 'النوع مطلوب',
+            'absence_types.required' => 'حاله الغياب مطلوبه ',
             // 'AbsenceEmployee.required_if' => 'التاريخ مطلوبة',
         ];
         $validatedData = Validator::make($request->all(), [
@@ -75,6 +77,8 @@ class ApiAbsenceController extends Controller
             'actual_number' => 'required',
             'point_id' => 'required',
             'mission_id' => 'required',
+            'type_employee'=>'required',
+            'absence_types'=>'required'
             // 'AbsenceEmployee'=> ['required_if:total_number -actual_number ,0']
         ], $messages);
         
