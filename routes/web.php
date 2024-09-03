@@ -28,6 +28,7 @@ use App\Http\Controllers\GroupPointsController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\qualificationController;
 use App\Http\Controllers\InstantmissionController;
+use App\Http\Controllers\statisticController;
 use App\Http\Controllers\ViolationTypesController;
 
 // use App\Http\Controllers\ViolationReportController;
@@ -453,6 +454,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
     Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');    
     Route::get('/Inspectors/TransferToEmployee/{id}', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove');    
+
+    //statistics
+    Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');    
+    Route::get('/statistics/search', [statisticController::class, 'getFilteredData']);    
+
 });
 
 

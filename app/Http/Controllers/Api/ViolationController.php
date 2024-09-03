@@ -45,7 +45,7 @@ class ViolationController  extends Controller
     function isTimeAvailable($pointStart, $pointEnd)
     {
         $currentTime = Carbon::now()->format('H:i');
-
+// dd($pointStart, $pointEnd,$currentTime);
         // Convert the times to Carbon instances for easy comparison
         $start = Carbon::createFromTimeString($pointStart);
         $end = Carbon::createFromTimeString($pointEnd);
@@ -162,15 +162,12 @@ class ViolationController  extends Controller
             $index = $this->todayIndex($today);
             // $point=Point::with('pointDays')->where('id',$point_id)->first();
             $point = Point::find($point_id);
-            // dd($point);
-            if ($point->work_type == 1) {
+            if ($point && $point->work_type == 1) {
                 $pointDay = $point->pointDays->where('name', $index)->first();
                 $workTime = PointDays::where('point_id', $point_id)->where('name', $index)->first();
-                $startTime = Carbon::create(date('y-m-d') . ' ' . $workTime->from);
-                $endtTime = Carbon::create(date('y-m-d') . ' ' . $workTime->to);
-                $fromTime = $startTime->format('h:i');
-                $ToTime = $endtTime->format('h:i');
-                $is_avilable = $this->isTimeAvailable($fromTime, $ToTime);
+                $startTime = $workTime->from;
+                $endtTime = $workTime->to;;
+                $is_avilable = $this->isTimeAvailable($startTime, $endtTime);
                 if(!$is_avilable){
                     return $this->respondError('failed to save', ['error' =>'انتهت مواعيد عمل النقطه'], 404);
 
