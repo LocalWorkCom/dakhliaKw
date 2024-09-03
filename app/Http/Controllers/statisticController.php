@@ -10,6 +10,7 @@ use App\Models\Violation;
 use App\Models\ViolationTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class statisticController extends Controller
 {
@@ -39,7 +40,7 @@ class statisticController extends Controller
             $violations = ViolationTypes::all();
         } else {
             $inspectors = Inspector::where('department_id', Auth()->user()->department_id)->get();
-            $points = collect(); // Ensure $points is always defined
+            $points = collect();
         }
 
         $date = $request->input('date');
@@ -48,7 +49,7 @@ class statisticController extends Controller
         $inspector = $request->input('inspectors');
 
         $violation = Violation::query();
-
+        $user_id=Inspector::where('id',$inspector)->value('user_id');
         if ($date) {
             $violation->whereDate('created_at', $date);
         }
@@ -58,20 +59,17 @@ class statisticController extends Controller
         }
 
         if ($violation_type && $violation_type != -1) {
-            // Assuming 'violation_type' is a comma-separated string of IDs, e.g., "1,5,7"
-            $violationIds = explode(',', $violation_type); // Convert the string to an array
+            $violationIds = explode(',', $violation_type);
             $violation->whereIn('violation_type', $violationIds);
         }
 
         if ($inspector && $inspector != -1) {
-            $violation->where('inspector_id', $inspector);
+            $violation->where('user_id', $user_id);
         }
-
-        // Use distinct to ensure uniqueness based on selected columns
-        $violationData = $violation->distinct()->get();
-
-
-        // Render the view with $violationData and $points
+        $violationData = $violation
+        ->select('point_id', 'violation_type', 'user_id', DB::raw('count(*) as count'))
+        ->groupBy('point_id', 'violation_type', 'user_id')
+        ->get();
         return view('statistics.index', compact('inspectors', 'points', 'violations', 'violationData'))->render();
     }
 
