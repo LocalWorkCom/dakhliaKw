@@ -97,7 +97,8 @@
                                             @endforeach
                                         </tr>
                                         @foreach ($team['inspectors'] as $index => $inspector)
-                                            <tr id="group-{{ $Group->id }}-team-inspector-tr{{ $inspector->id }}">
+                                            <tr id="group-{{ $Group->id }}-team-inspector-tr{{ $inspector->id }}"
+                                                class="one-team" data-team-id="{{ $team->id }}">
 
                                                 <td style="background-color: #a5d0ffbd">{{ $count }}</td>
                                                 <td
@@ -152,7 +153,8 @@
                                                                             count($inspector['personal_missions'][$index2]) > 0)
                                                                         @foreach ($inspector['personal_missions'][$index2] as $personal_mission)
                                                                             <li class="task">
-                                                                                {{ $personal_mission->point->name }}</li>
+                                                                                {{ $personal_mission->point->name }}
+                                                                            </li>
                                                                         @endforeach
                                                                     @endif
                                                                 </ul>
@@ -199,6 +201,11 @@
     function extractGroupId(id) {
         const match = id.match(/^group-\d+/);
         return match ? match[0] : null;
+    }
+
+    function extractTeamId(trId) {
+        const match = trId.match(/-team-tr(\d+)/);
+        return match ? match[1] : null;
     }
 
     function getDayDate(dayNumber) {
@@ -262,6 +269,7 @@
     });
 
     document.addEventListener('drop', (event) => {
+
         if (event.target.tagName === 'TD' && event.target.classList.contains('drop-target')) {
             event.preventDefault();
 
@@ -278,9 +286,22 @@
                 return;
             }
 
+            // Get the closest <tr> element
             const targetTr = event.target.closest('tr');
-            const targetGroupId = extractGroupId(targetTr.id);
 
+            // Convert the targetTr into a jQuery object and then use parent() and find() methods
+            const parentElement = targetTr.parentElement;
+
+            // Find all elements with the class '.one-team' within the parent element
+
+            const targetGroupId = extractGroupId(targetTr.id);
+            const oneTeamElements = targetTr.classList.contains('one-team') ? [targetTr] : [];
+            // const targetTeamId = extractTeamId(targetTr.id); // Extract team ID from the tr ID
+            // Adjusting the way we select .one-team
+            if (oneTeamElements.length > 0) {
+                const teamId = oneTeamElements[0].getAttribute('data-team-id');
+                console.log('Team ID:', teamId); // Output the value of 'data-team-id'
+            }
             // Allow move only if the target group is the same as the original group
             if (originalGroup !== targetGroupId) {
                 alert('Cannot move item to a different group');
@@ -290,11 +311,21 @@
             const targetElement = event.target;
             const targetUl = targetElement.querySelector('ul');
 
+
             // Check for duplicate content in the target cell
             if (isDuplicateContent(targetElement, draggedElement.innerHTML)) {
                 alert('Cannot drop item; duplicate content in target cell');
                 return;
             }
+            const pointString = draggedElement ? draggedElement.getAttribute('id') : null;
+
+            if (pointString && typeof pointString === 'string') {
+                const group_point_id = pointString.slice(-2);
+            } else {
+                console.error('pointString is invalid or not found:', pointString);
+            }
+            // Extract the last two characters from the string
+
 
             const newLi = document.createElement('li');
             newLi.innerHTML = draggedElement.innerHTML;
@@ -309,6 +340,7 @@
                 targetElement.appendChild(newUl);
             }
 
+
             originalParent.removeChild(draggedElement);
             draggedElement.classList.remove('dragging');
             draggedElement = null;
@@ -318,6 +350,12 @@
 
                 url: "{{ route('point.dragdrop') }}",
                 type: 'get',
+                data: {
+                    group_id: targetGroupId, // Replace with your actual group ID variable
+                    team_id: teamId, // Replace with your actual team ID variable
+                    group_point_id: group_point_id, // Replace with your actual group point ID variable
+                    date: targetDate // Replace with your actual date variable, e.g., new Date().toISOString().split('T')[0] for today's date
+                },
                 success: function(response) {
                     console.log(response);
 
