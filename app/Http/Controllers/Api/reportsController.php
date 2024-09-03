@@ -132,7 +132,7 @@ class reportsController extends Controller
                     'employee_military_number' => $employeeAbsence->military_number ?? '',
                     'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name :'',
                     'type_employee'=>$employee_absence->type_employee ? $employee_absence->typeEmployee->name :'',
-                    'employee_civil_number'=>$employee_absence->type_employee ? $employee_absence->absenceType->name :''
+                    'employee_civil_number'=>$employee_absence->civil_number ? $employee_absence->civil_number :''
                 ];
             }
 
