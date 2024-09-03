@@ -457,7 +457,7 @@ Route::middleware(['auth'])->group(function () {
 
     //statistics
     Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');    
-    Route::post('/statistics/search', [statisticController::class, 'getFilteredData'])->name('statistic.search');    
+    Route::get('/statistics/search', [statisticController::class, 'getFilteredData'])->name('statistic.search');    
 
 });
 

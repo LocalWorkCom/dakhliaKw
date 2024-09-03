@@ -24,38 +24,56 @@ class statisticController extends Controller
             $violations = ViolationTypes::all();
         } else {
             $inspectors = Inspector::where('department_id', Auth()->user()->department_id)->get();
+            $points = collect(); // Ensure $points is always defined
         }
-        return view('statistics.index', compact('inspectors', 'points', 'violations'));
+
+        $violationData = null;
+        return view('statistics.index', compact('inspectors', 'points', 'violations', 'violationData'));
     }
+
     public function getFilteredData(Request $request)
     {
-        $date = $request->input('date');
-        $points = $request->input('points');
-        $violation = $request->input('violation');
-        $inspectors = $request->input('inspectors');
+        dd($request->all());
+        if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
+            $inspectors = Inspector::all();
+            $points = Grouppoint::where('deleted', 0)->get();
+            $violations = ViolationTypes::all();
+        } else {
+            $inspectors = Inspector::where('department_id', Auth()->user()->department_id)->get();
+            $points = collect(); // Ensure $points is always defined
+        }
 
-        $violations = Violation::query();
+        $date = $request->input('date');
+        $pointsId = $request->input('points');
+        $violation_type = $request->input('violation');
+        $inspector = $request->input('inspectors');
+
+        $violation = Violation::query();
 
         if ($date) {
-            $violations->whereDate('created_at', $date);
+            $violation->whereDate('created_at', $date);
         }
 
-        if ($points && $points != -1) {
-            $violations->with(['point'])->where('point_id', $points);
+        if ($pointsId && $pointsId != -1) {
+            $violation->with(['point'])->where('point_id', $pointsId);
         }
 
-        if ($violation && $violation != -1) {
-            $violations->where('violation_type_id', $violation);
+        if ($violation_type && $violation_type != -1) {
+            // Assuming 'violation_type' is a comma-separated string of IDs, e.g., "1,5,7"
+            $violationIds = explode(',', $violation_type); // Convert the string to an array
+            $violations->whereIn('violation_type', $violationIds);
         }
 
-        if ($inspectors && $inspectors != -1) {
-            $violations->where('inspector_id', $inspectors);
+        if ($inspector && $inspector != -1) {
+            $violation->where('inspector_id', $inspector);
         }
 
-        $violationData = $violations->get();
-   
-        return redirect()->back()->with('');
+        $violationData = $violation->get();
+
+        // Render the view with $violationData and $points
+        return view('statistics.index', compact('inspectors', 'points', 'violations', 'violationData'))->render();
     }
+
 
 
 

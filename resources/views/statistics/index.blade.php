@@ -21,6 +21,8 @@
             </div>
         </div>
         <br>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <div class="row">
             <div class="container  col-11 mt-3 p-0 ">
 
@@ -28,65 +30,62 @@
                     <div class="form-group moftsh mt-4  mx-4  d-flex">
                         <p class="filter "> تصفية حسب :</p>
 
-                        <form class="edit-grade-form" action="{{ route('statistic.search') }}" method="post">
-                            @csrf
-                            <div class="check-one d-flex pt-2">
-                                <input type="checkbox" class="mx-2" name="all_date" checked id="all_date">
-                                <label for=""> كل الايام </label>
-                            </div>
-                            <div class="form-group moftsh select-box-2  mx-3  d-flex">
-                                <h4 style="    line-height: 1.8;"> التاريخ : </h4>
-                                <input type="date" name="date" id="date">
+                        <div class="check-one d-flex pt-2">
+                            <input type="checkbox" class="mx-2" name="all_date" checked id="all_date">
+                            <label for=""> كل الايام </label>
+                        </div>
+                        <div class="form-group moftsh select-box-2  mx-3  d-flex">
+                            <h4 style="    line-height: 1.8;"> التاريخ : </h4>
+                            <input type="date" name="date" id="date">
 
-                            </div>
-                            <div class="form-group moftsh select-box-2 mx-3  d-flex">
-                                <h4 style=" line-height: 1.8;"> النقطه : </h4>
-                                <select id="points" name="points"
-                                    class="form-control custom-select custom-select-lg mb-3 select2 ">
-                                    <option value="-1" selected> كل النقاط
+                        </div>
+                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                            <h4 style=" line-height: 1.8;"> النقطه : </h4>
+                            <select id="points" name="points"
+                                class="form-control custom-select custom-select-lg mb-3 select2 ">
+                                <option value="-1" selected> كل النقاط
+                                </option>
+                                @foreach ($points as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ $item->name }}
                                     </option>
-                                    @foreach ($points as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group moftsh select-box-2 mx-3  d-flex">
-                                <h4 style=" line-height: 1.8;"> المخالفه : </h4>
-                                <select id="violation" name="violation"
-                                    class="form-control custom-select custom-select-lg mb-3 select2 ">
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                            <h4 style=" line-height: 1.8;"> المخالفه : </h4>
+                            <select id="violation" name="violation"
+                                class="form-control custom-select custom-select-lg mb-3 select2 ">
 
-                                    <option value="-1" selected> كل المخالفات
+                                <option value="-1" selected> كل المخالفات
+                                </option>
+                                @foreach ($violations as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ $item->name }}
                                     </option>
-                                    @foreach ($violations as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group moftsh select-box-2 mx-3  d-flex">
-                                <h4 style=" line-height: 1.8;"> المفتش : </h4>
-                                <select id="inspectors" name="inspectors"
-                                    class="form-control custom-select custom-select-lg mb-3 select2 " placeholder="المفتش">
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                            <h4 style=" line-height: 1.8;"> المفتش : </h4>
+                            <select id="inspectors" name="inspectors"
+                                class="form-control custom-select custom-select-lg mb-3 select2 " placeholder="المفتش">
 
-                                    <option value="-1" selected> كل المفتشين
+                                <option value="-1" selected> كل المفتشين
+                                </option>
+                                @foreach ($inspectors as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ $item->name }}
                                     </option>
-                                    @foreach ($inspectors as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group moftsh  mx-3  d-flex">
-                                <button class="btn-all px-3 " style="color: #212529; background-color: #f8f8f8;"
-                                    onclick="search()">
-                                    بحث
-                                </button>
-                            </div>
-                        </form>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group moftsh  mx-3  d-flex">
+                            <button class="btn-all px-3 " style="color: #212529; background-color: #f8f8f8;"
+                                onclick="search()">
+                                بحث
+                            </button>
+                        </div>
                     </div>
 
                 </div>
@@ -99,30 +98,36 @@
                                 </div>
                             @endif
                             <div class="container  col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11">
-                                @foreach ($violationData as $violation)
-                                    
-                                @endforeach
-                                <table class="table table-bordered" dir="rtl">
-                                    <tbody>
-                                        <tr>
-                                            <th>التاريخ :</th>
-                                            <td>{{$violation->created_at ?  $violation->created_at->format('d-m-Y') :'' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>النقطه :</th>
-                                            <td>{{ $violation->point_id ? $violation->point->name : ''}}</td>
-                                        </tr>
+                                @if ($violationData && $violationData->isNotEmpty())
+                                    @foreach ($violationData as $violation)
+                                        <table class="table table-bordered" dir="rtl">
+                                            <tbody>
+                                                <tr>
+                                                    <th>التاريخ :</th>
+                                                    <td>{{ $violation->created_at ? $violation->created_at->format('d-m-Y') : '' }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>النقطه :</th>
+                                                    <td>{{ $violation->point_id ? $violation->point->name : '' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">نوع المخالفه</th>
+                                                    <td>{{ $violation->violation_id ? $violation->violation->name : '' }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">المفتش</th>
+                                                    <td>{{ $violation->inspector_id ? $violation->inspector->name : '' }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    @endforeach
+                                @else
+                                    <p>No results found</p>
+                                @endif
 
-                                        <tr>
-                                            <th scope="row">نوع المخالفه </th>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">المفتش</th>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                              @endforeach
                             </div>
                         </div>
                     </div>
@@ -140,6 +145,39 @@
         $('.select2').select2({
             dir: "rtl"
         });
+
+        function search() {
+            var url = "{{ url('/statistics/search') }}";
+            var dateItem = $('#date').val();
+            var alldate = $('#all_date').val();
+            var group = $('#group_id').val();
+            var team = $('#group_team_id').val();
+            var inspectors = $('#inspectors').val();
+            var addurl = '';
+            if (all_date == 0) {
+                if (dateItem != '' || dateItem != null) {
+                    if (addurl == '') addurl += '?';
+                    else addurl += '&';
+                    addurl += 'date=' + dateItem;
+                }
+            }
+            if (group) {
+                if (addurl == '') addurl += '?';
+                else addurl += '&';
+                addurl += 'group=' + group;
+            }
+            if (team) {
+                if (addurl == '') addurl += '?';
+                else addurl += '&';
+                addurl += 'team=' + team;
+            }
+            if (inspectors) {
+                if (addurl == '') addurl += '?';
+                else addurl += '&';
+                addurl += 'inspector=' + inspectors;
+            }
+            document.location = url + addurl;
+        }
     </script>
     {{-- <script>
         function search() {
