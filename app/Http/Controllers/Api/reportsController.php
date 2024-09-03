@@ -40,7 +40,7 @@ class reportsController extends Controller
     public function  getAbsence(Request $request)
     {
 
-
+        
         $messages = [
             'point_id.required' => 'يجب اختيار النقطه المضاف لها المهمه',
             'point_id.exists' => 'عفوا هذه النقطه غير متاحه',
@@ -119,10 +119,9 @@ class reportsController extends Controller
                     // dd($time);
             }
           
-            $employees_absence = AbsenceEmployee::with(['gradeName', 'absenceType'])
+            $employees_absence = AbsenceEmployee::with(['gradeName', 'absenceType','typeEmployee'])
                 ->where('absences_id', $absence->id)
                 ->get();
-
             $absence_members = [];
             foreach ($employees_absence as $employee_absence) {
                 // $grade=$employee_absence->grade != null ? $employee_absence->grade->name : 'لا يوجد رتبه';
@@ -130,8 +129,10 @@ class reportsController extends Controller
                 $absence_members[] = [
                     'employee_name' => $employee_absence->name,
                     'employee_grade' => $employee_absence->grade == null ? '' : $employee_absence->gradeName->name,
-                    'employee_military_number' => $employee_absence->military_number != null ? $employee_absence->military_number :'',
-                    'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name : '',
+                    'employee_military_number' => $employeeAbsence->military_number ?? '',
+                    'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name :'',
+                    'type_employee'=>$employee_absence->type_employee ? $employee_absence->typeEmployee->name :'',
+                    'employee_civil_number'=>$employee_absence->type_employee ? $employee_absence->absenceType->name :''
                 ];
             }
 
@@ -268,7 +269,7 @@ class reportsController extends Controller
                             ->first();
                     }
 
-                    $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType'])
+                    $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType','typeEmployee'])
                         ->where('absences_id', $absence->id)
                         ->get();
 
@@ -279,6 +280,8 @@ class reportsController extends Controller
                             'employee_grade' => $employeeAbsence->grade == null ? '' : $employeeAbsence->gradeName->name,
                             'employee_military_number' => $employeeAbsence->military_number ?? '',
                             'employee_type_absence' => $employeeAbsence->absenceType ? $employeeAbsence->absenceType->name :'',
+                            'type_employee'=>$employeeAbsence->type_employee ? $employeeAbsence->typeEmployee->name :'',
+                            'employee_civil_number'=>$employeeAbsence->type_employee ? $employeeAbsence->absenceType->name :''
                         ];
                     }
 

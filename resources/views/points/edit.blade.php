@@ -249,7 +249,7 @@
                                 alt="img" height="20px" width="20px"> اضافة</button>
                     </div>
                 </div>
-            </div>
+            </div> 
         </div>
     </form>
 @endsection
