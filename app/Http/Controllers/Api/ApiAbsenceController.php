@@ -77,8 +77,8 @@ class ApiAbsenceController extends Controller
             'actual_number' => 'required',
             'point_id' => 'required',
             'mission_id' => 'required',
-            'type_employee'=>'required',
-            'absence_types'=>'required'
+          /*  'type_employee'=>'required',
+            'absence_types'=>'required'*/
             // 'AbsenceEmployee'=> ['required_if:total_number -actual_number ,0']
         ], $messages);
         
