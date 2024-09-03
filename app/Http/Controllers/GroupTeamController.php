@@ -21,6 +21,7 @@ use App\Models\Grouppoint;
 use App\Models\Groups;
 use App\Models\instantmission;
 use App\Models\PersonalMission;
+use App\Models\Point;
 use Illuminate\Support\Facades\DB;
 
 class GroupTeamController extends Controller
@@ -1095,22 +1096,68 @@ class GroupTeamController extends Controller
     }
     public function DragDrop(Request $request)
     {
-        return $request;
+        // Retrieve relevant request data
         $group_id = $request->group_id;
         $team_id = $request->team_id;
-        $new_date = $request->new_date;
-        $GroupPoint_id = $request->GroupPoint_id;
-        $index = $this->todayIndex($new_date);
-        $check =  $this->DragDropHelp($index, $GroupPoint_id, $group_id, $team_id, $new_date);
-        if ($check) {
+        $old_team_id = $request->old_team_id;
+        $new_date = $request->date;
+        $old_date = $request->old_date;
+        $old_inspector_id = $request->old_inspector_id;
+        $new_inspector_id = $request->new_inspector_id;
+        $group_point_id = $request->group_point_id;
 
-            // insert point in json in this team group in inspector mission
+        // Get the index of the current day based on the provided date
+        $index = $this->todayIndex($new_date);
+
+        // Check the validity of the drag-and-drop action based on working times and availability
+        $check = $this->DragDropHelp($index, $group_point_id, $group_id, $team_id, $new_date);
+        if ($check) {
+            // Retrieve the old inspector mission based on the provided data
+            $old_mission = InspectorMission::where('group_id', $group_id)
+                ->where('group_team_id', $old_team_id)
+                ->whereJsonContains('ids_group_point', $group_point_id)
+                ->where('date', $old_date)
+                ->first();
+            if ($old_mission) {
+                // Remove the group point ID from the old mission's list of group points
+                $ids_group_point = $old_mission->ids_group_point;
+                if (($key = array_search($group_point_id, $ids_group_point)) !== false) {
+                //  dd(($ids_group_point[$key])) ;  
+                    unset($ids_group_point[$key]);
+                    // dd($ids_group_point);
+                    $ids_group_point = array_values($ids_group_point);
+                    $old_mission->ids_group_point = $ids_group_point;
+                    $old_mission->save();
+                }
+            }
+
+            // Find or create a new mission record for the new inspector
+            $new_mission = InspectorMission::firstOrNew(
+                [
+                    'group_id' => $group_id,
+                    'group_team_id' => $team_id,
+                    'date' => $new_date,
+                    'inspector_id' => $new_inspector_id
+                ]
+            );
+
+            // Update the group points list for the new mission if the group point is not already included
+            $new_ids_group_point = $new_mission->ids_group_point;
+            if (!in_array($group_point_id, $new_ids_group_point)) {
+                $new_ids_group_point[] = $group_point_id;
+                $new_mission->ids_group_point = $new_ids_group_point;
+                $new_mission->save();
+            }
+
+            return true; // Return true if the operation was successful
         } else {
-            return false;
+            return false; // Return false if the operation failed the validity check
         }
     }
+
     public function todayIndex($today)
     {
+        // Array of weekdays in Arabic
         $daysOfWeek = [
             "السبت",
             "الأحد",
@@ -1121,14 +1168,32 @@ class GroupTeamController extends Controller
             "الجمعة",
         ];
 
+        // Parse the date and get the day name in Arabic
         $todayDate = Carbon::parse($today);
         $dayWeek = $todayDate->locale('ar')->dayName;
+
+        // Find the index of the day in the array
         $index = array_search($dayWeek, $daysOfWeek);
 
+        // Return the index if found, otherwise return null
         return $index !== false ? $index : null;
     }
+
+    function isTimeAvailable($pointStart, $pointEnd, $teamStart, $teamEnd)
+    {
+        // Convert time strings to timestamps for comparison
+        $pointStartTimestamp = strtotime($pointStart);
+        $pointEndTimestamp = strtotime($pointEnd);
+        $teamStartTimestamp = strtotime($teamStart);
+        $teamEndTimestamp = strtotime($teamEnd);
+
+        // Check if the point's time falls within the team's working time
+        return $teamStartTimestamp <= $pointStartTimestamp && $teamStartTimestamp >= $pointEndTimestamp && $teamEndTimestamp >= $pointStartTimestamp;
+    }
+
     public function DragDropHelp($index, $GroupPoint_id, $group_id, $group_team_id, $new_date)
     {
+        // Fetch working times of the team on the specific date
         $teamsWorkingTime = InspectorMission::with('workingTime')
             ->where('group_id', $group_id)
             ->where('group_team_id', $group_team_id)
@@ -1137,29 +1202,35 @@ class GroupTeamController extends Controller
             ->distinct('group_team_id')
             ->get();
 
+        // Extract time periods from the fetched working times
         $teamTimePeriods = $teamsWorkingTime->map(function ($mission) {
             return [$mission->workingTime->start_time, $mission->workingTime->end_time];
         })->toArray();
 
+        // Fetch all points associated with the group point ID
         $availablePoints = Grouppoint::find($GroupPoint_id)->points_ids;
-        foreach ($availablePoints as $available_point) {
+        $allPoints = Point::with('pointDays')->whereIn('id', $availablePoints)->get();
+
+        foreach ($allPoints as $available_point) {
+            // Check if the point has a fixed working day
             if ($available_point->work_type == 0) {
-                $is_off = in_array($index, $available_point->days_work);
-                if ($is_off) {
-                    return false;
+                $is_work = in_array($index, $available_point->days_work);
+                if ($is_work) {
+                    return true; // Return true if the point is scheduled to work on that day
                 } else {
-                    return true;
+                    return false; // Return false if not scheduled
                 }
             } else {
-                ///////
+                // Retrieve specific working times for variable working days
                 $pointDay = $available_point->pointDays->where('name', $index)->first();
 
                 if ($pointDay) {
+                    // Check if the point's working time is available within the team's time
                     $is_available = $this->isTimeAvailable($pointDay->from, $pointDay->to, $teamTimePeriods[0][0], $teamTimePeriods[0][1]);
                     if ($is_available) {
-                        return true;
+                        return true; // Return true if available
                     } else {
-                        return false;
+                        return false; // Return false if not available
                     }
                 }
             }
