@@ -116,12 +116,14 @@ class ApiAbsenceController extends Controller
                             $Emp->military_number  = $item["military_number"] ?? null;
                             $Emp->civil_number  = $item["civil_number"] ?? null;
                             $Emp->absence_types_id  = $item["absence_types"] ?? null;
+                            $Emp->file_num  = $item["file_num"] ?? null;
+
                             $Emp->type_employee = $item["type_employee"] ?? null;
                             $Emp->absences_id  = $new->id;
                             $Emp->save();
                             if($Emp)
                             {
-                                $array[]=$Emp->only(['id','name','military_number','civil_number','grade','absence_types_id','type_employee']);
+                                $array[]=$Emp->only(['id','name','military_number','civil_number','file_num','grade','absence_types_id','type_employee']);
                             }
     
                         }

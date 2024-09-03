@@ -15,7 +15,7 @@
 
             <div class="container welcome col-11">
                 <div class="d-flex justify-content-between">
-                    <p> </p>
+                    <p>الأحصائيات </p>
 
                 </div>
             </div>
@@ -27,88 +27,106 @@
                 <div class="row d-flex justify-content-between " dir="rtl">
                     <div class="form-group moftsh mt-4  mx-4  d-flex">
                         <p class="filter "> تصفية حسب :</p>
-                        <div class="check-one d-flex pt-2">
-                            <input type="checkbox" class="mx-2" name="all_date" checked id="all_date">
-                            <label for=""> كل الايام </label>
-                        </div>
-                        <div class="form-group moftsh select-box-2  mx-3  d-flex">
-                            <h4 style="    line-height: 1.8;"> التاريخ : </h4>
-                            <input type="date" name="date" id="date">
 
-                        </div>
-                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
-                            <h4 style=" line-height: 1.8;"> النقطه : </h4>
-                            <select id="points" name="points"
-                                class="form-control custom-select custom-select-lg mb-3 select2 ">
-                                <option value="-1" selected> كل النقاط
-                                </option>
-                                @foreach ($points as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
-                            <h4 style=" line-height: 1.8;"> المخالفه : </h4>
-                            <select id="violation" name="violation"
-                                class="form-control custom-select custom-select-lg mb-3 select2 ">
-
-                                <option value="-1" selected> كل المخالفات
-                                </option>
-                                @foreach ($violations as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
-                            <h4 style=" line-height: 1.8;"> المفتش : </h4>
-                            <select id="inspectors" name="inspectors"
-                                class="form-control custom-select custom-select-lg mb-3 select2 " placeholder="المفتش">
-
-                                <option value="-1" selected> كل المفتشين
-                                </option>
-                                @foreach ($inspectors as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group moftsh  mx-3  d-flex">
-                            <button class="btn-all px-3 " style="color: #212529; background-color: #f8f8f8;"
-                                onclick="search()">
-                                بحث
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="col-lg-12">
-                    <div class="bg-white ">
-                        @if (session()->has('message'))
-                            <div class="alert alert-info">
-                                {{ session('message') }}
+                        <form class="edit-grade-form" action="{{ route('statistic.search') }}" method="post">
+                            @csrf
+                            <div class="check-one d-flex pt-2">
+                                <input type="checkbox" class="mx-2" name="all_date" checked id="all_date">
+                                <label for=""> كل الايام </label>
                             </div>
-                        @endif
-                        <div>
-                            <table id="users-table"
-                                class="display table table-responsive-sm  table-bordered table-hover dataTable">
-                                <thead>
-                                    <tr>
-                                        <th>التاريخ </th>
-                                        <th>النقاط</th>
-                                        <th>المخالفات</th>
-                                        <th>المفتشون</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <div class="form-group moftsh select-box-2  mx-3  d-flex">
+                                <h4 style="    line-height: 1.8;"> التاريخ : </h4>
+                                <input type="date" name="date" id="date">
+
+                            </div>
+                            <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                                <h4 style=" line-height: 1.8;"> النقطه : </h4>
+                                <select id="points" name="points"
+                                    class="form-control custom-select custom-select-lg mb-3 select2 ">
+                                    <option value="-1" selected> كل النقاط
+                                    </option>
+                                    @foreach ($points as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                                <h4 style=" line-height: 1.8;"> المخالفه : </h4>
+                                <select id="violation" name="violation"
+                                    class="form-control custom-select custom-select-lg mb-3 select2 ">
+
+                                    <option value="-1" selected> كل المخالفات
+                                    </option>
+                                    @foreach ($violations as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                                <h4 style=" line-height: 1.8;"> المفتش : </h4>
+                                <select id="inspectors" name="inspectors"
+                                    class="form-control custom-select custom-select-lg mb-3 select2 " placeholder="المفتش">
+
+                                    <option value="-1" selected> كل المفتشين
+                                    </option>
+                                    @foreach ($inspectors as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group moftsh  mx-3  d-flex">
+                                <button class="btn-all px-3 " style="color: #212529; background-color: #f8f8f8;"
+                                    onclick="search()">
+                                    بحث
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <section style="direction: rtl;">
+                    <div class="col-lg-12">
+                        <div class="bg-white ">
+                            @if (session()->has('message'))
+                                <div class="alert alert-info">
+                                    {{ session('message') }}
+                                </div>
+                            @endif
+                            <div class="container  col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11">
+                                @foreach ($violationData as $violation)
+                                    
+                                @endforeach
+                                <table class="table table-bordered" dir="rtl">
+                                    <tbody>
+                                        <tr>
+                                            <th>التاريخ :</th>
+                                            <td>{{$violation->created_at ?  $violation->created_at->format('d-m-Y') :'' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>النقطه :</th>
+                                            <td>{{ $violation->point_id ? $violation->point->name : ''}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th scope="row">نوع المخالفه </th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">المفتش</th>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                              @endforeach
+                            </div>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
 
         </div>
@@ -122,148 +140,14 @@
         $('.select2').select2({
             dir: "rtl"
         });
-        $('#search-btn').click(function() {
-    $('#users-table').DataTable().ajax.reload();
-});
-        $(document).ready(function() {
-
-
-            // Initialize DataTable
-            var table = $('#users-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '{{ url('statistics/search') }}', // Initial URL
-                    data: function(d) {
-                        // Add custom filter parameters
-                        d.date = $('#date').val();
-                        d.points = $('#points').val();
-                        d.violation = $('#violation').val();
-                        d.inspector = $('#inspectors').val();
-                    }
-                },
-                columns: [{
-                        data: 'Date',
-                        sWidth: '50px',
-                        name: 'Date'
-                    },
-                    {
-                        data: 'points',
-                        sWidth: '50px',
-                        name: 'points'
-                    },
-                    {
-                        data: 'Violations',
-                        sWidth: '50px',
-                        name: 'Violations'
-                    },
-                    {
-                        data: 'inspectors',
-                        name: 'inspectors',
-                        sWidth: '50px',
-                        orderable: false,
-                        searchable: false
-                    }
-                ],
-                order: [
-                    [1, 'desc']
-                ],
-                oLanguage: {
-                    sSearch: "",
-                    sSearchPlaceholder: "بحث",
-                    sInfo: 'اظهار صفحة _PAGE_ من _PAGES_',
-                    sInfoEmpty: 'لا توجد بيانات متاحه',
-                    sInfoFiltered: '(تم تصفية  من _MAX_ اجمالى البيانات)',
-                    sLengthMenu: 'اظهار _MENU_ عنصر لكل صفحة',
-                    sZeroRecords: 'نأسف لا توجد نتيجة',
-                    oPaginate: {
-                        sFirst: '<i class="fa fa-fast-backward" aria-hidden="true"></i>',
-                        sPrevious: '<i class="fa fa-chevron-left" aria-hidden="true"></i>',
-                        sNext: '<i class="fa fa-chevron-right" aria-hidden="true"></i>',
-                        sLast: '<i class="fa fa-step-forward" aria-hidden="true"></i>'
-                    }
-                },
-                pagingType: "full_numbers",
-                fnDrawCallback: function(oSettings) {
-                    var page = this.api().page.info().pages;
-                    if (page == 1) {
-                        $('.dataTables_paginate').css('visibility',
-                        'hidden'); // to hide pagination if only one page
-                    }
-                }
-            });
-
-            // Search button click event
-            $('#search-btn').click(function() {
-                table.ajax.reload(); // Reload the table data with new filters
-            });
-        });
     </script>
-    <script>
-        $(document).ready(function() {
-            $('#group_id').on('change', function() {
-                var group_id = $(this).val();
-
-
-                //if (group_id!=-1) {
-                $.ajax({
-                    url: '/getGroups/' + group_id,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#group_team_id').empty();
-                        $('#group_team_id').append(
-                            '<option selected value="-1"> كل الدوريات </option>');
-                        $.each(data, function(key, employee) {
-                            console.log(employee);
-                            $('#group_team_id').append('<option value="' + employee.id +
-                                '">' + employee.name + '</option>');
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error:', error);
-                        console.log('XHR:', xhr.responseText);
-                    }
-                });
-            });
-        });
-
-        $(document).ready(function() {
-            $('#group_team_id').on('change', function() {
-                var group_team_id = $(this).val();
-                var group_id = $('#group_id').val();
-                console.log(group_team_id);
-
-                $.ajax({
-                    url: '/getInspector/' + group_team_id + '/' + group_id,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#inspectors').empty();
-                        $('#inspectors').append('<option value="-1"> كل المفتشين   </option>');
-                        $.each(data, function(key, employee) {
-                            $('#inspectors').append('<option value="' + employee.id +
-                                '">' + employee.name + '</option>');
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error:', error);
-                        console.log('XHR:', xhr.responseText);
-                    }
-                });
-                /*} else {
-                    $('#inspectors').empty();
-                }*/
-            });
-        });
-    </script>
-    <script>
+    {{-- <script>
         function search() {
             var url = "";
             var dateItem = $('#date').val();
             var alldate = $('#all_date').val();
-            var group = $('#group_id').val();
-            var team = $('#group_team_id').val();
+            var group = $('#points').val();
+            var team = $('#violation').val();
             var inspectors = $('#inspectors').val();
             var addurl = '';
             if (all_date == 0) {
@@ -291,7 +175,7 @@
             document.location = url + addurl;
         }
     </script>
-
+--}}
     <script>
         $(document).ready(function() {
             $('#date').on('change', function() {
