@@ -29,47 +29,34 @@ class statisticController extends Controller
     }
     public function getFilteredData(Request $request)
     {
-        // Extract filter parameters
         $date = $request->input('date');
-        $all_date = $request->input('all_date');
         $points = $request->input('points');
         $violation = $request->input('violation');
         $inspectors = $request->input('inspectors');
-    
-        // Query logic here (example)
-        $query = InspectorMission::query();
-    
-        if (!$all_date && $date) {
-            $query->where('date', $date);
+
+        $violations = Violation::query();
+
+        if ($date) {
+            $violations->whereDate('created_at', $date);
         }
-    
+
         if ($points && $points != -1) {
-            $query->where('point_id', $points);
+            $violations->with(['point'])->where('point_id', $points);
         }
-    
+
         if ($violation && $violation != -1) {
-            $query->whereHas('violations', function ($q) use ($violation) {
-                $q->where('violation_type', $violation);
-            });
+            $violations->where('violation_type_id', $violation);
         }
-    
+
         if ($inspectors && $inspectors != -1) {
-            $query->where('inspector_id', $inspectors);
+            $violations->where('inspector_id', $inspectors);
         }
-    
-        $inspector_num = $query->count();
-        $violation_num = $query->whereHas('violations')->count();
-    
-        $results = [
-            'date' => $date,
-            'points' => $points,  // Adjust as necessary
-            'violations' => $violation_num,
-            'inspectors' => $inspector_num,
-        ];
-    
-        return response()->json($results);
+
+        $violationData = $violations->get();
+   
+        return redirect()->back()->with('');
     }
-    
+
 
 
     /**
