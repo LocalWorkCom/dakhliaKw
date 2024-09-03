@@ -141,6 +141,7 @@ class reportsController extends Controller
                 'point_name' => $absence->point->name,
                 'point_time' => $absence->point->work_type == 0 ? 'طوال اليوم' : "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا'),
                 'inspector_name' => $absence->inspector->name,
+                'inspector_grade' => auth()->user()->grade_id ? auth()->user()->grade->name : '',
                 'team_name' => $teamName,
                 'total_number' => $absence->total_number,
                 'actual_number' => $absence->actual_number,
