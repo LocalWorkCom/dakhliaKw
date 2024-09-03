@@ -87,11 +87,11 @@ class UserController extends Controller
                 $isManger= false;
                 $groupTeam = GroupTeam::where('group_id',$user->group_id)->whereRaw('find_in_set(?, inspector_ids)', [$user->inspectorId])
                 ->first();
-                
-                if($user->inspectorId == $groupTeam->inspector_manager)
-                {
-                    $isManger= true;
-                }
+                if($groupTeam)
+                { if($user->inspectorId == $groupTeam->inspector_manager)
+                 {
+                     $isManger= true;
+                 }}
                 // dd($groupTeam);
                 $success['token'] = $token;//->token;
                 $user->image=$user->image;

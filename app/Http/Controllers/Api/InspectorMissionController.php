@@ -60,6 +60,8 @@ class InspectorMissionController extends Controller
         $count = 0;
         $missionData = [];
         $avilable=true;
+        $groupPointCount =0;
+        $instantMissionData = [];
         foreach ($missions as $mission) {
             $idsGroupPoint = is_array($mission->ids_group_point) ? $mission->ids_group_point : explode(',', $mission->ids_group_point);
             if (!is_null($mission->ids_instant_mission)) {
