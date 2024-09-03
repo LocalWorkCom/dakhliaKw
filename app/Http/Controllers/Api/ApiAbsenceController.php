@@ -69,19 +69,22 @@ class ApiAbsenceController extends Controller
             'point_id.required' => 'رقم النقطة  مطلوب .',
             'mission_id.required' => 'رقم المهمة مطلوبة',
             'type_employee.required' => 'النوع مطلوب',
-            'absence_types.required' => 'حاله الغياب مطلوبه ',
+            'absence_types.required' => 'حاله الغياب مطلوبه',
             // 'AbsenceEmployee.required_if' => 'التاريخ مطلوبة',
         ];
         $validatedData = Validator::make($request->all(), [
             'total_number' => 'required',
             'actual_number' => 'required',
             'point_id' => 'required',
-            'mission_id' => 'required',
-            'type_employee'=>'required',
-            'absence_types'=>'required'
+           
             // 'AbsenceEmployee'=> ['required_if:total_number -actual_number ,0']
         ], $messages);
-        
+        if ($request->input('actual_number') != $request->input('total_number')) {
+            $validatedData->addRules([
+                'type_employee' => 'required',
+                 'absence_types'=>'required'
+            ]);
+        }
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
