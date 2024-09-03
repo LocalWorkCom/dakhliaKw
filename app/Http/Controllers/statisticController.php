@@ -33,7 +33,6 @@ class statisticController extends Controller
 
     public function getFilteredData(Request $request)
     {
-        dd($request->all());
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $inspectors = Inspector::all();
             $points = Grouppoint::where('deleted', 0)->get();
@@ -55,24 +54,27 @@ class statisticController extends Controller
         }
 
         if ($pointsId && $pointsId != -1) {
-            $violation->with(['point'])->where('point_id', $pointsId);
+            $violation->where('point_id', $pointsId);
         }
 
         if ($violation_type && $violation_type != -1) {
             // Assuming 'violation_type' is a comma-separated string of IDs, e.g., "1,5,7"
             $violationIds = explode(',', $violation_type); // Convert the string to an array
-            $violations->whereIn('violation_type', $violationIds);
+            $violation->whereIn('violation_type', $violationIds);
         }
 
         if ($inspector && $inspector != -1) {
             $violation->where('inspector_id', $inspector);
         }
 
-        $violationData = $violation->get();
+        // Use distinct to ensure uniqueness based on selected columns
+        $violationData = $violation->distinct()->get();
+
 
         // Render the view with $violationData and $points
         return view('statistics.index', compact('inspectors', 'points', 'violations', 'violationData'))->render();
     }
+
 
 
 

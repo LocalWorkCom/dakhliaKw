@@ -113,7 +113,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">نوع المخالفه</th>
-                                                    <td>{{ $violation->violation_id ? $violation->violation->name : '' }}
+                                                    <td>{{count(explode(',', $violation->violation_type))  }}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -150,8 +150,8 @@
             var url = "{{ url('/statistics/search') }}";
             var dateItem = $('#date').val();
             var alldate = $('#all_date').val();
-            var group = $('#group_id').val();
-            var team = $('#group_team_id').val();
+            var point = $('#points').val();
+            var type = $('#violation').val();
             var inspectors = $('#inspectors').val();
             var addurl = '';
             if (all_date == 0) {
@@ -161,21 +161,28 @@
                     addurl += 'date=' + dateItem;
                 }
             }
-            if (group) {
-                if (addurl == '') addurl += '?';
-                else addurl += '&';
-                addurl += 'group=' + group;
-            }
-            if (team) {
-                if (addurl == '') addurl += '?';
-                else addurl += '&';
-                addurl += 'team=' + team;
-            }
+           
             if (inspectors) {
                 if (addurl == '') addurl += '?';
                 else addurl += '&';
                 addurl += 'inspector=' + inspectors;
             }
+            if (point) {
+                if (addurl == '') addurl += '?';
+                else addurl += '&';
+                addurl += 'point=' + point;
+            }
+            if (type) {
+                if (addurl == '') addurl += '?';
+                else addurl += '&';
+                addurl += 'violation=' + type;
+            }
+            if (dateItem) {
+                if (addurl == '') addurl += '?';
+                else addurl += '&';
+                addurl += 'date=' + dateItem;
+            }
+           
             document.location = url + addurl;
         }
     </script>

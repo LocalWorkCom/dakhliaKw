@@ -316,7 +316,7 @@ class ViolationController  extends Controller
                 'Civil_number' => $violation->Civil_number ?? null,
                 'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                 'image' => $violation->image,
-                'violation_type' => ViolationTypes::whereIn('id', explode(',', $violation->violation_type))->select('id', 'name')->get(),
+                'violation_type' => $violation->violation_type? ViolationTypes::whereIn('id', explode(',', $violation->violation_type))->select('id', 'name')->get() : '',
                 'civil_military' => empty(grade::where('id', $violation->grade)->select('id', 'name')->first()) ? "مدنى" : "عسكرى",
                 // 'user_id' => $violation->user_id,
                 'created_at' => $violation->created_at,
