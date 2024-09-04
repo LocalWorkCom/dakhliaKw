@@ -42,6 +42,9 @@ class IoTelegramController extends Controller
             $IoTelegram['type'] = ($IoTelegram->type == 'in') ? 'داخلي' : 'خارجي';
         }
         return DataTables::of($IoTelegrams)
+            ->addColumn('representive_name', function ($row) {
+                return ($row->representive) ? $row->representive->name : '';
+            })
             ->rawColumns(['action'])
             ->make(true);
     }
@@ -59,6 +62,9 @@ class IoTelegramController extends Controller
             $IoTelegram['type'] = ($IoTelegram->type == 'in') ? 'داخلي' : 'خارجي';
         }
         return DataTables::of($IoTelegrams)
+            ->addColumn('representive_name', function ($row) {
+                return ($row->representive) ? $row->representive->name : '';
+            })
             ->rawColumns(['action'])
             ->make(true);
     }
@@ -93,10 +99,27 @@ class IoTelegramController extends Controller
     {
 
         if ($request->hasFile('files')) {
-            $request->validate([
-                'files.*' => 'mimes:jpeg,png,pdf|max:2048', // Adjust validation rules as needed
-            ]);
+
+            // Validation rules
+            $rules = [
+                'files.*' => 'mimes:jpeg,png,jpg|max:2048',
+            ];
+
+            // Custom validation messages
+            $messages = [
+                'files.*.mimes' => 'يجب أن يكون الملف بصيغة jpeg,jpg أو png فقط.',
+                'files.*.max' => 'يجب ألا يتجاوز حجم الملف 2048 كيلوبايت.',
+            ];
+
+            // Validate the request
+            $validatedData = Validator::make($request->all(), $rules, $messages);
+
+            // Check if validation fails
+            if ($validatedData->fails()) {
+                return redirect()->back()->withErrors($validatedData)->withInput();
+            }
         }
+
         $iotelegram_num = Iotelegram::orderBy('id', 'desc')->first();
         if ($iotelegram_num) {
             $record = $iotelegram_num->iotelegram_num;

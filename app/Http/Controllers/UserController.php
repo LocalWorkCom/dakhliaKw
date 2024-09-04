@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\departements;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use App\Rules\UniqueNumberInUser; 
+use App\Rules\UniqueNumberInUser;
 use App\DataTables\UsersDataTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -70,7 +70,7 @@ class UserController extends Controller
                         $query->where('hidden', false);
                     })->get();
             }
-        } else { 
+        } else {
             if (is_null($parentDepartment->parent_id)) {
                 $subdepart = Departements::where('parent_id', $parentDepartment->id)->pluck('id')->toArray();
 
@@ -111,7 +111,7 @@ class UserController extends Controller
             }
         }
 
-     
+
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 
@@ -127,82 +127,82 @@ class UserController extends Controller
     }
 
     // public function login(Request $request)
-        // {
-        //     $messages = [
-        //         'military_number.required' => 'رقم العسكري مطلوب.',
-        //         'password.required' => 'كلمة المرور مطلوبة.',
-        //     ];
+    // {
+    //     $messages = [
+    //         'military_number.required' => 'رقم العسكري مطلوب.',
+    //         'password.required' => 'كلمة المرور مطلوبة.',
+    //     ];
 
-        //     $validatedData = Validator::make($request->all(), [
-        //         'military_number' => 'required|string',
-        //         'password' => 'required|string',
-        //     ], $messages);
+    //     $validatedData = Validator::make($request->all(), [
+    //         'military_number' => 'required|string',
+    //         'password' => 'required|string',
+    //     ], $messages);
 
-            //     if ($validatedData->fails()) {
-            //         return back()->withErrors($validatedData)->withInput();
-            //     }
+    //     if ($validatedData->fails()) {
+    //         return back()->withErrors($validatedData)->withInput();
+    //     }
 
-            //     $military_number = $request->military_number;
-            //     $password = $request->password;
+    //     $military_number = $request->military_number;
+    //     $password = $request->password;
 
-            //     // Check if the user exists
-            //     $user = User::where('military_number', $military_number)->first();
+    //     // Check if the user exists
+    //     $user = User::where('military_number', $military_number)->first();
 
-            //     if (!$user) {
-            //         return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
-            //     }
+    //     if (!$user) {
+    //         return back()->with('error', 'الرقم العسكري لا يتطابق مع سجلاتنا');
+    //     }
 
-            //     // Check if the user has the correct flag
-            //     if ($user->flag !== 'user') {
-            //         return back()->with('error', 'لا يسمح لك بدخول الهيئة');
-            //     }
+    //     // Check if the user has the correct flag
+    //     if ($user->flag !== 'user') {
+    //         return back()->with('error', 'لا يسمح لك بدخول الهيئة');
+    //     }
 
-            //     $credentials = $request->only('military_number', 'password');
+    //     $credentials = $request->only('military_number', 'password');
 
-            //     // Check if the user has logged in within the last two hours
-            //     $twoHoursAgo = now()->subHours(6);
+    //     // Check if the user has logged in within the last two hours
+    //     $twoHoursAgo = now()->subHours(6);
 
-            //     if (Auth::attempt($credentials)) {
-            //         // If the user has logged in within the last two hours, do not set the code
-            //         if ($user->updated_at >= $twoHoursAgo) {
+    //     if (Auth::attempt($credentials)) {
+    //         // If the user has logged in within the last two hours, do not set the code
+    //         if ($user->updated_at >= $twoHoursAgo) {
 
-            //             $firstlogin = 0;
-            //             if ($user->token == null) {
-            //                 $firstlogin = 1;
-            //                             $set = '123456789';
-            //         $code = substr(str_shuffle($set), 0, 4);
+    //             $firstlogin = 0;
+    //             if ($user->token == null) {
+    //                 $firstlogin = 1;
+    //                             $set = '123456789';
+    //         $code = substr(str_shuffle($set), 0, 4);
 
-            //         $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+    //         $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
 
-            //         $response = send_sms_code($msg, $user->phone, $user->country_code);
-            //         $result = json_decode($response, true);
+    //         $response = send_sms_code($msg, $user->phone, $user->country_code);
+    //         $result = json_decode($response, true);
 
-            //         if (isset($result['sent']) && $result['sent'] === 'true') {
-            //             return view('verfication_code', compact('code', 'military_number', 'password'));
-            //         } else {
-            //             return back()->with('error', 'سجل الدخول مرة أخرى');
-            //         }
-            //                // return view('resetpassword', compact('military_number', 'firstlogin'));
-            //             }
+    //         if (isset($result['sent']) && $result['sent'] === 'true') {
+    //             return view('verfication_code', compact('code', 'military_number', 'password'));
+    //         } else {
+    //             return back()->with('error', 'سجل الدخول مرة أخرى');
+    //         }
+    //                // return view('resetpassword', compact('military_number', 'firstlogin'));
+    //             }
 
-            //             Auth::login($user); // Log the user in
-            //             return redirect()->route('home');
-            //         }
+    //             Auth::login($user); // Log the user in
+    //             return redirect()->route('home');
+    //         }
 
-            //         $set = '123456789';
-            //         $code = substr(str_shuffle($set), 0, 4);
+    //         $set = '123456789';
+    //         $code = substr(str_shuffle($set), 0, 4);
 
-            //         $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
+    //         $msg = "يرجى التحقق من حسابك\nتفعيل الكود\n" . $code;
 
-            //         $response = send_sms_code($msg, $user->phone, $user->country_code);
-            //         $result = json_decode($response, true);
+    //         $response = send_sms_code($msg, $user->phone, $user->country_code);
+    //         $result = json_decode($response, true);
 
-            //         if (isset($result['sent']) && $result['sent'] === 'true') {
-            //             return view('verfication_code', compact('code', 'military_number', 'password'));
-            //         } else {
-            //             return back()->with('error', 'سجل الدخول مرة أخرى');
-            //         }
-            //     }
+    //         if (isset($result['sent']) && $result['sent'] === 'true') {
+    //             return view('verfication_code', compact('code', 'military_number', 'password'));
+    //         } else {
+    //             return back()->with('error', 'سجل الدخول مرة أخرى');
+    //         }
+    //     }
 
     //     return back()->with('error', 'كلمة المرور لا تتطابق مع سجلاتنا');
     // }
@@ -288,14 +288,13 @@ class UserController extends Controller
         $response = send_sms_code($msg, $user->phone, $user->country_code);
         $result = json_decode($response, true);
         // $code = $request->code;
-        $military_number = $request->military_number;    
+        $military_number = $request->military_number;
         $number = $request->number;
         $password = $request->password;
         $sent = $result['sent'];
         if ($sent === 'true') {
             // dd("true");
-            return  view('verfication_code', compact('code', 'number','military_number', 'password'));
-
+            return  view('verfication_code', compact('code', 'number', 'military_number', 'password'));
         } else {
 
             return back()->with('error', 'سجل الدخول مرة أخرى');
@@ -579,8 +578,8 @@ class UserController extends Controller
                     ValidationRule::unique('users', 'Civil_number'),
                 ],
 
-               
-              /*   'military_number' => [
+
+                /*   'military_number' => [
                    'required_if:type_military,police',
                 ], */
             ];
@@ -597,7 +596,7 @@ class UserController extends Controller
                         ValidationRule::unique('users', 'military_number'),
                     ];
                 }
-              /*   if ($request->has('file_number')) {
+                /*   if ($request->has('file_number')) {
                     $rules['file_number'] = [
                         'required_if:type_military,police',
                         'string',
@@ -690,6 +689,7 @@ class UserController extends Controller
 
                 UploadFilesWithoutReal($path, 'image', $newUser, $file);
             }
+            session()->flash('success', 'تم الحفظ بنجاح.');
 
             $id = $request->type;
             return redirect()->route('user.employees', ['id' => $id]);
@@ -786,61 +786,49 @@ class UserController extends Controller
             'military_number.required_if' => 'رقم العسكري مطلوب ولا يمكن تركه فارغاً.',
             'phone.required' => 'رقم الهاتف مطلوب ولا يمكن تركه فارغاً.',
             // 'file_number.required' => 'رقم الملف مطلوب ولا يمكن تركه فارغاً.',
-            'email.required' => 'الايميل مطلوب',
             'Civil_number.required' => 'رقم المدنى مطلوب ولا يمكن تركه فارغاً.',
         ];
 
-        $validatedData = Validator::make($request->all(), [
-            // 'military_number' => 'required|string|max:255',
-            'military_number' => [
-                // 'required',
-                // 'required_if:solderORcivil,military',
-                'required_if:type_military,police',
-                // 'string',
-                'max:255',
+        if ($user->flag == 'user') {
+            $messages['email.required'] = 'الايميل مطلوب';
+        }
 
-                // ValidationRule::unique('permissions', 'name'),
+
+        // Define validation rules
+        $rules = [
+            'military_number' => [
+                'required_if:type_military,police',
+                'max:255',
                 new UniqueNumberInUser($user),
             ],
-            // 'phone' => 'required|string',
             'phone' => [
                 'required',
-                // 'string',
-                // 'max:255',
-                // ValidationRule::unique('permissions', 'name'),
                 new UniqueNumberInUser($user),
             ],
-            // 'file_number' => 'required|string',
-            // 'file_number' => [
-            //     'required',
-            //     // 'string',
-            //     // 'max:255',
-            //     // ValidationRule::unique('permissions', 'name'),
-            //     new UniqueNumberInUser($user),
-            // ],
-            'email' => [
-                'required',
-                // 'max:255',
-                // ValidationRule::unique('permissions', 'name'),
-                new UniqueNumberInUser($user),
-            ],
-            'public_administration' => 'required',
-            // 'Civil_number' => 'required',
+
+            // 'public_administration' => 'required',
             'Civil_number' => [
                 'required',
-                // 'string',
-                // 'max:255',
-                // ValidationRule::unique('permissions', 'name'),
                 new UniqueNumberInUser($user),
             ],
-        ], $messages);
+        ];
+        if ($user->flag == 'user') {
+            $role['email'] = [
+                'required',
+                new UniqueNumberInUser($user),
+            ];
+        }
+
+
+        // Apply validation
+        $validatedData = Validator::make($request->all(), $rules, $messages);
         // }
-       
+
         // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
-       
+
 
         // Update user attributes
         $user->name = $request->name;
@@ -903,7 +891,7 @@ class UserController extends Controller
         $user->save();
 
         $id = $user->flag == "user" ? "0" : "1";
-
+        session()->flash('success', 'تم الحفظ بنجاح.');
         if ($user->flag == "user") {
             // return view('user.view', compact('id'));
             return redirect()->route('user.index', ['id' => $id]);

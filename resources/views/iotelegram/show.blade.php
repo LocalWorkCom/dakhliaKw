@@ -4,16 +4,16 @@
     التفاصيل
 @endsection
 @section('content')
-<div class="row " dir="rtl">
-<div class="container  col-11" style="background-color:transparent;">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('iotelegrams.list') }}">الواردات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض الوارد</a></li>
-            </ol>
-        </nav>
-</div>
+    <div class="row " dir="rtl">
+        <div class="container  col-11" style="background-color:transparent;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('iotelegrams.list') }}">الواردات </a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض الوارد</a></li>
+                </ol>
+            </nav>
+        </div>
     </div>
     <div class="row ">
         <div class="container welcome col-11">
@@ -68,7 +68,7 @@
 
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">اسم مندوب الجهه المرسلة </th>
-                            <td>{{ $iotelegram->representive->name }}</td>
+                            <td>{{ $iotelegram->representive ? $iotelegram->representive->name : '' }}</td>
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;"> الموظف المستلم </th>
@@ -158,7 +158,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
-              
+
                 </div>
                 <div class="modal-body text-center">
                     <img id="modalImage" src="#" class="img-fluid" alt="صورة">
