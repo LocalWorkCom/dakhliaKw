@@ -14,74 +14,75 @@
         @if (url()->current() == url('/users/0'))
             <div class="container welcome col-11">
                 <div class="d-flex justify-content-between">
-                        <p>المستخـــــــــــدمين</p>
-                    
-                            <div class="form-group">
-                                @if (Auth::user()->hasPermission('create User'))
-                                    <button type="button" class="wide-btn"
-                                        onclick="window.location.href='{{ route('user.create', $id) }}'" style="color: #0D992C;">
-                                  
-                                        اضافة جديد      <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    </button>
-                                @endif
-                            </div>
+                    <p>المستخـــــــــــدمين</p>
+
+                    <div class="form-group">
+                        @if (Auth::user()->hasPermission('create User'))
+                            <button type="button" class="wide-btn"
+                                onclick="window.location.href='{{ route('user.create', $id) }}'" style="color: #0D992C;">
+
+                                اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            </button>
+                        @endif
+                    </div>
                 </div>
             </div>
         @elseif (url()->current() == url('/employees/1'))
             <div class="container welcome col-11">
                 <div class="d-flex justify-content-between">
-                        <p>المـــــــــــوظفين</p>
-                        <div class="form-group">
-                                @if (Auth::user()->hasPermission('add_employee User'))
-                                <button type="button" class="wide-btn"
-                                        onclick="window.location.href='{{ route('user.create', $id) }}'" style="color: #0D992C;">
-                                       
-                                        اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    </button>
-                                @endif
-                            </div>
+                    <p>المـــــــــــوظفين</p>
+                    <div class="form-group">
+                        @if (Auth::user()->hasPermission('add_employee User'))
+                            <button type="button" class="wide-btn"
+                                onclick="window.location.href='{{ route('user.create', $id) }}'"
+                                style="color: #0D992C;">
+
+                                اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            </button>
+                        @endif
+                    </div>
                 </div>
             </div>
-            @elseif ($id == 0)
+        @elseif ($id == 0)
             <div class="container welcome col-11">
                 <div class="d-flex justify-content-between">
-                        <p>المستخـــــــــــدمين</p>
-                    
-                            <div class="form-group">
-                                @if (Auth::user()->hasPermission('create User'))
-                                    <button type="button" class="wide-btn"
-                                        onclick="window.location.href='{{ route('user.create', $id) }}'">
-                                  
-                                        اضافة جديد       <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    </button>
-                                @endif
-                            </div>
+                    <p>المستخـــــــــــدمين</p>
+
+                    <div class="form-group">
+                        @if (Auth::user()->hasPermission('create User'))
+                            <button type="button" class="wide-btn"
+                                onclick="window.location.href='{{ route('user.create', $id) }}'">
+
+                                اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            </button>
+                        @endif
+                    </div>
                 </div>
             </div>
-            @elseif($id==1)
+        @elseif($id == 1)
             <div class="container welcome col-11">
                 <div class="d-flex justify-content-between">
-                        <p>المـــــــــــوظفين</p>
-                        <div class="form-group">
-                                @if (Auth::user()->hasPermission('add_employee User'))
-                                <button type="button" class="wide-btn"
-                                        onclick="window.location.href='{{ route('user.create', $id) }}'">
-                                       
-                                        اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                    </button>
-                                @endif
-                            </div>
+                    <p>المـــــــــــوظفين</p>
+                    <div class="form-group">
+                        @if (Auth::user()->hasPermission('add_employee User'))
+                            <button type="button" class="wide-btn"
+                                onclick="window.location.href='{{ route('user.create', $id) }}'">
+
+                                اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            </button>
+                        @endif
+                    </div>
                 </div>
             </div>
         @endif
-      
-        
+
+
     </div>
 
 
     <br>
 
-    
+
     <div class="row">
         <div class="container  col-11 mt-3 p-0 ">
             @include('inc.flash')
@@ -101,7 +102,7 @@
                                     <th style="width:150px !important;">العمليات</th>
                                 </tr>
                             </thead>
-                           <!--  <tfoot>
+                            <!--  <tfoot>
                                     <tr>
                                         <th>رقم التعريف</th>
                                         <th>الاسم</th>
@@ -121,29 +122,30 @@
                                 $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
 
                                 var id = {{ $id }};
-                            
-                                        @php
-                                        $Dataurl= url('api/users') ;
-                                        if(isset($mode)){
-                                            if($mode=='search')
-                                                 $Dataurl=url('searchUsers/users')."/".$q;
+
+                                @php
+                                    $Dataurl = url('api/users');
+                                    if (isset($mode)) {
+                                        if ($mode == 'search') {
+                                            $Dataurl = url('searchUsers/users');
                                         }
-                                       // dd($Dataurl);
-                                                                        
-                                        @endphp    
-                                      /*   
-                                        $('#users-table tfoot th').each(function (i) {
-                                            var title = $('#users-table thead th')
-                                                .eq($(this).index())
-                                                .text();
-                                            $(this).html(
-                                                '<input type="text" placeholder="' + title + '" data-index="' + i + '" />'
-                                            );
-                                        }); */
-                                var table=$('#users-table').DataTable({
+                                    }
+                                    // dd($Dataurl);
+                                @endphp
+                                /*   
+                                  $('#users-table tfoot th').each(function (i) {
+                                      var title = $('#users-table thead th')
+                                          .eq($(this).index())
+                                          .text();
+                                      $(this).html(
+                                          '<input type="text" placeholder="' + title + '" data-index="' + i + '" />'
+                                      );
+                                  }); */
+                                var table = $('#users-table').DataTable({
                                     processing: true,
                                     serverSide: true,
-                                    ajax: '{{$Dataurl}}/' + id, // Correct URL concatenation
+                                    ajax: '{{ $Dataurl }}/' + id + "/" +
+                                        '{{ isset($q) ? $q : '' }}', // Correct URL concatenation
                                     bAutoWidth: false,
                                     columns: [{
                                             data: 'id',
@@ -180,7 +182,7 @@
                                         render: function(data, type, row) {
 
 
-                                          //  console.log("dalia", data);
+                                            //  console.log("dalia", data);
                                             // Using route generation correctly in JavaScript
                                             var useredit = '{{ route('user.edit', ':id') }}';
                                             useredit = useredit.replace(':id', row.id);
@@ -190,7 +192,8 @@
                                             vacation = vacation.replace(':id', row.id);
                                             var unsigned = '{{ route('user.unsigned', ':id') }}';
                                             unsigned = unsigned.replace(':id', row.id);
-                                            var visibility = row.department_id != null ? 'd-block-inline' : 'd-none';
+                                            var visibility = row.department_id != null ? 'd-block-inline' :
+                                                'd-none';
                                             return `
 
                                         <a href="` + usershow + `"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i>عرض  </a>
@@ -229,23 +232,23 @@
                                     },
                                     "pagingType": "full_numbers",
                                     "fnDrawCallback": function(oSettings) {
-                                        console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
+                                        console.log('Page ' + this.api().page.info().pages)
+                                        var page = this.api().page.info().pages;
                                         console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                                        if (page == 1) {
+                                            //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                            $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
                                         }
                                     }
                                 });
 
-                                $(table.table().container()).on('keyup', 'tfoot input', function () {
-                                        table
-                                            .column($(this).data('index'))
-                                            .search(this.value)
-                                            .draw();
-                                    });
+                                $(table.table().container()).on('keyup', 'tfoot input', function() {
+                                    table
+                                        .column($(this).data('index'))
+                                        .search(this.value)
+                                        .draw();
+                                });
                             });
                         </script>
 
