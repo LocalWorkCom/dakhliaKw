@@ -99,45 +99,37 @@
                             @endif
                             <div class="container  col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11">
                                 @if ($violationData && $violationData->isNotEmpty())
-                                @php
-                                $pointViolations = $violationData->where('point_id', $point->id);
-                            @endphp
-                            @foreach ($pointViolations as $violation)
-                            <tr>
-                                <th>التاريخ :</th>
-                                <td>{{ $violation->created_at ? $violation->created_at->format('d-m-Y') : '' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>النقطه :</th>
-                                <td>{{ $violation->point_id ? $violation->point->name : '' }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">نوع المخالفه</th>
-                                <td>{{ $violation->count }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">المفتش</th>
-                                <td>{{ $violation->user_id ? $violation->user->name : '' }}
-                                </td>
-                            </tr>
-                        @endforeach
                                     @foreach ($violationData as $violation)
+                                       
                                         <table class="table table-bordered" dir="rtl">
                                             <tbody>
-                                               
-                                                
-                                               
-                                                
+                                                <tr>
+                                                    <th>التاريخ :</th>
+                                                    <td>{{ $violation->created_at ? $violation->created_at->format('d-m-Y') : '' }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>النقطه :</th>
+                                                    <td>{{ $violation->point_id ? $violation->point->name : '' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">نوع المخالفه</th>
+                                                    <td>{{ $violation->count }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">المفتش</th>
+                                                    <td>{{ $violation->user->name ?? '' }}
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     @endforeach
                                 @else
                                     <p>No results found</p>
                                 @endif
-                         
-                            
+
+
                             </div>
                         </div>
                     </div>
@@ -171,7 +163,7 @@
                     addurl += 'date=' + dateItem;
                 }
             }
-           
+
             if (inspectors) {
                 if (addurl == '') addurl += '?';
                 else addurl += '&';
@@ -192,7 +184,7 @@
                 else addurl += '&';
                 addurl += 'date=' + dateItem;
             }
-           
+
             document.location = url + addurl;
         }
     </script>

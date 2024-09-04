@@ -132,7 +132,9 @@ class reportsController extends Controller
                     'employee_military_number' => $employeeAbsence->military_number ?? '',
                     'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name :'',
                     'type_employee'=>$employee_absence->type_employee ? $employee_absence->typeEmployee->name :'',
-                    'employee_civil_number'=>$employee_absence->civil_number ? $employee_absence->civil_number :''
+                    'employee_civil_number'=>$employee_absence->civil_number ? $employee_absence->civil_number :'',
+                    'employee_file_number'=>$employee_absence->file_num ? $employee_absence->file_num :''
+
                 ];
             }
 
@@ -282,7 +284,8 @@ class reportsController extends Controller
                             'employee_military_number' => $employeeAbsence->military_number ?? '',
                             'employee_type_absence' => $employeeAbsence->absenceType ? $employeeAbsence->absenceType->name :'',
                             'type_employee'=>$employeeAbsence->type_employee ? $employeeAbsence->typeEmployee->name :'',
-                            'employee_civil_number'=>$employeeAbsence->type_employee ? $employeeAbsence->absenceType->name :''
+                            'employee_civil_number'=>$employeeAbsence->type_employee ? $employeeAbsence->absenceType->name :'',
+                            'employee_file_number'=>$employeeAbsence->file_num ? $employeeAbsence->file_num :''
                         ];
                     }
 
@@ -335,6 +338,7 @@ class reportsController extends Controller
                         'name' => $violation->name,
                         'Civil_number' => $violation->Civil_number ? $violation->Civil_number : '',
                         'military_number' => $violation->military_number ? $violation->military_number :'',
+                        'file_number'=>$violation->file_num ? $violation->file_num :'',
                         'grade' => $violation->grade ? $violation->grade :'',
                         'violation_type' => $violation->flag == 0 ? 'مخالفة مبانى' : $formattedViolationType,
                         'point_name' => $violation->point->name,
