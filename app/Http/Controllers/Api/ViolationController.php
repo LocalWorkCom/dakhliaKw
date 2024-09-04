@@ -48,7 +48,7 @@ class ViolationController  extends Controller
         // dd($pointStart, $pointEnd,$currentTime);
         // Convert the times to Carbon instances for easy comparison
         $start = Carbon::createFromTimeString($pointStart);
-        $end = Carbon::createFromTimeString($pointEnd);
+        $end = Carbon::createFromTimeString($pointEnd)->addMinutes(30);
         $current = Carbon::createFromTimeString($currentTime);
 
         return $current->between($start, $end);
@@ -118,11 +118,13 @@ class ViolationController  extends Controller
         } else {
             $point_id = $request->point_id;
         }
-        if ($request->civil_military == 1) { //عسكري
+        if ($request->civil_military == 1) { 
+            //عسكري
             $military_number = $request->military_number;
             $Civil_number = $request->Civil_number;
             $file_num = $request->file_num;
-        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4) { //ظابط ||مهنيين ||أفراد
+        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4) { 
+            //ظابط ||مهنيين ||أفراد
             $military_number = null;
             $Civil_number = $request->Civil_number;
             $file_num = $request->file_num;
@@ -186,6 +188,7 @@ class ViolationController  extends Controller
             $new->violation_type = $cleanedString;
             $new->flag_instantmission = $request->flag_instantmission;
             $new->description = $request->description ?? null;
+            $new->flag=1;
             $new->user_id = auth()->user()->id;
             // $new->user_id = 1;
             $new->save();
@@ -229,6 +232,7 @@ class ViolationController  extends Controller
             $new->file_num = $request->file_num;
             $new->description = $request->description ?? null;
             $new->point_id = $point_id;
+            $new->flag = 0;
             // // $new->user_id = auth()->user()->id;
             $new->user_id = 1;
             $new->save();
@@ -248,7 +252,7 @@ class ViolationController  extends Controller
         if ($new) {
             $model = Violation::find($new->id);
 
-            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description']);
+            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description','flag']);
             return $this->respondSuccess($success, 'Data Saved successfully.');
         } else {
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
@@ -320,7 +324,7 @@ class ViolationController  extends Controller
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'flag_instantmission' => $violation->flag_instantmission,
-                'violation_mode' =>  $violation->military_number != null ? "1" : "2",
+                'violation_mode' =>  $violation->flag ,
             ];
         });
         // $allviolation = Violation::where('point_id', $request->point_id)->get();

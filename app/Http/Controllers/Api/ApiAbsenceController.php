@@ -83,8 +83,6 @@ class ApiAbsenceController extends Controller
     function isTimeAvailable($pointStart, $pointEnd)
     {
         $currentTime = Carbon::now()->format('H:i');
-        // dd($pointStart, $pointEnd,$currentTime);
-        // Convert the times to Carbon instances for easy comparison
         $start = Carbon::createFromTimeString($pointStart);
         $end = Carbon::createFromTimeString($pointEnd)->addMinutes(30);
         $current = Carbon::createFromTimeString($currentTime);
