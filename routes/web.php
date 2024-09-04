@@ -433,9 +433,9 @@ Route::middleware(['auth'])->group(function () {
     /**
      * Search From Home
      */
-    Route::get('/search/{search}/{q}', [SearchController::class, 'index'])->name('search');
-    Route::get('/searchUsers/users/{q}/{id}', [SearchController::class, 'getUsers'])->name('search.users')->middleware('check.permission:view User');
-    Route::get('/searchDept/departments/{q}', [SearchController::class,'getDepartments'])->name('search.departments');
+    Route::get('/search/{search}/{q?}', [SearchController::class, 'index'])->name('search');
+    Route::get('/searchUsers/users/{id}/{q?}', [SearchController::class, 'getUsers'])->name('search.users')->middleware('check.permission:view User');
+    Route::get('/searchDept/departments/{q?}', [SearchController::class,'getDepartments'])->name('search.departments');
 
     /**
      * Violation Show

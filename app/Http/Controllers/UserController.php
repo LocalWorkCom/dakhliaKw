@@ -52,7 +52,6 @@ class UserController extends Controller
     {
 
 
-
         $flagType = $id == 0 ? 'user' : 'employee';
         $parentDepartment = Departements::find(Auth()->user()->department_id);
 
@@ -66,9 +65,9 @@ class UserController extends Controller
                 $data = User::where('flag', $flagType)->get();
             } else {
                 $data = User::where('flag', $flagType)
-                    ->whereHas('rule', function ($query) {
-                        $query->where('hidden', false);
-                    })->get();
+                ->whereHas('rule', function ($query) {
+                    $query->where('hidden', false);
+                })->get();
             }
         } else {
             if (is_null($parentDepartment->parent_id)) {
