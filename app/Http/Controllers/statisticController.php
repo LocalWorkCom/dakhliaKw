@@ -49,7 +49,7 @@ class statisticController extends Controller
         $inspector = $request->input('inspectors');
 
         $violation = Violation::query();
-        $user_id=Inspector::where('id',$inspector)->value('user_id');
+        $user_id = Inspector::where('id', $inspector)->value('user_id');
         if ($date) {
             $violation->whereDate('created_at', $date);
         }
@@ -66,10 +66,12 @@ class statisticController extends Controller
         if ($inspector && $inspector != -1) {
             $violation->where('user_id', $user_id);
         }
+
         $violationData = $violation
-        ->select('point_id', 'violation_type', 'user_id', DB::raw('count(*) as count'))
-        ->groupBy('point_id', 'violation_type', 'user_id')
-        ->get();
+            ->select('point_id', 'violation_type', 'user_id', DB::raw('count(violation_type) as count'))
+            ->with(['point', 'user']) 
+            ->groupBy('point_id', 'violation_type', 'user_id')
+            ->get();
         return view('statistics.index', compact('inspectors', 'points', 'violations', 'violationData'))->render();
     }
 
