@@ -7,20 +7,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 @endsection
 @section('content')
-<div class="row " dir="rtl">
-<div class="container  col-11" style="background-color:transparent;">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسية</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('iotelegrams.list') }}">الواردات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة </a></li>
-            </ol>
-        </nav>
-    </div>
+    <div class="row " dir="rtl">
+        <div class="container  col-11" style="background-color:transparent;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="/">الرئيسية</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('iotelegrams.list') }}">الواردات </a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافة </a></li>
+                </ol>
+            </nav>
+        </div>
     </div>
     <br>
     <div class="row">
+        
         <div class="container  col-11 mt-3 p-0 ">
+            @include('inc.flash')
             <form action="{{ route('iotelegram.store') }}" method="POST" enctype="multipart/form-data"
                 onsubmit="return validation()">
                 @csrf
@@ -142,8 +144,7 @@
                                 <div class="fileupload d-inline">
                                     <div class="d-flex">
                                         <input id="fileInput" type="file" name="files[]" multiple
-                                            class="mb-2 form-control"  onchange="uploadFils()"
-                                            disabled>
+                                            class="mb-2 form-control" onchange="uploadFils()" disabled>
 
                                     </div>
                                     <div class="space-uploading">
@@ -208,7 +209,7 @@
                             <label for="modal-department_id ">الادارة</label>
                             <select id="modal-department_id" name="modal_department_id" class="form-control" required>
                                 <option value="">اختر الادارة</option>
-                                @foreach ($departments as $item)
+                                @foreach ($external_departments as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
