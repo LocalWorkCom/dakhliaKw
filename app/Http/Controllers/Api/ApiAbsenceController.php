@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Models\ViolationTypes;
 use App\Models\AbsenceEmployee;
 use App\Http\Controllers\Controller;
+use App\Models\Point;
+use App\Models\PointDays;
 use Illuminate\Support\Facades\Validator;
 
 class ApiAbsenceController extends Controller
@@ -60,6 +62,35 @@ class ApiAbsenceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function todayIndex($today)
+    {
+        $daysOfWeek = [
+            "السبت",
+            "الأحد",
+            "الاثنين",
+            "الثلاثاء",
+            "الأربعاء",
+            "الخميس",
+            "الجمعة",
+        ];
+
+        $todayDate = Carbon::parse($today);
+        $dayWeek = $todayDate->locale('ar')->dayName;
+        $index = array_search($dayWeek, $daysOfWeek);
+
+        return $index !== false ? $index : null;
+    }
+    function isTimeAvailable($pointStart, $pointEnd)
+    {
+        $currentTime = Carbon::now()->format('H:i');
+        // dd($pointStart, $pointEnd,$currentTime);
+        // Convert the times to Carbon instances for easy comparison
+        $start = Carbon::createFromTimeString($pointStart);
+        $end = Carbon::createFromTimeString($pointEnd)->addMinutes(30);
+        $current = Carbon::createFromTimeString($currentTime);
+
+        return $current->between($start, $end);
+    }
     public function store(Request $request)
     {
         // 
@@ -92,6 +123,19 @@ class ApiAbsenceController extends Controller
         if ($request->total_number != $request->actual_number && $abs !=  count($request->AbsenceEmployee)) {
             return $this->respondError('يرجى ادخال باقى الموظفين', ['absence_number' => [' عدد الموظفين  المدخل لا يتوافق مع عددهم']], 400);
         } else {
+            $today = Carbon::now()->toDateString();
+            $index = $this->todayIndex($today);
+            $point = Point::find($request->point_id);
+            if ($point && $point->work_type == 1) {
+                $pointDay = $point->pointDays->where('name', $index)->first();
+                $workTime = PointDays::where('point_id',$request->point_id)->where('name', $index)->first();
+                $startTime = $workTime->from;
+                $endtTime = $workTime->to;;
+                $is_avilable = $this->isTimeAvailable($startTime, $endtTime);
+                if (!$is_avilable) {
+                    return $this->respondError('failed to save', ['error' => 'انتهت مواعيد عمل النقطه'], 404);
+                }
+            }
             $new = new Absence();
             $new->date =  $today;
             $new->point_id = $request->point_id;

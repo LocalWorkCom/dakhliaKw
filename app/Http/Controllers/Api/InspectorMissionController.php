@@ -25,7 +25,7 @@ class InspectorMissionController extends Controller
 
         // Convert the times to Carbon instances for easy comparison
         $start = Carbon::createFromTimeString($pointStart);
-        $end = Carbon::createFromTimeString($pointEnd);
+        $end = Carbon::createFromTimeString($pointEnd)->addMinutes(30);
         $current = Carbon::createFromTimeString($currentTime);
         
         return $current->between($start, $end);
@@ -89,8 +89,12 @@ class InspectorMissionController extends Controller
                             $workTime = PointDays::where('point_id', $pointId)->where('name', $today)->first();
                             $startTime = Carbon::create(date('y-m-d') . ' ' . $workTime->from);
                             $endtTime = Carbon::create(date('y-m-d') . ' ' . $workTime->to);
-                            $fromTime = $startTime->format('h:i');
-                            $ToTime = $endtTime->format('h:i');
+                            $fromTime = $startTime->format('hh:mm');
+                            $ToTime = $endtTime->format('hh:mm');
+                            $pointTime=[
+                                'startTime '=> $workTime->from,
+                                'endTime ' => $workTime->to
+                            ];
                             $inspectionTime = "من {$fromTime} " . ($workTime->from > 12 ? 'مساءا' : 'صباحا') . " الى {$ToTime} " . ($workTime->to > 12 ? 'مساءا' : 'صباحا');
                             $is_avilable = $this->isTimeAvailable($fromTime, $ToTime);
                             if($is_avilable){
@@ -98,7 +102,10 @@ class InspectorMissionController extends Controller
                             }else{
                                 $avilable= false;
                             }
-                        } else {
+                        } else {$pointTime = [
+                                'startTime' => '00:00',  // Full day start time
+                                'endTime' => '23:59'     // Full day end time
+                            ];
                             $inspectionTime = 'طول اليوم'; // Handle cases where working time is not found
                         }
 
@@ -109,6 +116,7 @@ class InspectorMissionController extends Controller
                             'point_name' => $point->name,
                             'point_governate' => $point->government->name, // Assuming government name is the location
                             'point_time' => $inspectionTime, // Assuming 'time' is the attribute for time
+                            'point_shift' => $pointTime,
                             'point_location' => $point->google_map, // Assuming 'time' is the attribute for time
                             'Point_availability'=>$avilable,
                             'latitude' => $point->lat,

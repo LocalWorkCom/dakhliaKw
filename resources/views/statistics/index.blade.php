@@ -99,34 +99,30 @@
                             @endif
 
                             <div class="container  col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11">
-                                @if ($searchResults && $searchResults->isNotEmpty())
-                                    @foreach ($searchResults as $result)
-                                        <table class="table table-bordered" dir="rtl">
-                                            <tbody>
-                                                <tr>
-                                                    <th>التاريخ :</th>
-                                                    <td>{{ $result['date'] ?? '' }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>النقطه :</th>
-                                                    <td>{{ $result['point_name'] ?? '' }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">نوع المخالفه</th>
-                                                    <td>{{ $result['violation_count'] ?? '' }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">المفتش</th>
-                                                    <td>{{ $result['inspector_count'] ?? '' }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    @endforeach
+                                @if ($results && !empty($results))
+                                    <table class="table table-bordered" dir="rtl">
+                                        <tbody>
+                                            <tr>
+                                                <th>التاريخ :</th>
+                                                <td>{{ $results['date'] ?? '' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>عدد المخالفة :</th>
+                                                <td>{{ $results['violationCount'] ?? '' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>عدد النقاط :</th>
+                                                <td>{{ $results['pointCount'] ?? '' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>عدد المفتشين :</th>
+                                                <td>{{ $results['inspectorCount'] ?? '' }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 @else
                                     <p>No results found</p>
                                 @endif
-
-
 
                             </div>
                         </div>
