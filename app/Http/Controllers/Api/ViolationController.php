@@ -99,7 +99,7 @@ class ViolationController  extends Controller
 
     public function add_Violation(Request $request)
     {
-    
+
         $messages = [
             'type.required' => 'type required',
             'flag_instantmission.required' => 'flag instantmission required',
@@ -121,12 +121,12 @@ class ViolationController  extends Controller
         if ($request->civil_military == 1) { //عسكري
             $military_number = $request->military_number;
             $Civil_number = $request->Civil_number;
-           $file_num=$request->file_num;
-        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4 ) { //ظابط ||مهنيين ||أفراد
-            $military_number =null;
+            $file_num = $request->file_num;
+        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4) { //ظابط ||مهنيين ||أفراد
+            $military_number = null;
             $Civil_number = $request->Civil_number;
-           $file_num=$request->file_num;
-        } 
+            $file_num = $request->file_num;
+        }
 
         // 1 => مخالفة سلوك
         if ($request->type == "1") {
@@ -179,7 +179,7 @@ class ViolationController  extends Controller
             $new->name = $request->name;
             $new->military_number = $military_number ?? null;
             $new->Civil_number = $Civil_number ?? null;
-            $new->file_num = $file_num??null;
+            $new->file_num = $file_num ?? null;
             $new->grade = $request->grade;
             $new->mission_id = $request->mission_id;
             $new->point_id = $point_id;
@@ -191,16 +191,11 @@ class ViolationController  extends Controller
             $new->save();
 
             if ($request->hasFile('image')) {
-           
-                $file = $request->image;
-                $path = 'Api/images/violations';
-                // foreach ($file as $image) {
-                // UploadFilesWithoutReal($path, 'image', $new, $image);
-                UploadFilesIM($path, 'image', $new, $file);
-
-                // 
-                // }
-
+                $files = $request->file('image'); // Expecting an array of files
+                $path = 'Api/images/violations'; // Directory path
+                $model = Violation::find($new->id);
+        
+                UploadFilesIM($path, 'image', $model, $files);
             }
         } else {
 
@@ -250,9 +245,10 @@ class ViolationController  extends Controller
         }
 
 
-
         if ($new) {
-            $success['violation'] = $new->only(['id', 'name', 'military_number', 'Civil_number', 'file_num'], 'grade', 'image', 'violation_type', 'user_id', 'description','image');
+            $model = Violation::find($new->id);
+
+            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description']);
             return $this->respondSuccess($success, 'Data Saved successfully.');
         } else {
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);

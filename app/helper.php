@@ -208,7 +208,7 @@ function getLatLongFromUrl($url)
 
 
 function UploadFilesWithoutReal($path, $image, $model, $request)
-{ dd($request);
+{
 
     $thumbnail = $request;
     $destinationPath = $path;
@@ -222,20 +222,16 @@ function UploadFilesWithoutReal($path, $image, $model, $request)
 function UploadFilesIM($path, $image, $model, $request)
 {
 
-
+    // dd($request);
 
     $imagePaths = [];
     $thumbnail = $request;
     $destinationPath = $path;
-    foreach ($thumbnail as $key => $item) {
-       
-        if (is_object($item)) {
-          
-            $filename = $key . time() . '.' . $item->getClientOriginalExtension();
-            $item->move($destinationPath, $filename);
-            $imagePaths[] = asset($path) . '/' . $filename;
-        } else {
-            $imagePaths[] = $item;
+    foreach ($thumbnail as $file) {
+        if ($file->isValid()) {
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move($destinationPath, $filename);
+            $imagePaths[] =url($path . '/' . $filename) ; // Save relative path
         }
     }
     // dd($model->image);
