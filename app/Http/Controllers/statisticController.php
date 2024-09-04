@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Grouppoint;
 use App\Models\Inspector;
 use App\Models\InspectorMission;
+use App\Models\Point;
 use App\Models\Violation;
 use App\Models\ViolationTypes;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,8 +30,8 @@ class statisticController extends Controller
             $points = collect(); // Ensure $points is always defined
         }
 
-        $violationData = null;
-        return view('statistics.index', compact('inspectors', 'points', 'violations', 'violationData'));
+        $searchResults = null;
+        return view('statistics.index', compact('inspectors', 'points', 'violations', 'searchResults'));
     }
 
     public function getFilteredData(Request $request)
@@ -39,41 +41,64 @@ class statisticController extends Controller
             $points = Grouppoint::where('deleted', 0)->get();
             $violations = ViolationTypes::all();
         } else {
-            $inspectors = Inspector::where('department_id', Auth()->user()->department_id)->get();
+            $inspectors = Inspector::where('department_id', Auth::user()->department_id)->get();
             $points = collect();
         }
 
         $date = $request->input('date');
-        $pointsId = $request->input('points');
-        $violation_type = $request->input('violation');
-        $inspector = $request->input('inspectors');
+        $pointId = $request->input('points');
+        $violationTypeId = $request->input('violation');
+        $inspectorId = $request->input('inspector');
+        $userId = Inspector::where('id', $inspectorId)->value('user_id');
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $allPoints = Point::query();
 
-        $violation = Violation::query();
-        $user_id = Inspector::where('id', $inspector)->value('user_id');
-        if ($date) {
-            $violation->whereDate('created_at', $date);
+
+        $allPoints = Point::query()->when($pointId && $pointId != -1, function ($query) use ($pointId) {
+            return $query->where('id', $pointId);
+        })->orderBy('id')->pluck('id')->toArray();
+
+        $searchResults = collect();
+      
+        foreach ($allPoints as $point) {
+            $point_id = '' . $point . '';
+            $groupId = Grouppoint::whereJsonContains('points_ids', $point_id)->where('deleted', 0)->value('id');
+
+            $group = (string) $groupId; // Ensure $groupId is a string and in the correct format
+
+            $missionsQuery = InspectorMission::whereJsonContains('ids_group_point', $group);
+                   
+            if ($date) {
+                $missionsQuery->whereDate('date', $date);
+            } elseif ($request->input('all_date') == 'on') {
+                $missionsQuery->whereBetween('date', [$startOfMonth, $endOfMonth]);
+            }
+
+            if ($inspectorId && $inspectorId != -1) {
+              
+                $missionsQuery->where('inspector_id', $inspectorId);
+            
+            }
+            dd( $missionsQuery->distinct('inspector_id')->count('inspector_id'));
+            $inspectorCount = $inspectorId && $inspectorId != -1 $missionsQuery->distinct('inspector_id')->count('inspector_id');
+            $violationDate = $missionsQuery->orderBy('date', 'desc')->value('date');
+            $formattedDate = $date ? Carbon::parse($date)->format('d-m-Y') : ($violationDate ? Carbon::parse($violationDate)->format('d-m-Y') : 'No date available');
+
+            if ($inspectorCount > 0) {
+                $searchResults->push([
+                    'point_name' => Point::find($point)->name ?? 'Unknown',
+                    'inspector_count' => $inspectorCount,
+                    'date' => $formattedDate
+                ]);
+            }
         }
-
-        if ($pointsId && $pointsId != -1) {
-            $violation->where('point_id', $pointsId);
-        }
-
-        if ($violation_type && $violation_type != -1) {
-            $violationIds = explode(',', $violation_type);
-            $violation->whereIn('violation_type', $violationIds);
-        }
-
-        if ($inspector && $inspector != -1) {
-            $violation->where('user_id', $user_id);
-        }
-
-        $violationData = $violation
-            ->select('point_id', 'violation_type', 'user_id', DB::raw('count(violation_type) as count'))
-            ->with(['point', 'user']) 
-            ->groupBy('point_id', 'violation_type', 'user_id')
-            ->get();
-        return view('statistics.index', compact('inspectors', 'points', 'violations', 'violationData'))->render();
+        dd($searchResults );
+        return view('statistics.index', compact('inspectors', 'points', 'violations', 'searchResults'))->render();
     }
+
+
+
 
 
 
