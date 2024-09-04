@@ -45,7 +45,7 @@ class ViolationController  extends Controller
     function isTimeAvailable($pointStart, $pointEnd)
     {
         $currentTime = Carbon::now()->format('H:i');
-// dd($pointStart, $pointEnd,$currentTime);
+        // dd($pointStart, $pointEnd,$currentTime);
         // Convert the times to Carbon instances for easy comparison
         $start = Carbon::createFromTimeString($pointStart);
         $end = Carbon::createFromTimeString($pointEnd);
@@ -99,16 +99,14 @@ class ViolationController  extends Controller
 
     public function add_Violation(Request $request)
     {
-        // dd($request->image);
+    
         $messages = [
             'type.required' => 'type required',
             'flag_instantmission.required' => 'flag instantmission required',
-            'civil_military.required' => 'civil_military required [military or civil]',
         ];
         $validatedData = Validator::make($request->all(), [
             'type' => 'required',
             'flag_instantmission' => 'required',
-            'civil_military' => 'required',
         ], $messages);
 
         if ($validatedData->fails()) {
@@ -120,14 +118,16 @@ class ViolationController  extends Controller
         } else {
             $point_id = $request->point_id;
         }
-
-        if ($request->civil_military == "military") {
+        if ($request->civil_military == 1) { //عسكري
             $military_number = $request->military_number;
-            $grade = $request->grade;
-        } else {
-            $military_number = Null;
-            $grade = Null;
-        }
+            $Civil_number = $request->Civil_number;
+           $file_num=$request->file_num;
+        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4 ) { //ظابط ||مهنيين ||أفراد
+            $military_number =null;
+            $Civil_number = $request->Civil_number;
+           $file_num=$request->file_num;
+        } 
+
         // 1 => مخالفة سلوك
         if ($request->type == "1") {
             // dd($request);
@@ -168,20 +168,19 @@ class ViolationController  extends Controller
                 $startTime = $workTime->from;
                 $endtTime = $workTime->to;;
                 $is_avilable = $this->isTimeAvailable($startTime, $endtTime);
-                if(!$is_avilable){
-                    return $this->respondError('failed to save', ['error' =>'انتهت مواعيد عمل النقطه'], 404);
-
+                if (!$is_avilable) {
+                    return $this->respondError('failed to save', ['error' => 'انتهت مواعيد عمل النقطه'], 404);
                 }
             }
             $idsArray = array_map('intval', explode(',', $request->violation_type));
             $cleanedString = implode(",", $idsArray);
-            
+
             $new = new Violation();
             $new->name = $request->name;
-            $new->military_number = $military_number;
-            $new->Civil_number = $request->Civil_number;
-            $new->file_num = $request->file_num;
-            $new->grade = $grade;
+            $new->military_number = $military_number ?? null;
+            $new->Civil_number = $Civil_number ?? null;
+            $new->file_num = $file_num??null;
+            $new->grade = $request->grade;
             $new->mission_id = $request->mission_id;
             $new->point_id = $point_id;
             $new->violation_type = $cleanedString;
@@ -192,7 +191,7 @@ class ViolationController  extends Controller
             $new->save();
 
             if ($request->hasFile('image')) {
-                // dd("ss");
+           
                 $file = $request->image;
                 $path = 'Api/images/violations';
                 // foreach ($file as $image) {
@@ -253,7 +252,7 @@ class ViolationController  extends Controller
 
 
         if ($new) {
-            $success['violation'] = $new->only(['id', 'name', 'military_number', 'Civil_number','file_num'], 'grade', 'image', 'violation_type', 'user_id', 'description');
+            $success['violation'] = $new->only(['id', 'name', 'military_number', 'Civil_number', 'file_num'], 'grade', 'image', 'violation_type', 'user_id', 'description','image');
             return $this->respondSuccess($success, 'Data Saved successfully.');
         } else {
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
@@ -317,7 +316,7 @@ class ViolationController  extends Controller
                 'File_number' => $violation->file_num ?? null,
                 'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                 'image' => $violation->image,
-                'violation_type' => $violation->violation_type? ViolationTypes::whereIn('id', explode(',', $violation->violation_type))->select('id', 'name')->get() : '',
+                'violation_type' => $violation->violation_type ? ViolationTypes::whereIn('id', explode(',', $violation->violation_type))->select('id', 'name')->get() : '',
                 'civil_military' => empty(grade::where('id', $violation->grade)->select('id', 'name')->first()) ? "مدنى" : "عسكرى",
                 // 'user_id' => $violation->user_id,
                 'created_at' => $violation->created_at,

@@ -97,30 +97,27 @@
                                     {{ session('message') }}
                                 </div>
                             @endif
+
                             <div class="container  col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11">
-                                @if ($violationData && $violationData->isNotEmpty())
-                                    @foreach ($violationData as $violation)
-                                       
+                                @if ($searchResults && $searchResults->isNotEmpty())
+                                    @foreach ($searchResults as $result)
                                         <table class="table table-bordered" dir="rtl">
                                             <tbody>
                                                 <tr>
                                                     <th>التاريخ :</th>
-                                                    <td>{{ $violation->created_at ? $violation->created_at->format('d-m-Y') : '' }}
-                                                    </td>
+                                                    <td>{{ $result['date'] ?? '' }}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>النقطه :</th>
-                                                    <td>{{ $violation->point_id ? $violation->point->name : '' }}</td>
+                                                    <td>{{ $result['point_name'] ?? '' }}</td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">نوع المخالفه</th>
-                                                    <td>{{ $violation->count }}
-                                                    </td>
+                                                    <td>{{ $result['violation_count'] ?? '' }}</td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">المفتش</th>
-                                                    <td>{{ $violation->user->name ?? '' }}
-                                                    </td>
+                                                    <td>{{ $result['inspector_count'] ?? '' }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -128,6 +125,7 @@
                                 @else
                                     <p>No results found</p>
                                 @endif
+
 
 
                             </div>

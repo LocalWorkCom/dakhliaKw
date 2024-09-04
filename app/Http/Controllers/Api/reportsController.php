@@ -125,11 +125,11 @@ class reportsController extends Controller
             $absence_members = [];
             foreach ($employees_absence as $employee_absence) {
                 // $grade=$employee_absence->grade != null ? $employee_absence->grade->name : 'لا يوجد رتبه';
-                //dd($grade);
+               
                 $absence_members[] = [
                     'employee_name' => $employee_absence->name,
                     'employee_grade' => $employee_absence->grade == null ? '' : $employee_absence->gradeName->name,
-                    'employee_military_number' => $employeeAbsence->military_number ?? '',
+                    'employee_military_number' => $employee_absence->military_number ?? '',
                     'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name :'',
                     'type_employee'=>$employee_absence->type_employee ? $employee_absence->typeEmployee->name :'',
                     'employee_civil_number'=>$employee_absence->civil_number ? $employee_absence->civil_number :'',
