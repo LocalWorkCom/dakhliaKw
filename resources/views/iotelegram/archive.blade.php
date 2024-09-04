@@ -83,8 +83,8 @@
                                     name: 'date'
                                 },
                                 {
-                                    data: 'representive.name',
-                                    name: 'representive.name'
+                                    data: 'representive_name',
+                                    name: 'representive_name'
 
                                 },
 

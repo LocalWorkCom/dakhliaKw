@@ -128,7 +128,7 @@
                             <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="3"> </textarea>
                         </div>
                     </div>
-                    @if (Auth::user()->hasPermission('edit outgoing_files'))
+                    {{-- @if (Auth::user()->hasPermission('edit outgoing_files')) --}}
                         <div class="form-row mx-md-2 d-flex justify-content-center">
                             <div class="form-group col-md-10">
                                 <label for="files">اضف ملفات بحد اقصي 10</label>
@@ -148,7 +148,7 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    {{-- @endif --}}
 
                     <!-- <div class="form-row d-flex  justify-content-center" dir="rtl">
                                                                             <div class="form-group d-flex justify-content-start col-md-10 "> -->
