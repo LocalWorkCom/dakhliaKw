@@ -185,6 +185,7 @@ class ViolationController  extends Controller
             $new->grade = $request->grade;
             $new->mission_id = $request->mission_id;
             $new->point_id = $point_id;
+            $new->civil_type = $request->civil_military;
             $new->violation_type = $cleanedString;
             $new->flag_instantmission = $request->flag_instantmission;
             $new->description = $request->description ?? null;
@@ -317,7 +318,7 @@ class ViolationController  extends Controller
                 'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                 'image' => $violation->image,
                 'violation_type' => $violation->violation_type ? ViolationTypes::whereIn('id', explode(',', $violation->violation_type))->select('id', 'name')->get() : '',
-                'civil_military' => empty(grade::where('id', $violation->grade)->select('id', 'name')->first()) ? "مدنى" : "عسكرى",
+                'civil_military' =>$violation->civil_type ?  ViolationTypes::where('id',$violation->civil_type)->value('name'): '',
                 // 'user_id' => $violation->user_id,
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
