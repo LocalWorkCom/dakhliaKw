@@ -89,8 +89,8 @@ class InspectorMissionController extends Controller
                             $workTime = PointDays::where('point_id', $pointId)->where('name', $today)->first();
                             $startTime = Carbon::create(date('y-m-d') . ' ' . $workTime->from);
                             $endtTime = Carbon::create(date('y-m-d') . ' ' . $workTime->to);
-                            $fromTime = $startTime->format('hh:mm');
-                            $ToTime = $endtTime->format('hh:mm');
+                            $fromTime = $startTime->format('H:i');
+                            $ToTime = $endtTime->format('H:i');
                             $pointTime=[
                                 'startTime '=> $workTime->from,
                                 'endTime ' => $workTime->to
@@ -107,6 +107,7 @@ class InspectorMissionController extends Controller
                                 'endTime' => '23:59'     // Full day end time
                             ];
                             $inspectionTime = 'طول اليوم'; // Handle cases where working time is not found
+                            $avilable= true;
                         }
 
 
