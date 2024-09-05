@@ -33,7 +33,6 @@ class statisticController extends Controller
         $results = null;
         return view('statistics.index', compact('inspectors', 'points', 'violations', 'results'));
     }
-
     public function getFilteredData(Request $request)
     {
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
@@ -43,53 +42,66 @@ class statisticController extends Controller
         } else {
             $inspectors = Inspector::where('department_id', Auth::user()->department_id)->get();
             $points = collect();
+            $violations = ViolationTypes::all();
         }
 
         $date = $request->input('date');
         $pointId = $request->input('point');
         $violationTypeId = $request->input('violation');
         $inspectorId = $request->input('inspector');
-        $userId = Inspector::where('id', $inspectorId)->value('user_id');
+
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
-        if (isset($date) && $date != '-1') {
+
+        if ($date && $date != '-1') {
             $missions = InspectorMission::whereDate('date', $date);
-            $violation = Violation::whereDate('created_at', $date);
+            $violationsQuery = Violation::whereDate('created_at', $date);
         } else {
             $missions = InspectorMission::whereBetween('date', [$startOfMonth, $endOfMonth]);
-            $violation = Violation::whereBetween('created_at', [$startOfMonth, $endOfMonth]);
+            $violationsQuery = Violation::whereBetween('created_at', [$startOfMonth, $endOfMonth]);
+        }
+        if ($violationTypeId && $violationTypeId != '-1') {
+            
+            $violationsQuery->whereRaw("FIND_IN_SET(?, violation_type)", [$violationTypeId]);
         }
         if ($pointId && $pointId != '-1') {
-            $group = Grouppoint::whereJsonContains('points_ids', $pointId)->select('id','points_ids');
-            
-            $missions->whereJsonContains('ids_group_point', $group);
-            $violation->where('point_id', $pointId);
+            $missions->whereJsonContains('ids_group_point', $pointId);
+            $pointIds = Grouppoint::where('id', $pointId)
+                ->where('deleted', 0)
+                ->pluck('points_ids')
+                ->flatten()
+                ->toArray();
+
+            $violationCountByPoints = $violationsQuery->whereIn('point_id', $pointIds)->count();
         } else {
-            // Calculate pointCount without filtering by pointId
-            $group = Grouppoint::whereJsonContains('points_ids', $pointId)->value('id');
-            $missions->whereJsonContains('ids_group_point', $group);
+            $violationCountByPoints = $violationsQuery->count();
         }
-        if (isset($inspectorId) && $inspectorId != '-1') {
+
+     
+
+        if ($inspectorId && $inspectorId != '-1') {
             $missions->where('inspector_id', $inspectorId);
-            $violation->where('user_id', $userId);
+            $userId = Inspector::where('id', $inspectorId)->value('user_id');
+            if ($userId) {
+                $violationsQuery->where('user_id', $userId);
+            }
         }
-       
-        
-        $inspectorCount = $missions->distinct('inspector_id')->count('inspector_id');
-        $violationCount = $violation->count();
-        $pointCount = $missions->distinct('ids_group_point')->count('ids_group_point');
-        
-        // Prepare results array
+
+        $inspectorCount = $missions->get()->unique('inspector_id')->count();
+        $pointCount = $missions->get()->unique('ids_group_point')->count();
+        $violationCount = $violationCountByPoints;  
+
         $results = [
-            'date' => isset($date) && $date != '-1' ? $date : 'This Month',
+            'date' => $date && $date != '-1' ? $date : 'الشهر الحالى',
             'violationCount' => $violationCount,
             'inspectorCount' => $inspectorCount,
             'pointCount' => $pointCount,
         ];
 
-        // Pass data to the view
         return view('statistics.index', compact('inspectors', 'points', 'violations', 'results'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
