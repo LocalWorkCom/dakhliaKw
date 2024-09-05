@@ -31,55 +31,52 @@
                         <p class="filter "> تصفية حسب :</p>
 
                         <div class="check-one d-flex pt-2">
-                            <input type="checkbox" class="mx-2" name="all_date" checked id="all_date">
-                            <label for=""> كل الايام </label>
+                            <input type="checkbox" class="mx-2" name="all_date" 
+                            value="{{ request('date') !== '-1' && request('date') ? request('date') : '' }}">
+                            <label for="all_date"> كل الايام </label>
                         </div>
+                        
                         <div class="form-group moftsh select-box-2  mx-3  d-flex">
-                            <h4 style="    line-height: 1.8;"> التاريخ : </h4>
-                            <input type="date" name="date" id="date">
-
+                            <h4 style="line-height: 1.8;"> التاريخ : </h4>
+                            <input type="date" name="date" id="date" value="{{ request('date') !== '-1' ? request('date') : '' }}">
                         </div>
+                        
                         <div class="form-group moftsh select-box-2 mx-3  d-flex">
-                            <h4 style=" line-height: 1.8;"> النقطه : </h4>
-                            <select id="points" name="points"
-                                class="form-control custom-select custom-select-lg mb-3 select2 ">
-                                <option value="-1" selected> كل النقاط
-                                </option>
+                            <h4 style="line-height: 1.8;"> النقطه : </h4>
+                            <select id="points" name="points" class="form-control custom-select custom-select-lg mb-3 select2">
+                                <option value="-1" {{ request('point') == '-1' ? 'selected' : '' }}> كل النقاط</option>
                                 @foreach ($points as $item)
-                                    <option value="{{ $item->id }}">
+                                    <option value="{{ $item->id }}" {{ request('point') == $item->id ? 'selected' : '' }}>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
+                        
                         <div class="form-group moftsh select-box-2 mx-3  d-flex">
-                            <h4 style=" line-height: 1.8;"> المخالفه : </h4>
-                            <select id="violation" name="violation"
-                                class="form-control custom-select custom-select-lg mb-3 select2 ">
-
-                                <option value="-1" selected> كل المخالفات
-                                </option>
+                            <h4 style="line-height: 1.8;"> المخالفه : </h4>
+                            <select id="violation" name="violation" class="form-control custom-select custom-select-lg mb-3 select2">
+                                <option value="-1" {{ request('violation') == '-1' ? 'selected' : '' }}> كل المخالفات</option>
                                 @foreach ($violations as $item)
-                                    <option value="{{ $item->id }}">
+                                    <option value="{{ $item->id }}" {{ request('violation') == $item->id ? 'selected' : '' }}>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
+                        
                         <div class="form-group moftsh select-box-2 mx-3  d-flex">
-                            <h4 style=" line-height: 1.8;"> المفتش : </h4>
-                            <select id="inspectors" name="inspectors"
-                                class="form-control custom-select custom-select-lg mb-3 select2 " placeholder="المفتش">
-
-                                <option value="-1" selected> كل المفتشين
-                                </option>
+                            <h4 style="line-height: 1.8;"> المفتش : </h4>
+                            <select id="inspectors" name="inspectors" class="form-control custom-select custom-select-lg mb-3 select2">
+                                <option value="-1" {{ request('inspector') == '-1' ? 'selected' : '' }}> كل المفتشين</option>
                                 @foreach ($inspectors as $item)
-                                    <option value="{{ $item->id }}">
+                                    <option value="{{ $item->id }}" {{ request('inspector') == $item->id ? 'selected' : '' }}>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
+                        
                         <div class="form-group moftsh  mx-3  d-flex">
                             <button class="btn-all px-3 " style="color: #212529; background-color: #f8f8f8;"
                                 onclick="search()">
