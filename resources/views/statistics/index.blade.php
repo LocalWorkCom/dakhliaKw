@@ -100,29 +100,30 @@
 
                             <div class="container  col-12 mt-3 p-0 col-md-11 col-lg-11 col-s-11">
                                 @if ($results && !empty($results))
-                                    <table class="table table-bordered" dir="rtl">
-                                        <tbody>
-                                            <tr>
-                                                <th>التاريخ :</th>
-                                                <td>{{ $results['date'] ?? '' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>عدد المخالفة :</th>
-                                                <td>{{ $results['violationCount'] ?? '' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>عدد النقاط :</th>
-                                                <td>{{ $results['pointCount'] ?? '' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>عدد المفتشين :</th>
-                                                <td>{{ $results['inspectorCount'] ?? '' }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                @else
-                                    <p>No results found</p>
-                                @endif
+                                <table class="table table-bordered" dir="rtl">
+                                    <tbody>
+                                        <tr>
+                                            <th>التاريخ :</th>
+                                            <td>{{ $results['date'] ?? '' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>عدد المخالفة :</th>
+                                            <td>{{ $results['violationCount'] ?? '' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>عدد النقاط :</th>
+                                            <td>{{ $results['pointCount'] ?? '' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>عدد المفتشين :</th>
+                                            <td>{{ $results['inspectorCount'] ?? '' }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            @else
+                                <p>No results found</p>
+                            @endif
+                            
 
                             </div>
                         </div>
