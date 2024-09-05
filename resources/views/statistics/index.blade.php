@@ -32,7 +32,7 @@
 
                         <div class="check-one d-flex pt-2">
                             <input type="checkbox" class="mx-2" name="all_date" 
-                            value="{{ request('date') !== '-1' && request('date') ? request('date') : '' }}">
+                                   id="all_date" {{ request('date') == '-1' ? 'checked' : '' }}>
                             <label for="all_date"> كل الايام </label>
                         </div>
                         
