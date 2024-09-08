@@ -215,7 +215,7 @@ class reportsController extends Controller
             'point_id.*.exists' => 'عفوا هذه النقطه غير متاحه',
             'date.*.date_format' => 'يرجى إدخال التاريخ بصيغه صحيحه yyyy-mm-dd',
         ];
-
+    
         $validatedData = Validator::make($request->all(), [
             'point_id' => [
                 'nullable',
@@ -229,42 +229,51 @@ class reportsController extends Controller
                     }
                 },
             ],
-            'point_id.*' => ['nullable', 'integer'], // Validate each point_id in the array
-            'date' => ['nullable', 'array'], // Allow date to be an array
-            'date.*' => ['nullable', 'date', 'date_format:Y-m-d'], // Validate each date in the array
+            'point_id.*' => ['nullable', 'integer'],
+            'date' => ['nullable', 'array'],
+            'date.*' => ['nullable', 'date', 'date_format:Y-m-d'],
             'type_id' => ['nullable', 'integer'],
         ], $messages);
-
+    
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-
-        $dates = $request->input('date', [Carbon::today()->toDateString()]);
+    
+        // Handle dates
+        $dates = $request->input('date');
+        if (empty($dates)) {
+            $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
+            $endOfMonth = Carbon::now()->toDateString();
+            $dates = [];
+            while (strtotime($startOfMonth) <= strtotime($endOfMonth)) {
+                $dates[] = $startOfMonth;
+                $startOfMonth = Carbon::parse($startOfMonth)->addDay()->toDateString();
+            }
+        }
+    
         $pointIds = $request->input('point_id', []);
         $type = $request->input('type_id');
-
+    
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
-
+    
         $absenceReport = [];
         $violationReport = [];
-
+    
         foreach ($dates as $date) {
-            $today = Carbon::parse($date)->toDateString(); // Handle date
-            $index = $this->dayIndex($today);
-
+            $today = Carbon::parse($date)->toDateString();
+            $index = date('w');
+    
             if ($type === null || $type == 2) {
-
-                // Handle absences
                 $absencesQuery = Absence::where('inspector_id', $inspectorId)
                     ->whereDate('date', $today);
-
+    
                 if (!empty($pointIds)) {
                     $absencesQuery->whereIn('point_id', $pointIds);
                 }
-
+    
                 $absences = $absencesQuery->get();
-
+    
                 foreach ($absences as $absence) {
                     $time = null;
                     if ($absence->point->work_type != 0) {
@@ -272,11 +281,11 @@ class reportsController extends Controller
                             ->where('name', $index)
                             ->first();
                     }
-
+    
                     $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
                         ->where('absences_id', $absence->id)
                         ->get();
-
+    
                     $absenceMembers = [];
                     foreach ($employeesAbsence as $employeeAbsence) {
                         $absenceMembers[] = [
@@ -289,11 +298,10 @@ class reportsController extends Controller
                             'employee_file_number' => $employeeAbsence->file_num ? $employeeAbsence->file_num : ''
                         ];
                     }
-
                     $absenceReport[] = [
                         'absence_day' => $absence->date,
                         'point_name' => $absence->point->name,
-                        'point_time' => $absence->point->work_type == 0 ? 'طوال اليوم' : "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا'),
+                        'point_time' => $time == 0 ? 'طوال اليوم' : "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا'),
                         'inspector_name' => $absence->inspector->name,
                         'team_name' => $teamName,
                         'total_number' => $absence->total_number,
@@ -304,19 +312,19 @@ class reportsController extends Controller
                 }
             }
             if ($type === null || $type == 0 || $type == 1) {
-
+    
                 $violationQuery = Violation::with(['user', 'point', 'violatType'])
                     ->where('user_id', auth()->user()->id)
                     ->whereDate('created_at', $today);
-
+    
                 if (!empty($pointIds)) {
                     $violationQuery->whereIn('point_id', $pointIds);
                 }
-
+    
                 if ($type !== null) { // Ensure type is not null or empty
                     $violationQuery->where('flag', $type);
                 }
-
+    
                 $violations = $violationQuery->get();
                 foreach ($violations as $violation) {
                     $violationTypeIds = explode(',', $violation->violation_type); // Convert to array if needed
@@ -325,13 +333,13 @@ class reportsController extends Controller
                     $violationTypeNames = implode(', ', $violationTypes);
                     $formattedViolationType = $violationTypeNames ? "مخالفة سلوك انضباطى ({$violationTypeNames})" : 'غير متوفر';
                     $imageData = $violation->image; // e.g., "/Api/images/violations/1724759522.png,/Api/images/violations/1724759522.png"
-
+    
                     // Split the comma-separated image paths into an array
                     $imageArray = explode(',', $imageData);
-
+    
                     // Count the number of images
                     $imageCount = count($imageArray);
-
+    
                     // Prepare the formatted image string
                     $formattedImages = $imageCount . ' صور ,' . ' [' . implode(', ', $imageArray) . ']';
                     $violationReport[] = [
@@ -349,19 +357,19 @@ class reportsController extends Controller
                 }
             }
         }
-
+    
         $success = [
             'absences' => $absenceReport ?? [],
             'violations' => $violationReport ?? [],
         ];
-        //end violation Building report
+    
         if ($success) {
             return $this->apiResponse(true, 'Data get successfully.', $success, 200);
         } else {
-
             return $this->apiResponse(true, 'Data get successfully.', null, 200);
         }
     }
+    
 
 
     public function getAllstatistics(Request $request)
