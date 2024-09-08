@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class statisticController extends Controller
 {
-  
+
     public function index()
     {
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
@@ -33,6 +33,7 @@ class statisticController extends Controller
     }
     public function getFilteredData(Request $request)
     {
+        // Fetch inspectors, points, and violations based on user role
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $inspectors = Inspector::all();
             $points = Grouppoint::where('deleted', 0)->get();
@@ -42,15 +43,18 @@ class statisticController extends Controller
             $points = collect();
             $violations = ViolationTypes::all();
         }
-
+    
+        // Get filter inputs from the request
         $date = $request->input('date');
         $pointId = $request->input('point');
         $violationTypeId = $request->input('violation');
         $inspectorId = $request->input('inspector');
-
+    
+        // Default to current month if no date is selected
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
-
+    
+        // Handle date filtering (either by specific date or by the current month)
         if ($date && $date != '-1') {
             $missions = InspectorMission::whereDate('date', $date);
             $violationsQuery = Violation::whereDate('created_at', $date);
@@ -58,10 +62,15 @@ class statisticController extends Controller
             $missions = InspectorMission::whereBetween('date', [$startOfMonth, $endOfMonth]);
             $violationsQuery = Violation::whereBetween('created_at', [$startOfMonth, $endOfMonth]);
         }
+    
+        // Apply filters based on user inputs
+    
+        // Violation filter
         if ($violationTypeId && $violationTypeId != '-1') {
-            
             $violationsQuery->whereRaw("FIND_IN_SET(?, violation_type)", [$violationTypeId]);
         }
+    
+        // Point filter
         if ($pointId && $pointId != '-1') {
             $missions->whereJsonContains('ids_group_point', $pointId);
             $pointIds = Grouppoint::where('id', $pointId)
@@ -69,14 +78,11 @@ class statisticController extends Controller
                 ->pluck('points_ids')
                 ->flatten()
                 ->toArray();
-
-            $violationCountByPoints = $violationsQuery->whereIn('point_id', $pointIds)->count();
-        } else {
-            $violationCountByPoints = $violationsQuery->count();
+    
+            $violationsQuery->whereIn('point_id', $pointIds);
         }
-
-     
-
+    
+        // Inspector filter
         if ($inspectorId && $inspectorId != '-1') {
             $missions->where('inspector_id', $inspectorId);
             $userId = Inspector::where('id', $inspectorId)->value('user_id');
@@ -84,21 +90,24 @@ class statisticController extends Controller
                 $violationsQuery->where('user_id', $userId);
             }
         }
-
+    
+        // Get counts based on the filtered results
         $inspectorCount = $missions->get()->unique('inspector_id')->count();
         $pointCount = $missions->get()->unique('ids_group_point')->count();
-        $violationCount = $violationCountByPoints;  
-
+        $violationCount = $violationsQuery->count();
+    
+        // Prepare the results for the view
         $results = [
             'date' => $date && $date != '-1' ? $date : 'الشهر الحالى',
             'violationCount' => $violationCount,
             'inspectorCount' => $inspectorCount,
             'pointCount' => $pointCount,
         ];
-
+    
+        // Return view with the filtered results
         return view('statistics.index', compact('inspectors', 'points', 'violations', 'results'));
     }
-
+    
 
 
     /**
