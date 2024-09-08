@@ -136,93 +136,71 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
     <script>
+        // Initialize select2 plugin for dropdowns
         $('.select2').select2({
             dir: "rtl"
         });
-
+    
+        // Search function to redirect with selected filters
         function search() {
             var url = "{{ url('/statistics/search') }}";
             var dateItem = $('#date').val();
-            var alldate = $('#all_date').val();
+            var allDateChecked = $('#all_date').is(':checked');
             var point = $('#points').val();
             var type = $('#violation').val();
             var inspectors = $('#inspectors').val();
             var addurl = '';
-            if (all_date == 0) {
-                if (dateItem != '' || dateItem != null) {
-                    if (addurl == '') addurl += '?';
-                    else addurl += '&';
-                    addurl += 'date=' + dateItem;
-                }
+    
+            // Handle all dates checkbox
+            if (allDateChecked) {
+                if (addurl == '') addurl += '?';
+                else addurl += '&';
+                addurl += 'date=-1';  // This sets the "All Date" option
+            } else if (dateItem) {
+                if (addurl == '') addurl += '?';
+                else addurl += '&';
+                addurl += 'date=' + dateItem;
             }
-
+    
+            // Inspector filter
             if (inspectors) {
                 if (addurl == '') addurl += '?';
                 else addurl += '&';
                 addurl += 'inspector=' + inspectors;
             }
+    
+            // Point filter
             if (point) {
                 if (addurl == '') addurl += '?';
                 else addurl += '&';
                 addurl += 'point=' + point;
             }
+    
+            // Violation filter
             if (type) {
                 if (addurl == '') addurl += '?';
                 else addurl += '&';
                 addurl += 'violation=' + type;
             }
-            if (dateItem) {
-                if (addurl == '') addurl += '?';
-                else addurl += '&';
-                addurl += 'date=' + dateItem;
-            }
-
+    
+            // Redirect with filters
             document.location = url + addurl;
         }
-    </script>
-    {{-- <script>
-        function search() {
-            var url = "";
-            var dateItem = $('#date').val();
-            var alldate = $('#all_date').val();
-            var group = $('#points').val();
-            var team = $('#violation').val();
-            var inspectors = $('#inspectors').val();
-            var addurl = '';
-            if (all_date == 0) {
-                if (dateItem != '' || dateItem != null) {
-                    if (addurl == '') addurl += '?';
-                    else addurl += '&';
-                    addurl += 'date=' + dateItem;
-                }
-            }
-            if (group) {
-                if (addurl == '') addurl += '?';
-                else addurl += '&';
-                addurl += 'group=' + group;
-            }
-            if (team) {
-                if (addurl == '') addurl += '?';
-                else addurl += '&';
-                addurl += 'team=' + team;
-            }
-            if (inspectors) {
-                if (addurl == '') addurl += '?';
-                else addurl += '&';
-                addurl += 'inspector=' + inspectors;
-            }
-            document.location = url + addurl;
-        }
-    </script>
---}}
-    <script>
+    
+        // Date input handling
         $(document).ready(function() {
             $('#date').on('change', function() {
-                const selectedDate = $(this).val();
-                //  $('#selectedDate').text('Selected Date: ' + selectedDate);
-                $('#all_date').prop('checked', false).val('0');
-                console.log('Date changed to: ', selectedDate);
+                $('#all_date').prop('checked', false);  // Uncheck "All Date" when a specific date is selected
+                console.log('Date changed to: ', $(this).val());
+            });
+    
+            // Check/uncheck "All Date" checkbox
+            $('#all_date').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#date').val('');  // Clear date when "All Date" is checked
+                }
             });
         });
     </script>
+    
 @endpush

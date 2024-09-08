@@ -24,7 +24,7 @@ class reportsController extends Controller
     {
         $date = Carbon::parse($date); // Parse the date if it's not already a Carbon instance
         $daysOfWeek = [
-          
+
             "الأحد",  // 0
             "الإثنين",  // 1
             "الثلاثاء",  // 2
@@ -41,7 +41,7 @@ class reportsController extends Controller
     public function  getAbsence(Request $request)
     {
 
-        
+
         $messages = [
             'point_id.required' => 'يجب اختيار النقطه المضاف لها المهمه',
             'point_id.exists' => 'عفوا هذه النقطه غير متاحه',
@@ -76,36 +76,36 @@ class reportsController extends Controller
             ->get();
 
 
-            $statusFlag = false;
+        $statusFlag = false;
 
-            $groupedAbsences = $absences->groupBy('mission_id')
-                ->filter(function ($group) use (&$statusFlag) {
-                    foreach ($group as $absence) {
-                        if (is_null($absence->status)) {
-                            $statusFlag = true;
-                            return true; // Keep the group if any absence has a null status
-                        }
+        $groupedAbsences = $absences->groupBy('mission_id')
+            ->filter(function ($group) use (&$statusFlag) {
+                foreach ($group as $absence) {
+                    if (is_null($absence->status)) {
+                        $statusFlag = true;
+                        return true; // Keep the group if any absence has a null status
                     }
-                    return false; // Exclude the group if no absence has a null status
-                });
-            
-            // Debugging grouped absences
-            // dd($statusFlag);
-            
-            if (!$statusFlag) {
-                // dd("false");
-                $absences = $absences->filter(function ($absence) {
-                    return $absence->status === 'Accept';
-                });
-            } else {
-               
-                // $absences = $groupedAbsences;
-                $absences = $groupedAbsences->flatten();
-                // dd($absences);
-            }
+                }
+                return false; // Exclude the group if no absence has a null status
+            });
+
+        // Debugging grouped absences
+        // dd($statusFlag);
+
+        if (!$statusFlag) {
+            // dd("false");
+            $absences = $absences->filter(function ($absence) {
+                return $absence->status === 'Accept';
+            });
+        } else {
+
+            // $absences = $groupedAbsences;
+            $absences = $groupedAbsences->flatten();
+            // dd($absences);
+        }
 
 
-            // $absences = Absence::whereIn('id',$absences->id)->get();
+        // $absences = Absence::whereIn('id',$absences->id)->get();
 
         $response = [];  // Initialize the response array
 
@@ -117,24 +117,24 @@ class reportsController extends Controller
                 $time = PointDays::where('point_id', $absence->point_id)
                     ->where('name', $index)
                     ->first();
-                    // dd($time);
+                // dd($time);
             }
-          
-            $employees_absence = AbsenceEmployee::with(['gradeName', 'absenceType','typeEmployee'])
+
+            $employees_absence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
                 ->where('absences_id', $absence->id)
                 ->get();
             $absence_members = [];
             foreach ($employees_absence as $employee_absence) {
                 // $grade=$employee_absence->grade != null ? $employee_absence->grade->name : 'لا يوجد رتبه';
-               
+
                 $absence_members[] = [
                     'employee_name' => $employee_absence->name,
                     'employee_grade' => $employee_absence->grade == null ? '' : $employee_absence->gradeName->name,
                     'employee_military_number' => $employee_absence->military_number ?? '',
-                    'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name :'',
-                    'type_employee'=>$employee_absence->type_employee ? $employee_absence->typeEmployee->name :'',
-                    'employee_civil_number'=>$employee_absence->civil_number ? $employee_absence->civil_number :'',
-                    'employee_file_number'=>$employee_absence->file_num ? $employee_absence->file_num :''
+                    'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name : '',
+                    'type_employee' => $employee_absence->type_employee ? $employee_absence->typeEmployee->name : '',
+                    'employee_civil_number' => $employee_absence->civil_number ? $employee_absence->civil_number : '',
+                    'employee_file_number' => $employee_absence->file_num ? $employee_absence->file_num : ''
 
                 ];
             }
@@ -273,7 +273,7 @@ class reportsController extends Controller
                             ->first();
                     }
 
-                    $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType','typeEmployee'])
+                    $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
                         ->where('absences_id', $absence->id)
                         ->get();
 
@@ -283,10 +283,10 @@ class reportsController extends Controller
                             'employee_name' => $employeeAbsence->name,
                             'employee_grade' => $employeeAbsence->grade == null ? '' : $employeeAbsence->gradeName->name,
                             'employee_military_number' => $employeeAbsence->military_number ?? '',
-                            'employee_type_absence' => $employeeAbsence->absenceType ? $employeeAbsence->absenceType->name :'',
-                            'type_employee'=>$employeeAbsence->type_employee ? $employeeAbsence->typeEmployee->name :'',
-                            'employee_civil_number'=>$employeeAbsence->type_employee ? $employeeAbsence->absenceType->name :'',
-                            'employee_file_number'=>$employeeAbsence->file_num ? $employeeAbsence->file_num :''
+                            'employee_type_absence' => $employeeAbsence->absenceType ? $employeeAbsence->absenceType->name : '',
+                            'type_employee' => $employeeAbsence->type_employee ? $employeeAbsence->typeEmployee->name : '',
+                            'employee_civil_number' => $employeeAbsence->type_employee ? $employeeAbsence->absenceType->name : '',
+                            'employee_file_number' => $employeeAbsence->file_num ? $employeeAbsence->file_num : ''
                         ];
                     }
 
@@ -338,9 +338,9 @@ class reportsController extends Controller
                         'date' => $violation->created_at->format('Y-m-d') . ' ' . 'وقت و تاريخ التفتيش' . ' ' . $violation->created_at->format('H:i:s'),
                         'name' => $violation->name,
                         'Civil_number' => $violation->Civil_number ? $violation->Civil_number : '',
-                        'military_number' => $violation->military_number ? $violation->military_number :'',
-                        'file_number'=>$violation->file_num ? $violation->file_num :'',
-                        'grade' => $violation->grade ? $violation->grade :'',
+                        'military_number' => $violation->military_number ? $violation->military_number : '',
+                        'file_number' => $violation->file_num ? $violation->file_num : '',
+                        'grade' => $violation->grade ? $violation->grade : '',
                         'violation_type' => $violation->flag == 0 ? 'مخالفة مبانى' : $formattedViolationType,
                         'point_name' => $violation->point->name,
                         'inspector_name' => $violation->user->name,
@@ -388,19 +388,18 @@ class reportsController extends Controller
     public function getstatistics(Request $request)
     {
         $today = Carbon::now();
-        $startOfMonth = $today->startOfMonth()->format('Y-m-d');
-        $endOfMonth = $today->endOfMonth()->format('Y-m-d');
-       
+        $startOfMonth = $today->copy()->startOfMonth()->format('Y-m-d'); // First day of the month
+        $end = Carbon::now()->format('Y-m-d');
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->where('flag', 0)->value('id');
         if (!$inspectorId) {
             return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
         }
-        $mission_count = InspectorMission::where('inspector_id', $inspectorId)->whereBetween('date', [$startOfMonth, $endOfMonth])->pluck('ids_group_point')->flatten()
+        $mission_count = InspectorMission::where('inspector_id', $inspectorId)->whereBetween('date', [$startOfMonth, $end])->pluck('ids_group_point')->flatten()
             ->flatten()->count();
-        $violations_bulding_count = Violation::where('user_id', auth()->user()->id)->where('flag',0)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-        ->pluck('id')->flatten()->count();
-        $violation_Disciplined_behavior_count = Violation::where('user_id', auth()->user()->id)->where('flag',1)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-        ->pluck('id')->flatten()->count();
+        $violations_bulding_count = Violation::where('user_id', auth()->user()->id)->where('flag', 0)->whereBetween('created_at', [$startOfMonth, $end])
+            ->pluck('id')->flatten()->count();
+        $violation_Disciplined_behavior_count = Violation::where('user_id', auth()->user()->id)->where('flag', 1)->whereBetween('created_at', [$startOfMonth, $end])
+            ->pluck('id')->flatten()->count();
 
         // $point_ids = Grouppoint::whereIn('id', $mission)->pluck('points_ids')->flatten()->toArray();
         // $points_detail = Point::with(['pointDays'])->whereIn('id', $point_ids)->get();
@@ -479,8 +478,8 @@ class reportsController extends Controller
         // }
         $success = [
             'mission_count' => $mission_count ?? 0,
-            'violation_Disciplined_behavior' => $violation_Disciplined_behavior_count ??0,
-            'violations_bulding_count' => $violations_bulding_count ??0,
+            'violation_Disciplined_behavior' => $violation_Disciplined_behavior_count ?? 0,
+            'violations_bulding_count' => $violations_bulding_count ?? 0,
 
         ];
         if ($success) {
@@ -520,7 +519,7 @@ class reportsController extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-        
+
         $abence = Absence::find($request->absence_id);
         $abence->status = "Accept";
         $abence->save();
@@ -528,21 +527,16 @@ class reportsController extends Controller
 
         if (!$abence) {
             return $this->respondError('Absence not found.', [], 404);
-        }
-        else
-        {
-            $all= Absence::where('mission_id',$abence->mission_id)->get();
+        } else {
+            $all = Absence::where('mission_id', $abence->mission_id)->get();
 
-            foreach($all as $item)
-            {
+            foreach ($all as $item) {
                 $abence = Absence::find($item->absence_id);
                 $abence->status = "Accept";
                 $abence->save();
             }
-    
+
             return $this->respondSuccess("success", 'Data Updated successfully.');
         }
-        
-
     }
 }
