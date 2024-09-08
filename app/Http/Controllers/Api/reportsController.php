@@ -61,9 +61,8 @@ class reportsController extends Controller
         }
         $today = Carbon::today()->toDateString();
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
-        $teamName = GroupTeam::whereRaw('FIND_IN_SET(?, inspector_ids)', [$inspectorId])->value('name');
-        $teamInspectors = GroupTeam::whereRaw('FIND_IN_SET(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
-
+        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
+        $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
 
         $inspectorIdsArray = [];
         foreach ($teamInspectors as $inspectorIds) {
@@ -170,7 +169,7 @@ class reportsController extends Controller
             return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
         }
         $sector = GroupTeam::with('group.sector')
-            ->whereJsonContains('inspector_ids', $inspectorId)
+            ->whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])
             ->first()
             ->group
             ->sector_id;
@@ -216,7 +215,7 @@ class reportsController extends Controller
             'point_id.*.exists' => 'عفوا هذه النقطه غير متاحه',
             'date.*.date_format' => 'يرجى إدخال التاريخ بصيغه صحيحه yyyy-mm-dd',
         ];
-
+    
         $validatedData = Validator::make($request->all(), [
             'point_id' => [
                 'nullable',
@@ -235,11 +234,11 @@ class reportsController extends Controller
             'date.*' => ['nullable', 'date', 'date_format:Y-m-d'],
             'type_id' => ['nullable', 'integer'],
         ], $messages);
-
+    
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-
+    
         // Handle dates
         $dates = $request->input('date');
         if (empty($dates)) {
@@ -251,30 +250,30 @@ class reportsController extends Controller
                 $startOfMonth = Carbon::parse($startOfMonth)->addDay()->toDateString();
             }
         }
-
+    
         $pointIds = $request->input('point_id', []);
         $type = $request->input('type_id');
-
+    
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
-
+    
         $absenceReport = [];
         $violationReport = [];
-
+    
         foreach ($dates as $date) {
             $today = Carbon::parse($date)->toDateString();
             $index = date('w');
-
+    
             if ($type === null || $type == 2) {
                 $absencesQuery = Absence::where('inspector_id', $inspectorId)
                     ->whereDate('date', $today);
-
+    
                 if (!empty($pointIds)) {
                     $absencesQuery->whereIn('point_id', $pointIds);
                 }
-
+    
                 $absences = $absencesQuery->get();
-
+    
                 foreach ($absences as $absence) {
                     $time = null;
                     if ($absence->point->work_type != 0) {
@@ -282,11 +281,11 @@ class reportsController extends Controller
                             ->where('name', $index)
                             ->first();
                     }
-
+    
                     $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
                         ->where('absences_id', $absence->id)
                         ->get();
-
+    
                     $absenceMembers = [];
                     foreach ($employeesAbsence as $employeeAbsence) {
                         $absenceMembers[] = [
@@ -313,19 +312,19 @@ class reportsController extends Controller
                 }
             }
             if ($type === null || $type == 0 || $type == 1) {
-
+    
                 $violationQuery = Violation::with(['user', 'point', 'violatType'])
                     ->where('user_id', auth()->user()->id)
                     ->whereDate('created_at', $today);
-
+    
                 if (!empty($pointIds)) {
                     $violationQuery->whereIn('point_id', $pointIds);
                 }
-
+    
                 if ($type !== null) { // Ensure type is not null or empty
                     $violationQuery->where('flag', $type);
                 }
-
+    
                 $violations = $violationQuery->get();
                 foreach ($violations as $violation) {
                     $violationTypeIds = explode(',', $violation->violation_type); // Convert to array if needed
@@ -334,13 +333,13 @@ class reportsController extends Controller
                     $violationTypeNames = implode(', ', $violationTypes);
                     $formattedViolationType = $violationTypeNames ? "مخالفة سلوك انضباطى ({$violationTypeNames})" : 'غير متوفر';
                     $imageData = $violation->image; // e.g., "/Api/images/violations/1724759522.png,/Api/images/violations/1724759522.png"
-
+    
                     // Split the comma-separated image paths into an array
                     $imageArray = explode(',', $imageData);
-
+    
                     // Count the number of images
                     $imageCount = count($imageArray);
-
+    
                     // Prepare the formatted image string
                     $formattedImages = $imageCount . ' صور ,' . ' [' . implode(', ', $imageArray) . ']';
                     $violationReport[] = [
@@ -358,19 +357,19 @@ class reportsController extends Controller
                 }
             }
         }
-
+    
         $success = [
             'absences' => $absenceReport ?? [],
             'violations' => $violationReport ?? [],
         ];
-
+    
         if ($success) {
             return $this->apiResponse(true, 'Data get successfully.', $success, 200);
         } else {
             return $this->apiResponse(true, 'Data get successfully.', null, 200);
         }
     }
-
+    
 
 
     public function getAllstatistics(Request $request)
@@ -509,7 +508,7 @@ class reportsController extends Controller
         // }
 
         $success = [
-            'mission_count' => $groupPointsCount + $instantMissionsCount ?? 0,
+            'mission_count' => $groupPointsCount + $instantMissionsCount?? 0,
             'violation_Disciplined_behavior' => $violation_Disciplined_behavior_count ?? 0,
             'violations_bulding_count' => $violations_bulding_count ?? 0,
         ];
