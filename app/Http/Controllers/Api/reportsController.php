@@ -373,9 +373,11 @@ class reportsController extends Controller
         }
         $mission = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_group_point')->flatten()
             ->count();
+        $mission_instans = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_instant_mission')->flatten()
+            ->count();
         $violation = Violation::where('user_id', auth()->user()->id)->whereDate('created_at', $today)->pluck('id')->flatten()->count();
         $success = [
-            'mission_count' => $mission ?? 0,
+            'mission_count' => $mission + $mission_instans ?? 0,
             'violation_count' => $violation ?? 0,
         ];
         if ($success) {
@@ -394,8 +396,28 @@ class reportsController extends Controller
         if (!$inspectorId) {
             return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
         }
-        $mission_count = InspectorMission::where('inspector_id', $inspectorId)->whereBetween('date', [$startOfMonth, $end])->pluck('ids_group_point')->flatten()
-            ->flatten()->count();
+        $missions = InspectorMission::where('inspector_id', $inspectorId)
+            ->whereBetween('date', [$startOfMonth, $end])
+            ->get();
+        $groupPointsCount = $missions->filter(function ($mission) {
+            return !is_null($mission->ids_group_point);
+        })->map(function ($mission) {
+            // Check if the value is a string and needs decoding, or is already an array
+            if (is_string($mission->ids_group_point)) {
+                return json_decode($mission->ids_group_point, true); // Decode if it's JSON
+            }
+            return $mission->ids_group_point; // Return as is if already an array
+        })->flatten()->count();
+
+        $instantMissionsCount = $missions->filter(function ($mission) {
+            return !is_null($mission->ids_instant_mission);
+        })->map(function ($mission) {
+            // Check if the value is a string and needs decoding, or is already an array
+            if (is_string($mission->ids_instant_mission)) {
+                return json_decode($mission->ids_instant_mission, true); // Decode if it's JSON
+            }
+            return $mission->ids_instant_mission; // Return as is if already an array
+        })->flatten()->count();
         $violations_bulding_count = Violation::where('user_id', auth()->user()->id)->where('flag', 0)->whereBetween('created_at', [$startOfMonth, $end])
             ->pluck('id')->flatten()->count();
         $violation_Disciplined_behavior_count = Violation::where('user_id', auth()->user()->id)->where('flag', 1)->whereBetween('created_at', [$startOfMonth, $end])
@@ -476,11 +498,11 @@ class reportsController extends Controller
         //         'images' => $formattedImages,
         //     ];
         // }
+
         $success = [
-            'mission_count' => $mission_count ?? 0,
+            'mission_count' => $groupPointsCount + $instantMissionsCount?? 0,
             'violation_Disciplined_behavior' => $violation_Disciplined_behavior_count ?? 0,
             'violations_bulding_count' => $violations_bulding_count ?? 0,
-
         ];
         if ($success) {
             return $this->apiResponse(true, 'Data get successfully.', $success, 200);
