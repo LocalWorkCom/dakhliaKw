@@ -65,13 +65,14 @@ class ApiAbsenceController extends Controller
     public function todayIndex($today)
     {
         $daysOfWeek = [
-            "السبت",
+           
             "الأحد",
             "الاثنين",
             "الثلاثاء",
             "الأربعاء",
             "الخميس",
             "الجمعة",
+            "السبت",
         ];
 
         $todayDate = Carbon::parse($today);

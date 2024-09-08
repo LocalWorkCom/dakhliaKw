@@ -20,13 +20,14 @@ class personalMissionController extends Controller
 
         $today = Carbon::today()->toDateString();
         $daysOfWeek = [
-            "السبت",  // 0
-            "الأحد",  // 1
-            "الإثنين",  // 2
-            "الثلاثاء",  // 3
-            "الأربعاء",  // 4
-            "الخميس",  // 5
-            "الجمعة",  // 6
+           
+            "الأحد",  // 0
+            "الإثنين",  // 1
+            "الثلاثاء",  // 2
+            "الأربعاء",  // 3
+            "الخميس",  // 4
+            "الجمعة",  // 5
+            "السبت",  // 6
         ];
         $dayWeek = Carbon::now()->locale('ar')->dayName;
         $index = array_search($dayWeek, $daysOfWeek);

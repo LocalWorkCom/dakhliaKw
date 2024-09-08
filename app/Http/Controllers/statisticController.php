@@ -16,9 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class statisticController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+  
     public function index()
     {
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {

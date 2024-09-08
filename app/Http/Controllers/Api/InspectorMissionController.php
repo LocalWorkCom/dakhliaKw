@@ -83,10 +83,11 @@ class InspectorMissionController extends Controller
 
                     foreach ($idsPoints as $pointId) {
                         $point = Point::with('government')->find($pointId);
-                        // dd($point);
+                       // dd($point);
                         if ($point->work_type == 1) {
                             $today = date('w');
                             $workTime = PointDays::where('point_id', $pointId)->where('name', $today)->first();
+                           //c  dd($workTime);
                             $startTime = Carbon::create(date('y-m-d') . ' ' . $workTime->from);
                             $endtTime = Carbon::create(date('y-m-d') . ' ' . $workTime->to);
                             $fromTime = $startTime->format('H:i');
