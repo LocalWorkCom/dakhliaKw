@@ -352,9 +352,9 @@ class reportsController extends Controller
                         'file_number' => $violation->file_num ?? '',
                         'grade' => $violation->grade ?? '',
                         'violation_type' => $violation->flag == 0 ? 'مخالفة مبانى' : $formattedViolationType,
-                        'point_name' => $violation->point->name,
-                        'inspector_name' => $violation->user->name,
-                        'images' => $formattedImages,
+                        'point_name' =>  $violation->point_id ? $violation->point->name : 'لا يوجد نقطه',
+                        'inspector_name' =>  $violation->user_id ? $violation->user->name : 'لا يوجد مفتش',
+                        'images' => $formattedImages ? $formattedImages :"لا يوجد صور",
                     ];
                 }
             }
