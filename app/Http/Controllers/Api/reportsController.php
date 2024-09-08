@@ -240,7 +240,7 @@ class reportsController extends Controller
         }
     
         // Handle dates
-        $dates = $request->input('date');
+        $dates = $request->input('date', []);
         if (empty($dates)) {
             $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
             $endOfMonth = Carbon::now()->toDateString();
@@ -262,8 +262,9 @@ class reportsController extends Controller
     
         foreach ($dates as $date) {
             $today = Carbon::parse($date)->toDateString();
-            $index = date('w');
+            $index = Carbon::parse($date)->dayOfWeek; // Using Carbon's dayOfWeek
     
+            // Absences logic
             if ($type === null || $type == 2) {
                 $absencesQuery = Absence::where('inspector_id', $inspectorId)
                     ->whereDate('date', $today);
@@ -282,6 +283,11 @@ class reportsController extends Controller
                             ->first();
                     }
     
+                    $pointTime = 'طوال اليوم';
+                    if ($time && $time->from && $time->to) {
+                        $pointTime = "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا');
+                    }
+    
                     $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
                         ->where('absences_id', $absence->id)
                         ->get();
@@ -290,18 +296,19 @@ class reportsController extends Controller
                     foreach ($employeesAbsence as $employeeAbsence) {
                         $absenceMembers[] = [
                             'employee_name' => $employeeAbsence->name,
-                            'employee_grade' => $employeeAbsence->grade == null ? '' : $employeeAbsence->gradeName->name,
+                            'employee_grade' => $employeeAbsence->gradeName->name ?? '',
                             'employee_military_number' => $employeeAbsence->military_number ?? '',
-                            'employee_type_absence' => $employeeAbsence->absenceType ? $employeeAbsence->absenceType->name : '',
-                            'type_employee' => $employeeAbsence->type_employee ? $employeeAbsence->typeEmployee->name : '',
-                            'employee_civil_number' => $employeeAbsence->type_employee ? $employeeAbsence->absenceType->name : '',
-                            'employee_file_number' => $employeeAbsence->file_num ? $employeeAbsence->file_num : ''
+                            'employee_type_absence' => $employeeAbsence->absenceType->name ?? '',
+                            'type_employee' => $employeeAbsence->typeEmployee->name ?? '',
+                            'employee_civil_number' => $employeeAbsence->absenceType->name ?? '',
+                            'employee_file_number' => $employeeAbsence->file_num ?? '',
                         ];
                     }
+    
                     $absenceReport[] = [
                         'absence_day' => $absence->date,
                         'point_name' => $absence->point->name,
-                        'point_time' => $time == 0 ? 'طوال اليوم' : "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا'),
+                        'point_time' => $pointTime,
                         'inspector_name' => $absence->inspector->name,
                         'team_name' => $teamName,
                         'total_number' => $absence->total_number,
@@ -311,8 +318,9 @@ class reportsController extends Controller
                     ];
                 }
             }
-            if ($type === null || $type == 0 || $type == 1) {
     
+            // Violations logic
+            if ($type === null || $type == 0 || $type == 1) {
                 $violationQuery = Violation::with(['user', 'point', 'violatType'])
                     ->where('user_id', auth()->user()->id)
                     ->whereDate('created_at', $today);
@@ -321,34 +329,28 @@ class reportsController extends Controller
                     $violationQuery->whereIn('point_id', $pointIds);
                 }
     
-                if ($type !== null) { // Ensure type is not null or empty
+                if ($type !== null) {
                     $violationQuery->where('flag', $type);
                 }
     
                 $violations = $violationQuery->get();
                 foreach ($violations as $violation) {
-                    $violationTypeIds = explode(',', $violation->violation_type); // Convert to array if needed
+                    $violationTypeIds = explode(',', $violation->violation_type);
                     $violationTypes = ViolationTypes::whereIn('id', $violationTypeIds)->pluck('name')->toArray();
-                    // Format names into a string
                     $violationTypeNames = implode(', ', $violationTypes);
                     $formattedViolationType = $violationTypeNames ? "مخالفة سلوك انضباطى ({$violationTypeNames})" : 'غير متوفر';
-                    $imageData = $violation->image; // e.g., "/Api/images/violations/1724759522.png,/Api/images/violations/1724759522.png"
     
-                    // Split the comma-separated image paths into an array
-                    $imageArray = explode(',', $imageData);
-    
-                    // Count the number of images
+                    $imageArray = explode(',', $violation->image);
                     $imageCount = count($imageArray);
-    
-                    // Prepare the formatted image string
                     $formattedImages = $imageCount . ' صور ,' . ' [' . implode(', ', $imageArray) . ']';
+    
                     $violationReport[] = [
-                        'date' => $violation->created_at->format('Y-m-d') . ' ' . 'وقت و تاريخ التفتيش' . ' ' . $violation->created_at->format('H:i:s'),
+                        'date' => $violation->created_at->format('Y-m-d') . ' وقت و تاريخ التفتيش ' . $violation->created_at->format('H:i:s'),
                         'name' => $violation->name,
-                        'Civil_number' => $violation->Civil_number ? $violation->Civil_number : '',
-                        'military_number' => $violation->military_number ? $violation->military_number : '',
-                        'file_number' => $violation->file_num ? $violation->file_num : '',
-                        'grade' => $violation->grade ? $violation->grade : '',
+                        'Civil_number' => $violation->Civil_number ?? '',
+                        'military_number' => $violation->military_number ?? '',
+                        'file_number' => $violation->file_num ?? '',
+                        'grade' => $violation->grade ?? '',
                         'violation_type' => $violation->flag == 0 ? 'مخالفة مبانى' : $formattedViolationType,
                         'point_name' => $violation->point->name,
                         'inspector_name' => $violation->user->name,
@@ -359,16 +361,13 @@ class reportsController extends Controller
         }
     
         $success = [
-            'absences' => $absenceReport ?? [],
-            'violations' => $violationReport ?? [],
+            'absences' => $absenceReport,
+            'violations' => $violationReport,
         ];
     
-        if ($success) {
-            return $this->apiResponse(true, 'Data get successfully.', $success, 200);
-        } else {
-            return $this->apiResponse(true, 'Data get successfully.', null, 200);
-        }
+        return $this->apiResponse(true, 'Data retrieved successfully.', $success, 200);
     }
+    
     
 
 
