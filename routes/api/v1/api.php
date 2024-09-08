@@ -47,7 +47,7 @@ Route::get('/getAll/points', [personalMissionController::class, 'getAllPoints'])
 /**
  * /Lizam
  */
-Route::any('/lizamat', [InspectorMissionController::class,'get_shift']);
+Route::any('/lizamat', [InspectorMissionController::class,' ']);
 
 });
 

@@ -24,13 +24,14 @@ class reportsController extends Controller
     {
         $date = Carbon::parse($date); // Parse the date if it's not already a Carbon instance
         $daysOfWeek = [
-            "السبت",  // 0
-            "الأحد",  // 1
-            "الإثنين",  // 2
-            "الثلاثاء",  // 3
-            "الأربعاء",  // 4
-            "الخميس",  // 5
-            "الجمعة",  // 6
+          
+            "الأحد",  // 0
+            "الإثنين",  // 1
+            "الثلاثاء",  // 2
+            "الأربعاء",  // 3
+            "الخميس",  // 4
+            "الجمعة",  // 5
+            "السبت",  // 6
         ];
         $dayWeek = $date->locale('ar')->dayName;
         $index = array_search($dayWeek, $daysOfWeek);
@@ -394,7 +395,7 @@ class reportsController extends Controller
         if (!$inspectorId) {
             return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
         }
-        $mission_count = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_group_point')->flatten()
+        $mission_count = InspectorMission::where('inspector_id', $inspectorId)->whereBetween('date', [$startOfMonth, $endOfMonth])->pluck('ids_group_point')->flatten()
             ->flatten()->count();
         $violations_bulding_count = Violation::where('user_id', auth()->user()->id)->where('flag',0)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
         ->pluck('id')->flatten()->count();
