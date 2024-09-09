@@ -68,7 +68,8 @@ class reportsController extends Controller
             $working_time = WorkingTime::find($inspector->working_time_id);
         } else {
             $working_time = null;
-        }        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
+        }
+        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
         $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
 
         $inspectorIdsArray = [];
@@ -143,7 +144,7 @@ class reportsController extends Controller
                 ];
             }
             $response[] = [
-                'shift'=> $working_time->only(['id', 'name', 'start_time', 'end_time']),
+                'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
                 'abcence_day' => $absence->date,
                 'point_name' => $absence->point->name,
                 'point_time' => $absence->point->work_type == 0 ? 'طوال اليوم' : "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا'),
@@ -218,7 +219,7 @@ class reportsController extends Controller
             'point_id.*.exists' => 'عفوا هذه النقطه غير متاحه',
             'date.*.date_format' => 'يرجى إدخال التاريخ بصيغه صحيحه yyyy-mm-dd',
         ];
-
+    
         $validatedData = Validator::make($request->all(), [
             'point_id' => [
                 'nullable',
@@ -237,14 +238,13 @@ class reportsController extends Controller
             'date.*' => ['nullable', 'date', 'date_format:Y-m-d'],
             'type_id' => ['nullable', 'integer'],
         ], $messages);
-
+    
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-
+    
         $dates = $request->input('date', []);
         if (empty($dates)) {
-            // Generate default dates if none provided
             $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
             $endOfMonth = Carbon::now()->toDateString();
             $dates = [];
@@ -253,34 +253,23 @@ class reportsController extends Controller
                 $startOfMonth = Carbon::parse($startOfMonth)->addDay()->toDateString();
             }
         } else {
-            // Ensure dates are in the correct format
             $dates = array_map(function ($date) {
                 return Carbon::parse($date)->toDateString();
             }, $dates);
         }
-
+    
         $pointIds = $request->input('point_id', []);
         $type = $request->input('type_id');
-
+    
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
-        // shift
-        // $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
-        // if ($inspector != null) {
-        //     $working_time = WorkingTime::find($inspector->working_time_id);
-        // } else {
-        //     $working_time = null;
-        // }        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
-        // $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
-
+    
         $absenceReport = [];
         $pointViolations = [];
-
-        // Gather violations
+    
         $violationQuery = Violation::with(['user', 'point', 'violatType'])
             ->where('user_id', auth()->user()->id);
-
-        // Apply date range filtering
+    
         if (!empty($dates)) {
             $violationQuery->where(function ($query) use ($dates) {
                 foreach ($dates as $date) {
@@ -290,39 +279,59 @@ class reportsController extends Controller
                 }
             });
         }
-
+    
         if (!empty($pointIds)) {
             $violationQuery->whereIn('point_id', $pointIds);
         }
-
+    
         if ($type !== null) {
             $violationQuery->where('flag', $type);
         }
-
+    
         $violations = $violationQuery->orderBy('created_at', 'asc')->get();
-
+    
         foreach ($violations as $violation) {
             $violationTypeIds = explode(',', $violation->violation_type);
-            $violationTypes = ViolationTypes::whereIn('id', $violationTypeIds)->pluck('name')->toArray();
-            $violationTypeNames = implode(', ', $violationTypes);
-            $formattedViolationType = $violationTypeNames ? "مخالفة سلوك انضباطى ({$violationTypeNames})" : 'غير متوفر';
-
+            $violationTypes = ViolationTypes::whereIn('id', $violationTypeIds)->get();
+    
+            if ($violation->description) {
+                $violationTypes->push((object)[
+                    'id' => -1,
+                    'name' => $violation->description
+                ]);
+            }
+    
+            $formattedViolationTypes = $violationTypes->map(function ($type) {
+                return [
+                    'id' => $type->id,
+                    'name' => $type->name
+                ];
+            })->toArray();
+    
             $imageArray = explode(',', $violation->image);
             $imageCount = count($imageArray);
             $formattedImages = $imageCount . ' صور ,' . ' [' . implode(', ', $imageArray) . ']';
-
+    
             $pointName = $violation->point_id ? $violation->point->name : 'لا يوجد نقطه';
-
-            // Initialize point violations if not set
+    
+            // Fetch point shift (work time)
+            $pointShift = PointDays::where('point_id', $violation->point_id)
+                ->where('name', Carbon::parse($violation->created_at)->dayOfWeek)
+                ->first();
+    
+            $shiftDetails = 'طوال اليوم'; // Default if no specific shift
+            if ($pointShift && $pointShift->from && $pointShift->to) {
+                $shiftDetails = $pointShift->only(['from', 'to']);}
+    
             if (!isset($pointViolations[$pointName])) {
                 $pointViolations[$pointName] = [
                     'point_id' => $violation->point_id,
                     'point_name' => $pointName,
+                    'point_shift' => $shiftDetails,
                     'violationsOfPoint' => []
                 ];
             }
-
-            // Add the violation details to the respective point
+    
             $pointViolations[$pointName]['violationsOfPoint'][] = [
                 'id' => $violation->id,
                 'InspectorName' => $violation->user_id ? $violation->user->name : 'لا يوجد مفتش',
@@ -332,35 +341,35 @@ class reportsController extends Controller
                 'Civil_number' => $violation->Civil_number ?? '',
                 'military_number' => $violation->military_number ?? '',
                 'file_number' => $violation->file_num ?? '',
-                'grade' => grade::where('id', $violation->grade)->value('name') ?? '',
-                'violation_type' => $violation->flag == 0 ? 'مخالفة مبانى' : $formattedViolationType,
+                'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? '',
+                'violation_type' => $formattedViolationTypes,
                 'inspector_name' => $violation->user_id ? $violation->user->name : 'لا يوجد مفتش',
-                'civil_military' => $violation->civil_type ?  ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
+                'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
                 'images' => $formattedImages ? $formattedImages : "لا يوجد صور",
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'flag_instantmission' => $violation->flag_instantmission,
-                'violation_mode' =>  $violation->flag,
+                'violation_mode' => $violation->flag,
             ];
         }
-
+    
         // Absences
         foreach ($dates as $date) {
             $today = Carbon::parse($date)->toDateString();
             $index = Carbon::parse($date)->dayOfWeek;
-
+    
             if ($type === null || $type == 2) {
                 $absencesQuery = Absence::where('inspector_id', $inspectorId)
                     ->whereDate('date', $today); // Use whereDate to filter by exact date
-
+    
                 if (!empty($pointIds)) {
                     $absencesQuery->whereIn('point_id', $pointIds);
                 }
-
+    
                 $absences = $absencesQuery->get();
-
+    
                 foreach ($absences as $absence) {
                     $time = null;
                     if ($absence->point->work_type != 0) {
@@ -368,16 +377,16 @@ class reportsController extends Controller
                             ->where('name', $index)
                             ->first();
                     }
-
+    
                     $pointTime = 'طوال اليوم';
                     if ($time && $time->from && $time->to) {
                         $pointTime = "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا');
                     }
-
+    
                     $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
                         ->where('absences_id', $absence->id)
                         ->get();
-
+    
                     $absenceMembers = [];
                     foreach ($employeesAbsence as $employeeAbsence) {
                         $absenceMembers[] = [
@@ -390,7 +399,7 @@ class reportsController extends Controller
                             'employee_file_number' => $employeeAbsence->file_num ?? '',
                         ];
                     }
-
+    
                     $absenceReport[] = [
                         'absence_day' => $absence->date,
                         'point_name' => $absence->point->name,
@@ -405,38 +414,15 @@ class reportsController extends Controller
                 }
             }
         }
-
+    
         $success = [
             'absences' => $absenceReport,
             'violations' => array_values($pointViolations),
         ];
-
+    
         return $this->apiResponse(true, 'Data retrieved successfully.', $success, 200);
     }
-
-    public function getAllstatistics(Request $request)
-    {
-        $today = Carbon::now();
-        $inspectorId = Inspector::where('user_id', auth()->user()->id)->where('flag', 0)->value('id');
-        if (!$inspectorId) {
-            return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
-        }
-        $mission = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_group_point')->flatten()
-            ->count();
-        $mission_instans = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_instant_mission')->flatten()
-            ->count();
-        $violation = Violation::where('user_id', auth()->user()->id)->whereDate('created_at', $today)->pluck('id')->flatten()->count();
-        $success = [
-            'mission_count' => $mission + $mission_instans ?? 0,
-            'violation_count' => $violation ?? 0,
-        ];
-        if ($success) {
-            return $this->apiResponse(true, 'Data get successfully.', $success, 200);
-        } else {
-
-            return $this->apiResponse(true, 'Data get successfully.', null, 200);
-        }
-    }
+    
     public function getstatistics(Request $request)
     {
         $today = Carbon::now();
@@ -470,8 +456,7 @@ class reportsController extends Controller
         })->flatten()->count();
         $violations_bulding_count = Violation::where('user_id', auth()->user()->id)->where('flag', 0)->whereBetween('created_at', [$startOfMonth, $end])
             ->pluck('id')->flatten()->count();
-        $violation_Disciplined_behavior_count = Violation::where('user_id', auth()->user()->id)->where('flag', 1)->whereBetween('created_at', [$startOfMonth, $end])
-
+        $violation_Disciplined_behavior_count = Violation::where('user_idl', auth()->user()->id)->where('flag', 1)->whereBetween('created_at', [$startOfMonth, $end])
             ->pluck('id')->flatten()->count();
         // $point_ids = Grouppoint::whereIn('id', $mission)->pluck('points_ids')->flatten()->toArray();
         // $points_detail = Point::with(['pointDays'])->whereIn('id', $point_ids)->get();
