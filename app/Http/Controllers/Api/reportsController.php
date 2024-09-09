@@ -70,9 +70,6 @@ class reportsController extends Controller
             $working_time = null;
         }        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
         $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
-        $success['date'] = $today;
-
-        $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
 
         $inspectorIdsArray = [];
         foreach ($teamInspectors as $inspectorIds) {
@@ -146,6 +143,7 @@ class reportsController extends Controller
                 ];
             }
             $response[] = [
+                'shift'=> $working_time->only(['id', 'name', 'start_time', 'end_time']),
                 'abcence_day' => $absence->date,
                 'point_name' => $absence->point->name,
                 'point_time' => $absence->point->work_type == 0 ? 'طوال اليوم' : "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا'),
@@ -157,10 +155,6 @@ class reportsController extends Controller
                 'absence_members' => $absence_members,
             ];
         }
-        $success['date'] = $today;
-
-        $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
-
         $success['report'] = $response;
 
 
