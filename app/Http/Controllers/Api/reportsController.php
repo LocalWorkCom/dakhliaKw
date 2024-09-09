@@ -263,6 +263,14 @@ class reportsController extends Controller
         $type = $request->input('type_id');
 
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
+        // shift
+        // $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
+        // if ($inspector != null) {
+        //     $working_time = WorkingTime::find($inspector->working_time_id);
+        // } else {
+        //     $working_time = null;
+        // }        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
+        // $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
 
         $absenceReport = [];
@@ -463,8 +471,8 @@ class reportsController extends Controller
         $violations_bulding_count = Violation::where('user_id', auth()->user()->id)->where('flag', 0)->whereBetween('created_at', [$startOfMonth, $end])
             ->pluck('id')->flatten()->count();
         $violation_Disciplined_behavior_count = Violation::where('user_id', auth()->user()->id)->where('flag', 1)->whereBetween('created_at', [$startOfMonth, $end])
-            ->pluck('id')->flatten()->count();
 
+            ->pluck('id')->flatten()->count();
         // $point_ids = Grouppoint::whereIn('id', $mission)->pluck('points_ids')->flatten()->toArray();
         // $points_detail = Point::with(['pointDays'])->whereIn('id', $point_ids)->get();
 
