@@ -350,7 +350,7 @@ class ViolationController  extends Controller
 
     public function get_voilation_instantMission(Request $request)
     {
-        // dd("dd");
+        // Validation
         $messages = [
             'mission_id.required' => 'mission_id required',
         ];
@@ -361,29 +361,58 @@ class ViolationController  extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
+
+        // Get today's date
         $today = Carbon::today()->toDateString();
+
         // Retrieve the inspector ID for the authenticated user
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
-        // shift
-        $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
-        if ($inspector != null) {
-            $working_time = WorkingTime::find($inspector->working_time_id);
-        } else {
-            $working_time = null;
+
+        // Get shift information
+        $inspector = InspectorMission::where('inspector_id', $inspectorId)
+            ->where('date', $today)
+            ->where('day_off', 0)
+            ->first();
+
+        $working_time = $inspector ? WorkingTime::find($inspector->working_time_id) : null;
+
+        // Get instant mission details
+        $instantMission = instantmission::find($request->mission_id);
+        if (!$instantMission) {
+            return $this->respondError('Instant mission not found.', [], 404);
         }
 
-        $instantMissions = instantmission::where('id', $request->mission_id)->first();
-        // dd($instantMissions->location);
-        if (str_contains($instantMissions->location, 'gis.paci.gov.kw')) {
-            // dd("yes");
+        // Handle GIS link or location
+        if (str_contains($instantMission->location, 'gis.paci.gov.kw')) {
             $location = null;
-            $kwFinder = $instantMissions->location;
+            $kwFinder = $instantMission->location;
         } else {
-            $location = $instantMissions->location;
+            $location = $instantMission->location;
             $kwFinder = null;
         }
-        $violation = Violation::where('mission_id', $request->mission_id)->where('flag_instantmission', "1")->where('user_id', auth()->user()->id)->whereDate('created_at', $today)->get();
-        $success['violation'] = $violation->map(function ($violation) {
+
+        // Get violations for this instant mission
+        $violations = Violation::where('mission_id', $request->mission_id)
+            ->where('flag_instantmission', 1)
+            ->where('user_id', auth()->user()->id)
+            ->whereDate('created_at', $today)
+            ->get();
+
+        // Map violations and retrieve violation types
+        $success['violation'] = $violations->map(function ($violation) {
+            // Retrieve violation types based on the existing ids
+            $violationTypes = ViolationTypes::whereIn('id', explode(',', $violation->violation_type))
+                                            ->select('id', 'name')
+                                            ->get();
+
+            // Add description as a type if it exists
+            if ($violation->description) {
+                $violationTypes->push((object) [
+                    'id' => -1,
+                    'name' => $violation->description
+                ]);
+            }
+
             return [
                 'id' => $violation->id,
                 'InspectorName' => $violation->user->name ?? null,
@@ -394,36 +423,35 @@ class ViolationController  extends Controller
                 'File_number' => $violation->file_num ?? null,
                 'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                 'image' => $violation->image,
-                'violation_type' => ViolationTypes::whereIn('id', explode(',', $violation->violation_type))->select('id', 'name')->get(),
-                'civil_military' => $violation->civil_type ?  ViolationTypes::where('id',$violation->civil_type)->value('name'): '',
-                // 'user_id' => $violation->user_id,
+                'violation_type' => $violationTypes,
+                'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'flag_instantmission' => $violation->flag_instantmission,
-                'violation_mode' =>  $violation->military_number != null ? "1" : "2",
+                'violation_mode' => $violation->military_number ? "1" : "2",
             ];
         });
+
+        // Add additional instant mission details
         $success['date'] = $today;
-        $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
+        $success['shift'] = $working_time ? $working_time->only(['id', 'name', 'start_time', 'end_time']) : null;
 
         $success['instantMissions'] = [
-
-            'instant_mission_id' => $instantMissions->id,
-            'name' => $instantMissions->label,  // Assuming description field
+            'instant_mission_id' => $instantMission->id,
+            'name' => $instantMission->label,  // Assuming description field
             'location' => $location,
             'KWfinder' => $kwFinder,
-            'description' => $instantMissions->description,
-            'group' => $instantMissions->group ? $instantMissions->group->name : 'N/A',  // Include group name
-            'team' => $instantMissions->groupTeam ? $instantMissions->groupTeam->name : 'N/A',  // Include group team name ,
-            'date' => $instantMissions->created_at->format('Y-m-d'),
-
-            'latitude' => $instantMissions->latitude,
-            'longitude' => $instantMissions->longitude,
+            'description' => $instantMission->description,
+            'group' => $instantMission->group ? $instantMission->group->name : 'N/A',  // Include group name
+            'team' => $instantMission->groupTeam ? $instantMission->groupTeam->name : 'N/A',  // Include group team name
+            'date' => $instantMission->created_at->format('Y-m-d'),
+            'latitude' => $instantMission->latitude,
+            'longitude' => $instantMission->longitude,
         ];
 
-        //   $success['violation'] = $violation;
         return $this->respondSuccess($success, 'Data returned successfully.');
     }
+
 }

@@ -27,7 +27,7 @@ class InspectorMissionController extends Controller
         $start = Carbon::createFromTimeString($pointStart);
         $end = Carbon::createFromTimeString($pointEnd)->addMinutes(30);
         $current = Carbon::createFromTimeString($currentTime);
-        
+
         return $current->between($start, $end);
     }
     public function getMissionsByInspector()
@@ -49,6 +49,9 @@ class InspectorMissionController extends Controller
             $endTimeofTeam = $team_time->first()->workingTime->start_time;
 
         }
+        // else{
+
+        // }
         // Retrieve the missions for the specific inspector
         $missions = InspectorMission::whereDate('date', $today)
             ->where('inspector_id', $inspectorId)
@@ -139,7 +142,7 @@ class InspectorMissionController extends Controller
                 }
             }
             // dd($groupPointsData);
-         
+
             //dd($instantMissions);
             //    $instantmissioncount=count($instantMissions);
             //  dd($instantmissioncount);
@@ -167,7 +170,7 @@ class InspectorMissionController extends Controller
 
                             'instant_mission_id' => $instantmission->id,
                             'name' => $instantmission->label,  // Assuming description field
-                            // 'location' => $instantmission->location,  
+                            // 'location' => $instantmission->location,
                             'location' => $location,
                             'KWfinder' => $kwFinder,
                             'description' => $instantmission->description,
@@ -191,8 +194,8 @@ class InspectorMissionController extends Controller
             $instantMissionData[] = [
                 'instant_mission_id' => $instantmission->id,
                 'name' => $instantmission->label,  // Assuming description field
-                'location' => $instantmission->location,  
-                'description' => $instantmission->description,  
+                'location' => $instantmission->location,
+                'description' => $instantmission->description,
                 'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
                 'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name ,
                 'date' => $instantmission->created_at->format('Y-m-d'),
