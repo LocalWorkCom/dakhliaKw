@@ -307,10 +307,15 @@ class reportsController extends Controller
                     'name' => $type->name
                 ];
             })->toArray();
+            if($violation->image){
+                $imageArray = explode(',', $violation->image);
+                $imageCount = count($imageArray);
+                $formattedImages = $imageCount . ' صور ,' . implode(', ', $imageArray);
 
-            $imageArray = explode(',', $violation->image);
-            $imageCount = count($imageArray);
-            $formattedImages = $imageCount . ' صور ,' . implode(', ', $imageArray);
+            }else{
+                $formattedImages = 0 . 'صور' ;
+
+            }
 
             $pointName = $violation->point_id ? $violation->point->name : 'لا يوجد نقطه';
 
