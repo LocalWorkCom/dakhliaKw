@@ -43,7 +43,7 @@ class InspectorMissionController extends Controller
             ->get();
 
         // Check if the collection has any items
-        if ($team_time->isNotEmpty()) {
+        if ($team_time->working_time_id->isNotEmpty()) {
             // Assuming you want to access the first item
             $startTimeofTeam = $team_time->first()->workingTime->start_time;
             $endTimeofTeam = $team_time->first()->workingTime->start_time;
