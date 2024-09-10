@@ -47,21 +47,6 @@ class InspectorMissionController extends Controller
             $startTimeofTeam = $team_time->first()->workingTime->start_time;
             $endTimeofTeam = $team_time->first()->workingTime->start_time;
 
-        }else{
-            $responseData = [
-                'date' => date('Y-m-d'),
-                'mission_count' => null,
-                'instant_mission_count' =>  null,
-                'groupPointCount' => null,
-                'missions' => null,
-
-                'instant_missions' => null,
-            ];
-            // $success['ViolationType'] = $missionData->map(function ($item) {
-            //     return $item->only(['id', 'name']);
-            // });
-            // return response()->json($missionData);
-            return $this->respondSuccess($responseData, 'Get Data successfully.');
         }
         // else{
 
@@ -155,12 +140,6 @@ class InspectorMissionController extends Controller
                     ];
                 }
             }
-            // dd($groupPointsData);
-
-            //dd($instantMissions);
-            //    $instantmissioncount=count($instantMissions);
-            //  dd($instantmissioncount);
-
             $instantMissionData = [];
             if (!is_null($mission->ids_instant_mission)) {
                 foreach ($instantMissions as $instant) {
@@ -216,15 +195,27 @@ class InspectorMissionController extends Controller
             ];
         }
         */
-        $responseData = [
-            'date' => date('Y-m-d'),
-            'mission_count' => $count,
-            'instant_mission_count' => $instantmissioncount,
-            'groupPointCount' => $groupPointCount,
-            'missions' => $missionData,
+        if($missionData){
+            $responseData = [
+                'date' => date('Y-m-d'),
+                'mission_count' => $count,
+                'instant_mission_count' => $instantmissioncount,
+                'groupPointCount' => $groupPointCount,
+                'missions' => $missionData,
 
-            'instant_missions' => $instantMissionData,
-        ];
+                'instant_missions' => $instantMissionData,
+            ];
+        }else{
+            $responseData = [
+                'date' => date('Y-m-d'),
+                'mission_count' => 0,
+                'instant_mission_count' => $instantmissioncount,
+                'groupPointCount' => 0,
+                'missions' => null,
+                'instant_missions' => $instantMissionData,
+            ];
+        }
+
         // $success['ViolationType'] = $missionData->map(function ($item) {
         //     return $item->only(['id', 'name']);
         // });
