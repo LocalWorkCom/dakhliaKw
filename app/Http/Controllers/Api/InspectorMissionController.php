@@ -48,6 +48,21 @@ class InspectorMissionController extends Controller
             $startTimeofTeam = $team_time->first()->workingTime->start_time;
             $endTimeofTeam = $team_time->first()->workingTime->start_time;
 
+        }else{
+            $responseData = [
+                'date' => date('Y-m-d'),
+                'mission_count' => null,
+                'instant_mission_count' =>  null,
+                'groupPointCount' => null,
+                'missions' => null,
+
+                'instant_missions' => null,
+            ];
+            // $success['ViolationType'] = $missionData->map(function ($item) {
+            //     return $item->only(['id', 'name']);
+            // });
+            // return response()->json($missionData);
+            return $this->respondSuccess($responseData, 'Get Data successfully.');
         }
         // else{
 
@@ -235,12 +250,22 @@ class InspectorMissionController extends Controller
 
         }else{ */
       //  dd($todayMission);
+      if( ($todayMission->workingTree)->isNotEmpty()){
         $success['dayOff'] = 0;
         $success['name'] = $todayMission->workingTree->name;
         $success['workdays'] = $todayMission->workingTree->working_days_num;
         $success['holidaydays'] = $todayMission->workingTree->holiday_days_num;
         $success['todayTimes_start'] = $todayMission->workingTime->start_time;
         $success['todayTimes_end'] = $todayMission->workingTime->end_time;
+      }else{
+        $success['dayOff'] = 0;
+        $success['name'] = null;
+        $success['workdays'] = null;
+        $success['holidaydays'] = null;
+        $success['todayTimes_start'] =null;
+        $success['todayTimes_end'] = null;
+      }
+
 
         return $this->respondSuccess($success, 'بيانات اللازم اليوم');
 

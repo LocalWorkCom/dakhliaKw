@@ -309,31 +309,32 @@ class reportsController extends Controller
             })->toArray();
             if($violation->image){
                 $imageArray = explode(',', $violation->image);
-                $imageCount = count($imageArray);
-                $formattedImages = $imageCount . ' صور ,' . implode(', ', $imageArray);
+                $formattedImages = implode(', ', $imageArray);
 
             }else{
-                $formattedImages = 0 . 'صور' ;
+                $formattedImages =null;
 
             }
 
             $pointName = $violation->point_id ? $violation->point->name : 'لا يوجد نقطه';
 
+
             // Fetch point shift (work time)
             $pointShift = PointDays::where('point_id', $violation->point_id)
                 ->where('name', Carbon::parse($violation->created_at)->dayOfWeek)
                 ->first();
-
-            $shiftDetails = 'طوال اليوم'; // Default if no specific shift
+            $shiftDetails =  [
+                'startTime' => '00:00',  // Full day start time
+                'endTime' => '23:59'     // Full day end time
+            ]; // Default if no specific shift
             if ($pointShift && $pointShift->from && $pointShift->to) {
                 $shiftDetails = $pointShift->only(['from', 'to']);
             }
-
             if (!isset($pointViolations[$pointName])) {
                 $pointViolations[$pointName] = [
                     'point_id' => $violation->point_id,
-                    'point_name' => $pointName,
-                    'point_shift' => $shiftDetails,
+                    'point_name'=>$pointName,
+                    'shift'=>$shiftDetails,
                     'violationsOfPoint' => []
                 ];
             }
@@ -342,6 +343,7 @@ class reportsController extends Controller
                 'id' => $violation->id,
                 'InspectorName' => $violation->user_id ? $violation->user->name : 'لا يوجد مفتش',
                 'Inspectorgrade' => $violation->user->grade->name ?? '',
+                'team_name'=>$teamName,
                 'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
                 'name' => $violation->name,
                 'Civil_number' => $violation->Civil_number ?? '',
@@ -351,7 +353,7 @@ class reportsController extends Controller
                 'violation_type' => $formattedViolationTypes,
                 'inspector_name' => $violation->user_id ? $violation->user->name : 'لا يوجد مفتش',
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
-                'images' => $formattedImages ? $formattedImages : "لا يوجد صور",
+                'images' => $formattedImages ? $formattedImages : null,
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
@@ -392,7 +394,6 @@ class reportsController extends Controller
                     $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
                         ->where('absences_id', $absence->id)
                         ->get();
-
                     $absenceMembers = [];
                     foreach ($employeesAbsence as $employeeAbsence) {
                         $absenceMembers[] = [
@@ -407,6 +408,7 @@ class reportsController extends Controller
                     }
 
                     $absenceReport[] = [
+
                         'abcence_day' => $absence->date,
                         'point_name' => $absence->point->name,
                         'point_time' => $pointTime,
@@ -420,9 +422,9 @@ class reportsController extends Controller
                     ];
                 }
             }
-        } 
+        }
         $success = [
-            'absences' => $absenceReport,
+            'report' => $absenceReport,
             'violations' => array_values($pointViolations),
         ];
 
