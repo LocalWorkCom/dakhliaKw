@@ -282,8 +282,10 @@ class ViolationController  extends Controller
         $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
         if ($inspector != null) {
             $working_time = WorkingTime::find($inspector->working_time_id);
+            $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
         } else {
             $working_time = null;
+            $success['shift'] = null;
         }
 
         // Get the team name where the inspector is listed in `inspector_ids`
@@ -306,7 +308,7 @@ class ViolationController  extends Controller
 
         $pointName = Point::find($request->point_id);
         $success['date'] = $today;
-        $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
+
         $success['teamName'] = $teamName;
         $success['pointName'] = $pointName->only(['id', 'name']);
 
