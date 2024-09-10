@@ -27,7 +27,7 @@ class ViolationController  extends Controller
     public function todayIndex($today)
     {
         $daysOfWeek = [
-       
+
             "الأحد",
             "الاثنين",
             "الثلاثاء",
@@ -95,7 +95,7 @@ class ViolationController  extends Controller
             return $this->respondError('type not found', ['error' => 'خطأ فى استرجاع البيانات'], 404);
         }
 
-        // 
+        //
     }
 
     public function add_Violation(Request $request)
@@ -119,12 +119,12 @@ class ViolationController  extends Controller
         } else {
             $point_id = $request->point_id;
         }
-        if ($request->civil_military == 1) { 
+        if ($request->civil_military == 1) {
             //عسكري
             $military_number = $request->military_number;
             $Civil_number = $request->Civil_number;
             $file_num = $request->file_num;
-        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4) { 
+        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4) {
             //ظابط ||مهنيين ||أفراد
             $military_number = null;
             $Civil_number = $request->Civil_number;
@@ -151,7 +151,7 @@ class ViolationController  extends Controller
                 'name' => 'required|string',
                 // 'grade' => ['required_if:civil_military,military'],
                 'image' => 'nullable',
-                'violation_type' => 'required',
+                ///'violation_type' => 'required',
                 // 'Civil_number' => 'required',
                 'point_id' => ['required_if:flag_instantmission,0'],
                 'mission_id' => 'required',
@@ -199,7 +199,7 @@ class ViolationController  extends Controller
                 $files = $request->file('image'); // Expecting an array of files
                 $path = 'Api/images/violations'; // Directory path
                 $model = Violation::find($new->id);
-        
+
                 UploadFilesIM($path, 'image', $model, $files);
             }
         } else {
@@ -212,7 +212,7 @@ class ViolationController  extends Controller
             ];
             $validatedData = Validator::make($request->all(), [
                 'image' => 'required',
-                'violation_type' => 'required',
+               // 'violation_type' => 'required',
                 // 'point_id' => 'required',
                 'point_id' => ['required_if:flag_instantmission,0'],
                 'mission_id' => 'required',
@@ -271,7 +271,7 @@ class ViolationController  extends Controller
             'point_id' => 'required',
             // 'mission_id' => 'required',
         ], $messages);
-    
+
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
@@ -285,37 +285,37 @@ class ViolationController  extends Controller
         } else {
             $working_time = null;
         }
-    
+
         // Get the team name where the inspector is listed in `inspector_ids`
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
         // Get all the inspector IDs associated with the team(s) the user is part of
         $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])
             ->pluck('inspector_ids')->toArray();
-    
+
         // Flatten the array and convert the inspector IDs to individual IDs
         $inspectorIds = array_unique(explode(',', implode(',', $teamInspectors)));
-    
+
         // Find user IDs corresponding to the inspector IDs
         $userIds = Inspector::whereIn('id', $inspectorIds)->pluck('user_id')->toArray();
-    
+
         $violation = Violation::with('user')->where('point_id', $request->point_id)
             ->where('flag_instantmission', "0")
             ->whereIn('user_id', $userIds)
             ->whereDate('created_at', $today)
             ->get();
-    
+
         $pointName = Point::find($request->point_id);
         $success['date'] = $today;
         $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
         $success['teamName'] = $teamName;
         $success['pointName'] = $pointName->only(['id', 'name']);
-    
+
         $success['violation'] = $violation->map(function ($violation) {
             // Retrieve violation types based on the existing ids
             $violationTypes = ViolationTypes::whereIn('id', explode(',', $violation->violation_type))
                                             ->select('id', 'name')
                                             ->get();
-    
+
             // Add the description to the list if it's not null
             if ($violation->description) {
                 $violationTypes->push((object) [
@@ -323,7 +323,7 @@ class ViolationController  extends Controller
                     'name' => $violation->description
                 ]);
             }
-    
+
             return [
                 'id' => $violation->id,
                 'InspectorName' => $violation->user->name ?? null,
@@ -344,10 +344,10 @@ class ViolationController  extends Controller
                 'violation_mode' => $violation->flag,
             ];
         });
-    
+
         return $this->respondSuccess($success, 'Data returned successfully.');
     }
-    
+
     public function get_voilation_instantMission(Request $request)
     {
         // dd("dd");
