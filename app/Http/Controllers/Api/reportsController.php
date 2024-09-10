@@ -347,7 +347,7 @@ class reportsController extends Controller
                 'Civil_number' => $violation->Civil_number ?? '',
                 'military_number' => $violation->military_number ?? '',
                 'file_number' => $violation->file_num ?? '',
-                'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? '',
+                'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                 'violation_type' => $formattedViolationTypes,
                 'inspector_name' => $violation->user_id ? $violation->user->name : 'لا يوجد مفتش',
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
@@ -407,10 +407,11 @@ class reportsController extends Controller
                     }
 
                     $absenceReport[] = [
-                        'absence_day' => $absence->date,
+                        'abcence_day' => $absence->date,
                         'point_name' => $absence->point->name,
                         'point_time' => $pointTime,
                         'inspector_name' => $absence->inspector->name,
+                        'inspector_grade' => auth()->user()->grade_id ? auth()->user()->grade->name : '',
                         'team_name' => $teamName,
                         'total_number' => $absence->total_number,
                         'actual_number' => $absence->actual_number,
@@ -419,8 +420,7 @@ class reportsController extends Controller
                     ];
                 }
             }
-        }
-
+        } 
         $success = [
             'absences' => $absenceReport,
             'violations' => array_values($pointViolations),
