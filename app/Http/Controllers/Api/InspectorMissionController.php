@@ -35,35 +35,37 @@ class InspectorMissionController extends Controller
         $today = Carbon::today()->format('Y-m-d');
         // Retrieve the currently authenticated user
         $inspector = Inspector::where('user_id', Auth::id())->first();
-        // dd($inspectorId);
         $inspectorId = $inspector->id;
         $team_time = InspectorMission::whereDate('date', $today)
             ->where('inspector_id', $inspectorId)
-            ->with('workingTime')
+            ->with('workingTime')  // Assuming 'workingTime' is a valid relationship
             ->get();
 
         // Check if the collection has any items
-        if ($team_time->working_time_id->isNotEmpty()) {
-            // Assuming you want to access the first item
-            $startTimeofTeam = $team_time->first()->workingTime->start_time;
-            $endTimeofTeam = $team_time->first()->workingTime->start_time;
+        if ($team_time->isNotEmpty()) {
+            // Access the first item in the collection
+            $firstMission = $team_time->first();
 
-        }else{
+            // Check if the workingTime relationship is loaded and exists
+            if ($firstMission->workingTime) {
+                $startTimeofTeam = $firstMission->workingTime->start_time;
+                $endTimeofTeam = $firstMission->workingTime->end_time;
+            } else {
+                $startTimeofTeam = null;
+                $endTimeofTeam = null;
+            }
+        } else {
             $responseData = [
                 'date' => date('Y-m-d'),
                 'mission_count' => null,
-                'instant_mission_count' =>  null,
+                'instant_mission_count' => null,
                 'groupPointCount' => null,
                 'missions' => null,
-
                 'instant_missions' => null,
             ];
-            // $success['ViolationType'] = $missionData->map(function ($item) {
-            //     return $item->only(['id', 'name']);
-            // });
-            // return response()->json($missionData);
             return $this->respondSuccess($responseData, 'Get Data successfully.');
         }
+
         // else{
 
         // }
