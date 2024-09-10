@@ -310,7 +310,7 @@ class reportsController extends Controller
     
             $imageArray = explode(',', $violation->image);
             $imageCount = count($imageArray);
-            $formattedImages = $imageCount . ' صور ,' . ' [' . implode(', ', $imageArray) . ']';
+            $formattedImages = $imageCount . ' صور ,' . implode(', ', $imageArray);
     
             $pointName = $violation->point_id ? $violation->point->name : 'لا يوجد نقطه';
     
@@ -422,7 +422,29 @@ class reportsController extends Controller
     
         return $this->apiResponse(true, 'Data retrieved successfully.', $success, 200);
     }
-    
+    public function getAllstatistics(Request $request)
+    {
+        $today = Carbon::now();
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->where('flag', 0)->value('id');
+        if (!$inspectorId) {
+            return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
+        }
+        $mission = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_group_point')->flatten()
+            ->count();
+        $mission_instans = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_instant_mission')->flatten()
+            ->count();
+        $violation = Violation::where('user_id', auth()->user()->id)->whereDate('created_at', $today)->pluck('id')->flatten()->count();
+        $success = [
+            'mission_count' => $mission + $mission_instans ?? 0,
+            'violation_count' => $violation ?? 0,
+        ];
+        if ($success) {
+            return $this->apiResponse(true, 'Data get successfully.', $success, 200);
+        } else {
+
+            return $this->apiResponse(true, 'Data get successfully.', null, 200);
+        }
+    }
     public function getstatistics(Request $request)
     {
         $today = Carbon::now();
@@ -456,7 +478,7 @@ class reportsController extends Controller
         })->flatten()->count();
         $violations_bulding_count = Violation::where('user_id', auth()->user()->id)->where('flag', 0)->whereBetween('created_at', [$startOfMonth, $end])
             ->pluck('id')->flatten()->count();
-        $violation_Disciplined_behavior_count = Violation::where('user_idl', auth()->user()->id)->where('flag', 1)->whereBetween('created_at', [$startOfMonth, $end])
+        $violation_Disciplined_behavior_count = Violation::where('user_id', auth()->user()->id)->where('flag', 1)->whereBetween('created_at', [$startOfMonth, $end])
             ->pluck('id')->flatten()->count();
         // $point_ids = Grouppoint::whereIn('id', $mission)->pluck('points_ids')->flatten()->toArray();
         // $points_detail = Point::with(['pointDays'])->whereIn('id', $point_ids)->get();
