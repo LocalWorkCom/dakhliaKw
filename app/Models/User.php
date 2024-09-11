@@ -66,7 +66,7 @@ class User extends Authenticatable
     }
     public function hasPermission($permission)
     {
-        $userPermission = Rule::find(auth()->user()->rule_id);     
+        $userPermission = Rule::find(auth()->user()->rule_id);
         // dd($permission);
         // 1,2,3,4,5
         $permission_ids = explode(',', $userPermission->permission_ids);
@@ -82,7 +82,7 @@ class User extends Authenticatable
             return false;
         }
 
-        
+
     }
     public function createdViolations()
     {
@@ -108,7 +108,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(grade::class, 'grade_id'); // Assuming 'grade_id' is the foreign key
     }
-    
+
     // public function inspectors()
     // {
     //     return $this->belongsTo(grade::class, 'id'); // Assuming 'grade_id' is the foreign key
@@ -125,5 +125,9 @@ class User extends Authenticatable
     public function violations()
     {
         return $this->hasMany(Violation::class, 'user_id');
+    }
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 }

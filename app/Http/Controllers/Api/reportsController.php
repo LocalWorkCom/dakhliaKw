@@ -10,6 +10,7 @@ use App\Models\Grouppoint;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
 use App\Models\InspectorMission;
+use App\Models\Notification;
 use App\Models\Point;
 use App\Models\PointDays;
 use App\Models\Violation;
@@ -190,10 +191,9 @@ class reportsController extends Controller
             ];
         }
         $types = [
-
             [
                 'id' => 0,
-                'name' => 'مخالفه مبانى'
+                'name' => 'حضور و غياب'
             ],
             [
                 'id' => 1,
@@ -201,8 +201,10 @@ class reportsController extends Controller
             ],
             [
                 'id' => 2,
-                'name' => 'حضور و غياب'
+                'name' => 'مخالفه مبانى'
             ]
+
+
         ];
         $success['points'] = $response;
         $success['types'] = $types;
@@ -284,8 +286,11 @@ class reportsController extends Controller
             $violationQuery->whereIn('point_id', $pointIds);
         }
 
-        if ($type !== null) {
-            $violationQuery->where('flag', $type);
+        if ($type !== null && $type == 1)  {
+            $violationQuery->where('flag', operator: $type);
+        }elseif($type == 2){
+            $violationQuery->where('flag',0);
+
         }
 
         $violations = $violationQuery->orderBy('created_at', 'asc')->get();
@@ -330,7 +335,7 @@ class reportsController extends Controller
             }
             if (!isset($pointViolations[$pointName])) {
                 $pointViolations[$pointName] = [
-                    'date'=> $violation->created_at->format('Y-m-d'),
+                    'date' => $violation->created_at->format('Y-m-d'),
                     'point_id' => $violation->point_id,
                     'point_name' => $pointName,
                     'shift' => $shiftDetails,
@@ -368,7 +373,7 @@ class reportsController extends Controller
             $today = Carbon::parse($date)->toDateString();
             $index = Carbon::parse($date)->dayOfWeek;
 
-            if ($type === null || $type == 2) {
+            if ($type === null || $type == 0) {
                 $absencesQuery = Absence::where('inspector_id', $inspectorId)
                     ->whereDate('date', $today); // Use whereDate to filter by exact date
 
@@ -425,7 +430,7 @@ class reportsController extends Controller
                         'date' => $absence->date,
                         'point_name' => $absence->point->name,
                         'point_time' => $pointTime,
-                        'shift'=>$shiftDetails,
+                        'shift' => $shiftDetails,
                         'inspector_name' => $absence->inspector->name,
                         'inspector_grade' => auth()->user()->grade_id ? auth()->user()->grade->name : '',
                         'teamName' => $teamName,
@@ -452,13 +457,13 @@ class reportsController extends Controller
             return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
         }
         $mission = InspectorMission::selectRaw('SUM(JSON_LENGTH(ids_group_point)) as count')
-        ->where('inspector_id', $inspectorId)
-        ->whereDate('date', $today)
-        ->value('count');
+            ->where('inspector_id', $inspectorId)
+            ->whereDate('date', $today)
+            ->value('count');
         $mission_instans = InspectorMission::selectRaw('SUM(JSON_LENGTH(ids_instant_mission)) as count')
-        ->where('inspector_id', $inspectorId)
-        ->whereDate('date', $today)
-        ->value('count');
+            ->where('inspector_id', $inspectorId)
+            ->whereDate('date', $today)
+            ->value('count');
 
 
         $violation = Violation::where('user_id', auth()->user()->id)->whereDate('created_at', $today)->pluck('id')->flatten()->count();
@@ -528,7 +533,32 @@ class reportsController extends Controller
         return $this->apiResponse(true, 'Data retrieved successfully.', $success, 200);
     }
 
+    public function getNotifi(Request $request)
+    {
+        // Get today's date
+        $today = Carbon::now();
 
+        // Fetch notifications for the authenticated user, including related mission data
+        $notifies = Notification::with(['mission'])->where('user_id', auth()->user()->id)->get();
+
+        // Check if there are any notifications
+        if ($notifies->isNotEmpty()) {
+            // Extract only the required fields for each notification
+            $success['notifi'] = $notifies->map(function($notification) {
+                return [
+                    'message' => $notification->message,
+                    'user_id' => $notification->user_id,
+                    'mission_id' => $notification->mission_id,
+                    'status'=>$notification->status ==0 ?  false : true,
+                ];
+            });
+
+            return $this->respondSuccess($success, 'Data retrieved successfully.');
+        } else {
+            // Return a response if no notifications are found
+            return $this->apiResponse(true, 'No notifications found.', null, 200);
+        }
+    }
     protected function apiResponse($status, $message, $data, $code, $errorData = null)
     {
         $response = [

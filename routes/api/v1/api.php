@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\InspectorMissionController;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes 
+| API Routes
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
@@ -26,7 +26,7 @@ Route::post('/check_military_number', 'App\Http\Controllers\Api\UserController@c
 }); */
 
 Route::group(['middleware' => 'auth:api'], function () {
-  
+
 Route::any('/Violation_type', 'App\Http\Controllers\Api\ViolationController@get_Violation_type');
 Route::post('/add_Violation', 'App\Http\Controllers\Api\ViolationController@add_Violation');
 Route::any('/get_voilation_instantMission', 'App\Http\Controllers\Api\ViolationController@get_voilation_instantMission');
@@ -41,6 +41,7 @@ Route::any('/home/statistics', [reportsController::class, 'getAllstatistics']);
 Route::any('/statistics', [reportsController::class, 'getstatistics']);
 Route::any('/accept/abcense/report', [reportsController::class, 'changeStatus']);
 
+Route::any('/notification', [reportsController::class, 'getNotifi']);
 
 Route::post('/inspector/add/mission', [personalMissionController::class, 'addPersonalMission']);
 Route::get('/getAll/points', [personalMissionController::class, 'getAllPoints']);
