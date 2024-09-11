@@ -240,7 +240,7 @@ class InspectorMissionController extends Controller
 
         }else{ */
       //  dd($todayMission);
-      if( ($todayMission->workingTree)->isNotEmpty()){
+      if($todayMission->workingTree){
         $success['dayOff'] = 0;
         $success['name'] = $todayMission->workingTree->name;
         $success['workdays'] = $todayMission->workingTree->working_days_num;
