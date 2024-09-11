@@ -239,8 +239,8 @@ class InspectorMissionController extends Controller
             return $this->respondSuccess(json_decode('{"dayOff":1}'), 'يوم راحة لايوجد دوام');
 
         }else{ */
-      //  dd($todayMission);
-      if($todayMission->workingTree){
+      
+      if(!empty($todayMission->workingTree)){
         $success['dayOff'] = 0;
         $success['name'] = $todayMission->workingTree->name;
         $success['workdays'] = $todayMission->workingTree->working_days_num;
