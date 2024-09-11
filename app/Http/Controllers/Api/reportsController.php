@@ -307,13 +307,11 @@ class reportsController extends Controller
                     'name' => $type->name
                 ];
             })->toArray();
-            if($violation->image){
+            if ($violation->image) {
                 $imageArray = explode(',', $violation->image);
                 $formattedImages = implode(', ', $imageArray);
-
-            }else{
-                $formattedImages =null;
-
+            } else {
+                $formattedImages = null;
             }
 
             $pointName = $violation->point_id ? $violation->point->name : 'لا يوجد نقطه';
@@ -333,8 +331,8 @@ class reportsController extends Controller
             if (!isset($pointViolations[$pointName])) {
                 $pointViolations[$pointName] = [
                     'point_id' => $violation->point_id,
-                    'point_name'=>$pointName,
-                    'shift'=>$shiftDetails,
+                    'point_name' => $pointName,
+                    'shift' => $shiftDetails,
                     'violationsOfPoint' => []
                 ];
             }
@@ -343,7 +341,7 @@ class reportsController extends Controller
                 'id' => $violation->id,
                 'InspectorName' => $violation->user_id ? $violation->user->name : 'لا يوجد مفتش',
                 'Inspectorgrade' => $violation->user->grade->name ?? '',
-                'team_name'=>$teamName,
+                'team_name' => $teamName,
                 'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
                 'name' => $violation->name,
                 'Civil_number' => $violation->Civil_number ?? '',
@@ -437,10 +435,16 @@ class reportsController extends Controller
         if (!$inspectorId) {
             return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
         }
-        $mission = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_group_point')->flatten()
-            ->count();
-        $mission_instans = InspectorMission::where('inspector_id', $inspectorId)->whereDate('date', $today)->pluck('ids_instant_mission')->flatten()
-            ->count();
+        $mission = InspectorMission::selectRaw('SUM(JSON_LENGTH(ids_group_point)) as count')
+        ->where('inspector_id', $inspectorId)
+        ->whereDate('date', $today)
+        ->value('count');
+        $mission_instans = InspectorMission::selectRaw('SUM(JSON_LENGTH(ids_instant_mission)) as count')
+        ->where('inspector_id', $inspectorId)
+        ->whereDate('date', $today)
+        ->value('count');
+   
+
         $violation = Violation::where('user_id', auth()->user()->id)->whereDate('created_at', $today)->pluck('id')->flatten()->count();
         $success = [
             'mission_count' => $mission + $mission_instans ?? 0,
