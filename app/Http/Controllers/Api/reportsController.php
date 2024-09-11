@@ -353,7 +353,7 @@ class reportsController extends Controller
                 'violation_type' => $formattedViolationTypes,
                 'inspector_name' => $violation->user_id ? $violation->user->name : 'لا يوجد مفتش',
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
-                'images' => $formattedImages ? $formattedImages : null,
+                'image' => $formattedImages ? $formattedImages : null,
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
