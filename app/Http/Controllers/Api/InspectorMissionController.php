@@ -46,7 +46,6 @@ class InspectorMissionController extends Controller
             // Assuming you want to access the first item
             $startTimeofTeam = $team_time->first()->workingTime->start_time;
             $endTimeofTeam = $team_time->first()->workingTime->start_time;
-
         }
         // else{
 
@@ -61,8 +60,8 @@ class InspectorMissionController extends Controller
 
         $count = 0;
         $missionData = [];
-        $avilable=true;
-        $groupPointCount =0;
+        $avilable = true;
+        $groupPointCount = 0;
         $instantMissionData = [];
         foreach ($missions as $mission) {
             $idsGroupPoint = is_array($mission->ids_group_point) ? $mission->ids_group_point : explode(',', $mission->ids_group_point);
@@ -85,32 +84,33 @@ class InspectorMissionController extends Controller
 
                     foreach ($idsPoints as $pointId) {
                         $point = Point::with('government')->find($pointId);
-                       // dd($point);
+                        // dd($point);
                         if ($point->work_type == 1) {
                             $today = date('w');
                             $workTime = PointDays::where('point_id', $pointId)->where('name', $today)->first();
-                           //c  dd($workTime);
+                            //c  dd($workTime);
                             $startTime = Carbon::create(date('y-m-d') . ' ' . $workTime->from);
                             $endtTime = Carbon::create(date('y-m-d') . ' ' . $workTime->to);
                             $fromTime = $startTime->format('H:i');
                             $ToTime = $endtTime->format('H:i');
-                            $pointTime=[
-                                'startTime '=> $workTime->from,
+                            $pointTime = [
+                                'startTime ' => $workTime->from,
                                 'endTime ' => $workTime->to
                             ];
                             $inspectionTime = "من {$fromTime} " . ($workTime->from > 12 ? 'مساءا' : 'صباحا') . " الى {$ToTime} " . ($workTime->to > 12 ? 'مساءا' : 'صباحا');
                             $is_avilable = $this->isTimeAvailable($fromTime, $ToTime);
-                            if($is_avilable){
-                                $avilable= true;
-                            }else{
-                                $avilable= false;
+                            if ($is_avilable) {
+                                $avilable = true;
+                            } else {
+                                $avilable = false;
                             }
-                        } else {$pointTime = [
+                        } else {
+                            $pointTime = [
                                 'startTime' => '00:00',  // Full day start time
                                 'endTime' => '23:59'     // Full day end time
                             ];
                             $inspectionTime = 'طول اليوم'; // Handle cases where working time is not found
-                            $avilable= true;
+                            $avilable = true;
                         }
 
 
@@ -122,7 +122,7 @@ class InspectorMissionController extends Controller
                             'point_time' => $inspectionTime, // Assuming 'time' is the attribute for time
                             'point_shift' => $pointTime,
                             'point_location' => $point->google_map, // Assuming 'time' is the attribute for time
-                            'Point_availability'=>$avilable,
+                            'Point_availability' => $avilable,
                             'latitude' => $point->lat,
                             'longitude' => $point->long,
 
@@ -195,7 +195,7 @@ class InspectorMissionController extends Controller
             ];
         }
         */
-        if($missionData){
+        if ($missionData) {
             $responseData = [
                 'date' => date('Y-m-d'),
                 'mission_count' => $count,
@@ -205,7 +205,7 @@ class InspectorMissionController extends Controller
 
                 'instant_missions' => $instantMissionData,
             ];
-        }else{
+        } else {
             $responseData = [
                 'date' => date('Y-m-d'),
                 'mission_count' => 0,
@@ -239,22 +239,22 @@ class InspectorMissionController extends Controller
             return $this->respondSuccess(json_decode('{"dayOff":1}'), 'يوم راحة لايوجد دوام');
 
         }else{ */
-      
-      if(!empty($todayMission->workingTree)){
-        $success['dayOff'] = 0;
-        $success['name'] = $todayMission->workingTree->name;
-        $success['workdays'] = $todayMission->workingTree->working_days_num;
-        $success['holidaydays'] = $todayMission->workingTree->holiday_days_num;
-        $success['todayTimes_start'] = $todayMission->workingTime->start_time;
-        $success['todayTimes_end'] = $todayMission->workingTime->end_time;
-      }else{
-        $success['dayOff'] = 0;
-        $success['name'] = null;
-        $success['workdays'] = null;
-        $success['holidaydays'] = null;
-        $success['todayTimes_start'] =null;
-        $success['todayTimes_end'] = null;
-      }
+
+        if ($todayMission->day_off == 0) {
+            $success['dayOff'] = 0;
+            $success['name'] = $todayMission->workingTree->name;
+            $success['workdays'] = $todayMission->workingTree->working_days_num;
+            $success['holidaydays'] = $todayMission->workingTree->holiday_days_num;
+            $success['todayTimes_start'] = $todayMission->workingTime->start_time;
+            $success['todayTimes_end'] = $todayMission->workingTime->end_time;
+        } else {
+            $success['dayOff'] = 0;
+            $success['name'] = null;
+            $success['workdays'] = null;
+            $success['holidaydays'] = null;
+            $success['todayTimes_start'] = null;
+            $success['todayTimes_end'] = null;
+        }
 
 
         return $this->respondSuccess($success, 'بيانات اللازم اليوم');
