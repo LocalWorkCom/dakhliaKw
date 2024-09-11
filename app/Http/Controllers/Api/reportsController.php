@@ -390,12 +390,12 @@ class reportsController extends Controller
                     if ($time && $time->from && $time->to) {
                         $pointTime = "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا');
                     }
-                    $pointName = $violation->point_id ? $violation->point->name : 'لا يوجد نقطه';
+                    $pointName = $absence->point_id ? $absence->point->name : 'لا يوجد نقطه';
 
 
                     // Fetch point shift (work time)
-                    $pointShift = PointDays::where('point_id', $violation->point_id)
-                        ->where('name', Carbon::parse($violation->created_at)->dayOfWeek)
+                    $pointShift = PointDays::where('point_id', $absence->point_id)
+                        ->where('name', Carbon::parse($absence->created_at)->dayOfWeek)
                         ->first();
                     $shiftDetails =  [
                         'startTime' => '00:00',  // Full day start time
