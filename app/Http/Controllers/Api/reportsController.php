@@ -517,7 +517,7 @@ class reportsController extends Controller
         // Calculate the count of group points
         $groupPointsCount = InspectorMission::selectRaw('SUM(JSON_LENGTH(ids_group_point)) as count')
             ->where('inspector_id', $inspectorId)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$startOfMonth, $end])
+            ->whereBetween('date', [$startOfMonth, $end])
             ->whereNotNull('ids_group_point') // Ensure ids_group_point is not null
             ->whereRaw('JSON_LENGTH(ids_group_point) > 0') // Ensure JSON array is not empty
             ->value('count') ?? 0;
@@ -525,7 +525,7 @@ class reportsController extends Controller
         // Calculate the count of instant missions
         $instantMissionsCount = InspectorMission::selectRaw('SUM(JSON_LENGTH(ids_instant_mission)) as count')
             ->where('inspector_id', $inspectorId)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$startOfMonth, $end])
+            ->whereBetween('date', [$startOfMonth, $end])
             ->whereNotNull('ids_instant_mission') // Ensure ids_instant_mission is not null
             ->whereRaw('JSON_LENGTH(ids_instant_mission) > 0') // Ensure JSON array is not empty
             ->value('count') ?? 0;
