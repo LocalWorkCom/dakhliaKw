@@ -7,7 +7,8 @@ use App\Events\MissionCreated;
 use App\Models\InspectorMission;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\MissionAssignedNotification;
 class NotifyTeam
 {
     /**
@@ -79,6 +80,11 @@ class NotifyTeam
                 
             }
             // dd($flag);
+            $inspector_ids = explode(',', $team->inspector_ids);
+
+                // Send notification to the team
+                Notification::send($inspector_ids, new MissionAssignedNotification($event->mission));
+
             return $flag; 
         } else {
         
@@ -126,6 +132,9 @@ class NotifyTeam
             } else {
                 $flag = false;
             }
+            $inspectorId[] = $event->mission->inspector_id;
+            // Send notification to the team
+            Notification::send($inspectorId, new MissionAssignedNotification($event->mission));
 
             return $flag;
         }
@@ -134,7 +143,5 @@ class NotifyTeam
         // }
 
 
-        // Send notification to the team
-        // Notification::send($team->members, new MissionAssignedNotification($event->mission));
     }
 }
