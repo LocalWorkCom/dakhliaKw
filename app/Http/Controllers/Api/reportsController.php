@@ -192,17 +192,18 @@ class reportsController extends Controller
         }
         $types = [
             [
-                'id' => 0,
-                'name' => 'حضور و غياب'
-            ],
-            [
+                "id"=> 2,
+                "name"=> "حضور و غياب"
+            ],            [
                 'id' => 1,
-                'name' => 'مخالفه سلوك أنضباطى'
+                'name' => ' سلوك أنضباطى'
             ],
             [
-                'id' => 2,
-                'name' => 'مخالفه مبانى'
-            ]
+                "id"=> 0,
+                "name"=>" مبانى",
+            ],
+
+
 
 
         ];
@@ -226,14 +227,6 @@ class reportsController extends Controller
             'point_id' => [
                 'nullable',
                 'array',
-                function ($attribute, $value, $fail) {
-                    foreach ($value as $id) {
-                        $exists = Grouppoint::whereJsonContains('points_ids', (string) $id)->exists();
-                        if (!$exists) {
-                            $fail('عفوا هذه النقطه غير متاحه');
-                        }
-                    }
-                },
             ],
             'point_id.*' => ['nullable', 'integer'],
             'date' => ['nullable', 'array'],
@@ -272,25 +265,31 @@ class reportsController extends Controller
         $violationQuery = Violation::with(['user', 'point', 'violatType'])
             ->where('user_id', auth()->user()->id);
 
-        if (!empty($dates)) {
-            $violationQuery->where(function ($query) use ($dates) {
-                foreach ($dates as $date) {
-                    $startOfDay = Carbon::parse($date)->startOfDay();
-                    $endOfDay = Carbon::parse($date)->addDay()->endOfDay();
-                    $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
-                }
-            });
-        }
+            if (!empty($dates) && count($dates) != 1) {
+                $violationQuery->where(function ($query) use ($dates) {
+                    foreach ($dates as $date) {
+                        $startOfDay = Carbon::parse($date)->startOfDay();
+                        $endOfDay = Carbon::parse($date)->endOfDay();
+                        $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
+                    }
+                });
+            } else {
+                $violationQuery->where(function ($query) use ($dates) {
+                    foreach ($dates as $date) {
+                        $startOfDay = Carbon::parse($date)->startOfDay();
+                        $endOfDay = Carbon::parse($date)->endOfDay();
+                        $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
+                    }
+                });
+            }
+
 
         if (!empty($pointIds)) {
             $violationQuery->whereIn('point_id', $pointIds);
         }
 
-        if ($type !== null && $type == 1)  {
+        if ($type !== null)  {
             $violationQuery->where('flag', operator: $type);
-        }elseif($type == 2){
-            $violationQuery->where('flag',0);
-
         }
 
         $violations = $violationQuery->orderBy('created_at', 'asc')->get();
@@ -339,7 +338,7 @@ class reportsController extends Controller
                     'point_id' => $violation->point_id,
                     'point_name' => $pointName,
                     'shift' => $shiftDetails,
-                    'teamName' => $teamName,
+                    'team_name' => $teamName,
                     'violationsOfPoint' => []
                 ];
             }
@@ -373,7 +372,7 @@ class reportsController extends Controller
             $today = Carbon::parse($date)->toDateString();
             $index = Carbon::parse($date)->dayOfWeek;
 
-            if ($type === null || $type == 0) {
+            if ($type === null || $type == 2) {
                 $absencesQuery = Absence::where('inspector_id', $inspectorId)
                     ->whereDate('date', $today); // Use whereDate to filter by exact date
 
@@ -433,7 +432,7 @@ class reportsController extends Controller
                         'shift' => $shiftDetails,
                         'inspector_name' => $absence->inspector->name,
                         'inspector_grade' => auth()->user()->grade_id ? auth()->user()->grade->name : '',
-                        'teamName' => $teamName,
+                        'team_name' => $teamName,
                         'total_number' => $absence->total_number,
                         'actual_number' => $absence->actual_number,
                         'disability' => $absence->total_number - $absence->actual_number,
