@@ -19,7 +19,10 @@ class instantmission extends Model
     {
         return $this->belongsTo(GroupTeam::class,'group_team_id');
     }
-
+    public function violations()
+    {
+        return $this->hasMany(Violation::class);
+    }
     protected static function booted()
 {
     static::created(function ($mission) {

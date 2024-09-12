@@ -432,7 +432,7 @@ class ViolationController  extends Controller
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'flag_instantmission' => $violation->flag_instantmission,
-                'violation_mode' => $violation->military_number ? "1" : "2",
+                'violation_mode' => $violation->flag ? "0" : "1",
             ];
         });
 
