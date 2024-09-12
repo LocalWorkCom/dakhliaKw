@@ -6,14 +6,15 @@ use App\Models\Groups;
 use App\Models\Sector;
 use App\Models\Country;
 use App\Models\Io_file;
+use App\Models\Inspector;
 use App\Models\Government;
 use App\Models\departements;
 use App\Models\VacationType;
 use App\Models\EmployeeVacation;
 use App\Models\GroupSectorHistory;
-use App\Models\InspectorGroupHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use App\Models\InspectorGroupHistory;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -420,3 +421,38 @@ function addGroupHistory($group_id, $sector_id)
     $group_sector->date = $today;
     $group_sector->save();
 }
+function getTokenDevice($inspector_id)
+{
+   $user_id=Inspector::find($inspector_id)->user_id;
+   $device_token=User::find($user_id)->device_token;
+   return $device_token;
+}
+if (!function_exists('send_push_notification')) {
+    function send_push_notification($mission_id,$token,$title,$message){
+        $serverkey = 'AAAAFN778j8:APA91bFt1GglZf07Po-5ccwa8tYHuaIz0ymvDZCeDKJ2bxpaNrj2eM1TbON3_EdkhjkcH9IhKsaTOUv0mHSXHWQ-O2t61J6OwgoBmzoftKS-1uKBzTmwlGs0kkGClVYcP0TTXtFArxIT';// this is a Firebase server key 
+        // device_token
+            $data = array(
+                'to' => $token,
+                'notification' => 
+                        array(
+                        'body' => $message,
+                        'title' => $title),
+                        "data"=> array(
+                                "mission_id"=> $mission_id,
+                                // "mode"=>"rate",
+                                "title"=>$title
+                            
+                            )
+                        );
+       
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,"https://fcm.googleapis.com/fcm/send");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($data));  //Post Fields
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Authorization: key='.$serverkey));
+        $output = curl_exec ($ch);
+        $result=json_decode($output);
+        curl_close ($ch);
+    }
+} 
