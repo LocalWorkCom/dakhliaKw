@@ -179,7 +179,7 @@ class reportsController extends Controller
             ->group
             ->sector_id;
         // Retrieve the points associated with the sector
-        $sectorPoints = Grouppoint::where('sector_id', $sector)->where('deleted', 0)
+        $sectorPoints = Point::where('sector_id', $sector)
             ->select('id', 'name')
             ->get()
             ->toArray();
@@ -192,15 +192,16 @@ class reportsController extends Controller
         }
         $types = [
             [
-                "id"=> 2,
-                "name"=> "حضور و غياب"
-            ],            [
+                "id" => 2,
+                "name" => "حضور و غياب"
+            ],
+            [
                 'id' => 1,
                 'name' => ' سلوك أنضباطى'
             ],
             [
-                "id"=> 0,
-                "name"=>" مبانى",
+                "id" => 0,
+                "name" => " مبانى",
             ],
 
 
@@ -265,30 +266,30 @@ class reportsController extends Controller
         $violationQuery = Violation::with(['user', 'point', 'violatType'])
             ->where('user_id', auth()->user()->id);
 
-            if (!empty($dates) && count($dates) != 1) {
-                $violationQuery->where(function ($query) use ($dates) {
-                    foreach ($dates as $date) {
-                        $startOfDay = Carbon::parse($date)->startOfDay();
-                        $endOfDay = Carbon::parse($date)->endOfDay();
-                        $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
-                    }
-                });
-            } else {
-                $violationQuery->where(function ($query) use ($dates) {
-                    foreach ($dates as $date) {
-                        $startOfDay = Carbon::parse($date)->startOfDay();
-                        $endOfDay = Carbon::parse($date)->endOfDay();
-                        $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
-                    }
-                });
-            }
+        if (!empty($dates) && count($dates) != 1) {
+            $violationQuery->where(function ($query) use ($dates) {
+                foreach ($dates as $date) {
+                    $startOfDay = Carbon::parse($date)->startOfDay();
+                    $endOfDay = Carbon::parse($date)->endOfDay();
+                    $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
+                }
+            });
+        } else {
+            $violationQuery->where(function ($query) use ($dates) {
+                foreach ($dates as $date) {
+                    $startOfDay = Carbon::parse($date)->startOfDay();
+                    $endOfDay = Carbon::parse($date)->endOfDay();
+                    $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
+                }
+            });
+        }
 
 
         if (!empty($pointIds)) {
             $violationQuery->whereIn('point_id', $pointIds);
         }
 
-        if ($type !== null)  {
+        if ($type !== null) {
             $violationQuery->where('flag', operator: $type);
         }
 
@@ -318,6 +319,7 @@ class reportsController extends Controller
                 $formattedImages = null;
             }
 
+
             $pointName = $violation->point_id ? $violation->point->name : 'لا يوجد نقطه';
 
 
@@ -325,16 +327,37 @@ class reportsController extends Controller
             $pointShift = PointDays::where('point_id', $violation->point_id)
                 ->where('name', Carbon::parse($violation->created_at)->dayOfWeek)
                 ->first();
-            $shiftDetails =  [
-                'startTime' => '00:00',  // Full day start time
-                'endTime' => '23:59'     // Full day end time
-            ]; // Default if no specific shift
-            if ($pointShift && $pointShift->from && $pointShift->to) {
-                $shiftDetails = $pointShift->only(['from', 'to']);
+
+            if ($violation->point_id) {
+                // Default shift details (full day)
+                $shiftDetails = [
+                    'startTime' => '00:00',  // Full day start time
+                    'endTime' => '23:59',
+                    'time' => null
+                ];
+
+                // Override with actual shift if available
+                if ($pointShift && $pointShift->from && $pointShift->to) {
+                    $shiftDetails = [
+                        'startTime' => $pointShift->from,
+                        'endTime' => $pointShift->to,
+                        'time' => null // As per requirement
+                    ];
+                }
+            } else {
+                // No point_id, setting time based on violation's created_at
+                $shiftDetails = [
+                    'startTime' => null,
+                    'endTime' => null,
+                    'time' => $violation->created_at->format('H') // Hour in 24-hour format
+                ];
             }
+
+
             if (!isset($pointViolations[$pointName])) {
                 $pointViolations[$pointName] = [
                     'date' => $violation->created_at->format('Y-m-d'),
+                    'is_instansmission' => $violation->point_id ? false : true,
                     'point_id' => $violation->point_id,
                     'point_name' => $pointName,
                     'shift' => $shiftDetails,
@@ -543,12 +566,12 @@ class reportsController extends Controller
         // Check if there are any notifications
         if ($notifies->isNotEmpty()) {
             // Extract only the required fields for each notification
-            $success['notifi'] = $notifies->map(function($notification) {
+            $success['notifi'] = $notifies->map(function ($notification) {
                 return [
                     'message' => $notification->message,
                     'user_id' => $notification->user_id,
                     'mission_id' => $notification->mission_id,
-                    'status'=>$notification->status ==0 ?  false : true,
+                    'status' => $notification->status == 0 ?  false : true,
                 ];
             });
 
