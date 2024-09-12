@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 class Inspector extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory , SoftDeletes, Notifiable;
 
     protected $table = 'inspectors';
 
@@ -31,5 +32,10 @@ class Inspector extends Model
     public function absences()
     {
         return $this->hasMany(Absence::class, 'inspector_id');
+    }
+    public function routeNotificationForMail()
+    {
+        // Assuming 'email' is the attribute that stores the inspector's email address
+        return $this->email;
     }
 }
