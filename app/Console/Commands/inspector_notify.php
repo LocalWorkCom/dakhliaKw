@@ -2,13 +2,14 @@
 
 namespace App\Console\Commands;
 
+use DB;
 use App\Models\Inspector;
-use App\Models\EmployeeVacation;
-use App\Models\InspectorMission;
-use App\Models\Team; // Assuming you have a Team model
-use App\Notifications\InspectorMissionNotification;
+use App\Models\instantmission;
 use Illuminate\Console\Command;
+use App\Models\InspectorMission;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\MissionAssignedNotification;
 
 class inspector_notify extends Command
 {
@@ -29,47 +30,103 @@ class inspector_notify extends Command
     /**
      * Execute the console command.
      */
+
+    // public function handle()
+    // {
+    //     $today = date('Y-m-d');
+
+    //     // Fetch all Inspectors
+    //     $inspectors = Inspector::all();
+
+    //     foreach ($inspectors as $inspector) {
+    //         // Check if inspector has ids_instant_mission for today and day_off is 0
+    //         $mission = InspectorMission::where('inspector_id', $inspector->id)
+    //             ->whereDate('date', $today)
+    //             ->where('day_off', 0)
+    //             ->whereNotNull('ids_instant_mission')
+    //             ->first();
+
+    //         // Send notification only if no team members have a day off
+
+    //         if ($mission) {
+
+    //             // Check if ids_instant_mission is an array or JSON string
+    //             $instantMissionIds = is_string($mission->ids_instant_mission)
+    //                 ? json_decode($mission->ids_instant_mission, true)
+    //                 : $mission->ids_instant_mission;
+
+    //             if (is_array($instantMissionIds)) {
+    //                 foreach ($instantMissionIds as $instantMissionId) {
+    //                     $instantMission = instantmission::find($instantMissionId);
+    //                     if ($mission->day_off == 0) {
+    //                         $inspectorId[] = $inspector->id;
+    //                         // Send notification
+    //                         Notification::send($inspectorId, new MissionAssignedNotification($instantMission));
+    //                     }
+
+    //                     // Log details before inserting
+    //                     Log::info('Inserting notification', [
+    //                         'user_id' => $inspector->id,
+    //                         'mission_id' => $instantMissionId
+    //                     ]);
+
+    //                     // Insert into notifications table
+    //                     DB::table('notifications')->insert([
+    //                         'user_id' => $inspector->id,
+    //                         'mission_id' => $instantMissionId,
+    //                         'message' => 'A new mission has been assigned to your team.',
+    //                         'created_at' => now(),
+    //                         'updated_at' => now(),
+    //                     ]);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     public function handle()
     {
         $today = date('Y-m-d');
 
-        $EmployeeVacations = EmployeeVacation::all();
-        foreach ($EmployeeVacations as $EmployeeeVacation) {
+        // Fetch all Inspectors
+        $inspectors = Inspector::all();
 
-            $expectedEndDate = ExpectedEndDate($EmployeeeVacation)[0];
+        foreach ($inspectors as $inspector) {
+            // Check if inspector has ids_instant_mission for today and day_off is 0
+            $mission = InspectorMission::where('inspector_id', $inspector->id)
+                ->whereDate('date', $today)
+                ->where('day_off', 0)
+                ->whereNotNull('ids_instant_mission')
+                ->first();
 
-            if ($EmployeeeVacation->status == 'Approved') {
+            // Send notification only if no team members have a day off
+            if ($mission) {
+                // Check if ids_instant_mission is an array or JSON string
+                $instantMissionIds = is_string($mission->ids_instant_mission)
+                    ? json_decode($mission->ids_instant_mission, true)
+                    : $mission->ids_instant_mission;
 
-                if ($EmployeeeVacation->start_date < $today && $expectedEndDate < $today && (!$EmployeeeVacation->end_date || $EmployeeeVacation->end_date > $today)) {
-                    $EmployeeeVacation->is_exceeded = 1;
-                    $EmployeeeVacation->save();
-                    $inspector = Inspector::where('user_id', $EmployeeeVacation->employee_id)->first();
+                if (is_array($instantMissionIds)) {
+                    foreach ($instantMissionIds as $instantMissionId) {
+                        $instantMission = InstantMission::find($instantMissionId);
 
-                    if ($inspector) {
-                        // Fetch InspectorMission records for the found inspector ID
-                        $inspectorMissions = InspectorMission::where('inspector_id', $inspector->id)
-                            ->whereDate('date', '=', $today)
-                            ->get();
+                        if ($mission->day_off == 0) {
+                            // Send notification to the Inspector object
+                            Notification::send($inspector, new MissionAssignedNotification($instantMission));
 
-                        foreach ($inspectorMissions as $inspectorMission) {
-                            // Update the InspectorMission record with the vacation ID
-                            $inspectorMission->vacation_id = $EmployeeeVacation->id;
-                            $inspectorMission->save();
+                            // Log details before inserting
+                            Log::info('Inserting notification', [
+                                'user_id' => $inspector->user_id,
+                                'mission_id' => $instantMissionId
+                            ]);
 
-                            // Check if the inspector's team members are not on a day off
-                            $team = $inspector->team; // Assuming there is a relationship to the team
-                            if ($team) {
-                                // Fetch team members and check their day off status
-                                $teamMembers = $team->members; // Assuming 'members' is the relationship method
-                                $teamMembersWithDayOff = $teamMembers->whereHas('inspectorMissions', function ($query) use ($today) {
-                                    $query->whereDate('date', $today)->where('day_off', 1);
-                                });
-
-                                // Send notification only if no team members have day off
-                                if ($teamMembersWithDayOff->isEmpty()) {
-                                    Notification::send($team, new InspectorMissionNotification($inspectorMission));
-                                }
-                            }
+                            // Insert into notifications table
+                            DB::table('notifications')->insert([
+                                'user_id' => $inspector->user_id,
+                                'mission_id' => $instantMissionId,
+                                'message' => 'A new mission has been assigned to your team.',
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
                         }
                     }
                 }

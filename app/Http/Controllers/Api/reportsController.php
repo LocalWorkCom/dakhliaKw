@@ -331,7 +331,7 @@ class reportsController extends Controller
             if ($violation->point_id) {
 
                 $shiftDetails = [
-                    'start_time' => '00:00', 
+                    'start_time' => '00:00',
                     'end_time' => '23:59',
                     'time' => null
                 ];
@@ -431,7 +431,11 @@ class reportsController extends Controller
                         'end_time' => '23:59'     // Full day end time
                     ]; // Default if no specific shift
                     if ($pointShift && $pointShift->from && $pointShift->to) {
-                        $shiftDetails = $pointShift->only(['from', 'to']);
+                        $shiftDetails = [
+                            'start_time' => $pointShift->from,
+                            'end_time' => $pointShift->to,
+                            'time' => null // As per requirement
+                        ];
                     }
                     $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
                         ->where('absences_id', $absence->id)
