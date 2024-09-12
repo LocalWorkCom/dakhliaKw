@@ -22,6 +22,6 @@ class Violation extends Model
     }
     public function instantMission()
     {
-        return $this->belongsTo(InstantMission::class , 'mission_id');
+        return $this->belongsTo(instantmission::class , 'mission_id');
     }
 }
