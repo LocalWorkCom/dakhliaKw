@@ -20,4 +20,8 @@ class Violation extends Model
     {
         return $this->belongsTo(ViolationTypes::class, 'violation_type');
     }
+    public function instantMission()
+    {
+        return $this->belongsTo(InstantMission::class , 'mission_id');
+    }
 }
