@@ -107,11 +107,10 @@ class inspector_notify extends Command
 
                 if (is_array($instantMissionIds)) {
                     foreach ($instantMissionIds as $instantMissionId) {
-                        $instantMission = InstantMission::find($instantMissionId);
-
+                        $token = getTokenDevice($inspector->id);
                         if ($mission->day_off == 0) {
                             // Send notification to the Inspector object
-                            Notification::send($inspector, new MissionAssignedNotification($instantMission));
+                           send_push_notification($instantMissionId,$token,'new mission.','A new mission has been assigned to your team.');
 
                             // Log details before inserting
                             Log::info('Inserting notification', [
@@ -123,6 +122,7 @@ class inspector_notify extends Command
                             DB::table('notifications')->insert([
                                 'user_id' => $inspector->user_id,
                                 'mission_id' => $instantMissionId,
+                                'title' => 'new mission.',
                                 'message' => 'A new mission has been assigned to your team.',
                                 'created_at' => now(),
                                 'updated_at' => now(),

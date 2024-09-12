@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\MissionAssignedNotification;
+
 class NotifyTeam
 {
     /**
@@ -26,23 +27,23 @@ class NotifyTeam
     {
         $mission = $event->mission;
         $team = $event->mission->groupTeam;
-      
+
         if ($event->mission->inspector_id == null) {
             $inspector_ids = explode(',', $team->inspector_ids);
             // dd($team->inspector_ids);
-            $flag= false;
+            $flag = false;
             foreach ($inspector_ids as $item) {
-                
+
                 $query = InspectorMission::where('date', $event->mission->date)
-                ->where('inspector_id', $item)
-                ->first();
+                    ->where('inspector_id', $item)
+                    ->first();
 
                 if ($query) {
                     // Ensure ids_instant_mission is not null
-    
+
                     // dd($existingIdsArray);
                     if (!empty($query->ids_instant_mission)) {
-    
+
                         // Decode the JSON string to a PHP array
                         $array = $query->ids_instant_mission;
                         $existingIdsArray = $query->ids_instant_mission;
@@ -65,34 +66,32 @@ class NotifyTeam
                             $query->ids_instant_mission = json_decode($jsonString);
                         }
                     }
-    
+
                     // Save the updated record
                     $query->save();
                     // dd($query);
                     $flag = true;
                 } else {
-                    $flag= false;
+                    $flag = false;
                 }
-
-               
-                
-               
-                
             }
             // dd($flag);
             $inspector_ids = explode(',', $team->inspector_ids);
+            // Send notification to the team
+            // Notification::send($inspector_ids, new MissionAssignedNotification($event->mission));
+            foreach ($inspector_ids as $inspector) {
+                $token = getTokenDevice($inspector);
+                send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
+            }
 
-                // Send notification to the team
-                Notification::send($inspector_ids, new MissionAssignedNotification($event->mission));
-
-            return $flag; 
+            return $flag;
         } else {
-        
+
 
             $query = InspectorMission::where('date', $event->mission->date)
                 ->where('inspector_id', $event->mission->inspector_id)
                 ->first();
-           
+
             if ($query) {
                 // Ensure ids_instant_mission is not null
 
@@ -101,7 +100,7 @@ class NotifyTeam
 
                     // Decode the JSON string to a PHP array
                     $array = $query->ids_instant_mission;
-                  //  dd($array);
+                    //  dd($array);
                     $existingIdsArray = $query->ids_instant_mission;
                     $array[] = json_encode($mission->id);
                     // Check if the mission ID is already in the array to avoid duplicates
@@ -112,7 +111,7 @@ class NotifyTeam
                     }
                 } else {
                     $existingIdsArray = $query->ids_instant_mission ? json_decode($query->ids_instant_mission, true) : [];
-                    
+
 
                     // Check if the mission ID is already in the array to avoid duplicates
                     if (!in_array($mission->id, $existingIdsArray)) {
@@ -120,28 +119,25 @@ class NotifyTeam
                         $stringArray = array_map('strval', $existingIdsArray);
                         // Convert the updated array to JSON
                         $jsonString = json_encode($stringArray);
-                     
+
                         // Encode the array back to JSON and save it
                         $query->ids_instant_mission = json_decode($jsonString);
                     }
                 }
-             
+
                 // Save the updated record
                 $query->save();
                 $flag = true;
             } else {
                 $flag = false;
             }
-            $inspectorId[] = $event->mission->inspector_id;
             // Send notification to the team
-            Notification::send($inspectorId, new MissionAssignedNotification($event->mission));
+            $token = getTokenDevice($event->mission->inspector_id);
+
+            send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
 
             return $flag;
         }
-
-
-        // }
-
 
     }
 }
