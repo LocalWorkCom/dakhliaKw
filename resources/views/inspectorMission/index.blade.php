@@ -150,12 +150,12 @@
                                                                         @foreach ($inspector['points'][$index2] as $index3 => $point)
                                                                             <li class="change-place"
                                                                                 id="point-{{ $point->id }}"
-                                                                                draggable="true">{{ $point->name }}</li>
+                                                                                draggable="true">{{ $point->name }}<hr /></li>
                                                                             <!-- Display points with draggable feature -->
                                                                         @endforeach
                                                                     @endif
                                                                     @if (
-                                                                        !$mission->day_off &&
+                                                                        // !$mission->day_off &&
                                                                             isset($inspector['instant_missions'][$index2]) &&
                                                                             count($inspector['instant_missions'][$index2]) > 0)
                                                                         @foreach ($inspector['instant_missions'][$index2] as $instant_mission)
