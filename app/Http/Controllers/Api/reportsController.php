@@ -566,6 +566,7 @@ class reportsController extends Controller
             // Extract only the required fields for each notification
             $success['notifi'] = $notifies->map(function ($notification) {
                 return [
+                    'date'=>$notification->created_at->format('Y-m-d'),
                     'message' => $notification->message,
                     'user_id' => $notification->user_id,
                     'mission_id' => $notification->mission_id,
