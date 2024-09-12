@@ -329,10 +329,10 @@ class reportsController extends Controller
                 ->first();
 
             if ($violation->point_id) {
-                // Default shift details (full day)
+
                 $shiftDetails = [
-                    'startTime' => '00:00',  // Full day start time
-                    'endTime' => '23:59',
+                    'start_time' => '00:00', 
+                    'end_time' => '23:59',
                     'time' => null
                 ];
 
