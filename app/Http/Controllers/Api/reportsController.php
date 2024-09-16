@@ -448,9 +448,10 @@ class reportsController extends Controller
                             'employee_military_number' => $employeeAbsence->military_number ?? null,
                             'employee_type_absence' => $employeeAbsence->absenceType->name ?? null,
                             'type_employee' => $employeeAbsence->typeEmployee->name ?? null,
-                            'employee_civil_number' => $employeeAbsence->absenceType->name ?? null,
+                            'employee_civil_number' => $employeeAbsence->civil_number ?? null,
                             'employee_file_number' => $employeeAbsence->file_num ?? null,
                         ];
+
                     }
 
                     $absenceReport[] = [

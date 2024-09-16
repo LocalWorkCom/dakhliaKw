@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Models\Inspector;
 use App\Models\instantmission;
 use Illuminate\Console\Command;
