@@ -4,11 +4,13 @@ namespace App\Listeners;
 
 use Carbon\Carbon;
 use App\Events\MissionCreated;
+use App\Models\Inspector;
 use App\Models\InspectorMission;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\MissionAssignedNotification;
+use Illuminate\Support\Facades\DB;
 
 class NotifyTeam
 {
@@ -82,6 +84,16 @@ class NotifyTeam
             foreach ($inspector_ids as $inspector) {
                 $token = getTokenDevice($inspector);
                 send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
+
+                $user_id = Inspector::find($inspector)->user_id;
+                DB::table('notifications')->insert([
+                    'user_id' => $user_id,
+                    'mission_id' => $event->mission->id,
+                    'title' => 'new mission.',
+                    'message' => 'A new mission has been assigned to your team.',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
 
             return $flag;
@@ -135,9 +147,17 @@ class NotifyTeam
             $token = getTokenDevice($event->mission->inspector_id);
 
             send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
+            $user_id = Inspector::find($event->mission->inspector_id)->user_id;
 
+            DB::table('notifications')->insert([
+                'user_id' => $user_id,
+                'mission_id' => $event->mission->id,
+                'title' => 'new mission.',
+                'message' => 'A new mission has been assigned to your team.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
             return $flag;
         }
-
     }
 }
