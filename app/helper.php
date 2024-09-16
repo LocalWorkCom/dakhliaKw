@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\InspectorGroupHistory;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+use Google\Client as GoogleClient;
 
 
 if (!function_exists('whats_send')) {
@@ -428,7 +429,7 @@ function getTokenDevice($inspector_id)
    return $device_token;
 }
 if (!function_exists('send_push_notification')) {
-    function send_push_notification($mission_id,$token,$title,$message){
+    /* function send_push_notification($mission_id,$token,$title,$message){
         $serverkey = 'AAAAFN778j8:APA91bFt1GglZf07Po-5ccwa8tYHuaIz0ymvDZCeDKJ2bxpaNrj2eM1TbON3_EdkhjkcH9IhKsaTOUv0mHSXHWQ-O2t61J6OwgoBmzoftKS-1uKBzTmwlGs0kkGClVYcP0TTXtFArxIT';// this is a Firebase server key 
         // device_token
             $data = array(
@@ -454,5 +455,45 @@ if (!function_exists('send_push_notification')) {
         $output = curl_exec ($ch);
         $result=json_decode($output);
         curl_close ($ch);
+    } */
+    function send_push_notification($mission_id,$token,$title,$message){
+        $projectId = "taftesh-74633";//config('services.fcm.project_id'); # INSERT COPIED PROJECT ID
+
+        $credentialsFilePath = Storage::path('app/json/file.json');
+        $client = new GoogleClient();
+        $client->setAuthConfig($credentialsFilePath);
+        $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+        $client->refreshTokenWithAssertion();
+        $token = $client->getAccessToken();
+
+        $access_token = $token['access_token'];
+
+        $headers = [
+            "Authorization: Bearer $access_token",
+            'Content-Type: application/json'
+        ];
+
+        $data = [
+            "message" => [
+                "token" => $token,
+                "notification" => [
+                    "title" => $title,
+                    "body" => $message,
+                ],
+            ]
+        ];
+        $payload = json_encode($data);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/v1/projects/{$projectId}/messages:send");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_VERBOSE, true); // Enable verbose output for debugging
+        $response = curl_exec($ch);
+        $err = curl_error($ch);
+        curl_close($ch);
     }
 } 
