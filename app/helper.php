@@ -459,7 +459,7 @@ if (!function_exists('send_push_notification')) {
     function send_push_notification($mission_id,$token,$title,$message){
         $projectId = "taftesh-74633";//config('services.fcm.project_id'); # INSERT COPIED PROJECT ID
 
-        $credentialsFilePath = Storage::path('app/json/file.json');
+        $credentialsFilePath = Storage::path('json/file.json');
         $client = new GoogleClient();
         $client->setAuthConfig($credentialsFilePath);
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
