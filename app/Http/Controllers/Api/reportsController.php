@@ -258,12 +258,13 @@ class reportsController extends Controller
         $type = $request->input('type_id');
 
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
+
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
 
         $absenceReport = [];
         $pointViolations = [];
 
-        $violationQuery = Violation::with(['user', 'point', 'violatType','instantMission'])
+        $violationQuery = Violation::with(['user', 'point', 'violatType', 'instantMission'])
             ->where('user_id', auth()->user()->id);
 
         if (!empty($dates) && count($dates) != 1) {
@@ -349,7 +350,7 @@ class reportsController extends Controller
                 $shiftDetails = [
                     'start_time' => null,
                     'end_time' => null,
-                    'time' =>date("g:i:s A", strtotime($violation->created_at))// Hour in 24-hour format
+                    'time' => date("g:i:s A", strtotime($violation->created_at)) // Hour in 24-hour format
                 ];
             }
 
@@ -358,8 +359,8 @@ class reportsController extends Controller
                 $pointViolations[$pointName] = [
                     'date' => $violation->created_at->format('Y-m-d'),
                     'is_instansmission' => $violation->point_id ? false : true,
-                    'MissionName '=>$violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
-                    'description'=>$violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
+                    'MissionName ' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
+                    'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
                     'point_id' => $violation->point_id,
                     'point_name' => $pointName,
                     'shift' => $shiftDetails,
@@ -421,22 +422,27 @@ class reportsController extends Controller
                     }
                     $pointName = $absence->point_id ? $absence->point->name : null;
 
-
-                    // Fetch point shift (work time)
-                    $pointShift = PointDays::where('point_id', $absence->point_id)
-                        ->where('name', Carbon::parse($absence->created_at)->dayOfWeek)
-                        ->first();
-                    $shiftDetails =  [
-                        'start_time' => '00:00',  // Full day start time
-                        'end_time' => '23:59'     // Full day end time
-                    ]; // Default if no specific shift
-                    if ($pointShift && $pointShift->from && $pointShift->to) {
-                        $shiftDetails = [
-                            'start_time' => $pointShift->from,
-                            'end_time' => $pointShift->to,
-                            'time' => null // As per requirement
-                        ];
-                    }
+                    $team_time = InspectorMission::whereDate('date', $today)
+                    ->where('inspector_id', $inspectorId)
+                    ->with('workingTime')
+                    ->get();
+                // Check if the collection has any items
+                if ($team_time->isNotEmpty() && $team_time->first()->day_off != 1) {
+                    // Assuming you want to access the first item
+                    $startTimeofTeam = $team_time->first()->workingTime->start_time;
+                    $endTimeofTeam = $team_time->first()->workingTime->start_time;
+                    $shiftDetails = [
+                        'start_time' => $startTimeofTeam,
+                        'end_time' => $endTimeofTeam,
+                        'time' => null
+                    ];
+                }else{
+                    $shiftDetails = [
+                        'start_time' => null,
+                        'end_time' => null,
+                        'time' => null
+                    ];
+                }
                     $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
                         ->where('absences_id', $absence->id)
                         ->get();
@@ -451,7 +457,6 @@ class reportsController extends Controller
                             'employee_civil_number' => $employeeAbsence->civil_number ?? null,
                             'employee_file_number' => $employeeAbsence->file_num ?? null,
                         ];
-
                     }
 
                     $absenceReport[] = [
@@ -547,9 +552,9 @@ class reportsController extends Controller
 
         // Calculate the count of disciplined behavior violations
         $violation_Disciplined_behavior_count = Violation::where('user_id', auth()->user()->id)
-        ->where('flag', 1)
-        ->whereBetween(DB::raw('DATE(created_at)'), [$startOfMonth, $end])
-        ->count();
+            ->where('flag', 1)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$startOfMonth, $end])
+            ->count();
         // Prepare the success response
         $success = [
             'mission_count' => $groupPointsCount + $instantMissionsCount,
@@ -562,18 +567,17 @@ class reportsController extends Controller
 
     public function getNotifi(Request $request)
     {
-        // Get today's date
-        $today = Carbon::now();
-
-        // Fetch notifications for the authenticated user, including related mission data
-        $notifies = Notification::with(['mission'])->where('user_id', auth()->user()->id)->get();
-
+        $today = now()->toDateString(); // Today's date
+        $notifies = Notification::with('mission')
+            ->where('user_id', auth()->user()->id)
+            ->whereDate('created_at', $today) // Ensure the date comparison is for the correct day
+            ->get();
         // Check if there are any notifications
         if ($notifies->isNotEmpty()) {
             // Extract only the required fields for each notification
             $success['notifi'] = $notifies->map(function ($notification) {
                 return [
-                    'date'=>$notification->created_at->format('Y-m-d') ?? null,
+                    'date' => $notification->created_at->format('Y-m-d') ?? null,
                     'message' => $notification->message,
                     'user_id' => $notification->user_id,
                     'mission_id' => $notification->mission_id,
