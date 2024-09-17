@@ -25,13 +25,21 @@ class ApiAbsenceController extends Controller
         //
         $absenceType = AbsenceType::all();
         $type = ViolationTypes::where('type_id', '0')->get();
-        $grade = grade::all();
+        $grade = grade::where('type',0)->get();
         if ($grade->isNotEmpty()) {
-            $success['grade'] = $grade->map(function ($item) {
+            $success['grade2'] = $grade->map(function ($item) {
                 return $item->only(['id', 'name']);
             });
         } else {
-            $success['grade'] = "لا يوجد بيانات";
+            $success['grade2'] = '';
+        }
+        $grade3 = grade::where('type',2)->get();
+        if ($grade->isNotEmpty()) {
+            $success['grade3'] = $grade3->map(function ($item) {
+                return $item->only(['id', 'name']);
+            });
+        } else {
+            $success['grade3'] = '';
         }
         if ($absenceType->isNotEmpty()) {
             $success['absence_Type'] = $absenceType->map(function ($item) {
