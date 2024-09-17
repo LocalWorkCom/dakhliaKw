@@ -29,8 +29,9 @@ class NotifyTeam
     {
         $mission = $event->mission;
         $team = $event->mission->groupTeam;
-
+       
         if ($event->mission->inspector_id == null) {
+           // dd($event->mission->inspector_id);
             $inspector_ids = explode(',', $team->inspector_ids);
             // dd($team->inspector_ids);
             $flag = false;
@@ -83,8 +84,6 @@ class NotifyTeam
             // Notification::send($inspector_ids, new MissionAssignedNotification($event->mission));
             foreach ($inspector_ids as $inspector) {
                 $token = getTokenDevice($inspector);
-                send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
-
                 $user_id = Inspector::find($inspector)->user_id;
                 DB::table('notifications')->insert([
                     'user_id' => $user_id,
@@ -94,12 +93,15 @@ class NotifyTeam
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
+                send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
+
+              
             }
 
             return $flag;
         } else {
 
-
+         //   dd($event->mission);
             $query = InspectorMission::where('date', $event->mission->date)
                 ->where('inspector_id', $event->mission->inspector_id)
                 ->first();
@@ -145,10 +147,7 @@ class NotifyTeam
             }
             // Send notification to the team
             $token = getTokenDevice($event->mission->inspector_id);
-
-            send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
             $user_id = Inspector::find($event->mission->inspector_id)->user_id;
-
             DB::table('notifications')->insert([
                 'user_id' => $user_id,
                 'mission_id' => $event->mission->id,
@@ -157,6 +156,10 @@ class NotifyTeam
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+            send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to you.');
+         
+
+         
             return $flag;
         }
     }

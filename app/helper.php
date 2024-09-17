@@ -456,10 +456,10 @@ if (!function_exists('send_push_notification')) {
         $result=json_decode($output);
         curl_close ($ch);
     } */
-    function send_push_notification($mission_id,$token,$title,$message){
+    function send_push_notification($mission_id,$usertoken,$title,$message){
         $projectId = "taftesh-74633";//config('services.fcm.project_id'); # INSERT COPIED PROJECT ID
 
-        $credentialsFilePath = Storage::path('app/json/file.json');
+        $credentialsFilePath = Storage::path('json/file.json');
         $client = new GoogleClient();
         $client->setAuthConfig($credentialsFilePath);
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
@@ -475,7 +475,7 @@ if (!function_exists('send_push_notification')) {
 
         $data = [
             "message" => [
-                "token" => $token,
+                "token" => $usertoken,
                 "notification" => [
                     "title" => $title,
                     "body" => $message,
@@ -493,6 +493,7 @@ if (!function_exists('send_push_notification')) {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_VERBOSE, true); // Enable verbose output for debugging
         $response = curl_exec($ch);
+       // dd($response);
         $err = curl_error($ch);
         curl_close($ch);
     }

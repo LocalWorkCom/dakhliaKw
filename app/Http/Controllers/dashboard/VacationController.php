@@ -594,8 +594,8 @@ class VacationController extends Controller
                         $end_date = $request->end_date;
                         $end_date = Carbon::parse($end_date);
                         $start_date =  Carbon::parse($vacation->start_date);
+                        $daysNumber = $start_date->diffInDays($end_date, false) + 1;
                         if (!$vacation->is_exceeded) {
-                            $daysNumber = $start_date->diffInDays($end_date, false) + 1;
                             $vacation->days_number = $daysNumber;
                             $vacation->save();
                         }

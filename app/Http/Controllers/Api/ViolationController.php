@@ -72,13 +72,21 @@ class ViolationController  extends Controller
         $allViolationType = ViolationTypes::whereJsonContains('type_id', $type)->get();
         if ($allViolationType->isNotEmpty()) {
             $type = ViolationTypes::where('type_id', '0')->get();
-            $grade = grade::all();
+            $grade = grade::where('type',0)->get();
             if ($grade->isNotEmpty()) {
-                $success['grade'] = $grade->map(function ($item) {
+                $success['grade2'] = $grade->map(function ($item) {
                     return $item->only(['id', 'name']);
                 });
             } else {
-                $success['grade'] = '';
+                $success['grade2'] = '';
+            }
+            $grade3 = grade::where('type',2)->get();
+            if ($grade->isNotEmpty()) {
+                $success['grade3'] = $grade->map(function ($item) {
+                    return $item->only(['id', 'name']);
+                });
+            } else {
+                $success['grade3'] = '';
             }
             if ($type->isNotEmpty()) {
                 $success['type'] = $type->map(function ($item) {
@@ -456,4 +464,16 @@ class ViolationController  extends Controller
         return $this->respondSuccess($success, 'Data returned successfully.');
     }
 
+    public function getGrade(Request $request,$type)
+    {
+        $grade = grade::where('type',$type)->get();
+        if ($grade->isNotEmpty()) {
+            $success['grade'] = $grade->map(function ($item) {
+                return $item->only(['id', 'name']);
+            });
+        } else {
+            $success['grade'] = '';
+        }
+        return $this->respondSuccess($success, 'Get Data successfully.');
+    }
 }

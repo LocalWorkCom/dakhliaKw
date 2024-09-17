@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Api\InspectorMissionController;
+use App\Http\Controllers\Api\ViolationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,8 @@ Route::any('/notification', [reportsController::class, 'getNotifi']);
 
 Route::post('/inspector/add/mission', [personalMissionController::class, 'addPersonalMission']);
 Route::get('/getAll/points', [personalMissionController::class, 'getAllPoints']);
+Route::get('/grade/{type}', [ViolationController::class, 'getGrade']);
+
 /**
  * /Lizam
  */

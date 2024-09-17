@@ -88,7 +88,7 @@
                                     <option value="" selected disabled>اختر نوع الرتبه</option>
                                     <option value="0">ظابط</option>
                                     <option value="1">صف ظابط</option>
-
+                                    <option value="2"> فرد</option>
                                 </select>
                                 <span class="text-danger span-error" id="typeadd-error" dir="rtl"></span>
 
@@ -134,7 +134,7 @@
                                     <option value="" selected disabled>اختر نوع الرتبه</option>
                                     <option value="0">ظابط</option>
                                     <option value="1">صف ظابط</option>
-
+                                    <option value="2"> فرد</option>
                                 </select>
                                 <span class="text-danger span-error" id="typeedit-error" dir="rtl"></span>
 

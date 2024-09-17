@@ -567,13 +567,11 @@ class reportsController extends Controller
 
     public function getNotifi(Request $request)
     {
-        // Get today's date
-        $today = Carbon::now();
-
-        // Fetch notifications for the authenticated user, including related mission data
-        $notifies = Notification::with(['mission'])->where('user_id', auth()->user()->id)->where(DB::raw('DATE(created_at)'),$today)
-        ->get();
-
+        $today = now()->toDateString(); // Today's date
+        $notifies = Notification::with('mission')
+            ->where('user_id', auth()->user()->id)
+            ->whereDate('created_at', $today) // Ensure the date comparison is for the correct day
+            ->get();
         // Check if there are any notifications
         if ($notifies->isNotEmpty()) {
             // Extract only the required fields for each notification
