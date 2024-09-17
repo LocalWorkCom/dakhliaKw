@@ -430,7 +430,7 @@ class reportsController extends Controller
                 if ($team_time->isNotEmpty() && $team_time->first()->day_off != 1) {
                     // Assuming you want to access the first item
                     $startTimeofTeam = $team_time->first()->workingTime->start_time;
-                    $endTimeofTeam = $team_time->first()->workingTime->start_time;
+                    $endTimeofTeam = $team_time->first()->workingTime->end_time;
                     $shiftDetails = [
                         'start_time' => $startTimeofTeam,
                         'end_time' => $endTimeofTeam,
