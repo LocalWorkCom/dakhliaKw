@@ -74,11 +74,19 @@ class ViolationController  extends Controller
             $type = ViolationTypes::where('type_id', '0')->get();
             $grade = grade::where('type',0)->get();
             if ($grade->isNotEmpty()) {
-                $success['grade'] = $grade->map(function ($item) {
+                $success['grade2'] = $grade->map(function ($item) {
                     return $item->only(['id', 'name']);
                 });
             } else {
-                $success['grade'] = '';
+                $success['grade2'] = '';
+            }
+            $grade3 = grade::where('type',2)->get();
+            if ($grade->isNotEmpty()) {
+                $success['grade3'] = $grade->map(function ($item) {
+                    return $item->only(['id', 'name']);
+                });
+            } else {
+                $success['grade3'] = '';
             }
             if ($type->isNotEmpty()) {
                 $success['type'] = $type->map(function ($item) {
