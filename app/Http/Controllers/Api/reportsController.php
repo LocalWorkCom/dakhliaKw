@@ -359,7 +359,7 @@ class reportsController extends Controller
                 $pointViolations[$pointName] = [
                     'date' => $violation->created_at->format('Y-m-d'),
                     'is_instansmission' => $violation->point_id ? false : true,
-                    'MissionName ' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
+                    'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
                     'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
                     'point_id' => $violation->point_id,
                     'point_name' => $pointName,
