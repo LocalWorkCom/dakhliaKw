@@ -89,30 +89,11 @@
 
         }
 
-        function openViewModal(id, name) {
+        function openViewModal(id, key, value) {
             // console.log("id", id);
-            $.ajax({
-                url: '/groups/show/' + id,
-                method: 'GET',
-                success: function(response) {
-                    if (response.success) {
-                        var data = response.data;
-                        // console.log("data",data);
-
-                        // // Populate modal fields with data
-                        document.getElementById('nameadd_show').value = data.group.name;
-                        document.getElementById('points_inspector_show').value = data.group.points_inspector;
-                        document.getElementById('sector_show_id').value = data.group.sector_id;
-                        // document.getElementById('id_show').value = data.id;
-                        $('#view').modal('show');
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function() {
-                    alert('Error retrieving data');
-                }
-            });
+            $('#view').modal('show');
+            document.getElementById('key_show').value = key;
+            document.getElementById('value_show').value = value;
         }
 
         function openEditModal(id, key, value) {
@@ -136,7 +117,7 @@
                     var data = response.data;
 
                     // Populate modal fields with data
-                    document.getElementById('key_edit').value = data.key;
+                    document.getElementById('nameadd_show').value = data.key;
                     document.getElementById('value_edit').value = data.value;
                     document.getElementById('id_edit').value = data.id;
 
@@ -170,7 +151,7 @@
                                     <label for="keyadd" class="d-flex justify-content-start pt-3 pb-2">ادخل الاسم
                                     </label>
                                     <input type="text" id="keyadd" name="key" class="form-control"
-                                        placeholder=" اكتب " value="{{ old('key') }}">
+                                        placeholder=" اكتب " value="{{ old('key') }}" >
                                     @if ($errors->has('key'))
                                         <span class="text-danger">{{ $errors->first('key') }}</span>
                                     @endif
@@ -248,7 +229,7 @@
                                     <label for="key_edit" class="d-flex justify-content-start pt-3 pb-2">ادخل الاسم
                                     </label>
                                     <input type="text" id="key_edit" name="key" class="form-control"
-                                        placeholder=" اكتب " value="{{ old('key') }}">
+                                        placeholder=" اكتب " value="{{ old('key') }}" disabled>
                                     @if ($errors->has('key'))
                                         <span class="text-danger">{{ $errors->first('key') }}</span>
                                     @endif
@@ -307,16 +288,16 @@
                     <div id="firstModalBody" class="mb-3 mt-3 d-flex justify-content-center">
                         <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                             <div class="form-group mt-4 mb-3">
-                                <label class="d-flex justify-content-start pt-3 pb-2" for="nameadd_show">
+                                <label class="d-flex justify-content-start pt-3 pb-2" for="name_show">
                                     اسم الاعداد </label>
-                                <input type="text" id="nameadd_show" name="nameadd_show" class="form-control"
+                                <input type="text" id="name_show" name="nameadd_show" class="form-control" 
                                     placeholder="اكتب الاسم" disabled>
                             </div>
 
                             <div class="form-group mt-4 mb-3">
-                                <label for="value_edit_show" class="d-flex justify-content-start pt-3 pb-2">ادخل القيمة
+                                <label for="value_show" class="d-flex justify-content-start pt-3 pb-2">ادخل القيمة
                                 </label>
-                                <input type="text" id="value_edit_show" name="value" class="form-control"
+                                <input type="text" id="value_show" name="value" class="form-control"
                                     placeholder=" اكتب القيمة " disabled>
 
                             </div>

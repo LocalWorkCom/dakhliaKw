@@ -462,11 +462,12 @@ class settingController extends Controller
         $messages = [
             'key.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'value.required' => 'القيمة مطلوبة',
+            'key.unique' => 'الاسم موجود بالفعل'
 
         ];
 
         $validatedData = Validator::make($request->all(), [
-            'key' => 'required',
+            'key' => 'required|unique:settings,key',
             'value' => 'required',
 
         ], $messages);

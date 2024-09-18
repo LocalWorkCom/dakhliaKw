@@ -233,7 +233,7 @@ function UploadFilesIM($path, $image, $model, $request)
         if ($file->isValid()) {
             $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move($destinationPath, $filename);
-            $imagePaths[] =url($path . '/' . $filename) ; // Save relative path
+            $imagePaths[] = url($path . '/' . $filename); // Save relative path
         }
     }
     // dd($model->image);
@@ -336,7 +336,12 @@ function GetEmployeeVacationType($employeeVacation)
             } else {
 
                 if ($employeeVacation->is_exceeded) {
-                    return $exceeded;
+                    if ($employeeVacation->end_date) {
+                        return $finished;
+                    } else {
+
+                        return $exceeded;
+                    }
                 } else {
                     return $finished;
                 }
@@ -424,9 +429,9 @@ function addGroupHistory($group_id, $sector_id)
 }
 function getTokenDevice($inspector_id)
 {
-   $user_id=Inspector::find($inspector_id)->user_id;
-   $device_token=User::find($user_id)->device_token;
-   return $device_token;
+    $user_id = Inspector::find($inspector_id)->user_id;
+    $device_token = User::find($user_id)->device_token;
+    return $device_token;
 }
 if (!function_exists('send_push_notification')) {
     /* function send_push_notification($mission_id,$token,$title,$message){
@@ -456,8 +461,9 @@ if (!function_exists('send_push_notification')) {
         $result=json_decode($output);
         curl_close ($ch);
     } */
-    function send_push_notification($mission_id,$usertoken,$title,$message){
-        $projectId = "taftesh-74633";//config('services.fcm.project_id'); # INSERT COPIED PROJECT ID
+    function send_push_notification($mission_id, $usertoken, $title, $message)
+    {
+        $projectId = "taftesh-74633"; //config('services.fcm.project_id'); # INSERT COPIED PROJECT ID
 
         $credentialsFilePath = Storage::path('json/file.json');
         $client = new GoogleClient();
@@ -493,8 +499,8 @@ if (!function_exists('send_push_notification')) {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_VERBOSE, true); // Enable verbose output for debugging
         $response = curl_exec($ch);
-       // dd($response);
+        // dd($response);
         $err = curl_error($ch);
         curl_close($ch);
     }
-} 
+}
