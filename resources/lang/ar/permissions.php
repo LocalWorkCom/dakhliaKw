@@ -75,6 +75,7 @@ return [
     'edit Region'=>  'تعديل المناطق',
     'create Region'=> 'أضافه المناطق',
     'add_archive Iotelegram'=>'ارشفة الوارد',
-    'archive Iotelegram'=>'عرض ارشيف الوارد'
+    'archive Iotelegram'=>'عرض ارشيف الوارد',
+    'add_archive outgoings' => 'اضافه ارشيف الصادر'
     // Add more permissions as needed
 ];
