@@ -147,6 +147,10 @@
                             <ul>
                                 <div class="row col-12 d-flex justify-content-around">
                                     <div class="col-6">
+                                        <li class="{{ request()->routeIs('settings.index') ? 'active' : '' }}">
+                                            <img src="{{ asset('frontend/images/police.svg') }}" alt="logo" style="margin-left: 7px;">
+                                            <a href="{{ route('settings.index') }}">الاعدادات</a>
+                                        </li>
                                         @if (Auth::user()->hasPermission('view grade'))
                                             <li class="{{ request()->routeIs('grads.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/police.svg') }}" alt="logo" style="margin-left: 7px;">
