@@ -162,7 +162,10 @@ class settingController extends Controller
 
         })
         ->addColumn('type', function ($row) {
-            return $row->type ==0 ? 'ظابط' : 'صف ظابط';
+            if($row->type ==0) $mode='ظابط';
+            elseif($row->type ==1) $mode='صف ظابط';
+            else $mode= 'فرد';
+            return $mode;
         })
         ->rawColumns(['action'])
         ->make(true);

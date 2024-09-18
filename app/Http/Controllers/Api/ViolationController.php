@@ -82,7 +82,7 @@ class ViolationController  extends Controller
             }
             $grade3 = grade::where('type',2)->get();
             if ($grade->isNotEmpty()) {
-                $success['grade3'] = $grade->map(function ($item) {
+                $success['grade3'] = $grade3->map(function ($item) {
                     return $item->only(['id', 'name']);
                 });
             } else {
