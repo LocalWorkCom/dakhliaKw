@@ -5,18 +5,22 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\grade;
 use App\Models\GroupTeam;
+use App\Models\InspectorMission;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Whoops\Inspector\InspectorFactory;
 
 class UserController extends Controller
 {
     //
 
 
-    
+
     public function login(Request $request)
     {
         $messages = [
@@ -42,7 +46,7 @@ class UserController extends Controller
         ->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId','inspectors.group_id')
         ->first();
 
-        
+
         //dd($user);
 
         if (!$user) {
@@ -75,7 +79,8 @@ class UserController extends Controller
            // if ($user->updated_at >= $sixHoursAgo) {
 
 
-             
+           $today = Carbon::today()->format('Y-m-d');
+
              //   $token=$user->createToken('auth_token')->accessToken;
               $token =$user->createToken('auth_token')->accessToken;
                 Auth::login($user); // Log the user in
@@ -95,18 +100,22 @@ class UserController extends Controller
                 // dd($groupTeam);
                 $success['token'] = $token;//->token;
                 $user->image=$user->image;
+                $is_off = InspectorMission::where('inspector_id',$user->inspectorId)->whereDate('date',$today)->value('day_off');
+                $time_edit = Setting::where('key','timer')->value('value');
                 $success['user'] = $user->only(['id', 'name', 'username', 'military_number', 'phone', 'code','image','inspectorId']);
-                $success['user'] = 
+                $success['user'] =
                 [
                     'id' => $user->id,
-                    'name' => $user->name, 
+                    'name' => $user->name,
                     'username' => $user->username,
                     'military_number' =>$user->military_number,
-                    'phone' => $user->phone , 
+                    'phone' => $user->phone ,
                     'code'  => $user->code ,
                     'image' => $user->image ,
                     'inspectorId' => $user->inspectorId ,
-                    'isManger' => $isManger 
+                    'isManger' => $isManger,
+                    'is_off' => $is_off ,
+                    'time_edit' => $time_edit 
                 ];
                 if($user->grade) $grade=$user->grade->name; else $grade='مدني';
                 $success['user']['grade']=$grade;
@@ -129,7 +138,7 @@ class UserController extends Controller
               return $this->respondwarning($success, trans('message.account not verified'), ['account' => trans('message.account not verified')], 402);
           }*/
 
-           
+
         }
         return $this->respondError('password error', ['crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']], 403);
     }
@@ -156,7 +165,7 @@ class UserController extends Controller
       }
 
         $user = User::where('military_number', $request->military_number)->first();
-        
+
 
         if (!$user) {
           return $this->respondError('Validation Error.', ['milltary_number'=> ['الرقم العسكري لا يتطابق مع سجلاتنا']], 400);
@@ -189,7 +198,7 @@ class UserController extends Controller
         {
             $gradeData = ['grade' => 'لا يوجد بيانات'];
         }
-        
+
         $success['user'] = array_merge($userData, $gradeData);
         return $this->respondSuccess($success, 'reset password successfully.');
     }
@@ -246,7 +255,7 @@ class UserController extends Controller
             return $this->respondSuccess(json_decode('{}'), 'تم ارسال الرسالة بنجاح');
 
         }
-        
+
          else {
             return $this->respondError('user not found', ['military_number' => ['مستخدم غير مسجل لدينا']], 400);
         }
@@ -264,12 +273,12 @@ class UserController extends Controller
 
         $user = User::where('military_number', $request->military_number)->join('inspectors','user_id','users.id')->first();
 
-        if ($user) { 
+        if ($user) {
         // $success['user'] = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
         // return $this->respondSuccess($success, 'reset password successfully.');
           return $this->respondSuccess(json_decode('{}'), 'الرقم العسكرى صحيح');
         }
-        
+
          else {
             return $this->respondError('user not found', ['military_number' => ['مستخدم غير مسجل لدينا']], 400);
         }

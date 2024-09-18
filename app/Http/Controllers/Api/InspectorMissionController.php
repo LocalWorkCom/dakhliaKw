@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\PersonalMission;
+use App\Models\Violation;
 use Carbon\Carbon;
 
 use App\Models\Grouppoint;
@@ -13,8 +14,10 @@ use App\Models\Inspector;
 use App\Models\Point;
 use App\Models\PointDays;
 use App\Http\Controllers\Controller;
+use App\Models\Absence;
 use App\Models\GroupTeam;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class InspectorMissionController extends Controller
@@ -45,7 +48,7 @@ class InspectorMissionController extends Controller
         if ($team_time->isNotEmpty() && $team_time->first()->day_off != 1) {
             // Assuming you want to access the first item
             $startTimeofTeam = $team_time->first()->workingTime->start_time;
-            $endTimeofTeam = $team_time->first()->workingTime->start_time;
+            $endTimeofTeam = $team_time->first()->workingTime->end_time;
         }
         // else{
 
@@ -113,8 +116,16 @@ class InspectorMissionController extends Controller
                             $avilable = true;
                         }
 
+                        // is visited or not
 
-
+                        $date = Carbon::today()->format('Y-m-d');
+                        $viloation = Violation::where('point_id', $point->id)->whereDate('created_at', $date)->count();
+                        $abcennse = Absence::where('point_id',$point->id)->whereDate('date',$date)->count();
+                        if($viloation || $abcennse){
+                            $is_visited = true;
+                        }else{
+                            $is_visited = false;
+                        }
                         $groupPointsData[] = [
                             'point_id' => $point->id,
                             'point_name' => $point->name,
@@ -125,7 +136,7 @@ class InspectorMissionController extends Controller
                             'Point_availability' => $avilable,
                             'latitude' => $point->lat,
                             'longitude' => $point->long,
-
+                            'is_visited'=>$is_visited
                         ];
                     }
                     // Fetch and format the working time
