@@ -140,14 +140,23 @@ class reportsController extends Controller
                     'employee_type_absence' => $employee_absence->absenceType ? $employee_absence->absenceType->name : '',
                     'type_employee' => $employee_absence->type_employee ? $employee_absence->typeEmployee->name : '',
                     'employee_civil_number' => $employee_absence->civil_number ? $employee_absence->civil_number : '',
-                    'employee_file_number' => $employee_absence->file_num ? $employee_absence->file_num : ''
+                    'employee_file_number' => $employee_absence->file_num ? $employee_absence->file_num : '',
+                    'id_employee_grade'=> $employee_absence->grade,
+                    'id_employee_type_absence' => $employee_absence->absenceType->id,
+                    'id_type_employee' => $employee_absence->type_employee
 
                 ];
             }
             $response[] = [
                 'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
                 'abcence_day' => $absence->date,
+                'mission_id'=>$absence->mission_id,
+                'point_id'=>$absence->point_id,
                 'point_name' => $absence->point->name,
+                'point_governate' => $absence->point->government->name,
+                'point_location' => $absence->point->google_map,
+                'latitude' => $absence->point->lat,
+                'longitude' => $absence->point->long,
                 'point_time' => $absence->point->work_type == 0 ? 'طوال اليوم' : "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا'),
                 'inspector_name' => $absence->inspector->name,
                 'inspector_grade' => auth()->user()->grade_id ? auth()->user()->grade->name : '',
@@ -155,6 +164,7 @@ class reportsController extends Controller
                 'total_number' => $absence->total_number,
                 'actual_number' => $absence->actual_number,
                 'absence_members' => $absence_members,
+                'created_at'=> $absence->created_at
             ];
         }
         $success['report'] = $response;
@@ -423,26 +433,26 @@ class reportsController extends Controller
                     $pointName = $absence->point_id ? $absence->point->name : null;
 
                     $team_time = InspectorMission::whereDate('date', $today)
-                    ->where('inspector_id', $inspectorId)
-                    ->with('workingTime')
-                    ->get();
-                // Check if the collection has any items
-                if ($team_time->isNotEmpty() && $team_time->first()->day_off != 1) {
-                    // Assuming you want to access the first item
-                    $startTimeofTeam = $team_time->first()->workingTime->start_time;
-                    $endTimeofTeam = $team_time->first()->workingTime->end_time;
-                    $shiftDetails = [
-                        'start_time' => $startTimeofTeam,
-                        'end_time' => $endTimeofTeam,
-                        'time' => null
-                    ];
-                }else{
-                    $shiftDetails = [
-                        'start_time' => null,
-                        'end_time' => null,
-                        'time' => null
-                    ];
-                }
+                        ->where('inspector_id', $inspectorId)
+                        ->with('workingTime')
+                        ->get();
+                    // Check if the collection has any items
+                    if ($team_time->isNotEmpty() && $team_time->first()->day_off != 1) {
+                        // Assuming you want to access the first item
+                        $startTimeofTeam = $team_time->first()->workingTime->start_time;
+                        $endTimeofTeam = $team_time->first()->workingTime->end_time;
+                        $shiftDetails = [
+                            'start_time' => $startTimeofTeam,
+                            'end_time' => $endTimeofTeam,
+                            'time' => null
+                        ];
+                    } else {
+                        $shiftDetails = [
+                            'start_time' => null,
+                            'end_time' => null,
+                            'time' => null
+                        ];
+                    }
                     $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
                         ->where('absences_id', $absence->id)
                         ->get();
