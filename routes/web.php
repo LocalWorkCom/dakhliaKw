@@ -80,7 +80,7 @@ Route::any('/reset_password', [UserController::class, 'reset_password'])->name('
 
 //  Auth verfication_code
 Route::middleware(['auth'])->group(function () {
-    Route::get('/violation_report',[ViolationReportController::class, 'getdata'])->name('violation_report.getdata');
+    Route::get('/violation_report', [ViolationReportController::class, 'getdata'])->name('violation_report.getdata');
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index')->middleware('check.permission:view User');
@@ -105,7 +105,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/permission_show/{id}', [PermissionController::class, 'show'])->name('permissions_show')->middleware('check.permission:edit Permission');
     Route::any('/permission_store', [PermissionController::class, 'store'])->name('permission.store')->middleware('check.permission:edit Permission');
     Route::any('/permission_delete/{id}', [PermissionController::class, 'destroy'])->name('permissions_destroy')->middleware('check.permission:delete Permission');
-    
+
 
     // Absence
     Route::any('/absence', [AbsenceTypeController::class, 'index'])->name('absence.index');
@@ -242,6 +242,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('setting/vacationType/show/{id}', [settingController::class, 'showvacationType'])->name('vacationType.show')->middleware('check.permission:view VacationType');
     Route::post('setting/vacationType/delete', [settingController::class, 'deletevacationType'])->name('vacationType.delete')->middleware('check.permission:delete VacationType');
     //end vacation type
+
+    //settings 
+
+
+    Route::get('/settings', [settingController::class, 'allSettings'])->name('settings.index');
+    Route::get('get_settings', [settingController::class, 'getSettings'])->name('get.settings');
+    Route::post('/setting/store', [settingController::class, 'CreateSetting'])->name('setting.store');
+    Route::post('/setting/update', [settingController::class, 'UpdateSetting'])->name('setting.update');
+    Route::get('/setting/delete', [settingController::class, 'deleteSetting'])->name('setting.delete');
+
+
     //start gards
     Route::get('setting/grads', [settingController::class, 'getAllgrads'])->name('setting.getAllgrads')->middleware('check.permission:view grade');
     Route::get('setting/grads/all', [settingController::class, 'indexgrads'])->name('grads.index')->middleware('check.permission:view grade');
@@ -407,9 +418,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('vacation/permit/{id}', [VacationController::class, 'permitVacation'])->name('vacation.permit');
     Route::get('vacation/print_return/{id}', [VacationController::class, 'print_returnVacation'])->name('vacation.print_return');
     Route::post('vacation/print/{id}', [VacationController::class, 'printVacation'])->name('vacation.print');
-    
-    
-   
+
+
+
     // Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit')->middleware('check.permission:edit EmployeeVacation');
     // Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update')->middleware('check.permission:edit EmployeeVacation');
     Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show')->middleware('check.permission:view EmployeeVacation');
@@ -435,7 +446,7 @@ Route::middleware(['auth'])->group(function () {
      */
     Route::get('/search/{search}/{q?}', [SearchController::class, 'index'])->name('search');
     Route::get('/searchUsers/users/{id}/{q?}', [SearchController::class, 'getUsers'])->name('search.users')->middleware('check.permission:view User');
-    Route::get('/searchDept/departments/{q?}', [SearchController::class,'getDepartments'])->name('search.departments');
+    Route::get('/searchDept/departments/{q?}', [SearchController::class, 'getDepartments'])->name('search.departments');
 
     /**
      * Violation Show
@@ -452,13 +463,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/Inspectors', [InspectorController::class, 'store'])->name('inspectors.store');
     Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit');
     Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
-    Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');    
-    Route::get('/Inspectors/TransferToEmployee/{id}', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove');    
+    Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');
+    Route::get('/Inspectors/TransferToEmployee/{id}', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove');
 
     //statistics
-    Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');    
-    Route::get('/statistics/search', [statisticController::class, 'getFilteredData'])->name('statistic.search');    
-
+    Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');
+    Route::get('/statistics/search', [statisticController::class, 'getFilteredData'])->name('statistic.search');
 });
 
 
