@@ -121,7 +121,7 @@ class InspectorMissionController extends Controller
                         $date = Carbon::today()->format('Y-m-d');
                         $viloation = Violation::where('point_id', $point->id)->whereDate('created_at', $date)->count();
                         $abcennse = Absence::where('point_id',$point->id)->whereDate('date',$date)->count();
-                        if($viloation || $abcennse){
+                        if($viloation > 0 || $abcennse > 0){
                             $is_visited = true;
                         }else{
                             $is_visited = false;
@@ -136,7 +136,9 @@ class InspectorMissionController extends Controller
                             'Point_availability' => $avilable,
                             'latitude' => $point->lat,
                             'longitude' => $point->long,
-                            'is_visited'=>$is_visited
+                            'is_visited'=>$is_visited,
+                            'count_violation'=>$viloation,
+                            'count_abcense'=>$abcennse
                         ];
                     }
                     // Fetch and format the working time
