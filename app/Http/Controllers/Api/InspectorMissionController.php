@@ -19,6 +19,7 @@ use App\Models\GroupTeam;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use IntlDateFormatter;
 
 class InspectorMissionController extends Controller
 {
@@ -212,9 +213,20 @@ class InspectorMissionController extends Controller
             ];
         }
         */
+        $dayNamesArabic = [
+            'Sunday'    => 'الأحد',
+            'Monday'    => 'الإثنين',
+            'Tuesday'   => 'الثلاثاء',
+            'Wednesday' => 'الأربعاء',
+            'Thursday'  => 'الخميس',
+            'Friday'    => 'الجمعة',
+            'Saturday'  => 'السبت',
+        ];
+        $dayName = date('l');
+        $date = date('Y-m-d');
         if ($missionData) {
             $responseData = [
-                'date' => date('Y-m-d'),
+                'date' => $dayNamesArabic[$dayName] . ', ' . $date,
                 'mission_count' => $count,
                 'instant_mission_count' => $instantmissioncount,
                 'groupPointCount' => $groupPointCount,
@@ -224,7 +236,7 @@ class InspectorMissionController extends Controller
             ];
         } else {
             $responseData = [
-                'date' => date('Y-m-d'),
+                'date' => $dayNamesArabic[$dayName] . ', ' . $date,
                 'mission_count' => 0,
                 'instant_mission_count' => $instantmissioncount,
                 'groupPointCount' => 0,
