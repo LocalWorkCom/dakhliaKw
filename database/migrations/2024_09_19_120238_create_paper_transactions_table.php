@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('inspector_id');
             $table->text('civil_number');
             $table->text('registration_number');
+            $table->text('date')->nullable();
+
             $table->text('images')->nullable();
 
             $table->integer('status')->comment(' 0 -> is not active , 1->is active');
