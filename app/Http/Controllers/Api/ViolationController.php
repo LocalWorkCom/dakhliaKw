@@ -651,6 +651,7 @@ class ViolationController  extends Controller
                 if ($parent_id == 0) {
                     $parent_violate->status = 0;
                     $parent_violate->save();
+                    $new = new Violation();
                     $new->violation_type = json_encode($request->violation_type);
                     $new->flag_instantmission = $request->flag_instantmission;
                     $new->mission_id = $request->mission_id;
@@ -680,6 +681,8 @@ class ViolationController  extends Controller
                         $viloate->status = 0;
                         $viloate->save();
                     }
+                    $new = new Violation();
+
                     $new->violation_type = json_encode($request->violation_type);
                     $new->flag_instantmission = $request->flag_instantmission;
                     $new->mission_id = $request->mission_id;
@@ -747,4 +750,5 @@ class ViolationController  extends Controller
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
         }
     }
+}
 }

@@ -46,6 +46,7 @@ class paperTransactionController extends Controller
             'point_id' => ['required'],
             'mission_id' => ['required'],
             'civil_number' =>['required'],
+            'date' =>['required'],
             'registration_number' => ['required'],
         ], $messages);
 
@@ -62,6 +63,8 @@ class paperTransactionController extends Controller
         $new->mission_id =$request->mission_id ;
         $new->inspector_id = $inspectorId ;
         $new->civil_number =$request->civil_number ;
+        $new->date =$request->date ;
+
         $new->registration_number =$request->registration_number ;
         $new->status =1 ;
         $new->parent =0 ;
