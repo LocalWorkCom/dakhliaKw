@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiAbsenceController;
 use App\Http\Controllers\Api\personalMissionController;
 use App\Http\Controllers\Api\reportsController;
 use Illuminate\Http\Request;
@@ -48,10 +49,17 @@ Route::post('/inspector/add/mission', [personalMissionController::class, 'addPer
 Route::get('/getAll/points', [personalMissionController::class, 'getAllPoints']);
 Route::get('/grade/{type}', [ViolationController::class, 'getGrade']);
 
+
+Route::any('/inspector/update_absence',  [ApiAbsenceController::class, 'update']);
+Route::any('/inspector/update_violation',  [ViolationController::class, 'updateViolation']);
+
 /**
  * /Lizam
  */
 Route::any('/lizamat', [InspectorMissionController::class,'get_shift']);
+
+
+Route::post('/changepassword', 'App\Http\Controllers\Api\UserController@changePassword');
 
 });
 
