@@ -23,7 +23,6 @@ use App\Models\Groups;
 use App\Models\Absence;
 use App\Models\AbsenceType;
 use App\Models\AbsenceEmployee;
-use App\Models\paperTransaction;
 use Yajra\DataTables\DataTables;
 
 class ViollationController extends Controller
@@ -56,35 +55,6 @@ class ViollationController extends Controller
         $group = $request->group;
         $team = $request->team;
         $inspector = $request->inspector;
-        $paper = paperTransaction::leftJoin('points', 'points.id', 'paper_transactions.point_id')->leftJoin('inspector_mission', 'inspector_mission.id', 'paper_transactions.mission_id');
-        if (isset($date) && $date != '-1')
-            $paper->where('paper_transactions.date', $date);
-        if (isset($group) && $group != '-1') {
-            $inpectors = GroupTeam::whereJsonContains('group_id', $group)
-                ->pluck('inspector_ids')
-                ->flatMap(function ($ids) {
-                    return explode(',', $ids);
-                })
-                ->unique()
-                ->map('intval')
-                ->toArray();
-            $paper->whereIn('inpectors', $inpectors)->where('status', 1);
-        }
-        if (isset($team) && $team != '-1')
-           {
-            $inpectors = GroupTeam::where('id', $team)
-                ->pluck('inspector_ids')
-                ->flatMap(function ($ids) {
-                    return explode(',', $ids);
-                })
-                ->unique()
-                ->map('intval')
-                ->toArray();
-            $paper->whereIn('inpectors', $inpectors)->where('status', 1);
-           }
-        if (isset($inspector) && $inspector != '-1')
-            $paper->where('paper_transactions.inspector_id', $inspector);
-
 
         $first = Absence::leftJoin('points', 'points.id', 'absences.point_id')->SelectRaw('absences.id,points.`name` as name,CONCAT_WS("\n\r",CONCAT_WS(":","اجمالى القوة",absences.total_number),CONCAT_WS(":","العدد الفعلي",absences.actual_number)) as ViolationType,"غياب" as Type,"0" as mode')->leftJoin('inspector_mission', 'inspector_mission.id', 'absences.mission_id');
         if (isset($date) && $date != '-1')
@@ -107,7 +77,6 @@ class ViollationController extends Controller
         if (isset($inspector) && $inspector != '-1')
             $data->Join('inspectors', 'inspectors.user_id', 'violations.user_id')->where('inspectors.id', $inspector);
         $data->union($first);
-        $data->union($paper);
         //dd($data);
 
         /*     foreach ($data as $item) {
@@ -148,6 +117,7 @@ class ViollationController extends Controller
             $title = "سجل مخالفات";
             $data = Violation::leftJoin('grades', 'grades.id', 'violations.grade')->SelectRaw("image, violations.id,CONCAT_WS('/',violations.name,grades.name)  as name,(Select GROUP_CONCAT(violation_type.`name`) from violation_type where FIND_IN_SET(violation_type.id,violations.violation_type)) AS ViolationType,IF(violations.flag=1,'مخالفة سلوك انظباطي','مخالفة مباني') as Type")->leftJoin('inspector_mission', 'inspector_mission.id', 'violations.mission_id')->where('violations.id', $id)->first();
             $details = [];
+
         }
         return view('violations.details', compact('type', 'id', 'title', 'data', 'details'));
     }
