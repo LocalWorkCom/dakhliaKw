@@ -105,37 +105,73 @@
                                 <th scope="row"> المخالفات</th>
                                 <td>{{ $data->ViolationType }}</td>
                             </tr>
-                            <tr>
-                                <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
-                                <td>
-                                    @php
-                                        $images = explode(',', $data->image);
-                                    @endphp
-                                    @foreach ($images as $file)
-                                        <div class="pb-4 mx-2">
+                            @if ($data->image)
+                                <tr>
+                                    <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
+                                    <td>
+                                        @php
+                                            $images = explode(',', $data->image);
+                                        @endphp
+                                        @foreach ($images as $file)
+                                            <div class="pb-4 mx-2">
 
-                                            <a href="#" class="image-popup" data-toggle="modal"
-                                                data-target="#imageModal" data-image="{{ $file }}"
-                                                data-title="{{ $file }}">
-                                                <img src="{{ $file }}" class="img-thumbnail mx-2"
-                                                    alt="{{ $file }}">
-                                                <br> <br>
-                                                {{-- @if (Auth::user()->hasPermission('download Io_file')) --}}
-                                                {{-- <a id="downloadButton"
-                                    href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
-                                    class="btn-download"><i class="fa fa-download" style="color:green;"></i>
-                                    تحميل الملف
-                                </a> --}}
-                                                {{-- @endif --}}
-                                            </a>
-                                        </div>
-                                    @endforeach
-                                </td>
-                            </tr>
+                                                <a href="#" class="image-popup" data-toggle="modal"
+                                                    data-target="#imageModal" data-image="{{ $file }}"
+                                                    data-title="{{ $file }}">
+                                                    <img src="{{ $file }}" class="img-thumbnail mx-2"
+                                                        alt="{{ $file }}">
+                                                    <br> <br>
+                                                    {{-- @if (Auth::user()->hasPermission('download Io_file')) --}}
+                                                    {{-- <a id="downloadButton"
+                                                            href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
+                                                            class="btn-download"><i class="fa fa-download" style="color:green;"></i>
+                                                                </a> --}}
+                                                    {{-- @endif --}}
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                 @endif
             </div>
         </div>
     </div>
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
+
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="#" class="img-fluid" alt="صورة">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
+@push('scripts')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.image-popup').click(function(event) {
+                event.preventDefault();
+                var imageUrl = $(this).data('image');
+                var imageTitle = $(this).data('title');
+
+                // Set modal image and title
+                $('#modalImage').attr('src', imageUrl);
+                $('#imageModalLabel').text(imageTitle);
+
+                // Show the modal
+                $('#imageModal').modal('show');
+            });
+        });
+    </script>
+@endpush
