@@ -54,7 +54,10 @@ class InspectorMission extends Model
     {
         return $this->belongsTo(WorkingTime::class, 'working_time_id');
     }
-
+    public function paperTransactions()
+    {
+        return $this->hasMany(PaperTransaction::class);
+    }
     public function workingTree()
     {
         return $this->belongsTo(WorkingTree::class, 'working_tree_id');

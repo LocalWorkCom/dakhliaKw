@@ -9,7 +9,7 @@ class Point extends Model
 {
     use HasFactory;
     protected $table = 'points';
-   
+
 
     protected $fillable = [
         'name','government_id ','region_id ','sector_id ','google_map','lat','long','note','work_type','days_work','created_by '
@@ -24,6 +24,10 @@ class Point extends Model
     public function pointDays()
     {
         return $this->hasMany(PointDays::class, 'point_id');
+    }
+    public function paperTransactions()
+    {
+        return $this->hasMany(PaperTransaction::class);
     }
     public function region()
     {

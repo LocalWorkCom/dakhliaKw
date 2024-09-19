@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Api\InspectorMissionController;
+use App\Http\Controllers\Api\paperTransactionController;
 use App\Http\Controllers\Api\ViolationController;
 
 /*
@@ -57,9 +58,13 @@ Route::any('/inspector/update_violation',  [ViolationController::class, 'updateV
  * /Lizam
  */
 Route::any('/lizamat', [InspectorMissionController::class,'get_shift']);
-
-
 Route::post('/changepassword', 'App\Http\Controllers\Api\UserController@changePassword');
+
+
+//papertransactions
+Route::any('/paper_transactions',  [paperTransactionController::class, 'store']);
+
+
 
 });
 
