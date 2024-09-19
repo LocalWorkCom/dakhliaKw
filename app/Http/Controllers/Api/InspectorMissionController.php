@@ -46,9 +46,15 @@ class InspectorMissionController extends Controller
             ->get();
         // Check if the collection has any items
         if ($team_time->isNotEmpty() && $team_time->first()->day_off != 1) {
-            // Assuming you want to access the first item
-            $startTimeofTeam = $team_time->first()->workingTime->start_time;
-            $endTimeofTeam = $team_time->first()->workingTime->end_time;
+
+            // $startTimeofTeam = $team_time->first()->workingTime->start_time;
+            // $endTimeofTeam = $team_time->first()->workingTime->end_time;
+            // $name = $team_time->first()->workingTime->name;
+            $inspector_shift = [
+                'name' => $team_time->first()->workingTime->name,
+                'start_time' => $team_time->first()->workingTime->start_time,
+                'end_time' => $team_time->first()->workingTime->end_time
+            ];
         }
         // else{
 
@@ -79,23 +85,19 @@ class InspectorMissionController extends Controller
             foreach ($idsGroupPoint as $groupId) {
                 $groupPointsData = [];
                 $groupPoint = Grouppoint::with('government')->find($groupId);
-                //  $groupPoint = Grouppoint::with('government')->find($groupId);
-                //dd($groupPoint);
                 if ($groupPoint) {
                     $idsPoints = is_array($groupPoint->points_ids) ? $groupPoint->points_ids : explode(',', $groupPoint->points_ids);
-                    //   $groupPointCount=count($idsPoints);
-
                     foreach ($idsPoints as $pointId) {
                         $point = Point::with('government')->find($pointId);
                         // dd($point);
                         if ($point->work_type == 1) {
                             $today = date('w');
                             $workTime = PointDays::where('point_id', $pointId)->where('name', $today)->first();
-                            //c  dd($workTime);
                             $startTime = Carbon::create(date('y-m-d') . ' ' . $workTime->from);
                             $endtTime = Carbon::create(date('y-m-d') . ' ' . $workTime->to);
                             $fromTime = $startTime->format('H:i');
                             $ToTime = $endtTime->format('H:i');
+
                             $pointTime = [
                                 'startTime ' => $workTime->from,
                                 'endTime ' => $workTime->to
@@ -119,11 +121,11 @@ class InspectorMissionController extends Controller
                         // is visited or not
 
                         $date = Carbon::today()->format('Y-m-d');
-                        $viloation = Violation::where('point_id', $point->id)->whereDate('created_at', $date)->count();
-                        $abcennse = Absence::where('point_id',$point->id)->whereDate('date',$date)->count();
-                        if($viloation > 0 || $abcennse > 0){
+                        $viloation = Violation::where('point_id', $point->id)->where('status', 1)->whereDate('created_at', $date)->count();
+                        $abcennse = Absence::where('point_id', $point->id)->where('flag', 1)->whereDate('date', $date)->count();
+                        if ($viloation > 0 || $abcennse > 0) {
                             $is_visited = true;
-                        }else{
+                        } else {
                             $is_visited = false;
                         }
                         $groupPointsData[] = [
@@ -136,19 +138,21 @@ class InspectorMissionController extends Controller
                             'Point_availability' => $avilable,
                             'latitude' => $point->lat,
                             'longitude' => $point->long,
-                            'is_visited'=>$is_visited,
-                            'count_violation'=>$viloation,
-                            'count_abcense'=>$abcennse
+                            'is_visited' => $is_visited,
+                            'count_violation' => $viloation,
+                            'count_abcense' => $abcennse
                         ];
                     }
                     // Fetch and format the working time
                     // $workingTime = $mission->workingTime;
                     $missionData[] = [
                         'mission_id' => $mission->id,
+                        'inspector_shift'=>$inspector_shift,
                         'governate' => $groupPoint->government->name,
                         'name' =>  $groupPoint->name,
                         'points_count' =>  $groupPointCount,
                         'points' => $groupPointsData,
+                        'created_at' => $mission->created_at
 
                     ];
                 }

@@ -77,11 +77,12 @@ class reportsController extends Controller
         foreach ($teamInspectors as $inspectorIds) {
             $inspectorIdsArray = array_merge($inspectorIdsArray, explode(',', $inspectorIds));
         }
-        $index = date('w');;
+        $index = date('w');
 
         $absences = Absence::whereIn('inspector_id', $inspectorIdsArray)
             ->where('point_id', $request->point_id)
             ->whereDate('date', $today)
+            ->where('flag',1)
             ->get();
 
 
@@ -151,6 +152,7 @@ class reportsController extends Controller
                 'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
                 'abcence_day' => $absence->date,
                 'mission_id'=>$absence->mission_id,
+                'report_id' =>$absence->id,
                 'point_id'=>$absence->point_id,
                 'point_name' => $absence->point->name,
                 'point_governate' => $absence->point->government->name,

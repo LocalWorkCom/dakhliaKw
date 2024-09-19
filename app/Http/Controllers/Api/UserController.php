@@ -31,7 +31,7 @@ class UserController extends Controller
         $validatedData = Validator::make($request->all(), [
             'military_number' => 'required|string',
             'password' => 'required|string',
-             'device_token' => 'min:2'
+            'device_token' => 'min:2'
         ], $messages);
 
         if ($validatedData->fails()) {
@@ -43,19 +43,19 @@ class UserController extends Controller
 
         // Check if the user exists
         $user = User::where('military_number', $military_number)->orWhere('Civil_number', $military_number)
-        ->join('inspectors','user_id','users.id')->select('users.*','inspectors.id as inspectorId','inspectors.group_id')
-        ->first();
+            ->join('inspectors', 'user_id', 'users.id')->select('users.*', 'inspectors.id as inspectorId', 'inspectors.group_id')
+            ->first();
 
 
         //dd($user);
 
         if (!$user) {
-          return $this->respondError('Validation Error.', ['military_number'=> ['رقم الهوية لا يتطابق مع سجلات المفتشين']], 400);
+            return $this->respondError('Validation Error.', ['military_number' => ['رقم الهوية لا يتطابق مع سجلات المفتشين']], 400);
         }
 
         // Check if the user has the correct flag
 
-       /*  if ($user->flag !== 'user') {
+        /*  if ($user->flag !== 'user') {
           //  return back()->with('error', 'لا يسمح لك بدخول الهيئة');
           return $this->respondError('Validation Error.', ['not authorized'=> ['لا يسمح لك بدخول الهيئة']], 400);
         } */
@@ -65,7 +65,7 @@ class UserController extends Controller
         //DD(Auth::attempt($credentials));
 
 
-      /*   if (!Hash::check($credentials['password'], $user->password)) {
+        /*   if (!Hash::check($credentials['password'], $user->password)) {
             return response()->json(['error' => 'Invalid credentials'], 401);
         }else{
             return response()->json(['sucess' => 'user In'], 401);
@@ -75,51 +75,52 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             // If the user has logged in within the last two hours, do not set the code
-           // dd('Inn');
-           // if ($user->updated_at >= $sixHoursAgo) {
+            // dd('Inn');
+            // if ($user->updated_at >= $sixHoursAgo) {
 
 
-           $today = Carbon::today()->format('Y-m-d');
+            $today = Carbon::today()->format('Y-m-d');
 
-             //   $token=$user->createToken('auth_token')->accessToken;
-              $token =$user->createToken('auth_token')->accessToken;
-                Auth::login($user); // Log the user in
-                $user->device_token = $request->device_token;
-                $user->token = $token;//->token;
+            //   $token=$user->createToken('auth_token')->accessToken;
+            $token = $user->createToken('auth_token')->accessToken;
+            Auth::login($user); // Log the user in
+            $user->device_token = $request->device_token;
+            $user->token = $token; //->token;
 
-                $user->save();
+            $user->save();
 
-                $isManger= false;
-                $groupTeam = GroupTeam::where('group_id',$user->group_id)->whereRaw('find_in_set(?, inspector_ids)', [$user->inspectorId])
+            $isManger = false;
+            $groupTeam = GroupTeam::where('group_id', $user->group_id)->whereRaw('find_in_set(?, inspector_ids)', [$user->inspectorId])
                 ->first();
-                if($groupTeam)
-                { if($user->inspectorId == $groupTeam->inspector_manager)
-                 {
-                     $isManger= true;
-                 }}
-                // dd($groupTeam);
-                $success['token'] = $token;//->token;
-                $user->image=$user->image;
-                $is_off = InspectorMission::where('inspector_id',$user->inspectorId)->whereDate('date',$today)->value('day_off');
-                $time_edit = Setting::where('key','timer')->value('value');
-                $success['user'] = $user->only(['id', 'name', 'username', 'military_number', 'phone', 'code','image','inspectorId']);
-                $success['user'] =
+            if ($groupTeam) {
+                if ($user->inspectorId == $groupTeam->inspector_manager) {
+                    $isManger = true;
+                }
+            }
+            // dd($groupTeam);
+            $success['token'] = $token; //->token;
+            $user->image = $user->image;
+            $is_off = InspectorMission::where('inspector_id', $user->inspectorId)->whereDate('date', $today)->value('day_off');
+            $time_edit = Setting::where('key', 'timer')->value('value');
+            $success['user'] = $user->only(['id', 'name', 'username', 'military_number', 'phone', 'code', 'image', 'inspectorId']);
+            $success['user'] =
                 [
                     'id' => $user->id,
                     'name' => $user->name,
                     'username' => $user->username,
-                    'military_number' =>$user->military_number,
-                    'phone' => $user->phone ,
-                    'code'  => $user->code ,
-                    'image' => $user->image ,
-                    'inspectorId' => $user->inspectorId ,
+                    'military_number' => $user->military_number,
+                    'phone' => $user->phone,
+                    'code'  => $user->code,
+                    'image' => $user->image,
+                    'inspectorId' => $user->inspectorId,
                     'isManger' => $isManger,
-                    'is_off' => $is_off ,
-                    'time_edit' => $time_edit 
+                    'is_off' => $is_off,
+                    'time_edit' => $time_edit
                 ];
-                if($user->grade) $grade=$user->grade->name; else $grade='مدني';
-                $success['user']['grade']=$grade;
-              return $this->respondSuccess($success, 'User login successfully.');
+            if ($user->grade) $grade = $user->grade->name;
+            else $grade = 'مدني';
+            $success['user']['grade'] = $grade;
+            return $this->respondSuccess($success, 'User login successfully.');
 
 
             //}
@@ -137,8 +138,6 @@ class UserController extends Controller
               $success['user'] = $user->only(['id', 'firstname', 'email', 'lastname', 'phone', 'country_code', 'code','image']);
               return $this->respondwarning($success, trans('message.account not verified'), ['account' => trans('message.account not verified')], 402);
           }*/
-
-
         }
         return $this->respondError('password error', ['crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']], 403);
     }
@@ -161,25 +160,25 @@ class UserController extends Controller
         ], $messages);
 
         if ($validatedData->fails()) {
-          return $this->respondError('Validation Error.', $validatedData->errors(), 400);
-      }
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+        }
 
         $user = User::where('military_number', $request->military_number)->first();
 
 
         if (!$user) {
-          return $this->respondError('Validation Error.', ['milltary_number'=> ['الرقم العسكري لا يتطابق مع سجلاتنا']], 400);
+            return $this->respondError('Validation Error.', ['milltary_number' => ['الرقم العسكري لا يتطابق مع سجلاتنا']], 400);
         }
 
         // Check if the user has the correct flag
         if ($user->flag !== 'user') {
-          return $this->respondError('Validation Error.', ['not authorized'=> ['لا يسمح لك بدخول الهيئة']], 400);
+            return $this->respondError('Validation Error.', ['not authorized' => ['لا يسمح لك بدخول الهيئة']], 400);
         }
 
         if (Hash::check($request->password, $user->password) == true) {
-          return $this->respondError('Validation Error.', ['password'=> ['لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية'] ], 400);
+            return $this->respondError('Validation Error.', ['password' => ['لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية']], 400);
         }
-        $grade = grade::where('id',$user->grade_id)->first();
+        $grade = grade::where('id', $user->grade_id)->first();
         // Update password and set token for first login if applicable
         Auth::login($user); // Log the user in
         $user->device_token = $request->device_token;
@@ -189,13 +188,10 @@ class UserController extends Controller
         // $token =$user->createToken('auth_token')->accessToken;
         $success['token'] = $user->createToken('MyApp')->accessToken;
         // $user->image = $user->image;
-        $userData = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
-        if($grade)
-        {
+        $userData = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code', 'image']);
+        if ($grade) {
             $gradeData = ['grade' => $grade->name];
-        }
-        else
-        {
+        } else {
             $gradeData = ['grade' => 'لا يوجد بيانات'];
         }
 
@@ -215,13 +211,14 @@ class UserController extends Controller
             return $this->respondError('Validation Error.', $validator->errors(), 400);
         }
         $code = $request->code;
-        $military_number=$request->military_number;
-        $userId=$request->military_number;
-        $user = User::where(function ($query) use ($military_number,$code) {
-            $query->where('military_number', $military_number)->where('code',$code);
+        $military_number = $request->military_number;
+        $userId = $request->military_number;
+        $user = User::where(function ($query) use ($military_number, $code) {
+            $query->where('military_number', $military_number)->where('code', $code);
         })->orWhere([
             ['id', $userId],
-            ['code',$code]])->first();
+            ['code', $code]
+        ])->first();
         if ($user) {
             return $this->respondSuccess(json_decode('{}'), 'الكود صحيح');
         } else {
@@ -241,8 +238,9 @@ class UserController extends Controller
         }
         $military_number = $request->military_number;
         $user = User::where(function ($query) use ($military_number) {
-            if($military_number){
-            $query->where('military_number', $military_number);}
+            if ($military_number) {
+                $query->where('military_number', $military_number);
+            }
         })->orWhere('id', $request->userId)->first();
         if ($user) {
             $set = '123456789';
@@ -253,10 +251,7 @@ class UserController extends Controller
             $user->code = $code;
             $user->save();
             return $this->respondSuccess(json_decode('{}'), 'تم ارسال الرسالة بنجاح');
-
-        }
-
-         else {
+        } else {
             return $this->respondError('user not found', ['military_number' => ['مستخدم غير مسجل لدينا']], 400);
         }
     }
@@ -271,15 +266,13 @@ class UserController extends Controller
             return $this->respondError('Validation Error.', $validator->errors(), 400);
         }
 
-        $user = User::where('military_number', $request->military_number)->join('inspectors','user_id','users.id')->first();
+        $user = User::where('military_number', $request->military_number)->join('inspectors', 'user_id', 'users.id')->first();
 
         if ($user) {
-        // $success['user'] = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
-        // return $this->respondSuccess($success, 'reset password successfully.');
-          return $this->respondSuccess(json_decode('{}'), 'الرقم العسكرى صحيح');
-        }
-
-         else {
+            // $success['user'] = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
+            // return $this->respondSuccess($success, 'reset password successfully.');
+            return $this->respondSuccess(json_decode('{}'), 'الرقم العسكرى صحيح');
+        } else {
             return $this->respondError('user not found', ['military_number' => ['مستخدم غير مسجل لدينا']], 400);
         }
     }
@@ -291,9 +284,42 @@ class UserController extends Controller
 
 
         return $this->respondSuccess(null, trans('تسجيل خروج'));
-
-
     }
 
+    public function changePassword(Request $request)
+    {
+        // Custom validation messages
+        $messages = [
+            "current_password.required" => "يجب ادخال كلمه المرور الحاليه",
+            "new_password.required" => "يجب ادخال كلمه المرور الجديده",
+            "password_confirm.required" => "يجب ادخال تأكيد كلمه المرور",
+            "password_confirm.same" => "يجب ان يكون كلمه المرور متطابقه"
+        ];
 
+        // Validation rules
+        $validatedData = Validator::make($request->all(), [
+            "current_password" => "required",
+            "new_password" => "required",
+            "password_confirm" => "required|same:new_password",
+        ], $messages);
+
+        // Check for validation failures
+        if ($validatedData->fails()) {
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+        }
+
+        $user = Auth::user(); // Get the authenticated user
+
+        // Check if the current password matches the user's password
+        if (!Hash::check($request->current_password, $user->password)) {
+            return $this->respondError('Error.', "كلمة المرور الحالية غير صحيحة", 400);
+        }
+
+        // Update the user's password
+        $user = User::find(Auth()->id());
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json(['message' => 'Password changed successfully.'], 200);
+    }
 }
