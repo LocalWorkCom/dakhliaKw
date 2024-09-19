@@ -57,35 +57,107 @@ class paperTransactionController extends Controller
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         // shift
         $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
+        if($request->id){
+            $record = paperTransaction::where('id',$request->id)->first();
+            $isparent = $record->parent;
+            if($isparent == 0){
+                $record->status = 0;
+                $record->save();
+                $new = new paperTransaction();
+                $new->point_id =$request->point_id ;
+                $new->mission_id =$request->mission_id ;
+                $new->inspector_id = $inspectorId ;
+                $new->civil_number =$request->civil_number ;
+                $new->date =$request->date ;
 
-        $new = new paperTransaction();
-        $new->point_id =$request->point_id ;
-        $new->mission_id =$request->mission_id ;
-        $new->inspector_id = $inspectorId ;
-        $new->civil_number =$request->civil_number ;
-        $new->date =$request->date ;
+                $new->registration_number =$request->registration_number ;
+                $new->status =1 ;
+                $new->parent =$request->id;
+                $new->created_by = auth()->user()->id;
+                $new->save();
+                if ($request->hasFile('images')) {
+                    $files = $request->file('images');
+                    $path = 'Api/images/paperTransactions';
+                    $model = paperTransaction::find($new->id);
+                    UploadFilesIM($path, 'images', $model, $files);
+                }
+                $recor= paperTransaction::find($new->id);
+            $success['report'] = $recor->only('id','point_id','mission_id','inspector_id','civil_number','registration_number','images','created_at');
 
-        $new->registration_number =$request->registration_number ;
-        $new->status =1 ;
-        $new->parent =0 ;
-        $new->created_by = auth()->user()->id;
-        $new->save();
-        if ($request->hasFile('images')) {
-            $files = $request->file('images');
-            $path = 'Api/images/paperTransactions';
-            $model = paperTransaction::find($new->id);
-            UploadFilesIM($path, 'images', $model, $files);
+
+            if ($new) {
+                return $this->respondSuccess($success, 'Data get successfully.');
+            } else {
+
+                return $this->apiResponse(true, 'Data get successfully.', null, 200);
+            }
+            }else{
+                $records = paperTransaction::where('parent',$isparent)->pluck('id')->toArray();
+                foreach($records as $record){
+                    $recs = paperTransaction::find($record);
+                    $recs->status = 0;
+                    $recs->save();
+                }
+                $new = new paperTransaction();
+                $new->point_id =$request->point_id ;
+                $new->mission_id =$request->mission_id ;
+                $new->inspector_id = $inspectorId ;
+                $new->civil_number =$request->civil_number ;
+                $new->date =$request->date ;
+
+                $new->registration_number =$request->registration_number ;
+                $new->status =1;
+                $new->parent =$isparent ;
+                $new->created_by = auth()->user()->id;
+                $new->save();
+                if ($request->hasFile('images')) {
+                    $files = $request->file('images');
+                    $path = 'Api/images/paperTransactions';
+                    $model = paperTransaction::find($new->id);
+                    UploadFilesIM($path, 'images', $model, $files);
+                }
+                $recor= paperTransaction::find($new->id);
+                $success['report'] = $recor->only('id','point_id','mission_id','inspector_id','civil_number','registration_number','images','created_at');
+
+
+                if ($new) {
+                    return $this->respondSuccess($success, 'Data get successfully.');
+                } else {
+
+                    return $this->apiResponse(true, 'Data get successfully.', null, 200);
+                }
+            }
+        }else{
+            $new = new paperTransaction();
+            $new->point_id =$request->point_id ;
+            $new->mission_id =$request->mission_id ;
+            $new->inspector_id = $inspectorId ;
+            $new->civil_number =$request->civil_number ;
+            $new->date =$request->date ;
+
+            $new->registration_number =$request->registration_number ;
+            $new->status =1 ;
+            $new->parent =0 ;
+            $new->created_by = auth()->user()->id;
+            $new->save();
+            if ($request->hasFile('images')) {
+                $files = $request->file('images');
+                $path = 'Api/images/paperTransactions';
+                $model = paperTransaction::find($new->id);
+                UploadFilesIM($path, 'images', $model, $files);
+            }
+            $record = paperTransaction::find($new->id);
+            $success['report'] = $record->only('id','point_id','mission_id','inspector_id','civil_number','registration_number','images','created_at');
+
+
+            if ($new) {
+                return $this->respondSuccess($success, 'Data get successfully.');
+            } else {
+
+                return $this->apiResponse(true, 'Data get successfully.', null, 200);
+            }
         }
-        $record = paperTransaction::find($new->id);
-        $success['report'] = $record->only('id','point_id','mission_id','inspector_id','civil_number','registration_number','images','created_at');
 
-
-        if ($new) {
-            return $this->respondSuccess($success, 'Data get successfully.');
-        } else {
-
-            return $this->apiResponse(true, 'Data get successfully.', null, 200);
-        }
     }
 
     /**

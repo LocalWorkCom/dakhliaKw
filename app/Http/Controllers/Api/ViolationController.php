@@ -352,6 +352,7 @@ class ViolationController  extends Controller
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
+                'point_name' => $violation->point->name,
                 'flag_instantmission' => $violation->flag_instantmission,
                 'violation_mode' => $violation->flag,
             ];
@@ -442,8 +443,9 @@ class ViolationController  extends Controller
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
+                'point_name' => $violation->point->name,
                 'flag_instantmission' => $violation->flag_instantmission,
-                'violation_mode' => $violation->flag ? "0" : "1",
+                'violation_mode' => $violation->flag ,
             ];
         });
 
@@ -675,7 +677,7 @@ class ViolationController  extends Controller
 
                     }
                 } else {
-                    $viloations = Violation::where('point_id', $point->id)->where('parent', $parent_id)->pluck('id')->toArray();
+                    $viloations = Violation::where('point_id', $request->point_id)->where('parent', $parent_id)->pluck('id')->toArray();
                     foreach ($viloations as $viloation) {
                         $viloate = Violation::findOrFail($viloation);
                         $viloate->status = 0;
