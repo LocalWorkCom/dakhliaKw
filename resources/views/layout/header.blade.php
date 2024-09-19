@@ -95,22 +95,35 @@
                                 <img src="{{ asset('frontend/images/inspectors.svg') }}" alt="logo" style="margin-left: 7px;">
                                 <a href="{{ route('inspectors.index') }}">المفتشون</a>
                             </li>
+                            @if (Auth::user()->hasPermission('view Groups'))
+
                             <li>
                                 <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo" style="margin-left: 7px;">
                                 <a href="{{ route('group.view') }}">المجموعات</a>
                             </li>
+                            @endif
+                            @if (Auth::user()->hasPermission('view instantmission'))
+
                             <li>
                                 <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo" style="margin-left: 7px;">
                                 <a href="{{ route('instant_mission.index') }}">الأوامر الخدمة</a>
                             </li>
+                            @endif
+                            @if (Auth::user()->hasPermission('view Violation'))
+
                             <li>
                                 <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo" style="margin-left: 7px;">
                                 <a href="{{ route('viollation') }}"> سجل المخالفات</a>
                             </li>
+                            @endif
+                            @if (Auth::user()->hasPermission('view EmployeeVacation'))
+
                             <li>
                                 <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo" style="margin-left: 7px;">
                                 <a href="{{ route('vacations.list') }}">الإجازات</a>
                             </li>
+                            @endif
+
                             <li>
                                 <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo" style="margin-left: 7px;">
                                 <a href="{{ route('statistic.show') }}"> الأحصائيات </a>
@@ -147,10 +160,13 @@
                             <ul>
                                 <div class="row col-12 d-flex justify-content-around">
                                     <div class="col-6">
+                                        @if (Auth::user()->hasPermission('view Setting'))
+
                                         <li class="{{ request()->routeIs('settings.index') ? 'active' : '' }}">
                                             <img src="{{ asset('frontend/images/police.svg') }}" alt="logo" style="margin-left: 7px;">
                                             <a href="{{ route('settings.index') }}">الاعدادات</a>
                                         </li>
+                                        @endif
                                         @if (Auth::user()->hasPermission('view grade'))
                                             <li class="{{ request()->routeIs('grads.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/police.svg') }}" alt="logo" style="margin-left: 7px;">
@@ -176,18 +192,30 @@
                                                 <a href="{{ route('government.all') }}">المحافظات</a>
                                             </li>
                                         @endif
+                                        @if (Auth::user()->hasPermission('view Region'))
+
                                         <li class="{{ request()->routeIs('regions.index') ? 'active' : '' }}">
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
                                             <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
                                         </li>
+                                        @endif
+
+                                        @if (Auth::user()->hasPermission('view Sector'))
+
                                         <li class="{{ request()->routeIs('sectors.index') ? 'active' : '' }}">
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
                                             <a href="{{ route('sectors.index') }}">القطاعات</a>
                                         </li>
+                                        @endif
+
+                                        @if (Auth::user()->hasPermission('view Point'))
+
                                         <li class="{{ request()->routeIs('points.index') ? 'active' : '' }}">
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
                                             <a href="{{ route('points.index') }}">النقاط</a>
                                         </li>
+                                        @endif
+
                                     </div>
                                     <div class="col-6">
                                         @if (Auth::user()->hasPermission('view VacationType'))
@@ -196,10 +224,14 @@
                                                 <a href="{{ route('vacationType.index') }}">أنواع الأجازات</a>
                                             </li>
                                         @endif
+                                        @if (Auth::user()->hasPermission('view ViolationTypes'))
+
                                         <li class="{{ request()->routeIs('violations.index') ? 'active' : '' }}">
                                             <i class="fa-solid fa-xmark" style="margin-left: 7px;"></i>
                                             <a href="{{ route('violations.index') }}">أنواع المخالفات</a>
                                         </li>
+                                        @endif
+
                                         @if (Auth::user()->hasPermission('view Rule'))
                                             <li class="{{ request()->routeIs('rule.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/task.svg') }}" alt="logo" style="margin-left: 7px;">
@@ -212,19 +244,31 @@
                                                 <a href="{{ route('permission.index') }}">الصلاحيات</a>
                                             </li>
                                         @endif
+                                        @if (Auth::user()->hasPermission('view WorkingTime'))
+
                                         <li class="{{ request()->routeIs('working_time.index') ? 'active' : '' }}">
                                             <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo" style="margin-left: 7px;">
                                             <a href="{{ route('working_time.index') }}">فترات العمل</a>
                                         </li>
+                                        @endif
+
+                                        @if (Auth::user()->hasPermission('view WorkingTree'))
+
                                         <li class="{{ request()->routeIs('working_trees.list') ? 'active' : '' }}">
                                             <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo" style="margin-left: 7px;">
                                             <a href="{{ route('working_trees.list') }}">نظام العمل</a>
                                         </li>
+                                        @endif
+
+                                        @if (Auth::user()->hasPermission('view Absence'))
+
                                         <li class="{{ request()->routeIs('absence.index') ? 'active' : '' }}">
                                             <img src="{{ asset('frontend/images/permission.svg') }}" alt="logo" style="margin-left: 7px;">
                                             <a href="{{ route('absence.index') }}">مسميات العجز
                                             </a>
                                         </li>
+                                        @endif
+
 
                                       
                                     </div>
