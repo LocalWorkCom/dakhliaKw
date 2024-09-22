@@ -314,7 +314,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('points/create', [pointsController::class, 'create'])->name('points.create')->middleware('check.permission:create Point');
     Route::post('points/add', [pointsController::class, 'store'])->name('points.store')->middleware('check.permission:create Point');
 
-    Route::post('points/edit', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
+    // Route::post('points/edit', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
     //End sectors
         Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index')->middleware('check.permission:view Sector');
