@@ -349,7 +349,6 @@ class ViolationController  extends Controller
                 'violation_type' => $violationTypes,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
                 'civil_military_id' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('id') : '',
-
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
@@ -562,6 +561,21 @@ class ViolationController  extends Controller
                 return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
             } else {
                 $parent_id = $parent_violate->parent;
+                $images = [];
+
+                // Handle old images
+                if (!empty($request->old_images)) {
+                    // If old_images is a string, explode it into an array
+                    if (is_string($request->old_images)) {
+                        $oldImages = explode(',', $request->old_images);
+                    } else {
+                        $oldImages = $request->old_images; // In case it's already an array
+                    }
+
+                    if (is_array($oldImages)) {
+                        $images = $oldImages;
+                    }
+                }
                 if ($parent_id == 0) {
                     $parent_violate->status = 0;
                     $parent_violate->save();
@@ -581,15 +595,20 @@ class ViolationController  extends Controller
                     $new->description = $request->description ?? null;
                     $new->flag = 1;
                     $new->user_id = auth()->user()->id;
-                    $new->save();
-
+                    // Handle new image upload
                     if ($request->hasFile('image')) {
-                        $files = $request->file('image'); // Expecting an array of files
-                        $path = 'Api/images/violations'; // Directory path
+                        $files = $request->file('image');
+                        $path = 'Api/images/paperTransactions';
                         $model = Violation::find($new->id);
+                        $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
 
-                        UploadFilesIM($path, 'image', $model, $files);
+                        // Merge old and new images
+                        $images = array_merge($images, $newImages);
                     }
+
+                    // Save images as a comma-separated string
+                    $new->image = implode(',', $images);
+                    $new->save();
                 } else {
                     $viloations = Violation::where('point_id', $point->id)->where('parent', $parent_id)->pluck('id')->toArray();
                     foreach ($viloations as $viloation) {
@@ -613,16 +632,39 @@ class ViolationController  extends Controller
                     $new->description = $request->description ?? null;
                     $new->flag = 1;
                     $new->user_id = auth()->user()->id;
-                    $new->save();
+                    // $new->save();
 
+                    // if ($request->hasFile('image')) {
+                    //     $files = $request->file('image'); // Expecting an array of files
+                    //     $path = 'Api/images/violations'; // Directory path
+                    //     $model = Violation::find($new->id);
+
+                    //     UploadFilesIM($path, 'image', $model, $files);
+                    // }
+                    // Handle new image upload
                     if ($request->hasFile('image')) {
-                        $files = $request->file('image'); // Expecting an array of files
-                        $path = 'Api/images/violations'; // Directory path
+                        $files = $request->file('image');
+                        $path = 'Api/images/paperTransactions';
                         $model = Violation::find($new->id);
+                        $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
 
-                        UploadFilesIM($path, 'image', $model, $files);
+                        // Merge old and new images
+                        $images = array_merge($images, $newImages);
                     }
+
+                    // Save images as a comma-separated string
+                    $new->image = implode(',', $images);
+                    $new->save();
                 }
+            }
+
+            if ($new) {
+                $model = Violation::find($new->id);
+
+                $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                return $this->respondSuccess($success, 'Data Saved successfully.');
+            } else {
+                return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
             }
         } else {
 
@@ -652,6 +694,21 @@ class ViolationController  extends Controller
                 return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
             } else {
                 $parent_id = $parent_violate->parent;
+                $images = [];
+
+                // Handle old images
+                if (!empty($request->old_images)) {
+                    // If old_images is a string, explode it into an array
+                    if (is_string($request->old_images)) {
+                        $oldImages = explode(',', $request->old_images);
+                    } else {
+                        $oldImages = $request->old_images; // In case it's already an array
+                    }
+
+                    if (is_array($oldImages)) {
+                        $images = $oldImages;
+                    }
+                }
                 if ($parent_id == 0) {
                     $parent_violate->status = 0;
                     $parent_violate->save();
@@ -667,17 +724,20 @@ class ViolationController  extends Controller
                     $new->status = 1;
                     // // $new->user_id = auth()->user()->id;
                     $new->user_id = 1;
-                    $new->save();
-
+                    // Handle new image upload
                     if ($request->hasFile('image')) {
-                        $file = $request->image;
-                        $path = 'Api/images/violations';
-                        // foreach ($file as $image) {
-                        //UploadFilesWithoutReal($path, 'image', $new, $file);
-                        UploadFilesIM($path, 'image', $new, $file);
-                        // }
+                        $files = $request->file('image');
+                        $path = 'Api/images/paperTransactions';
+                        $model = Violation::find($new->id);
+                        $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
 
+                        // Merge old and new images
+                        $images = array_merge($images, $newImages);
                     }
+
+                    // Save images as a comma-separated string
+                    $new->image = implode(',', $images);
+                    $new->save();
                 } else {
                     $viloations = Violation::where('point_id', $request->point_id)->where('parent', $parent_id)->pluck('id')->toArray();
                     foreach ($viloations as $viloation) {
@@ -698,50 +758,21 @@ class ViolationController  extends Controller
                     $new->status = 1;
                     // // $new->user_id = auth()->user()->id;
                     $new->user_id = 1;
-                    $new->save();
-
+                    // Handle new image upload
                     if ($request->hasFile('image')) {
-                        $file = $request->image;
-                        $path = 'Api/images/violations';
-                        // foreach ($file as $image) {
-                        //UploadFilesWithoutReal($path, 'image', $new, $file);
-                        UploadFilesIM($path, 'image', $new, $file);
-                        // }
-
-                    }
-
-                    if ($request->hasFile('image')) {
-                        $files = $request->file('image'); // Expecting an array of files
-                        $path = 'Api/images/violations'; // Directory path
+                        $files = $request->file('image');
+                        $path = 'Api/images/paperTransactions';
                         $model = Violation::find($new->id);
+                        $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
 
-                        UploadFilesIM($path, 'image', $model, $files);
+                        // Merge old and new images
+                        $images = array_merge($images, $newImages);
                     }
+
+                    // Save images as a comma-separated string
+                    $new->image = implode(',', $images);
+                    $new->save();
                 }
-                // if (now() > $cutoffTime) {
-                //     return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
-                // } else {
-                //     $new->violation_type = json_encode($request->violation_type);
-                //     $new->flag_instantmission = $request->flag_instantmission;
-                //     $new->mission_id = $request->mission_id;
-                //     $new->file_num = $request->file_num;
-                //     $new->description = $request->description ?? null;
-                //     $new->point_id = $point_id;
-                //     $new->flag = 0;
-                //     // // $new->user_id = auth()->user()->id;
-                //     $new->user_id = 1;
-                //     $new->save();
-
-                //     if ($request->hasFile('image')) {
-                //         $file = $request->image;
-                //         $path = 'Api/images/violations';
-                //         // foreach ($file as $image) {
-                //         //UploadFilesWithoutReal($path, 'image', $new, $file);
-                //         UploadFilesIM($path, 'image', $new, $file);
-                //         // }
-
-                //     }
-                // }
             }
 
 
@@ -754,5 +785,24 @@ class ViolationController  extends Controller
                 return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
             }
         }
+    }
+    function UploadFilesIM($path, $inputName, $model, $files)
+    {
+        $uploadedImages = [];
+
+        foreach ($files as $file) {
+            // Generate a unique filename
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // Move the file to the specified path
+            $file->move(public_path($path), $filename);
+
+            // Store the file URL
+            $uploadedImages[] = url($path . '/' . $filename);
+        }
+
+        return $uploadedImages;
+
+
     }
 }
