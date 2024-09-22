@@ -348,6 +348,8 @@ class ViolationController  extends Controller
                 'image' => $violation->image,
                 'violation_type' => $violationTypes,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
+                'civil_military_id' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('id') : '',
+
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
@@ -445,7 +447,7 @@ class ViolationController  extends Controller
                 'point_id' => $violation->point_id,
                 'point_name' => $violation->point->name,
                 'flag_instantmission' => $violation->flag_instantmission,
-                'violation_mode' => $violation->flag ,
+                'violation_mode' => $violation->flag,
             ];
         });
 
@@ -716,41 +718,41 @@ class ViolationController  extends Controller
                         UploadFilesIM($path, 'image', $model, $files);
                     }
                 }
-            // if (now() > $cutoffTime) {
-            //     return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
-            // } else {
-            //     $new->violation_type = json_encode($request->violation_type);
-            //     $new->flag_instantmission = $request->flag_instantmission;
-            //     $new->mission_id = $request->mission_id;
-            //     $new->file_num = $request->file_num;
-            //     $new->description = $request->description ?? null;
-            //     $new->point_id = $point_id;
-            //     $new->flag = 0;
-            //     // // $new->user_id = auth()->user()->id;
-            //     $new->user_id = 1;
-            //     $new->save();
+                // if (now() > $cutoffTime) {
+                //     return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
+                // } else {
+                //     $new->violation_type = json_encode($request->violation_type);
+                //     $new->flag_instantmission = $request->flag_instantmission;
+                //     $new->mission_id = $request->mission_id;
+                //     $new->file_num = $request->file_num;
+                //     $new->description = $request->description ?? null;
+                //     $new->point_id = $point_id;
+                //     $new->flag = 0;
+                //     // // $new->user_id = auth()->user()->id;
+                //     $new->user_id = 1;
+                //     $new->save();
 
-            //     if ($request->hasFile('image')) {
-            //         $file = $request->image;
-            //         $path = 'Api/images/violations';
-            //         // foreach ($file as $image) {
-            //         //UploadFilesWithoutReal($path, 'image', $new, $file);
-            //         UploadFilesIM($path, 'image', $new, $file);
-            //         // }
+                //     if ($request->hasFile('image')) {
+                //         $file = $request->image;
+                //         $path = 'Api/images/violations';
+                //         // foreach ($file as $image) {
+                //         //UploadFilesWithoutReal($path, 'image', $new, $file);
+                //         UploadFilesIM($path, 'image', $new, $file);
+                //         // }
 
-            //     }
-            // }
-        }
+                //     }
+                // }
+            }
 
 
-        if ($new) {
-            $model = Violation::find($new->id);
+            if ($new) {
+                $model = Violation::find($new->id);
 
-            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
-            return $this->respondSuccess($success, 'Data Saved successfully.');
-        } else {
-            return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                return $this->respondSuccess($success, 'Data Saved successfully.');
+            } else {
+                return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+            }
         }
     }
-}
 }

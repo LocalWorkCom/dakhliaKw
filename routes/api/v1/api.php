@@ -64,6 +64,7 @@ Route::post('/changepassword', 'App\Http\Controllers\Api\UserController@changePa
 //papertransactions
 Route::any('/paper_transactions',  [paperTransactionController::class, 'store']);
 
+Route::any('/papertransaction/all',  [paperTransactionController::class, 'index']);
 
 
 });

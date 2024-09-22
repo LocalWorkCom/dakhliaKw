@@ -271,7 +271,7 @@ class reportsController extends Controller
 
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
 
-        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
+        $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value(column: 'name');
 
         $absenceReport = [];
         $pointViolations = [];
