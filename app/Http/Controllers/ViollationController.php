@@ -71,7 +71,7 @@ class ViollationController extends Controller
         if (isset($date) && $date != '-1')
             $data->where('inspector_mission.date', $date);
         if (isset($group) && $group != '-1')
-            $data->where('inspector_mission.group_id', $group);
+            $data->where('inspector_mission.group_id', $group);      
         if (isset($team) && $team != '-1')
             $data->where('inspector_mission.group_team_id', $group);
         if (isset($inspector) && $inspector != '-1')

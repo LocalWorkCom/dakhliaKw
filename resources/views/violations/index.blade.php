@@ -17,7 +17,7 @@
         <div class="container welcome col-11">
         <div class="d-flex justify-content-between">
             <p> سجل المخالفـــات</p>
-         
+
         </div>
     </div>
     </div>
@@ -35,12 +35,12 @@
                     <div class="form-group moftsh select-box-2  mx-3  d-flex">
                             <!-- <h4 style="    line-height: 1.8;"> التاريخ :</h4> -->
                           <input type="date" name="date" id="date" value="{{($date)?$date:date('Y-m-d')}}">
-                       
+
                         </div>
                         <div class="form-group moftsh select-box-2 mx-3  d-flex">
                         <!-- <h4 style=" line-height: 1.8;"> المجموعة :</h4> -->
                             <select id="group_id" name="group_id" class="form-control" placeholder="المجموعة">
-                             
+
                                 <option value="-1"
                                 selected   > كل المجموعات
                                     </option>
@@ -51,12 +51,12 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                       
                         <div class="form-group moftsh select-box-2  mx-3  d-flex">
                         <!-- <h4 style=" line-height: 1.8;"> الفريق :</h4> -->
                         <select id="group_team_id" name="group_team_id" class="form-control" placeholder="الفرق">
-                             
+
                                 <option value="-1" selected > كل الدوريات
                                     </option>
                                 @foreach ($groupTeams as $item)
@@ -69,7 +69,7 @@
                         <div class="form-group moftsh select-box-2 mx-3  d-flex">
                              <!-- <h4 style=" line-height: 1.8;"> المفتش :</h4> -->
                             <select id="inspectors" name="inspectors" class="form-control" placeholder="المفتش">
-                                 
+
                                     <option value="-1" selected > كل المفتشين
                                     </option>
                                     @foreach ($inspectors as $item)
@@ -82,7 +82,7 @@
                         <div class="form-group moftsh  mx-3  d-flex">
                         <button class="btn-all px-3 " style="color: #212529; background-color: #f8f8f8;"
                         onclick="search()">
-                    بحث  
+                    بحث
                     </button>
                         </div>
                 </div>
@@ -131,7 +131,7 @@
  $(document).ready(function() {
     $('#group_id').on('change', function() {
         var group_id = $(this).val();
-       
+
 
         //if (group_id!=-1) {
             $.ajax({
@@ -141,10 +141,10 @@
                 success: function(data) {
                     $('#group_team_id').empty();
                     $('#group_team_id').append('<option selected value="-1"> كل الدوريات </option>');
-                    $.each(data, function(key, employee) {               
-                        console.log(employee);   
+                    $.each(data, function(key, employee) {
+                        console.log(employee);
                         $('#group_team_id').append('<option value="' + employee.id + '">' + employee.name + '</option>');
-                    });                 
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.log('Error:', error);
@@ -162,7 +162,7 @@ $(document).ready(function() {
         var group_team_id = $(this).val();
         var group_id = $('#group_id').val();
         console.log(group_team_id);
-       
+
 
        // if (group_id!=-1) {
             $.ajax({
@@ -172,10 +172,10 @@ $(document).ready(function() {
                 success: function(data) {
                     $('#inspectors').empty();
                     $('#inspectors').append('<option value="-1"> كل المفتشين   </option>');
-                    $.each(data, function(key, employee) {               
-                        // console.log(employee);   
+                    $.each(data, function(key, employee) {
+                        // console.log(employee);
                         $('#inspectors').append('<option value="' + employee.id + '">' + employee.name + '</option>');
-                    });                 
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.log('Error:', error);
@@ -206,7 +206,7 @@ function search()
             if(addurl=='')addurl+='?';else addurl+='&';
             addurl+='date='+dateItem;
         }
-    } 
+    }
     if(group)
     {
         if(addurl=='')addurl+='?';else addurl+='&';
@@ -254,8 +254,8 @@ $(document).ready(function() {
                                       }
                                       $Dataurl.=$url;
                                         //dd($Dataurl);
-                                                                        
-                                        @endphp    
+
+                                        @endphp
     $('#users-table').DataTable({
         processing: true,
         serverSide: true,
