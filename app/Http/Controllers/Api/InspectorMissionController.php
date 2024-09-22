@@ -226,7 +226,8 @@ class InspectorMissionController extends Controller
         $date = date('Y-m-d');
         if ($missionData) {
             $responseData = [
-                'date' => $dayNamesArabic[$dayName] . ', ' . $date,
+                'date' => $date,
+                'date_name'=>$dayNamesArabic[$dayName],
                 'mission_count' => $count,
                 'instant_mission_count' => $instantmissioncount,
                 'groupPointCount' => $groupPointCount,
