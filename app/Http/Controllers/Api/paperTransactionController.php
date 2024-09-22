@@ -33,7 +33,7 @@ class paperTransactionController extends Controller
         $today = Carbon::today()->toDateString();
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value(column: 'name');
-
+        $all=[];
         $records = paperTransaction::where('status', 1)->where('point_id', $request->point_id)->where('inspector_id', $inspectorId)->where('date',$today)->get();
         foreach ($records as $record) {
             $all[] = [
@@ -93,111 +93,146 @@ class paperTransactionController extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
+
         $today = Carbon::today()->toDateString();
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
-        // shift
-        $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
+        $inspector = InspectorMission::where('inspector_id', $inspectorId)
+                                     ->where('date', $today)
+                                     ->where('day_off', 0)
+                                     ->first();
+
         if ($request->id) {
             $record = paperTransaction::where('id', $request->id)->first();
-            $isparent = $record->parent;
-            if ($isparent == 0) {
+            $isParent = $record->parent;
+
+            // Initialize the images array
+            $images = [];
+
+            // Handle old images
+            if (!empty($request->old_images)) {
+                // If old_images is a string, explode it into an array
+                if (is_string($request->old_images)) {
+                    $oldImages = explode(',', $request->old_images);
+                } else {
+                    $oldImages = $request->old_images; // In case it's already an array
+                }
+
+                if (is_array($oldImages)) {
+                    $images = $oldImages;
+                }
+            }
+
+            if ($isParent == 0) {
+                // Mark the old record as inactive
                 $record->status = 0;
                 $record->save();
+
+                // Create new paperTransaction record
                 $new = new paperTransaction();
                 $new->point_id = $request->point_id;
                 $new->mission_id = $request->mission_id;
                 $new->inspector_id = $inspectorId;
                 $new->civil_number = $request->civil_number;
                 $new->date = $request->date;
-
                 $new->registration_number = $request->registration_number;
                 $new->status = 1;
                 $new->parent = $request->id;
                 $new->created_by = auth()->user()->id;
-                $new->save();
+
+
+                // Handle new image upload
                 if ($request->hasFile('images')) {
                     $files = $request->file('images');
                     $path = 'Api/images/paperTransactions';
                     $model = paperTransaction::find($new->id);
-                    UploadFilesIM($path, 'images', $model, $files);
+                    $newImages = $this->UploadFilesIM($path, 'images', $model, $files);
+
+                    // Merge old and new images
+                    $images = array_merge($images, $newImages);
                 }
+
+                // Save images as a comma-separated string
+                $new->images = implode(',', $images);
+                $new->save();
+
                 $recor = paperTransaction::find($new->id);
                 $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number', 'registration_number', 'images', 'created_at');
 
-
-                if ($new) {
-                    return $this->respondSuccess($success, 'Data get successfully.');
-                } else {
-
-                    return $this->apiResponse(true, 'Data get successfully.', null, 200);
-                }
+                return $this->respondSuccess($success, 'Data saved successfully.');
             } else {
-                $records = paperTransaction::where('parent', $isparent)->pluck('id')->toArray();
-                foreach ($records as $record) {
-                    $recs = paperTransaction::find($record);
+                // Deactivate child records of the same parent
+                $records = paperTransaction::where('parent', $isParent)->pluck('id')->toArray();
+                foreach ($records as $recordId) {
+                    $recs = paperTransaction::find($recordId);
                     $recs->status = 0;
                     $recs->save();
                 }
+
+                // Create new paperTransaction record
                 $new = new paperTransaction();
                 $new->point_id = $request->point_id;
                 $new->mission_id = $request->mission_id;
                 $new->inspector_id = $inspectorId;
                 $new->civil_number = $request->civil_number;
                 $new->date = $request->date;
-
                 $new->registration_number = $request->registration_number;
                 $new->status = 1;
-                $new->parent = $isparent;
+                $new->parent = $isParent;
                 $new->created_by = auth()->user()->id;
-                $new->save();
+
+
+                // Handle new image upload
                 if ($request->hasFile('images')) {
                     $files = $request->file('images');
                     $path = 'Api/images/paperTransactions';
                     $model = paperTransaction::find($new->id);
-                    UploadFilesIM($path, 'images', $model, $files);
+                    $newImages = $this->UploadFilesIM($path, 'images', $model, $files);
+
+                    // Merge old and new images
+                    $images = array_merge($images, $newImages);
                 }
+
+                // Save images as a comma-separated string
+                $new->images = implode(',', $images);
+                $new->save();
+
                 $recor = paperTransaction::find($new->id);
                 $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number', 'registration_number', 'images', 'created_at');
 
-
-                if ($new) {
-                    return $this->respondSuccess($success, 'Data get successfully.');
-                } else {
-
-                    return $this->apiResponse(true, 'Data get successfully.', null, 200);
-                }
+                return $this->respondSuccess($success, 'Data saved successfully.');
             }
         } else {
+            // Create new paperTransaction record
             $new = new paperTransaction();
             $new->point_id = $request->point_id;
             $new->mission_id = $request->mission_id;
             $new->inspector_id = $inspectorId;
             $new->civil_number = $request->civil_number;
             $new->date = $request->date;
-
             $new->registration_number = $request->registration_number;
             $new->status = 1;
             $new->parent = 0;
             $new->created_by = auth()->user()->id;
-            $new->save();
+
+            // Handle new image upload
             if ($request->hasFile('images')) {
                 $files = $request->file('images');
                 $path = 'Api/images/paperTransactions';
                 $model = paperTransaction::find($new->id);
-                UploadFilesIM($path, 'images', $model, $files);
+                $newImages = $this->UploadFilesIM($path, 'images', $model, $files);
+
+                // Save images as a comma-separated string
+
             }
+            $new->images = implode(',', $newImages);
+            $new->save();
             $record = paperTransaction::find($new->id);
             $success['report'] = $record->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number', 'registration_number', 'images', 'created_at');
 
-
-            if ($new) {
-                return $this->respondSuccess($success, 'Data get successfully.');
-            } else {
-
-                return $this->apiResponse(true, 'Data get successfully.', null, 200);
-            }
+            return $this->respondSuccess($success, 'Data saved successfully.');
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -238,34 +273,8 @@ class paperTransactionController extends Controller
         }
 
         return $uploadedImages;
-        function UploadFilesIM($path, $inputName, $model, $files)
-        {
-            $uploadedImages = [];
+    
 
-            foreach ($files as $file) {
-                // Generate a unique filename
-                $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
-
-                // Move the file to the specified path
-                $file->move(public_path($path), $filename);
-
-                // Store the file URL
-                $uploadedImages[] = url($path . '/' . $filename);
-            }
-
-            return $uploadedImages;
-        }
-        // Handle image upload and merging old and new images
-        $images = $request->old_images ?? [];  // Get old images from request
-        if ($request->hasFile('images')) {
-            $files = $request->file('images');
-            $path = 'Api/images/paperTransactions';
-            $model = paperTransaction::find($new->id);
-            $newImages = $this->UploadFilesIM($path, 'images', $model, $files);
-            $images = array_merge($images, $newImages); // Combine old and new images
-        }
-        $new->images = json_encode($images); // Save merged images
-        $new->save();
     }
 
     /**
