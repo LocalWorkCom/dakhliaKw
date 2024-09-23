@@ -178,8 +178,11 @@ class InspectorMissionController extends Controller
 
 
 
-                        $time = $createdAt->format('h:i'); // 12-hour format
-                        $time_arabic = str_replace(['AM', 'PM'], ['صباحا', 'مساءا'], $time);
+                        $time = $createdAt->format('h:i'); // Only time
+
+                        // Determine if it's AM or PM and set the Arabic equivalent
+                        $period = $createdAt->format('A'); // AM or PM
+                        $time_arabic = ($period === 'AM') ? 'صباحا' : 'مساءا';
 
                         $instantMissionData[] = [
                             'instant_mission_id' => $instantmission->id,
