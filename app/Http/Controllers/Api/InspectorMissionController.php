@@ -120,7 +120,6 @@ class InspectorMissionController extends Controller
                                 $avilable = true;
                             }
 
-                            // Check for violations and absences
                             $date = Carbon::today()->format('Y-m-d');
                             $violationCount = Violation::where('point_id', $point->id)->where('status', 1)->whereDate('created_at', $date)->count();
                             $absenceCount = Absence::where('point_id', $point->id)->where('flag', 1)->whereDate('date', $date)->count();
