@@ -97,7 +97,6 @@ class InspectorMissionController extends Controller
                             $avilable = false;
                             $pointTime = ['startTime' => '00:00', 'endTime' => '23:59']; // Default to full day
 
-                            // Check if point has specific working hours
                             if ($point->work_type == 1) {
                                 $workTime = PointDays::where('point_id', $pointId)->where('name', $today)->first();
                                 if ($workTime) {
