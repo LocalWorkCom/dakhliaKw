@@ -91,7 +91,6 @@ class InspectorMissionController extends Controller
                     $groupPointsData = [];
                     foreach ($idsPoints as $pointId) {
                         $point = Point::with('government')->find($pointId);
-                        print_r($point);
                         if ($point) {
                             $today = date('w');
                             $inspectionTime = '';
