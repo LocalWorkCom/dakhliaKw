@@ -189,9 +189,9 @@ class InspectorMissionController extends Controller
                             'description' => $instantmission->description,
                             'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
                             'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name
-                            'date' => $createdAt->format('Y-m-d'), // Use Carbon for consistent date formatting
+                            'date' => $createdAt->format('Y-m-d'), 
                             'time' => $time?? null,
-                            'time_name' => $time_arabic?? null, // Arabic AM/PM
+                            'time_name' => $time_arabic?? null,
                             'latitude' => $instantmission->latitude,
                             'longitude' => $instantmission->longitude,
                         ];
