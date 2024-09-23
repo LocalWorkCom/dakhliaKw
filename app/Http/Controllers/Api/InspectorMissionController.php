@@ -178,7 +178,7 @@ class InspectorMissionController extends Controller
 
 
 
-                        $time = $createdAt->format('h:i A'); // 12-hour format with AM/PM
+                        $time = $createdAt->format('h:i'); // 12-hour format
                         $time_arabic = str_replace(['AM', 'PM'], ['صباحا', 'مساءا'], $time);
 
                         $instantMissionData[] = [
@@ -189,7 +189,7 @@ class InspectorMissionController extends Controller
                             'description' => $instantmission->description,
                             'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
                             'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name
-                            'date' => $createdAt->format('Y-m-d'), 
+                            'date' => $createdAt->format('Y-m-d'),
                             'time' => $time?? null,
                             'time_name' => $time_arabic?? null,
                             'latitude' => $instantmission->latitude,
