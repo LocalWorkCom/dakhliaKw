@@ -174,7 +174,8 @@ class InspectorMissionController extends Controller
                             $location = $instantmission->location;
                             $kwFinder = null;
                         }
-
+                        $time = $instantmission->created_at->format('h:i A'); // Format with AM/PM
+                        $time_arabic = str_replace(['AM', 'PM'], ['صباحا', 'مساءا'], $time);
 
                         $instantMissionData[] = [
 
@@ -187,7 +188,8 @@ class InspectorMissionController extends Controller
                             'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
                             'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name ,
                             'date' => $instantmission->created_at->format('Y-m-d'),
-
+                            'time'=>$time,
+                            'time_name'=> $time_arabic,
                             'latitude' => $instantmission->latitude,
                             'longitude' => $instantmission->longitude,
                         ];

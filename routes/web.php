@@ -28,6 +28,7 @@ use App\Http\Controllers\GroupPointsController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\qualificationController;
 use App\Http\Controllers\InstantmissionController;
+use App\Http\Controllers\paperTransactionController;
 use App\Http\Controllers\statisticController;
 use App\Http\Controllers\ViolationTypesController;
 
@@ -39,8 +40,7 @@ use App\Http\Controllers\ViolationTypesController;
 use App\Http\Controllers\ViolationReportController;
 
 use App\Http\Controllers\ViollationController;
-
-
+use App\Models\paperTransaction;
 
 /*
 |--------------------------------------------------------------------------
@@ -424,6 +424,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search/{search}/{q?}', [SearchController::class, 'index'])->name('search');
     Route::get('/searchUsers/users/{id}/{q?}', [SearchController::class, 'getUsers'])->name('search.users')->middleware('check.permission:view User');
     Route::get('/searchDept/departments/{q?}', [SearchController::class, 'getDepartments'])->name('search.departments');
+
+    //// paperTransactions
+    // Route::get('/paperTransactions', [paperTransaction::class, 'index'])->name('transactions')->middleware('check.permission:view paperTransactions');
+    Route::get('/paperTransactions', [paperTransactionController::class, 'index'])->name('transactions');
+    Route::get('paperTransactions/getAll', [ViollationController::class, 'gettransactions'])->name('paperTransactions.getAll')->middleware('check.permission:view Violation');
 
     /**
      * Violation Show
