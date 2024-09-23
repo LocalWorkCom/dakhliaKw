@@ -91,7 +91,7 @@ class InspectorMissionController extends Controller
                     $groupPointsData = [];
                     foreach ($idsPoints as $pointId) {
                         $point = Point::with('government')->find($pointId);
-
+                        print_r($point);
                         if ($point) {
                             $today = date('w');
                             $inspectionTime = '';
@@ -142,27 +142,28 @@ class InspectorMissionController extends Controller
                                 'count_absence' => $absenceCount
                             ];
                         }
+                        // dd('k');
                     }
+
 
                     $missionData[] = [
                         'mission_id' => $mission->id,
                         'inspector_shift' => $inspector_shift,
                         'governate' => $groupPoint->government->name,
-                        'sector'=>$sector,
+                        'sector' => $sector,
                         'name' => $groupPoint->name,
                         'points_count' => count($groupPointsData),
                         'points' => $groupPointsData,
                         'created_at' => $mission->created_at
                     ];
                 }
-
             }
             $instantMissionData = [];
             if (!is_null($mission->ids_instant_mission)) {
                 foreach ($instantMissions as $instant) {
                     $instantmissioncount++;
                     $instantmission =  instantmission::find($instant);
-                    //dd( $instabtMi);
+                    // dd( $instantmission);
 
                     if ($instantmission) {
 
@@ -174,22 +175,26 @@ class InspectorMissionController extends Controller
                             $location = $instantmission->location;
                             $kwFinder = null;
                         }
-                        $time = $instantmission->created_at->format('h:i A'); // Format with AM/PM
+
+
+                        $createdAt = $instantmission->created_at;
+
+
+
+                        $time = $createdAt->format('h:i A'); // 12-hour format with AM/PM
                         $time_arabic = str_replace(['AM', 'PM'], ['صباحا', 'مساءا'], $time);
 
                         $instantMissionData[] = [
-
                             'instant_mission_id' => $instantmission->id,
-                            'name' => $instantmission->label,  // Assuming description field
-                            // 'location' => $instantmission->location,
+                            'name' => $instantmission->label,
                             'location' => $location,
                             'KWfinder' => $kwFinder,
                             'description' => $instantmission->description,
                             'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
-                            'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name ,
-                            'date' => $instantmission->created_at->format('Y-m-d'),
-                            'time'=>$time,
-                            'time_name'=> $time_arabic,
+                            'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name
+                            'date' => $createdAt->format('Y-m-d'), // Use Carbon for consistent date formatting
+                            'time' => $time?? null,
+                            'time_name' => $time_arabic?? null, // Arabic AM/PM
                             'latitude' => $instantmission->latitude,
                             'longitude' => $instantmission->longitude,
                         ];
@@ -228,7 +233,7 @@ class InspectorMissionController extends Controller
         if ($missionData) {
             $responseData = [
                 'date' => $date,
-                'date_name'=>$dayNamesArabic[$dayName],
+                'date_name' => $dayNamesArabic[$dayName],
                 'mission_count' => $count,
                 'instant_mission_count' => $instantmissioncount,
                 'groupPointCount' => $groupPointCount,
