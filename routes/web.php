@@ -425,11 +425,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/searchUsers/users/{id}/{q?}', [SearchController::class, 'getUsers'])->name('search.users')->middleware('check.permission:view User');
     Route::get('/searchDept/departments/{q?}', [SearchController::class, 'getDepartments'])->name('search.departments');
 
-    //// paperTransactions
-    // Route::get('/paperTransactions', [paperTransaction::class, 'index'])->name('transactions')->middleware('check.permission:view paperTransactions');
-    // Route::get('/paperTransactions', [paperTransactionController::class, 'index'])->name('transactions');
-    // Route::get('paperTransactions/getAll', [ViollationController::class, 'gettransactions'])->name('paperTransactions.getAll')->middleware('check.permission:view Violation');
-
+   
     /**
      * Violation Show
      */

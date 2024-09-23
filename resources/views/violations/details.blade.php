@@ -82,6 +82,48 @@
                             </tbody>
                         </table>
                     @endforeach
+                    @elseif ($type == 2)
+                    <table class="table table-bordered" dir="rtl">
+                        <tbody>
+                            <tr>
+                                <th>رقم القيد :</th>
+                                <td>{{ $data->civil_number ? $data->civil_number : ' ' }}</td>
+                            </tr>
+                            <tr>
+                                <th>رقم الأحوال :</th>
+                                <td>{{ $data->registration_number ? $data->registration_number : ' ' }}</td>
+                            </tr>
+
+                            @if ($data->images)
+                                <tr>
+                                    <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
+                                    <td>
+                                        @php
+                                            $images = explode(',', $data->image);
+                                        @endphp
+                                        @foreach ($images as $file)
+                                            <div class="pb-4 mx-2">
+
+                                                <a href="#" class="image-popup" data-toggle="modal"
+                                                    data-target="#imageModal" data-image="{{ $file }}"
+                                                    data-title="{{ $file }}">
+                                                    <img src="{{ $file }}" class="img-thumbnail mx-2"
+                                                        alt="{{ $file }}">
+                                                    <br> <br>
+                                                    {{-- @if (Auth::user()->hasPermission('download Io_file')) --}}
+                                                    {{-- <a id="downloadButton"
+                                                            href="{{ route('iotelegram.downlaodfile', ['id' => $file->id]) }}"
+                                                            class="btn-download"><i class="fa fa-download" style="color:green;"></i>
+                                                                </a> --}}
+                                                    {{-- @endif --}}
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
                 @else
                     <table class="table table-bordered" dir="rtl">
                         <tbody>
