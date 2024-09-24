@@ -64,6 +64,7 @@ class paperTransactionController extends Controller
                 'point_id' => $record->point_id,
                 'point_shift'=>$shiftDetails,
                 'point_name' => $record->point->name,
+                'date' => $record->date,
                 'inspector_id' => $record->inspector_id,
                 'inspector_name' => $record->inspector->name,
                 'team_name' => $teamName,
