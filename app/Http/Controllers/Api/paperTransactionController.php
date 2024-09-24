@@ -182,7 +182,7 @@ class paperTransactionController extends Controller
                 $new->save();
 
                 $recor = paperTransaction::find($new->id);
-                $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number', 'registration_number', 'images', 'created_at');
+                $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number','date', 'registration_number', 'images', 'created_at');
 
                 return $this->respondSuccess($success, 'Data saved successfully.');
             } else {
@@ -225,7 +225,7 @@ class paperTransactionController extends Controller
                 $new->save();
 
                 $recor = paperTransaction::find($new->id);
-                $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number', 'registration_number', 'images', 'created_at');
+                $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id','date', 'civil_number', 'registration_number', 'images', 'created_at');
 
                 return $this->respondSuccess($success, 'Data saved successfully.');
             }
@@ -258,7 +258,7 @@ class paperTransactionController extends Controller
             $new->save();
 
             $record = paperTransaction::find($new->id);
-            $success['report'] = $record->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number', 'registration_number', 'images', 'created_at');
+            $success['report'] = $record->only('id', 'point_id', 'mission_id', 'inspector_id','date', 'civil_number', 'registration_number', 'images', 'created_at');
 
             return $this->respondSuccess($success, 'Data saved successfully.');
         }
