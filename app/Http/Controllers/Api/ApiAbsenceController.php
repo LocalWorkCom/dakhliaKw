@@ -318,7 +318,7 @@ class ApiAbsenceController extends Controller
                     $abcenses = Absence::where( 'point_id', $request->point_id)->where('parent', $parent_id)->pluck('id')->toArray();
                     foreach ($abcenses as $abcenses) {
                         $viloate = Absence::findOrFail($abcenses);
-                        $viloate->status = 0;
+                        $viloate->flag = 0;
                         $viloate->save();
                     }
                     $new = new Absence();

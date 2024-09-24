@@ -474,9 +474,13 @@ class reportsController extends Controller
                     $absenceReport[] = [
 
                         'abcence_day' => $absence->date,
+                        'point_id'=>$absence->point_id,
                         'point_name' => $absence->point->name,
                         'point_time' => $pointTime,
                         'shift' => $shiftDetails,
+                        'id'=>$absence->id,
+                        'missiom_id'=>$absence->mission_id,
+
                         'inspector_name' => $absence->inspector->name,
                         'inspector_grade' => auth()->user()->grade_id ? auth()->user()->grade->name : null,
                         'team_name' => $teamName,
