@@ -8,6 +8,7 @@ use App\Models\GroupTeam;
 use App\Models\Inspector;
 use App\Models\InspectorMission;
 use App\Models\paperTransaction;
+use App\Models\PointDays;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -36,9 +37,32 @@ class paperTransactionController extends Controller
         $all=[];
         $records = paperTransaction::where('status', 1)->where('point_id', $request->point_id)->where('inspector_id', $inspectorId)->where('date',$today)->get();
         foreach ($records as $record) {
+            $pointShift = PointDays::where('point_id', $record->point_id)
+            ->where('name', Carbon::parse($record->created_at)->dayOfWeek)
+            ->first();
+
+        if ($record->point_id) {
+
+            $shiftDetails = [
+                'start_time' => '00:00',
+                'end_time' => '23:59',
+                'time' => null
+            ];
+
+            // Override with actual shift if available
+            if ($pointShift && $pointShift->from && $pointShift->to) {
+                $shiftDetails = [
+                    'start_time' => $pointShift->from,
+                    'end_time' => $pointShift->to,
+                    'time' => null // As per requirement
+                ];
+            }
+        }
             $all[] = [
                 'id' => $record->id,
+                'governrate'=>$record->point->government->name,
                 'point_id' => $record->point_id,
+                'point_shift'=>$shiftDetails,
                 'point_name' => $record->point->name,
                 'inspector_id' => $record->inspector_id,
                 'inspector_name' => $record->inspector->name,
