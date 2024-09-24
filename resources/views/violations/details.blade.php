@@ -99,7 +99,7 @@
                                     <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
                                     <td>
                                         @php
-                                            $images = explode(',', $data->image);
+                                            $images = explode(',', $data->images);
                                         @endphp
                                         @foreach ($images as $file)
                                             <div class="pb-4 mx-2">
