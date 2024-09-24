@@ -110,7 +110,6 @@ class paperTransactionController extends Controller
 
             // Handle old images
             if (!empty($request->old_images)) {
-                // If old_images is a string, explode it into an array
                 if (is_string($request->old_images)) {
                     $oldImages = explode(',', $request->old_images);
                 } else {
@@ -139,6 +138,8 @@ class paperTransactionController extends Controller
                 $new->parent = $request->id;
                 $new->created_by = auth()->user()->id;
 
+                // Initialize $newImages as an empty array
+                $newImages = [];
 
                 // Handle new image upload
                 if ($request->hasFile('images')) {
@@ -180,6 +181,8 @@ class paperTransactionController extends Controller
                 $new->parent = $isParent;
                 $new->created_by = auth()->user()->id;
 
+                // Initialize $newImages as an empty array
+                $newImages = [];
 
                 // Handle new image upload
                 if ($request->hasFile('images')) {
@@ -214,24 +217,28 @@ class paperTransactionController extends Controller
             $new->parent = 0;
             $new->created_by = auth()->user()->id;
 
+            // Initialize $newImages as an empty array
+            $newImages = [];
+
             // Handle new image upload
             if ($request->hasFile('images')) {
                 $files = $request->file('images');
                 $path = 'Api/images/paperTransactions';
                 $model = paperTransaction::find($new->id);
                 $newImages = $this->UploadFilesIM($path, 'images', $model, $files);
-
-                // Save images as a comma-separated string
-
             }
+
+            // Save images as a comma-separated string
             $new->images = implode(',', $newImages);
             $new->save();
+
             $record = paperTransaction::find($new->id);
             $success['report'] = $record->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number', 'registration_number', 'images', 'created_at');
 
             return $this->respondSuccess($success, 'Data saved successfully.');
         }
     }
+
 
 
     /**
@@ -273,7 +280,7 @@ class paperTransactionController extends Controller
         }
 
         return $uploadedImages;
-    
+
 
     }
 
