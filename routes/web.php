@@ -415,8 +415,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('working_tree/show/{id}', [WorkingTreeController::class, 'show'])->name('working_tree.show')->middleware('check.permission:view WorkingTree');
 
 
-    Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission')->middleware('check.permission:view InspectorMission');
-    Route::get('/inspectors-mession/drag-drop', [GroupTeamController::class, 'DragDrop'])->name('point.dragdrop')->middleware('check.permission:edit InspectorMission');
+    Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
+    Route::get('/inspectors-mession/drag-drop', [GroupTeamController::class, 'DragDrop'])->name('point.dragdrop');
 
     /**
      * Search From Home
@@ -425,7 +425,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/searchUsers/users/{id}/{q?}', [SearchController::class, 'getUsers'])->name('search.users')->middleware('check.permission:view User');
     Route::get('/searchDept/departments/{q?}', [SearchController::class, 'getDepartments'])->name('search.departments');
 
-   
+
     /**
      * Violation Show
      */
