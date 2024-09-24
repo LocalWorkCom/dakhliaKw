@@ -484,6 +484,7 @@ class reportsController extends Controller
                         'actual_number' => $absence->actual_number,
                         'disability' => $absence->total_number - $absence->actual_number,
                         'absence_members' => $absenceMembers,
+                        'created_at'=>$absence->created_at
                     ];
                 }
             }
