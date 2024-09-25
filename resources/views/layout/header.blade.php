@@ -109,13 +109,13 @@
                                 <a href="{{ route('instant_mission.index') }}">الأوامر الخدمة</a>
                             </li>
                             @endif
-                            @if (Auth::user()->hasPermission('view Violation'))
+                            <!-- @if (Auth::user()->hasPermission('view Violation'))
 
                             <li>
                                 <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo" style="margin-left: 7px;">
                                 <a href="{{ route('viollation') }}"> سجل المخالفات</a>
                             </li>
-                            @endif
+                            @endif -->
                             @if (Auth::user()->hasPermission('view EmployeeVacation'))
 
                             <li>
@@ -131,6 +131,14 @@
                         </ul>
                     </div>
                 </li>
+                @if (Auth::user()->hasPermission('view Violation'))
+                <li class="nav-item {{ request()->routeIs('user.employees') ? 'active' : '' }} btn3  @isset($search) @if($search=='emps') active @endif @endisset" >
+                    <a href="{{ route('viollation') }}"  >
+                        <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
+                        <h6 class="btn3">المخالفات</h6>
+                    </a>
+                </li>
+                @endif
                 <li class="nav-item {{ request()->routeIs('inspector.mission') ? 'active' : '' }}">
                     <a href="{{ route('inspector.mission') }}">
                         <img src="{{ asset('frontend/images/table.svg') }}" alt="logo" style="height:35px; width:35px;">
