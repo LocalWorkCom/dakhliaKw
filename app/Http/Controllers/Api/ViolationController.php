@@ -263,7 +263,7 @@ class ViolationController  extends Controller
         if ($new) {
             $model = Violation::find($new->id);
 
-            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag','created_at']);
             return $this->respondSuccess($success, 'Data Saved successfully.');
         } else {
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
@@ -611,9 +611,10 @@ class ViolationController  extends Controller
                     $new->save();
                     if ($new) {
                         $model = Violation::find($new->id);
-
+                        $created=Violation::find($request->id);
                         $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
-                        $success['violation']['created_at'] = Violation::find($request->id)->value('created_at');
+                        $success['violation']['created_at'] = $created->created_at;
+                        // dd($model->created_at , $created,$request->id);
 
                         return $this->respondSuccess($success, 'Data Saved successfully.');
                     } else {
@@ -667,9 +668,11 @@ class ViolationController  extends Controller
                     $new->save();
                     if ($new) {
                         $model = Violation::find($new->id);
+                        $created=Violation::find($parent_id);
 
                         $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
-                        $success['violation']['created_at'] = Violation::find($parent_id)->value('created_at');
+                        $success['violation']['created_at'] = $created->created_at;
+                        // dd($model->created_at , Violation::find($parent_id)->value('created_at'));
 
                         return $this->respondSuccess($success, 'Data Saved successfully.');
                     } else {
@@ -756,7 +759,6 @@ class ViolationController  extends Controller
 
                         $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
                         $success['violation']['created_at'] = Violation::find($request->id)->value('created_at');
-
                         return $this->respondSuccess($success, 'Data Saved successfully.');
                     } else {
                         return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
