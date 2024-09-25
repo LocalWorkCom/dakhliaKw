@@ -182,7 +182,10 @@ class paperTransactionController extends Controller
                 $new->save();
 
                 $recor = paperTransaction::find($new->id);
-                $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number','date', 'registration_number', 'images', 'created_at');
+                $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number', 'date', 'registration_number', 'images');
+
+                // Manually add the created_at from $record
+                $success['report']['created_at'] = $record->created_at;
 
                 return $this->respondSuccess($success, 'Data saved successfully.');
             } else {
@@ -225,7 +228,9 @@ class paperTransactionController extends Controller
                 $new->save();
 
                 $recor = paperTransaction::find($new->id);
-                $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id','date', 'civil_number', 'registration_number', 'images', 'created_at');
+                $created= paperTransaction::find($isParent);
+                $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number', 'date', 'registration_number', 'images');
+                $success['report']['created_at'] = $created->created_at;
 
                 return $this->respondSuccess($success, 'Data saved successfully.');
             }
