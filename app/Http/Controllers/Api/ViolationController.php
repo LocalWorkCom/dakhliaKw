@@ -70,18 +70,24 @@ class ViolationController  extends Controller
         }
 
         $type = $request->type;
+
         $allViolationType = ViolationTypes::whereJsonContains('type_id', $type)->get();
         if ($allViolationType->isNotEmpty()) {
+
             $type = ViolationTypes::where('type_id', '0')->get();
             $grade = grade::where('type', 0)->get();
             if ($grade->isNotEmpty()) {
+
+
                 $success['grade2'] = $grade->map(function ($item) {
                     return $item->only(['id', 'name']);
                 });
+
             } else {
                 $success['grade2'] = '';
             }
             $grade3 = grade::where('type', 2)->get();
+
             if ($grade->isNotEmpty()) {
                 $success['grade3'] = $grade3->map(function ($item) {
                     return $item->only(['id', 'name']);
@@ -96,9 +102,12 @@ class ViolationController  extends Controller
             } else {
                 $success['type'] = '';
             }
+
             $success['ViolationType'] = $allViolationType->map(function ($item) {
                 return $item->only(['id', 'name']);
             });
+            // dd( $success['grade2'],  $success['grade3'] ,$success['type'] , $success['ViolationType']);
+
             return $this->respondSuccess($success, 'Get Data successfully.');
         } else {
             return $this->respondError('type not found', ['error' => 'خطأ فى استرجاع البيانات'], 404);
