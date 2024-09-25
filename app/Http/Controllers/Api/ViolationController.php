@@ -662,6 +662,8 @@ class ViolationController  extends Controller
                 $model = Violation::find($new->id);
 
                 $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                $success['violation']['created_at'] = Violation::find($parent_id)->value('created_at');
+
                 return $this->respondSuccess($success, 'Data Saved successfully.');
             } else {
                 return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
@@ -780,6 +782,8 @@ class ViolationController  extends Controller
                 $model = Violation::find($new->id);
 
                 $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                $success['violation']['created_at'] = Violation::find($request->id)->value('created_at');
+
                 return $this->respondSuccess($success, 'Data Saved successfully.');
             } else {
                 return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
