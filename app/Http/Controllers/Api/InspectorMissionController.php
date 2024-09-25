@@ -102,7 +102,7 @@ class InspectorMissionController extends Controller
                                 $workTime = PointDays::where('point_id', $pointId)->where('name', $today)->first();
 
                                 if ($workTime) {
-                                  
+
                                     $startTime = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d') . ' ' . $workTime->from);
 
                                     $endtTime = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d') . ' ' . $workTime->to);
@@ -223,7 +223,7 @@ class InspectorMissionController extends Controller
                 'date' => $instantmission->created_at->format('Y-m-d'),
             ];
         }
-        */
+        *///
         $dayNamesArabic = [
             'Sunday'    => 'الأحد',
             'Monday'    => 'الإثنين',
@@ -240,6 +240,7 @@ class InspectorMissionController extends Controller
                 'date' => $date,
                 'date_name' => $dayNamesArabic[$dayName],
                 'mission_count' => $count,
+                'inspector_shift' =>$inspector_shift,
                 'instant_mission_count' => $instantmissioncount,
                 'groupPointCount' => $groupPointCount,
                 'missions' => $missionData,
@@ -249,6 +250,8 @@ class InspectorMissionController extends Controller
             $responseData = [
                 'date' => $dayNamesArabic[$dayName] . ', ' . $date,
                 'mission_count' => 0,
+                'inspector_shift' =>null,
+
                 'instant_mission_count' => $instantmissioncount,
                 'groupPointCount' => 0,
                 'missions' => null,
