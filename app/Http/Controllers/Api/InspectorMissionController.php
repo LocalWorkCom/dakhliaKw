@@ -89,6 +89,7 @@ class InspectorMissionController extends Controller
                 if ($groupPoint) {
                     $idsPoints = is_array($groupPoint->points_ids) ? $groupPoint->points_ids : explode(',', $groupPoint->points_ids);
                     $groupPointsData = [];
+
                     foreach ($idsPoints as $pointId) {
                         $point = Point::with('government')->find($pointId);
                         if ($point) {
@@ -99,9 +100,13 @@ class InspectorMissionController extends Controller
 
                             if ($point->work_type == 1) {
                                 $workTime = PointDays::where('point_id', $pointId)->where('name', $today)->first();
+
                                 if ($workTime) {
-                                    $startTime = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' ' . $workTime->from);
-                                    $endtTime = Carbon::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' ' . $workTime->to);
+                                  
+                                    $startTime = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d') . ' ' . $workTime->from);
+
+                                    $endtTime = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d') . ' ' . $workTime->to);
+
                                     $fromTime = $startTime->format('H:i');
                                     $toTime = $endtTime->format('H:i');
 
@@ -139,7 +144,7 @@ class InspectorMissionController extends Controller
                                 'count_absence' => $absenceCount
                             ];
                         }
-                        // dd('k');
+
                     }
 
 
