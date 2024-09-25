@@ -609,6 +609,16 @@ class ViolationController  extends Controller
                     // Save images as a comma-separated string
                     $new->image = implode(',', $images);
                     $new->save();
+                    if ($new) {
+                        $model = Violation::find($new->id);
+
+                        $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                        $success['violation']['created_at'] = Violation::find($request->id)->value('created_at');
+
+                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                    } else {
+                        return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                    }
                 } else {
                     $viloations = Violation::where('point_id', $point->id)->where('parent', $parent_id)->pluck('id')->toArray();
                     foreach ($viloations as $viloation) {
@@ -655,19 +665,20 @@ class ViolationController  extends Controller
                     // Save images as a comma-separated string
                     $new->image = implode(',', $images);
                     $new->save();
+                    if ($new) {
+                        $model = Violation::find($new->id);
+
+                        $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                        $success['violation']['created_at'] = Violation::find($parent_id)->value('created_at');
+
+                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                    } else {
+                        return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                    }
                 }
             }
 
-            if ($new) {
-                $model = Violation::find($new->id);
 
-                $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
-                $success['violation']['created_at'] = Violation::find($parent_id)->value('created_at');
-
-                return $this->respondSuccess($success, 'Data Saved successfully.');
-            } else {
-                return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
-            }
         } else {
 
             $messages = [
@@ -740,6 +751,16 @@ class ViolationController  extends Controller
                     // Save images as a comma-separated string
                     $new->image = implode(',', $images);
                     $new->save();
+                    if ($new) {
+                        $model = Violation::find($new->id);
+
+                        $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                        $success['violation']['created_at'] = Violation::find($request->id)->value('created_at');
+
+                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                    } else {
+                        return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                    }
                 } else {
                     $viloations = Violation::where('point_id', $request->point_id)->where('parent', $parent_id)->pluck('id')->toArray();
                     foreach ($viloations as $viloation) {
@@ -774,20 +795,30 @@ class ViolationController  extends Controller
                     // Save images as a comma-separated string
                     $new->image = implode(',', $images);
                     $new->save();
+                    if ($new) {
+                        $model = Violation::find($new->id);
+
+                        $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                        $success['violation']['created_at'] = Violation::find($parent_id)->value('created_at');
+
+                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                    } else {
+                        return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                    }
                 }
             }
 
 
-            if ($new) {
-                $model = Violation::find($new->id);
+            // if ($new) {
+            //     $model = Violation::find($new->id);
 
-                $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
-                $success['violation']['created_at'] = Violation::find($request->id)->value('created_at');
+            //     $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+            //     $success['violation']['created_at'] = Violation::find($request->id)->value('created_at');
 
-                return $this->respondSuccess($success, 'Data Saved successfully.');
-            } else {
-                return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
-            }
+            //     return $this->respondSuccess($success, 'Data Saved successfully.');
+            // } else {
+            //     return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+            // }
         }
     }
     function UploadFilesIM($path, $inputName, $model, $files)
