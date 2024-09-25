@@ -69,7 +69,8 @@ class ViolationController  extends Controller
         }
 
         $type = $request->type;
-        $allViolationType = ViolationTypes::whereJsonContains('type_id', $type)->get();
+        $typeId = '' . $type . '';
+        $allViolationType = ViolationTypes::whereJsonContains('type_id', $typeId)->get();
         if ($allViolationType->isNotEmpty()) {
             $type = ViolationTypes::where('type_id', '0')->get();
             $grade = grade::where('type',0)->get();
@@ -119,12 +120,18 @@ class ViolationController  extends Controller
         } else {
             $point_id = $request->point_id;
         }
-        if ($request->civil_military == 1) {
+        /**
+         * civil_military->1 فرد   (رتبه - رقم عسكرى - رقم ملف)
+         * civil_military->2 ضابط  (رتبه - رقم ملف )
+         * civil_military->3 مهنى  (رقم عسكرى - رقم ملف - رقم مدني  )
+         * civil_military->1 مدني ( رقم مدني)
+         */
+        if ($request->civil_military == 1  || $request->civil_military == 3) {
             //عسكري
             $military_number = $request->military_number;
             $Civil_number = $request->Civil_number;
             $file_num = $request->file_num;
-        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4) {
+        } elseif ($request->civil_military == 2 || $request->civil_military == 4) {
             //ظابط ||مهنيين ||أفراد
             $military_number = null;
             $Civil_number = $request->Civil_number;
