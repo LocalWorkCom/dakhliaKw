@@ -137,12 +137,18 @@ class ViolationController  extends Controller
         } else {
             $point_id = $request->point_id;
         }
-        if ($request->civil_military == 1) {
+        /**
+         * civil_military->1 فرد   (رتبه - رقم عسكرى - رقم ملف)
+         * civil_military->2 ضابط  (رتبه - رقم ملف )
+         * civil_military->3 مهنى  (رقم عسكرى - رقم ملف - رقم مدني  )
+         * civil_military->1 مدني ( رقم مدني)
+         */
+        if ($request->civil_military == 1  || $request->civil_military == 3) {
             //عسكري
             $military_number = $request->military_number;
             $Civil_number = $request->Civil_number;
             $file_num = $request->file_num;
-        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4) {
+        } elseif ($request->civil_military == 2 || $request->civil_military == 4) {
             //ظابط ||مهنيين ||أفراد
             $military_number = null;
             $Civil_number = $request->Civil_number;
@@ -358,8 +364,8 @@ class ViolationController  extends Controller
                 'violation_type' => $violationTypes,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
                 'civil_military_id' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('id') : '',
-                'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
-                'updated_at' => $violation->parent == 0 ? $violation->updated_at : Violation::find($violation->parent)->updated_at,
+                'created_at' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
+                'updated_at' => $violation->parent == 0 ? $violation->updated_at->format('H:i:s') : Violation::find($violation->parent)->updated_at->format('H:i:s'),
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'point_name' => $violation->point->name,
@@ -449,8 +455,8 @@ class ViolationController  extends Controller
                 'image' => $violation->image,
                 'violation_type' => $violationTypes,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
-                'created_at' => $violation->created_at,
-                'updated_at' => $violation->updated_at,
+                'created_at' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
+                'updated_at' => $violation->parent == 0 ? $violation->updated_at->format('H:i:s') : Violation::find($violation->parent)->updated_at->format('H:i:s'),
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'point_name' => $violation->point->name,
