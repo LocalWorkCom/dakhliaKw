@@ -176,6 +176,26 @@
             }
         }
     }
+    function toggleDropdown6() {
+        var dropdownMenu = document.getElementById("dropdownMenu6");
+        if (dropdownMenu.style.display === "block") {
+            dropdownMenu.style.display = "none";
+        } else {
+            dropdownMenu.style.display = "block";
+        }
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.matches('.btn6')) {
+            var dropdowns = document.getElementsByClassName("dropdown-menu6");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.style.display === "block") {
+                    openDropdown.style.display = "none";
+                }
+            }
+        }
+    }
     //  for header collapsing 
 
     $(document).ready(function() {
@@ -285,44 +305,68 @@
         }
     }
     function toggleDropdown4(event) {
-        event.stopPropagation();
-        const menu4 = document.getElementById('dropdownMenu4');
-        const menu5 = document.getElementById('dropdownMenu5');
-        
-        if (menu4.style.display === 'block') {
-            menu4.style.display = 'none';
-        } else {
-            menu4.style.display = 'block';
-            menu5.style.display = 'none'; 
-        }
+    event.stopPropagation();
+    const menu4 = document.getElementById('dropdownMenu4');
+    const menu5 = document.getElementById('dropdownMenu5');
+    const menu6 = document.getElementById('dropdownMenu6');
+
+    if (menu4.style.display === 'block') {
+        menu4.style.display = 'none';
+    } else {
+        menu4.style.display = 'block';
+        menu5.style.display = 'none'; 
+        menu6.style.display = 'none'; 
+    }
+}
+
+function toggleDropdown5(event) {
+    event.stopPropagation();
+    const menu4 = document.getElementById('dropdownMenu4');
+    const menu5 = document.getElementById('dropdownMenu5');
+    const menu6 = document.getElementById('dropdownMenu6');
+
+    if (menu5.style.display === 'block') {
+        menu5.style.display = 'none';
+    } else {
+        menu5.style.display = 'block';
+        menu4.style.display = 'none'; 
+        menu6.style.display = 'none'; 
+    }
+}
+
+function toggleDropdown6(event) {
+    event.stopPropagation();
+    const menu4 = document.getElementById('dropdownMenu4');
+    const menu5 = document.getElementById('dropdownMenu5');
+    const menu6 = document.getElementById('dropdownMenu6');
+
+    if (menu6.style.display === 'block') {
+        menu6.style.display = 'none';
+    } else {
+        menu6.style.display = 'block';
+        menu4.style.display = 'none'; 
+        menu5.style.display = 'none'; 
+    }
+}
+
+document.addEventListener('click', function(event) {
+    const menu4 = document.getElementById('dropdownMenu4');
+    const menu5 = document.getElementById('dropdownMenu5');
+    const menu6 = document.getElementById('dropdownMenu6');
+
+    if (!event.target.closest('.btn4') && !event.target.closest('#dropdownMenu4')) {
+        menu4.style.display = 'none';
     }
 
-    function toggleDropdown5(event) {
-        event.stopPropagation();
-        const menu4 = document.getElementById('dropdownMenu4');
-        const menu5 = document.getElementById('dropdownMenu5');
-        
-        if (menu5.style.display === 'block') {
-            menu5.style.display = 'none';
-        } else {
-            menu5.style.display = 'block';
-            menu4.style.display = 'none'; 
-        }
+    if (!event.target.closest('.btn5') && !event.target.closest('#dropdownMenu5')) {
+        menu5.style.display = 'none';
     }
 
+    if (!event.target.closest('.btn6') && !event.target.closest('#dropdownMenu6')) {
+        menu6.style.display = 'none';
+    }
+});
 
-    document.addEventListener('click', function(event) {
-        const menu4 = document.getElementById('dropdownMenu4');
-        const menu5 = document.getElementById('dropdownMenu5');
-
-        if (!event.target.closest('.btn4') && !event.target.closest('#dropdownMenu4')) {
-            menu4.style.display = 'none';
-        }
-
-        if (!event.target.closest('.btn5') && !event.target.closest('#dropdownMenu5')) {
-            menu5.style.display = 'none';
-        }
-    });
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
