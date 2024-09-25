@@ -223,7 +223,7 @@ class InspectorMissionController extends Controller
                 'date' => $instantmission->created_at->format('Y-m-d'),
             ];
         }
-        */
+        *///
         $dayNamesArabic = [
             'Sunday'    => 'الأحد',
             'Monday'    => 'الإثنين',
