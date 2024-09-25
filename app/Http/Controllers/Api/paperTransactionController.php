@@ -42,7 +42,7 @@ class paperTransactionController extends Controller
             ->first();
 
         if ($record->point_id) {
-
+            $shift_name='طوال اليوم';
             $shiftDetails = [
                 'start_time' => '00:00',
                 'end_time' => '23:59',
@@ -56,6 +56,8 @@ class paperTransactionController extends Controller
                     'end_time' => $pointShift->to,
                     'time' => null // As per requirement
                 ];
+                $shift_name='دوام جزئى';
+
             }
         }
             $all[] = [
@@ -63,6 +65,7 @@ class paperTransactionController extends Controller
                 'governrate'=>$record->point->government->name,
                 'point_id' => $record->point_id,
                 'point_shift'=>$shiftDetails,
+                'shift_name'=>$shift_name,
                 'point_name' => $record->point->name,
                 'date' => $record->date,
                 'inspector_id' => $record->inspector_id,
