@@ -308,6 +308,8 @@ class ApiAbsenceController extends Controller
                             }
                         }
                         $created=Absence::find($request->id);
+                        // dd($created->created_at ,$new->created_at );
+
                         $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
                         $success['Absence']['created_at'] = $created->created_at;
                         $success['AbsenceEmployee'] = $array;
@@ -361,7 +363,7 @@ class ApiAbsenceController extends Controller
                             }
                         }
                         $created=Absence::find($parent_id);
-
+                        // dd($created->created_at ,$new->created_at );
                         $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
                         $success['Absence']['created_at'] = $created->created_at;
 

@@ -148,6 +148,7 @@ class reportsController extends Controller
 
                 ];
             }
+         
             $response[] = [
                 'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
                 'abcence_day' => $absence->date,
@@ -166,7 +167,7 @@ class reportsController extends Controller
                 'total_number' => $absence->total_number,
                 'actual_number' => $absence->actual_number,
                 'absence_members' => $absence_members,
-                'created_at'=> $absence->created_at
+                'created_at'=> $absence->parent == 0 ? $absence->created_at : Absence::find($absence->parent)->created_at
             ];
         }
         $success['report'] = $response;
