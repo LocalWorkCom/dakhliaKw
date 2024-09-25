@@ -60,18 +60,26 @@ class PermissionController extends Controller
         // return $dataTable->render('permission.view');
         return view('permission.view');
     }
+
     public function getPermision()
     {
         $data = Permission::all();
 
-        return DataTables::of($data)->addColumn('action', function ($row) {
-
-            return '<button class="btn btn-primary btn-sm">Edit</button>';
-        })
+        return DataTables::of($data)
+            ->addColumn('action', function ($row) {
+                return '<button class="btn btn-primary btn-sm">Edit</button>';
+            })
+            ->addColumn('name', function ($row) {
+                // Ensure proper translation key usage with concatenation
+                return trans('permissions.' . $row->name);
+            })
+            ->addColumn('guard_name', function ($row) {
+                // Ensure proper translation key usage with concatenation
+                return trans('models.' . $row->guard_name);
+            })
             ->rawColumns(['action'])
             ->make(true);
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -99,8 +107,8 @@ class PermissionController extends Controller
 
             // Add more custom messages here
         ];
-       $nameModel = $request->name . " " . $request->model;
-    //    dd($nameModel);
+        $nameModel = $request->name . " " . $request->model;
+        //    dd($nameModel);
         $validatedData = Validator::make($request->all(), [
             'model' => [
                 'required',
@@ -122,12 +130,12 @@ class PermissionController extends Controller
 
 
         $nameModel = $request->name . " " . $request->model;
-        
+
 
         try {
 
             $existornot = Permission::where('name', $nameModel)->withTrashed()->first();
-           
+
 
             if ($existornot) {
                 $existornot->restore();

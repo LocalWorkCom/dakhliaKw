@@ -11,7 +11,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
 
-                <li class="breadcrumb-item"><a href="{{ route('rule_show', $rule_permission->id) }}">المهام</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('rule.index', $rule_permission->id) }}">المهام</a></li>
 
                 <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض المهام</a></li>
             </ol>

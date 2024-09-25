@@ -15,6 +15,7 @@ use App\Models\InspectorMission;
 use App\Http\Controllers\Controller;
 use App\Models\Point;
 use App\Models\PointDays;
+use App\Models\Setting;
 use App\Models\WorkingTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -69,17 +70,30 @@ class ViolationController  extends Controller
         }
 
         $type = $request->type;
-        $typeId = '' . $type . '';
-        $allViolationType = ViolationTypes::whereJsonContains('type_id', $typeId)->get();
+
+        $allViolationType = ViolationTypes::whereJsonContains('type_id', $type)->get();
         if ($allViolationType->isNotEmpty()) {
+
             $type = ViolationTypes::where('type_id', '0')->get();
-            $grade = grade::where('type',0)->get();
+            $grade = grade::where('type', 0)->get();
             if ($grade->isNotEmpty()) {
-                $success['grade'] = $grade->map(function ($item) {
+
+
+                $success['grade2'] = $grade->map(function ($item) {
+                    return $item->only(['id', 'name']);
+                });
+
+            } else {
+                $success['grade2'] = '';
+            }
+            $grade3 = grade::where('type', 2)->get();
+
+            if ($grade->isNotEmpty()) {
+                $success['grade3'] = $grade3->map(function ($item) {
                     return $item->only(['id', 'name']);
                 });
             } else {
-                $success['grade'] = '';
+                $success['grade3'] = '';
             }
             if ($type->isNotEmpty()) {
                 $success['type'] = $type->map(function ($item) {
@@ -88,9 +102,12 @@ class ViolationController  extends Controller
             } else {
                 $success['type'] = '';
             }
+
             $success['ViolationType'] = $allViolationType->map(function ($item) {
                 return $item->only(['id', 'name']);
             });
+            // dd( $success['grade2'],  $success['grade3'] ,$success['type'] , $success['ViolationType']);
+
             return $this->respondSuccess($success, 'Get Data successfully.');
         } else {
             return $this->respondError('type not found', ['error' => 'خطأ فى استرجاع البيانات'], 404);
@@ -197,7 +214,7 @@ class ViolationController  extends Controller
             $new->violation_type = $cleanedString;
             $new->flag_instantmission = $request->flag_instantmission;
             $new->description = $request->description ?? null;
-            $new->flag=1;
+            $new->flag = 1;
             $new->user_id = auth()->user()->id;
             // $new->user_id = 1;
             $new->save();
@@ -219,7 +236,7 @@ class ViolationController  extends Controller
             ];
             $validatedData = Validator::make($request->all(), [
                 'image' => 'required',
-               // 'violation_type' => 'required',
+                // 'violation_type' => 'required',
                 // 'point_id' => 'required',
                 'point_id' => ['required_if:flag_instantmission,0'],
                 'mission_id' => 'required',
@@ -261,7 +278,7 @@ class ViolationController  extends Controller
         if ($new) {
             $model = Violation::find($new->id);
 
-            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description','flag']);
+            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag','created_at']);
             return $this->respondSuccess($success, 'Data Saved successfully.');
         } else {
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
@@ -311,6 +328,7 @@ class ViolationController  extends Controller
             ->where('flag_instantmission', "0")
             ->whereIn('user_id', $userIds)
             ->whereDate('created_at', $today)
+            ->where('status', 1)
             ->get();
 
         $pointName = Point::find($request->point_id);
@@ -322,8 +340,8 @@ class ViolationController  extends Controller
         $success['violation'] = $violation->map(function ($violation) {
             // Retrieve violation types based on the existing ids
             $violationTypes = ViolationTypes::whereIn('id', explode(',', $violation->violation_type))
-                                            ->select('id', 'name')
-                                            ->get();
+                ->select('id', 'name')
+                ->get();
 
             // Add the description to the list if it's not null
             if ($violation->description) {
@@ -345,10 +363,12 @@ class ViolationController  extends Controller
                 'image' => $violation->image,
                 'violation_type' => $violationTypes,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
+                'civil_military_id' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('id') : '',
                 'created_at' => $violation->created_at,
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
+                'point_name' => $violation->point->name,
                 'flag_instantmission' => $violation->flag_instantmission,
                 'violation_mode' => $violation->flag,
             ];
@@ -405,14 +425,15 @@ class ViolationController  extends Controller
             ->where('flag_instantmission', 1)
             ->where('user_id', auth()->user()->id)
             ->whereDate('created_at', $today)
+            ->where('status', 1)
             ->get();
 
         // Map violations and retrieve violation types
         $success['violation'] = $violations->map(function ($violation) {
             // Retrieve violation types based on the existing ids
             $violationTypes = ViolationTypes::whereIn('id', explode(',', $violation->violation_type))
-                                            ->select('id', 'name')
-                                            ->get();
+                ->select('id', 'name')
+                ->get();
 
             // Add description as a type if it exists
             if ($violation->description) {
@@ -438,8 +459,9 @@ class ViolationController  extends Controller
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
+                'point_name' => $violation->point->name,
                 'flag_instantmission' => $violation->flag_instantmission,
-                'violation_mode' => $violation->flag ? "0" : "1",
+                'violation_mode' => $violation->flag,
             ];
         });
 
@@ -463,9 +485,9 @@ class ViolationController  extends Controller
         return $this->respondSuccess($success, 'Data returned successfully.');
     }
 
-    public function getGrade(Request $request,$type)
+    public function getGrade(Request $request, $type)
     {
-        $grade = grade::where('type',$type)->get();
+        $grade = grade::where('type', $type)->get();
         if ($grade->isNotEmpty()) {
             $success['grade'] = $grade->map(function ($item) {
                 return $item->only(['id', 'name']);
@@ -474,5 +496,365 @@ class ViolationController  extends Controller
             $success['grade'] = '';
         }
         return $this->respondSuccess($success, 'Get Data successfully.');
+    }
+
+
+    public function updateViolation(Request $request)
+    {
+        $messages = [
+            'type.required' => 'type required',
+            'flag_instantmission.required' => 'flag instantmission required',
+        ];
+        $validatedData = Validator::make($request->all(), [
+            'type' => 'required',
+            'flag_instantmission' => 'required',
+        ], $messages);
+
+        if ($validatedData->fails()) {
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+        }
+        // 1=> this violation of instant mission
+        if ($request->flag_instantmission == "1") {
+            $point_id = Null;
+        } else {
+            $point_id = $request->point_id;
+        }
+        if ($request->civil_military == 1) {
+            //عسكري
+            $military_number = $request->military_number;
+            $Civil_number = $request->Civil_number;
+            $file_num = $request->file_num;
+        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4) {
+            //ظابط ||مهنيين ||أفراد
+            $military_number = null;
+            $Civil_number = $request->Civil_number;
+            $file_num = $request->file_num;
+        }
+
+        if ($request->type == "1") {
+            $messages = [
+                'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+                'name.string' => 'الاسم  يجب أن يكون نصاً.',
+                'image.required' => 'المرفقات مطلوبة',
+                'violation_type.required' => 'نوع المخالفة مطلوب',
+                'point_id.required_if' => 'رقم النقطة  مطلوب',
+                'mission_id.required' => 'رقم المهمة  مطلوب',
+            ];
+            $validatedData = Validator::make($request->all(), [
+                'name' => 'required|string',
+                'image' => 'nullable',
+                'point_id' => ['required_if:flag_instantmission,0'],
+                'mission_id' => 'required',
+
+            ], $messages);
+
+            if ($validatedData->fails()) {
+                return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+            }
+            $today = Carbon::now()->toDateString();
+            $index = $this->todayIndex($today);
+            // $point=Point::with('pointDays')->where('id',$point_id)->first();
+            $point = Point::find($point_id);
+            if ($point && $point->work_type == 1) {
+                $pointDay = $point->pointDays->where('name', $index)->first();
+                $workTime = PointDays::where('point_id', $point_id)->where('name', $index)->first();
+                $startTime = $workTime->from;
+                $endtTime = $workTime->to;;
+                $is_avilable = $this->isTimeAvailable($startTime, $endtTime);
+                if (!$is_avilable) {
+                    return $this->respondError('failed to save', ['error' => 'انتهت مواعيد عمل النقطه'], 404);
+                }
+            }
+            $idsArray = array_map('intval', explode(',', $request->violation_type));
+            $cleanedString = implode(",", $idsArray);
+
+            $parent_violate = Violation::findOrFail($request->id);
+            $time_edit = Setting::where('key', 'timer')->value('value');
+            $cutoffTime = $parent_violate->created_at->addMinutes($time_edit);
+
+            if (now() > $cutoffTime) {
+                return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
+            } else {
+                $parent_id = $parent_violate->parent;
+                $images = [];
+
+                // Handle old images
+                if (!empty($request->old_images)) {
+                    // If old_images is a string, explode it into an array
+                    if (is_string($request->old_images)) {
+                        $oldImages = explode(',', $request->old_images);
+                    } else {
+                        $oldImages = $request->old_images; // In case it's already an array
+                    }
+
+                    if (is_array($oldImages)) {
+                        $images = $oldImages;
+                    }
+                }
+                if ($parent_id == 0) {
+                    $parent_violate->status = 0;
+                    $parent_violate->save();
+                    $new = new Violation();
+                    $new->name = $request->name;
+                    $new->military_number = $military_number ?? null;
+                    $new->Civil_number = $Civil_number ?? null;
+                    $new->file_num = $file_num ?? null;
+                    $new->grade = $request->grade;
+                    $new->mission_id = $request->mission_id;
+                    $new->point_id = $point_id;
+                    $new->civil_type = $request->civil_military;
+                    $new->violation_type = $cleanedString;
+                    $new->flag_instantmission = $request->flag_instantmission;
+                    $new->parent = $request->id;
+                    $new->status = 1;
+                    $new->description = $request->description ?? null;
+                    $new->flag = 1;
+                    $new->user_id = auth()->user()->id;
+                    // Handle new image upload
+                    if ($request->hasFile('image')) {
+                        $files = $request->file('image');
+                        $path = 'Api/images/paperTransactions';
+                        $model = Violation::find($new->id);
+                        $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
+
+                        // Merge old and new images
+                        $images = array_merge($images, $newImages);
+                    }
+
+                    // Save images as a comma-separated string
+                    $new->image = implode(',', $images);
+                    $new->save();
+                    if ($new) {
+                        $model = Violation::find($new->id);
+                        $created=Violation::find($request->id);
+                        $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                        $success['violation']['created_at'] = $created->created_at;
+                        // dd($model->created_at , $created,$request->id);
+
+                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                    } else {
+                        return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                    }
+                } else {
+                    $viloations = Violation::where('point_id', $point->id)->where('parent', $parent_id)->pluck('id')->toArray();
+                    foreach ($viloations as $viloation) {
+                        $viloate = Violation::findOrFail($viloation);
+                        $viloate->status = 0;
+                        $viloate->save();
+                    }
+                    $new = new Violation();
+                    $new->name = $request->name;
+                    $new->military_number = $military_number ?? null;
+                    $new->Civil_number = $Civil_number ?? null;
+                    $new->file_num = $file_num ?? null;
+                    $new->grade = $request->grade;
+                    $new->mission_id = $request->mission_id;
+                    $new->point_id = $point_id;
+                    $new->civil_type = $request->civil_military;
+                    $new->violation_type = $cleanedString;
+                    $new->flag_instantmission = $request->flag_instantmission;
+                    $new->parent = $parent_id;
+                    $new->status = 1;
+                    $new->description = $request->description ?? null;
+                    $new->flag = 1;
+                    $new->user_id = auth()->user()->id;
+                    // $new->save();
+
+                    // if ($request->hasFile('image')) {
+                    //     $files = $request->file('image'); // Expecting an array of files
+                    //     $path = 'Api/images/violations'; // Directory path
+                    //     $model = Violation::find($new->id);
+
+                    //     UploadFilesIM($path, 'image', $model, $files);
+                    // }
+                    // Handle new image upload
+                    if ($request->hasFile('image')) {
+                        $files = $request->file('image');
+                        $path = 'Api/images/paperTransactions';
+                        $model = Violation::find($new->id);
+                        $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
+
+                        // Merge old and new images
+                        $images = array_merge($images, $newImages);
+                    }
+
+                    // Save images as a comma-separated string
+                    $new->image = implode(',', $images);
+                    $new->save();
+                    if ($new) {
+                        $model = Violation::find($new->id);
+                        $created=Violation::find($parent_id);
+
+                        $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                        $success['violation']['created_at'] = $created->created_at;
+                        // dd($model->created_at , Violation::find($parent_id)->value('created_at'));
+
+                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                    } else {
+                        return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                    }
+                }
+            }
+
+
+        } else {
+
+            $messages = [
+                'image.required' => 'المرفقات مطلوبة',
+                'violation_type.required' => 'نوع المخالفة مطلوب',
+                'point_id.required_if' => 'رقم النقطة  مطلوب',
+                'mission_id.required' => 'رقم المهمة  مطلوب',
+            ];
+            $validatedData = Validator::make($request->all(), [
+                'image' => 'required',
+                // 'violation_type' => 'required',
+                // 'point_id' => 'required',
+                'point_id' => ['required_if:flag_instantmission,0'],
+                'mission_id' => 'required',
+            ], $messages);
+
+            if ($validatedData->fails()) {
+                return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+            }
+
+            $parent_violate = Violation::findOrFail($request->id);
+            $time_edit = Setting::where('key', 'timer')->value('value');
+            $cutoffTime = $parent_violate->created_at->addMinutes($time_edit);
+
+            if (now() > $cutoffTime) {
+                return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
+            } else {
+                $parent_id = $parent_violate->parent;
+                $images = [];
+
+                // Handle old images
+                if (!empty($request->old_images)) {
+                    // If old_images is a string, explode it into an array
+                    if (is_string($request->old_images)) {
+                        $oldImages = explode(',', $request->old_images);
+                    } else {
+                        $oldImages = $request->old_images; // In case it's already an array
+                    }
+
+                    if (is_array($oldImages)) {
+                        $images = $oldImages;
+                    }
+                }
+                if ($parent_id == 0) {
+                    $parent_violate->status = 0;
+                    $parent_violate->save();
+                    $new = new Violation();
+                    $new->violation_type = json_encode($request->violation_type);
+                    $new->flag_instantmission = $request->flag_instantmission;
+                    $new->mission_id = $request->mission_id;
+                    $new->file_num = $request->file_num;
+                    $new->description = $request->description ?? null;
+                    $new->point_id = $point_id;
+                    $new->flag = 0;
+                    $new->parent = $request->id;
+                    $new->status = 1;
+                    // // $new->user_id = auth()->user()->id;
+                    $new->user_id = 1;
+                    // Handle new image upload
+                    if ($request->hasFile('image')) {
+                        $files = $request->file('image');
+                        $path = 'Api/images/paperTransactions';
+                        $model = Violation::find($new->id);
+                        $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
+
+                        // Merge old and new images
+                        $images = array_merge($images, $newImages);
+                    }
+
+                    // Save images as a comma-separated string
+                    $new->image = implode(',', $images);
+                    $new->save();
+                    if ($new) {
+                        $model = Violation::find($new->id);
+
+                        $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                        $success['violation']['created_at'] = Violation::find($request->id)->value('created_at');
+                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                    } else {
+                        return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                    }
+                } else {
+                    $viloations = Violation::where('point_id', $request->point_id)->where('parent', $parent_id)->pluck('id')->toArray();
+                    foreach ($viloations as $viloation) {
+                        $viloate = Violation::findOrFail($viloation);
+                        $viloate->status = 0;
+                        $viloate->save();
+                    }
+                    $new = new Violation();
+
+                    $new->violation_type = json_encode($request->violation_type);
+                    $new->flag_instantmission = $request->flag_instantmission;
+                    $new->mission_id = $request->mission_id;
+                    $new->file_num = $request->file_num;
+                    $new->description = $request->description ?? null;
+                    $new->point_id = $point_id;
+                    $new->flag = 0;
+                    $new->parent = $request->id;
+                    $new->status = 1;
+                    // // $new->user_id = auth()->user()->id;
+                    $new->user_id = 1;
+                    // Handle new image upload
+                    if ($request->hasFile('image')) {
+                        $files = $request->file('image');
+                        $path = 'Api/images/paperTransactions';
+                        $model = Violation::find($new->id);
+                        $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
+
+                        // Merge old and new images
+                        $images = array_merge($images, $newImages);
+                    }
+
+                    // Save images as a comma-separated string
+                    $new->image = implode(',', $images);
+                    $new->save();
+                    if ($new) {
+                        $model = Violation::find($new->id);
+
+                        $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                        $success['violation']['created_at'] = Violation::find($parent_id)->value('created_at');
+
+                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                    } else {
+                        return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                    }
+                }
+            }
+
+
+            // if ($new) {
+            //     $model = Violation::find($new->id);
+
+            //     $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+            //     $success['violation']['created_at'] = Violation::find($request->id)->value('created_at');
+
+            //     return $this->respondSuccess($success, 'Data Saved successfully.');
+            // } else {
+            //     return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+            // }
+        }
+    }
+    function UploadFilesIM($path, $inputName, $model, $files)
+    {
+        $uploadedImages = [];
+
+        foreach ($files as $file) {
+            // Generate a unique filename
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // Move the file to the specified path
+            $file->move(public_path($path), $filename);
+
+            // Store the file URL
+            $uploadedImages[] = url($path . '/' . $filename);
+        }
+
+        return $uploadedImages;
+
+
     }
 }

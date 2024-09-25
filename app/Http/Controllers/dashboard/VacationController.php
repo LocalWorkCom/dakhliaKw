@@ -235,7 +235,11 @@ class VacationController extends Controller
                             if ($daysLeft >= 0) {
                                 $EmployeeVacation['DaysLeft'] = $daysLeft;
                             } else {
-                                $EmployeeVacation['DaysLeft'] = 'متجاوز';
+                                if ($EmployeeVacation->end_date) {
+                                    $EmployeeVacation['DaysLeft'] = 'منتهية';
+                                } else {
+                                    $EmployeeVacation['DaysLeft'] = 'متجاوز';
+                                }
                             }
                         }
                     }

@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\ApiAbsenceController;
 use App\Http\Controllers\Api\personalMissionController;
 use App\Http\Controllers\Api\reportsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Api\InspectorMissionController;
+use App\Http\Controllers\Api\paperTransactionController;
 use App\Http\Controllers\Api\ViolationController;
 
 /*
@@ -48,10 +50,22 @@ Route::post('/inspector/add/mission', [personalMissionController::class, 'addPer
 Route::get('/getAll/points', [personalMissionController::class, 'getAllPoints']);
 Route::get('/grade/{type}', [ViolationController::class, 'getGrade']);
 
+
+Route::any('/inspector/update_absence',  [ApiAbsenceController::class, 'update']);
+Route::any('/inspector/update_violation',  [ViolationController::class, 'updateViolation']);
+
 /**
  * /Lizam
  */
 Route::any('/lizamat', [InspectorMissionController::class,'get_shift']);
+Route::post('/changepassword', 'App\Http\Controllers\Api\UserController@changePassword');
+
+
+//papertransactions
+Route::any('/paper_transactions',  [paperTransactionController::class, 'store']);
+
+Route::any('/papertransaction/all',  [paperTransactionController::class, 'index']);
+
 
 });
 

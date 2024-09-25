@@ -13,6 +13,7 @@ use App\Models\AbsenceEmployee;
 use App\Http\Controllers\Controller;
 use App\Models\Point;
 use App\Models\PointDays;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Validator;
 
 class ApiAbsenceController extends Controller
@@ -25,13 +26,21 @@ class ApiAbsenceController extends Controller
         //
         $absenceType = AbsenceType::all();
         $type = ViolationTypes::where('type_id', '0')->get();
-        $grade = grade::all();
+        $grade = grade::where('type', 0)->get();
         if ($grade->isNotEmpty()) {
-            $success['grade'] = $grade->map(function ($item) {
+            $success['grade2'] = $grade->map(function ($item) {
                 return $item->only(['id', 'name']);
             });
         } else {
-            $success['grade'] = "لا يوجد بيانات";
+            $success['grade2'] = '';
+        }
+        $grade3 = grade::where('type', 2)->get();
+        if ($grade->isNotEmpty()) {
+            $success['grade3'] = $grade3->map(function ($item) {
+                return $item->only(['id', 'name']);
+            });
+        } else {
+            $success['grade3'] = '';
         }
         if ($absenceType->isNotEmpty()) {
             $success['absence_Type'] = $absenceType->map(function ($item) {
@@ -65,7 +74,7 @@ class ApiAbsenceController extends Controller
     public function todayIndex($today)
     {
         $daysOfWeek = [
-           
+
             "الأحد",
             "الاثنين",
             "الثلاثاء",
@@ -92,7 +101,7 @@ class ApiAbsenceController extends Controller
     }
     public function store(Request $request)
     {
-        // 
+        //
         $messages = [
             'total_number.required' => 'الرقم الاجمالى  مطلوب ولا يمكن تركه فارغاً.',
             'actual_number.required' => 'الرقم الفعلى  مطلوب ولا يمكن تركه فارغاً.',
@@ -100,7 +109,7 @@ class ApiAbsenceController extends Controller
             'mission_id.required' => 'رقم المهمة مطلوبة',
             'type_employee.required' => 'النوع مطلوب',
             'absence_types.required' => 'حاله الغياب مطلوبه',
-            'name.required'=>'الاسم مطلوب'
+            'name.required' => 'الاسم مطلوب'
             // 'AbsenceEmployee.required_if' => 'التاريخ مطلوبة',
         ];
         $validatedData = Validator::make($request->all(), [
@@ -127,7 +136,7 @@ class ApiAbsenceController extends Controller
             $point = Point::find($request->point_id);
             if ($point && $point->work_type == 1) {
                 $pointDay = $point->pointDays->where('name', $index)->first();
-                $workTime = PointDays::where('point_id',$request->point_id)->where('name', $index)->first();
+                $workTime = PointDays::where('point_id', $request->point_id)->where('name', $index)->first();
                 $startTime = $workTime->from;
                 $endtTime = $workTime->to;;
                 $is_avilable = $this->isTimeAvailable($startTime, $endtTime);
@@ -149,7 +158,7 @@ class ApiAbsenceController extends Controller
             if ($new) {
                 $array = [];
                 if ($request->has('AbsenceEmployee') && ($request->total_number > $request->actual_number)) {
-                  
+
 
                     foreach ($request->AbsenceEmployee as $item) {
                         $employeeValidator = Validator::make($item, [
@@ -157,7 +166,7 @@ class ApiAbsenceController extends Controller
                             'type_employee' => 'required',
                             'absence_types' => 'required'
                         ], $messages);
-        
+
                         if ($employeeValidator->fails()) {
                             return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
                         }
@@ -206,9 +215,164 @@ class ApiAbsenceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $messages = [
+            'total_number.required' => 'الرقم الاجمالى  مطلوب ولا يمكن تركه فارغاً.',
+            'actual_number.required' => 'الرقم الفعلى  مطلوب ولا يمكن تركه فارغاً.',
+            'point_id.required' => 'رقم النقطة  مطلوب .',
+            'mission_id.required' => 'رقم المهمة مطلوبة',
+            'type_employee.required' => 'النوع مطلوب',
+            'absence_types.required' => 'حاله الغياب مطلوبه',
+            'name.required' => 'الاسم مطلوب'
+            // 'AbsenceEmployee.required_if' => 'التاريخ مطلوبة',
+        ];
+        $validatedData = Validator::make($request->all(), [
+            'total_number' => 'required',
+            'actual_number' => 'required',
+            'point_id' => 'required',
+
+            // 'AbsenceEmployee'=> ['required_if:total_number -actual_number ,0']
+        ], $messages);
+
+        if ($validatedData->fails()) {
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+        }
+
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
+        //  dd(auth()->user()->inspectors);
+        $today = Carbon::today()->toDateString();
+        $abs = $request->total_number - $request->actual_number;
+        if ($request->total_number != $request->actual_number && $abs !=  count($request->AbsenceEmployee)) {
+            return $this->respondError('يرجى ادخال باقى الموظفين', ['absence_number' => [' عدد الموظفين  المدخل لا يتوافق مع عددهم']], 400);
+        } else {
+            $today = Carbon::now()->toDateString();
+            $index = $this->todayIndex($today);
+            $point = Point::find($request->point_id);
+            if ($point && $point->work_type == 1) {
+                $pointDay = $point->pointDays->where('name', $index)->first();
+                $workTime = PointDays::where('point_id', $request->point_id)->where('name', $index)->first();
+                $startTime = $workTime->from;
+                $endtTime = $workTime->to;;
+                $is_avilable = $this->isTimeAvailable($startTime, $endtTime);
+                if (!$is_avilable) {
+                    return $this->respondError('failed to save', ['error' => 'انتهت مواعيد عمل النقطه'], 404);
+                }
+            }
+            $parent_absence = Absence::findOrFail($request->id);
+            $time_edit = Setting::where('key', 'timer')->value('value');
+            $cutoffTime = $parent_absence->created_at->addMinutes($time_edit);
+            if (now() > $cutoffTime) {
+                return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
+            } else {
+                $parent_id = $parent_absence->parent;
+                if($parent_id == 0){
+                    $parent_absence->flag = 0;
+                    $parent_absence->save();
+                    $new = new Absence();
+                    $new->date =  $today;
+                    $new->point_id = $request->point_id;
+                    $new->mission_id = $request->mission_id;
+                    $new->total_number = $request->total_number;
+                    $new->actual_number = $request->actual_number;
+                    $new->flag = 1;
+                    $new->parent = $request->id;
+                    $new->inspector_id = $inspectorId ? $inspectorId->id : null;
+                    $new->save();
+                    if ($new) {
+                        $array = [];
+                        if ($request->has('AbsenceEmployee') && ($request->total_number > $request->actual_number)) {
+                            foreach ($request->AbsenceEmployee as $item) {
+                                $employeeValidator = Validator::make($item, [
+                                    'name' => 'required',
+                                    'type_employee' => 'required',
+                                    'absence_types' => 'required'
+                                ], $messages);
+
+                                if ($employeeValidator->fails()) {
+                                    return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
+                                }
+                                $Emp = new AbsenceEmployee();
+                                $Emp->name = $item["name"];
+                                $Emp->grade = $item["grade"] ?? null;
+                                $Emp->military_number  = $item["military_number"] ?? null;
+                                $Emp->civil_number  = $item["civil_number"] ?? null;
+                                $Emp->absence_types_id  = $item["absence_types"] ?? null;
+                                $Emp->file_num  = $item["file_num"] ?? null;
+                                $Emp->type_employee = $item["type_employee"] ?? null;
+                                $Emp->absences_id  = $new->id;
+                                $Emp->save();
+                                if ($Emp) {
+                                    $array[] = $Emp->only(['id', 'name', 'military_number', 'civil_number', 'file_num', 'grade', 'absence_types_id', 'type_employee']);
+                                }
+                            }
+                        }
+                        $created=Absence::find($request->id);
+                        $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
+                        $success['Absence']['created_at'] = $created->created_at;
+                        $success['AbsenceEmployee'] = $array;
+                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                    } else {
+                        return $this->respondError('failed to save', ['error' => ['خطأ فى حفظ البيانات']], 400);
+                    }
+                }else{
+                    $abcenses = Absence::where( 'point_id', $request->point_id)->where('parent', $parent_id)->pluck('id')->toArray();
+                    foreach ($abcenses as $abcenses) {
+                        $viloate = Absence::findOrFail($abcenses);
+                        $viloate->flag = 0;
+                        $viloate->save();
+                    }
+                    $new = new Absence();
+                    $new->date =  $today;
+                    $new->point_id = $request->point_id;
+                    $new->mission_id = $request->mission_id;
+                    $new->total_number = $request->total_number;
+                    $new->actual_number = $request->actual_number;
+                    $new->flag = 1;
+                    $new->parent = $parent_id;
+                    $new->inspector_id = $inspectorId ? $inspectorId->id : null;
+                    $new->save();
+                    if ($new) {
+                        $array = [];
+                        if ($request->has('AbsenceEmployee') && ($request->total_number > $request->actual_number)) {
+                            foreach ($request->AbsenceEmployee as $item) {
+                                $employeeValidator = Validator::make($item, [
+                                    'name' => 'required',
+                                    'type_employee' => 'required',
+                                    'absence_types' => 'required'
+                                ], $messages);
+
+                                if ($employeeValidator->fails()) {
+                                    return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
+                                }
+                                $Emp = new AbsenceEmployee();
+                                $Emp->name = $item["name"];
+                                $Emp->grade = $item["grade"] ?? null;
+                                $Emp->military_number  = $item["military_number"] ?? null;
+                                $Emp->civil_number  = $item["civil_number"] ?? null;
+                                $Emp->absence_types_id  = $item["absence_types"] ?? null;
+                                $Emp->file_num  = $item["file_num"] ?? null;
+                                $Emp->type_employee = $item["type_employee"] ?? null;
+                                $Emp->absences_id  = $new->id;
+                                $Emp->save();
+                                if ($Emp) {
+                                    $array[] = $Emp->only(['id', 'name', 'military_number', 'civil_number', 'file_num', 'grade', 'absence_types_id', 'type_employee']);
+                                }
+                            }
+                        }
+                        $created=Absence::find($parent_id);
+
+                        $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
+                        $success['Absence']['created_at'] = $created->created_at;
+
+                        $success['AbsenceEmployee'] = $array;
+                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                    } else {
+                        return $this->respondError('failed to save', ['error' => ['خطأ فى حفظ البيانات']], 400);
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -28,6 +28,7 @@ use App\Http\Controllers\GroupPointsController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\qualificationController;
 use App\Http\Controllers\InstantmissionController;
+use App\Http\Controllers\paperTransactionController;
 use App\Http\Controllers\statisticController;
 use App\Http\Controllers\ViolationTypesController;
 
@@ -39,8 +40,7 @@ use App\Http\Controllers\ViolationTypesController;
 use App\Http\Controllers\ViolationReportController;
 
 use App\Http\Controllers\ViollationController;
-
-
+use App\Models\paperTransaction;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ Route::any('/reset_password', [UserController::class, 'reset_password'])->name('
 
 //  Auth verfication_code
 Route::middleware(['auth'])->group(function () {
-    Route::get('/violation_report',[ViolationReportController::class, 'getdata'])->name('violation_report.getdata');
+    Route::get('/violation_report', [ViolationReportController::class, 'getdata'])->name('violation_report.getdata');
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index')->middleware('check.permission:view User');
@@ -88,8 +88,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users_create/{id}', [UserController::class, 'create'])->name('user.create')->middleware('check.permission:create User');
     Route::post('/store', [UserController::class, 'store'])->name('user.store')->middleware('check.permission:create User');
 
-    Route::any('/getGoverment/{id}', [UserController::class, 'getGoverment'])->name('user.getGoverment');
-    Route::any('/getRegion/{id}', [UserController::class, 'getRegion'])->name('user.getRegion');
+    Route::any('/getGoverment/{id}', [UserController::class, 'getGoverment'])->name('user.getGoverment')->middleware('check.permission:view Government');
+    Route::any('/getRegion/{id}', [UserController::class, 'getRegion'])->name('user.getRegion')->middleware('check.permission:view Region');
 
     Route::get('/employees/{id}', [UserController::class, 'index'])->name('user.employees')->middleware('check.permission:view User');
     Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit')->middleware('check.permission:edit User');
@@ -105,14 +105,14 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/permission_show/{id}', [PermissionController::class, 'show'])->name('permissions_show')->middleware('check.permission:edit Permission');
     Route::any('/permission_store', [PermissionController::class, 'store'])->name('permission.store')->middleware('check.permission:edit Permission');
     Route::any('/permission_delete/{id}', [PermissionController::class, 'destroy'])->name('permissions_destroy')->middleware('check.permission:delete Permission');
-    
+
 
     // Absence
-    Route::any('/absence', [AbsenceTypeController::class, 'index'])->name('absence.index');
-    Route::get('api/absence', [AbsenceTypeController::class, 'getAbsence'])->name('api.absence');
-    Route::any('/absence/edit/{id}', [AbsenceTypeController::class, 'edit'])->name('absence_edit');
-    Route::any('/absence_update', [AbsenceTypeController::class, 'update'])->name('absence_update');
-    Route::any('/absence_store', [AbsenceTypeController::class, 'store'])->name('absence.store');
+    Route::any('/absence', [AbsenceTypeController::class, 'index'])->name('absence.index')->middleware('check.permission:view Absence');
+    Route::get('api/absence', [AbsenceTypeController::class, 'getAbsence'])->name('api.absence')->middleware('check.permission:view Absence');
+    Route::any('/absence/edit/{id}', [AbsenceTypeController::class, 'edit'])->name('absence_edit')->middleware('check.permission:edit Absence');
+    Route::any('/absence_update', [AbsenceTypeController::class, 'update'])->name('absence_update')->middleware('check.permission:edit Absence');
+    Route::any('/absence_store', [AbsenceTypeController::class, 'store'])->name('absence.store')->middleware('check.permission:create Absence');
 
 
 
@@ -127,49 +127,49 @@ Route::middleware(['auth'])->group(function () {
 
     // working Time
 
-    Route::get('/working_time', [WorkingTimeController::class, 'index'])->name('working_time.index');
-    Route::get('/api/working_time', [WorkingTimeController::class, 'getWorkingTime'])->name('api.working_time');
-    Route::post('/working_time/create', [WorkingTimeController::class, 'store'])->name('working_time.store');
-    Route::any('/working_time/edit/{id}', [WorkingTimeController::class, 'edit'])->name('working_time.edit');
+    Route::get('/working_time', [WorkingTimeController::class, 'index'])->name('working_time.index')->middleware('check.permission:view WorkingTime');
+    Route::get('/api/working_time', [WorkingTimeController::class, 'getWorkingTime'])->name('api.working_time')->middleware('check.permission:view WorkingTime');
+    Route::post('/working_time/create', [WorkingTimeController::class, 'store'])->name('working_time.store')->middleware('check.permission:create WorkingTime');
+    Route::any('/working_time/edit/{id}', [WorkingTimeController::class, 'edit'])->name('working_time.edit')->middleware('check.permission:edit WorkingTime');
 
-    Route::any('/working_time/update', [WorkingTimeController::class, 'update'])->name('working_time.update');
-    Route::any('/working_time/show/{id}', [WorkingTimeController::class, 'show'])->name('working_time.show');
+    Route::any('/working_time/update', [WorkingTimeController::class, 'update'])->name('working_time.update')->middleware('check.permission:edit WorkingTime');
+    Route::any('/working_time/show/{id}', [WorkingTimeController::class, 'show'])->name('working_time.show')->middleware('check.permission:view WorkingTime');
 
     // instantmission
-    Route::any('/instant_mission', [InstantmissionController::class, 'index'])->name('instant_mission.index');
-    Route::get('api/instant_mission', [InstantmissionController::class, 'getInstantMission'])->name('api.instant_mission');
-    Route::any('/instant_mission/create', [InstantmissionController::class, 'create'])->name('instant_mission.create');
-    Route::any('/instant_mission/edit/{id}', [InstantmissionController::class, 'edit'])->name('instant_mission.edit');
-    Route::any('/instant_mission/show/{id}', [InstantmissionController::class, 'show'])->name('instant_mission.show');
-    Route::any('/instant_mission/update/{id}', [InstantmissionController::class, 'update'])->name('instant_mission.update');
-    Route::any('/instant_mission/store', [InstantmissionController::class, 'store'])->name('instant_mission.store');
-    Route::any('/getGroups/{id}', [InstantmissionController::class, 'getGroups'])->name('instant_mission.getGroups');
-    Route::any('/getInspector/{team_id}/{group_id}', [InstantmissionController::class, 'getInspector'])->name('instant_mission.getInspector');
+    Route::any('/instant_mission', [InstantmissionController::class, 'index'])->name('instant_mission.index')->middleware('check.permission:view instantmission');
+    Route::get('api/instant_mission', [InstantmissionController::class, 'getInstantMission'])->name('api.instant_mission')->middleware('check.permission:view instantmission');
+    Route::any('/instant_mission/create', [InstantmissionController::class, 'create'])->name('instant_mission.create')->middleware('check.permission:create instantmission');
+    Route::any('/instant_mission/edit/{id}', [InstantmissionController::class, 'edit'])->name('instant_mission.edit')->middleware('check.permission:edit instantmission');
+    Route::any('/instant_mission/show/{id}', [InstantmissionController::class, 'show'])->name('instant_mission.show')->middleware('check.permission:view instantmission');
+    Route::any('/instant_mission/update/{id}', [InstantmissionController::class, 'update'])->name('instant_mission.update')->middleware('check.permission:edit instantmission');
+    Route::any('/instant_mission/store', [InstantmissionController::class, 'store'])->name('instant_mission.store')->middleware('check.permission:create instantmission');
+    Route::any('/getGroups/{id}', [InstantmissionController::class, 'getGroups'])->name('instant_mission.getGroups')->middleware('check.permission:view instantmission');
+    Route::any('/getInspector/{team_id}/{group_id}', [InstantmissionController::class, 'getInspector'])->name('instant_mission.getInspector')->middleware('check.permission:view instantmission');
 
     //groups
     // Route::resource('groups', GroupsController::class);
-    Route::any('/groups', [GroupsController::class, 'index'])->name('group.view');
-    Route::any('/groups/add', [GroupsController::class, 'store'])->name('group.store');
-    Route::any('/groups/update', [GroupsController::class, 'update'])->name('group.update');
-    Route::any('/groups/edit/{id}', [GroupsController::class, 'edit'])->name('group.edit');
+    Route::any('/groups', [GroupsController::class, 'index'])->name('group.view')->middleware('check.permission:view Groups');
+    Route::any('/groups/add', [GroupsController::class, 'store'])->name('group.store')->middleware('check.permission:create Groups');
+    Route::any('/groups/update', [GroupsController::class, 'update'])->name('group.update')->middleware('check.permission:edit Groups');
+    Route::any('/groups/edit/{id}', [GroupsController::class, 'edit'])->name('group.edit')->middleware('check.permission:edit Groups');
 
     // Route::any('/groupTeam/team/{id}', [GroupTeamController::class, 'team'])->name('groupTeam.team');
-    Route::any('/groupTeam/store/{id}', [GroupTeamController::class, 'store'])->name('groupTeam.store');
-    Route::any('/groupTeam/show/{id}', [GroupTeamController::class, 'index'])->name('groupTeam.index');
-    Route::any('/groupTeam/showdetails/{id}', [GroupTeamController::class, 'show'])->name('groupTeam.show');
+    Route::any('/groupTeam/store/{id}', [GroupTeamController::class, 'store'])->name('groupTeam.store')->middleware('check.permission:create GroupTeam');
+    Route::any('/groupTeam/show/{id}', [GroupTeamController::class, 'index'])->name('groupTeam.index')->middleware('check.permission:view GroupTeam');
+    Route::any('/groupTeam/showdetails/{id}', [GroupTeamController::class, 'show'])->name('groupTeam.show')->middleware('check.permission:view GroupTeam');
 
-    Route::get('/api/groupTeam/{id}', [GroupTeamController::class, 'getGroupTeam'])->name('api.getGroupTeam');
-    Route::any('/groupTeam/edit/{id}', [GroupTeamController::class, 'edit'])->name('groupTeam.edit');
-    Route::any('/groupTeam/update/{id}', [GroupTeamController::class, 'update'])->name('groupTeam.update');
-    Route::any('/groupTeam/transfer/{id}', [GroupTeamController::class, 'transfer'])->name('groupTeam.transfer');
-    Route::any('/groupTeam/transfer/update/{id}', [GroupTeamController::class, 'updateTransfer'])->name('groupTeam.transfer.update');
+    Route::get('/api/groupTeam/{id}', [GroupTeamController::class, 'getGroupTeam'])->name('api.getGroupTeam')->middleware('check.permission:view GroupTeam');
+    Route::any('/groupTeam/edit/{id}', [GroupTeamController::class, 'edit'])->name('groupTeam.edit')->middleware('check.permission:edit GroupTeam');
+    Route::any('/groupTeam/update/{id}', [GroupTeamController::class, 'update'])->name('groupTeam.update')->middleware('check.permission:edit GroupTeam');
+    Route::any('/groupTeam/transfer/{id}', [GroupTeamController::class, 'transfer'])->name('groupTeam.transfer')->middleware('check.permission:edit GroupTeam');
+    Route::any('/groupTeam/transfer/update/{id}', [GroupTeamController::class, 'updateTransfer'])->name('groupTeam.transfer.update')->middleware('check.permission:edit GroupTeam');
 
-    Route::any('/groups/show/{id}', [GroupsController::class, 'show'])->name('group.show');
+    Route::any('/groups/show/{id}', [GroupsController::class, 'show'])->name('group.show')->middleware('check.permission:view Groups');
 
     Route::any('/groups/delete', [GroupsController::class, 'delete'])->name('group.delete');
-    Route::get('/api/groups', [GroupsController::class, 'getgroups'])->name('api.groups');
-    Route::get('/group/create/Inspectors/{id}', [GroupsController::class, 'groupCreateInspectors'])->name('group.groupcreateInspectors');
-    Route::post('/group/add/Inspectors/{id}', [GroupsController::class, 'groupAddInspectors'])->name('group.groupAddInspectors');
+    Route::get('/api/groups', [GroupsController::class, 'getgroups'])->name('api.groups')->middleware('check.permission:view Groups');
+    Route::get('/group/create/Inspectors/{id}', [GroupsController::class, 'groupCreateInspectors'])->name('group.groupcreateInspectors')->middleware('check.permission:create Groups');
+    Route::post('/group/add/Inspectors/{id}', [GroupsController::class, 'groupAddInspectors'])->name('group.groupAddInspectors')->middleware('check.permission:create Groups');
 
     // export
     //Start Export routes
@@ -242,6 +242,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('setting/vacationType/show/{id}', [settingController::class, 'showvacationType'])->name('vacationType.show')->middleware('check.permission:view VacationType');
     Route::post('setting/vacationType/delete', [settingController::class, 'deletevacationType'])->name('vacationType.delete')->middleware('check.permission:delete VacationType');
     //end vacation type
+
+    //settings
+
+
+    Route::get('/settings', [settingController::class, 'allSettings'])->name('settings.index')->middleware('check.permission:view Setting');
+    Route::get('get_settings', [settingController::class, 'getSettings'])->name('get.settings')->middleware('check.permission:view Setting');
+    Route::post('/setting/store', [settingController::class, 'CreateSetting'])->name('setting.store')->middleware('check.permission:create Setting');
+    Route::post('/setting/update', [settingController::class, 'UpdateSetting'])->name('setting.update')->middleware('check.permission:edit Setting');
+    Route::get('/setting/delete', [settingController::class, 'deleteSetting'])->name('setting.delete')->middleware('check.permission:delete Setting');
+
+
     //start gards
     Route::get('setting/grads', [settingController::class, 'getAllgrads'])->name('setting.getAllgrads')->middleware('check.permission:view grade');
     Route::get('setting/grads/all', [settingController::class, 'indexgrads'])->name('grads.index')->middleware('check.permission:view grade');
@@ -267,12 +278,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('setting/government/edit/{id}', [regionsController::class, 'editgovernment'])->name('government.edit')->middleware('check.permission:edit Government');
     Route::get('setting/government/show/{id}', [regionsController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
     //endgovernment
-    //Start Regions 
-    Route::get('setting/Regions/all/{id}', [regionsController::class, 'index'])->name('regions.index');
-    Route::get('setting/Regions/ajax', [regionsController::class, 'getregions'])->name('getAllregions');
-    Route::get('setting/RegionBygovernment', [regionsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment');
-    Route::post('setting/Regions/create', [regionsController::class, 'store'])->name('regions.store');
-    Route::post('setting/Regions/edit', [regionsController::class, 'update'])->name('regions.update');
+    //Start Regions
+    Route::get('setting/Regions/all/{id}', [regionsController::class, 'index'])->name('regions.index')->middleware('check.permission:view Region');
+    Route::get('setting/Regions/ajax', [regionsController::class, 'getregions'])->name('getAllregions')->middleware('check.permission:view Region');
+    Route::get('setting/RegionBygovernment', [regionsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
+    Route::post('setting/Regions/create', [regionsController::class, 'store'])->name('regions.store')->middleware('check.permission:create Region');
+    Route::post('setting/Regions/edit', [regionsController::class, 'update'])->name('regions.update')->middleware('check.permission:edit Region');
     // Route::get('setting/Regions/all/{id}', [regionsController::class, 'index'])->name('regions.index')->middleware('check.permission:view Region');
     // Route::get('setting/Regions/ajax', [regionsController::class, 'getregions'])->name('getAllregions')->middleware('check.permission:view Region');
     // Route::get('setting/RegionBygovernment', [regionsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
@@ -280,14 +291,14 @@ Route::middleware(['auth'])->group(function () {
     // Route::post('setting/Regions/edit', [regionsController::class, 'update'])->name('regions.update')->middleware('check.permission:edit Region');
     // Route::post('setting/Regions/delete', [regionsController::class, 'destroy'])->name('regions.delete')->middleware('check.permission:view Region');
     //End Regions
-    //Start sectors 
-    Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index');
-    Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors');
+    //Start sectors
+    Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index')->middleware('check.permission:view Sector');
+    Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors')->middleware('check.permission:view Sector');
     // Route::get('sectors', [sectorsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
-    Route::get('sectors/create', [sectorsController::class, 'create'])->name('sectors.create');
-    Route::post('sectors/add', [sectorsController::class, 'store'])->name('sectors.store');
+    Route::get('sectors/create', [sectorsController::class, 'create'])->name('sectors.create')->middleware('check.permission:create Sector');
+    Route::post('sectors/add', [sectorsController::class, 'store'])->name('sectors.store')->middleware('check.permission:create Sector');
 
-    Route::post('sectors/edit', [sectorsController::class, 'update'])->name('sectors.update');
+    // Route::post('sectors/edit', [sectorsController::class, 'update'])->name('sectors.update')->middleware('check.permission:edit Sector');
     // Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index')->middleware('check.permission:view Sector');
     // Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors')->middleware('check.permission:view Sector');
     // // Route::get('sectors', [sectorsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
@@ -296,80 +307,57 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::post('sectors/edit', [sectorsController::class, 'update'])->name('sectors.update')->middleware('check.permission:edit Sector');
     //End sectors
-    //Start points 
-    Route::get('points/all', [pointsController::class, 'index'])->name('points.index');
-    Route::get('points/ajax', [pointsController::class, 'getpoints'])->name('getAllpoints');
+    //Start points
+    Route::get('points/all', [pointsController::class, 'index'])->name('points.index')->middleware('check.permission:view Point');
+    Route::get('points/ajax', [pointsController::class, 'getpoints'])->name('getAllpoints')->middleware('check.permission:view Point');
     // Route::get('points', [pointsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
-    Route::get('points/create', [pointsController::class, 'create'])->name('points.create');
-    Route::post('points/add', [pointsController::class, 'store'])->name('points.store');
-
-    Route::post('points/edit', [pointsController::class, 'update'])->name('points.update');
-    // Route::get('points/all', [pointsController::class, 'index'])->name('points.index')->middleware('check.permission:view Point');
-    // Route::get('points/ajax', [pointsController::class, 'getpoints'])->name('getAllpoints')->middleware('check.permission:view Point');
-    // // Route::get('points', [pointsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
-    // Route::get('points/create', [pointsController::class, 'create'])->name('points.create')->middleware('check.permission:create Point');
-    // Route::post('points/add', [pointsController::class, 'store'])->name('points.store')->middleware('check.permission:create Point');
+    Route::get('points/create', [pointsController::class, 'create'])->name('points.create')->middleware('check.permission:create Point');
+    Route::post('points/add', [pointsController::class, 'store'])->name('points.store')->middleware('check.permission:create Point');
 
     // Route::post('points/edit', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
-
-
-    Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index');
-    Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors');
-    Route::get('sectors/show/{id}', [sectorsController::class, 'show'])->name('sectors.show');
-    Route::get('sectors/create', [sectorsController::class, 'create'])->name('sectors.create');
-    Route::post('sectors/add', [sectorsController::class, 'store'])->name('sectors.store');
-    Route::get('sectors/edit/{id}', [sectorsController::class, 'edit'])->name('sectors.edit');
-
-    Route::post('sectors/update', [sectorsController::class, 'update'])->name('sectors.update');
     //End sectors
-    //     Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index')->middleware('check.permission:view Sector');
-    //     Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors')->middleware('check.permission:view Sector');
-    //     Route::get('sectors/show/{id}', [sectorsController::class, 'show'])->name('sectors.show')->middleware('check.permission:view Sector');
-    //     Route::get('sectors/create', [sectorsController::class, 'create'])->name('sectors.create')->middleware('check.permission:create Sector');
-    //     Route::post('sectors/add', [sectorsController::class, 'store'])->name('sectors.store')->middleware('check.permission:create Sector');
-    //     Route::get('sectors/edit/{id}', [sectorsController::class, 'edit'])->name('sectors.edit')->middleware('check.permission:edit Sector');
+        Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index')->middleware('check.permission:view Sector');
+        Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors')->middleware('check.permission:view Sector');
+        Route::get('sectors/show/{id}', [sectorsController::class, 'show'])->name('sectors.show')->middleware('check.permission:view Sector');
+        Route::get('sectors/create', [sectorsController::class, 'create'])->name('sectors.create')->middleware('check.permission:create Sector');
+        Route::post('sectors/add', [sectorsController::class, 'store'])->name('sectors.store')->middleware('check.permission:create Sector');
+        Route::get('sectors/edit/{id}', [sectorsController::class, 'edit'])->name('sectors.edit')->middleware('check.permission:edit Sector');
 
-    //     Route::post('sectors/update', [sectorsController::class, 'update'])->name('sectors.update')->middleware('check.permission:edit Sector');
+        Route::post('sectors/update', [sectorsController::class, 'update'])->name('sectors.update')->middleware('check.permission:edit Sector');
     // //End sectors
-    //Start points 
-    Route::get('points/all', [pointsController::class, 'index'])->name('points.index');
-    Route::get('points/ajax', [pointsController::class, 'getpoints'])->name('getAllpoints');
-    Route::get('points/create', [pointsController::class, 'create'])->name('points.create');
-    Route::post('points/add', [pointsController::class, 'store'])->name('points.store');
-    Route::get('points/edit/{id}', [pointsController::class, 'edit'])->name('points.edit');
-    Route::get('points/show/{id}', [pointsController::class, 'show'])->name('points.show');
-    Route::post('points/update', [pointsController::class, 'update'])->name('points.update');
-    // Route::get('points/all', [pointsController::class, 'index'])->name('points.index')->middleware('check.permission:view Point');
-    // Route::get('points/ajax', [pointsController::class, 'getpoints'])->name('getAllpoints')->middleware('check.permission:view Point');
-    // Route::get('points/create', [pointsController::class, 'create'])->name('points.create')->middleware('check.permission:create Point');
-    // Route::post('points/add', [pointsController::class, 'store'])->name('points.store')->middleware('check.permission:create Point');
-    // Route::get('points/edit/{id}', [pointsController::class, 'edit'])->name('points.edit')->middleware('check.permission:edit Point');
-    // Route::get('points/show/{id}', [pointsController::class, 'show'])->name('points.show')->middleware('check.permission:view Point');
-    // Route::post('points/update', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
+    //Start points
+
+    Route::get('points/all', [pointsController::class, 'index'])->name('points.index')->middleware('check.permission:view Point');
+    Route::get('points/ajax', [pointsController::class, 'getpoints'])->name('getAllpoints')->middleware('check.permission:view Point');
+    Route::get('points/create', [pointsController::class, 'create'])->name('points.create')->middleware('check.permission:create Point');
+    Route::post('points/add', [pointsController::class, 'store'])->name('points.store')->middleware('check.permission:create Point');
+    Route::get('points/edit/{id}', [pointsController::class, 'edit'])->name('points.edit')->middleware('check.permission:edit Point');
+    Route::get('points/show/{id}', [pointsController::class, 'show'])->name('points.show')->middleware('check.permission:view Point');
+    Route::post('points/update', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
 
     //Start GroupPoints
-    Route::get('points/create/group', [GroupPointsController::class, 'create'])->name('grouppoints.create');
-    Route::post('points/add/group', [GroupPointsController::class, 'store'])->name('grouppoints.store');
-    Route::get('points/edit/group/{id}', [GroupPointsController::class, 'edit'])->name('grouppoints.edit');
-    Route::post('points/update/group/{id}', [GroupPointsController::class, 'update'])->name('grouppoints.update');
+    Route::get('points/create/group', [GroupPointsController::class, 'create'])->name('grouppoints.create')->middleware('check.permission:view Grouppoint');
+    Route::post('points/add/group', [GroupPointsController::class, 'store'])->name('grouppoints.store')->middleware('check.permission:create Grouppoint');
+    Route::get('points/edit/group/{id}', [GroupPointsController::class, 'edit'])->name('grouppoints.edit')->middleware('check.permission:edit Grouppoint');
+    Route::post('points/update/group/{id}', [GroupPointsController::class, 'update'])->name('grouppoints.update')->middleware('check.permission:edit Grouppoint');
 
     Route::get('trstssss', [governmentController::class, 'index']);
 
     //End GroupPoints
-    Route::get('/get-governorates/{sector}', [pointsController::class, 'getGovernorates']);
-    Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions']);
-    Route::get('/get-points/{governorate}', [pointsController::class, 'getAllPoints']);
-    Route::get('/get-pointsAll/{governorate}/{points}', [pointsController::class, 'getAllPoints2']);
+    Route::get('/get-governorates/{sector}', [pointsController::class, 'getGovernorates'])->middleware('check.permission:view Point');
+    Route::get('/get-regions/{governorate}', [pointsController::class, 'getRegions'])->middleware('check.permission:view Point');
+    Route::get('/get-points/{governorate}', [pointsController::class, 'getAllPoints'])->middleware('check.permission:view Point');
+    Route::get('/get-pointsAll/{governorate}/{points}', [pointsController::class, 'getAllPoints2'])->middleware('check.permission:view Point');
 
 
     //Start Violation
-    Route::get('setting/violation/all', [ViolationTypesController::class, 'index'])->name('violations.index');
-    Route::get('setting/violation/ajax', [ViolationTypesController::class, 'getviolations'])->name('violations.getAllviolations');
-    Route::post('setting/violation/add', [ViolationTypesController::class, 'store'])->name('violations.store');
-    Route::get('setting/violation/show/{id}', [ViolationTypesController::class, 'show'])->name('violations.show');
-    Route::post('setting/violation/update', [ViolationTypesController::class, 'update'])->name('violations.update');
+    Route::get('setting/violation/all', [ViolationTypesController::class, 'index'])->name('violations.index')->middleware('check.permission:view ViolationTypes');
+    Route::get('setting/violation/ajax', [ViolationTypesController::class, 'getviolations'])->name('violations.getAllviolations')->middleware('check.permission:view ViolationTypes');
+    Route::post('setting/violation/add', [ViolationTypesController::class, 'store'])->name('violations.store')->middleware('check.permission:create ViolationTypes');
+    Route::get('setting/violation/show/{id}', [ViolationTypesController::class, 'show'])->name('violations.show')->middleware('check.permission:view ViolationTypes');
+    Route::post('setting/violation/update', [ViolationTypesController::class, 'update'])->name('violations.update')->middleware('check.permission:edit ViolationTypes');
     //End Violation
     //setting end
 
@@ -397,68 +385,68 @@ Route::middleware(['auth'])->group(function () {
     Route::get('vacation/get/{id?}', [VacationController::class, 'getVacations'])->name('employee.vacations')->middleware('check.permission:view EmployeeVacation');
     Route::get('vacation/add/{id?}', [VacationController::class, 'create'])->name('vacation.add')->middleware('check.permission:create EmployeeVacation');
     Route::post('vacation/store/{id?}', [VacationController::class, 'store'])->name('vacation.store')->middleware('check.permission:edit EmployeeVacation');
-    Route::post('vacation/accept/{id}', [VacationController::class, 'acceptVacation'])->name('vacation.accept');
-    Route::post('vacation/reject/{id}', [VacationController::class, 'rejectVacation'])->name('vacation.reject');
-    Route::post('vacation/update/{id}', [VacationController::class, 'updateVacation'])->name('vacation.update');
+    Route::post('vacation/accept/{id}', [VacationController::class, 'acceptVacation'])->name('vacation.accept')->middleware('check.permission:edit EmployeeVacation');
+    Route::post('vacation/reject/{id}', [VacationController::class, 'rejectVacation'])->name('vacation.reject')->middleware('check.permission:edit EmployeeVacation');
+    Route::post('vacation/update/{id}', [VacationController::class, 'updateVacation'])->name('vacation.update')->middleware('check.permission:edit EmployeeVacation');
     // Route::post('vacation/cut/{id}', [VacationController::class, 'cutVacation'])->name('vacation.cut');
     // Route::post('vacation/exceed/{id}', [VacationController::class, 'exceedVacation'])->name('vacation.exceed');
     // Route::post('vacation/direct_exceed/{id}', [VacationController::class, 'direct_exceedVacation'])->name('vacation.direct_exceed');
     // Route::post('vacation/direct_work/{id}', [VacationController::class, 'direct_workVacation'])->name('vacation.direct_work');
-    Route::get('vacation/permit/{id}', [VacationController::class, 'permitVacation'])->name('vacation.permit');
-    Route::get('vacation/print_return/{id}', [VacationController::class, 'print_returnVacation'])->name('vacation.print_return');
-    Route::post('vacation/print/{id}', [VacationController::class, 'printVacation'])->name('vacation.print');
-    
-    
-   
+    Route::get('vacation/permit/{id}', [VacationController::class, 'permitVacation'])->name('vacation.permit')->middleware('check.permission:edit EmployeeVacation');
+    Route::get('vacation/print_return/{id}', [VacationController::class, 'print_returnVacation'])->name('vacation.print_return')->middleware('check.permission:edit EmployeeVacation');
+    Route::post('vacation/print/{id}', [VacationController::class, 'printVacation'])->name('vacation.print')->middleware('check.permission:edit EmployeeVacation');
+
+
+
     // Route::get('vacation/edit/{id}', [VacationController::class, 'edit'])->name('vacation.edit')->middleware('check.permission:edit EmployeeVacation');
     // Route::post('vacation/update/{id}', [VacationController::class, 'update'])->name('vacation.update')->middleware('check.permission:edit EmployeeVacation');
     Route::get('vacation/show/{id}', [VacationController::class, 'show'])->name('vacation.show')->middleware('check.permission:view EmployeeVacation');
     // Route::get('vacation/delete/{id}', [VacationController::class, 'delete'])->name('vacation.delete')->middleware('check.permission:delete EmployeeVacation');
     Route::get('vacation/downlaod/{id}', [VacationController::class, 'downlaodfile'])->name('vacation.downlaodfile')->middleware('check.permission:download EmployeeVacation');
-    Route::get('/employees/by-department/{departmentId}', [DepartmentController::class, 'getEmployeesByDepartment']);
+    Route::get('/employees/by-department/{departmentId}', [DepartmentController::class, 'getEmployeesByDepartment'])->middleware('check.permission:view departements');
 
     // working tree
-    Route::get('working_tree/list', [WorkingTreeController::class, 'index'])->name('working_trees.list');
-    Route::get('working_tree/get', [WorkingTreeController::class, 'getWorkingTrees'])->name('working_trees');
-    Route::get('working_tree/add', [WorkingTreeController::class, 'create'])->name('working_tree.add');
-    Route::post('working_tree/store', [WorkingTreeController::class, 'store'])->name('working_tree.store');
-    Route::get('working_tree/edit/{id}', [WorkingTreeController::class, 'edit'])->name('working_tree.edit');
-    Route::post('working_tree/update/{id}', [WorkingTreeController::class, 'update'])->name('working_tree.update');
-    Route::get('working_tree/show/{id}', [WorkingTreeController::class, 'show'])->name('working_tree.show');
+    Route::get('working_tree/list', [WorkingTreeController::class, 'index'])->name('working_trees.list')->middleware('check.permission:view WorkingTree');
+    Route::get('working_tree/get', [WorkingTreeController::class, 'getWorkingTrees'])->name('working_trees')->middleware('check.permission:view WorkingTree');
+    Route::get('working_tree/add', [WorkingTreeController::class, 'create'])->name('working_tree.add')->middleware('check.permission:create WorkingTree');
+    Route::post('working_tree/store', [WorkingTreeController::class, 'store'])->name('working_tree.store')->middleware('check.permission:create WorkingTree');
+    Route::get('working_tree/edit/{id}', [WorkingTreeController::class, 'edit'])->name('working_tree.edit')->middleware('check.permission:edit WorkingTree');
+    Route::post('working_tree/update/{id}', [WorkingTreeController::class, 'update'])->name('working_tree.update')->middleware('check.permission:edit WorkingTree');
+    Route::get('working_tree/show/{id}', [WorkingTreeController::class, 'show'])->name('working_tree.show')->middleware('check.permission:view WorkingTree');
 
 
-    Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission');
-    Route::get('/inspectors-mession/drag-drop', [GroupTeamController::class, 'DragDrop'])->name('point.dragdrop');
+    Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission')->middleware('check.permission:view InspectorMission');
+    Route::get('/inspectors-mession/drag-drop', [GroupTeamController::class, 'DragDrop'])->name('point.dragdrop')->middleware('check.permission:edit InspectorMission');
 
     /**
      * Search From Home
      */
     Route::get('/search/{search}/{q?}', [SearchController::class, 'index'])->name('search');
     Route::get('/searchUsers/users/{id}/{q?}', [SearchController::class, 'getUsers'])->name('search.users')->middleware('check.permission:view User');
-    Route::get('/searchDept/departments/{q?}', [SearchController::class,'getDepartments'])->name('search.departments');
+    Route::get('/searchDept/departments/{q?}', [SearchController::class, 'getDepartments'])->name('search.departments');
+
 
     /**
      * Violation Show
      */
-    Route::get('/viollation', [ViollationController::class, 'index'])->name('viollation');
-    Route::get('violation/getAll', [ViollationController::class, 'getviolations'])->name('violations.getAll');
-    Route::get('violation_details/{type}/{id}', [ViollationController::class, 'violation_detail'])->name('violations.details');
+    Route::get('/viollation', [ViollationController::class, 'index'])->name('viollation')->middleware('check.permission:view Violation');
+    Route::get('violation/getAll', [ViollationController::class, 'getviolations'])->name('violations.getAll')->middleware('check.permission:view Violation');
+    Route::get('violation_details/{type}/{id}', [ViollationController::class, 'violation_detail'])->name('violations.details')->middleware('check.permission:view Violation');
 
 
-    Route::get('api/Inspectors', [InspectorController::class, 'getInspectors'])->name('api.inspector');
-    Route::get('/Inspectors', [InspectorController::class, 'index'])->name('inspectors.index');
-    Route::get('/Inspectors/create', [InspectorController::class, 'create'])->name('inspectors.create');
-    Route::get('/Inspectors/show/{Inspector}', [InspectorController::class, 'show'])->name('inspectors.show');
-    Route::post('/Inspectors', [InspectorController::class, 'store'])->name('inspectors.store');
-    Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit');
-    Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update');
-    Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup');    
-    Route::get('/Inspectors/TransferToEmployee/{id}', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove');    
+    Route::get('api/Inspectors', [InspectorController::class, 'getInspectors'])->name('api.inspector')->middleware('check.permission:view Inspector');
+    Route::get('/Inspectors', [InspectorController::class, 'index'])->name('inspectors.index')->middleware('check.permission:view Inspector');
+    Route::get('/Inspectors/create', [InspectorController::class, 'create'])->name('inspectors.create')->middleware('check.permission:create Inspector');
+    Route::get('/Inspectors/show/{Inspector}', [InspectorController::class, 'show'])->name('inspectors.show')->middleware('check.permission:view Inspector');
+    Route::post('/Inspectors', [InspectorController::class, 'store'])->name('inspectors.store')->middleware('check.permission:create Inspector');
+    Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit')->middleware('check.permission:edit Inspector');
+    Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update')->middleware('check.permission:edit Inspector');
+    Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup')->middleware('check.permission:edit Inspector');
+    Route::get('/Inspectors/TransferToEmployee/{id}', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove')->middleware('check.permission:edit Inspector');
 
     //statistics
-    Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');    
-    Route::get('/statistics/search', [statisticController::class, 'getFilteredData'])->name('statistic.search');    
-
+    Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');
+    Route::get('/statistics/search', [statisticController::class, 'getFilteredData'])->name('statistic.search');
 });
 
 

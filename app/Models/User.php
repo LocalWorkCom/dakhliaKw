@@ -130,4 +130,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class);
     }
+    public function paperTransactions()
+    {
+        return $this->hasMany(PaperTransaction::class, 'created_by');
+    }
 }
