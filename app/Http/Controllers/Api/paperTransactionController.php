@@ -75,7 +75,7 @@ class paperTransactionController extends Controller
                 'civil_number' => $record->civil_number,
                 'registration_number' => $record->registration_number,
                 'images' => $record->images,
-                'created_at' => $record->created_at
+                'created_at' =>$record->parent == 0 ? $record->created_at : paperTransaction::find($record->parent)->created_at
             ];
         }
         $success['report'] = $all;
