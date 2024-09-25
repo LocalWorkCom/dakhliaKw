@@ -309,6 +309,7 @@ class ApiAbsenceController extends Controller
                         }
 
                         $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
+                        $success['Absence']['created_at'] =Absence::find($request->id)->value('created_at');
                         $success['AbsenceEmployee'] = $array;
                         return $this->respondSuccess($success, 'Data Saved successfully.');
                     } else {
@@ -361,6 +362,8 @@ class ApiAbsenceController extends Controller
                         }
 
                         $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
+                        $success['Absence']['created_at'] =Absence::find($parent_id)->value('created_at');
+
                         $success['AbsenceEmployee'] = $array;
                         return $this->respondSuccess($success, 'Data Saved successfully.');
                     } else {
