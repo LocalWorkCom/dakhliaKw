@@ -82,7 +82,6 @@ class ViolationController  extends Controller
                 $success['grade2'] = $grade->map(function ($item) {
                     return $item->only(['id', 'name']);
                 });
-
             } else {
                 $success['grade2'] = '';
             }
@@ -278,7 +277,7 @@ class ViolationController  extends Controller
         if ($new) {
             $model = Violation::find($new->id);
 
-            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag','created_at']);
+            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag', 'created_at']);
             return $this->respondSuccess($success, 'Data Saved successfully.');
         } else {
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
@@ -364,7 +363,8 @@ class ViolationController  extends Controller
                 'violation_type' => $violationTypes,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
                 'civil_military_id' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('id') : '',
-                'created_at' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
+                'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
+                'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
                 'updated_at' => $violation->parent == 0 ? $violation->updated_at->format('H:i:s') : Violation::find($violation->parent)->updated_at->format('H:i:s'),
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
@@ -455,8 +455,8 @@ class ViolationController  extends Controller
                 'image' => $violation->image,
                 'violation_type' => $violationTypes,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
-                'created_at'=>$violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at ,
-                'created_at_time'=> $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
+                'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
+                'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
                 'updated_at' => $violation->parent == 0 ? $violation->updated_at->format('H:i:s') : Violation::find($violation->parent)->updated_at->format('H:i:s'),
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
@@ -627,7 +627,7 @@ class ViolationController  extends Controller
                     $new->save();
                     if ($new) {
                         $model = Violation::find($new->id);
-                        $created=Violation::find($request->id);
+                        $created = Violation::find($request->id);
                         $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
                         $success['violation']['created_at'] = $created->created_at;
                         // dd($model->created_at , $created,$request->id);
@@ -684,7 +684,7 @@ class ViolationController  extends Controller
                     $new->save();
                     if ($new) {
                         $model = Violation::find($new->id);
-                        $created=Violation::find($parent_id);
+                        $created = Violation::find($parent_id);
 
                         $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
                         $success['violation']['created_at'] = $created->created_at;
@@ -696,8 +696,6 @@ class ViolationController  extends Controller
                     }
                 }
             }
-
-
         } else {
 
             $messages = [
@@ -855,7 +853,5 @@ class ViolationController  extends Controller
         }
 
         return $uploadedImages;
-
-
     }
 }
