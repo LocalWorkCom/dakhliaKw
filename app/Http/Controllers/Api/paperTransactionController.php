@@ -264,7 +264,8 @@ class paperTransactionController extends Controller
                 $data=[
                     'data'=>'تم أنشاء وثيقه أحوال لهذه النقطه اليوم ولا يمكن أضافه جديد'
                 ];
-                return $this->respondError('Error.',  $data, 400);
+                return $this->respondError('تم أنشاء وثيقه أحوال لهذه النقطه اليوم ولا يمكن أضافه جديد'
+                ,  $data, 400);
             } else {
                 // Create new paperTransaction record
                 $new = new paperTransaction();
