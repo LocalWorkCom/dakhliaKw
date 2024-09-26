@@ -460,7 +460,7 @@ class ViolationController  extends Controller
                 'updated_at' => $violation->parent == 0 ? $violation->updated_at->format('H:i:s') : Violation::find($violation->parent)->updated_at->format('H:i:s'),
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
-                'point_name' => $violation->point->name,
+                'point_name' => null,
                 'flag_instantmission' => $violation->flag_instantmission,
                 'violation_mode' => $violation->flag,
             ];
