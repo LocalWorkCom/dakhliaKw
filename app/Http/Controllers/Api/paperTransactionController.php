@@ -34,38 +34,37 @@ class paperTransactionController extends Controller
         $today = Carbon::today()->toDateString();
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value(column: 'name');
-        $all=[];
-        $records = paperTransaction::where('status', 1)->where('point_id', $request->point_id)->where('inspector_id', $inspectorId)->where('date',$today)->get();
+        $all = [];
+        $records = paperTransaction::where('status', 1)->where('point_id', $request->point_id)->where('inspector_id', $inspectorId)->where('date', $today)->get();
         foreach ($records as $record) {
             $pointShift = PointDays::where('point_id', $record->point_id)
-            ->where('name', Carbon::parse($record->created_at)->dayOfWeek)
-            ->first();
+                ->where('name', Carbon::parse($record->created_at)->dayOfWeek)
+                ->first();
 
-        if ($record->point_id) {
-            $shift_name='طوال اليوم';
-            $shiftDetails = [
-                'start_time' => '00:00',
-                'end_time' => '23:59',
-                'time' => null
-            ];
-
-            // Override with actual shift if available
-            if ($pointShift && $pointShift->from && $pointShift->to) {
+            if ($record->point_id) {
+                $shift_name = 'طوال اليوم';
                 $shiftDetails = [
-                    'start_time' => $pointShift->from,
-                    'end_time' => $pointShift->to,
-                    'time' => null // As per requirement
+                    'start_time' => '00:00',
+                    'end_time' => '23:59',
+                    'time' => null
                 ];
-                $shift_name='دوام جزئى';
 
+                // Override with actual shift if available
+                if ($pointShift && $pointShift->from && $pointShift->to) {
+                    $shiftDetails = [
+                        'start_time' => $pointShift->from,
+                        'end_time' => $pointShift->to,
+                        'time' => null // As per requirement
+                    ];
+                    $shift_name = 'دوام جزئى';
+                }
             }
-        }
             $all[] = [
                 'id' => $record->id,
-                'governrate'=>$record->point->government->name,
+                'governrate' => $record->point->government->name,
                 'point_id' => $record->point_id,
-                'point_shift'=>$shiftDetails,
-                'shift_name'=>$shift_name,
+                'point_shift' => $shiftDetails,
+                'shift_name' => $shift_name,
                 'point_name' => $record->point->name,
                 'date' => $record->date,
                 'inspector_id' => $record->inspector_id,
@@ -75,7 +74,7 @@ class paperTransactionController extends Controller
                 'civil_number' => $record->civil_number,
                 'registration_number' => $record->registration_number,
                 'images' => $record->images,
-                'created_at' =>$record->parent == 0 ? $record->created_at : paperTransaction::find($record->parent)->created_at->format('H:i:s')
+                'created_at' => $record->parent == 0 ? $record->created_at : paperTransaction::find($record->parent)->created_at->format('H:i:s')
             ];
         }
         $success['report'] = $all;
@@ -125,9 +124,9 @@ class paperTransactionController extends Controller
         $today = Carbon::today()->toDateString();
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         $inspector = InspectorMission::where('inspector_id', $inspectorId)
-                                     ->where('date', $today)
-                                     ->where('day_off', 0)
-                                     ->first();
+            ->where('date', $today)
+            ->where('day_off', 0)
+            ->first();
 
         if ($request->id) {
             $record = paperTransaction::where('id', $request->id)->first();
@@ -231,44 +230,70 @@ class paperTransactionController extends Controller
                 $new->save();
 
                 $recor = paperTransaction::find($new->id);
-                $created= paperTransaction::find($isParent);
+                $created = paperTransaction::find($isParent);
                 $success['report'] = $recor->only('id', 'point_id', 'mission_id', 'inspector_id', 'civil_number', 'date', 'registration_number', 'images');
                 $success['report']['created_at'] = $created->created_at;
 
                 return $this->respondSuccess($success, 'Data saved successfully.');
             }
         } else {
-            // Create new paperTransaction record
-            $new = new paperTransaction();
-            $new->point_id = $request->point_id;
-            $new->mission_id = $request->mission_id;
-            $new->inspector_id = $inspectorId;
-            $new->civil_number = $request->civil_number;
-            $new->date = $request->date;
-            $new->registration_number = $request->registration_number;
-            $new->status = 1;
-            $new->parent = 0;
-            $new->created_by = auth()->user()->id;
+            $messages = [
+                'point_id.required' => 'يجب اختيار النقطه المضاف لها المهمه',
+                'point_id.exists' => 'عفوا هذه النقطه غير متاحه',
+                'registration_number.required' => 'يجب ادخال رقم القيد',
+                'civil_number.required' => 'يجب ادخال رقم الأحوال',
+                'mission_id.required' => 'يجب ادخال رقم المهمه',
+            ];
 
-            // Initialize $newImages as an empty array
-            $newImages = [];
+            $validatedData = Validator::make($request->all(), [
+                'point_id' => ['required'],
+                'mission_id' => ['required'],
+                'civil_number' => ['required'],
+                'date' => ['required'],
+                'registration_number' => ['required'],
+                'images' => ['required'],
+            ], $messages);
 
-            // Handle new image upload
-            if ($request->hasFile('images')) {
-                $files = $request->file('images');
-                $path = 'Api/images/paperTransactions';
-                $model = paperTransaction::find($new->id);
-                $newImages = $this->UploadFilesIM($path, 'images', $model, $files);
+            if ($validatedData->fails()) {
+                return $this->respondError('Validation Error.', $validatedData->errors(), 400);
             }
+            $is_exist = paperTransaction::where('date', $today)->where('point_id', $request->point_id)->exists();
+            // dd($is_exist , $today ,$request->point_id);
+            if ($is_exist) {
+                return $this->respondError('Error.', 'تم أنشاء وثيقه أحوال لهذه النقطه اليوم ولا يمكن أضافه جديد', 400);
+            } else {
+                // Create new paperTransaction record
+                $new = new paperTransaction();
+                $new->point_id = $request->point_id;
+                $new->mission_id = $request->mission_id;
+                $new->inspector_id = $inspectorId;
+                $new->civil_number = $request->civil_number;
+                $new->date = $request->date;
+                $new->registration_number = $request->registration_number;
+                $new->status = 1;
+                $new->parent = 0;
+                $new->created_by = auth()->user()->id;
 
-            // Save images as a comma-separated string
-            $new->images = implode(',', $newImages);
-            $new->save();
+                // Initialize $newImages as an empty array
+                $newImages = [];
 
-            $record = paperTransaction::find($new->id);
-            $success['report'] = $record->only('id', 'point_id', 'mission_id', 'inspector_id','date', 'civil_number', 'registration_number', 'images', 'created_at');
+                // Handle new image upload
+                if ($request->hasFile('images')) {
+                    $files = $request->file('images');
+                    $path = 'Api/images/paperTransactions';
+                    $model = paperTransaction::find($new->id);
+                    $newImages = $this->UploadFilesIM($path, 'images', $model, $files);
+                }
 
-            return $this->respondSuccess($success, 'Data saved successfully.');
+                // Save images as a comma-separated string
+                $new->images = implode(',', $newImages);
+                $new->save();
+
+                $record = paperTransaction::find($new->id);
+                $success['report'] = $record->only('id', 'point_id', 'mission_id', 'inspector_id', 'date', 'civil_number', 'registration_number', 'images', 'created_at');
+
+                return $this->respondSuccess($success, 'Data saved successfully.');
+            }
         }
     }
 
@@ -313,8 +338,6 @@ class paperTransactionController extends Controller
         }
 
         return $uploadedImages;
-
-
     }
 
     /**
