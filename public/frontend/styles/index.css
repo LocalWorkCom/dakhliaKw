@@ -1549,3 +1549,77 @@ width: 25px !important;
 font-size: 18px;
 color: #a5a5a5;
 }
+/********** graph ********** */
+.graph-card {
+    width: 455px;
+    height: 200px;
+    border-radius: 20px;
+    padding-block: 30px;
+    margin-bottom: 30px;
+    padding-inline: 50px;
+}
+.canvas-card, .circle-graph-card{
+    border-radius: 20px;
+    padding-block: 30px;
+    padding-inline: 50px;
+    margin-bottom: 30px;
+}
+.graph-card h1{
+    display: flex;
+    justify-content: start;
+font-family: Almarai;
+font-size: 40px;
+font-weight: 700;
+line-height: 150px;
+text-align: right;
+color: #274373;
+}
+.graph-card i, .canvas-card i, .circle-graph-card i{
+font-size: 25px;
+}
+.graph-card h2{
+    font-family: Almarai;
+font-size: 30px;
+font-weight: 700;
+line-height: 26.78px;
+text-align: right;
+color: #2A2726;
+}
+.canvas-card .color, .circle-graph-card .color{
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    /* background-color:dodgerblue ; */
+    border: 0.01px solid gray;
+    margin-left: 5px;
+}
+.canvas-card .info, .circle-graph-card .info{
+    font-family: Almarai;
+font-size: 25px;
+font-weight: 400;
+line-height: 20px;
+text-align: center;
+color: #2A2726;
+}
+.canvas-card .h2, .circle-graph-card .h2{
+    font-family: Almarai;
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 22.78px;
+    text-align: left;
+    color: #999595;
+}
+.h2-charts{
+    font-family: Almarai;
+font-size:30px;
+font-weight: 700;
+line-height: 26.78px;
+text-align: center;
+color: #2A2726;
+}
+.mobile-view{
+    display: none;
+}
+.mobile-view .h2{
+    color: rgb(158, 156, 156);
+}
