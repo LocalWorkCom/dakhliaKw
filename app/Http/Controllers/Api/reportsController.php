@@ -167,7 +167,8 @@ class reportsController extends Controller
                 'total_number' => $absence->total_number,
                 'actual_number' => $absence->actual_number,
                 'absence_members' => $absence_members,
-                'created_at'=> $absence->parent == 0 ? $absence->created_at->format('H:i:s') : Absence::find($absence->parent)->created_at->format('H:i:s')
+                'created_at'=>$absence->parent == 0 ? $absence->created_at : Absence::find($absence->parent)->created_at ,
+                'created_at_time'=> $absence->parent == 0 ? $absence->created_at->format('H:i:s') : Absence::find($absence->parent)->created_at->format('H:i:s')
             ];
         }
         $success['report'] = $response;

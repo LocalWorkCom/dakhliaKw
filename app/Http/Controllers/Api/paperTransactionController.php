@@ -74,7 +74,8 @@ class paperTransactionController extends Controller
                 'civil_number' => $record->civil_number,
                 'registration_number' => $record->registration_number,
                 'images' => $record->images,
-                'created_at' => $record->parent == 0 ? $record->created_at : paperTransaction::find($record->parent)->created_at->format('H:i:s')
+                'created_at'=>$record->parent == 0 ? $record->created_at : paperTransaction::find($record->parent)->created_at ,
+                'created_at_time'=> $record->parent == 0 ? $record->created_at->format('H:i:s') : paperTransaction::find($record->parent)->created_at->format('H:i:s'),
             ];
         }
         $success['report'] = $all;
