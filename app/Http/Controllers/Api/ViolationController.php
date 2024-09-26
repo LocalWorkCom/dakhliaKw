@@ -303,13 +303,7 @@ class ViolationController  extends Controller
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         // shift
         $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
-        if ($inspector != null) {
-            $working_time = WorkingTime::find($inspector->working_time_id);
-            $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
-        } else {
-            $working_time = null;
-            $success['shift'] = null;
-        }
+
 
         // Get the team name where the inspector is listed in `inspector_ids`
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
@@ -330,9 +324,43 @@ class ViolationController  extends Controller
             ->where('status', 1)
             ->get();
 
+            // if ($inspector != null) {
+            //     $working_time = WorkingTime::find($inspector->working_time_id);
+            //     $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
+            // } else {
+            //     $working_time = null;
+            //     $success['shift'] = null;
+            // }
         $pointName = Point::find($request->point_id);
         $success['date'] = $today;
+        $pointShift = PointDays::where('point_id', $request->point_id)
+        ->where('name', Carbon::parse($today)->dayOfWeek)
+        ->first();
+        if ($request->point_id) {
 
+            $shiftDetails = [
+                'start_time' => '00:00',
+                'end_time' => '23:59',
+                'time' => null
+            ];
+
+            // Override with actual shift if available
+            if ($pointShift && $pointShift->from && $pointShift->to) {
+                $shiftDetails = [
+                    'start_time' => $pointShift->from,
+                    'end_time' => $pointShift->to,
+                    'time' => null // As per requirement
+                ];
+            }
+        } else {
+            // No point_id, setting time based on violation's created_at
+            $shiftDetails = [
+                'start_time' => null,
+                'end_time' => null,
+                'time' => date("g:i:s A", strtotime($violation->created_at)) // Hour in 24-hour format
+            ];
+        }
+        $success['shift'] =$shiftDetails;
         $success['teamName'] = $teamName;
         $success['pointName'] = $pointName->only(['id', 'name']);
 
