@@ -82,7 +82,7 @@ class reportsController extends Controller
         $absences = Absence::whereIn('inspector_id', $inspectorIdsArray)
             ->where('point_id', $request->point_id)
             ->whereDate('date', $today)
-            ->where('flag',1)
+            ->where('flag', 1)
             ->get();
 
 
@@ -142,7 +142,7 @@ class reportsController extends Controller
                     'type_employee' => $employee_absence->type_employee ? $employee_absence->typeEmployee->name : '',
                     'employee_civil_number' => $employee_absence->civil_number ? $employee_absence->civil_number : '',
                     'employee_file_number' => $employee_absence->file_num ? $employee_absence->file_num : '',
-                    'id_employee_grade'=> $employee_absence->grade,
+                    'id_employee_grade' => $employee_absence->grade,
                     'id_employee_type_absence' => $employee_absence->absenceType->id,
                     'id_type_employee' => $employee_absence->type_employee
 
@@ -152,9 +152,9 @@ class reportsController extends Controller
             $response[] = [
                 'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
                 'abcence_day' => $absence->date,
-                'mission_id'=>$absence->mission_id,
-                'report_id' =>$absence->id,
-                'point_id'=>$absence->point_id,
+                'mission_id' => $absence->mission_id,
+                'report_id' => $absence->id,
+                'point_id' => $absence->point_id,
                 'point_name' => $absence->point->name,
                 'point_governate' => $absence->point->government->name,
                 'point_location' => $absence->point->google_map,
@@ -167,8 +167,8 @@ class reportsController extends Controller
                 'total_number' => $absence->total_number,
                 'actual_number' => $absence->actual_number,
                 'absence_members' => $absence_members,
-                'created_at'=>$absence->parent == 0 ? $absence->created_at : Absence::find($absence->parent)->created_at ,
-                'created_at_time'=> $absence->parent == 0 ? $absence->created_at->format('H:i:s') : Absence::find($absence->parent)->created_at->format('H:i:s')
+                'created_at' => $absence->parent == 0 ? $absence->created_at : Absence::find($absence->parent)->created_at,
+                'created_at_time' => $absence->parent == 0 ? $absence->created_at->format('H:i:s') : Absence::find($absence->parent)->created_at->format('H:i:s')
             ];
         }
         $success['report'] = $response;
@@ -397,7 +397,8 @@ class reportsController extends Controller
                 'inspector_name' => $violation->user_id ? $violation->user->name : null,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
                 'image' => $formattedImages ? $formattedImages : null,
-                'created_at' => $violation->created_at,
+                'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
+                'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
                 'updated_at' => $violation->updated_at,
                 'mission_id' => $violation->mission_id ?? null,
                 'point_id' => $violation->point_id ?? null,
@@ -475,12 +476,12 @@ class reportsController extends Controller
                     $absenceReport[] = [
 
                         'abcence_day' => $absence->date,
-                        'point_id'=>$absence->point_id,
+                        'point_id' => $absence->point_id,
                         'point_name' => $absence->point->name,
                         'point_time' => $pointTime,
                         'shift' => $shiftDetails,
-                        'id'=>$absence->id,
-                        'missiom_id'=>$absence->mission_id,
+                        'id' => $absence->id,
+                        'missiom_id' => $absence->mission_id,
 
                         'inspector_name' => $absence->inspector->name,
                         'inspector_grade' => auth()->user()->grade_id ? auth()->user()->grade->name : null,
@@ -489,7 +490,7 @@ class reportsController extends Controller
                         'actual_number' => $absence->actual_number,
                         'disability' => $absence->total_number - $absence->actual_number,
                         'absence_members' => $absenceMembers,
-                        'created_at'=>$absence->created_at
+                        'created_at' => $absence->created_at
                     ];
                 }
             }
