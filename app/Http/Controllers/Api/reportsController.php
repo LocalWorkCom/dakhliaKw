@@ -387,7 +387,6 @@ class reportsController extends Controller
                 'id' => $violation->id,
                 'InspectorName' => $violation->user_id ? $violation->user->name : null,
                 'Inspectorgrade' => $violation->user->grade->name ?? null,
-
                 'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
                 'name' => $violation->name,
                 'Civil_number' => $violation->Civil_number ?? null,
