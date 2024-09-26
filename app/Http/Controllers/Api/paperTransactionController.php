@@ -35,7 +35,7 @@ class paperTransactionController extends Controller
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value(column: 'name');
         $all = [];
-        $records = paperTransaction::where('status', 1)->where('point_id', $request->point_id)->where('inspector_id', $inspectorId)->where('date', $today)->get();
+        $records = paperTransaction::where('status', 1)->where('point_id', $request->point_id)->where('date', $today)->get();
         foreach ($records as $record) {
             $pointShift = PointDays::where('point_id', $record->point_id)
                 ->where('name', Carbon::parse($record->created_at)->dayOfWeek)
@@ -261,7 +261,10 @@ class paperTransactionController extends Controller
             $is_exist = paperTransaction::where('date', $today)->where('point_id', $request->point_id)->exists();
             // dd($is_exist , $today ,$request->point_id);
             if ($is_exist) {
-                return $this->respondError('Error.', 'تم أنشاء وثيقه أحوال لهذه النقطه اليوم ولا يمكن أضافه جديد', 400);
+                $data=[
+                    'data'=>'تم أنشاء وثيقه أحوال لهذه النقطه اليوم ولا يمكن أضافه جديد'
+                ];
+                return $this->respondError('Error.',  $data, 400);
             } else {
                 // Create new paperTransaction record
                 $new = new paperTransaction();
