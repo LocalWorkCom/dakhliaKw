@@ -520,9 +520,14 @@ class reportsController extends Controller
 
 
         $violation = Violation::where('user_id', auth()->user()->id)->where('status',1)->whereDate('created_at', $today)->pluck('id')->flatten()->count();
+        $is_off = InspectorMission::whereDate('date', $today)
+        ->where('inspector_id', $inspectorId)
+        ->value('day_off');
         $success = [
             'mission_count' => $mission + $mission_instans ?? 0,
             'violation_count' => $violation ?? 0,
+            'is_off'=> $is_off == 0 ? false : true
+
         ];
         if ($success) {
             return $this->apiResponse(true, 'Data get successfully.', $success, 200);
@@ -574,11 +579,15 @@ class reportsController extends Controller
             ->where('flag', 1)->where('status',1)
             ->whereBetween(DB::raw('DATE(created_at)'), [$startOfMonth, $end])
             ->count();
+            $is_off = InspectorMission::whereDate('date', $today)
+            ->where('inspector_id', $inspectorId)
+            ->value('day_off');
         // Prepare the success response
         $success = [
             'mission_count' => $groupPointsCount + $instantMissionsCount,
             'violation_Disciplined_behavior' => $violation_Disciplined_behavior_count,
             'violations_bulding_count' => $violations_bulding_count,
+            'is_off'=> $is_off == 0 ? false : true
         ];
 
         return $this->apiResponse(true, 'Data retrieved successfully.', $success, 200);
