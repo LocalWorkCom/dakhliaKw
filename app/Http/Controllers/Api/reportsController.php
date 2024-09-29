@@ -278,7 +278,7 @@ class reportsController extends Controller
         $absenceReport = [];
         $pointViolations = [];
 
-        $violationQuery = Violation::with(['user', 'point', 'violatType', 'instantMission'])
+        $violationQuery = Violation::with(['user', 'point', 'violatType', 'instantMission'])->where('status',1)
             ->where('user_id', auth()->user()->id);
 
         if (!empty($dates) && count($dates) != 1) {
@@ -413,7 +413,7 @@ class reportsController extends Controller
             $index = Carbon::parse($date)->dayOfWeek;
 
             if ($type === null || $type == 2) {
-                $absencesQuery = Absence::where('inspector_id', $inspectorId)
+                $absencesQuery = Absence::where('inspector_id', $inspectorId)->where('flag',1)
                     ->whereDate('date', $today); // Use whereDate to filter by exact date
 
                 if (!empty($pointIds)) {
@@ -519,7 +519,7 @@ class reportsController extends Controller
             ->value('count');
 
 
-        $violation = Violation::where('user_id', auth()->user()->id)->whereDate('created_at', $today)->pluck('id')->flatten()->count();
+        $violation = Violation::where('user_id', auth()->user()->id)->where('status',1)->whereDate('created_at', $today)->pluck('id')->flatten()->count();
         $success = [
             'mission_count' => $mission + $mission_instans ?? 0,
             'violation_count' => $violation ?? 0,
@@ -563,7 +563,7 @@ class reportsController extends Controller
 
         // Calculate the count of building violations
         $violations_bulding_count = Violation::where('user_id', auth()->user()->id)
-            ->where('flag', 0)
+            ->where('flag', 0)->where('status',1)
             ->whereBetween(DB::raw('DATE(created_at)'), [$startOfMonth, $end])
             ->pluck('id')
             ->flatten()
@@ -571,7 +571,7 @@ class reportsController extends Controller
 
         // Calculate the count of disciplined behavior violations
         $violation_Disciplined_behavior_count = Violation::where('user_id', auth()->user()->id)
-            ->where('flag', 1)
+            ->where('flag', 1)->where('status',1)
             ->whereBetween(DB::raw('DATE(created_at)'), [$startOfMonth, $end])
             ->count();
         // Prepare the success response

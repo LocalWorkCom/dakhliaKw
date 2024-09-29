@@ -292,6 +292,7 @@ class UserController extends Controller
         $messages = [
             "current_password.required" => "يجب ادخال كلمه المرور الحاليه",
             "new_password.required" => "يجب ادخال كلمه المرور الجديده",
+            "new_password.different" => "يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمة المرور الحالية",
             "password_confirm.required" => "يجب ادخال تأكيد كلمه المرور",
             "password_confirm.same" => "يجب ان يكون كلمه المرور متطابقه"
         ];
@@ -299,7 +300,7 @@ class UserController extends Controller
         // Validation rules
         $validatedData = Validator::make($request->all(), [
             "current_password" => "required",
-            "new_password" => "required",
+            "new_password" => "required|different:current_password",
             "password_confirm" => "required|same:new_password",
         ], $messages);
 
