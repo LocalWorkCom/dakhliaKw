@@ -313,7 +313,7 @@ class UserController extends Controller
 
         if (!Hash::check($request->current_password, $user->password)) {
             $message=[
-                'error'=>  "كلمة المرور الحالية غير صحيحة"
+                'error'=>  ["كلمة المرور الحالية غير صحيحة"]
             ];
             return $this->respondError('Error.',  $message, 400);
         }
