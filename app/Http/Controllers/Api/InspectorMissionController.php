@@ -115,11 +115,13 @@ class InspectorMissionController extends Controller
 
                                     $pointTime = ['startTime' => $fromTime, 'endTime' => $toTime];
                                 } else {
+
                                     // If working time is not found, default to full day
                                     $inspectionTime = 'طول اليوم';
-                                    $avilable = true;
+                                    $avilable = false;
                                 }
                             } else {
+                                
                                 $inspectionTime = 'طول اليوم';
                                 $avilable = true;
                             }
