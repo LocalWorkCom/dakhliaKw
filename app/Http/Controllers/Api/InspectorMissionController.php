@@ -121,7 +121,7 @@ class InspectorMissionController extends Controller
                                     $avilable = false;
                                 }
                             } else {
-                                
+
                                 $inspectionTime = 'طول اليوم';
                                 $avilable = true;
                             }
