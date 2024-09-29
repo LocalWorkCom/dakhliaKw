@@ -299,12 +299,46 @@
     height: 140px;
     width: 235px;
 }
+.graph-card {
+    width: 310px;
+    height: 180px;
+    padding-block: 31px;
+    margin-bottom: 20px;
+    padding-inline: 35px;
+}
+#myPieChart {
+    height: 225px !important;
+    width: 375px !important;
+}
+.h2-charts {
+    font-size: 25px;
+    line-height: 30.78px;
+}
+.canvas-card .info, .circle-graph-card .info {
+    font-size: 20px !important;
+    line-height: 19px;
+}
+.canvas-card .h2, .circle-graph-card .h2 {
+    font-size: 20px;
+    line-height: 23.78px;
+}
+.graph-card h1 {
+    font-size: 30px;
+    line-height: 118px;
+}
+.graph-card h2 {
+    font-size: 27px;
+    line-height: 26.78px;
+}
+.graph-card i, .canvas-card i, .circle-graph-card i {
+    font-size: 21px;
+}
 }
 @media (min-width: 1600px){
     .container-responsive {
         display: none;
     }
-
+  
 }
 @media (max-width: 1400px){
     /* li {
@@ -656,6 +690,54 @@
     .logo-request p {
         font-size: 22px;
     }
+    .graph-card {
+        width: 255px;
+        height: 160px;
+        padding-block: 27px;
+        margin-bottom: 20px;
+        padding-inline: 25px;
+    }
+    .graph-card h2 {
+        font-size: 23px;
+        line-height: 26.78px;
+    }
+    .graph-card h1 {
+        font-size: 27px;
+        line-height: 118px;
+    }
+    .h2-charts {
+        font-size: 19px;
+        line-height: 30.78px;
+    }
+    #myPieChart {
+        height: 212px !important;
+        width: 370px !important;
+    }
+    .color{
+        display: none;
+    }
+    .graph-card {
+        width: 237px;
+        height: 160px;
+        padding-block: 14px;
+        margin-bottom: 19px;
+        padding-inline: 20px;
+    }
+    .graph-card h2 {
+        font-size: 21px;
+        line-height: 26.78px;
+    }
+    .graph-card h1 {
+        font-size: 24px;
+        line-height: 120px;
+    }
+    .graph-card i, .canvas-card i, .circle-graph-card i {
+        font-size: 19px;
+    }
+    #myPieChart {
+        height: 183px !important;
+        width: 358px !important;
+    }
 }
 @media (max-width: 1100px){
     .navbar{
@@ -781,6 +863,18 @@
     .second-section input {
         width: 186px;
         height: 40px;
+        
+    }
+    .graph-card {
+        width: 215px;
+        height: 160px;
+        padding-block: 14px;
+        margin-bottom: 19px;
+        padding-inline: 20px;
+    }
+    #myPieChart {
+        height: 210px !important;
+        width: 340px !important;
     }
 }
 @media (max-width: 992px){
@@ -908,6 +1002,57 @@
     .background-request {
         height: 34px;
         width: 245px;
+    }
+    .mobile-view {
+        display: block;
+        margin-bottom: 20px !important;
+    }
+    .desktop-view{
+        display: none;
+    }
+    .graph-card {
+        width: 210px;
+        height: 160px;
+        padding-block: 14px;
+        margin-bottom: 19px;
+        padding-inline: 20px;
+    }
+    .mobile-view .info, .mobile-view .h2 {
+        font-size: 23px;
+        text-align: center;
+    }
+    .graph-card {
+        width: 160px;
+        height: 160px;
+        padding-block: 14px;
+        margin-bottom: 15px;
+        padding-inline: 20px;
+    }
+    .graph-card h2 {
+        font-size: 15px;
+        line-height: 26.78px;
+    }
+    .graph-card i, .canvas-card i, .circle-graph-card i {
+        font-size: 16px;
+    }
+    .graph-card h1 {
+        font-size: 20px;
+        line-height: 68px;
+    }
+    .graph-card {
+        width: 160px;
+        height: 139px;
+        padding-block: 30px;
+        margin-bottom: 15px;
+        padding-inline: 6px;
+    }
+    .mobile-view .info, .mobile-view .h2 {
+        font-size: 20px;
+        text-align: center;
+    }
+    .h2-charts {
+        font-size: 18px;
+        line-height: 22.78px;
     }
 }
 @media (max-width: 768px){
@@ -1270,7 +1415,39 @@
     .header-radio {
         height: 53px;
     }
-  
+    .graph-card {
+        width: 505px;
+        height: 139px;
+        padding-block: 30px;
+        margin-bottom: 15px;
+        padding-inline: 6px;
+    }
+    .graph-card h2 {
+        font-size: 23px;
+        line-height: 26.78px;
+    }
+    .graph-card {
+        width: 160px;
+        height: 139px;
+        padding-block: 30px;
+        margin-bottom: 15px;
+        padding-inline: 6px;
+    }
+    .graph-card h2 {
+        font-size: 15px;
+        line-height: 26.78px;
+    }
+    .graph-card h1 {
+        font-size: 18px;
+        line-height: 30px;
+    }
+    .graph-card {
+        width: 160px;
+        height: 115px;
+        padding-block: 30px;
+        margin-bottom: 15px;
+        padding-inline: 6px;
+    }
 }
 @media (max-width: 578px){
 .input-group{
@@ -1327,7 +1504,56 @@
     margin: 0px;
     margin-bottom: 15px;
 }
-
+.graph-card {
+    width: 500px;
+    height: 130px;
+    padding-block: 30px;
+    margin-bottom: 15px;
+    padding-inline: 35px;
+}
+.graph-card h1 {
+    font-size: 23px;
+    line-height: 68px;
+}
+.graph-card h2 {
+    font-size: 23px;
+    line-height: 26.78px;
+}
+.graph-card i, .canvas-card i, .circle-graph-card i {
+    font-size: 20px;
+}
+.h2-charts {
+    font-size: 21px;
+    line-height: 22.78px;
+}
+.mobile-view .info, .mobile-view .h2 {
+    font-size: 21px;
+    text-align: center;
+}
+.graph-card {
+    width: 360px;
+    height: 120px;
+    padding-block: 18px;
+    margin-bottom: 15px;
+    padding-inline: 24px;
+}
+.h2-charts {
+    font-size: 20px;
+    line-height: 22.78px;
+}
+.mobile-view .info, .mobile-view .h2 {
+    font-size: 20px;
+    text-align: center;
+}
+}
+@media (max-width:540px) {
+    .graph-card {
+        width: 460px;
+        height: 120px;
+        padding-block: 18px;
+        margin-bottom: 15px;
+        padding-inline: 24px;
+    }
 }
 @media (max-width: 450px){
     li {
@@ -1566,8 +1792,21 @@ footer {
         line-height: 44.64px;
         text-align: center;
     }
-    
-    
+    .graph-card h2 {
+        font-size: 21px;
+        line-height: 26.78px;
+    }
+    .h2-charts {
+        font-size: 19px;
+        line-height: 22.78px;
+    }
+    .graph-card {
+        width: 365px;
+        height: 120px;
+        padding-block: 18px;
+        margin-bottom: 15px;
+        padding-inline: 24px;
+    }
 }
 @media (max-width: 380px){
     li {
@@ -1692,6 +1931,32 @@ footer {
     .details {
         padding: 45px 50px 74px 21px;
     }
+    .graph-card {
+        width: 315px;
+        height: 114px;
+        padding-block: 13px;
+        margin-bottom: 15px;
+        padding-inline: 11px;
+    }
+    .graph-card i, .canvas-card i, .circle-graph-card i {
+        font-size: 18px;
+    }
+    .graph-card h2 {
+        font-size: 19px;
+        line-height: 23.78px;
+    }
+    .graph-card h1 {
+        font-size: 20px;
+        line-height: 67px;
+    }
+    .mobile-view .info, .mobile-view .h2 {
+        font-size: 18px;
+        text-align: center;
+    }
+    .h2-charts {
+        font-size: 18px;
+        line-height: 20.78px;
+    }
 }
 @media (max-width: 340px){
     .details {
@@ -1784,5 +2049,24 @@ footer {
     }
     li {
         width: 75px;
+    }
+    .graph-card {
+        width: 267px;
+        height: 98px;
+        padding-block: 10px;
+        margin-bottom: 15px;
+        padding-inline: 11px;
+    }
+    .graph-card i, .canvas-card i, .circle-graph-card i {
+        font-size: 16px;
+    }
+    .h2-charts {
+        font-size: 17px;
+        line-height: 20.78px;
+    }
+    .mobile-view .info, .mobile-view .h2 {
+        font-size: 17px;
+        text-align: center;
+        line-height: 18px;
     }
 }
