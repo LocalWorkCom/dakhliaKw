@@ -324,18 +324,18 @@ class ViolationController  extends Controller
             ->where('status', 1)
             ->get();
 
-            // if ($inspector != null) {
-            //     $working_time = WorkingTime::find($inspector->working_time_id);
-            //     $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
-            // } else {
-            //     $working_time = null;
-            //     $success['shift'] = null;
-            // }
+        // if ($inspector != null) {
+        //     $working_time = WorkingTime::find($inspector->working_time_id);
+        //     $success['shift'] = $working_time->only(['id', 'name', 'start_time', 'end_time']);
+        // } else {
+        //     $working_time = null;
+        //     $success['shift'] = null;
+        // }
         $pointName = Point::find($request->point_id);
         $success['date'] = $today;
         $pointShift = PointDays::where('point_id', $request->point_id)
-        ->where('name', Carbon::parse($today)->dayOfWeek)
-        ->first();
+            ->where('name', Carbon::parse($today)->dayOfWeek)
+            ->first();
         if ($request->point_id) {
 
             $shiftDetails = [
@@ -360,7 +360,7 @@ class ViolationController  extends Controller
                 'time' => date("g:i:s A", strtotime($violation->created_at)) // Hour in 24-hour format
             ];
         }
-        $success['shift'] =$shiftDetails;
+        $success['shift'] = $shiftDetails;
         $success['teamName'] = $teamName;
         $success['pointName'] = $pointName->only(['id', 'name']);
 
@@ -483,6 +483,7 @@ class ViolationController  extends Controller
                 'image' => $violation->image,
                 'violation_type' => $violationTypes,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
+                'civil_military_id' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('id') : '',
                 'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
                 'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
                 'updated_at' => $violation->parent == 0 ? $violation->updated_at->format('H:i:s') : Violation::find($violation->parent)->updated_at->format('H:i:s'),
@@ -496,7 +497,19 @@ class ViolationController  extends Controller
 
         // Add additional instant mission details
         $success['date'] = $today;
-        $success['shift'] = $working_time ? $working_time->only(['id', 'name', 'start_time', 'end_time']) : null;
+        $createdAt = $instantMission->created_at;
+
+
+
+        $time = $createdAt->format('h:i'); // Only time
+
+        // Determine if it's AM or PM and set the Arabic equivalent
+        $period = $createdAt->format('A'); // AM or PM
+        $time_arabic = ($period === 'AM') ? 'صباحا' : 'مساءا';
+        $success['shift'] =  [
+            'date' => $createdAt->format('Y-m-d'),
+            'time' => $time ?? null,
+        ];
 
         $success['instantMissions'] = [
             'instant_mission_id' => $instantMission->id,
