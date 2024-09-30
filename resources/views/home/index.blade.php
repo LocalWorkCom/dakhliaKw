@@ -115,111 +115,68 @@
         </div>
     </div>
 
-    <div class="row desktop-view">
-        <div class="container col-11 mt-3 p-0 d-flex" style="background-color: transparent;" dir="rtl">
-            <!-- First Card -->
-            <div class="col-md-7 col-sm-12 col-12 mx-4 circle-graph-card " style="background-color: #ffffff;">
-                <div class="">
-                    <div class="d-flex ">
-                        <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                        <h2 class="mx-3 h2-charts mb-3" style="text-align: right;">تقرير شهر اغسطس</h2>
-                    </div>
-                    <!-- Second Row: Pie Chart and Info -->
-                    <div class="row">
-                        <div class="col-md-6  col-sm-12 col-12 d-flex">
 
-                            <div class="d-block col-md-12 col-sm-12 col-12 mt-5">
-                                <div class="d-flex mb-3 ">
-                                    <div class="color"></div>
-                                    <h2 class="info col-5 " id="info1"> عدد المخالفات</h2>
-                                    <h2 class="h2 mx-5">890</h2>
+
+    <div class="row desktop-view">
+        <div class="container col-11 mt-3 p-0" style="background-color: transparent;" dir="rtl">
+            <!-- First Row -->
+            <div class="row">
+                <!-- First Card -->
+                <div class="col-12 circle-graph-card" style="background-color: #ffffff;">
+                    <div class="">
+                        <div class="d-flex">
+                            <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
+                            <h2 class="mx-3 h2-charts mb-3" style="text-align: right;">تقرير شهر اغسطس</h2>
+                        </div>
+                        <!-- Second Row: Pie Chart and Info -->
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 d-flex">
+                                <div class="d-block col-md-12 mt-5">
+                                    <div class="d-flex mb-3">
+                                        <div class="color"></div>
+                                        <h2 class="info col-5" id="info1">عدد المخالفات</h2>
+                                        <h2 class="h2 mx-5">{{ $violations }}</h2>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <div class="color"></div>
+                                        <h2 class="info col-5" id="info1">عدد النقاط</h2>
+                                        <h2 class="h2 mx-5">{{ $points }}</h2>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <div class="color"></div>
+                                        <h2 class="info col-5" id="info1">عدد المفتشين</h2>
+                                        <h2 class="h2 mx-5">{{ $inspectors }}</h2>
+                                    </div>
                                 </div>
-                                <div class="d-flex mb-3">
-                                    <div class="color "></div>
-                                    <h2 class="info col-5" id="info1"> عدد النقاط</h2>
-                                    <h2 class="h2 mx-5 ">890</h2>
-                                </div>
-                                <div class="d-flex mb-3">
-                                    <div class="color"></div>
-                                    <h2 class="info col-5" id="info1"> عدد المفتشين</h2>
-                                    <h2 class="h2 mx-5">890</h2>
-                                </div>
+                                <canvas id="myPieChart" width="150" height="90" class="mt-2"></canvas>
                             </div>
-                            <canvas id="myPieChart" width="150" height="90" class="mt-2"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-4 col-sm-12 col-12 mx-5 canvas-card " style="background-color: #ffffff;">
-                <div class="d-flex">
-                    <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                    <h2 class="mx-3 h2-charts mb-4" style="text-align: right;">احصائيات المستخدمين والموظفين خلال ثلاث
-                        اشهر</h2>
-                </div>
-                <canvas id="barChart" style="width:100%;max-width:600px;"></canvas>
-                <div class="d-flex col-md-8 col-sm-12 col-12 mt-3">
-                    <div class="color"></div>
-                    <h2 class="info  " id="info1"> مستخدم</h2>
-                    <h2 class="h2 mx-5">890</h2>
-                </div>
-                <div class="d-flex col-md-8 col-sm-12 col-12">
-                    <div class="color"></div>
-                    <h2 class="info " id="info1"> موظف</h2>
-                    <h2 class=" h2 mx-5">890</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class=" row mobile-view ">
-        <div class=" container col-11 d-flex justify-content-between" style="background-color: transparent;">
-            <div class="  col-12  " style="background-color: #ffffff; border-radius: 20px;" dir="rtl">
-                <div class="d-block  col-12 mt-3">
+            <!-- Second Row -->
+            <div class="row mt-4">
+                <div class="col-12 canvas-card" style="background-color: #ffffff;">
                     <div class="d-flex">
                         <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                        <h2 class="mx-3 h2-charts mb-4" style="text-align: right;">احصائيات المستخدمين والموظفين خلال ثلاث
-                            اشهر</h2>
+                        <h2 class="mx-3 h2-charts mb-4" style="text-align: right;">احصائيات عدد الفرق والمجموعات والمفتشين
+                            خلال الشهر</h2>
                     </div>
-                    <div class="d-md-flex d-sm-block justify-content-between">
-                        <div class="d-sm-flex d-md-block d-flex mb-3 ">
-                            <div class="color"></div>
-                            <h2 class="info  " id="info1"> عدد المخالفات</h2>
-                            <h2 class="h2 mx-5">890</h2>
-                        </div>
-                        <div class="d-sm-flex d-md-block d-flex mb-3">
-                            <div class="color "></div>
-                            <h2 class="info " id="info1"> عدد النقاط</h2>
-                            <h2 class="h2 mx-5 ">890</h2>
-                        </div>
-                        <div class="d-sm-flex d-md-block d-flex mb-3">
-                            <div class="color"></div>
-                            <h2 class="info " id="info1"> عدد المفتشين</h2>
-                            <h2 class="h2 mx-5">890</h2>
-
-                        </div>
+                    <canvas id="barChart" style="width:100%;height: 300px;"></canvas>
+                    <div class="d-flex col-md-8 col-sm-12 mt-3">
+                        <div class="color" style="background-color:#AA1717"></div>
+                        <h2 class="info">عدد مخالفات</h2>
+                        <h2 class="h2 mx-5">20</h2>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class=" container col-11 d-flex justify-content-between" style="background-color: transparent;">
-            <div class="  col-12  mt-2" style="background-color: #ffffff; border-radius: 20px;" dir="rtl">
-                <div class="d-block  col-12 mt-3 ">
-                    <div class="d-flex ">
-                        <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                        <h2 class="mx-3 h2-charts mb-5" style="text-align: right;">تقرير شهر اغسطس</h2>
+                    <div class="d-flex col-md-8 col-sm-12">
+                        <div class="color"style="background-color:#F8A723"></div>
+                        <h2 class="info">عدد زيارات</h2>
+                        <h2 class="h2 mx-5">10</h2>
                     </div>
-                    <div class="d-md-flex d-sm-block justify-content-between">
-                        <div class="d-sm-flex d-md-block d-flex ">
-                            <div class="color"></div>
-                            <h2 class="info  " id="info1"> مستخدم</h2>
-                            <h2 class="h2 mx-5">890</h2>
-                        </div>
-                        <div class="d-sm-flex d-md-block d-flex">
-                            <div class="color"></div>
-                            <h2 class="info" id="info1"> موظف</h2>
-                            <h2 class=" h2 mx-5">890</h2>
-
-                        </div>
+                    <div class="d-flex col-md-8 col-sm-12">
+                        <div class="color" style="background-color:#274373"></div>
+                        <h2 class="info">عدد المفتشين</h2>
+                        <h2 class="h2 mx-5">200</h2>
                     </div>
                 </div>
             </div>
@@ -232,22 +189,30 @@
         const xValues = ["الشهر الأول", "الشهر الثاني", "الشهر الثالث"];
         const employeesData = [55, 49, 44];
         const managersData = [24, 15, 30];
-        const chartColors = ["#F8A723", "#274373"];
+        const IspectorData = [24, 15, 30];
+        const chartColors = ["#AA1717", "#F8A723", "#274373"];
+
 
         // Create the bar chart
         new Chart("barChart", {
             type: "bar",
             data: {
                 labels: xValues,
+
                 datasets: [{
-                        label: "موظف",
+                        label: "مخالفات",
                         backgroundColor: chartColors[0],
                         data: employeesData
                     },
                     {
-                        label: "مستخدم",
+                        label: "زيارات",
                         backgroundColor: chartColors[1],
                         data: managersData
+                    },
+                    {
+                        label: "مفتشين",
+                        backgroundColor: chartColors[2],
+                        data: IspectorData
                     }
                 ]
             },

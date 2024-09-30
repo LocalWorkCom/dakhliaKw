@@ -7,8 +7,11 @@ use App\Models\outgoings;
 use App\Models\Iotelegram;
 use App\Models\departements;
 use App\Models\EmployeeVacation;
+use App\Models\Grouppoint;
 use App\Models\Groups;
+use App\Models\Inspector;
 use App\Models\instantmission;
+use App\Models\Violation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,6 +30,9 @@ class HomeController extends Controller
             $groups = Groups::count();
             $instantmissions = instantmission::count();
             $employeeVacation = EmployeeVacation::where('status', 'Approved')->count();
+            $violations = Violation::count();
+            $points = Grouppoint::count();
+            $inspectors = Inspector::count();
         } else {
             $empCount = User::where('flag', 'employee')->count();
             $userCount = User::where('flag', 'user')->count();
@@ -39,8 +45,20 @@ class HomeController extends Controller
             $groups = Groups::where('created_departement', Auth::user()->department_id)->count();
             $instantmissions = instantmission::where('created_departement', Auth::user()->department_id)->count();
             $employeeVacation = EmployeeVacation::where('created_departement', Auth::user()->department_id)->where('status', 'Approved')->count();
-        }
+            $violations = Violation::leftJoin('users', 'users.id', 'violations.user_id')
+                ->leftJoin('departements', 'users.department_id', 'departements.id')->where(function ($query) {
+                    $query->where('users.department_id', Auth::user()->department_id)
+                        ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+                })->count();
+            $inspectors = Inspector::leftJoin('users', 'users.id', 'inspectors.user_id')
+                ->leftJoin('departements', 'users.department_id', 'departements.id')
+                ->where(function ($query) {
+                    $query->where('users.department_id', Auth::user()->department_id)
+                        ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+                })->count();
 
+            $points = Grouppoint::count();
+        }
 
         // if (!Auth::check()) {
         //     return redirect()->route('login');

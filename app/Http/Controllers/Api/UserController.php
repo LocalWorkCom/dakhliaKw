@@ -311,16 +311,18 @@ class UserController extends Controller
 
         $user = Auth::user(); // Get the authenticated user
 
-        // Check if the current password matches the user's password
         if (!Hash::check($request->current_password, $user->password)) {
-            return $this->respondError('Error.', "كلمة المرور الحالية غير صحيحة", 400);
+            $message=[
+                'error'=>  ["كلمة المرور الحالية غير صحيحة"]
+            ];
+            return $this->respondError('Error.',  $message, 400);
         }
 
         // Update the user's password
         $user = User::find(Auth()->id());
         $user->password = Hash::make($request->new_password);
         $user->save();
+        return $this->respondSuccess($user, 'Password changed successfully.');
 
-        return response()->json(['message' => 'Password changed successfully.'], 200);
     }
 }
