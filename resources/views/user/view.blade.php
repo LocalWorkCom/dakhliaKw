@@ -194,15 +194,24 @@
                                             unsigned = unsigned.replace(':id', row.id);
                                             var visibility = row.department_id != null ? 'd-block-inline' :
                                                 'd-none';
+                                            var showUnassignedButton = row.id !==
+                                            {{ auth()->user()->id }}; // Replace with your specific condition
+
+                                            // Conditionally include the "Unassigned" button based on `showUnassignedButton`
+                                            var unassignedButton = showUnassignedButton ? `
+    <a href="${unsigned}" class="btn btn-sm ${visibility}" style="background-color: #28a39c;">
+        <i class="fa-solid fa-user-minus"></i> الغاء التعيين
+    </a>` : '';
+
                                             return `
 
                                         <a href="` + usershow + `"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i>عرض  </a>
                                         <a href="` + useredit + `" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> تعديل </a>
                                         {{-- <a href="${vacation}"  "   class="btn btn-sm" style=" background-color:#864824; "> <i class="fa-solid fa-mug-hot" ></i> </a> --}}
+                                                ${unassignedButton}
+
+
                                     
-                                        <a href="${unsigned}" class="btn btn-sm ${visibility}" style="background-color: #28a39c;"> 
-                                            <i class="fa-solid fa-user-minus"></i> الغاء التعيين 
-                                        </a>
 
                                         `;
                                         }

@@ -11,16 +11,16 @@
 @endsection
 
 <section>
-<div class="row " dir="rtl">
-<div class="container  col-11" style="background-color:transparent;">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('group.view') }}">المجموعات </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> الدوريات</a></li>
-            </ol>
-        </nav>
-</div>
+    <div class="row " dir="rtl">
+        <div class="container  col-11" style="background-color:transparent;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('group.view') }}">المجموعات </a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> الدوريات</a></li>
+                </ol>
+            </nav>
+        </div>
     </div>
     <div class="container welcome col-11">
         <div class="d-flex justify-content-between">
@@ -28,12 +28,15 @@
             <p>الدوريات</p>
             <p></p>
             <div class="second mx-4">
-                <button class="btn-all px-3 mx-2" style="color: #274373;">
-                    <a href="{{ route('groupTeam.transfer', $id) }}" style="color: #274373">
+                @if (count($GroupTeamsss))
+                    <button class="btn-all px-3 mx-2" style="color: #274373;">
 
-                        نقل مفتشين <img src="{{ asset('frontend/images/change.svg') }}" class="mx-1">
-                    </a>
-                </button>
+                        <a href="{{ route('groupTeam.transfer', $id) }}" style="color: #274373">
+
+                            نقل مفتشين <img src="{{ asset('frontend/images/change.svg') }}" class="mx-1">
+                        </a>
+                    </button>
+                @endif
                 {{-- <button class="btn-all px-3 mx-2" style="color: #259240;">
                         <a href="{{ route('group.groupcreateInspectors', $id) }}" style="    color: #0D992C;">
 
@@ -80,7 +83,9 @@
                                 <div class="form-group mt-4 mb-3">
                                     <label for="working_tree_id" class="d-flex justify-content-start pt-3 pb-2">اختر
                                         نظام العمل</label>
-                                    <select class="form-control select2" style="border: 0.2px solid rgb(199, 196, 196);width:100%;" name="working_tree_id" id="working_tree_id">
+                                    <select class="form-control select2"
+                                        style="border: 0.2px solid rgb(199, 196, 196);width:100%;"
+                                        name="working_tree_id" id="working_tree_id">
                                         <option selected disabled>اختار من القائمة</option>
                                         @foreach ($workTrees as $workTree)
                                             <option value="{{ $workTree->id }}"
@@ -205,7 +210,7 @@
                     data: 'group.name',
                     sname: 'group.name'
                 },
-          
+
                 {
                     data: 'action',
                     name: 'action',
@@ -258,24 +263,23 @@
             },
             "pagingType": "full_numbers",
             "fnDrawCallback": function(oSettings) {
-                              console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                console.log('Page ' + this.api().page.info().pages)
+                var page = this.api().page.info().pages;
+                console.log($('#users-table tr').length);
+                if (page == 1) {
+                    //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                    $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
-                                        }
-                                    }
+                }
+            }
 
         });
     });
-    
 </script>
 <script>
-$('.select2').select2({
-                // dir: "rtl"
-            });
+    $('.select2').select2({
+        // dir: "rtl"
+    });
 </script>
 @endsection
 {{-- <a href="` + permissionedit + `" class="btn btn-primary btn-sm">تعديل</a> --}}

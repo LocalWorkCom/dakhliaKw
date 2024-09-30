@@ -29,17 +29,18 @@ class DepartmentController extends Controller
     public function index()
     {
         $users = User::where('flag', 'employee')->where('department_id', NULL)->get();
-        $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
 
+        $parentDepartment = $departments = departements::where('parent_id', Auth::user()->department_id)->first();
         // Get the children of the parent department 
-        $departments = $parentDepartment ? $parentDepartment->children : collect();
-        if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
-            $subdepartments = departements::with('children')->get();
-        } else {
-            $subdepartments = departements::where('id', Auth::user()->department_id)->with('children')->get();
-        }
 
-        return view('departments.index', compact('users', 'subdepartments', 'departments', 'parentDepartment'));
+        // $departments = $parentDepartment ? $parentDepartment->children : collect();
+        // if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
+        //     $subdepartments = departements::with('children')->get();
+        // } else {
+        //     $subdepartments = departements::where('id', Auth::user()->department_id)->with('children')->get();
+        // }
+
+        return view('departments.index', compact('users', 'departments', 'parentDepartment'));
     }
     public function getDepartment()
     {
@@ -51,9 +52,12 @@ class DepartmentController extends Controller
                 ->orderBy('id', 'desc')->get();
         } else {
             $data = departements::withCount('iotelegrams')
-                ->withCount('outgoings')
                 ->withCount('children')
-                ->where('id', Auth::user()->department_id)
+
+                ->withCount('outgoings')->where(function ($query) {
+                    $query->where('id', Auth::user()->department_id)
+                        ->orWhere('parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+                })
                 ->with(['children'])
                 ->orderBy('id', 'desc')->get();
         }
@@ -130,10 +134,28 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        // dd(Auth::user());
-        $users = User::where('department_id', NULL)->get();
+
+        $users = User::where(function ($query) {
+            $query->where('rule_id', '!=', 2)
+                ->orWhereNull('rule_id'); // Include rows where 'rule_id' is null
+        })
+            ->where('id', '<>', Auth::user()->id)
+            ->where('flag', 'user')
+            ->where(function ($query) {
+                $query->whereNull('department_id')
+                    ->orWhere('department_id', auth()->user()->department_id); // Include rows where 'rule_id' is null
+            })
+            ->get();
+
         $departments = departements::with('children', 'parent')->get();
-        $employee = User::where('department_id', NULL)->get();
+
+        $employee = User::WhereNull('rule_id') // Include rows where 'rule_id' is null
+            ->where('flag', 'employee')
+            ->where(function ($query) {
+                $query->whereNull('department_id')
+                    ->orWhere('department_id', auth()->user()->department_id); // Include rows where 'rule_id' is null
+            })
+            ->get();
         return view('departments.create', compact('users', 'departments', 'employee'));
     }
 
@@ -141,7 +163,7 @@ class DepartmentController extends Controller
     public function create_1()
     {
         // dd(Auth::user());
-        $users = User::where('department_id', NULL)->get();
+        $users = User::where('rule_id', '<>', 2)->where('department_id', NULL)->get();
         $parentDepartment = departements::where('parent_id', Auth::user()->department_id)->first();
 
         // Get the children of the parent department
@@ -167,15 +189,18 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
 
         $request->validate([
             'name' => 'required',
             'manger' => 'required',
         ]);
-        $departements = departements::create($request->all());
-        $departements->created_by = Auth::user()->id;
 
+
+        $departements = new Departements();
+        $departements->name = $request->name;
+        $departements->manger = $request->manger;
+        $departements->parent_id = Auth::user()->department_id;
+        $departements->created_by = Auth::user()->id;
         $departements->save();
 
         $user = User::find($request->manger);
@@ -284,7 +309,7 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, departements $department)
     {
-         //dd($request);
+        //dd($request);
         $request->validate([
             'name' => 'required',
             'manger' => 'required',
