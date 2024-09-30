@@ -117,10 +117,17 @@
             <div class=" col-12  circle-graph-card " style="background-color: #ffffff;">
                 <div class="">
                     <div class=" d-flex justify-content-between">
+                        @php
+
+                            use Carbon\Carbon;
+                            setlocale(LC_TIME, 'ar_AE.utf8'); // Set locale to Arabic
+                            $month_name = Carbon::create()->month(date('n'))->translatedFormat('F'); // Outputs the full month name in Arabic, e.g., "سبتمبر"
+
+                        @endphp
                         <div class="d-flex graph">
                             <img src="{{ asset('frontend/images/report.svg') }}" alt="logo">
                             <h2 class="col-12 h2-charts mb-3" style="text-align: right;">تقرير شهر <span
-                                    id="month_name"></span></h2>
+                                    id="month_name">{{ $month_name }}</span></h2>
                         </div>
                         @php
                             $currentMonth = date('n'); // Get current month as an integer (1 to 12)
@@ -244,7 +251,8 @@
             $('#month, #year').on('change', function() {
                 var month = $('#month').val();
                 var year = $('#year').val();
-                $('#month_name').html(month);
+                var selectedMonthText = $('#month option:selected').text(); // Get the month name
+                $('#month_name').html(selectedMonthText);
 
                 // Send AJAX request to the filter route
                 $.ajax({

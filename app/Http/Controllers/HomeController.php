@@ -43,8 +43,14 @@ class HomeController extends Controller
 
             foreach ($groupedMissions as $inspector_id => $missions) {
                 foreach ($missions as $inspector_mission) {
-                    $group_points += count(explode(',', $inspector_mission->ids_group_point));
-                    $ids_instant_mission += count(explode(',', $inspector_mission->ids_instant_mission));
+
+
+                    $group_points += count(is_array($inspector_mission->ids_group_point)
+                        ? $inspector_mission->ids_group_point
+                        : explode(',', $inspector_mission->ids_group_point));
+                    $ids_instant_mission += count(is_array($inspector_mission->ids_instant_mission)
+                        ? $inspector_mission->ids_instant_mission
+                        : explode(',', $inspector_mission->ids_instant_mission));
                 }
             }
 
