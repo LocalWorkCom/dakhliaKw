@@ -32,7 +32,23 @@ class HomeController extends Controller
             $instantmissions = instantmission::count();
             $employeeVacation = EmployeeVacation::where('status', 'Approved')->count();
             $violations = Violation::count();
-            $points = Grouppoint::count();
+            $inspector_missions = InspectorMission::whereYear('date', date('Y'))
+                ->whereMonth('date',  date('m'))
+                ->get();
+
+            $group_points = 0;
+            $ids_instant_mission = 0;
+
+            $groupedMissions = $inspector_missions->groupBy('inspector_id');
+
+            foreach ($groupedMissions as $inspector_id => $missions) {
+                foreach ($missions as $inspector_mission) {
+                    $group_points += count(explode(',', $inspector_mission->ids_group_point));
+                    $ids_instant_mission += count(explode(',', $inspector_mission->ids_instant_mission));
+                }
+            }
+
+            $points = $ids_instant_mission + $group_points;
             $inspectors = Inspector::count();
         } else {
             $empCount = User::where('flag', 'employee')->count();
@@ -58,7 +74,24 @@ class HomeController extends Controller
                         ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
                 })->count();
 
-            $points = Grouppoint::count();
+            //filter by department
+            $inspector_missions = InspectorMission::whereYear('date', date('Y'))
+                ->whereMonth('date',  date('m'))
+                ->get();
+
+            $group_points = 0;
+            $ids_instant_mission = 0;
+
+            $groupedMissions = $inspector_missions->groupBy('inspector_id');
+
+            foreach ($groupedMissions as $inspector_id => $missions) {
+                foreach ($missions as $inspector_mission) {
+                    $group_points += count(explode(',', $inspector_mission->ids_group_point));
+                    $ids_instant_mission += count(explode(',', $inspector_mission->ids_instant_mission));
+                }
+            }
+
+            $points = $ids_instant_mission + $group_points;
         }
 
         // if (!Auth::check()) {
