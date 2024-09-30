@@ -1623,3 +1623,8 @@ color: #2A2726;
 .mobile-view .h2{
     color: rgb(158, 156, 156);
 }
+#myPieChart {
+    display: block;
+    height: 350px;
+    width: 601px;
+}
