@@ -322,7 +322,7 @@ class UserController extends Controller
         $user = User::find(Auth()->id());
         $user->password = Hash::make($request->new_password);
         $user->save();
+        return $this->respondSuccess($user, 'Password changed successfully.');
 
-        return response()->json(['message' => 'Password changed successfully.'], 200);
     }
 }
