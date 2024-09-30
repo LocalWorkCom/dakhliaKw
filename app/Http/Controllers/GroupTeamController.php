@@ -32,9 +32,10 @@ class GroupTeamController extends Controller
     public function index($id)
     {
         $workTrees = WorkingTree::all();
+        $GroupTeamsss = GroupTeam::where('group_id', $id)->get();
 
         //
-        return view('groupteam.show', compact('id', 'workTrees'));
+        return view('groupteam.show', compact('id', 'workTrees', 'GroupTeamsss'));
     }
     public function getGroupTeam($id)
     {
@@ -142,6 +143,8 @@ class GroupTeamController extends Controller
             $grouptemItem->name = $request->groupTeam_name;
             $grouptemItem->group_id = $id;
             $grouptemItem->working_tree_id = $request->working_tree_id;
+            $grouptemItem->created_departement = auth()->user()->department_id;
+
             $grouptemItem->service_order = ($request->service_order) ? $request->service_order : 0;
             $grouptemItem->save();
 
@@ -1122,7 +1125,7 @@ class GroupTeamController extends Controller
                 // Remove the group point ID from the old mission's list of group points
                 $ids_group_point = $old_mission->ids_group_point;
                 if (($key = array_search($group_point_id, $ids_group_point)) !== false) {
-                //  dd(($ids_group_point[$key])) ;  
+                    //  dd(($ids_group_point[$key])) ;  
                     unset($ids_group_point[$key]);
                     // dd($ids_group_point);
                     $ids_group_point = array_values($ids_group_point);

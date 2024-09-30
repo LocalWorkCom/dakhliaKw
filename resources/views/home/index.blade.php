@@ -7,9 +7,10 @@
         <div class="container welcome col-11">
             <p> {{ auth()->user()->name }} مرحـــــــــــــــبا بك </p>
         </div>
-
     </div>
     <br>
+
+
 
     <div class="row">
         <div class="container  col-11 mt-3 p-0 " style=" background-color: transparent;">
@@ -24,7 +25,7 @@
                             <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
                             <h2 class="mx-3">الادارات</h2>
                         </div>
-                        <h1>20</h1>
+                        <h1>{{ $depCount }}</h1>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
@@ -35,7 +36,7 @@
                             <i class="fa-solid fa-user-group" style="color: #28A39C"></i>
                             <h2 class="mx-3">المجموعات</h2>
                         </div>
-                        <h1>5</h1>
+                        <h1>{{ $groups }}</h1>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
@@ -46,7 +47,7 @@
                             <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
                             <h2 class="mx-3">اجمالى المستخدمين</h2>
                         </div>
-                        <h1>102</h1>
+                        <h1>{{ $userCount }}</h1>
                     </div>
                 </div>
 
@@ -58,7 +59,7 @@
                             <i class="fa-solid fa-user-group" style="color:   #F7AF15;"></i>
                             <h2 class="mx-3">اجمالى الموظفين</h2>
                         </div>
-                        <h1>1233</h1>
+                        <h1>{{ $empCount }}</h1>
                     </div>
                 </div>
             </div>
@@ -72,7 +73,7 @@
                             <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
                             <h2 class="mx-3">الوارد</h2>
                         </div>
-                        <h1>102</h1>
+                        <h1>{{ $ioCount }}</h1>
                     </div>
                 </div>
 
@@ -84,7 +85,7 @@
                             <i class="fa-solid fa-user-group" style="color: #F7AF15;"></i>
                             <h2 class="mx-3">الصادر</h2>
                         </div>
-                        <h1>102</h1>
+                        <h1>{{ $outCount }}</h1>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
@@ -95,7 +96,7 @@
                             <i class="fa-solid fa-user-group" style="color: #259240;"></i>
                             <h2 class="mx-3">اوامر الخدمة</h2>
                         </div>
-                        <h1>40</h1>
+                        <h1>{{ $instantmissions }}</h1>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
@@ -106,7 +107,7 @@
                             <i class="fa-solid fa-user-group" style="color: #259240;"></i>
                             <h2 class="mx-3">الاجازات</h2>
                         </div>
-                        <h1>14</h1>
+                        <h1>{{ $employeeVacation }}</h1>
                     </div>
                 </div>
 
@@ -114,43 +115,59 @@
         </div>
     </div>
 
+
     <div class="row desktop-view">
-        <div class="container col-11 mt-3 p-0" style="background-color: transparent;" dir="rtl">
-            <!-- First Row -->
-            <div class="row">
-                <!-- First Card -->
-                <div class="col-12 circle-graph-card" style="background-color: #ffffff;">
-                    <div class="">
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                            <h2 class="mx-3 h2-charts mb-3" style="text-align: right;">تقرير شهر اغسطس</h2>
+        <div class="container col-11 mt-3 p-0 d-flex" style="background-color: transparent;" dir="rtl">
+            <!-- First Card -->
+            <div class=" col-12  circle-graph-card " style="background-color: #ffffff;">
+                <div class="">
+                   <div class=" d-flex justify-content-between">
+                    <div class="d-flex ">
+                        <img src="../images/report.svg" alt="">
+                            <h2 class="col-12 h2-charts mb-3" style="text-align: right;">تقرير شهر اغسطس</h2>
                         </div>
-                        <!-- Second Row: Pie Chart and Info -->
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12 d-flex">
-                                <div class="d-block col-md-12 mt-5">
-                                    <div class="d-flex mb-3">
-                                        <div class="color"></div>
-                                        <h2 class="info col-5" id="info1">عدد المخالفات</h2>
-                                        <h2 class="h2 mx-5">890</h2>
-                                    </div>
-                                    <div class="d-flex mb-3">
-                                        <div class="color"></div>
-                                        <h2 class="info col-5" id="info1">عدد النقاط</h2>
-                                        <h2 class="h2 mx-5">890</h2>
-                                    </div>
-                                    <div class="d-flex mb-3">
-                                        <div class="color"></div>
-                                        <h2 class="info col-5" id="info1">عدد المفتشين</h2>
-                                        <h2 class="h2 mx-5">890</h2>
-                                    </div>
+                        <select id="month" class="month" name="month">
+                            <option value="">شهر يناير</option>
+                            <option value=""> شهر فبراير</option>
+                            <option value="">شهر مارس</option>
+                            <option value="">شهر ابريل</option>
+                        </select>
+                   </div>
+                    <!-- Second Row: Pie Chart and Info -->
+                    <div class="row">
+                        <div class="col-md-6  col-sm-12 col-12 d-flex">
+
+                            <div class="d-block col-md-12 col-sm-12 col-12 mt-5">
+                                <div class="d-flex mb-3 ">
+                                    <div class="color" style="background-color: #aa1717;"></div>
+                                    <h2 class="info col-5 " id="info1"> عدد المخالفات</h2>
+                                    <h2 class="h2 mx-5">{{ $violations }}</h2>
                                 </div>
-                                <canvas id="myPieChart" width="150" height="90" class="mt-2"></canvas>
+                                <div class="d-flex mb-3">
+                                    <div class="color " style="background-color: #f8a723;"></div>
+                                    <h2 class="info col-5" id="info1">  عدد الزيارات </h2>
+                                    <h2 class="h2 mx-5 ">{{ $points }}</h2>
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <div class="color" style="background-color: #274373;"></div>
+                                    <h2 class="info col-5" id="info1"> عدد المفتشين</h2>
+                                    <h2 class="h2 mx-5">{{ $inspectors }}</h2>
+                                </div>
                             </div>
+                            <canvas id="myPieChart" width="150" height="90" class="mt-2"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
+
+          
+        </div>
+    </div>
+
+    <div class="row desktop-view">
+        <div class="container col-11 mt-3 p-0" style="background-color: transparent;" dir="rtl">
+            <!-- First Row -->
+       
             <!-- Second Row -->
             <div class="row mt-4">
                 <div class="col-12 canvas-card" style="background-color: #ffffff;">
@@ -195,7 +212,7 @@
             type: "bar",
             data: {
                 labels: xValues,
-                
+
                 datasets: [{
                         label: "مخالفات",
                         backgroundColor: chartColors[0],
@@ -268,9 +285,9 @@
         });
 
         // Update h2 elements with data
-        document.getElementById('info1').innerText = `عدد المخالفات: ${dataValues[0]}`;
-        document.getElementById('info2').innerText = `عدد النقاط: ${dataValues[1]}`;
-        document.getElementById('info3').innerText = `عدد المفتشين: ${dataValues[2]}`;
+        // document.getElementById('info1').innerText = `عدد المخالفات: ${dataValues[0]}`;
+        // document.getElementById('info2').innerText = `عدد النقاط: ${dataValues[1]}`;
+        // document.getElementById('info3').innerText = `عدد المفتشين: ${dataValues[2]}`;
 
         // Function to draw text inside the pie chart
         function drawText() {

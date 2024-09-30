@@ -13,6 +13,7 @@ class GroupTeam extends Model
     protected $fillable = [
         'name',
         'group_id',
+        'created_departement'
     ];
 
     public function government()
