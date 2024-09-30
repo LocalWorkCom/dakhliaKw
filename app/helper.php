@@ -305,18 +305,17 @@ function getgroups()
 
 function getMonthNames()
 {
-    // Set locale to English
-
     // Set locale to Arabic
-    $arabicMonths = [];
     App::setLocale('ar'); // Set locale to Arabic
     setlocale(LC_TIME, 'ar_AE.utf8'); // Change locale to Arabic
+
+    // Retrieve Arabic month names
+    $arabicMonths = [];
     for ($month = 1; $month <= 12; $month++) {
-        $arabicMonths[] = Carbon::create()->month($month)->formatLocalized('%B');
+        $arabicMonths[] = Carbon::create()->month($month)->translatedFormat('F'); // Use translatedFormat
     }
 
-    return
-        $arabicMonths;
+    return $arabicMonths;
 }
 
 function getListOfYears($startYear = 2000)
