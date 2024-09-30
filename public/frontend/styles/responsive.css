@@ -338,7 +338,11 @@
     .container-responsive {
         display: none;
     }
-  
+    /* .graph-card {
+        width: 405px;
+        height: 200px;
+   
+    } */
 }
 @media (max-width: 1400px){
     /* li {
