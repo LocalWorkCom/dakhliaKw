@@ -10,6 +10,7 @@ use App\Models\EmployeeVacation;
 use App\Models\Grouppoint;
 use App\Models\Groups;
 use App\Models\Inspector;
+use App\Models\InspectorMission;
 use App\Models\instantmission;
 use App\Models\Violation;
 use Illuminate\Http\Request;
@@ -70,5 +71,44 @@ class HomeController extends Controller
         // }
 
         return view('home.index', get_defined_vars());
+    }
+    public function filter(Request $request)
+    {
+        $month = $request->input('month'); // Get the selected month
+        $year = $request->input('year'); // Get the selected year
+        // Filter data based on selected month and year
+        $violations = Violation::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->count();
+
+
+        $inspectors = Inspector::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->count();
+        $inspector_missions = InspectorMission::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->get();
+
+        $group_points = 0;
+        $ids_instant_mission = 0;
+
+        $groupedMissions = $inspector_missions->groupBy('inspector_id');
+
+        foreach ($groupedMissions as $inspector_id => $missions) {
+            foreach ($missions as $inspector_mission) {
+                $group_points += count(explode(',', $inspector_mission->ids_group_point));
+                $ids_instant_mission += count(explode(',', $inspector_mission->ids_instant_mission));
+            }
+        }
+
+        $points = $ids_instant_mission + $group_points;
+
+
+        // Return JSON response
+        return response()->json([
+            'violations' => $violations,
+            'points' => $points,
+            'inspectors' => $inspectors
+        ]);
     }
 }

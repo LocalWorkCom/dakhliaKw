@@ -121,18 +121,24 @@
             <!-- First Card -->
             <div class=" col-12  circle-graph-card " style="background-color: #ffffff;">
                 <div class="">
-                   <div class=" d-flex justify-content-between">
-                    <div class="d-flex ">
-                        <img src="../images/report.svg" alt="">
+                    <div class=" d-flex justify-content-between">
+                        <div class="d-flex ">
+                            <img src="../images/report.svg" alt="">
                             <h2 class="col-12 h2-charts mb-3" style="text-align: right;">تقرير شهر اغسطس</h2>
                         </div>
                         <select id="month" class="month" name="month">
-                            <option value="">شهر يناير</option>
-                            <option value=""> شهر فبراير</option>
-                            <option value="">شهر مارس</option>
-                            <option value="">شهر ابريل</option>
+                            @foreach (getMonthNames() as $index => $month)
+                                <option value="{{ $index + 1 }}">{{ $month }}</option>
+                            @endforeach
                         </select>
-                   </div>
+
+                        <select id="year" class="year" name="year">
+                            @foreach (getListOfYears() as $year)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endforeach
+                        </select>
+
+                    </div>
                     <!-- Second Row: Pie Chart and Info -->
                     <div class="row">
                         <div class="col-md-6  col-sm-12 col-12 d-flex">
@@ -145,7 +151,7 @@
                                 </div>
                                 <div class="d-flex mb-3">
                                     <div class="color " style="background-color: #f8a723;"></div>
-                                    <h2 class="info col-5" id="info1">  عدد الزيارات </h2>
+                                    <h2 class="info col-5" id="info1"> عدد الزيارات </h2>
                                     <h2 class="h2 mx-5 ">{{ $points }}</h2>
                                 </div>
                                 <div class="d-flex mb-3">
@@ -160,14 +166,14 @@
                 </div>
             </div>
 
-          
+
         </div>
     </div>
 
     <div class="row desktop-view">
         <div class="container col-11 mt-3 p-0" style="background-color: transparent;" dir="rtl">
             <!-- First Row -->
-       
+
             <!-- Second Row -->
             <div class="row mt-4">
                 <div class="col-12 canvas-card" style="background-color: #ffffff;">
@@ -198,6 +204,54 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            // When either the month or year is changed, trigger the filter
+            $('#month, #year').on('change', function() {
+                var month = $('#month').val();
+                var year = $('#year').val();
+
+                // Send AJAX request to the filter route
+                $.ajax({
+                    url: '{{ route('home.filter') }}',
+                    method: 'GET',
+                    data: {
+                        month: month,
+                        year: year
+                    },
+                    success: function(response) {
+                        // Update the UI with the new filtered data
+                        $('h2:contains("عدد المخالفات") + .h2').text(response.violations);
+                        $('h2:contains("عدد الزيارات") + .h2').text(response.points);
+                        $('h2:contains("عدد المفتشين") + .h2').text(response.inspectors);
+
+                        // If you have any charts, update them here as well
+                        updatePieChart(response.violations, response.points, response
+                            .inspectors);
+                    }
+                });
+            });
+
+            // Function to update the Pie Chart (assuming you're using Chart.js)
+            function updatePieChart(violations, points, inspectors) {
+                var ctx = document.getElementById('myPieChart').getContext('2d');
+                var pieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['مخالفات', 'زيارات', 'مفتشون'],
+                        datasets: [{
+                            label: 'Statistics',
+                            data: [violations, points, inspectors],
+                            backgroundColor: ['#aa1717', '#f8a723', '#274373'],
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            }
+        });
+    </script>
 
     <script>
         const xValues = ["الشهر الأول", "الشهر الثاني", "الشهر الثالث"];
