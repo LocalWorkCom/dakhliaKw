@@ -21,7 +21,7 @@ class NotifyTeam
     {
         //
     }
-
+ 
     /**
      * Handle the event.
      */
@@ -105,7 +105,7 @@ class NotifyTeam
             $query = InspectorMission::where('date', $event->mission->date)
                 ->where('inspector_id', $event->mission->inspector_id)
                 ->first();
-
+           // dd($query);
             if ($query) {
                 // Ensure ids_instant_mission is not null
 
@@ -145,18 +145,25 @@ class NotifyTeam
             } else {
                 $flag = false;
             }
+
             // Send notification to the team
             $token = getTokenDevice($event->mission->inspector_id);
+            //dd($token);
             $user_id = Inspector::find($event->mission->inspector_id)->user_id;
+            $check= DB::table('notifications')->where('user_id', $user_id)->where('mission_id',$event->mission->id)->get();
+            if(count($check)==0)
+            {
             DB::table('notifications')->insert([
                 'user_id' => $user_id,
                 'mission_id' => $event->mission->id,
-                'title' => 'new mission.',
-                'message' => 'A new mission has been assigned to your team.',
+                'title' => 'امر خدمة جديد.',
+                'message' => 'لقد تم اسناد أمر خدمة جديد لك',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-            send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to you.');
+          //  print_r(now());
+            send_push_notification($event->mission->id, $token, 'أمر خدمة جديد', 'لقد تم اسماد أمر خدمة جديد لك.');
+           }
          
 
          
