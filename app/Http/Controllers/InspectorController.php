@@ -136,7 +136,7 @@ class InspectorController extends Controller
                                         </a>';
             $remove_permission =  '<a href="' . route('inspectors.remove', $row->id) . '" class="btn btn-sm"  style=" background-color: #E3641E;">
                                        <i class="fa-solid fa-user-tie"></i> تحويل لموظف 
-                                    </a>';  
+                                    </a>';
             return  $show_permission . ' ' . $edit_permission . ' ' . $group_permission . ' ' . $remove_permission;
         })
             ->addColumn('name', function ($row) {
@@ -184,10 +184,16 @@ class InspectorController extends Controller
                 ->whereNotIn('id', $allmangers)
                 ->get();
         } else {
-            $users = User::where('department_id', $departmentId)
-                ->where('id', '!=', $department->manger)
-                ->where('id', '!=', auth()->user()->id)
-                ->whereNotIn('id', $inspectorUserIds)
+            $users = User::with('department')
+                ->join('departements', 'departements.id', '=', 'users.department_id') // Join the `departements` table
+                ->where(function ($query) {
+                    $query->where('users.department_id', Auth::user()->department_id) // Match user’s department
+                        ->orWhere('departements.parent_id', Auth::user()->department_id); // Match department’s parent_id
+                })
+                ->where('users.id', '!=', $department->manger)
+                ->where('users.id', '!=', auth()->user()->id)
+                ->whereNotIn('users.id', $inspectorUserIds)
+                ->select('users.*') // Ensure only `users` columns are selected
                 ->get();
         }
         //dd($users);
@@ -275,26 +281,26 @@ class InspectorController extends Controller
             $user->save();
         }
 
-        $is_hashistory = Inspector::where('user_id',$request->user_id)->value('id');
-        if($is_hashistory ){
-            $inspector=Inspector::findOrFail($is_hashistory);
+        $is_hashistory = Inspector::where('user_id', $request->user_id)->value('id');
+        if ($is_hashistory) {
+            $inspector = Inspector::findOrFail($is_hashistory);
             $inspector->flag = 0;
             $inspector->save();
-        }else{
+        } else {
             $inspector = new Inspector();
             $inspector->name = $user->name;
             $inspector->phone = $user->phone;
             //Buildings => مفتش مبانى  , internbilding =>مفتش متدرب مبانى   , internslok=> مفتس متدرب سلوك انضباطى   ,slok=>  مفتش سلوك 
             $inspector->type = $request->type;
-    
+
             $inspector->position = $user->position;
-    
+
             $inspector->user_id = $request->user_id;
             $inspector->Id_number = $user->Civil_number;
             $inspector->department_id = $user->department_id;
             $inspector->save();
         }
-      
+
 
         //   dd($departements);
         return redirect()->route('inspectors.index')->with('success', 'Inspector created successfully.')->with('showModal', true);

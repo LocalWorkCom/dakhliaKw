@@ -176,6 +176,8 @@ class InstantmissionController extends Controller
         $new->latitude = $lat;
         $new->longitude = $long;
         $new->date = $request->date;
+        $new->created_departement =auth()->user()->department_id;
+
         $new->save();
 
         if ($request->hasFile('images')) {

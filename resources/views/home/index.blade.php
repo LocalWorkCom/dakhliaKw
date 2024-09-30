@@ -25,7 +25,7 @@
                             <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
                             <h2 class="mx-3">الادارات</h2>
                         </div>
-                        <h1>20</h1>
+                        <h1>{{ $depCount }}</h1>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
@@ -36,7 +36,7 @@
                             <i class="fa-solid fa-user-group" style="color: #28A39C"></i>
                             <h2 class="mx-3">المجموعات</h2>
                         </div>
-                        <h1>5</h1>
+                        <h1>{{ $groups }}</h1>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
@@ -47,7 +47,7 @@
                             <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
                             <h2 class="mx-3">اجمالى المستخدمين</h2>
                         </div>
-                        <h1>102</h1>
+                        <h1>{{ $userCount }}</h1>
                     </div>
                 </div>
 
@@ -59,7 +59,7 @@
                             <i class="fa-solid fa-user-group" style="color:   #F7AF15;"></i>
                             <h2 class="mx-3">اجمالى الموظفين</h2>
                         </div>
-                        <h1>1233</h1>
+                        <h1>{{ $empCount }}</h1>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                             <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
                             <h2 class="mx-3">الوارد</h2>
                         </div>
-                        <h1>102</h1>
+                        <h1>{{ $ioCount }}</h1>
                     </div>
                 </div>
 
@@ -85,7 +85,7 @@
                             <i class="fa-solid fa-user-group" style="color: #F7AF15;"></i>
                             <h2 class="mx-3">الصادر</h2>
                         </div>
-                        <h1>102</h1>
+                        <h1>{{ $outCount }}</h1>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
@@ -96,7 +96,7 @@
                             <i class="fa-solid fa-user-group" style="color: #259240;"></i>
                             <h2 class="mx-3">اوامر الخدمة</h2>
                         </div>
-                        <h1>40</h1>
+                        <h1>{{ $instantmissions }}</h1>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
@@ -107,7 +107,7 @@
                             <i class="fa-solid fa-user-group" style="color: #259240;"></i>
                             <h2 class="mx-3">الاجازات</h2>
                         </div>
-                        <h1>14</h1>
+                        <h1>{{ $employeeVacation }}</h1>
                     </div>
                 </div>
 

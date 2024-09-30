@@ -20,22 +20,25 @@ class HomeController extends Controller
         $departmentId = auth()->user()->department_id; // Or however you determine the department ID
         if (auth()->user()->rule_id == 2) {
             $empCount = User::where('flag', 'employee')->count();
-            $empCount = User::where('flag', 'user')->count();
+            $userCount = User::where('flag', 'user')->count();
             $depCount = departements::count();
             $outCount = outgoings::count();
             $ioCount = Iotelegram::count();
-            $Groups = Groups::count();
+            $groups = Groups::count();
             $instantmissions = instantmission::count();
-            $EmployeeVacation = EmployeeVacation::where('status', 'Approved')->count();
+            $employeeVacation = EmployeeVacation::where('status', 'Approved')->count();
         } else {
             $empCount = User::where('flag', 'employee')->count();
-            $empCount = User::where('flag', 'user')->count();
-            $depCount = departements::count();
-            $outCount = outgoings::count();
-            $ioCount = Iotelegram::count();
-            $Groups = Groups::count();
-            $instantmissions = instantmission::count();
-            $EmployeeVacation = EmployeeVacation::where('status', 'Approved')->count(); 
+            $userCount = User::where('flag', 'user')->count();
+            $depCount = departements::where(function ($query) {
+                $query->where('id', Auth::user()->department_id)
+                    ->orWhere('parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+            })->count();
+            $outCount = outgoings::where('created_department', Auth::user()->department_id)->count();
+            $ioCount = Iotelegram::where('created_departement', Auth::user()->department_id)->count();
+            $groups = Groups::where('created_departement', Auth::user()->department_id)->count();
+            $instantmissions = instantmission::where('created_departement', Auth::user()->department_id)->count();
+            $employeeVacation = EmployeeVacation::where('created_departement', Auth::user()->department_id)->where('status', 'Approved')->count();
         }
 
 
@@ -48,6 +51,6 @@ class HomeController extends Controller
         //     return redirect()->with('success', 'تم إعادة تعيين كلمة المرور بنجاح');
         // }
 
-        return view('home.index', compact('empCount', 'depCount', 'outCount', 'ioCount'));
+        return view('home.index', get_defined_vars());
     }
 }

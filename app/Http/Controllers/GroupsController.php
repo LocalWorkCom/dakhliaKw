@@ -226,6 +226,8 @@ class GroupsController extends Controller
             $group->name = $request->name;
             $group->points_inspector = $request->points_inspector;
             $group->sector_id = $request->sector_id;
+            $group->created_departement =auth()->user()->department_id;
+
             $group->save();
             addGroupHistory($group->id, $group->sector_id);
             session()->flash('success', 'تم اضافه مجموعة بنجاح.');
