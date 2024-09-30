@@ -1651,3 +1651,8 @@ color: #575656;
 .graph img{
     height: 30px;
 }
+.month_label{
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 47px;
+}

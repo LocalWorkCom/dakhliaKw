@@ -647,9 +647,10 @@ class UserController extends Controller
 
         if ($request->type == "0") {
             $newUser = User::find($request->name);
-            if ($newUser->department_id == null) {
-                return redirect()->back()->withErrors(['يجب اختيار ادارة للمستخدم اولا'])->withInput();
-            }
+            // if ($newUser->department_id == null) {
+            //     return redirect()->back()->withErrors(['يجب اختيار ادارة للمستخدم اولا'])->withInput();
+            // }
+            $newUser->department_id = 1;
             $newUser->password = Hash::make($request->password);
             $newUser->flag = "user";
             $newUser->rule_id = $request->rule_id;
