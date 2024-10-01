@@ -27,6 +27,8 @@ use App\helper; // Adjust this namespace as per your helper file location
 use App\Models\Qualification;
 use App\Models\Region;
 use App\Models\Sector;
+use App\Models\Statistic;
+use App\Models\UserStatistic;
 
 class UserController extends Controller
 {
@@ -933,5 +935,29 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function changeProfile()
+    {
+        $UserStatistic = UserStatistic::where('user_id', Auth::user()->id)->where('checked', 1)->pluck('statistic_id');
+        $Statistics = Statistic::all();
+
+        return view('profile.index', get_defined_vars());
+    }
+    public function ProfileStore(Request $request)
+    {
+
+        $statistics = $request->statistic_id;
+        $UserStatistics = UserStatistic::where('user_id', Auth::user()->id)->get();
+        foreach ($UserStatistics as $UserStatistic) {
+            if (in_array($UserStatistic->statistic_id, $statistics)) {
+
+                $UserStatistic->checked = 1;
+            } else {
+                $UserStatistic->checked = 0;
+            }
+            $UserStatistic->save();
+        }
+        session()->flash('success', 'تم الحفظ بنجاح.');
+        return redirect()->back();
     }
 }

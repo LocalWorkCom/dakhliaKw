@@ -16,7 +16,7 @@
                 <div id="dropdownMenu" class="dropdown-menu">
                  <ul>
                     <li>   <a href="{{ route('logout') }}">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a></li> <hr>
-                    <li>   <a href="" style="color:black;"> صفحة المستخدم     <i class="fa-solid fa-user mx-2"></i></a></li>
+                    <li>   <a href="{{ route('profile') }}" style="color:black;"> صفحة المستخدم     <i class="fa-solid fa-user mx-2"></i></a></li>
  
                  </ul>
                     

@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_statistics', function (Blueprint $table) {
+        Schema::create('statistics', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
-            
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_statistics');
+        Schema::dropIfExists('statistics');
     }
 };

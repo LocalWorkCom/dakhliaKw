@@ -12,99 +12,21 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0 " style=" background-color: transparent;">
             <div class="row col-12 d-flex">
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                            <h2 class="mx-3">الادارات</h2>
+                {{-- @if (appear('stat')) --}}
+                @foreach ($Statistics as $statistic)
+                    <div class="col-md-3 col-sm-12 col-12 d-block" dir="rtl"
+                        style="visibility: {{ !in_array($statistic->id, $UserStatistic->toArray()) ? 'hidden' : 'visible' }}">
+                        <div class="graph-card" style="background-color: #ffffff;">
+                            <div class="d-flex">
+                                <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
+                                <h2 class="mx-3">{{ $statistic->name }}</h2>
+                            </div>
+                            <h1>
+                                {{ $counts[$statistic->name] ?? 0 }} <!-- Display the count for each statistic -->
+                            </h1>
                         </div>
-                        <h1>{{ $depCount }}</h1>
                     </div>
-                </div>
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #28A39C"></i>
-                            <h2 class="mx-3">المجموعات</h2>
-                        </div>
-                        <h1>{{ $groups }}</h1>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                            <h2 class="mx-3">اجمالى المستخدمين</h2>
-                        </div>
-                        <h1>{{ $userCount }}</h1>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color:   #F7AF15;"></i>
-                            <h2 class="mx-3">اجمالى الموظفين</h2>
-                        </div>
-                        <h1>{{ $empCount }}</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="row col-12 d-flex  ">
-
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                            <h2 class="mx-3">الوارد</h2>
-                        </div>
-                        <h1>{{ $ioCount }}</h1>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #F7AF15;"></i>
-                            <h2 class="mx-3">الصادر</h2>
-                        </div>
-                        <h1>{{ $outCount }}</h1>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #259240;"></i>
-                            <h2 class="mx-3">اوامر الخدمة</h2>
-                        </div>
-                        <h1>{{ $instantmissions }}</h1>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #259240;"></i>
-                            <h2 class="mx-3">الاجازات</h2>
-                        </div>
-                        <h1>{{ $employeeVacation }}</h1>
-                    </div>
-                </div>
+                @endforeach
 
             </div>
         </div>
@@ -137,8 +59,7 @@
 
                             <select id="month" class="month mx-2" name="month">
                                 @foreach (getMonthNames() as $index => $month)
-                                    <option value="{{ $index + 1 }}"
-                                        {{ $index + 1 == $currentMonth ? 'selected' : '' }}>
+                                    <option value="{{ $index + 1 }}" {{ $index + 1 == $currentMonth ? 'selected' : '' }}>
                                         {{ $month }}</option>
                                 @endforeach
                             </select>
