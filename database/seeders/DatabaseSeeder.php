@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RuleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(ViolationTypeSeeder::class);
+        $this->call(StatisticSeeder::class);
     }
 }

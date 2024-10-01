@@ -67,6 +67,7 @@ Route::get('/login', function () {
 });
 Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::any('/logout', [UserController::class, 'logout'])->name('logout');
+
 Route::post('/verfication_code', [UserController::class, 'verfication_code'])->name('verfication_code');
 Route::post('/resend_code', [UserController::class, 'resend_code'])->name('resend_code');
 
@@ -84,7 +85,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('home/filter', [HomeController::class, 'filter'])->name('home.filter');
-
+    Route::get('/profile', [UserController::class, 'changeProfile'])->name('profile');
+    Route::post('/profile/store', [UserController::class, 'ProfileStore'])->name('profile.store');
     Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index')->middleware('check.permission:view User');
     Route::get('api/users/{id}', [UserController::class, 'getUsers'])->name('api.users')->middleware('check.permission:view User');
     Route::get('/users_create/{id}', [UserController::class, 'create'])->name('user.create')->middleware('check.permission:create User');

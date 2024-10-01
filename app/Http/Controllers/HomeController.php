@@ -12,26 +12,59 @@ use App\Models\Groups;
 use App\Models\Inspector;
 use App\Models\InspectorMission;
 use App\Models\instantmission;
+use App\Models\Statistic;
+use App\Models\UserStatistic;
 use App\Models\Violation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+
     //
     public function index(Request $request)
     {
+        $Statistics = Statistic::all();
+        $counts = [];
+        $UserStatistic = UserStatistic::where('user_id', Auth::user()->id)->where('checked', 1)->pluck('statistic_id');
+
+
         $departmentId = auth()->user()->department_id; // Or however you determine the department ID
         if (auth()->user()->rule_id == 2) {
-            $empCount = User::where('flag', 'employee')->count();
-            $userCount = User::where('flag', 'user')->count();
-            $depCount = departements::count();
-            $outCount = outgoings::count();
-            $ioCount = Iotelegram::count();
-            $groups = Groups::count();
-            $instantmissions = instantmission::count();
-            $employeeVacation = EmployeeVacation::where('status', 'Approved')->count();
-            $violations = Violation::count();
+
+
+            foreach ($Statistics as $statistic) {
+                switch ($statistic->name) {
+                    case 'الموظفين':
+                        $counts[$statistic->name] = User::where('flag', 'employee')->count();
+                        break;
+                    case 'المستخدمين':
+                        $counts[$statistic->name] = User::where('flag', 'user')->count();
+                        break;
+                    case 'المجموعات':
+                        $counts[$statistic->name] = Groups::count();
+                        break;
+                    case 'الادارات':
+                        $counts[$statistic->name] = departements::count();
+                        break;
+                    case 'الاجازات':
+                        $counts[$statistic->name] = EmployeeVacation::where('status', 'Approved')->count();
+                        break;
+                    case 'اوامر خدمة':
+                        $counts[$statistic->name] = instantmission::count();
+                        break;
+                    case 'الصادر':
+                        $counts[$statistic->name] = outgoings::count();
+                        break;
+                    case 'الوارد':
+                        $counts[$statistic->name] = Iotelegram::count();
+                        break;
+                    default:
+                        $counts[$statistic->name] = 0; // Default to 0 if no match found
+                        break;
+                }
+            }
+
             $inspector_missions = InspectorMission::whereYear('date', date('Y'))
                 ->whereMonth('date',  date('m'))
                 ->get();
@@ -53,21 +86,51 @@ class HomeController extends Controller
                         : explode(',', $inspector_mission->ids_instant_mission));
                 }
             }
+            $violations = Violation::count();
+
 
             $points = $ids_instant_mission + $group_points;
             $inspectors = Inspector::count();
         } else {
-            $empCount = User::where('flag', 'employee')->count();
-            $userCount = User::where('flag', 'user')->count();
-            $depCount = departements::where(function ($query) {
-                $query->where('id', Auth::user()->department_id)
-                    ->orWhere('parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
-            })->count();
-            $outCount = outgoings::where('created_department', Auth::user()->department_id)->count();
-            $ioCount = Iotelegram::where('created_departement', Auth::user()->department_id)->count();
-            $groups = Groups::where('created_departement', Auth::user()->department_id)->count();
-            $instantmissions = instantmission::where('created_departement', Auth::user()->department_id)->count();
-            $employeeVacation = EmployeeVacation::where('created_departement', Auth::user()->department_id)->where('status', 'Approved')->count();
+
+            foreach ($Statistics as $statistic) {
+                switch ($statistic->name) {
+                    case 'الموظفين':
+                        $counts[$statistic->name] = User::where('flag', 'employee')->count();
+                        break;
+                    case 'المستخدمين':
+                        $counts[$statistic->name] = User::where('flag', 'user')->count();
+                        break;
+                    case 'المجموعات':
+                        $counts[$statistic->name] = Groups::where('created_departement', Auth::user()->department_id)->count();
+                        break;
+                    case 'الادارات':
+                        $counts[$statistic->name] = departements::where(function ($query) {
+                            $query->where('id', Auth::user()->department_id)
+                                ->orWhere('parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+                        })->count();
+                        break;
+                    case 'الاجازات':
+                        $counts[$statistic->name] = EmployeeVacation::where('created_departement', Auth::user()->department_id)->where('status', 'Approved')->count();
+                        break;
+                    case 'اوامر خدمة':
+                        $counts[$statistic->name] = instantmission::where('created_departement', Auth::user()->department_id)->count();
+                        break;
+                    case 'الصادر':
+                        $counts[$statistic->name] = outgoings::where('created_department', Auth::user()->department_id)->count();
+                        break;
+                    case 'الوارد':
+                        $counts[$statistic->name] = Iotelegram::where('created_departement', Auth::user()->department_id)->count();
+                        break;
+                    default:
+                        $counts[$statistic->name] = 0; // Default to 0 if no match found
+                        break;
+                }
+            }
+
+
+
+
             $violations = Violation::leftJoin('users', 'users.id', 'violations.user_id')
                 ->leftJoin('departements', 'users.department_id', 'departements.id')->where(function ($query) {
                     $query->where('users.department_id', Auth::user()->department_id)
