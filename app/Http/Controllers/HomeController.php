@@ -86,11 +86,15 @@ class HomeController extends Controller
                         : explode(',', $inspector_mission->ids_instant_mission));
                 }
             }
-            $violations = Violation::count();
+            $violations = Violation::whereYear('created_at', date('Y'))
+                ->whereMonth('created_at',  date('m'))
+                ->count();
 
 
             $points = $ids_instant_mission + $group_points;
-            $inspectors = Inspector::count();
+            $inspectors = Inspector::whereYear('created_at', date('Y'))
+                ->whereMonth('created_at',  date('m'))
+                ->count();
         } else {
 
             foreach ($Statistics as $statistic) {
@@ -182,25 +186,26 @@ class HomeController extends Controller
         $violations = Violation::whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->count();
-
-
         $inspectors = Inspector::whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->count();
+
         $inspector_missions = InspectorMission::whereYear('date', $year)
             ->whereMonth('date', $month)
+            ->distinct('inspector_id')
             ->get();
 
         $group_points = 0;
         $ids_instant_mission = 0;
 
-        $groupedMissions = $inspector_missions->groupBy('inspector_id');
 
-        foreach ($groupedMissions as $inspector_id => $missions) {
-            foreach ($missions as $inspector_mission) {
-                $group_points += count(explode(',', $inspector_mission->ids_group_point));
-                $ids_instant_mission += count(explode(',', $inspector_mission->ids_instant_mission));
-            }
+        foreach ($inspector_missions as  $missions) {
+            $group_points += count(is_array($missions->ids_group_point)
+                ? $missions->ids_group_point
+                : explode(',', $missions->ids_group_point));
+            $ids_instant_mission += count(is_array($missions->ids_instant_mission)
+                ? $missions->ids_instant_mission
+                : explode(',', $missions->ids_instant_mission));
         }
 
         $points = $ids_instant_mission + $group_points;
