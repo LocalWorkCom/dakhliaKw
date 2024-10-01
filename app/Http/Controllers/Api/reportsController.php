@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Absence;
 use App\Models\AbsenceEmployee;
+use App\Models\AbsenceViolation;
 use App\Models\grade;
 use App\Models\Grouppoint;
 use App\Models\GroupTeam;
@@ -148,6 +149,14 @@ class reportsController extends Controller
 
                 ];
             }
+            $absence_violations = AbsenceViolation::where('absence_id', $absence->id)->get();
+
+            $actual_number = []; // Initialize the array to store actual numbers
+
+            foreach ($absence_violations as $absence_violation) {
+                $actual_number[$absence_violation->violation_type->name] = $absence_violation->actual_number;
+            }
+
 
             $response[] = [
                 'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
@@ -165,7 +174,7 @@ class reportsController extends Controller
                 'inspector_grade' => auth()->user()->grade_id ? auth()->user()->grade->name : '',
                 'team_name' => $teamName,
                 'total_number' => $absence->total_number,
-                'actual_number' => $absence->actual_number,
+                'actual_number' => $actual_number,
                 'absence_members' => $absence_members,
                 'created_at' => $absence->parent == 0 ? $absence->created_at : Absence::find($absence->parent)->created_at,
                 'created_at_time' => $absence->parent == 0 ? $absence->created_at->format('H:i:s') : Absence::find($absence->parent)->created_at->format('H:i:s')

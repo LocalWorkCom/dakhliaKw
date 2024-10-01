@@ -146,7 +146,6 @@ class InspectorMissionController extends Controller
                                 'count_absence' => $absenceCount
                             ];
                         }
-
                     }
 
 
@@ -200,8 +199,8 @@ class InspectorMissionController extends Controller
                             'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
                             'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name
                             'date' => $createdAt->format('Y-m-d'),
-                            'time' => $time?? null,
-                            'time_name' => $time_arabic?? null,
+                            'time' => $time ?? null,
+                            'time_name' => $time_arabic ?? null,
                             'latitude' => $instantmission->latitude,
                             'longitude' => $instantmission->longitude,
                         ];
@@ -225,7 +224,7 @@ class InspectorMissionController extends Controller
                 'date' => $instantmission->created_at->format('Y-m-d'),
             ];
         }
-        *///
+        */ //
         $dayNamesArabic = [
             'Sunday'    => 'الأحد',
             'Monday'    => 'الإثنين',
@@ -242,7 +241,7 @@ class InspectorMissionController extends Controller
                 'date' => $date,
                 'date_name' => $dayNamesArabic[$dayName],
                 'mission_count' => $count,
-                'inspector_shift' =>$inspector_shift,
+                'inspector_shift' => $inspector_shift,
                 'instant_mission_count' => $instantmissioncount,
                 'groupPointCount' => $groupPointCount,
                 'missions' => $missionData,
@@ -252,7 +251,7 @@ class InspectorMissionController extends Controller
             $responseData = [
                 'date' => $dayNamesArabic[$dayName] . ', ' . $date,
                 'mission_count' => 0,
-                'inspector_shift' =>null,
+                'inspector_shift' => null,
 
                 'instant_mission_count' => $instantmissioncount,
                 'groupPointCount' => 0,
@@ -277,7 +276,13 @@ class InspectorMissionController extends Controller
         $inspector = Inspector::where('user_id', Auth::id())->first();
         // $inspector=Auth::user()->inspectorId;
         //dd($inspector);
-        $todayMission = InspectorMission::with('workingTime', 'workingTree')->where('date', date('Y-m-d'))->where('inspector_id', $inspector->id)->first();
+        if ($request->date) {
+            $date = $request->date;
+        } else {
+            $date = date('Y-m-d');
+        }
+
+        $todayMission = InspectorMission::with('workingTime', 'workingTree')->where('date', $date)->where('inspector_id', $inspector->id)->first();
         /*   if($todayMission->day_off==1)
         {
             $success['dayOff'] = 1;
@@ -285,27 +290,48 @@ class InspectorMissionController extends Controller
 
         }else{ */
 
-        if ($todayMission->day_off == 0) {
-            $success['dayOff'] = 0;
-            $success['name'] = $todayMission->workingTree->name;
-            $success['workdays'] = $todayMission->workingTree->working_days_num;
-            $success['holidaydays'] = $todayMission->workingTree->holiday_days_num;
-            $success['todayTimes_start'] = $todayMission->workingTime->start_time;
-            $success['todayTimes_end'] = $todayMission->workingTime->end_time;
-        } else {
-            $success['dayOff'] = 0;
-            $success['name'] = null;
-            $success['workdays'] = null;
-            $success['holidaydays'] = null;
-            $success['todayTimes_start'] = null;
-            $success['todayTimes_end'] = null;
+        if ($todayMission) {
+
+            if ($todayMission->day_off == 0) {
+                $success['dayOff'] = 0;
+                $success['name'] = $todayMission->workingTree->name;
+                $success['workdays'] = $todayMission->workingTree->working_days_num;
+                $success['holidaydays'] = $todayMission->workingTree->holiday_days_num;
+                $success['todayTimes_start'] = $todayMission->workingTime->start_time;
+                $success['todayTimes_end'] = $todayMission->workingTime->end_time;
+            } else {
+                $success['dayOff'] = 0;
+                $success['name'] = null;
+                $success['workdays'] = null;
+                $success['holidaydays'] = null;
+                $success['todayTimes_start'] = null;
+                $success['todayTimes_end'] = null;
+            }
+
+
+            return $this->respondSuccess($success, 'بيانات اللازم اليوم');
         }
 
-
-        return $this->respondSuccess($success, 'بيانات اللازم اليوم');
+        return $this->apiResponse(true, 'No Data .', null, 200);
 
 
 
         // }
+    }
+    protected function apiResponse($status, $message, $data, $code, $errorData = null)
+    {
+        $response = [
+            'code' => $code,
+            'status' => $status,
+            'message' => $message,
+            'data' => $data,
+        ];
+
+        // Only include 'errorData' if it is not null
+        if ($errorData !== null) {
+            $response['errorData'] = $errorData;
+        }
+
+        return response()->json($response, $code);
     }
 }
