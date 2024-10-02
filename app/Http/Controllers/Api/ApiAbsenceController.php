@@ -296,12 +296,12 @@ class ApiAbsenceController extends Controller
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
         //  dd(auth()->user()->inspectors);
         $today = Carbon::today()->toDateString();
-        $abs = $request->total_number - $request->actual_number;
         $police_number = $request->police_number;
         $civilian_number = $request->civilian_number;
         $workers_number = $request->workers_number;
         $individual_number = $request->individual_number;
         $actual_number = $police_number + $civilian_number + $workers_number + $individual_number;
+        $abs = $request->total_number - $actual_number;
         if ($request->total_number != $actual_number && $abs !=  count($request->AbsenceEmployee)) {
             return $this->respondError('يرجى ادخال باقى الموظفين', ['absence_number' => [' عدد الموظفين  المدخل لا يتوافق مع عددهم']], 400);
         } else {
