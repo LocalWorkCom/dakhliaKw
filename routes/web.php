@@ -85,6 +85,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('home/filter', [HomeController::class, 'filter'])->name('home.filter');
+    Route::get('home/statistics/search', [HomeController::class, 'searchStatistic'])->name('statistic.search');
+
     Route::get('/profile', [UserController::class, 'changeProfile'])->name('profile');
     Route::post('/profile/store', [UserController::class, 'ProfileStore'])->name('profile.store');
     Route::get('/users/{id}', [UserController::class, 'index'])->name('user.index')->middleware('check.permission:view User');
@@ -153,6 +155,7 @@ Route::middleware(['auth'])->group(function () {
     //groups
     // Route::resource('groups', GroupsController::class);
     Route::any('/groups', [GroupsController::class, 'index'])->name('group.view')->middleware('check.permission:view Groups');
+    Route::any('/groups/team', [GroupsController::class, 'GetGroupTeams'])->name('group.teams');
     Route::any('/groups/add', [GroupsController::class, 'store'])->name('group.store')->middleware('check.permission:create Groups');
     Route::any('/groups/update', [GroupsController::class, 'update'])->name('group.update')->middleware('check.permission:edit Groups');
     Route::any('/groups/edit/{id}', [GroupsController::class, 'edit'])->name('group.edit')->middleware('check.permission:edit Groups');
@@ -321,14 +324,14 @@ Route::middleware(['auth'])->group(function () {
     // Route::post('points/edit', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
     //End sectors
-        Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index')->middleware('check.permission:view Sector');
-        Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors')->middleware('check.permission:view Sector');
-        Route::get('sectors/show/{id}', [sectorsController::class, 'show'])->name('sectors.show')->middleware('check.permission:view Sector');
-        Route::get('sectors/create', [sectorsController::class, 'create'])->name('sectors.create')->middleware('check.permission:create Sector');
-        Route::post('sectors/add', [sectorsController::class, 'store'])->name('sectors.store')->middleware('check.permission:create Sector');
-        Route::get('sectors/edit/{id}', [sectorsController::class, 'edit'])->name('sectors.edit')->middleware('check.permission:edit Sector');
+    Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index')->middleware('check.permission:view Sector');
+    Route::get('sectors/ajax', [sectorsController::class, 'getsectors'])->name('getAllsectors')->middleware('check.permission:view Sector');
+    Route::get('sectors/show/{id}', [sectorsController::class, 'show'])->name('sectors.show')->middleware('check.permission:view Sector');
+    Route::get('sectors/create', [sectorsController::class, 'create'])->name('sectors.create')->middleware('check.permission:create Sector');
+    Route::post('sectors/add', [sectorsController::class, 'store'])->name('sectors.store')->middleware('check.permission:create Sector');
+    Route::get('sectors/edit/{id}', [sectorsController::class, 'edit'])->name('sectors.edit')->middleware('check.permission:edit Sector');
 
-        Route::post('sectors/update', [sectorsController::class, 'update'])->name('sectors.update')->middleware('check.permission:edit Sector');
+    Route::post('sectors/update', [sectorsController::class, 'update'])->name('sectors.update')->middleware('check.permission:edit Sector');
     // //End sectors
     //Start points
 

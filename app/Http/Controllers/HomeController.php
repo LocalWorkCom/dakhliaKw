@@ -86,15 +86,41 @@ class HomeController extends Controller
                         : explode(',', $inspector_mission->ids_instant_mission));
                 }
             }
-            $violations = Violation::whereYear('created_at', date('Y'))
-                ->whereMonth('created_at',  date('m'))
-                ->count();
+            // $violations = Violation::whereYear('created_at', date('Y'))
+            //     ->whereMonth('created_at',  date('m'))
+            //     ->count();
 
 
-            $points = $ids_instant_mission + $group_points;
-            $inspectors = Inspector::whereYear('created_at', date('Y'))
-                ->whereMonth('created_at',  date('m'))
-                ->count();
+            // $points = $ids_instant_mission + $group_points;
+            // $inspectors = Inspector::whereYear('created_at', date('Y'))
+            //     ->whereMonth('created_at',  date('m'))
+            //     ->count();
+
+            // $inspector_missions = InspectorMission::whereYear('date', date('Y'))
+            //     ->whereMonth('date',  date('m'))
+            //     ->get();
+
+            // $group_points = 0;
+            // $points = 0;
+            // $ids_instant_mission = 0;
+
+            // $groupedMissions = $inspector_missions->groupBy('inspector_id');
+
+            // foreach ($groupedMissions as $inspector_id => $missions) {
+            //     foreach ($missions as $inspector_mission) {
+            //         $group_points +=  count(is_array($inspector_mission->ids_group_point)
+            //             ? $inspector_mission->ids_group_point
+            //             : explode(',', $inspector_mission->ids_group_point));
+            //         $GrouppointData = Grouppoint::whereIn('id', is_array($inspector_mission->ids_group_point)
+            //             ? $inspector_mission->ids_group_point
+            //             : explode(',', $inspector_mission->ids_group_point))->pluck('points_ids');
+            //         foreach ($GrouppointData as $key => $value) {
+            //             $points +=
+            //                 sizeof($value);
+            //         }
+            //         $ids_instant_mission += count(explode(',', $inspector_mission->ids_instant_mission));
+            //     }
+            // }
         } else {
 
             foreach ($Statistics as $statistic) {
@@ -132,40 +158,165 @@ class HomeController extends Controller
                 }
             }
 
+            // $violations = Violation::leftJoin('users', 'users.id', 'violations.user_id')
+            //     ->leftJoin('departements', 'users.department_id', 'departements.id')->where(function ($query) {
+            //         $query->where('users.department_id', Auth::user()->department_id)
+            //             ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+            //     })->count();
+            // $inspectors = Inspector::leftJoin('users', 'users.id', 'inspectors.user_id')
+            //     ->leftJoin('departements', 'users.department_id', 'departements.id')
+            //     ->where(function ($query) {
+            //         $query->where('users.department_id', Auth::user()->department_id)
+            //             ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+            //     })->count();
+
+            // //filter by department
+            // $inspector_missions = InspectorMission::whereYear('date', date('Y'))
+            //     ->whereMonth('date',  date('m'))
+            //     ->get();
+
+            // $group_points = 0;
+            // $points = 0;
+            // $ids_instant_mission = 0;
+
+            // $groupedMissions = $inspector_missions->groupBy('inspector_id');
+
+            // foreach ($groupedMissions as $inspector_id => $missions) {
+            //     foreach ($missions as $inspector_mission) {
+            //         $group_points += count(explode(',', $inspector_mission->ids_group_point));
+            //         $GrouppointData = Grouppoint::whereIn('id', explode(',', $inspector_mission->ids_group_point))->pluck('points_ids');
+            //         foreach ($GrouppointData as $key => $value) {
+            //             $points += count(explode(',', $value->points_ids));
+            //         }
+            //         $ids_instant_mission += count(explode(',', $inspector_mission->ids_instant_mission));
+            //     }
+            // }
+        }
+
+        // $Groups = Groups::all();
+        // foreach ($Groups as $Group) {
+        //     $violations     =  Violation::leftJoin('users', 'users.id', 'violations.user_id')
+        //         ->leftJoin('inspectors', 'inspectors.user_id', 'users.id')
+        //         ->leftJoin('departements', 'users.department_id', 'departements.id')->where(function ($query) {
+        //             $query->where('users.department_id', Auth::user()->department_id)
+        //                 ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+        //         })->where('inspectors.group_id', $Group->id)->count();
+
+        //     $Group['violations'] = $violations;
+
+        //     $inspectors   = Inspector::leftJoin('users', 'users.id', 'inspectors.user_id')
+        //         ->leftJoin('departements', 'users.department_id', 'departements.id')
+        //         ->where(function ($query) {
+        //             $query->where('users.department_id', Auth::user()->department_id)
+        //                 ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+        //         })->where('inspectors.group_id', $Group->id)->count();
+
+        //     $Group['inspectors'] = $inspectors;
+        //     //filter by department
+        //     $groupedMissions = InspectorMission::where('group_id', $Group->id)->whereYear('date', date('Y'))
+        //         ->whereMonth('date',  date('m'))
+        //         ->distinct('inspector_id')
+        //         ->get();
+
+        //     $group_points = 0;
+        //     $points = 0;
+        //     $ids_instant_mission = 0;
 
 
+        //     foreach ($groupedMissions as $inspector_id => $inspector_mission) {
+        //         $group_points +=  count(is_array($inspector_mission->ids_group_point)
+        //             ? $inspector_mission->ids_group_point
+        //             : explode(',', $inspector_mission->ids_group_point));
+        //         $GrouppointData = Grouppoint::whereIn('id', is_array($inspector_mission->ids_group_point)
+        //             ? $inspector_mission->ids_group_point
+        //             : explode(',', $inspector_mission->ids_group_point))->pluck('points_ids');
+        //         foreach ($GrouppointData as $key => $value) {
+        //             $points  += count($value);
+        //         }
+        //         $ids_instant_mission += count(is_array($inspector_mission->ids_instant_mission)
+        //             ? $inspector_mission->ids_instant_mission
+        //             : explode(',', $inspector_mission->ids_instant_mission));
+        //     }
+        //     $Group['group_points']  = $group_points;
+        //     $Group['points']  = $points;
+        //     $Group['ids_instant_mission'] = $ids_instant_mission;
+        // }
 
+        $Groups = Groups::all();
+
+        // Initialize cumulative counters for all data points
+        $totalViolations = 0;
+        $totalInspectors = 0;
+        $totalGroupPoints = 0;
+        $totalPoints = 0;
+        $totalIdsInstantMission = 0;
+
+        foreach ($Groups as $Group) {
+            // Count violations for each group
             $violations = Violation::leftJoin('users', 'users.id', 'violations.user_id')
-                ->leftJoin('departements', 'users.department_id', 'departements.id')->where(function ($query) {
+                ->leftJoin('inspectors', 'inspectors.user_id', 'users.id')
+                ->leftJoin('departements', 'users.department_id', 'departements.id')
+                ->where(function ($query) {
                     $query->where('users.department_id', Auth::user()->department_id)
-                        ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
-                })->count();
+                        ->orWhere('departements.parent_id', Auth::user()->department_id);
+                })
+                ->where('inspectors.group_id', $Group->id)
+                ->count();
+            $Group['violations'] = $violations;
+            $totalViolations += $violations;
+
+            // Count inspectors for each group
             $inspectors = Inspector::leftJoin('users', 'users.id', 'inspectors.user_id')
                 ->leftJoin('departements', 'users.department_id', 'departements.id')
                 ->where(function ($query) {
                     $query->where('users.department_id', Auth::user()->department_id)
-                        ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
-                })->count();
+                        ->orWhere('departements.parent_id', Auth::user()->department_id);
+                })
+                ->where('inspectors.group_id', $Group->id)
+                ->count();
+            $Group['inspectors'] = $inspectors;
+            $totalInspectors += $inspectors;
 
-            //filter by department
-            $inspector_missions = InspectorMission::whereYear('date', date('Y'))
-                ->whereMonth('date',  date('m'))
+            // Filter missions by group and department
+            $groupedMissions = InspectorMission::where('group_id', $Group->id)
+                ->whereYear('date', date('Y'))
+                ->whereMonth('date', date('m'))
+                ->distinct('inspector_id')
                 ->get();
 
             $group_points = 0;
+            $points = 0; 
             $ids_instant_mission = 0;
 
-            $groupedMissions = $inspector_missions->groupBy('inspector_id');
+            // Calculate points and missions
+            foreach ($groupedMissions as $inspector_mission) {
+                $group_points += count(is_array($inspector_mission->ids_group_point)
+                    ? $inspector_mission->ids_group_point
+                    : explode(',', $inspector_mission->ids_group_point));
 
-            foreach ($groupedMissions as $inspector_id => $missions) {
-                foreach ($missions as $inspector_mission) {
-                    $group_points += count(explode(',', $inspector_mission->ids_group_point));
-                    $ids_instant_mission += count(explode(',', $inspector_mission->ids_instant_mission));
+                $GrouppointData = Grouppoint::whereIn('id', is_array($inspector_mission->ids_group_point)
+                    ? $inspector_mission->ids_group_point
+                    : explode(',', $inspector_mission->ids_group_point))->pluck('points_ids');
+
+                foreach ($GrouppointData as $value) {
+                    $points += count($value);
                 }
+
+                $ids_instant_mission += count(is_array($inspector_mission->ids_instant_mission)
+                    ? $inspector_mission->ids_instant_mission
+                    : explode(',', $inspector_mission->ids_instant_mission));
             }
 
-            $points = $ids_instant_mission + $group_points;
+            $Group['group_points'] = $group_points;
+            $Group['points'] = $points;
+            $Group['ids_instant_mission'] = $ids_instant_mission;
+
+            // Add to cumulative totals
+            $totalGroupPoints += $group_points;
+            $totalPoints += $points;
+            $totalIdsInstantMission += $ids_instant_mission;
         }
+
 
         // if (!Auth::check()) {
         //     return redirect()->route('login');
@@ -217,5 +368,9 @@ class HomeController extends Controller
             'points' => $points,
             'inspectors' => $inspectors
         ]);
+    }
+    function searchStatistic(Request $request)
+    {
+        dd($request);
     }
 }
