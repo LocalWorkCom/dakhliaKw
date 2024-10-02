@@ -226,7 +226,7 @@ class GroupsController extends Controller
             $group->name = $request->name;
             $group->points_inspector = $request->points_inspector;
             $group->sector_id = $request->sector_id;
-            $group->created_departement =auth()->user()->department_id;
+            $group->created_departement = auth()->user()->department_id;
 
             $group->save();
             addGroupHistory($group->id, $group->sector_id);
@@ -336,7 +336,7 @@ class GroupsController extends Controller
 
         $startOfMonth = Carbon::now();
         $endOfMonth =  Carbon::now()->endOfMonth();
-        dispatch(new assignPointsFrom($startOfMonth, $endOfMonth , $request->sector_id , $group->id));
+        dispatch(new assignPointsFrom($startOfMonth, $endOfMonth, $request->sector_id, $group->id));
         session()->flash('success', 'تم تعديل مجموعة بنجاح.');
 
         return redirect()->back();
@@ -395,5 +395,12 @@ class GroupsController extends Controller
         $group->delete();
 
         return redirect()->route('group.view')->with('message', 'Group deleted successfully');
+    }
+    function GetGroupTeams(Request $request)
+    {
+
+        $GroupTeams = GroupTeam::where('group_id', $request->group_id)->get();
+
+        return $GroupTeams;
     }
 }
