@@ -14,11 +14,11 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 " style=" background-color: transparent;">
-            <div class="row col-12 d-flex">
+            <div class="row col-12 d-flex" style="flex-direction: row-reverse;">
                 {{-- @if (appear('stat')) --}}
                 @foreach ($Statistics as $statistic)
-                    <div class="col-md-3 col-sm-12 col-12 d-block" dir="rtl"
-                        style="visibility: {{ !in_array($statistic->id, $UserStatistic->toArray()) ? 'hidden' : 'visible' }}">
+                    <div class="col-md-3 col-sm-12 col-12 " dir="rtl"
+                        style="display: {{ !in_array($statistic->id, $UserStatistic->toArray()) ? 'none' : 'block' }}">
                         <div class="graph-card" style="background-color: #ffffff;">
                             <div class="d-flex">
                                 <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
@@ -145,7 +145,10 @@
                             </div>
 
                             <!-- Search Icon Button -->
-                            <button id="searchBtn" class="btn btn-primary mx-2">
+                            <button id="searchBtn" class="btn btn-primary mx-2" style="    background-color: #274373;
+    font-size: 15px;
+    height: 48px;
+    border: none;">
                                 <i class="fa fa-search"></i> <!-- FontAwesome search icon -->
                             </button>
                         </div>
