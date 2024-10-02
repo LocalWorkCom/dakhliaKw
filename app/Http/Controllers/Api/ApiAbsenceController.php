@@ -183,7 +183,7 @@ class ApiAbsenceController extends Controller
             $absence_violation->absence_id = $new->id;
             $absence_violation->violation_type_id = 3;
             $absence_violation->save();
-            
+
             $absence_violation = new AbsenceViolation();
             $absence_violation->actual_number = $civilian_number;
             $absence_violation->absence_id = $new->id;
@@ -267,7 +267,10 @@ class ApiAbsenceController extends Controller
     {
         $messages = [
             'total_number.required' => 'الرقم الاجمالى  مطلوب ولا يمكن تركه فارغاً.',
-            'actual_number.required' => 'الرقم الفعلى  مطلوب ولا يمكن تركه فارغاً.',
+            'police_number.required' => 'العدد الفعلي للظباط  مطلوب ولا يمكن تركه فارغاً.',
+            'civilian_number.required' => 'العدد الفعلي للمدنيين مطلوب ولا يمكن تركه فارغاً.',
+            'workers_number.required' => 'العدد الفعلى للمهنين مطلوب ولا يمكن تركه فارغاً.',
+            'individual_number.required' => 'العدد الفعلى للافراد مطلوب ولا يمكن تركه فارغاً.',
             'point_id.required' => 'رقم النقطة  مطلوب .',
             'mission_id.required' => 'رقم المهمة مطلوبة',
             'type_employee.required' => 'النوع مطلوب',
@@ -277,7 +280,10 @@ class ApiAbsenceController extends Controller
         ];
         $validatedData = Validator::make($request->all(), [
             'total_number' => 'required',
-            'actual_number' => 'required',
+            'police_number' => 'required',
+            'civilian_number' => 'required',
+            'workers_number' => 'required',
+            'individual_number' => 'required',
             'point_id' => 'required',
 
             // 'AbsenceEmployee'=> ['required_if:total_number -actual_number ,0']
@@ -291,7 +297,12 @@ class ApiAbsenceController extends Controller
         //  dd(auth()->user()->inspectors);
         $today = Carbon::today()->toDateString();
         $abs = $request->total_number - $request->actual_number;
-        if ($request->total_number != $request->actual_number && $abs !=  count($request->AbsenceEmployee)) {
+        $police_number = $request->police_number;
+        $civilian_number = $request->civilian_number;
+        $workers_number = $request->workers_number;
+        $individual_number = $request->individual_number;
+        $actual_number = $police_number + $civilian_number + $workers_number + $individual_number;
+        if ($request->total_number != $actual_number && $abs !=  count($request->AbsenceEmployee)) {
             return $this->respondError('يرجى ادخال باقى الموظفين', ['absence_number' => [' عدد الموظفين  المدخل لا يتوافق مع عددهم']], 400);
         } else {
             $today = Carbon::now()->toDateString();
@@ -322,14 +333,38 @@ class ApiAbsenceController extends Controller
                     $new->point_id = $request->point_id;
                     $new->mission_id = $request->mission_id;
                     $new->total_number = $request->total_number;
-                    $new->actual_number = $request->actual_number;
+                    $new->actual_number = $actual_number;
                     $new->flag = 1;
                     $new->parent = $request->id;
                     $new->inspector_id = $inspectorId ? $inspectorId->id : null;
                     $new->save();
+                    $absence_violation = new AbsenceViolation();
+                    $absence_violation->actual_number = $individual_number;
+                    $absence_violation->absence_id = $new->id;
+                    $absence_violation->violation_type_id = 1;
+                    $absence_violation->save();
+
+                    $absence_violation = new AbsenceViolation();
+                    $absence_violation->actual_number = $police_number;
+                    $absence_violation->absence_id = $new->id;
+                    $absence_violation->violation_type_id = 2;
+                    $absence_violation->save();
+
+                    $absence_violation = new AbsenceViolation();
+                    $absence_violation->actual_number = $workers_number;
+                    $absence_violation->absence_id = $new->id;
+                    $absence_violation->violation_type_id = 3;
+                    $absence_violation->save();
+
+                    $absence_violation = new AbsenceViolation();
+                    $absence_violation->actual_number = $civilian_number;
+                    $absence_violation->absence_id = $new->id;
+                    $absence_violation->violation_type_id = 4;
+                    $absence_violation->save();
+
                     if ($new) {
                         $array = [];
-                        if ($request->has('AbsenceEmployee') && ($request->total_number > $request->actual_number)) {
+                        if ($request->has('AbsenceEmployee') && ($request->total_number > $actual_number)) {
                             foreach ($request->AbsenceEmployee as $item) {
                                 $employeeValidator = Validator::make($item, [
                                     'name' => 'required',
@@ -382,6 +417,30 @@ class ApiAbsenceController extends Controller
                     $new->parent = $parent_id;
                     $new->inspector_id = $inspectorId ? $inspectorId->id : null;
                     $new->save();
+                    $absence_violation = new AbsenceViolation();
+                    $absence_violation->actual_number = $individual_number;
+                    $absence_violation->absence_id = $new->id;
+                    $absence_violation->violation_type_id = 1;
+                    $absence_violation->save();
+        
+                    $absence_violation = new AbsenceViolation();
+                    $absence_violation->actual_number = $police_number;
+                    $absence_violation->absence_id = $new->id;
+                    $absence_violation->violation_type_id = 2;
+                    $absence_violation->save();
+        
+                    $absence_violation = new AbsenceViolation();
+                    $absence_violation->actual_number = $workers_number;
+                    $absence_violation->absence_id = $new->id;
+                    $absence_violation->violation_type_id = 3;
+                    $absence_violation->save();
+        
+                    $absence_violation = new AbsenceViolation();
+                    $absence_violation->actual_number = $civilian_number;
+                    $absence_violation->absence_id = $new->id;
+                    $absence_violation->violation_type_id = 4;
+                    $absence_violation->save();
+        
                     if ($new) {
                         $array = [];
                         if ($request->has('AbsenceEmployee') && ($request->total_number > $request->actual_number)) {

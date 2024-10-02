@@ -532,8 +532,7 @@ class reportsController extends Controller
                             'employee_file_number' => $employeeAbsence->file_num ?? null,
                         ];
                     }
-
-                    $absenceReport[] = [
+                    $data = [
 
                         'abcence_day' => $absence->date,
                         'point_id' => $absence->point_id,
@@ -553,6 +552,26 @@ class reportsController extends Controller
                         'created_at_time' => $absence->parent == 0 ? $absence->created_at->format('H:i:s') : Absence::find($absence->parent)->created_at->format('H:i:s'),
 
                     ];
+
+                    $absence_violations = AbsenceViolation::where('absence_id', $absence->id)->get();
+
+                    foreach ($absence_violations as $absence_violation) {
+                        $name = '';
+                        if ($absence_violation->violation_type_id == 1) {
+                            $name = "indvidual";
+                        } else if ($absence_violation->violation_type_id == 2) {
+                            $name = "police";
+                        } else if ($absence_violation->violation_type_id == 3) {
+                            $name = "worker";
+                        } else if ($absence_violation->violation_type_id == 4) {
+
+                            $name = "civil";
+                        }
+
+                        $data[$name] = $absence_violation->actual_number;
+                    }
+
+                    $absenceReport[] = $data;
                 }
             }
         }
