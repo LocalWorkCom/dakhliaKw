@@ -151,14 +151,9 @@ class reportsController extends Controller
             }
             $absence_violations = AbsenceViolation::where('absence_id', $absence->id)->get();
 
-            $actual_number = []; // Initialize the array to store actual numbers
-
-            foreach ($absence_violations as $absence_violation) {
-                $actual_number[$absence_violation->violation_type->name] = $absence_violation->actual_number;
-            }
 
 
-            $response[] = [
+            $data = [
                 'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
                 'abcence_day' => $absence->date,
                 'mission_id' => $absence->mission_id,
@@ -174,15 +169,31 @@ class reportsController extends Controller
                 'inspector_grade' => auth()->user()->grade_id ? auth()->user()->grade->name : '',
                 'team_name' => $teamName,
                 'total_number' => $absence->total_number,
-                'actual_number' => $actual_number,
+                'actual_number' => $absence->actual_number,
                 'absence_members' => $absence_members,
                 'created_at' => $absence->parent == 0 ? $absence->created_at : Absence::find($absence->parent)->created_at,
                 'created_at_time' => $absence->parent == 0 ? $absence->created_at->format('H:i:s') : Absence::find($absence->parent)->created_at->format('H:i:s')
             ];
+            foreach ($absence_violations as $absence_violation) {
+                $name = '';
+                if ($absence_violation->violation_type_id == 1) {
+                    $name = "indvidual";
+                } else if ($absence_violation->violation_type_id == 2) {
+                    $name = "police";
+                } else if ($absence_violation->violation_type_id == 3) {
+                    $name = "worker";
+                } else if ($absence_violation->violation_type_id == 4) {
+
+                    $name = "civil";
+                }
+
+                $data[$name] = $absence_violation->actual_number;
+            }
+            $response[] = $data;
         }
         $success['report'] = $response;
 
-  
+
         if ($response) {
             return $this->respondSuccess($success, 'Data get successfully.');
         } else {
