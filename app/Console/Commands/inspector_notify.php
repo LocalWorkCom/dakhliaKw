@@ -97,7 +97,7 @@ class inspector_notify extends Command
                 ->where('day_off', 0)
                 ->whereNotNull('ids_instant_mission')
                 ->first();
-
+              //  dd($mission);
             // Send notification only if no team members have a day off
             if ($mission) {
                 // Check if ids_instant_mission is an array or JSON string

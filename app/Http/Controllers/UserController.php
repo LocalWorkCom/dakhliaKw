@@ -65,9 +65,9 @@ class UserController extends Controller
                 $data = User::where('flag', $flagType)->get();
             } else {
                 $data = User::where('flag', $flagType)
-                ->whereHas('rule', function ($query) {
-                    $query->where('hidden', false);
-                })->get();
+                    ->whereHas('rule', function ($query) {
+                        $query->where('hidden', false);
+                    })->get();
             }
         } else {
             if (is_null($parentDepartment->parent_id)) {
@@ -77,7 +77,8 @@ class UserController extends Controller
                     $data = User::where('flag', $flagType)
                         ->where(function ($query) use ($subdepart, $parentDepartment) {
                             $query->whereIn('department_id', $subdepart)
-                                ->orWhere('department_id', $parentDepartment->id);
+                                ->orWhere('department_id', $parentDepartment->id)
+                                ->orwhereNull('department_id');
                         })
                         // ->whereIn('department_id', $subdepart)
                         // ->orWhere('department_id', $parentDepartment->id)
@@ -87,7 +88,8 @@ class UserController extends Controller
                         ->where(function ($query) use ($subdepart, $parentDepartment) {
                             $query->whereIn('department_id', $subdepart)
                                 ->orWhere('department_id', $parentDepartment->id);
-                        })->whereHas('rule', function ($query) {
+                        })
+                        ->whereHas('rule', function ($query) {
                             $query->where('hidden', false);
                         })
                         // ->whereIn('department_id', $subdepart)
@@ -484,7 +486,15 @@ class UserController extends Controller
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $alluser = User::where('flag', 'employee')->get();
         } else {
-            $alluser = User::where('flag', 'employee')->where('department_id', $user->department_id)->get();
+            $alluser = User::where('flag', 'employee')
+                ->leftJoin('departements', 'departements.id', '=', 'users.department_id') // Use leftJoin to handle `department_id = null`
+                ->where(function ($query) {
+                    $query->where('users.department_id', Auth::user()->department_id) // Match user’s department
+                        ->orWhere('departements.parent_id', Auth::user()->department_id) // Match department’s parent ID
+                        ->orWhereNull('users.department_id'); // Include users without a department
+                })
+                ->select('users.*') // Ensure only `users` columns are selected
+                ->get();
         }
 
         if ($user->department_id == "NULL") {
@@ -637,6 +647,10 @@ class UserController extends Controller
 
         if ($request->type == "0") {
             $newUser = User::find($request->name);
+            // if ($newUser->department_id == null) {
+            //     return redirect()->back()->withErrors(['يجب اختيار ادارة للمستخدم اولا'])->withInput();
+            // }
+            $newUser->department_id = 1;
             $newUser->password = Hash::make($request->password);
             $newUser->flag = "user";
             $newUser->rule_id = $request->rule_id;

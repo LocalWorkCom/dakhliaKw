@@ -1585,21 +1585,22 @@ line-height: 26.78px;
 text-align: right;
 color: #2A2726;
 }
-.canvas-card .color, .circle-graph-card .color{
-    width: 17px;
-    height: 17px;
+.canvas-card .color, .circle-graph-card .color {
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    /* background-color:dodgerblue ; */
-    border: 0.01px solid gray;
-    margin-left: 5px;
+    /* background-color: dodgerblue; */
+    /* border: 0.01px solid gray; */
+    margin-left: -62px;
 }
-.canvas-card .info, .circle-graph-card .info{
+.canvas-card .info, .circle-graph-card .info {
     font-family: Almarai;
-font-size: 25px;
-font-weight: 400;
-line-height: 20px;
-text-align: center;
-color: #2A2726;
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 44px;
+    text-align: center;
+    color: #2A2726;
+    font-weight: 700;
 }
 .canvas-card .h2, .circle-graph-card .h2{
     font-family: Almarai;
@@ -1622,4 +1623,36 @@ color: #2A2726;
 }
 .mobile-view .h2{
     color: rgb(158, 156, 156);
+}
+#myPieChart {
+    display: block;
+    height: 350px !important;
+    width: 601px !important;
+}
+.month{
+    width: 258px;
+    height: 50px;
+    padding: 12px 8px 12px 8px;
+   border-radius: 10px;
+   border: 0.2px solid #b3b1b1;
+   background-color: transparent;
+   font-family: Almarai;
+font-size: 22px;
+font-weight: 400;
+line-height: 26.78px;
+text-align: right;
+color: #575656;
+}
+.barchart {
+    width: 100%;
+    height: 500px !important;
+    display: block;
+}
+.graph img{
+    height: 30px;
+}
+.month_label{
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 47px;
 }

@@ -13,7 +13,7 @@ class Groups extends Model
     protected $table = 'groups';
     public $timestamps = false;
 
-    protected $fillable = ['name', 'points_inspector']; // Ensure this matches your table's columns
+    protected $fillable = ['name', 'points_inspector', 'created_departement']; // Ensure this matches your table's columns
 
 
 

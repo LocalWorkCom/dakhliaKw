@@ -18,7 +18,7 @@ use App\Models\InspectorGroupHistory;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Google\Client as GoogleClient;
-
+use Illuminate\Support\Facades\App;
 
 if (!function_exists('whats_send')) {
     function whats_send($mobile, $message, $country_code)
@@ -300,6 +300,30 @@ function getgroups()
 
     return  Groups::all();
 }
+
+
+
+function getMonthNames()
+{
+    // Set locale to Arabic
+    App::setLocale('ar'); // Set locale to Arabic
+    setlocale(LC_TIME, 'ar_AE.utf8'); // Change locale to Arabic
+
+    // Retrieve Arabic month names
+    $arabicMonths = [];
+    for ($month = 1; $month <= 12; $month++) {
+        $arabicMonths[] = Carbon::create()->month($month)->translatedFormat('F'); // Use translatedFormat
+    }
+
+    return $arabicMonths;
+}
+
+function getListOfYears($startYear = 2000)
+{
+    $currentYear = Carbon::now()->year; // Get the current year
+    return range($startYear, $currentYear); // Generate a range of years
+}
+
 ############################################## Vacation #######################################################################
 function CheckStartVacationDate($id)
 {
