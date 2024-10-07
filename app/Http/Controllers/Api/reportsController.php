@@ -86,7 +86,6 @@ class reportsController extends Controller
             ->where('flag', 1)
             ->get();
 
-
         $statusFlag = false;
 
         $groupedAbsences = $absences->groupBy('mission_id')
@@ -94,17 +93,13 @@ class reportsController extends Controller
                 foreach ($group as $absence) {
                     if (is_null($absence->status)) {
                         $statusFlag = true;
-                        return true; // Keep the group if any absence has a null status
+                        return true;
                     }
                 }
-                return false; // Exclude the group if no absence has a null status
+                return false;
             });
 
-        // Debugging grouped absences
-        // dd($statusFlag);
-
         if (!$statusFlag) {
-            // dd("false");
             $absences = $absences->filter(function ($absence) {
                 return $absence->status === 'Accept';
             });
@@ -125,7 +120,6 @@ class reportsController extends Controller
                 $time = PointDays::where('point_id', $absence->point_id)
                     ->where('name', $index)
                     ->first();
-                // dd($time);
             }
 
             $employees_absence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
@@ -133,8 +127,6 @@ class reportsController extends Controller
                 ->get();
             $absence_members = [];
             foreach ($employees_absence as $employee_absence) {
-                // $grade=$employee_absence->grade != null ? $employee_absence->grade->name : 'لا يوجد رتبه';
-
                 $absence_members[] = [
                     'employee_name' => $employee_absence->name,
                     'employee_grade' => $employee_absence->grade == null ? '' : $employee_absence->gradeName->name,
@@ -150,8 +142,6 @@ class reportsController extends Controller
                 ];
             }
             $absence_violations = AbsenceViolation::where('absence_id', $absence->id)->get();
-
-
 
             $data = [
                 'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
@@ -192,7 +182,6 @@ class reportsController extends Controller
             $response[] = $data;
         }
         $success['report'] = $response;
-
 
         if ($response) {
             return $this->respondSuccess($success, 'Data get successfully.');

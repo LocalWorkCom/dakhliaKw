@@ -9,6 +9,7 @@ use App\DataTables\vacationTypeDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Government;
 use App\Models\grade;
+use App\Models\InspectorMission;
 use App\Models\job;
 use App\Models\Setting;
 use App\Models\VacationType;
