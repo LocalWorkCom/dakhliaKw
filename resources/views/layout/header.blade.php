@@ -12,8 +12,14 @@
                     {{ $user->name }}
                     <i class="fa-solid fa-user mx-2"></i>
                 </button>
+                
                 <div id="dropdownMenu" class="dropdown-menu">
-                    <a href="{{ route('logout') }}">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a>
+                 <ul>
+                    <li>   <a href="{{ route('logout') }}">تسجيل خروج <i class="fa-solid fa-right-from-bracket"></i></a></li> <hr>
+                    <li>   <a href="{{ route('profile') }}" style="color:black;"> صفحة المستخدم     <i class="fa-solid fa-user mx-2"></i></a></li>
+ 
+                 </ul>
+                    
                 </div>
                 @else
                 <button class="btn btn-2 mt-3">

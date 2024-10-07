@@ -2,6 +2,9 @@
 @section('title')
     الرئيسيه
 @endsection
+@section('style')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+@endsection
 @section('content')
     <div class="row ">
         <div class="container welcome col-11">
@@ -11,100 +14,22 @@
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0 " style=" background-color: transparent;">
-            <div class="row col-12 d-flex">
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                            <h2 class="mx-3">الادارات</h2>
+            <div class="row col-12 d-flex" style="flex-direction: row-reverse;">
+                {{-- @if (appear('stat')) --}}
+                @foreach ($Statistics as $statistic)
+                    <div class="col-md-3 col-sm-12 col-12 " dir="rtl"
+                        style="display: {{ !in_array($statistic->id, $UserStatistic->toArray()) ? 'none' : 'block' }}">
+                        <div class="graph-card" style="background-color: #ffffff;">
+                            <div class="d-flex">
+                                <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
+                                <h2 class="mx-3">{{ $statistic->name }}</h2>
+                            </div>
+                            <h1>
+                                {{ $counts[$statistic->name] ?? 0 }} <!-- Display the count for each statistic -->
+                            </h1>
                         </div>
-                        <h1>{{ $depCount }}</h1>
                     </div>
-                </div>
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #28A39C"></i>
-                            <h2 class="mx-3">المجموعات</h2>
-                        </div>
-                        <h1>{{ $groups }}</h1>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                            <h2 class="mx-3">اجمالى المستخدمين</h2>
-                        </div>
-                        <h1>{{ $userCount }}</h1>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color:   #F7AF15;"></i>
-                            <h2 class="mx-3">اجمالى الموظفين</h2>
-                        </div>
-                        <h1>{{ $empCount }}</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="row col-12 d-flex  ">
-
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                            <h2 class="mx-3">الوارد</h2>
-                        </div>
-                        <h1>{{ $ioCount }}</h1>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #F7AF15;"></i>
-                            <h2 class="mx-3">الصادر</h2>
-                        </div>
-                        <h1>{{ $outCount }}</h1>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #259240;"></i>
-                            <h2 class="mx-3">اوامر الخدمة</h2>
-                        </div>
-                        <h1>{{ $instantmissions }}</h1>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12 col-12  d-block" dir="rtl">
-                    <div class=" graph-card" style="background-color: #ffffff;">
-
-
-                        <div class="d-flex">
-                            <i class="fa-solid fa-user-group" style="color: #259240;"></i>
-                            <h2 class="mx-3">الاجازات</h2>
-                        </div>
-                        <h1>{{ $employeeVacation }}</h1>
-                    </div>
-                </div>
+                @endforeach
 
             </div>
         </div>
@@ -137,8 +62,7 @@
 
                             <select id="month" class="month mx-2" name="month">
                                 @foreach (getMonthNames() as $index => $month)
-                                    <option value="{{ $index + 1 }}"
-                                        {{ $index + 1 == $currentMonth ? 'selected' : '' }}>
+                                    <option value="{{ $index + 1 }}" {{ $index + 1 == $currentMonth ? 'selected' : '' }}>
                                         {{ $month }}</option>
                                 @endforeach
                             </select>
@@ -193,58 +117,77 @@
                     <div class="d-flex justify-content-between">
                         <div class="d-flex graph">
                             <img src="{{ asset('frontend/images/report.svg') }}" alt="logo">
-                            <h2 class="mx-3 h2-charts mb-4" style="text-align: right;"> احصائيات الفرق والمجموعات
-                                والمفتشون
+                            <h2 class="mx-3 h2-charts mb-4" style="text-align: right;"> احصائيات الفرق والمجموعات والمفتشون
                             </h2>
                         </div>
                         <div class="d-flex">
-                            <select id="month" class="month" name="month">
+                            <select id="Group" class="month" name="group_id">
                                 <option value="" disabled selected> اختر المجموعة</option>
-                                <option value=""> المجموعة</option>
-                                <option value=""> المجموعة</option>
-                                <option value=""> المجموعة</option>
+                                @foreach ($Groups as $Group)
+                                    <option value="{{ $Group->id }}"> {{ $Group->name }}</option>
+                                @endforeach
                             </select>
-                            <select id="month" class="month mx-2" name="month">
-                                <option value="" disabled selected> اختر الفرقة</option>
-                                <option value=""> الفرقة</option>
-                                <option value=""> الفرقة</option>
-                                <option value=""> الفرقة</option>
-                            </select>
-                            <div class="d-flex">
 
+                            <select id="GroupTeam" class="month mx-2" name="group_team_id">
+                                <option value="" selected> اختر الفرقة</option>
+                            </select>
+
+                            <div class="d-flex">
                                 <label for="date_from" class="month_label">من</label>
-                                <input type="date" name="" id="date_from" class="month mx-2">
+                                <input type="date" name="date_from" id="date_from" class="month mx-2"
+                                    value="{{ date('Y-m-01') }}">
                             </div>
+
                             <div class="d-flex">
-
                                 <label for="date_to" class="month_label">الي</label>
-
-                                <input type="date" name="" id="date_to" class="month mx-2">
+                                <input type="date" name="date_to" id="date_to" class="month mx-2"
+                                    value="{{ date('Y-m-t') }}">
                             </div>
+
+                            <!-- Search Icon Button -->
+                            <button id="searchBtn" class="btn btn-primary mx-2" style="    background-color: #274373;
+    font-size: 15px;
+    height: 48px;
+    border: none;">
+                                <i class="fa fa-search"></i> <!-- FontAwesome search icon -->
+                            </button>
                         </div>
                     </div>
+
                     <div class="d-flex col-12 mt-3">
                         <div class="color" style="background-color:#AA1717"></div>
                         <h2 class="info col-2">عدد مخالفات</h2>
-                        <h2 class="h2 mx-5">20</h2>
+                        <h2 class="h2 mx-5">{{ $totalViolations }}</h2>
                     </div>
                     <div class="d-flex col-12 col-sm-12">
                         <div class="color" style="background-color:#F8A723"></div>
                         <h2 class="info col-2">عدد زيارات</h2>
-                        <h2 class="h2 mx-5">10</h2>
+                        <h2 class="h2 mx-5">{{ $totalPoints }}</h2>
                     </div>
                     <div class="d-flex col-12 col-sm-12">
                         <div class="color" style="background-color:#274373"></div>
-                        <h2 class="info col-2">اوامر الخدمة </h2>
-                        <h2 class="h2 mx-5">200</h2>
+                        <h2 class="info col-2">عدد المفتشين</h2>
+                        <h2 class="h2 mx-5">{{ $totalInspectors }}</h2>
+                    </div>
+                    <div class="d-flex col-12 col-sm-12">
+                        <div class="color" style="background-color:#274373"></div>
+                        <h2 class="info col-2">عدد المواقع</h2>
+                        <h2 class="h2 mx-5">{{ $totalGroupPoints }}</h2>
+                    </div>
+                    <div class="d-flex col-12 col-sm-12">
+                        <div class="color" style="background-color:#274373"></div>
+                        <h2 class="info col-2">عدد اوامر الخدمة </h2>
+                        <h2 class="h2 mx-5">{{ $totalIdsInstantMission }}</h2>
                     </div>
                     <canvas id="barChart" style="width:100%;height: 300px;" class="barChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
+    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
     <script>
         $(document).ready(function() {
             // When either the month or year is changed, trigger the filter
@@ -297,11 +240,19 @@
     </script>
 
     <script>
-        const xValues = ["الشهر الأول", "الشهر الثاني", "الشهر الثالث"];
-        const employeesData = [55, 49, 44];
-        const managersData = [24, 15, 30];
-        const IspectorData = [24, 15, 30];
-        const chartColors = ["#AA1717", "#F8A723", "#274373"];
+        const groups = @json($Groups);
+
+        // Use the map function to extract the names of the groups
+        const xValues = groups.map(group => group.name);
+
+        // Display the extracted group names in the console (for verification)
+        const ViolationData = groups.map(group => group.violations);
+        const PointsData = groups.map(group => group.points);
+        const IspectorData = groups.map(group => group.inspectors);
+        const GroupPointsData = groups.map(group => group.group_points);
+        const InstantmissionData = groups.map(group => group.ids_instant_mission);
+
+        const chartColors = ["#AA1717", "#F8A723", "#274373", "#274373", "#274373"];
         // Create the bar chart
         new Chart("barChart", {
             type: "bar",
@@ -310,20 +261,32 @@
                 datasets: [{
                         label: "مخالفات",
                         backgroundColor: chartColors[0],
-                        data: employeesData,
-                        barThickness: 60
+                        data: ViolationData,
+                        barThickness: 20
                     },
                     {
                         label: "زيارات",
                         backgroundColor: chartColors[1],
-                        data: managersData,
-                        barThickness: 60
+                        data: PointsData,
+                        barThickness: 20
                     },
                     {
                         label: "مفتشين",
                         backgroundColor: chartColors[2],
                         data: IspectorData,
-                        barThickness: 60
+                        barThickness: 20
+                    },
+                    {
+                        label: "المواقع",
+                        backgroundColor: chartColors[3],
+                        data: GroupPointsData,
+                        barThickness: 20
+                    },
+                    {
+                        label: "اوامر خدمة",
+                        backgroundColor: chartColors[4],
+                        data: InstantmissionData,
+                        barThickness: 20
                     }
                 ]
             },
@@ -413,5 +376,68 @@
         myPieChart.canvas.addEventListener('mouseover', drawText);
         myPieChart.canvas.addEventListener('mouseout', drawText);
         myPieChart.update();
+
+        $('#Group').change(function(e) {
+            e.preventDefault();
+            var group_id = $(this).val();
+
+            $.ajax({
+                url: "{{ route('group.teams') }}",
+                data: {
+                    group_id: group_id
+                },
+                method: 'GET',
+                success: function(response) {
+                    // Assuming `response` is an array of group teams with `id` and `name` properties
+                    var groupTeamSelect = $('#GroupTeam');
+
+                    // Clear previous options, except for the default one
+                    groupTeamSelect.empty().append('<option value="" selected>اختر الفرقة</option>');
+
+                    // Iterate through the response and add options dynamically
+                    $.each(response, function(index, team) {
+                        groupTeamSelect.append('<option value="' + team.id + '">' + team.name +
+                            '</option>');
+                    });
+                },
+                error: function() {
+                    alert('Error retrieving data');
+                }
+            });
+        });
+        $(document).ready(function() {
+            $('#searchBtn').click(function(e) {
+                e.preventDefault();
+
+                // Get the values of each input
+                var groupId = $('#Group').val();
+                var groupTeamId = $('#GroupTeam').val();
+                var dateFrom = $('#date_from').val();
+                var dateTo = $('#date_to').val();
+
+                // Create the data object to send
+                var searchData = {
+                    group_id: groupId,
+                    group_team_id: groupTeamId,
+                    date_from: dateFrom,
+                    date_to: dateTo
+                };
+
+                // Call AJAX
+                $.ajax({
+                    url: "{{ route('statistic.search') }}", // Update with your search route
+                    method: 'GET',
+                    data: searchData, // Pass the search data
+                    success: function(response) {
+                        console.log("Response: ", response);
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Error occurred during the search.');
+                    }
+                });
+            });
+        });
     </script>
 @endsection
