@@ -5,17 +5,17 @@
     القطاعات
 @endsection
 @section('content')
-<div class="row " dir="rtl">
-<div class="container  col-11" style="background-color:transparent;">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('sectors.index') }}">القطاعات</a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل القطاع</a></li>
-            </ol>
-        </nav>
+    <div class="row " dir="rtl">
+        <div class="container  col-11" style="background-color:transparent;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('sectors.index') }}">القطاعات</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> تعديل القطاع</a></li>
+                </ol>
+            </nav>
+        </div>
     </div>
-</div>
     {{-- <div class="row ">
         <div class="container welcome col-11">
             <p> القطــــاعات </p>
@@ -55,7 +55,7 @@
                     <div class="input-group moftsh px-md-4 px-3 pt-3">
                         <label class="pb-3" for="order">حدد ترتيب القطاع</label>
                         <input type="number" id="order" value="{{ $data->order }}" name="order" class="form-control"
-                            required disabled/>
+                            required disabled />
                         <span class="text-danger span-error" id="order-error"></span>
 
                     </div>
@@ -127,7 +127,7 @@
             if (!checkedOne) {
                 event.preventDefault(); // Prevent form submission
                 document.getElementById('governmentIDS-error').textContent =
-                'من فضلك اختر محافظه واحده على الأقل .';
+                    'من فضلك اختر محافظه واحده على الأقل .';
             } else {
                 document.getElementById('governmentIDS-error').textContent = ''; // Clear any error messages
             }
