@@ -412,7 +412,7 @@ class ApiAbsenceController extends Controller
                     $new->point_id = $request->point_id;
                     $new->mission_id = $request->mission_id;
                     $new->total_number = $request->total_number;
-                    $new->actual_number = $request->actual_number;
+                    $new->actual_number = $actual_number;
                     $new->flag = 1;
                     $new->parent = $parent_id;
                     $new->inspector_id = $inspectorId ? $inspectorId->id : null;
@@ -422,25 +422,25 @@ class ApiAbsenceController extends Controller
                     $absence_violation->absence_id = $new->id;
                     $absence_violation->violation_type_id = 1;
                     $absence_violation->save();
-        
+
                     $absence_violation = new AbsenceViolation();
                     $absence_violation->actual_number = $police_number;
                     $absence_violation->absence_id = $new->id;
                     $absence_violation->violation_type_id = 2;
                     $absence_violation->save();
-        
+
                     $absence_violation = new AbsenceViolation();
                     $absence_violation->actual_number = $workers_number;
                     $absence_violation->absence_id = $new->id;
                     $absence_violation->violation_type_id = 3;
                     $absence_violation->save();
-        
+
                     $absence_violation = new AbsenceViolation();
                     $absence_violation->actual_number = $civilian_number;
                     $absence_violation->absence_id = $new->id;
                     $absence_violation->violation_type_id = 4;
                     $absence_violation->save();
-        
+
                     if ($new) {
                         $array = [];
                         if ($request->has('AbsenceEmployee') && ($request->total_number > $request->actual_number)) {

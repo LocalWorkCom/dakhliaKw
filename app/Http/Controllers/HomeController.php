@@ -285,7 +285,7 @@ class HomeController extends Controller
                 ->get();
 
             $group_points = 0;
-            $points = 0; 
+            $points = 0;
             $ids_instant_mission = 0;
 
             // Calculate points and missions
@@ -371,6 +371,44 @@ class HomeController extends Controller
     }
     function searchStatistic(Request $request)
     {
-        dd($request);
+        dd($request->all());
+        $group = $request->input('group_id'); // Selected group from dropdown
+        $team = $request->input('group_team_id');   // Selected team from dropdown
+        $startDate = $request->input('date_from');
+        $endDate = $request->input('date_to');
+        if($group){
+            
+        }
+        $violations = Violation::leftJoin('users', 'users.id', 'violations.user_id')
+                ->leftJoin('inspectors', 'inspectors.user_id', 'users.id')
+                ->leftJoin('departements', 'users.department_id', 'departements.id')
+                ->where(function ($query) {
+                    $query->where('users.department_id', Auth::user()->department_id)
+                        ->orWhere('departements.parent_id', Auth::user()->department_id);
+                })
+                ->where('inspectors.group_id', $Group->id)
+                ->count();
+            $Group['violations'] = $violations;
+            $totalViolations += $violations;
+
+            // Count inspectors for each group
+            $inspectors = Inspector::leftJoin('users', 'users.id', 'inspectors.user_id')
+                ->leftJoin('departements', 'users.department_id', 'departements.id')
+                ->where(function ($query) {
+                    $query->where('users.department_id', Auth::user()->department_id)
+                        ->orWhere('departements.parent_id', Auth::user()->department_id);
+                })
+                ->where('inspectors.group_id', $Group->id)
+                ->count();
+            $Group['inspectors'] = $inspectors;
+            $totalInspectors += $inspectors;
+
+            // Filter missions by group and department
+            $groupedMissions = InspectorMission::where('group_id', $Group->id)
+                ->whereYear('date', date('Y'))
+                ->whereMonth('date', date('m'))
+                ->distinct('inspector_id')
+                ->get();
+
     }
 }
