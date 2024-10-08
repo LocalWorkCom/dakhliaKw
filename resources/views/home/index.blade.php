@@ -99,6 +99,9 @@
                                 </div>
                             </div>
                             <canvas id="myPieChart" width="150" height="90" class="mt-2"></canvas>
+                            <div id="NoData">
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -145,10 +148,11 @@
                             </div>
 
                             <!-- Search Icon Button -->
-                            <button id="searchBtn" class="btn btn-primary mx-2" style="    background-color: #274373;
-    font-size: 15px;
-    height: 48px;
-    border: none;">
+                            <button id="searchBtn" class="btn btn-primary mx-2"
+                                style="background-color: #274373;
+                                            font-size: 15px;
+                                            height: 48px;
+                                            border: none;">
                                 <i class="fa fa-search"></i> <!-- FontAwesome search icon -->
                             </button>
                         </div>
@@ -157,34 +161,37 @@
                     <div class="d-flex col-12 mt-3">
                         <div class="color" style="background-color:#AA1717"></div>
                         <h2 class="info col-2">عدد مخالفات</h2>
-                        <h2 class="h2 mx-5">{{ $totalViolations }}</h2>
+                        <h2 class="h2 mx-5" id="violations">{{ $totalViolations }}</h2>
                     </div>
                     <div class="d-flex col-12 col-sm-12">
                         <div class="color" style="background-color:#F8A723"></div>
                         <h2 class="info col-2">عدد زيارات</h2>
-                        <h2 class="h2 mx-5">{{ $totalPoints }}</h2>
+                        <h2 class="h2 mx-5" id="points">{{ $totalPoints }}</h2>
                     </div>
                     <div class="d-flex col-12 col-sm-12">
                         <div class="color" style="background-color:#274373"></div>
                         <h2 class="info col-2">عدد المفتشين</h2>
-                        <h2 class="h2 mx-5">{{ $totalInspectors }}</h2>
+                        <h2 class="h2 mx-5" id="inspectors">{{ $totalInspectors }}</h2>
                     </div>
                     <div class="d-flex col-12 col-sm-12">
-                        <div class="color" style="background-color:#274373"></div>
+                        <div class="color" style="background-color:#3C9A34"></div>
                         <h2 class="info col-2">عدد المواقع</h2>
-                        <h2 class="h2 mx-5">{{ $totalGroupPoints }}</h2>
+                        <h2 class="h2 mx-5" id="group_points">{{ $totalGroupPoints }}</h2>
                     </div>
                     <div class="d-flex col-12 col-sm-12">
-                        <div class="color" style="background-color:#274373"></div>
+                        <div class="color" style="background-color:#43B8CE"></div>
                         <h2 class="info col-2">عدد اوامر الخدمة </h2>
-                        <h2 class="h2 mx-5">{{ $totalIdsInstantMission }}</h2>
+                        <h2 class="h2 mx-5" id="instant_mission">{{ $totalIdsInstantMission }}</h2>
                     </div>
                     <canvas id="barChart" style="width:100%;height: 300px;" class="barChart"></canvas>
+                    <div id="NoData2">
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
@@ -221,6 +228,13 @@
             // Function to update the Pie Chart (assuming you're using Chart.js)
             function updatePieChart(violations, points, inspectors) {
                 var ctx = document.getElementById('myPieChart').getContext('2d');
+                if (violations == 0 && points == 0 && inspectors == 0) {
+
+                    $('#NoData').html("No Data");
+                } else {
+                    $('#NoData').html("");
+
+                }
                 var pieChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
@@ -252,7 +266,7 @@
         const GroupPointsData = groups.map(group => group.group_points);
         const InstantmissionData = groups.map(group => group.ids_instant_mission);
 
-        const chartColors = ["#AA1717", "#F8A723", "#274373", "#274373", "#274373"];
+        const chartColors = ["#AA1717", "#F8A723", "#274373", "#3C9A34", "#43B8CE"];
         // Create the bar chart
         new Chart("barChart", {
             type: "bar",
@@ -310,6 +324,13 @@
         const labels = ["عدد المخالفات", "عدد النقاط", "عدد المفتشين"];
         const pieChartColors = ["#AA1717", "#F8A723", "#274373"];
 
+        <?php
+        if ($violations == 0 && $points == 0 && $inspectors == 0) {?>
+
+        $('#NoData').html("No Data");
+        <?php }
+        ?>
+
         // Create the pie chart
         const ctx = document.getElementById('myPieChart').getContext('2d');
         const myPieChart = new Chart(ctx, {
@@ -330,7 +351,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'تفاصيل  '
+                        text: 'تفاصيل'
                     },
                     tooltip: {
                         callbacks: {
@@ -372,10 +393,120 @@
             });
         }
 
+        function updateChart2(violations, points, inspectors, instant_mission, group_points, groups, teams, inspectors) {
+            // var ctx = document.getElementById('barChart').getContext('2d');
+            var xValues;
+            var groupId = $('#Group').val();
+            var groupTeamId = $('#GroupTeam').val();
+            let chart = true; // Use a descriptive variable name
+
+            if (groupId) {
+
+                if (teams.length == 0) {
+                    chart = false;
+                }
+                xValues = teams.map(team => team.name);
+                const ViolationData = teams.map(team => team.violations);
+                const PointsData = teams.map(team => team.points);
+                const IspectorData = teams.map(team => team.inspectors);
+                const GroupPointsData = teams.map(team => team.group_points);
+                const InstantmissionData = teams.map(team => team.ids_instant_mission);
+            } else if (groupTeamId) {
+                if (inspectors.length == 0) {
+                    chart = false;
+                }
+                xValues = inspectors.map(inspector => inspector.name);
+                const ViolationData = inspectors.map(inspector => inspector.violations);
+                const PointsData = inspectors.map(inspector => inspector.points);
+                const IspectorData = inspectors.map(inspector => inspector.inspectors);
+                const GroupPointsData = inspectors.map(inspector => inspector.group_points);
+                const InstantmissionData = inspectors.map(inspector => inspector.ids_instant_mission);
+            } else {
+                if (groups.length == 0) {
+                    chart = false;
+                }
+                xValues = groups.map(group => group.name); // Fallback option if both are undefined
+                const ViolationData = groups.map(group => group.violations);
+                const PointsData = groups.map(group => group.points);
+                const IspectorData = groups.map(group => group.inspectors);
+                const GroupPointsData = groups.map(group => group.group_points);
+                const InstantmissionData = groups.map(group => group.ids_instant_mission);
+            }
+
+
+            // Display the extracted group names in the console (for verification)
+
+
+            if (chart) {
+                $('#NoData2').html("");
+                $('#barChart').show(); 
+                const chartColors = ["#AA1717", "#F8A723", "#274373", "#3C9A34", "#43B8CE"];
+                // Create the bar chart
+                new Chart("barChart", {
+                    type: "bar",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                                label: "مخالفات",
+                                backgroundColor: chartColors[0],
+                                data: ViolationData,
+                                barThickness: 20
+                            },
+                            {
+                                label: "زيارات",
+                                backgroundColor: chartColors[1],
+                                data: PointsData,
+                                barThickness: 20
+                            },
+                            {
+                                label: "مفتشين",
+                                backgroundColor: chartColors[2],
+                                data: IspectorData,
+                                barThickness: 20
+                            },
+                            {
+                                label: "المواقع",
+                                backgroundColor: chartColors[3],
+                                data: GroupPointsData,
+                                barThickness: 20
+                            },
+                            {
+                                label: "اوامر خدمة",
+                                backgroundColor: chartColors[4],
+                                data: InstantmissionData,
+                                barThickness: 20
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: true
+                            },
+                            title: {
+                                display: true,
+                                text: 'Chart Title'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+
+                });
+            } else {
+                $('#NoData2').html("No Data Available");
+                $('#barChart').hide(); 
+            }
+        }
+
+
         // Call drawText function after chart is rendered
-        myPieChart.canvas.addEventListener('mouseover', drawText);
-        myPieChart.canvas.addEventListener('mouseout', drawText);
-        myPieChart.update();
+        // myPieChart.canvas.addEventListener('mouseover', drawText);
+        // myPieChart.canvas.addEventListener('mouseout', drawText);
+        // myPieChart.update();
 
         $('#Group').change(function(e) {
             e.preventDefault();
@@ -425,12 +556,20 @@
 
                 // Call AJAX
                 $.ajax({
-                    url: "{{ route('statistic.search') }}", // Update with your search route
+                    url: "{{ route('home.statistic.search') }}", // Update with your search route
                     method: 'GET',
                     data: searchData, // Pass the search data
                     success: function(response) {
                         console.log("Response: ", response);
-
+                        $('#violations').html(response.totalViolations);
+                        $('#points').html(response.totalPoints);
+                        $('#inspectors').html(response.totalInspectors);
+                        $('#instant_mission').html(response.totalIdsInstantMission);
+                        $('#group_points').html(response.totalGroupPoints);
+                        updateChart2(response.totalViolations, response.totalPoints, response
+                            .totalInspectors, response.totalIdsInstantMission, response
+                            .totalGroupPoints, response.groups, response.teams, response
+                            .inspectors)
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);
