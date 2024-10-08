@@ -311,7 +311,7 @@ class HomeController extends Controller
         $totalGroupPoints = 0;
         $totalPoints = 0;
         $totalIdsInstantMission = 0;
-        if ($request->group_id) {
+        if ($request->group_id && !$request->group_team_id) {
 
 
             $teams = GroupTeam::where('group_id', $request->group_id)->get();
@@ -385,6 +385,7 @@ class HomeController extends Controller
             }
         } else if ($request->group_id && $request->group_team_id) {
 
+            $teams = 0;
             $group_team_id = $request->group_team_id;
             $team  = GroupTeam::find($group_team_id);
             $inspector_ids = $team->inspector_ids;
@@ -405,7 +406,7 @@ class HomeController extends Controller
                 $totalViolations += $violations;
 
                 // Count inspectors for each group
-                $inspectors = Inspector::leftJoin('users', 'users.id', 'inspectors.user_id')
+                $inspectorsCount = Inspector::leftJoin('users', 'users.id', 'inspectors.user_id')
                     ->leftJoin('departements', 'users.department_id', 'departements.id')
                     ->where(function ($query) {
                         $query->where('users.department_id', Auth::user()->department_id)
@@ -415,8 +416,8 @@ class HomeController extends Controller
                     ->where('inspectors.id', $inspector->id)
                     ->count();
 
-                $inspector['inspectors'] = $inspectors;
-                $totalInspectors += $inspectors;
+                $inspector['inspectors'] = $inspectorsCount;
+                $totalInspectors += $inspectorsCount;
 
                 // Filter missions by group and department
                 $groupedMissions = InspectorMission::whereBetween('date', [$request->date_from, $request->date_to])
