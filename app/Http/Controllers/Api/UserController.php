@@ -171,7 +171,7 @@ class UserController extends Controller
         }
 
         // Check if the user has the correct flag
-        if ($user->flag !== 'user') {
+        if ($user->flag !== 'employee') {
             return $this->respondError('Validation Error.', ['not authorized' => ['لا يسمح لك بدخول الهيئة']], 400);
         }
 
