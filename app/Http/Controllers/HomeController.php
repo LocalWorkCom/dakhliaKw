@@ -18,6 +18,7 @@ use App\Models\UserStatistic;
 use App\Models\Violation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -65,42 +66,47 @@ class HomeController extends Controller
                 }
             }
 
+            DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY", ""));');
             $inspector_missions = InspectorMission::whereYear('date', date('Y'))
-                ->whereMonth('date',  date('m'))
-                ->distinct('group_team_id')
+                ->whereMonth('date', date('m'))
+                ->whereNotNull('ids_group_point') // Ensure 'ids_group_point' is not null
+                ->groupBy('inspector_id')
                 ->get();
+            // dd($inspector_missions);
 
             $group_points = 0;
             $ids_instant_mission = 0;
             $points = 0;
+            $uniquePoints = [];
 
+            $temp = 0;
             foreach ($inspector_missions as $mission) {
-
-                $group_points += count(is_array($mission->ids_group_point)
-                    ? $mission->ids_group_point
-                    : explode(',', $mission->ids_group_point));
-                if ($mission->ids_group_point) {
-                    // dd($mission);
-                }
+                // Get the Grouppoint data for the current mission
                 $GrouppointData = Grouppoint::whereIn('id', is_array($mission->ids_group_point)
                     ? $mission->ids_group_point
                     : explode(',', $mission->ids_group_point))->pluck('points_ids');
-                if ($mission->ids_group_point) {
 
-                    // dd($GrouppointData);
-                }
+                // Count the number of instant missions
                 $ids_instant_mission += count(is_array($mission->ids_instant_mission)
                     ? $mission->ids_instant_mission
                     : explode(',', $mission->ids_instant_mission));
-                foreach ($GrouppointData as $key => $value) {
-                    $points +=
-                        sizeof($value);
-                }
-                if ($mission->ids_group_point) {
-                    // dd($points);
 
+                // Initialize a set to track unique points
+                foreach ($GrouppointData as $value) {
+                    // Parse the 'points_ids' value into an array
+                    $pointsArray = is_array($value) ? $value : explode(',', $value);
+
+                    // Count only unique points
+                    foreach ($pointsArray as $point) {
+                        if (!in_array($point, $uniquePoints)) {
+                            $uniquePoints[] = $point;
+                            $points++;
+                        }
+                    }
                 }
             }
+
+            // dd($inspector_missions);
 
             $violations = Violation::whereYear('created_at', date('Y'))
                 ->whereMonth('created_at',  date('m'))
@@ -110,7 +116,7 @@ class HomeController extends Controller
                 ->whereMonth('created_at',  date('m'))
                 ->count();
             // dd($inspectors);
-            // dd($points);
+            dd($points);
             // dd($violations);
         } else {
 
@@ -491,7 +497,7 @@ class HomeController extends Controller
                 $groupedMissions = InspectorMission::whereBetween('date', [$request->date_from, $request->date_to])
                     // ->distinct('inspector_id')
                     ->where('group_id', $Group->id)->get();
-       
+
 
                 $group_points2 = 0;
                 $points2 = 0;
