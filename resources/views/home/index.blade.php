@@ -398,9 +398,11 @@
             var xValues;
             var groupId = $('#Group').val();
             var groupTeamId = $('#GroupTeam').val();
+            console.log(groupTeamId);
+
             let chart = true; // Use a descriptive variable name
 
-            if (groupId) {
+            if (groupId && !groupTeamId) {
 
                 if (teams.length == 0) {
                     chart = false;
@@ -411,17 +413,21 @@
                 const IspectorData = teams.map(team => team.inspectors);
                 const GroupPointsData = teams.map(team => team.group_points);
                 const InstantmissionData = teams.map(team => team.ids_instant_mission);
-            } else if (groupTeamId) {
+            }
+            if (groupTeamId) {
                 if (inspectors.length == 0) {
                     chart = false;
                 }
+                console.log(inspectors);
+
                 xValues = inspectors.map(inspector => inspector.name);
                 const ViolationData = inspectors.map(inspector => inspector.violations);
                 const PointsData = inspectors.map(inspector => inspector.points);
                 const IspectorData = inspectors.map(inspector => inspector.inspectors);
                 const GroupPointsData = inspectors.map(inspector => inspector.group_points);
                 const InstantmissionData = inspectors.map(inspector => inspector.ids_instant_mission);
-            } else {
+            }
+            if (!groupId && !groupTeamId) {
                 if (groups.length == 0) {
                     chart = false;
                 }
@@ -439,7 +445,7 @@
 
             if (chart) {
                 $('#NoData2').html("");
-                $('#barChart').show(); 
+                $('#barChart').show();
                 const chartColors = ["#AA1717", "#F8A723", "#274373", "#3C9A34", "#43B8CE"];
                 // Create the bar chart
                 new Chart("barChart", {
@@ -498,7 +504,7 @@
                 });
             } else {
                 $('#NoData2').html("No Data Available");
-                $('#barChart').hide(); 
+                $('#barChart').hide();
             }
         }
 
