@@ -110,6 +110,7 @@ class HomeController extends Controller
 
             $violations = Violation::whereYear('created_at', date('Y'))
                 ->whereMonth('created_at',  date('m'))
+                ->where('status', 1)
                 ->count();
 
             $inspectors = Inspector::whereYear('created_at', date('Y'))
@@ -201,18 +202,20 @@ class HomeController extends Controller
 
         foreach ($Groups as $Group) {
             // Count violations for each group
-            $violations = Violation::leftJoin('users', 'users.id', 'violations.user_id')
+            $violations2 = Violation::leftJoin('users', 'users.id', 'violations.user_id')
                 ->leftJoin('inspectors', 'inspectors.user_id', 'users.id')
-                ->leftJoin('departements', 'users.department_id', 'departements.id')
-                ->where(function ($query) {
-                    $query->where('users.department_id', Auth::user()->department_id)
-                        ->orWhere('departements.parent_id', Auth::user()->department_id);
-                })
+                // ->leftJoin('departements', 'users.department_id', 'departements.id')
+                // ->where(function ($query) {
+                //     $query->where('users.department_id', Auth::user()->department_id)
+                //         ->orWhere('departements.parent_id', Auth::user()->department_id);
+                // })
                 ->whereBetween('violations.created_at', [date('Y-m-01'), date('Y-m-t')])
                 ->where('inspectors.group_id', $Group->id)
+                ->where('status', 1)
                 ->count();
-            $Group['violations'] = $violations;
-            $totalViolations += $violations;
+            $Group['violations'] = $violations2;
+            // dd($violations, $Group->id);
+            $totalViolations += $violations2;
 
             // Count inspectors for each group
             $inspectors = Inspector::leftJoin('users', 'users.id', 'inspectors.user_id')
@@ -265,6 +268,7 @@ class HomeController extends Controller
             $totalPoints += $points2;
             $totalIdsInstantMission += $ids_instant_mission2;
         }
+
         return view('home.index', get_defined_vars());
     }
     public function filter(Request $request)
@@ -274,6 +278,8 @@ class HomeController extends Controller
         // Filter data based on selected month and year
         $violations = Violation::whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
+            ->where('status', 1)
+
             ->count();
         $inspectors = Inspector::whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
@@ -346,6 +352,8 @@ class HomeController extends Controller
                         $query->where('users.department_id', Auth::user()->department_id)
                             ->orWhere('departements.parent_id', Auth::user()->department_id);
                     })->whereBetween('violations.created_at', [$request->date_from, $request->date_to])
+                    ->where('status', 1)
+
                     ->where('group_teams.id', $team->id)->count();
                 $team['violations'] = $violations;
                 $totalViolations += $violations;
@@ -421,6 +429,8 @@ class HomeController extends Controller
                         $query->where('users.department_id', Auth::user()->department_id)
                             ->orWhere('departements.parent_id', Auth::user()->department_id);
                     })->whereBetween('violations.created_at', [$request->date_from, $request->date_to])
+                    ->where('status', 1)
+
                     ->where('inspectors.id', $inspector->id)->count();
                 $inspector['violations'] = $violations;
                 $totalViolations += $violations;
@@ -486,7 +496,9 @@ class HomeController extends Controller
                         $query->where('users.department_id', Auth::user()->department_id)
                             ->orWhere('departements.parent_id', Auth::user()->department_id);
                     })->whereBetween('violations.created_at', [$request->date_from, $request->date_to])
-                    ->where('inspectors.group_id', $Group->id)->count();
+                    ->where('inspectors.group_id', $Group->id)
+                    ->where('status', 1)
+                    ->count();
                 $Group['violations'] = $violations;
 
                 $totalViolations += $violations;
