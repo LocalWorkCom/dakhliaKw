@@ -279,26 +279,38 @@ class HomeController extends Controller
             ->whereMonth('created_at', $month)
             ->count();
 
-        $inspector_missions = InspectorMission::whereYear('date', $year)
+
+        DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY", ""));');
+        $inspector_missions = InspectorMission::whereYear('date',  $year)
             ->whereMonth('date', $month)
-            ->distinct('inspector_id')
+            ->whereNotNull('ids_group_point') // Ensure 'ids_group_point' is not null
+            ->groupBy('inspector_id')
             ->get();
+        // dd($inspector_missions);
 
-        $group_points = 0;
-        $ids_instant_mission = 0;
+        $points = 0;
+        $uniquePoints = [];
 
+        foreach ($inspector_missions as $mission) {
+            // Get the Grouppoint data for the current mission
+            $GrouppointData = Grouppoint::whereIn('id', is_array($mission->ids_group_point)
+                ? $mission->ids_group_point
+                : explode(',', $mission->ids_group_point))->pluck('points_ids');
 
-        foreach ($inspector_missions as  $missions) {
-            $group_points += count(is_array($missions->ids_group_point)
-                ? $missions->ids_group_point
-                : explode(',', $missions->ids_group_point));
-            $ids_instant_mission += count(is_array($missions->ids_instant_mission)
-                ? $missions->ids_instant_mission
-                : explode(',', $missions->ids_instant_mission));
+            // Initialize a set to track unique points
+            foreach ($GrouppointData as $value) {
+                // Parse the 'points_ids' value into an array
+                $pointsArray = is_array($value) ? $value : explode(',', $value);
+
+                // Count only unique points
+                foreach ($pointsArray as $point) {
+                    if (!in_array($point, $uniquePoints)) {
+                        $uniquePoints[] = $point;
+                        $points++;
+                    }
+                }
+            }
         }
-
-        $points = $ids_instant_mission + $group_points;
-
 
         // Return JSON response
         return response()->json([
