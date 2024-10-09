@@ -116,7 +116,7 @@ class HomeController extends Controller
                 ->whereMonth('created_at',  date('m'))
                 ->count();
             // dd($inspectors);
-            dd($points);
+            // dd($points);
             // dd($violations);
         } else {
 
