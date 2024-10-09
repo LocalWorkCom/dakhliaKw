@@ -67,7 +67,7 @@ class HomeController extends Controller
 
             $inspector_missions = InspectorMission::whereYear('date', date('Y'))
                 ->whereMonth('date',  date('m'))
-                ->distinct('inspector_id')
+                ->distinct('group_team_id')
                 ->get();
 
             $group_points = 0;
