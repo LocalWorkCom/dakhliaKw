@@ -85,7 +85,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('home/filter', [HomeController::class, 'filter'])->name('home.filter');
-    Route::get('home/statistics/search', [HomeController::class, 'searchStatistic'])->name('statistic.search');
+    Route::get('home/statistics/search', [HomeController::class, 'searchStatistic'])->name('home.statistic.search');
 
     Route::get('/profile', [UserController::class, 'changeProfile'])->name('profile');
     Route::post('/profile/store', [UserController::class, 'ProfileStore'])->name('profile.store');
