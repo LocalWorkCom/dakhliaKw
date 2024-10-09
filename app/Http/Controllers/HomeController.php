@@ -202,6 +202,7 @@ class HomeController extends Controller
                     $query->where('users.department_id', Auth::user()->department_id)
                         ->orWhere('departements.parent_id', Auth::user()->department_id);
                 })
+                ->whereBetween('violations.created_at', [date('Y-m-01'), date('Y-m-t')])
                 ->where('inspectors.group_id', $Group->id)
                 ->count();
             $Group['violations'] = $violations;
@@ -214,6 +215,7 @@ class HomeController extends Controller
                     $query->where('users.department_id', Auth::user()->department_id)
                         ->orWhere('departements.parent_id', Auth::user()->department_id);
                 })
+                ->whereBetween('inspectors.created_at', [date('Y-m-01'), date('Y-m-t')])
                 ->where('inspectors.group_id', $Group->id)
                 ->count();
             $Group['inspectors'] = $inspectors;
@@ -221,8 +223,7 @@ class HomeController extends Controller
 
             // Filter missions by group and department
             $groupedMissions = InspectorMission::where('group_id', $Group->id)
-                ->whereYear('date', date('Y'))
-                ->whereMonth('date', date('m'))
+                ->whereBetween('date', [date('Y-m-01'), date('Y-m-t')])
                 ->distinct('inspector_id')
                 ->get();
 
@@ -304,6 +305,7 @@ class HomeController extends Controller
     {
 
         $Groups = Groups::all();
+        $teams = 0;
 
         // Initialize cumulative counters for all data points
         $totalViolations = 0;
@@ -466,8 +468,9 @@ class HomeController extends Controller
                         $query->where('users.department_id', Auth::user()->department_id)
                             ->orWhere('departements.parent_id', Auth::user()->department_id);
                     })->whereBetween('violations.created_at', [$request->date_from, $request->date_to])
-                    ->where('inspectors.group_id', $Group->group_id)->count();
+                    ->where('inspectors.group_id', $Group->id)->count();
                 $Group['violations'] = $violations;
+
                 $totalViolations += $violations;
 
                 // Count inspectors for each group
@@ -478,7 +481,7 @@ class HomeController extends Controller
                             ->orWhere('departements.parent_id', Auth::user()->department_id);
                     })
                     ->whereBetween('inspectors.created_at', [$request->date_from, $request->date_to])
-                    ->where('inspectors.group_id', $Group->group_id)
+                    ->where('inspectors.group_id', $Group->id)
                     ->count();
 
                 $Group['inspectors'] = $inspectors;
@@ -486,9 +489,9 @@ class HomeController extends Controller
 
                 // Filter missions by group and department
                 $groupedMissions = InspectorMission::whereBetween('date', [$request->date_from, $request->date_to])
-                    ->distinct('inspector_id')
-                    ->where('group_id', $Group->group_id)
-                    ->get();
+                    // ->distinct('inspector_id')
+                    ->where('group_id', $Group->id)->get();
+       
 
                 $group_points2 = 0;
                 $points2 = 0;
