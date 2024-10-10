@@ -249,7 +249,9 @@ class InspectorMissionController extends Controller
             ];
         } else {
             $responseData = [
-                'date' => $dayNamesArabic[$dayName] . ', ' . $date,
+                'date' => $date,
+                'date_name' => $dayNamesArabic[$dayName],
+                // 'date' => $dayNamesArabic[$dayName] . ', ' . $date,
                 'mission_count' => 0,
                 'inspector_shift' => null,
 

@@ -199,7 +199,12 @@ class HomeController extends Controller
         $totalGroupPoints = 0;
         $totalPoints = 0;
         $totalIdsInstantMission = 0;
-
+        $uniquePoints = [];
+        $uniqueGroupPoints = [];
+        $points2 = 0;
+        $group_points2 = 0;
+        $uniqueInstants = [];
+        $ids_instant_mission2 = 0;
         foreach ($Groups as $Group) {
             // Count violations for each group
             $violations2 = Violation::leftJoin('users', 'users.id', 'violations.user_id')
@@ -233,32 +238,73 @@ class HomeController extends Controller
             // Filter missions by group and department
             $groupedMissions = InspectorMission::where('group_id', $Group->id)
                 ->whereBetween('date', [date('Y-m-01'), date('Y-m-t')])
-                ->distinct('inspector_id')
-                ->get();
+                ->where(function ($query) {
+                    $query->whereNotNull('ids_instant_mission')
+                        ->orwhereNotNull('ids_group_point'); // Ensure 'ids_group_point' is not null
+                });
 
-            $group_points2 = 0;
-            $points2 = 0;
-            $ids_instant_mission2 = 0;
 
+            $forPoints = $groupedMissions->clone()->groupBy('inspector_id')->get();
+
+            // dd($forPoints);
             // Calculate points and missions
-            foreach ($groupedMissions as $inspector_mission) {
-                $group_points2 += count(is_array($inspector_mission->ids_group_point)
+            foreach ($forPoints as $inspector_mission) {
+                $group_pointsData2 = is_array($inspector_mission->ids_group_point)
                     ? $inspector_mission->ids_group_point
-                    : explode(',', $inspector_mission->ids_group_point));
+                    : explode(',', $inspector_mission->ids_group_point);
 
                 $GrouppointData = Grouppoint::whereIn('id', is_array($inspector_mission->ids_group_point)
                     ? $inspector_mission->ids_group_point
                     : explode(',', $inspector_mission->ids_group_point))->pluck('points_ids');
 
+
                 foreach ($GrouppointData as $value) {
-                    $points2 += count($value);
+                    // Parse the 'points_ids' value into an array
+                    $pointsArray = is_array($value) ? $value : explode(',', $value);
+
+                    // Count only unique points
+                    foreach ($pointsArray as $point) {
+                        if (!in_array($point, $uniquePoints)) {
+                            $uniquePoints[] = $point;
+                            $points2++;
+                        }
+                    }
                 }
+                foreach ($group_pointsData2 as $value) {
+                    // Parse the 'points_ids' value into an array
+                    $pointsDataArray = is_array($value) ? $value : explode(',', $value);
 
-                $ids_instant_mission2 += count(is_array($inspector_mission->ids_instant_mission)
-                    ? $inspector_mission->ids_instant_mission
-                    : explode(',', $inspector_mission->ids_instant_mission));
+                    // Count only unique points
+                    foreach ($pointsDataArray as $point) {
+                        if (!in_array($point, $uniqueGroupPoints)) {
+                            $uniqueGroupPoints[] = $point;
+                            $group_points2++;
+                        }
+                    }
+                }
             }
+            $forInstants = $groupedMissions->clone()->get();
 
+            foreach ($forInstants as $inspector_mission) {
+
+                $ids_instant_missionData2 = is_array($inspector_mission->ids_instant_mission)
+                    ? $inspector_mission->ids_instant_mission
+                    : explode(',', $inspector_mission->ids_instant_mission);
+                foreach ($ids_instant_missionData2 as $value) {
+                    // Parse the 'points_ids' value into an array
+                    $instantsDataArray = is_array($value) ? $value : explode(',', $value);
+
+                    // Count only unique points
+                    foreach ($instantsDataArray as $point) {
+                        if ($point != "") {
+                            if (!in_array($point, $uniqueInstants)) {
+                                $uniqueInstants[] = $point;
+                                $ids_instant_mission2++;
+                            }
+                        }
+                    }
+                }
+            }
             $Group['group_points'] = $group_points2;
             $Group['points'] = $points2;
             $Group['ids_instant_mission'] = $ids_instant_mission2;
@@ -267,6 +313,9 @@ class HomeController extends Controller
             $totalGroupPoints += $group_points2;
             $totalPoints += $points2;
             $totalIdsInstantMission += $ids_instant_mission2;
+            $points2 = 0;
+            $group_points2 = 0;
+            $ids_instant_mission2 = 0;
         }
 
         return view('home.index', get_defined_vars());
@@ -337,24 +386,28 @@ class HomeController extends Controller
         $totalGroupPoints = 0;
         $totalPoints = 0;
         $totalIdsInstantMission = 0;
+        $points2 = 0;
+        $uniquePoints = [];
+        $inspectors = 0;
+        $group_pointsData2 = 0;
+        $group_points2 = 0;
+        $uniquegroupPoints = [];
+        $ids_instant_mission2 = 0;
+        $uniqueInstants = [];
+        $ids_instant_mission2 = 0;
         if ($request->group_id && !$request->group_team_id) {
 
 
             $teams = GroupTeam::where('group_id', $request->group_id)->get();
-            $inspectors = 0;
-            foreach ($teams as $team) {
-                // Count violations for each group
-                $violations = Violation::leftJoin('users', 'users.id', 'violations.user_id')
-                    ->leftJoin('inspectors', 'inspectors.user_id', 'users.id')
-                    ->leftJoin('group_teams', 'group_teams.group_id', 'inspectors.group_id')
-                    ->leftJoin('departements', 'users.department_id', 'departements.id')
-                    ->where(function ($query) {
-                        $query->where('users.department_id', Auth::user()->department_id)
-                            ->orWhere('departements.parent_id', Auth::user()->department_id);
-                    })->whereBetween('violations.created_at', [$request->date_from, $request->date_to])
-                    ->where('status', 1)
 
-                    ->where('group_teams.id', $team->id)->count();
+            foreach ($teams as $team) {
+                $inspectorIds = explode(',', $team->inspector_ids);
+                $users_id = Inspector::whereIn('id', $inspectorIds)->pluck('user_id');
+                // Count violations for each group
+                $violations = Violation::whereBetween('violations.created_at', [$request->date_from, $request->date_to])
+                    ->where('status', 1)
+                    ->whereIn('user_id', $users_id)->count();
+
                 $team['violations'] = $violations;
                 $totalViolations += $violations;
 
@@ -373,35 +426,87 @@ class HomeController extends Controller
                 $team['inspectors'] = $inspectors;
                 $totalInspectors += $inspectors;
 
+                DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY", ""));');
+
                 // Filter missions by group and department
                 $groupedMissions = InspectorMission::whereBetween('date', [$request->date_from, $request->date_to])
-                    ->distinct('inspector_id')
+                    ->where(function ($query) {
+                        $query->whereNotNull('ids_instant_mission')
+                            ->orwhereNotNull('ids_group_point'); // Ensure 'ids_group_point' is not null
+                    })
                     ->where('group_team_id', $team->id)
-                    ->get();
+                    ->where('group_id', $request->group_id);
+                // ->get();
 
-                $group_points2 = 0;
-                $points2 = 0;
-                $ids_instant_mission2 = 0;
+
 
                 // Calculate points and missions
-                foreach ($groupedMissions as $inspector_mission) {
-                    $group_points2 += count(is_array($inspector_mission->ids_group_point)
+                $forPoints = $groupedMissions->clone()->groupBy('inspector_id')->get();
+                foreach ($forPoints as $inspector_mission) {
+                    $group_pointsData2 = is_array($inspector_mission->ids_group_point)
                         ? $inspector_mission->ids_group_point
-                        : explode(',', $inspector_mission->ids_group_point));
+                        : explode(',', $inspector_mission->ids_group_point);
 
                     $GrouppointData = Grouppoint::whereIn('id', is_array($inspector_mission->ids_group_point)
                         ? $inspector_mission->ids_group_point
                         : explode(',', $inspector_mission->ids_group_point))->pluck('points_ids');
 
                     foreach ($GrouppointData as $value) {
-                        $points2 += count($value);
-                    }
+                        // Parse the 'points_ids' value into an array
+                        $pointsArray = is_array($value) ? $value : explode(',', $value);
 
-                    $ids_instant_mission2 += count(is_array($inspector_mission->ids_instant_mission)
-                        ? $inspector_mission->ids_instant_mission
-                        : explode(',', $inspector_mission->ids_instant_mission));
+                        // Count only unique points
+                        foreach ($pointsArray as $point) {
+                            if ($point != "") {
+
+                                if (!in_array($point, $uniquePoints)) {
+                                    $uniquePoints[] = $point;
+                                    $points2++;
+                                }
+                            }
+                        }
+                    }
+                    foreach ($group_pointsData2 as $value) {
+                        // Parse the 'points_ids' value into an array
+                        $group_pointsArray = is_array($value) ? $value : explode(',', $value);
+
+                        // Count only unique points
+                        foreach ($group_pointsArray as $point) {
+                            if ($point != "") {
+
+
+                                if (!in_array($point, $uniquegroupPoints)) {
+                                    $uniquegroupPoints[] = $point;
+                                    $group_points2++;
+                                }
+                            }
+                        }
+                    }
                 }
 
+                $forInstants = $groupedMissions->clone()->get();
+                foreach ($forInstants as $inspector_mission) {
+
+                    $ids_instant_missionData2 = is_array($inspector_mission->ids_instant_mission)
+                        ? $inspector_mission->ids_instant_mission
+                        : explode(',', $inspector_mission->ids_instant_mission);
+
+                    foreach ($ids_instant_missionData2 as $value) {
+                        // Parse the 'points_ids' value into an array
+                        $instantsDataArray = is_array($value) ? $value : explode(',', $value);
+
+                        // Count only unique points
+                        foreach ($instantsDataArray as $point) {
+                            if ($point != "") {
+
+                                if (!in_array($point, $uniqueInstants)) {
+                                    $uniqueInstants[] = $point;
+                                    $ids_instant_mission2++;
+                                }
+                            }
+                        }
+                    }
+                }
                 $team['group_points'] = $group_points2;
                 $team['points'] = $points2;
                 $team['ids_instant_mission'] = $ids_instant_mission2;
@@ -410,6 +515,11 @@ class HomeController extends Controller
                 $totalGroupPoints += $group_points2;
                 $totalPoints += $points2;
                 $totalIdsInstantMission += $ids_instant_mission2;
+                $points2 = 0;
+                $inspectors = 0;
+                $group_points2 = 0;
+                $ids_instant_mission2 = 0;
+                $violations = 0;
             }
         } else if ($request->group_id && $request->group_team_id) {
 
@@ -425,12 +535,8 @@ class HomeController extends Controller
                 $violations = Violation::leftJoin('users', 'users.id', 'violations.user_id')
                     ->leftJoin('inspectors', 'inspectors.user_id', 'users.id')
                     ->leftJoin('departements', 'users.department_id', 'departements.id')
-                    ->where(function ($query) {
-                        $query->where('users.department_id', Auth::user()->department_id)
-                            ->orWhere('departements.parent_id', Auth::user()->department_id);
-                    })->whereBetween('violations.created_at', [$request->date_from, $request->date_to])
+                    ->whereBetween('violations.created_at', [$request->date_from, $request->date_to])
                     ->where('status', 1)
-
                     ->where('inspectors.id', $inspector->id)->count();
                 $inspector['violations'] = $violations;
                 $totalViolations += $violations;
@@ -468,10 +574,19 @@ class HomeController extends Controller
                         ? $inspector_mission->ids_group_point
                         : explode(',', $inspector_mission->ids_group_point))->pluck('points_ids');
 
-                    foreach ($GrouppointData as $value) {
-                        $points2 += count($value);
-                    }
 
+                    foreach ($GrouppointData as $value) {
+                        // Parse the 'points_ids' value into an array
+                        $pointsArray = is_array($value) ? $value : explode(',', $value);
+
+                        // Count only unique points
+                        foreach ($pointsArray as $point) {
+                            if (!in_array($point, $uniquePoints)) {
+                                $uniquePoints[] = $point;
+                                $points2++;
+                            }
+                        }
+                    }
                     $ids_instant_mission2 += count(is_array($inspector_mission->ids_instant_mission)
                         ? $inspector_mission->ids_instant_mission
                         : explode(',', $inspector_mission->ids_instant_mission));
@@ -516,11 +631,16 @@ class HomeController extends Controller
 
                 $Group['inspectors'] = $inspectors;
                 $totalInspectors += $inspectors;
+                DB::statement('SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY", ""));');
 
                 // Filter missions by group and department
                 $groupedMissions = InspectorMission::whereBetween('date', [$request->date_from, $request->date_to])
+                    ->where(function ($query) {
+                        $query->whereNotNull('ids_instant_mission')
+                            ->orwhereNotNull('ids_group_point'); // Ensure 'ids_group_point' is not null
+                    })
                     // ->distinct('inspector_id')
-                    ->where('group_id', $Group->id)->get();
+                    ->where('group_id', $Group->id);
 
 
                 $group_points2 = 0;
@@ -528,22 +648,72 @@ class HomeController extends Controller
                 $ids_instant_mission2 = 0;
 
                 // Calculate points and missions
-                foreach ($groupedMissions as $inspector_mission) {
-                    $group_points2 += count(is_array($inspector_mission->ids_group_point)
+                $forPoints = $groupedMissions->clone()->groupBy('inspector_id')->get();
+                foreach ($forPoints as $inspector_mission) {
+                    $group_pointsData2 = is_array($inspector_mission->ids_group_point)
                         ? $inspector_mission->ids_group_point
-                        : explode(',', $inspector_mission->ids_group_point));
+                        : explode(',', $inspector_mission->ids_group_point);
 
                     $GrouppointData = Grouppoint::whereIn('id', is_array($inspector_mission->ids_group_point)
                         ? $inspector_mission->ids_group_point
                         : explode(',', $inspector_mission->ids_group_point))->pluck('points_ids');
 
                     foreach ($GrouppointData as $value) {
-                        $points2 += count($value);
-                    }
+                        // Parse the 'points_ids' value into an array
+                        $pointsArray = is_array($value) ? $value : explode(',', $value);
 
-                    $ids_instant_mission2 += count(is_array($inspector_mission->ids_instant_mission)
+                        // Count only unique points
+                        foreach ($pointsArray as $point) {
+                            if ($point != "") {
+
+                                if (!in_array($point, $uniquePoints)) {
+                                    $uniquePoints[] = $point;
+                                    $points2++;
+                                }
+                            }
+                        }
+                    }
+                    foreach ($group_pointsData2 as $value) {
+                        // Parse the 'points_ids' value into an array
+                        $group_pointsArray = is_array($value) ? $value : explode(',', $value);
+
+                        // Count only unique points
+                        foreach ($group_pointsArray as $point) {
+                            if ($point != "") {
+
+
+                                if (!in_array($point, $uniquegroupPoints)) {
+                                    $uniquegroupPoints[] = $point;
+                                    $group_points2++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                $forInstants = $groupedMissions->clone()->get();
+                foreach ($forInstants as $inspector_mission) {
+
+                    $ids_instant_missionData2 = is_array($inspector_mission->ids_instant_mission)
                         ? $inspector_mission->ids_instant_mission
-                        : explode(',', $inspector_mission->ids_instant_mission));
+                        : explode(',', $inspector_mission->ids_instant_mission);
+
+                    foreach ($ids_instant_missionData2 as $value) {
+                        // Parse the 'points_ids' value into an array
+                        $instantsDataArray = is_array($value) ? $value : explode(',', $value);
+
+                        // Count only unique points
+                        foreach ($instantsDataArray as $point) {
+                            if ($point != "") {
+
+                                if (!in_array($point, $uniqueInstants)) {
+                                    $uniqueInstants[] = $point;
+                                    $ids_instant_mission2++;
+                                }
+                            }
+                        }
+                    }
                 }
 
                 $Group['group_points'] = $group_points2;
