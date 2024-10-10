@@ -147,6 +147,8 @@ class reportsController extends Controller
                 'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
                 'abcence_day' => $absence->date,
                 'mission_id' => $absence->mission_id,
+                'can_update'=> $absence->inspector_id == $inspectorId ? true : false,
+                'InspectorId' => $absence->inspector_id ?? null,
                 'report_id' => $absence->id,
                 'point_id' => $absence->point_id,
                 'point_name' => $absence->point->name,
