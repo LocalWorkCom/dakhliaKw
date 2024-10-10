@@ -68,6 +68,7 @@ class paperTransactionController extends Controller
                 'point_name' => $record->point->name,
                 'date' => $record->date,
                 'inspector_id' => $record->inspector_id,
+                'can_update'=> $record->inspector_id == $inspectorId ? true : false,
                 'inspector_name' => $record->inspector->name,
                 'team_name' => $teamName,
                 'mission_id' => $record->mission_id,
