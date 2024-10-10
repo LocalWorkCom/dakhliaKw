@@ -399,45 +399,54 @@
             var groupId = $('#Group').val();
             var groupTeamId = $('#GroupTeam').val();
             console.log(groupTeamId);
-
+            var PointsData = [];
+            var ViolationData;
+            var IspectorData;
+            var GroupPointsData;
+            var InstantmissionData;
             let chart = true; // Use a descriptive variable name
 
             if (groupId && !groupTeamId) {
+                console.log("g7657467");
 
                 if (teams.length == 0) {
                     chart = false;
                 }
                 xValues = teams.map(team => team.name);
-                const ViolationData = teams.map(team => team.violations);
-                const PointsData = teams.map(team => team.points);
-                const IspectorData = teams.map(team => team.inspectors);
-                const GroupPointsData = teams.map(team => team.group_points);
-                const InstantmissionData = teams.map(team => team.ids_instant_mission);
+                ViolationData = teams.map(team => team.violations);
+                PointsData = teams.map(team => team.points);
+                IspectorData = teams.map(team => team.inspectors);
+                GroupPointsData = teams.map(team => team.group_points);
+                InstantmissionData = teams.map(team => team.ids_instant_mission);
+
             }
             if (groupTeamId) {
+
                 if (inspectors.length == 0) {
                     chart = false;
                 }
                 console.log(inspectors);
 
                 xValues = inspectors.map(inspector => inspector.name);
-                const ViolationData = inspectors.map(inspector => inspector.violations);
-                const PointsData = inspectors.map(inspector => inspector.points);
-                const IspectorData = inspectors.map(inspector => inspector.inspectors);
-                const GroupPointsData = inspectors.map(inspector => inspector.group_points);
-                const InstantmissionData = inspectors.map(inspector => inspector.ids_instant_mission);
+                ViolationData = inspectors.map(inspector => inspector.violations);
+                PointsData = inspectors.map(inspector => inspector.points);
+                IspectorData = inspectors.map(inspector => inspector.inspectors);
+                GroupPointsData = inspectors.map(inspector => inspector.group_points);
+                InstantmissionData = inspectors.map(inspector => inspector.ids_instant_mission);
             }
             if (!groupId && !groupTeamId) {
+
                 if (groups.length == 0) {
                     chart = false;
                 }
                 xValues = groups.map(group => group.name); // Fallback option if both are undefined
-                const ViolationData = groups.map(group => group.violations);
-                const PointsData = groups.map(group => group.points);
-                const IspectorData = groups.map(group => group.inspectors);
-                const GroupPointsData = groups.map(group => group.group_points);
-                const InstantmissionData = groups.map(group => group.ids_instant_mission);
+                ViolationData = groups.map(group => group.violations);
+                PointsData = groups.map(group => group.points);
+                IspectorData = groups.map(group => group.inspectors);
+                GroupPointsData = groups.map(group => group.group_points);
+                InstantmissionData = groups.map(group => group.ids_instant_mission);
             }
+            console.log(PointsData);
 
 
             // Display the extracted group names in the console (for verification)
