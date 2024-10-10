@@ -520,7 +520,7 @@ class ViolationController  extends Controller
             'group' => $instantMission->group ? $instantMission->group->name : 'N/A',  // Include group name
             'team' => $instantMission->groupTeam ? $instantMission->groupTeam->name : 'N/A',  // Include group team name
             'date' => $instantMission->created_at->format('Y-m-d'),
-            'time' => $time?? null,
+            'time' => $time ?? null,
             'latitude' => $instantMission->latitude,
             'longitude' => $instantMission->longitude,
         ];
@@ -612,131 +612,135 @@ class ViolationController  extends Controller
             $cleanedString = implode(",", $idsArray);
 
             $parent_violate = Violation::findOrFail($request->id);
-            $time_edit = Setting::where('key', 'timer')->value('value');
-            $cutoffTime = $parent_violate->created_at->addMinutes($time_edit);
+            if ($parent_violate->user_id == auth()->user()->id) {
+                $time_edit = Setting::where('key', 'timer')->value('value');
+                $cutoffTime = $parent_violate->created_at->addMinutes($time_edit);
 
-            if (now() > $cutoffTime) {
-                return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
-            } else {
-                $parent_id = $parent_violate->parent;
-                $images = [];
-
-                // Handle old images
-                if (!empty($request->old_images)) {
-                    // If old_images is a string, explode it into an array
-                    if (is_string($request->old_images)) {
-                        $oldImages = explode(',', $request->old_images);
-                    } else {
-                        $oldImages = $request->old_images; // In case it's already an array
-                    }
-
-                    if (is_array($oldImages)) {
-                        $images = $oldImages;
-                    }
-                }
-                if ($parent_id == 0) {
-                    $parent_violate->status = 0;
-                    $parent_violate->save();
-                    $new = new Violation();
-                    $new->name = $request->name;
-                    $new->military_number = $military_number ?? null;
-                    $new->Civil_number = $Civil_number ?? null;
-                    $new->file_num = $file_num ?? null;
-                    $new->grade = $request->grade;
-                    $new->mission_id = $request->mission_id;
-                    $new->point_id = $point_id;
-                    $new->civil_type = $request->civil_military;
-                    $new->violation_type = $cleanedString;
-                    $new->flag_instantmission = $request->flag_instantmission;
-                    $new->parent = $request->id;
-                    $new->status = 1;
-                    $new->description = $request->description ?? null;
-                    $new->flag = 1;
-                    $new->user_id = auth()->user()->id;
-                    // Handle new image upload
-                    if ($request->hasFile('image')) {
-                        $files = $request->file('image');
-                        $path = 'Api/images/paperTransactions';
-                        $model = Violation::find($new->id);
-                        $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
-
-                        // Merge old and new images
-                        $images = array_merge($images, $newImages);
-                    }
-
-                    // Save images as a comma-separated string
-                    $new->image = implode(',', $images);
-                    $new->save();
-                    if ($new) {
-                        $model = Violation::find($new->id);
-                        $created = Violation::find($request->id);
-                        $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
-                        $success['violation']['created_at'] = $created->created_at;
-                        // dd($model->created_at , $created,$request->id);
-
-                        return $this->respondSuccess($success, 'Data Saved successfully.');
-                    } else {
-                        return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
-                    }
+                if (now() > $cutoffTime) {
+                    return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
                 } else {
-                    $viloations = Violation::where('point_id', $point->id)->where('parent', $parent_id)->pluck('id')->toArray();
-                    foreach ($viloations as $viloation) {
-                        $viloate = Violation::findOrFail($viloation);
-                        $viloate->status = 0;
-                        $viloate->save();
+                    $parent_id = $parent_violate->parent;
+                    $images = [];
+
+                    // Handle old images
+                    if (!empty($request->old_images)) {
+                        // If old_images is a string, explode it into an array
+                        if (is_string($request->old_images)) {
+                            $oldImages = explode(',', $request->old_images);
+                        } else {
+                            $oldImages = $request->old_images; // In case it's already an array
+                        }
+
+                        if (is_array($oldImages)) {
+                            $images = $oldImages;
+                        }
                     }
-                    $new = new Violation();
-                    $new->name = $request->name;
-                    $new->military_number = $military_number ?? null;
-                    $new->Civil_number = $Civil_number ?? null;
-                    $new->file_num = $file_num ?? null;
-                    $new->grade = $request->grade;
-                    $new->mission_id = $request->mission_id;
-                    $new->point_id = $point_id;
-                    $new->civil_type = $request->civil_military;
-                    $new->violation_type = $cleanedString;
-                    $new->flag_instantmission = $request->flag_instantmission;
-                    $new->parent = $parent_id;
-                    $new->status = 1;
-                    $new->description = $request->description ?? null;
-                    $new->flag = 1;
-                    $new->user_id = auth()->user()->id;
-                    // $new->save();
+                    if ($parent_id == 0) {
+                        $parent_violate->status = 0;
+                        $parent_violate->save();
+                        $new = new Violation();
+                        $new->name = $request->name;
+                        $new->military_number = $military_number ?? null;
+                        $new->Civil_number = $Civil_number ?? null;
+                        $new->file_num = $file_num ?? null;
+                        $new->grade = $request->grade;
+                        $new->mission_id = $request->mission_id;
+                        $new->point_id = $point_id;
+                        $new->civil_type = $request->civil_military;
+                        $new->violation_type = $cleanedString;
+                        $new->flag_instantmission = $request->flag_instantmission;
+                        $new->parent = $request->id;
+                        $new->status = 1;
+                        $new->description = $request->description ?? null;
+                        $new->flag = 1;
+                        $new->user_id = auth()->user()->id;
+                        // Handle new image upload
+                        if ($request->hasFile('image')) {
+                            $files = $request->file('image');
+                            $path = 'Api/images/paperTransactions';
+                            $model = Violation::find($new->id);
+                            $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
 
-                    // if ($request->hasFile('image')) {
-                    //     $files = $request->file('image'); // Expecting an array of files
-                    //     $path = 'Api/images/violations'; // Directory path
-                    //     $model = Violation::find($new->id);
+                            // Merge old and new images
+                            $images = array_merge($images, $newImages);
+                        }
 
-                    //     UploadFilesIM($path, 'image', $model, $files);
-                    // }
-                    // Handle new image upload
-                    if ($request->hasFile('image')) {
-                        $files = $request->file('image');
-                        $path = 'Api/images/paperTransactions';
-                        $model = Violation::find($new->id);
-                        $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
+                        // Save images as a comma-separated string
+                        $new->image = implode(',', $images);
+                        $new->save();
+                        if ($new) {
+                            $model = Violation::find($new->id);
+                            $created = Violation::find($request->id);
+                            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                            $success['violation']['created_at'] = $created->created_at;
+                            // dd($model->created_at , $created,$request->id);
 
-                        // Merge old and new images
-                        $images = array_merge($images, $newImages);
-                    }
-
-                    // Save images as a comma-separated string
-                    $new->image = implode(',', $images);
-                    $new->save();
-                    if ($new) {
-                        $model = Violation::find($new->id);
-                        $created = Violation::find($parent_id);
-
-                        $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
-                        $success['violation']['created_at'] = $created->created_at;
-                        // dd($model->created_at , Violation::find($parent_id)->value('created_at'));
-
-                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                            return $this->respondSuccess($success, 'Data Saved successfully.');
+                        } else {
+                            return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                        }
                     } else {
-                        return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                        $viloations = Violation::where('point_id', $point->id)->where('parent', $parent_id)->pluck('id')->toArray();
+                        foreach ($viloations as $viloation) {
+                            $viloate = Violation::findOrFail($viloation);
+                            $viloate->status = 0;
+                            $viloate->save();
+                        }
+                        $new = new Violation();
+                        $new->name = $request->name;
+                        $new->military_number = $military_number ?? null;
+                        $new->Civil_number = $Civil_number ?? null;
+                        $new->file_num = $file_num ?? null;
+                        $new->grade = $request->grade;
+                        $new->mission_id = $request->mission_id;
+                        $new->point_id = $point_id;
+                        $new->civil_type = $request->civil_military;
+                        $new->violation_type = $cleanedString;
+                        $new->flag_instantmission = $request->flag_instantmission;
+                        $new->parent = $parent_id;
+                        $new->status = 1;
+                        $new->description = $request->description ?? null;
+                        $new->flag = 1;
+                        $new->user_id = auth()->user()->id;
+                        // $new->save();
+
+                        // if ($request->hasFile('image')) {
+                        //     $files = $request->file('image'); // Expecting an array of files
+                        //     $path = 'Api/images/violations'; // Directory path
+                        //     $model = Violation::find($new->id);
+
+                        //     UploadFilesIM($path, 'image', $model, $files);
+                        // }
+                        // Handle new image upload
+                        if ($request->hasFile('image')) {
+                            $files = $request->file('image');
+                            $path = 'Api/images/paperTransactions';
+                            $model = Violation::find($new->id);
+                            $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
+
+                            // Merge old and new images
+                            $images = array_merge($images, $newImages);
+                        }
+
+                        // Save images as a comma-separated string
+                        $new->image = implode(',', $images);
+                        $new->save();
+                        if ($new) {
+                            $model = Violation::find($new->id);
+                            $created = Violation::find($parent_id);
+
+                            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                            $success['violation']['created_at'] = $created->created_at;
+                            // dd($model->created_at , Violation::find($parent_id)->value('created_at'));
+
+                            return $this->respondSuccess($success, 'Data Saved successfully.');
+                        } else {
+                            return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
+                        }
                     }
                 }
+            }else{
+                return $this->respondError('عفوا غير مسموح لك بالتعديل على هذه المخالفه', [], 403);
             }
         } else {
 
@@ -759,6 +763,8 @@ class ViolationController  extends Controller
             }
 
             $parent_violate = Violation::findOrFail($request->id);
+            if ($parent_violate->user_id == auth()->user()->id) {
+
             $time_edit = Setting::where('key', 'timer')->value('value');
             $cutoffTime = $parent_violate->created_at->addMinutes($time_edit);
 
@@ -865,7 +871,10 @@ class ViolationController  extends Controller
                     }
                 }
             }
+        }else{
+            return $this->respondError('عفوا غير مسموح لك بالتعديل على هذه المخالفه', [], 403);
 
+        }
 
             // if ($new) {
             //     $model = Violation::find($new->id);
