@@ -319,167 +319,173 @@ class ApiAbsenceController extends Controller
                 }
             }
             $parent_absence = Absence::findOrFail($request->id);
-            $time_edit = Setting::where('key', 'timer')->value('value');
-            $cutoffTime = $parent_absence->created_at->addMinutes($time_edit);
-            if (now() > $cutoffTime) {
-                return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
-            } else {
-                $parent_id = $parent_absence->parent;
-                if ($parent_id == 0) {
-                    $parent_absence->flag = 0;
-                    $parent_absence->save();
-                    $new = new Absence();
-                    $new->date =  $today;
-                    $new->point_id = $request->point_id;
-                    $new->mission_id = $request->mission_id;
-                    $new->total_number = $request->total_number;
-                    $new->actual_number = $actual_number;
-                    $new->flag = 1;
-                    $new->parent = $request->id;
-                    $new->inspector_id = $inspectorId ? $inspectorId->id : null;
-                    $new->save();
-                    $absence_violation = new AbsenceViolation();
-                    $absence_violation->actual_number = $individual_number;
-                    $absence_violation->absence_id = $new->id;
-                    $absence_violation->violation_type_id = 1;
-                    $absence_violation->save();
+            if ($parent_absence->inspector_id == $inspectorId->id) {
 
-                    $absence_violation = new AbsenceViolation();
-                    $absence_violation->actual_number = $police_number;
-                    $absence_violation->absence_id = $new->id;
-                    $absence_violation->violation_type_id = 2;
-                    $absence_violation->save();
-
-                    $absence_violation = new AbsenceViolation();
-                    $absence_violation->actual_number = $workers_number;
-                    $absence_violation->absence_id = $new->id;
-                    $absence_violation->violation_type_id = 3;
-                    $absence_violation->save();
-
-                    $absence_violation = new AbsenceViolation();
-                    $absence_violation->actual_number = $civilian_number;
-                    $absence_violation->absence_id = $new->id;
-                    $absence_violation->violation_type_id = 4;
-                    $absence_violation->save();
-
-                    if ($new) {
-                        $array = [];
-                        if ($request->has('AbsenceEmployee') && ($request->total_number > $actual_number)) {
-                            foreach ($request->AbsenceEmployee as $item) {
-                                $employeeValidator = Validator::make($item, [
-                                    'name' => 'required',
-                                    'type_employee' => 'required',
-                                    'absence_types' => 'required'
-                                ], $messages);
-
-                                if ($employeeValidator->fails()) {
-                                    return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
-                                }
-                                $Emp = new AbsenceEmployee();
-                                $Emp->name = $item["name"];
-                                $Emp->grade = $item["grade"] ?? null;
-                                $Emp->military_number  = $item["military_number"] ?? null;
-                                $Emp->civil_number  = $item["civil_number"] ?? null;
-                                $Emp->absence_types_id  = $item["absence_types"] ?? null;
-                                $Emp->file_num  = $item["file_num"] ?? null;
-                                $Emp->type_employee = $item["type_employee"] ?? null;
-                                $Emp->absences_id  = $new->id;
-                                $Emp->save();
-                                if ($Emp) {
-                                    $array[] = $Emp->only(['id', 'name', 'military_number', 'civil_number', 'file_num', 'grade', 'absence_types_id', 'type_employee']);
-                                }
-                            }
-                        }
-                        $created = Absence::find($request->id);
-                        // dd($created->created_at ,$new->created_at );
-
-                        $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
-                        $success['Absence']['created_at'] = $created->created_at;
-                        $success['AbsenceEmployee'] = $array;
-                        return $this->respondSuccess($success, 'Data Saved successfully.');
-                    } else {
-                        return $this->respondError('failed to save', ['error' => ['خطأ فى حفظ البيانات']], 400);
-                    }
+                $time_edit = Setting::where('key', 'timer')->value('value');
+                $cutoffTime = $parent_absence->created_at->addMinutes($time_edit);
+                if (now() > $cutoffTime) {
+                    return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
                 } else {
-                    $abcenses = Absence::where('point_id', $request->point_id)->where('parent', $parent_id)->pluck('id')->toArray();
-                    foreach ($abcenses as $abcenses) {
-                        $viloate = Absence::findOrFail($abcenses);
-                        $viloate->flag = 0;
-                        $viloate->save();
-                    }
-                    $new = new Absence();
-                    $new->date =  $today;
-                    $new->point_id = $request->point_id;
-                    $new->mission_id = $request->mission_id;
-                    $new->total_number = $request->total_number;
-                    $new->actual_number = $actual_number;
-                    $new->flag = 1;
-                    $new->parent = $parent_id;
-                    $new->inspector_id = $inspectorId ? $inspectorId->id : null;
-                    $new->save();
-                    $absence_violation = new AbsenceViolation();
-                    $absence_violation->actual_number = $individual_number;
-                    $absence_violation->absence_id = $new->id;
-                    $absence_violation->violation_type_id = 1;
-                    $absence_violation->save();
+                    $parent_id = $parent_absence->parent;
+                    if ($parent_id == 0) {
+                        $parent_absence->flag = 0;
+                        $parent_absence->save();
+                        $new = new Absence();
+                        $new->date =  $today;
+                        $new->point_id = $request->point_id;
+                        $new->mission_id = $request->mission_id;
+                        $new->total_number = $request->total_number;
+                        $new->actual_number = $actual_number;
+                        $new->flag = 1;
+                        $new->parent = $request->id;
+                        $new->inspector_id = $inspectorId ? $inspectorId->id : null;
+                        $new->save();
+                        $absence_violation = new AbsenceViolation();
+                        $absence_violation->actual_number = $individual_number;
+                        $absence_violation->absence_id = $new->id;
+                        $absence_violation->violation_type_id = 1;
+                        $absence_violation->save();
 
-                    $absence_violation = new AbsenceViolation();
-                    $absence_violation->actual_number = $police_number;
-                    $absence_violation->absence_id = $new->id;
-                    $absence_violation->violation_type_id = 2;
-                    $absence_violation->save();
+                        $absence_violation = new AbsenceViolation();
+                        $absence_violation->actual_number = $police_number;
+                        $absence_violation->absence_id = $new->id;
+                        $absence_violation->violation_type_id = 2;
+                        $absence_violation->save();
 
-                    $absence_violation = new AbsenceViolation();
-                    $absence_violation->actual_number = $workers_number;
-                    $absence_violation->absence_id = $new->id;
-                    $absence_violation->violation_type_id = 3;
-                    $absence_violation->save();
+                        $absence_violation = new AbsenceViolation();
+                        $absence_violation->actual_number = $workers_number;
+                        $absence_violation->absence_id = $new->id;
+                        $absence_violation->violation_type_id = 3;
+                        $absence_violation->save();
 
-                    $absence_violation = new AbsenceViolation();
-                    $absence_violation->actual_number = $civilian_number;
-                    $absence_violation->absence_id = $new->id;
-                    $absence_violation->violation_type_id = 4;
-                    $absence_violation->save();
+                        $absence_violation = new AbsenceViolation();
+                        $absence_violation->actual_number = $civilian_number;
+                        $absence_violation->absence_id = $new->id;
+                        $absence_violation->violation_type_id = 4;
+                        $absence_violation->save();
 
-                    if ($new) {
-                        $array = [];
-                        if ($request->has('AbsenceEmployee') && ($request->total_number > $request->actual_number)) {
-                            foreach ($request->AbsenceEmployee as $item) {
-                                $employeeValidator = Validator::make($item, [
-                                    'name' => 'required',
-                                    'type_employee' => 'required',
-                                    'absence_types' => 'required'
-                                ], $messages);
+                        if ($new) {
+                            $array = [];
+                            if ($request->has('AbsenceEmployee') && ($request->total_number > $actual_number)) {
+                                foreach ($request->AbsenceEmployee as $item) {
+                                    $employeeValidator = Validator::make($item, [
+                                        'name' => 'required',
+                                        'type_employee' => 'required',
+                                        'absence_types' => 'required'
+                                    ], $messages);
 
-                                if ($employeeValidator->fails()) {
-                                    return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
-                                }
-                                $Emp = new AbsenceEmployee();
-                                $Emp->name = $item["name"];
-                                $Emp->grade = $item["grade"] ?? null;
-                                $Emp->military_number  = $item["military_number"] ?? null;
-                                $Emp->civil_number  = $item["civil_number"] ?? null;
-                                $Emp->absence_types_id  = $item["absence_types"] ?? null;
-                                $Emp->file_num  = $item["file_num"] ?? null;
-                                $Emp->type_employee = $item["type_employee"] ?? null;
-                                $Emp->absences_id  = $new->id;
-                                $Emp->save();
-                                if ($Emp) {
-                                    $array[] = $Emp->only(['id', 'name', 'military_number', 'civil_number', 'file_num', 'grade', 'absence_types_id', 'type_employee']);
+                                    if ($employeeValidator->fails()) {
+                                        return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
+                                    }
+                                    $Emp = new AbsenceEmployee();
+                                    $Emp->name = $item["name"];
+                                    $Emp->grade = $item["grade"] ?? null;
+                                    $Emp->military_number  = $item["military_number"] ?? null;
+                                    $Emp->civil_number  = $item["civil_number"] ?? null;
+                                    $Emp->absence_types_id  = $item["absence_types"] ?? null;
+                                    $Emp->file_num  = $item["file_num"] ?? null;
+                                    $Emp->type_employee = $item["type_employee"] ?? null;
+                                    $Emp->absences_id  = $new->id;
+                                    $Emp->save();
+                                    if ($Emp) {
+                                        $array[] = $Emp->only(['id', 'name', 'military_number', 'civil_number', 'file_num', 'grade', 'absence_types_id', 'type_employee']);
+                                    }
                                 }
                             }
-                        }
-                        $created = Absence::find($parent_id);
-                        // dd($created->created_at ,$new->created_at );
-                        $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
-                        $success['Absence']['created_at'] = $created->created_at;
+                            $created = Absence::find($request->id);
+                            // dd($created->created_at ,$new->created_at );
 
-                        $success['AbsenceEmployee'] = $array;
-                        return $this->respondSuccess($success, 'Data Saved successfully.');
+                            $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
+                            $success['Absence']['created_at'] = $created->created_at;
+                            $success['AbsenceEmployee'] = $array;
+                            return $this->respondSuccess($success, 'Data Saved successfully.');
+                        } else {
+                            return $this->respondError('failed to save', ['error' => ['خطأ فى حفظ البيانات']], 400);
+                        }
                     } else {
-                        return $this->respondError('failed to save', ['error' => ['خطأ فى حفظ البيانات']], 400);
+                        $abcenses = Absence::where('point_id', $request->point_id)->where('parent', $parent_id)->pluck('id')->toArray();
+                        foreach ($abcenses as $abcenses) {
+                            $viloate = Absence::findOrFail($abcenses);
+                            $viloate->flag = 0;
+                            $viloate->save();
+                        }
+                        $new = new Absence();
+                        $new->date =  $today;
+                        $new->point_id = $request->point_id;
+                        $new->mission_id = $request->mission_id;
+                        $new->total_number = $request->total_number;
+                        $new->actual_number = $actual_number;
+                        $new->flag = 1;
+                        $new->parent = $parent_id;
+                        $new->inspector_id = $inspectorId ? $inspectorId->id : null;
+                        $new->save();
+                        $absence_violation = new AbsenceViolation();
+                        $absence_violation->actual_number = $individual_number;
+                        $absence_violation->absence_id = $new->id;
+                        $absence_violation->violation_type_id = 1;
+                        $absence_violation->save();
+
+                        $absence_violation = new AbsenceViolation();
+                        $absence_violation->actual_number = $police_number;
+                        $absence_violation->absence_id = $new->id;
+                        $absence_violation->violation_type_id = 2;
+                        $absence_violation->save();
+
+                        $absence_violation = new AbsenceViolation();
+                        $absence_violation->actual_number = $workers_number;
+                        $absence_violation->absence_id = $new->id;
+                        $absence_violation->violation_type_id = 3;
+                        $absence_violation->save();
+
+                        $absence_violation = new AbsenceViolation();
+                        $absence_violation->actual_number = $civilian_number;
+                        $absence_violation->absence_id = $new->id;
+                        $absence_violation->violation_type_id = 4;
+                        $absence_violation->save();
+
+                        if ($new) {
+                            $array = [];
+                            if ($request->has('AbsenceEmployee') && ($request->total_number > $request->actual_number)) {
+                                foreach ($request->AbsenceEmployee as $item) {
+                                    $employeeValidator = Validator::make($item, [
+                                        'name' => 'required',
+                                        'type_employee' => 'required',
+                                        'absence_types' => 'required'
+                                    ], $messages);
+
+                                    if ($employeeValidator->fails()) {
+                                        return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
+                                    }
+                                    $Emp = new AbsenceEmployee();
+                                    $Emp->name = $item["name"];
+                                    $Emp->grade = $item["grade"] ?? null;
+                                    $Emp->military_number  = $item["military_number"] ?? null;
+                                    $Emp->civil_number  = $item["civil_number"] ?? null;
+                                    $Emp->absence_types_id  = $item["absence_types"] ?? null;
+                                    $Emp->file_num  = $item["file_num"] ?? null;
+                                    $Emp->type_employee = $item["type_employee"] ?? null;
+                                    $Emp->absences_id  = $new->id;
+                                    $Emp->save();
+                                    if ($Emp) {
+                                        $array[] = $Emp->only(['id', 'name', 'military_number', 'civil_number', 'file_num', 'grade', 'absence_types_id', 'type_employee']);
+                                    }
+                                }
+                            }
+                            $created = Absence::find($parent_id);
+                            // dd($created->created_at ,$new->created_at );
+                            $success['Absence'] = $new->only(['id', 'date', 'total_number', 'actual_number', 'point_id', 'mission_id']);
+                            $success['Absence']['created_at'] = $created->created_at;
+
+                            $success['AbsenceEmployee'] = $array;
+                            return $this->respondSuccess($success, 'Data Saved successfully.');
+                        } else {
+                            return $this->respondError('failed to save', ['error' => ['خطأ فى حفظ البيانات']], 400);
+                        }
                     }
                 }
+            }else{
+                return $this->respondError('عفوا غير مسموح لك بالتعديل على هذه المخالفه', [], 403);
+
             }
         }
     }
