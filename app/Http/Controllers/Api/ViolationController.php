@@ -473,6 +473,8 @@ class ViolationController  extends Controller
 
             return [
                 'id' => $violation->id,
+                'can_update'=> $violation->user_id == auth()->user()->id ? true : false,
+                'InspectorId' => $violation->user_id ?? null,
                 'InspectorName' => $violation->user->name ?? null,
                 'Inspectorgrade' => $violation->user->grade->name ?? null,
                 'name' => $violation->name,
