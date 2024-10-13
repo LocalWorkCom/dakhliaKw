@@ -142,9 +142,9 @@ class HomeController extends Controller
                         break;
                     case 'المستخدمين':
                         $counts[$statistic->name] = User::leftJoin('departements', 'users.department_id', 'departements.id')->where(function ($query) {
-                                $query->where('users.department_id', Auth::user()->department_id)
-                                    ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
-                            })->where('flag', 'user')->count();
+                            $query->where('users.department_id', Auth::user()->department_id)
+                                ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+                        })->where('flag', 'user')->count();
                         break;
                     case 'المجموعات':
                         $counts[$statistic->name] = Groups::where('created_departement', Auth::user()->department_id)->count();
@@ -236,8 +236,15 @@ class HomeController extends Controller
                 }
             }
         }
+        if (auth()->user()->rule_id == 2) {
 
-        $Groups = Groups::all();
+            $Groups = Groups::all();
+        } else {
+            $Groups = Groups::leftJoin('departements', 'groups.created_departement', 'departements.id')->where(function ($query) {
+                    $query->where('created_departement', Auth::user()->department_id)
+                        ->orwhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+                })->select('groups.*')->get();
+        }
 
         // Initialize cumulative counters for all data points
         $totalViolations = 0;
@@ -248,6 +255,7 @@ class HomeController extends Controller
         $uniquePoints = [];
         $uniqueGroupPoints = [];
         $points2 = 0;
+        $inspectors = 0;
         $group_points2 = 0;
         $uniqueInstants = [];
         $ids_instant_mission2 = 0;
@@ -270,11 +278,11 @@ class HomeController extends Controller
 
             // Count inspectors for each group
             $inspectors = Inspector::leftJoin('users', 'users.id', 'inspectors.user_id')
-                ->leftJoin('departements', 'users.department_id', 'departements.id')
-                ->where(function ($query) {
-                    $query->where('users.department_id', Auth::user()->department_id)
-                        ->orWhere('departements.parent_id', Auth::user()->department_id);
-                })
+                // ->leftJoin('departements', 'users.department_id', 'departements.id')
+                // ->where(function ($query) {
+                //     $query->where('users.department_id', Auth::user()->department_id)
+                //         ->orWhere('departements.parent_id', Auth::user()->department_id);
+                // })
                 ->whereBetween('inspectors.created_at', [date('Y-m-01'), date('Y-m-t')])
                 ->where('inspectors.group_id', $Group->id)
                 ->count();
