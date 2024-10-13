@@ -67,6 +67,7 @@ class paperTransactionController extends Controller
                 'shift_name' => $shift_name,
                 'point_name' => $record->point->name,
                 'date' => $record->date,
+                'page_num' => $record->page_num,
                 'inspector_id' => $record->inspector_id,
                 'can_update'=> $record->inspector_id == $inspectorId ? true : false,
                 'inspector_name' => $record->inspector->name,
@@ -109,13 +110,15 @@ class paperTransactionController extends Controller
             'registration_number.required' => 'يجب ادخال رقم القيد',
             'civil_number.required' => 'يجب ادخال رقم الأحوال',
             'mission_id.required' => 'يجب ادخال رقم المهمه',
+            'page_num.required' => 'يجب ادخال رقم الصفحه',
+
         ];
 
         $validatedData = Validator::make($request->all(), [
             'point_id' => ['required'],
             'mission_id' => ['required'],
             'civil_number' => ['required'],
-            // 'date' => ['required'],
+            'page_num' => ['required'],
             'registration_number' => ['required'],
         ], $messages);
 
@@ -161,6 +164,8 @@ class paperTransactionController extends Controller
                 $new->mission_id = $request->mission_id;
                 $new->inspector_id = $inspectorId;
                 $new->civil_number = $request->civil_number;
+                $new->page_num = $request->page_num;
+
                 $new->date = $today;
                 $new->registration_number = $request->registration_number;
                 $new->status = 1;
@@ -207,6 +212,7 @@ class paperTransactionController extends Controller
                 $new->mission_id = $request->mission_id;
                 $new->inspector_id = $inspectorId;
                 $new->civil_number = $request->civil_number;
+                $new->page_num = $request->page_num;
                 $new->date = $today;
                 $new->registration_number = $request->registration_number;
                 $new->status = 1;
@@ -245,13 +251,15 @@ class paperTransactionController extends Controller
                 'registration_number.required' => 'يجب ادخال رقم القيد',
                 'civil_number.required' => 'يجب ادخال رقم الأحوال',
                 'mission_id.required' => 'يجب ادخال رقم المهمه',
+                'page_num.required' => 'يجب ادخال رقم الصفحه',
+
             ];
 
             $validatedData = Validator::make($request->all(), [
                 'point_id' => ['required'],
                 'mission_id' => ['required'],
                 'civil_number' => ['required'],
-                // 'date' => ['required'],
+                'page_num' => ['required'],
                 'registration_number' => ['required'],
                 'images' => ['required'],
             ], $messages);
@@ -274,6 +282,8 @@ class paperTransactionController extends Controller
                 $new->mission_id = $request->mission_id;
                 $new->inspector_id = $inspectorId;
                 $new->civil_number = $request->civil_number;
+                $new->page_num = $request->page_num;
+
                 $new->date = $today;
                 $new->registration_number = $request->registration_number;
                 $new->status = 1;
