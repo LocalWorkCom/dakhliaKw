@@ -8,7 +8,7 @@
 @section('content')
     <div class="row ">
         <div class="container welcome col-11">
-            <p> {{ auth()->user()->name }} مرحـــــــــــــــبا بك </p>
+            <!-- <p> {{ auth()->user()->name }} مرحـــــــــــــــبا بك </p> -->
         </div>
     </div>
     <br>
@@ -19,7 +19,8 @@
                 @foreach ($Statistics as $statistic)
                     <div class="col-md-3 col-sm-12 col-12 " dir="rtl"
                         style="display: {{ !in_array($statistic->id, $UserStatistic->toArray()) ? 'none' : 'block' }}">
-                        <div class="graph-card" style="background-color: #ffffff;">
+                       <a href="{{ route('user.index', 0) }}"> 
+                       <div class="graph-card" style="background-color: #ffffff;">
                             <div class="d-flex">
                                 <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
                                 <h2 class="mx-3">{{ $statistic->name }}</h2>
@@ -28,6 +29,7 @@
                                 {{ $counts[$statistic->name] ?? 0 }} <!-- Display the count for each statistic -->
                             </h1>
                         </div>
+                       </a>
                     </div>
                 @endforeach
 
