@@ -7,6 +7,7 @@
 @stack('scripts')
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+
 <script>
     $(document).ready(function() {
         function resetModal() {
@@ -196,7 +197,7 @@
             }
         }
     }
-    //  for header collapsing 
+    //  for header collapsing
 
     $(document).ready(function() {
         $('.navbar-toggler').click(function() {
@@ -314,8 +315,8 @@
         menu4.style.display = 'none';
     } else {
         menu4.style.display = 'block';
-        menu5.style.display = 'none'; 
-        menu6.style.display = 'none'; 
+        menu5.style.display = 'none';
+        menu6.style.display = 'none';
     }
 }
 
@@ -329,8 +330,8 @@ function toggleDropdown5(event) {
         menu5.style.display = 'none';
     } else {
         menu5.style.display = 'block';
-        menu4.style.display = 'none'; 
-        menu6.style.display = 'none'; 
+        menu4.style.display = 'none';
+        menu6.style.display = 'none';
     }
 }
 
@@ -344,8 +345,8 @@ function toggleDropdown6(event) {
         menu6.style.display = 'none';
     } else {
         menu6.style.display = 'block';
-        menu4.style.display = 'none'; 
-        menu5.style.display = 'none'; 
+        menu4.style.display = 'none';
+        menu5.style.display = 'none';
     }
 }
 
@@ -382,3 +383,26 @@ document.addEventListener('click', function(event) {
             minuteIncrement: 1       // Set minute increment step
         });
     </script>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
+      authDomain: "taftesh-74633.firebaseapp.com",
+      projectId: "taftesh-74633",
+      storageBucket: "taftesh-74633.appspot.com",
+      messagingSenderId: "930391301074",
+      appId: "1:930391301074:web:45a7ad03354d8d069dc60b",
+      measurementId: "G-G2FVZL2SQ7"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
