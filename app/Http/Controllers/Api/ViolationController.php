@@ -526,7 +526,7 @@ class ViolationController  extends Controller
             'location' => $location,
             'KWfinder' => $kwFinder,
             'description' => $instantMission->description,
-            'group' => $instantMission->group_id ? $instantMission->group->name: 'N/A',  // Include group name
+            'group' => $instantMission->group_id ? $instantMission->group->name : 'N/A',  // Include group name
             'team' => $instantMission->group_team_id ? $instantMission->groupTeam->name : 'N/A',  // Include group team name
             'date' => $instantMission->created_at->format('Y-m-d'),
             'time' => $time ?? null,
@@ -571,17 +571,18 @@ class ViolationController  extends Controller
         } else {
             $point_id = $request->point_id;
         }
-        if ($request->civil_military == 1) {
+        if ($request->civil_military == 1  || $request->civil_military == 3) {
             //عسكري
             $military_number = $request->military_number;
             $Civil_number = $request->Civil_number;
             $file_num = $request->file_num;
-        } elseif ($request->civil_military == 2 || $request->civil_military == 3 || $request->civil_military == 4) {
+        } elseif ($request->civil_military == 2 || $request->civil_military == 4) {
             //ظابط ||مهنيين ||أفراد
             $military_number = null;
             $Civil_number = $request->Civil_number;
             $file_num = $request->file_num;
         }
+
 
         if ($request->type == "1") {
             $messages = [
