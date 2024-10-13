@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class instantmission extends Model
 {
+    protected $table= 'instantmissions';
     use HasFactory;
 
     public function group()

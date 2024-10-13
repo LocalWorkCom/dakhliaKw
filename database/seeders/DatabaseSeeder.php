@@ -17,12 +17,13 @@ class DatabaseSeeder extends Seeder
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
+        //     'email' => 'teest@example.com',
         // ]);
 
         $this->call(RuleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(ViolationTypeSeeder::class);
         $this->call(StatisticSeeder::class);
+        $this->call(UserStatisticSeeder::class);
     }
 }
