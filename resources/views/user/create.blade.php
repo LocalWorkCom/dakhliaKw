@@ -50,7 +50,6 @@
             <div class="">
 
 
-                {{-- {{dd($flag)}} --}}
 
                 <form action="{{ route('user.store') }}" method="post" class="text-right"
                     enctype="multipart/form-data">
