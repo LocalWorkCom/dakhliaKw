@@ -29,7 +29,18 @@ class HomeController extends Controller
         $Statistics = Statistic::all();
         $counts = [];
         $UserStatistic = UserStatistic::where('user_id', Auth::user()->id)->where('checked', 1)->pluck('statistic_id');
+        $statistics = Statistic::all();
 
+        if (count($UserStatistic) == 0) {
+            foreach ($statistics as $statistic) {
+                UserStatistic::create([
+                    'user_id' => Auth::user()->id,
+                    'statistic_id' => $statistic->id,
+                    'checked' => true, // Set the `checked` column to true for all entries
+                ]);
+            }
+            $UserStatistic = UserStatistic::where('user_id', Auth::user()->id)->where('checked', 1)->pluck('statistic_id');
+        }
 
         $departmentId = auth()->user()->department_id; // Or however you determine the department ID
         if (auth()->user()->rule_id == 2) {

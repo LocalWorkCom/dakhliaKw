@@ -10,6 +10,11 @@ class UserStatistic extends Model
     use HasFactory;
     protected $table = "user_statistics";
 
+    protected $fillable = [
+        'user_id',
+        'statistic_id',
+        'checked',
+    ];
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
