@@ -823,7 +823,6 @@ class ViolationController  extends Controller
                             $path = 'Api/images/paperTransactions';
                             $model = Violation::find($new->id);
                             $newImages = $this->UploadFilesIM($path, 'image', $model, $files);
-
                             // Merge old and new images
                             $images = array_merge($images, $newImages);
                         }
