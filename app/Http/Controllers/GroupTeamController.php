@@ -1146,6 +1146,10 @@ class GroupTeamController extends Controller
 
             // Update the group points list for the new mission if the group point is not already included
             $new_ids_group_point = $new_mission->ids_group_point;
+            if (!$new_ids_group_point) {
+
+                $new_ids_group_point = [];
+            }
             if (!in_array($group_point_id, $new_ids_group_point)) {
                 $new_ids_group_point[] = $group_point_id;
                 $new_mission->ids_group_point = $new_ids_group_point;
