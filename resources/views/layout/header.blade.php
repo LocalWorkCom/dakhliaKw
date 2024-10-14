@@ -108,7 +108,8 @@
                     <div id="dropdownMenu7" class="dropdown-menu7">
                         <ul>
                             <li class="{{ request()->routeIs('user.index') ? 'active' : '' }}">
-                                <i class="fa-solid fa-user" style="margin-left: 7px;"></i>
+                                <i class="fa-solid fa-user"
+                                    style="margin-left: 7px; margin-top: 5px; font-size:15px"></i>
                                 <a href="{{ route('user.index', 0) }}">المستخدمين</a>
                             </li>
                             @if (Auth::user()->hasPermission('view Rule'))
