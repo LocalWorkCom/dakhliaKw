@@ -28,6 +28,7 @@ class HomeController extends Controller
     {
         $Statistics = Statistic::all();
         $counts = [];
+        $routes = [];
         $UserStatistic = UserStatistic::where('user_id', Auth::user()->id)->where('checked', 1)->pluck('statistic_id');
         $statistics = Statistic::all();
 
@@ -49,30 +50,48 @@ class HomeController extends Controller
                 switch ($statistic->name) {
                     case 'الموظفين':
                         $counts[$statistic->name] = User::where('flag', 'employee')->count();
+                        $routes[$statistic->name] = route('user.employees', 1);
+
                         break;
                     case 'المستخدمين':
                         $counts[$statistic->name] = User::where('flag', 'user')->count();
+                        $routes[$statistic->name] = route('user.index', 0);
+
                         break;
                     case 'المجموعات':
                         $counts[$statistic->name] = Groups::count();
+                        $routes[$statistic->name] = route('group.view');
+
                         break;
                     case 'الادارات':
                         $counts[$statistic->name] = departements::count();
+                        $routes[$statistic->name] = route('departments.index');
+
                         break;
                     case 'الاجازات':
                         $counts[$statistic->name] = EmployeeVacation::where('status', 'Approved')->count();
+                        $routes[$statistic->name] = route('vacations.list');
+
                         break;
                     case 'اوامر خدمة':
                         $counts[$statistic->name] = instantmission::count();
+                        $routes[$statistic->name] = route('instant_mission.index');
+
                         break;
                     case 'الصادر':
                         $counts[$statistic->name] = outgoings::count();
+                        $routes[$statistic->name] = route('Export.index');
+
                         break;
                     case 'الوارد':
                         $counts[$statistic->name] = Iotelegram::count();
+                        $routes[$statistic->name] = route('iotelegrams.list');
+
                         break;
                     default:
                         $counts[$statistic->name] = 0; // Default to 0 if no match found
+                        $routes[$statistic->name] = 0;
+
                         break;
                 }
             }
@@ -139,36 +158,53 @@ class HomeController extends Controller
                             $query->where('users.department_id', Auth::user()->department_id)
                                 ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
                         })->where('flag', 'employee')->count();
+                        $routes[$statistic->name] = route('user.employees', 1);
                         break;
                     case 'المستخدمين':
                         $counts[$statistic->name] = User::leftJoin('departements', 'users.department_id', 'departements.id')->where(function ($query) {
                             $query->where('users.department_id', Auth::user()->department_id)
                                 ->orWhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
                         })->where('flag', 'user')->count();
+                        $routes[$statistic->name] = route('user.index', 0);
+
                         break;
                     case 'المجموعات':
                         $counts[$statistic->name] = Groups::where('created_departement', Auth::user()->department_id)->count();
+                        $routes[$statistic->name] = route('group.view');
+
                         break;
                     case 'الادارات':
                         $counts[$statistic->name] = departements::where(function ($query) {
                             $query->where('id', Auth::user()->department_id)
                                 ->orWhere('parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
                         })->count();
+                        $routes[$statistic->name] = route('departments.index');
+
                         break;
                     case 'الاجازات':
                         $counts[$statistic->name] = EmployeeVacation::where('created_departement', Auth::user()->department_id)->where('status', 'Approved')->count();
+                        $routes[$statistic->name] = route('vacations.list');
+
                         break;
                     case 'اوامر خدمة':
                         $counts[$statistic->name] = instantmission::where('created_departement', Auth::user()->department_id)->count();
+                        $routes[$statistic->name] = route('instant_mission.index');
+
                         break;
                     case 'الصادر':
                         $counts[$statistic->name] = outgoings::where('created_department', Auth::user()->department_id)->count();
+                        $routes[$statistic->name] = route('Export.index');
+
                         break;
                     case 'الوارد':
                         $counts[$statistic->name] = Iotelegram::where('created_departement', Auth::user()->department_id)->count();
+                        $routes[$statistic->name] = route('iotelegrams.list');
+
                         break;
                     default:
                         $counts[$statistic->name] = 0; // Default to 0 if no match found
+                        $routes[$statistic->name] = 0;
+
                         break;
                 }
             }
@@ -241,9 +277,9 @@ class HomeController extends Controller
             $Groups = Groups::all();
         } else {
             $Groups = Groups::leftJoin('departements', 'groups.created_departement', 'departements.id')->where(function ($query) {
-                    $query->where('created_departement', Auth::user()->department_id)
-                        ->orwhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
-                })->select('groups.*')->get();
+                $query->where('created_departement', Auth::user()->department_id)
+                    ->orwhere('departements.parent_id', Auth::user()->department_id); // Include rows where 'rule_id' is null
+            })->select('groups.*')->get();
         }
 
         // Initialize cumulative counters for all data points

@@ -19,17 +19,17 @@
                 @foreach ($Statistics as $statistic)
                     <div class="col-md-3 col-sm-12 col-12 " dir="rtl"
                         style="display: {{ !in_array($statistic->id, $UserStatistic->toArray()) ? 'none' : 'block' }}">
-                       <a href="{{ route('user.index', 0) }}"> 
-                       <div class="graph-card" style="background-color: #ffffff;">
-                            <div class="d-flex">
-                                <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                                <h2 class="mx-3">{{ $statistic->name }}</h2>
+                        <a href="{{ $routes[$statistic->name] }}">
+                            <div class="graph-card" style="background-color: #ffffff;">
+                                <div class="d-flex">
+                                    <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
+                                    <h2 class="mx-3">{{ $statistic->name }}</h2>
+                                </div>
+                                <h1>
+                                    {{ $counts[$statistic->name] ?? 0 }} <!-- Display the count for each statistic -->
+                                </h1>
                             </div>
-                            <h1>
-                                {{ $counts[$statistic->name] ?? 0 }} <!-- Display the count for each statistic -->
-                            </h1>
-                        </div>
-                       </a>
+                        </a>
                     </div>
                 @endforeach
 
@@ -38,161 +38,171 @@
     </div>
 
 
-    <div class="row desktop-view">
+    <div class="row desktop-view" id="first-chart">
         <div class="container col-11 mt-3 p-0 d-flex" style="background-color: transparent;" dir="rtl">
-            <!-- First Card -->
-            <div class=" col-12  circle-graph-card " style="background-color: #ffffff;">
-                <div class="">
-                    <div class=" d-flex justify-content-between">
+            <div class="col-12 circle-graph-card" style="background-color: #ffffff;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <!-- Header with Month Name -->
+                    @php
+                        use Carbon\Carbon;
+                        setlocale(LC_TIME, 'ar_AE.utf8'); // Set locale to Arabic
+                        $month_name = Carbon::create()->month(date('n'))->translatedFormat('F'); // Arabic month name
+                    @endphp
+                    <div class="d-flex graph">
+                        <img src="{{ asset('frontend/images/report.svg') }}" alt="logo">
+                        <h2 class="col-12 h2-charts mb-3" style="text-align: right;">
+                            تقرير شهر <span id="month_name">{{ $month_name }}</span>
+                        </h2>
+                    </div>
+    
+                    <!-- Filters and Print Button Section -->
+                    <div class="d-flex align-items-center">
                         @php
-
-                            use Carbon\Carbon;
-                            setlocale(LC_TIME, 'ar_AE.utf8'); // Set locale to Arabic
-                            $month_name = Carbon::create()->month(date('n'))->translatedFormat('F'); // Outputs the full month name in Arabic, e.g., "سبتمبر"
-
-                        @endphp
-                        <div class="d-flex graph">
-                            <img src="{{ asset('frontend/images/report.svg') }}" alt="logo">
-                            <h2 class="col-12 h2-charts mb-3" style="text-align: right;">تقرير شهر <span
-                                    id="month_name">{{ $month_name }}</span></h2>
-                        </div>
-                        @php
-                            $currentMonth = date('n'); // Get current month as an integer (1 to 12)
+                            $currentMonth = date('n'); // Get current month
                             $currentYear = date('Y'); // Get current year
                         @endphp
-                        <div class="d-flex">
-
-                            <select id="month" class="month mx-2" name="month">
-                                @foreach (getMonthNames() as $index => $month)
-                                    <option value="{{ $index + 1 }}" {{ $index + 1 == $currentMonth ? 'selected' : '' }}>
-                                        {{ $month }}</option>
-                                @endforeach
-                            </select>
-
-                            <select id="year" class="month" name="year">
-                                @foreach (getListOfYears() as $year)
-                                    <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>
-                                        {{ $year }}</option>
-                                @endforeach
-                            </select>
-
-                        </div>
+    
+                        <select id="month" class="month mx-2" name="month">
+                            @foreach (getMonthNames() as $index => $month)
+                                <option value="{{ $index + 1 }}" 
+                                    {{ $index + 1 == $currentMonth ? 'selected' : '' }}>
+                                    {{ $month }}
+                                </option>
+                            @endforeach
+                        </select>
+    
+                        <select id="year" class="month mx-2" name="year">
+                            @foreach (getListOfYears() as $year)
+                                <option value="{{ $year }}" 
+                                    {{ $year == $currentYear ? 'selected' : '' }}>
+                                    {{ $year }}
+                                </option>
+                            @endforeach
+                        </select>
+    
+                        <!-- Print Chart Button -->
+                        <button onclick="PrintImage()" class="btn btn-secondary mx-2"
+                            style="background-color: #AA1717; font-size: 15px; height: 48px; border: none;">
+                            طباعة التقرير
+                        </button>
                     </div>
-
-                    <!-- Second Row: Pie Chart and Info -->
-                    <div class="row">
-                        <div class="col-md-5  col-sm-12 col-12 d-flex">
-
-                            <div class="d-block col-md-12 col-sm-12 col-12 mt-5">
-                                <div class="d-flex mb-3">
-                                    <div class="color" style="background-color: #aa1717;"></div>
-                                    <h2 class="info col-5 " id="info1"> عدد المخالفات</h2>
-                                    <h2 class="h2 mx-5">{{ $violations }}</h2>
-                                </div>
-                                <div class="d-flex mb-3">
-                                    <div class="color " style="background-color: #f8a723;"></div>
-                                    <h2 class="info col-5" id="info2"> عدد الزيارات </h2>
-                                    <h2 class="h2 mx-5 ">{{ $points }}</h2>
-                                </div>
-                                <div class="d-flex mb-3">
-                                    <div class="color" style="background-color: #274373;"></div>
-                                    <h2 class="info col-5" id="info3"> عدد المفتشين</h2>
-                                    <h2 class="h2 mx-5">{{ $inspectors }}</h2>
-                                </div>
+                </div>
+    
+                <!-- Second Row: Pie Chart and Info -->
+                <div class="row">
+                    <div class="col-md-5 col-sm-12 d-flex">
+                        <div class="d-block col-md-12 mt-5" id="data-info1">
+                            <div class="d-flex mb-3">
+                                <div class="color" style="background-color: #aa1717;"></div>
+                                <h2 class="info col-5" id="info1">عدد المخالفات</h2>
+                                <h2 class="h2 mx-5">{{ $violations }}</h2>
                             </div>
-                            <canvas id="myPieChart" width="150" height="90" class="mt-2"></canvas>
-                            <div id="NoData">
-
+                            <div class="d-flex mb-3">
+                                <div class="color" style="background-color: #f8a723;"></div>
+                                <h2 class="info col-5" id="info2">عدد الزيارات</h2>
+                                <h2 class="h2 mx-5">{{ $points }}</h2>
+                            </div>
+                            <div class="d-flex mb-3">
+                                <div class="color" style="background-color: #274373;"></div>
+                                <h2 class="info col-5" id="info3">عدد المفتشين</h2>
+                                <h2 class="h2 mx-5">{{ $inspectors }}</h2>
                             </div>
                         </div>
+    
+                        <canvas id="myPieChart" width="150" height="90" class="mt-2"></canvas>
+                        <div id="NoData"></div>
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
-
+    
     <div class="row desktop-view">
         <div class="container col-11 mt-3 p-0" style="background-color: transparent;" dir="rtl">
-            <!-- First Row -->
-            <!-- Second Row -->
             <div class="row mt-4">
                 <div class="col-12 canvas-card" style="background-color: #FFFFFF;">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex graph">
                             <img src="{{ asset('frontend/images/report.svg') }}" alt="logo">
-                            <h2 class="mx-3 h2-charts mb-4" style="text-align: right;"> احصائيات الفرق والمجموعات والمفتشون
+                            <h2 class="mx-3 h2-charts mb-4" style="text-align: right;">
+                                احصائيات الفرق والمجموعات والمفتشون
                             </h2>
                         </div>
-                        <div class="d-flex">
-                            <select id="Group" class="month" name="group_id">
-                                <option value="" disabled selected> اختر المجموعة</option>
+    
+                        <!-- Filters and Print Button -->
+                        <div class="d-flex align-items-center">
+                            <select id="Group" class="month mx-2" name="group_id">
+                                <option value="" disabled selected>اختر المجموعة</option>
                                 @foreach ($Groups as $Group)
-                                    <option value="{{ $Group->id }}"> {{ $Group->name }}</option>
+                                    <option value="{{ $Group->id }}">{{ $Group->name }}</option>
                                 @endforeach
                             </select>
-
+    
                             <select id="GroupTeam" class="month mx-2" name="group_team_id">
-                                <option value="" selected> اختر الفرقة</option>
+                                <option value="" selected>اختر الفرقة</option>
                             </select>
-
-                            <div class="d-flex">
+    
+                            <div class="d-flex align-items-center mx-2">
                                 <label for="date_from" class="month_label">من</label>
                                 <input type="date" name="date_from" id="date_from" class="month mx-2"
                                     value="{{ date('Y-m-01') }}">
                             </div>
-
-                            <div class="d-flex">
-                                <label for="date_to" class="month_label">الي</label>
+    
+                            <div class="d-flex align-items-center mx-2">
+                                <label for="date_to" class="month_label">الى</label>
                                 <input type="date" name="date_to" id="date_to" class="month mx-2"
                                     value="{{ date('Y-m-t') }}">
                             </div>
-
+    
                             <!-- Search Icon Button -->
                             <button id="searchBtn" class="btn btn-primary mx-2"
-                                style="background-color: #274373;
-                                            font-size: 15px;
-                                            height: 48px;
-                                            border: none;">
-                                <i class="fa fa-search"></i> <!-- FontAwesome search icon -->
+                                style="background-color: #274373; font-size: 15px; height: 48px; border: none;">
+                                <i class="fa fa-search"></i>
+                            </button>
+    
+                            <!-- Print Chart Button -->
+                            <button onclick="PrintImage2()" class="btn btn-secondary mx-2"
+                                style="background-color: #AA1717; font-size: 15px; height: 48px; border: none;">
+                                طباعة التقرير
                             </button>
                         </div>
                     </div>
-
-                    <div class="d-flex col-12 mt-3">
-                        <div class="color" style="background-color:#AA1717"></div>
-                        <h2 class="info col-2">عدد مخالفات</h2>
-                        <h2 class="h2 mx-5" id="violations">{{ $totalViolations }}</h2>
+    
+                    <div id="data-info2">
+                        <div class="d-flex col-12 mt-3">
+                            <div class="color" style="background-color:#AA1717"></div>
+                            <h2 class="info col-2">عدد مخالفات</h2>
+                            <h2 class="h2 mx-5" id="violations">{{ $totalViolations }}</h2>
+                        </div>
+                        <div class="d-flex col-12">
+                            <div class="color" style="background-color:#F8A723"></div>
+                            <h2 class="info col-2">عدد زيارات</h2>
+                            <h2 class="h2 mx-5" id="points">{{ $totalPoints }}</h2>
+                        </div>
+                        <div class="d-flex col-12">
+                            <div class="color" style="background-color:#274373"></div>
+                            <h2 class="info col-2">عدد المفتشين</h2>
+                            <h2 class="h2 mx-5" id="inspectors">{{ $totalInspectors }}</h2>
+                        </div>
+                        <div class="d-flex col-12">
+                            <div class="color" style="background-color:#3C9A34"></div>
+                            <h2 class="info col-2">عدد المواقع</h2>
+                            <h2 class="h2 mx-5" id="group_points">{{ $totalGroupPoints }}</h2>
+                        </div>
+                        <div class="d-flex col-12">
+                            <div class="color" style="background-color:#43B8CE"></div>
+                            <h2 class="info col-2">عدد اوامر الخدمة</h2>
+                            <h2 class="h2 mx-5" id="instant_mission">{{ $totalIdsInstantMission }}</h2>
+                        </div>
                     </div>
-                    <div class="d-flex col-12 col-sm-12">
-                        <div class="color" style="background-color:#F8A723"></div>
-                        <h2 class="info col-2">عدد زيارات</h2>
-                        <h2 class="h2 mx-5" id="points">{{ $totalPoints }}</h2>
-                    </div>
-                    <div class="d-flex col-12 col-sm-12">
-                        <div class="color" style="background-color:#274373"></div>
-                        <h2 class="info col-2">عدد المفتشين</h2>
-                        <h2 class="h2 mx-5" id="inspectors">{{ $totalInspectors }}</h2>
-                    </div>
-                    <div class="d-flex col-12 col-sm-12">
-                        <div class="color" style="background-color:#3C9A34"></div>
-                        <h2 class="info col-2">عدد المواقع</h2>
-                        <h2 class="h2 mx-5" id="group_points">{{ $totalGroupPoints }}</h2>
-                    </div>
-                    <div class="d-flex col-12 col-sm-12">
-                        <div class="color" style="background-color:#43B8CE"></div>
-                        <h2 class="info col-2">عدد اوامر الخدمة </h2>
-                        <h2 class="h2 mx-5" id="instant_mission">{{ $totalIdsInstantMission }}</h2>
-                    </div>
-                    <canvas id="barChart" style="width:100%;height: 300px;" class="barChart"></canvas>
-                    <div id="NoData2">
-
-                    </div>
+    
+                    <canvas id="barChart" style="width:100%; height: 300px;" class="barChart"></canvas>
+                    <div id="NoData2"></div>
                 </div>
             </div>
         </div>
     </div>
+    
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
@@ -366,33 +376,88 @@
             }
         });
 
-        // Update h2 elements with data
-        // document.getElementById('info1').innerText = `عدد المخالفات: ${dataValues[0]}`;
-        // document.getElementById('info2').innerText = `عدد النقاط: ${dataValues[1]}`;
-        // document.getElementById('info3').innerText = `عدد المفتشين: ${dataValues[2]}`;
 
-        // Function to draw text inside the pie chart
-        function drawText() {
-            const chartArea = myPieChart.chartArea;
-            ctx.font = '20px Almarai';
-            ctx.fillStyle = '#F4F7FD'; // Text color
+        function PrintImage() {
+            var canvas = document.getElementById("myPieChart");
+            var infoContent = document.querySelector("#data-info1").outerHTML; // Select the info block content
+            var monthName = document.getElementById("month_name").innerText; // Get the Arabic month name
 
-            // Draw text for each segment
-            const angles = myPieChart.data.datasets[0].data.map((value) => value / myPieChart.data.datasets[0].data.reduce((
-                a, b) => a + b) * 2 * Math.PI);
-            let startAngle = -Math.PI / 2;
+            // Create a new window for printing
+            var win = window.open('', '_blank');
 
-            angles.forEach((angle, index) => {
-                const endAngle = startAngle + angle * 2 * Math.PI;
-                const middleAngle = (startAngle + endAngle) / 2;
+            // Build the HTML content for printing
+            win.document.write(`
+        <html>
+            <head>
+                <title>Print Chart</title>
+                <style>
+                    body { font-family: Arial, sans-serif; direction: rtl; text-align: right; }
+                    h2 { margin: 5px 0; }
+                    .info { font-weight: bold; }
+                    .color { width: 20px; height: 20px; display: inline-block; margin-left: 10px; }
+                </style>
+            </head>
+            <body>
+                <div class="d-flex col-md-12">
+                <h2>تقرير شهر <span>${monthName}</span></h2>
+                ${infoContent}  <!-- Inject the info section -->
+                <div class="col-md-6">
+                    <img src="${canvas.toDataURL()}" alt="Pie Chart" id="chartImg"/>
+                    </div>
+                </div>
+            </body>
+        </html>
+    `);
+            var img = win.document.getElementById("chartImg");
+            img.onload = function() {
+                win.print();
+                win.close(); // Optional: Close the window after printing
+            };
 
-                const x = (chartArea.left + chartArea.right) / 2 + Math.cos(middleAngle) * 30;
-                const y = (chartArea.top + chartArea.bottom) / 2 + Math.sin(middleAngle) * 100;
+            // Ensure the print window content is loaded and ready
+            win.document.close();
+        }
 
-                ctx.fillText(`${dataValues[index]}`, x, y); // Draw the value inside the segment
+        function PrintImage2() {
+            var canvas = document.getElementById("barChart");
+            var infoContent = document.querySelector("#data-info2").outerHTML; // Select the info block content
 
-                startAngle = endAngle; // Move to the next segment
-            });
+            // Create a new window for printing
+            var win = window.open('', '_blank');
+
+            // Build the HTML content for printing
+            win.document.write(`
+        <html>
+            <head>
+                <title>Print Chart</title>
+                <style>
+                    body { font-family: Arial, sans-serif; direction: rtl; text-align: right; }
+                    h2 { margin: 5px 0; }
+                    .info { font-weight: bold; }
+                    .color { width: 20px; height: 20px; display: inline-block; margin-left: 10px; }
+                </style>
+            </head>
+            <body>
+                <div class="d-flex col-md-12">
+                    <h2>تقرير شهر</h2>
+                    ${infoContent}  <!-- Inject the info section -->
+                    <div class="col-md-6">
+                        <img id="chartImg" src="${canvas.toDataURL()}" alt="Pie Chart"/>
+                    </div>
+                </div>
+            </body>
+        </html>
+    `);
+
+            // Wait for the image to load before printing
+            var img = win.document.getElementById("chartImg");
+            img.onload = function() {
+                win.print();
+                win.close(); // Optional: Close the window after printing
+            };
+
+            // Ensure the print window content is loaded and ready
+            win.document.close();
         }
 
         function updateChart2(violations, points, inspectors, instant_mission, group_points, groups, teams, inspectors) {
