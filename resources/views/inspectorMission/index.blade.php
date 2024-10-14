@@ -146,7 +146,7 @@
                                                                 <ul style="list-style:none;">
                                                                     <!-- Display mission details -->
 
-                                                                    @if (!$mission->day_off && isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
+                                                                    @if (isset($inspector['points'][$index2]) && count($inspector['points'][$index2]) > 0)
                                                                         @foreach ($inspector['points'][$index2] as $index3 => $point)
                                                                             <li class="change-place"
                                                                                 id="point-{{ $point->id }}"
@@ -306,16 +306,16 @@
                 return;
             }
 
-            if (event.target.classList.contains('dayoff')) {
-                Swal.fire({
-                    title: 'خطأ',
-                    text: 'لا يمكن نقل نقطة الى أيام العطلة',
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'تم !'
-                });
-                return;
-            }
+            // if (event.target.classList.contains('dayoff')) {
+            //     Swal.fire({
+            //         title: 'خطأ',
+            //         text: 'لا يمكن نقل نقطة الى أيام العطلة',
+            //         icon: 'error',
+            //         confirmButtonColor: '#3085d6',
+            //         confirmButtonText: 'تم !'
+            //     });
+            //     return;
+            // }
 
             if (targetDate < today) {
                 Swal.fire({

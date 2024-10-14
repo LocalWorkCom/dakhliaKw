@@ -530,6 +530,7 @@ class ViolationController  extends Controller
             'team' => $instantMission->group_team_id ? $instantMission->groupTeam->name : 'N/A',  // Include group team name
             'date' => $instantMission->created_at->format('Y-m-d'),
             'time' => $time ?? null,
+            'time_name' => $time_arabic ?? null,
             'latitude' => $instantMission->latitude,
             'longitude' => $instantMission->longitude,
         ];
