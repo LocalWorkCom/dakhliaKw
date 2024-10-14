@@ -76,12 +76,12 @@ class WorkingTimeController extends Controller
             $WorkingTime->end_time = $request->end_time;
             // dd($WorkingTime);
             // Generate a random color that is not in the database
-            do {
+            /*do {
                 $color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
                 $existColors = ['#000000ab', '#ffffff', '#d6d6d6', '#fdfdfdc2', '#c9f5f9', '#4edfd0ba'];
-            } while (WorkingTime::where('color', $color)->whereNotIn('color', $existColors)->exists());
+            } while (WorkingTime::where('color', $color)->whereNotIn('color', $existColors)->exists());*/
 
-            $WorkingTime->color = $color;
+            $WorkingTime->color = $request->color;
             $WorkingTime->save();
             // Dynamically create model instance based on the model class string
             return view('working_time.index')->with('success', 'Permission created successfully.');
@@ -144,16 +144,17 @@ class WorkingTimeController extends Controller
             $WorkingTimeitem->name = $request->name_edit;
             $WorkingTimeitem->start_time = $request->start_time_edit;
             $WorkingTimeitem->end_time = $request->end_time_edit;
+            $WorkingTimeitem->color = $request->color_edit;
 
             // Generate a new random color if the color is null
-            if (is_null($WorkingTimeitem->color)) {
+            /*if (is_null($WorkingTimeitem->color)) {
                 do {
                     $color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
                     $existColors = ['#000000ab', '#ffffff', '#d6d6d6', '#fdfdfdc2', '#c9f5f9', '#4edfd0ba'];
                 } while (WorkingTime::where('color', $color)->whereNotIn('color', $existColors)->exists());
 
                 $WorkingTimeitem->color = $color;
-            }
+            }*/
 
             $WorkingTimeitem->save();
 

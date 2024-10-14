@@ -8,7 +8,7 @@
 @section('content')
     <div class="row ">
         <div class="container welcome col-11">
-            <p> {{ auth()->user()->name }} مرحـــــــــــــــبا بك </p>
+            <!-- <p> {{ auth()->user()->name }} مرحـــــــــــــــبا بك </p> -->
         </div>
     </div>
     <br>

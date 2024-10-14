@@ -190,6 +190,12 @@
                                                 <input type="text" id="end_time" name="end_time"
                                                     class="form-control" required>
                                             </div>
+                                            <div class="form-group mb-3">
+                                                <label class="d-flex justify-content-start pb-2" for="color"> لون
+                                                    فترة العمل</label>
+                                                <input type="color" id="color" name="color"
+                                                    class="form-control" value="#ffffff" required>
+                                            </div>
                                             <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                                 <button type="submit" class="btn-all mx-2 p-2"
                                                     style="background-color: #274373; color: #ffffff;"
@@ -256,6 +262,12 @@
                                                 <input type="text" id="end_time_edit" name="end_time_edit"
                                                     class="form-control" required>
                                             </div>
+                                            <div class="form-group mb-3">
+                                                <label class="d-flex justify-content-start pb-2" for="color_edit"> لون
+                                                    فترة العمل</label>
+                                                <input type="color" id="color_edit" name="color_edit"
+                                                    class="form-control" value="#ffffff" required>
+                                            </div>
                                             <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                                 <button type="submit" class="btn-all mx-2 p-2"
                                                     style="background-color: #274373; color: #ffffff;"
@@ -321,6 +333,12 @@
                                             <input type="text" id="end_time_show" name="end_time_show"
                                                 class="form-control" disabled>
                                         </div>
+                                        <div class="form-group mb-3">
+                                            <label class="d-flex justify-content-start pb-2" for="color_show"> لون
+                                                فترة العمل</label>
+                                            <input type="color" id="color_show" name="color_show"
+                                                    class="form-control" value="#ffffff" disabled>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -343,6 +361,7 @@
                                     document.getElementById('name_show').value = data.name;
                                     document.getElementById('start_time_show').value = data.start_time;
                                     document.getElementById('end_time_show').value = data.end_time;
+                                    document.getElementById('color_show').value = data.color;
                                     // document.getElementById('id_show').value = data.id;
                                     $('#view').modal('show');
                                 } else {
@@ -368,6 +387,7 @@
                                     document.getElementById('name_edit').value = data.name;
                                     document.getElementById('start_time_edit').value = data.start_time;
                                     document.getElementById('end_time_edit').value = data.end_time;
+                                    document.getElementById('color_edit').value = data.color;
                                     document.getElementById('id_edit').value = data.id;
                                     $('#edit').modal('show');
                                 } else {

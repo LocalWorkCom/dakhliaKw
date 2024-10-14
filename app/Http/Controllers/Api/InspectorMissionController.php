@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\paperTransaction;
 use App\Models\PersonalMission;
 use App\Models\Violation;
 use Carbon\Carbon;
@@ -129,7 +130,9 @@ class InspectorMissionController extends Controller
                             $date = Carbon::today()->format('Y-m-d');
                             $violationCount = Violation::where('point_id', $point->id)->where('status', 1)->whereDate('created_at', $date)->count();
                             $absenceCount = Absence::where('point_id', $point->id)->where('flag', 1)->whereDate('date', $date)->count();
-                            $is_visited = ($violationCount > 0 || $absenceCount > 0);
+                            $paperCount = paperTransaction::where('point_id', $point->id)->where('status', 1)->whereDate('date', $date)->count();
+
+                            $is_visited = ($violationCount > 0 || $absenceCount > 0 || $paperCount > 0);
                             $sector = $point->sector->name;
                             $groupPointsData[] = [
                                 'point_id' => $point->id,
