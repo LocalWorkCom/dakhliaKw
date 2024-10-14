@@ -20,7 +20,7 @@
         <div class="row">
             <div class="container welcome col-11">
                 <div class="d-flex justify-content-between">
-                    <p> أنواع المخالفـــات</p>
+                    <p id = "violation-type-heading"> أنواع المخالفـــات</p>
                     {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
                     <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
 
@@ -34,6 +34,22 @@
         <br>
         <div class="row">
             <div class="container  col-11 mt-3 p-0 pt-5 pb-4">
+                <div class="row d-flex justify-content-between " dir="rtl">
+
+                    <div class="form-group moftsh mt-4  mx-4  d-flex">
+                        <p class="filter "> تصفية حسب:</p>
+                        <button class="btn-all px-3 mx-2 btn-filter btn-active" data-filter="all" style="color: #274373;">
+                            الكل ({{ $all }})
+                        </button>
+                        <button class="btn-all px-3 mx-2 btn-filter" data-filter="buildings" style="color: #274373;">
+                            ادارة مباني ({{ $buildings }})
+                        </button>
+                        <button class="btn-all px-3 mx-2 btn-filter" data-filter="behavior" style="color: #274373;">
+                            سلوك انضباطي ({{ $behavior }})
+                        </button>
+                    </div>
+                </div>
+
                 <div class="col-lg-12">
                     <div class="bg-white ">
                         @if (session()->has('message'))
@@ -212,7 +228,6 @@
 @endsection
 @push('scripts')
     <script>
-        
         function openedit(id, name, types) {
             document.getElementById('nameedit').value = name;
             document.getElementById('idedit').value = id;
@@ -274,11 +289,18 @@
 
 
             $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
+            var filter = 'all'; // Default filter
 
-            $('#users-table').DataTable({
+
+            var table = $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('violations.getAllviolations') }}', // Correct URL concatenation
+                ajax: {
+                    url: '{{ route('violations.getAllviolations') }}',
+                    data: function(d) {
+                        d.filter = filter;
+                    }
+                },
                 columns: [{
                         data: 'name',
                         sWidth: '50px',
@@ -327,19 +349,36 @@
                 },
                 "pagingType": "full_numbers",
                 "fnDrawCallback": function(oSettings) {
-                                     console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                    console.log('Page ' + this.api().page.info().pages)
+                    var page = this.api().page.info().pages;
+                    console.log($('#users-table tr').length);
+                    if (page == 1) {
+                        //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
-                                        }
+                    }
                 }
 
             });
 
+            var defaultFilterButton = $('.btn-filter[data-filter="all"]');
+            var defaultFilterText = defaultFilterButton.text().trim();
+            $('#violation-type-heading').text('انواع المخالفات - ' + defaultFilterText);
+            $('.btn-filter').click(function() {
+                filter = $(this).data('filter'); // Update the filter variable
+                var filterText = $(this).text().trim(); // Get the text of the active button
 
+                // Remove 'btn-active' class from all buttons and add to the clicked one
+                $('.btn-filter').removeClass('btn-active');
+                $(this).addClass('btn-active');
+
+                $('#violation-type-heading').text('انواع المخالفات - ' +
+                    filterText); // Update the <p> content
+
+                // table.page(0).draw(true); // Reload table data
+                table.ajax.reload();
+
+            });
         });
     </script>
 

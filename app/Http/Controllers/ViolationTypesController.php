@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\departements;
+use App\Models\Violation;
 use App\Models\ViolationTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,48 +22,70 @@ class ViolationTypesController extends Controller
     }
     public function index()
     {
-      /*   $type=array();
+        /*   $type=array();
         $type[0]['id']='1';
         $type[0]['name']='السلوك الانظباطي'; 
         
         $type[1]['id']='2'; 
         $type[1]['name']='مباني';  */
-        $type[]=array('id'=>'1','name'=>'السلوك الانظباطي');
-        $type[]=array('id'=>'2','name'=>'مباني');
-      //  $type=json_encode($type);
-      // dd($type);
-        return view("ViolationTypes.index",compact('type'));
+        $type[] = array('id' => '1', 'name' => 'السلوك الانظباطي');
+        $type[] = array('id' => '2', 'name' => 'مباني');
+        $all = Violation::whereNotNull('flag')->count();
+        $behavior = Violation::where('flag', 1)->count();
+        $buildings = Violation::where('flag', 0)->count();
+        //  $type=json_encode($type);
+        // dd($type);
+        return view("ViolationTypes.index", compact('type', 'all', 'behavior', 'buildings'));
     }
 
-    public function getviolations()
+    public function getviolations(Request $request)
     {
-        $data = ViolationTypes::where('type_id','!=','0')->get();
+        // Get the total number of violation types without filtering
+        $totalRecords = ViolationTypes::where('type_id', '!=', '0')->count();
 
+        // Apply filtering based on the 'flag' from the Violations
+        $filter = $request->get('filter');
+        $data = ViolationTypes::where('type_id', '!=', '0');
+
+        if ($filter == 'behavior') {
+            $data->whereHas('violations', function ($query) {
+                $query->where('flag', 1);
+            });
+        } elseif ($filter == 'buildings') {
+            $data->whereHas('violations', function ($query) {
+                $query->where('flag', 0);
+            });
+        }
+
+        // Get the filtered data count
+        $filteredRecords = $data->count();
+
+        // Fetch the paginated data for DataTables
+        $data = $data->skip($request->start)
+            ->take($request->length)
+            ->get();
+
+        // Add department names for each violation type
         foreach ($data as $item) {
             $item->type_names = departements::whereIn('id', $item->type_id)->pluck('name')->implode(', ');
         }
 
         return DataTables::of($data)
+            ->setTotalRecords($totalRecords)
+            ->setFilteredRecords($filteredRecords)
             ->addColumn('action', function ($row) {
-                $name ="$row->name";
-                $typesJson = json_encode($row->type_id); // Ensure this is an array
-
-                // $edit_permission = null;
-                // $show_permission = null ;
-                // if (Auth::user()->hasPermission('edit item')) {
-                    $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit(' . $row->id . ', \'' . $name. '\', \'' . htmlspecialchars($typesJson, ENT_QUOTES, 'UTF-8') . '\')"><i class="fa fa-edit"></i> تعديل</a>';
-                    // }
-                // if (Auth::user()->hasPermission('view item')) {
-                // $show_permission = '<a class="btn btn-sm" style="background-color: #274373;"  href=' . route('violations.show', $row->id) . '> <i class="fa fa-eye"></i>عرض</a>';
-                // }
-                return  $edit_permission;
+                $name = "$row->name";
+                $typesJson = json_encode($row->type_id);
+                return '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit(' . $row->id . ', \'' . $name . '\', \'' . htmlspecialchars($typesJson, ENT_QUOTES, 'UTF-8') . '\')"><i class="fa fa-edit"></i> تعديل</a>';
             })
             ->addColumn('type_name', function ($row) {
-                return $row->type_names;
+                return departements::whereIn('id', $row->type_id)->pluck('name')->implode(', ');
             })
             ->rawColumns(['action', 'type_name'])
             ->make(true);
     }
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -126,17 +149,17 @@ class ViolationTypesController extends Controller
      */
     public function update(Request $request)
     {
-      
-       // dd($request);
-    $request->validate([
-        'nameedit' => 'required|string|max:255',
-        'types' => 'array'
-    ]);
 
-    $ViolationTypes = ViolationTypes::find($request->id);
-    $ViolationTypes->name = $request->nameedit;
-    $ViolationTypes->type_id = $request->types;
-    $ViolationTypes->save();
+        // dd($request);
+        $request->validate([
+            'nameedit' => 'required|string|max:255',
+            'types' => 'array'
+        ]);
+
+        $ViolationTypes = ViolationTypes::find($request->id);
+        $ViolationTypes->name = $request->nameedit;
+        $ViolationTypes->type_id = $request->types;
+        $ViolationTypes->save();
 
         return redirect()->route('violations.index')->with('success', 'تم تعديل المخالفه بنجاح');
     }
