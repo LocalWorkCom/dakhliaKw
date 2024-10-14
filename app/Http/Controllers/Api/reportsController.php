@@ -595,11 +595,17 @@ class reportsController extends Controller
         $is_off = InspectorMission::whereDate('date', $today)
             ->where('inspector_id', $inspectorId)
             ->value('day_off');
+      
+        $notifies = Notification::with('mission')
+            ->where('user_id', auth()->user()->id)
+            ->whereDate('created_at', $today) // Ensure the date comparison is for the correct day
+            ->count();
+        // dd($notifies);
         $success = [
             'mission_count' => $mission + $mission_instans ?? 0,
             'violation_count' => $violation ?? 0,
-            'is_off' => $is_off == 0 ? false : true
-
+            'is_off' => $is_off == 0 ? false : true,
+            'notify_num' => $notifies ?? 0
         ];
         if ($success) {
             return $this->apiResponse(true, 'Data get successfully.', $success, 200);
