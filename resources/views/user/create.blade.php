@@ -284,8 +284,15 @@
                     </div>
                     <div class="form-group col-md-5 mx-2">
                         <label for="input10">الجنسية</label>
-                        <input type="text" id="input10" name="nationality" class="form-control"
-                            placeholder="الجنسية" value="{{ old('nationality') }}">
+                        <select id="input10" name="nationality" class="form-control select2"
+                            placeholder="الجنسية">
+                            <option selected disabled>اختار من القائمة</option>
+                            @foreach ($nationality as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ old('input10') == $item->id ? 'selected' : '' }}> {{ $item->country_name_ar }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 

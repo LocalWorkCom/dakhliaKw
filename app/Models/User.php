@@ -72,17 +72,13 @@ class User extends Authenticatable
         $permission_ids = explode(',', $userPermission->permission_ids);
         // dd($permission_ids);
         // Fetch all permissions that the user has access to based on their role
-        $allPermissions = Permission::whereIn('id', $permission_ids)->where('name',$permission)->get();
+        $allPermissions = Permission::whereIn('id', $permission_ids)->where('name', $permission)->get();
         // dd(count($allPermissions));
-        if(count($allPermissions) > 0)
-        {
+        if (count($allPermissions) > 0) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
-
-
     }
     public function createdViolations()
     {
@@ -116,7 +112,7 @@ class User extends Authenticatable
 
     public function inspectors()
     {
-        return $this->belongsTo(Inspector::class,'id');
+        return $this->belongsTo(Inspector::class, 'id');
     }
     public function pointDays()
     {
@@ -133,5 +129,10 @@ class User extends Authenticatable
     public function paperTransactions()
     {
         return $this->hasMany(PaperTransaction::class, 'created_by');
+    }
+
+    public function nationality()
+    {
+        return $this->belongsTo(Country::class, 'id'); // Assuming 'department_id' is the foreign key
     }
 }

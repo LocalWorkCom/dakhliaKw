@@ -81,15 +81,15 @@
 @else
     -->
                                 <!-- <div class="radio-btns mx-md-4 ">
-                                                <input type="radio" class="form-check-input" id="male" name="gender"
-                                                    value="man" style="height:20px; width:20px;">
-                                                <label class="form-check-label mx-2" for="male">ذكر</label>
-                                            </div>
-                                            <div class="radio-btns mx-md-4 ">
-                                                <input type="radio" class="form-check-input" id="female" name="gender"
-                                                    value="female" style="height:20px; width:20px;" checked>
-                                                <label class="form-check-label mx-md-2" for="female">انثى</label>
-                                            </div> -->
+                                                                        <input type="radio" class="form-check-input" id="male" name="gender"
+                                                                            value="man" style="height:20px; width:20px;">
+                                                                        <label class="form-check-label mx-2" for="male">ذكر</label>
+                                                                    </div>
+                                                                    <div class="radio-btns mx-md-4 ">
+                                                                        <input type="radio" class="form-check-input" id="female" name="gender"
+                                                                            value="female" style="height:20px; width:20px;" checked>
+                                                                        <label class="form-check-label mx-md-2" for="female">انثى</label>
+                                                                    </div> -->
                                 <!--
     @endif -->
                                 <label for="input44">الفئة</label>
@@ -206,8 +206,18 @@
                             </div>
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input10">الجنسية</label>
-                                <input type="text" id="input10" name="nationality" class="form-control"
-                                    placeholder="الجنسية" value="{{ $user->nationality }}" dir="rtl">
+                                <select id="input10" name="nationality" class="form-control select2"
+                                    placeholder="الجنسية">
+                                    @if ($user->nationality == null)
+                                        <option selected disabled>اختار من القائمة</option>
+                                    @endif
+                                    @foreach ($nationality as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ $user->nationality == $item->id ? 'selected' : '' }}>
+                                            {{ $item->country_name_ar }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
@@ -305,7 +315,7 @@
                             <div class="form-group col-md-5 mx-md-2">
                                 <label for="input44">العنوان </label>
                                 <!--  <input type="text" id="input44" name="address_1" class="form-control"
-                                            placeholder="  العنوان" value="{{ $user->address1 }}"> -->
+                                                                    placeholder="  العنوان" value="{{ $user->address1 }}"> -->
                                 <textarea id="input44" name="address_1" class="form-control" placeholder="  العنوان"
                                     value="{{ $user->address1 }}">{{ $user->address1 }}</textarea>
                             </div>
