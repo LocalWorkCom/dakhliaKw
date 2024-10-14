@@ -51,9 +51,9 @@ class settingController extends Controller
             if (Auth::user()->hasPermission('edit job')) {
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit(' . $row->id . ',' . $name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
-            if (Auth::user()->hasPermission('delete job')) {
+            /*if (Auth::user()->hasPermission('delete job')) {
                 $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
-            }
+            }*/
             $uploadButton = $edit_permission . $delete_permission;
             return $uploadButton;
         })
@@ -151,9 +151,9 @@ class settingController extends Controller
             if (Auth::user()->hasPermission('edit grade')) {
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit(' . $row->id . ',' . $name . ',' . $row->type . ')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
-            if (Auth::user()->hasPermission('delete grade')) {
+            /*if (Auth::user()->hasPermission('delete grade')) {
                 $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
-            }
+            }*/
             $uploadButton = $edit_permission . $delete_permission;
             return $uploadButton;
         })
@@ -263,11 +263,11 @@ class settingController extends Controller
             if (Auth::user()->hasPermission('edit VacationType')) {
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit(' . $row->id . ',' . $name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
-            if (Auth::user()->hasPermission('delete VacationType')) {
+            /*if (Auth::user()->hasPermission('delete VacationType')) {
                 if (!in_array($row->id, $hiddenIds)) {
                     $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
                 }
-            }
+            }*/
             return $edit_permission . $delete_permission;
         })
             ->rawColumns(['action'])

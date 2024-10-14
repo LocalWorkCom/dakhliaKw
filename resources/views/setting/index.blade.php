@@ -348,7 +348,6 @@
                         return `
                                                  <a href="#" class="btn btn-sm " style="background-color: #274373;" onclick="openViewModal('${row.id}', '${row.key}', '${row.value}')"> <i class="fa fa-eye"></i>عرض  </a>
                                                  <a href="#" class="btn btn-sm" style="background-color: #F7AF15;" onclick="openEditModal('${row.id}', '${row.key}','${row.value}')"> <i class="fa fa-edit"></i> تعديل </a>
-                                                 <a href="#" class="btn btn-sm" style="background-color: red;" onclick="deleteSetting('${row.id}')"> <i class="fa fa-edit"></i> حذف </a>
 
 
                                                 `;
@@ -394,4 +393,6 @@
 
         });
     </script>
+
+    <!-- <a href="#" class="btn btn-sm" style="background-color: red;" onclick="deleteSetting('${row.id}')"> <i class="fa fa-edit"></i> حذف </a>-->
 @endpush
