@@ -438,7 +438,7 @@ class ViolationController  extends Controller
         // dd($request->mission_id);
         // Get instant mission details
         // $instantMission = DB::table('instantmissions')->with('group','groupTeam')->where('id', 57)->first();
-        $instantMission = InstantMission::with('group', 'groupTeam')->find(57);
+        $instantMission = InstantMission::with('group', 'groupTeam')->find($request->mission_id);
 
         // instantmission::find(57);
         if (!$instantMission) {
