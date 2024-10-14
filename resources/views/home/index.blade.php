@@ -19,15 +19,17 @@
                 @foreach ($Statistics as $statistic)
                     <div class="col-md-3 col-sm-12 col-12 " dir="rtl"
                         style="display: {{ !in_array($statistic->id, $UserStatistic->toArray()) ? 'none' : 'block' }}">
-                        <div class="graph-card" style="background-color: #ffffff;">
-                            <div class="d-flex">
-                                <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
-                                <h2 class="mx-3">{{ $statistic->name }}</h2>
+                        <a href="{{ $routes[$statistic->name] }}">
+                            <div class="graph-card" style="background-color: #ffffff;">
+                                <div class="d-flex">
+                                    <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
+                                    <h2 class="mx-3">{{ $statistic->name }}</h2>
+                                </div>
+                                <h1>
+                                    {{ $counts[$statistic->name] ?? 0 }} <!-- Display the count for each statistic -->
+                                </h1>
                             </div>
-                            <h1>
-                                {{ $counts[$statistic->name] ?? 0 }} <!-- Display the count for each statistic -->
-                            </h1>
-                        </div>
+                        </a>
                     </div>
                 @endforeach
 
@@ -36,11 +38,16 @@
     </div>
 
 
-    <div class="row desktop-view">
+    <div class="row desktop-view" id="first-chart">
         <div class="container col-11 mt-3 p-0 d-flex" style="background-color: transparent;" dir="rtl">
             <!-- First Card -->
+
             <div class=" col-12  circle-graph-card " style="background-color: #ffffff;">
                 <div class="">
+                    <div id="printArea">
+                        <button onclick="PrintImage()">Print Chart</button>
+                    </div>
+
                     <div class=" d-flex justify-content-between">
                         @php
 
@@ -364,33 +371,43 @@
             }
         });
 
-        // Update h2 elements with data
-        // document.getElementById('info1').innerText = `عدد المخالفات: ${dataValues[0]}`;
-        // document.getElementById('info2').innerText = `عدد النقاط: ${dataValues[1]}`;
-        // document.getElementById('info3').innerText = `عدد المفتشين: ${dataValues[2]}`;
 
-        // Function to draw text inside the pie chart
-        function drawText() {
-            const chartArea = myPieChart.chartArea;
-            ctx.font = '20px Almarai';
-            ctx.fillStyle = '#F4F7FD'; // Text color
+        function PrintImage() {
+            var canvas = document.getElementById("myPieChart");
+            var infoContent = document.querySelector(".d-block").outerHTML; // Select the info block content
+            var monthName = document.getElementById("month_name").innerText; // Get the Arabic month name
 
-            // Draw text for each segment
-            const angles = myPieChart.data.datasets[0].data.map((value) => value / myPieChart.data.datasets[0].data.reduce((
-                a, b) => a + b) * 2 * Math.PI);
-            let startAngle = -Math.PI / 2;
+            // Create a new window for printing
+            var win = window.open('', '_blank');
 
-            angles.forEach((angle, index) => {
-                const endAngle = startAngle + angle * 2 * Math.PI;
-                const middleAngle = (startAngle + endAngle) / 2;
+            // Build the HTML content for printing
+            win.document.write(`
+        <html>
+            <head>
+                <title>Print Chart</title>
+                <style>
+                    body { font-family: Arial, sans-serif; direction: rtl; text-align: right; }
+                    h2 { margin: 5px 0; }
+                    .info { font-weight: bold; }
+                    .color { width: 20px; height: 20px; display: inline-block; margin-left: 10px; }
+                </style>
+            </head>
+            <body>
+                <div class="d-flex col-md-12">
+                <h2>تقرير شهر <span>${monthName}</span></h2>
+                ${infoContent}  <!-- Inject the info section -->
+                <div class="col-md-6">
+                    <img src="${canvas.toDataURL()}" alt="Pie Chart"/>
+                    </div>
+                </div>
+            </body>
+        </html>
+    `);
 
-                const x = (chartArea.left + chartArea.right) / 2 + Math.cos(middleAngle) * 30;
-                const y = (chartArea.top + chartArea.bottom) / 2 + Math.sin(middleAngle) * 100;
-
-                ctx.fillText(`${dataValues[index]}`, x, y); // Draw the value inside the segment
-
-                startAngle = endAngle; // Move to the next segment
-            });
+            // Print and reload the print window
+            win.document.close();
+            win.print();
+            // win.location.reload();
         }
 
         function updateChart2(violations, points, inspectors, instant_mission, group_points, groups, teams, inspectors) {
