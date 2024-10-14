@@ -30,61 +30,53 @@ class ViolationTypesController extends Controller
         $type[1]['name']='مباني';  */
         $type[] = array('id' => '1', 'name' => 'السلوك الانظباطي');
         $type[] = array('id' => '2', 'name' => 'مباني');
-        $all = Violation::whereNotNull('flag')->count();
-        $behavior = Violation::where('flag', 1)->count();
-        $buildings = Violation::where('flag', 0)->count();
+        $all = ViolationTypes::whereJsonContains('type_id', '79')
+            ->orWhereJsonContains('type_id', '80')->count();
+        $behavior = ViolationTypes::whereJsonContains('type_id',  '79')->count();
+        $buildings = ViolationTypes::whereJsonContains('type_id', '80')->count();
         //  $type=json_encode($type);
         // dd($type);
         return view("ViolationTypes.index", compact('type', 'all', 'behavior', 'buildings'));
     }
 
-    public function getviolations(Request $request)
+    public function getviolations()
     {
-        // Get the total number of violation types without filtering
-        $totalRecords = ViolationTypes::where('type_id', '!=', '0')->count();
+        // Start with the query, don't call get() immediately
+        $data = ViolationTypes::whereJsonContains('type_id', '79')
+            ->orWhereJsonContains('type_id', '80');
 
-        // Apply filtering based on the 'flag' from the Violations
-        $filter = $request->get('filter');
-        $data = ViolationTypes::where('type_id', '!=', '0');
+        // Apply the filters only if necessary
+        $filter = request('filter');
 
         if ($filter == 'behavior') {
-            $data->whereHas('violations', function ($query) {
-                $query->where('flag', 1);
-            });
+            $data->whereJsonContains('type_id',  '79');
         } elseif ($filter == 'buildings') {
-            $data->whereHas('violations', function ($query) {
-                $query->where('flag', 0);
-            });
+            $data->whereJsonContains('type_id', '80');
         }
 
-        // Get the filtered data count
-        $filteredRecords = $data->count();
+        // Fetch the filtered data
+        $data = $data->get();
 
-        // Fetch the paginated data for DataTables
-        $data = $data->skip($request->start)
-            ->take($request->length)
-            ->get();
-
-        // Add department names for each violation type
         foreach ($data as $item) {
-            $item->type_names = departements::whereIn('id', $item->type_id)->pluck('name')->implode(', ');
+            $item->type_names = departements::whereIn('id', $item->type_id)
+                ->pluck('name')->implode(', ');
         }
 
+        // Return the DataTables response
         return DataTables::of($data)
-            ->setTotalRecords($totalRecords)
-            ->setFilteredRecords($filteredRecords)
             ->addColumn('action', function ($row) {
                 $name = "$row->name";
-                $typesJson = json_encode($row->type_id);
-                return '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit(' . $row->id . ', \'' . $name . '\', \'' . htmlspecialchars($typesJson, ENT_QUOTES, 'UTF-8') . '\')"><i class="fa fa-edit"></i> تعديل</a>';
+                $typesJson = json_encode($row->type_id); // Ensure this is an array
+
+                $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit(' . $row->id . ', \'' . $name . '\', \'' . htmlspecialchars($typesJson, ENT_QUOTES, 'UTF-8') . '\')"><i class="fa fa-edit"></i> تعديل</a>';
+                return  $edit_permission;
             })
             ->addColumn('type_name', function ($row) {
-                return departements::whereIn('id', $row->type_id)->pluck('name')->implode(', ');
+                return $row->type_names;
             })
             ->rawColumns(['action', 'type_name'])
             ->make(true);
     }
-
 
     /**
      * Show the form for creating a new resource.

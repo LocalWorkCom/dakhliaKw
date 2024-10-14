@@ -352,10 +352,12 @@
                     console.log('Page ' + this.api().page.info().pages)
                     var page = this.api().page.info().pages;
                     console.log($('#users-table tr').length);
-                    if (page == 1) {
-                        //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                        $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
-
+                    if (page === 1) {
+                        $('.dataTables_paginate').css('visibility',
+                            'hidden'); // Hide pagination if only one page
+                    } else {
+                        $('.dataTables_paginate').css('visibility',
+                            'visible'); // Show pagination if more than one page
                     }
                 }
 
@@ -375,7 +377,7 @@
                 $('#violation-type-heading').text('انواع المخالفات - ' +
                     filterText); // Update the <p> content
 
-                // table.page(0).draw(true); // Reload table data
+                table.page(0).draw(true); // Reload table data
                 table.ajax.reload();
 
             });
