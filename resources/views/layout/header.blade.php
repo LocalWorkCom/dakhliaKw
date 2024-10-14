@@ -15,14 +15,16 @@
 
                     <div id="dropdownMenu" class="dropdown-menu">
                         <ul>
-                            <li> <a href="{{ route('logout') }}">تسجيل خروج <i
-                                        class="fa-solid fa-right-from-bracket"></i></a>
-                            </li>
-                            <hr>
                             <li> <a href="{{ route('profile') }}"
                                     style="color:black;"> صفحة المستخدم <i
                                         class="fa-solid fa-user mx-2"></i></a>
                             </li>
+                            <hr>
+                            <li> <a href="{{ route('logout') }}">تسجيل خروج <i
+                                        class="fa-solid fa-right-from-bracket"></i></a>
+                            </li>
+
+
 
                         </ul>
 
@@ -466,7 +468,7 @@
         function closeDropdowns() {
             let dropdowns = document.querySelectorAll(
                 '.dropdown-menu, .dropdown-menu2, .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
-                );
+            );
             dropdowns.forEach(function(dropdown) {
                 dropdown.style.display = 'none';
             });
@@ -521,7 +523,7 @@
     document.addEventListener('click', function(event) {
         let dropdowns = document.querySelectorAll(
             '.dropdown-menu, .dropdown-menu2, .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
-            );
+        );
         dropdowns.forEach(function(dropdown) {
             if (!dropdown.contains(event.target) && !event
                 .target.closest('.btn')) {
