@@ -8,7 +8,7 @@
 @section('content')
     <div class="row ">
         <div class="container welcome col-11">
-            <!-- <p> {{ auth()->user()->name }} مرحـــــــــــــــبا بك </p> -->
+            <p> {{ auth()->user()->name }} مرحـــــــــــــــبا بك </p>
         </div>
     </div>
     <br>
@@ -82,7 +82,7 @@
     
                         <!-- Print Chart Button -->
                         <button onclick="PrintImage()" class="btn btn-secondary mx-2"
-                            style="background-color: #AA1717; font-size: 15px; height: 48px; border: none;">
+                            style="background-color: #274373; font-size: 15px; height: 48px; border: none;">
                             طباعة التقرير
                         </button>
                     </div>
@@ -162,7 +162,7 @@
     
                             <!-- Print Chart Button -->
                             <button onclick="PrintImage2()" class="btn btn-secondary mx-2"
-                                style="background-color: #AA1717; font-size: 15px; height: 48px; border: none;">
+                                style="background-color: #274373; font-size: 15px; height: 48px; border: none;">
                                 طباعة التقرير
                             </button>
                         </div>
