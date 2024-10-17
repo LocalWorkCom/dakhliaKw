@@ -1603,7 +1603,14 @@ input::placeholder {
     padding-block: 30px;
     margin-bottom: 30px;
     padding-inline: 50px;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Added transition */
 }
+
+.graph-card:hover {
+    background-color: #e5eaf3 !important;
+    transform: scale(1.05); /* Slightly scales up the card */
+}
+
 .canvas-card,
 .circle-graph-card {
     border-radius: 20px;
