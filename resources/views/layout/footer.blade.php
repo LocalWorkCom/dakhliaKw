@@ -419,7 +419,7 @@ document.addEventListener('click', function(event) {
                     }
                 });
                 $.ajax({
-                    url: '{{ route('store.token') }}',
+                    url: '{{ route('firebase.token') }}',
                     type: 'POST',
                     data: {
                         token: response
