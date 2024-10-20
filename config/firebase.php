@@ -50,7 +50,7 @@ return [
              *
              */
 
-            // 'credentials' => env('FIREBASE_CREDENTIALS', env('firebase_credentials.json')),
+            'credentials' => env('FIREBASE_CREDENTIALS', env('firebase_credentials.json')),
 
             /*
              * ------------------------------------------------------------------------
