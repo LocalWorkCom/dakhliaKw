@@ -49,12 +49,9 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
 
-                <li class="breadcrumb-item"><a
-                        href="{{ route('instant_mission.index') }}">الاوامر</a>
-                </li>
+                <li class="breadcrumb-item"><a href="{{ route('instant_mission.index') }}">الاوامر</a></li>
 
-                <li class="breadcrumb-item active" aria-current="page"> <a
-                        href=""> اضافه </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a href=""> اضافه </a></li>
             </ol>
 
         </nav>
@@ -94,15 +91,12 @@
                 class="text-right" enctype="multipart/form-data">
                 @csrf
 
-                <div class="container col-10 mt-4 p-4"
-                    style="border:0.5px solid #C7C7CC;">
-                    <div
-                        class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
+                <div class="container col-10 mt-4 p-4" style="border:0.5px solid #C7C7CC;">
+                    <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-5 mx-2">
                             <label for="input22">التاريخ</label>
-                            <input type="date" id="input2"2 name="date"
-                                class="form-control" placeholder="التاريخ"
-                                value="{{ old('label') }}">
+                            <input type="date" id="input2"2 name="date" class="form-control"
+                                placeholder="التاريخ" value="{{ old('label') }}">
                         </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="input2">اسم أمر الخدمة</label>
@@ -129,8 +123,23 @@
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
+
                             </select>
+                            <span class="text-danger span-error" id="group_id-error"></span>
+
                         </div>
+                        {{-- <div class="form-group col-md-5 mx-2">
+                            <label for="group_id">المجموعة</label>
+                            <select id="group_id" name="group_id" class=" form-control custom-select custom-select-lg mb-3 select2 "
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;">
+                            <option value="" selected disabled>اختر</option>
+                                @foreach ($groups as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ old('group_id') == $item->id ? 'selected' : '' }}> {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div> --}}
                         <div class="form-group col-md-5 mx-2">
                             <label for="group_team_id">الفرق</label>
                             <select id="group_team_id" name="group_team_id"
@@ -143,7 +152,7 @@
                                         {{ old('group_team_id') == $item->id ? 'selected' : '' }}>
                                         {{ $item->name }}
                                     </option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
 
@@ -159,7 +168,7 @@
                                         {{ old('inspectors') == $item->id ? 'selected' : '' }}>
                                         {{ $item->name }}
                                     </option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
 
@@ -172,8 +181,7 @@
                         </div>
                         <div class="form-group col-md-10 mx-2">
                             <label for="description">الملاجظات </label>
-                            <input type="text" name="description"
-                                class="form-control"
+                            <input type="text" name="description" class="form-control"
                                 value="{{ old('description') }}">
                             {{-- @error('description')
                             <div class="alert alert-danger">{{ $message }}</div>
@@ -182,9 +190,8 @@
                         <div class="form-group col-md-10">
                             <label for="images"> اختار الملفات</label>
                             <div class="form-group file-input-container">
-                                <input type="file" name="images[]"
-                                    id="images" class="form-control"
-                                    dir="rtl" multiple>
+                                <input type="file" name="images[]" id="images" class="form-control" dir="rtl"
+                                    multiple>
                                 <span id="file-count"></span>
                             </div>
                             <div class="file-preview" id="file-preview"
@@ -211,8 +218,14 @@
 </div>
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
 
 <script>
+    $('.select2').select2({
+        dir: "rtl"
+    });
     const fileInput = document.getElementById('images');
     const filePreview = document.getElementById('file-preview');
     const fileCount = document.getElementById('file-count');
@@ -341,7 +354,12 @@
                 }
             });
         } else {
-            $('#inspectors').empty();
+            $('#inspectors').empty().append('<option value="" selected disabled>اختر من القائمة  </option>')
+                .prop(
+                    'disabled', false);
+
+            // Update Select2 component
+            $('#inspectors').trigger('change');
         }
     });
 
