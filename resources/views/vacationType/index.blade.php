@@ -15,7 +15,7 @@
                     <p> أنواع الاجـــــازات</p>
                     @if (Auth::user()->hasPermission('create VacationType'))
                         <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
-                            اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            اضافة جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
 
                         </button>
                     @endif
@@ -48,6 +48,7 @@
                                 <thead>
                                     <tr>
                                         <th>الاسم</th>
+                                        <th>الظهور في التطبيق</th>
                                         <th style="width:150px;">العمليات</th>
                                     </tr>
                                 </thead>
@@ -85,6 +86,12 @@
                                 <span class="text-danger span-error" id="Civil_number-error" dir="rtl"></span>
 
                             </div>
+                            <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
+                                <div class="form-group col-md-10 mx-md-md-2  d-flex" dir="rtl">
+                                    <input type="checkbox" class="mx-2" name="flag" id="toggleCheckbox" value="1">
+                                    <label for="toggleCheckbox"> الظهور ف التطبيق</label>
+                                </div>
+                            </div>
                             <!-- Save button -->
                             <div class="text-end">
                                 <button type="submit" class="btn-blue" onclick="confirmAdd()">اضافه</button>
@@ -117,6 +124,13 @@
                                 <label for="name">الاسم</label>
                                 <input type="text" id="nameedit" value="" name="name" class="form-control"
                                     required dir="rtl">
+                                <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
+                                    <div class="form-group col-md-10 mx-md-md-2  d-flex" dir="rtl">
+                                        <input type="checkbox" class="mx-2" name="flag" id="toggleCheckbox_edit"
+                                            value="1">
+                                        <label for="toggleCheckbox"> الظهور ف التطبيق</label>
+                                    </div>
+                                </div>
                                 <input type="text" id="idedit" value="" name="id" hidden
                                     class="form-control" dir="rtl">
 
@@ -153,6 +167,7 @@
                                 <input type="text" id="id" value="" hidden name="id"
                                     class="form-control">
                             </div>
+
                             <!-- Save button -->
                             <div class="text-end">
                                 <div class="modal-footer mx-2 d-flex justify-content-center">
@@ -202,6 +217,7 @@
         function openedit(id, name) {
             document.getElementById('nameedit').value = name;
             document.getElementById('idedit').value = id;
+            document.getElementById('toggleCheckbox_edit').checked = true;
 
             $('#edit').modal('show');
 
@@ -252,6 +268,12 @@
                         sWidth: '50px',
                         name: 'name'
                     },
+                    {
+                        data: 'flag',
+                        sWidth: '50px',
+                        name: 'flag'
+                    },
+
 
                     {
                         data: 'action',
@@ -290,15 +312,15 @@
                 },
                 "pagingType": "full_numbers",
                 "fnDrawCallback": function(oSettings) {
-                                        console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                    console.log('Page ' + this.api().page.info().pages)
+                    var page = this.api().page.info().pages;
+                    console.log($('#users-table tr').length);
+                    if (page == 1) {
+                        //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
-                                        }
-                                    }
+                    }
+                }
 
             });
 
