@@ -5,7 +5,8 @@
     </div>
 </footer>
 @stack('scripts')
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+</script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 
 <script>
@@ -19,34 +20,50 @@
             e.preventDefault();
 
             // Serialize the form data
-            var formData = $(this).serialize(); // Changed to $(this)
+            var formData = $(this)
+        .serialize(); // Changed to $(this)
 
             // Submit AJAX request
             $.ajax({
-                url: $(this).attr('action'), // Changed to $(this)
+                url: $(this).attr(
+                'action'), // Changed to $(this)
                 type: 'POST',
                 data: formData,
                 success: function(response) {
                     if (response.success) {
                         // Handle success response
-                        $('#from_departement').empty();
+                        $('#from_departement')
+                            .empty();
                         $.ajax({
 
                             url: "{{ route('external.departments') }}",
                             type: 'get',
-                            success: function(response) {
+                            success: function(
+                                response
+                                ) {
                                 // Handle success response
                                 var selectOptions =
                                     '<option value="">اختر الادارة</option>';
-                                response.forEach(function(department) {
-                                    selectOptions += '<option value="' +
-                                        department.id +
-                                        '">' + department.name +
-                                        '</option>';
-                                });
-                                $('#from_departement').html(
-                                    selectOptions
-                                ); // Assuming you have a select element with id 'from_departement'
+                                response
+                                    .forEach(
+                                        function(
+                                            department
+                                            ) {
+                                            selectOptions
+                                                +=
+                                                '<option value="' +
+                                                department
+                                                .id +
+                                                '">' +
+                                                department
+                                                .name +
+                                                '</option>';
+                                        }
+                                        );
+                                $('#from_departement')
+                                    .html(
+                                        selectOptions
+                                    ); // Assuming you have a select element with id 'from_departement'
 
                             },
                             // error: function(xhr, status, error) {
@@ -56,19 +73,33 @@
                         });
                         // Optionally, you can close the modal after successful save
                         resetModal();
-                        $('#extern-department').modal('hide'); // Changed modal ID
+                        $('#extern-department')
+                            .modal(
+                            'hide'); // Changed modal ID
                     } else {
-                        $.each(response.message, function(key, value) {
-                            $('#' + key + '-error').html(value[0]);
-                        });
+                        $.each(response.message,
+                            function(key,
+                            value) {
+                                $('#' + key +
+                                    '-error'
+                                    ).html(
+                                    value[0]
+                                    );
+                            });
                     }
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                     if (xhr.status == 422) {
-                        var errors = xhr.responseJSON.errors;
-                        $.each(errors, function(key, value) {
-                            $('#' + key + '-error').html(value[0]);
+                        var errors = xhr
+                            .responseJSON.errors;
+                        $.each(errors, function(key,
+                            value) {
+                            $('#' + key +
+                                '-error'
+                                ).html(
+                                value[0]
+                                );
                         });
                     }
                 }
@@ -86,7 +117,8 @@
     }
     window.onclick = function(event) {
         if (!event.target.matches('.btn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-menu");
+            var dropdowns = document.getElementsByClassName(
+            "dropdown-menu");
             for (var i = 0; i < dropdowns.length; i++) {
                 var openDropdown = dropdowns[i];
                 if (openDropdown.style.display === "block") {
@@ -106,7 +138,8 @@
     }
     window.onclick = function(event) {
         if (!event.target.matches('.btn2')) {
-            var dropdowns = document.getElementsByClassName("dropdown-menu2");
+            var dropdowns = document.getElementsByClassName(
+                "dropdown-menu2");
             for (var i = 0; i < dropdowns.length; i++) {
                 var openDropdown = dropdowns[i];
                 if (openDropdown.style.display === "block") {
@@ -127,7 +160,8 @@
 
     window.onclick = function(event) {
         if (!event.target.matches('.btn3')) {
-            var dropdowns = document.getElementsByClassName("dropdown-menu3");
+            var dropdowns = document.getElementsByClassName(
+                "dropdown-menu3");
             for (var i = 0; i < dropdowns.length; i++) {
                 var openDropdown = dropdowns[i];
                 if (openDropdown.style.display === "block") {
@@ -148,7 +182,8 @@
 
     window.onclick = function(event) {
         if (!event.target.matches('.btn4')) {
-            var dropdowns = document.getElementsByClassName("dropdown-menu4");
+            var dropdowns = document.getElementsByClassName(
+                "dropdown-menu4");
             for (var i = 0; i < dropdowns.length; i++) {
                 var openDropdown = dropdowns[i];
                 if (openDropdown.style.display === "block") {
@@ -157,6 +192,7 @@
             }
         }
     }
+
     function toggleDropdown5() {
         var dropdownMenu = document.getElementById("dropdownMenu5");
         if (dropdownMenu.style.display === "block") {
@@ -168,7 +204,8 @@
 
     window.onclick = function(event) {
         if (!event.target.matches('.btn5')) {
-            var dropdowns = document.getElementsByClassName("dropdown-menu5");
+            var dropdowns = document.getElementsByClassName(
+                "dropdown-menu5");
             for (var i = 0; i < dropdowns.length; i++) {
                 var openDropdown = dropdowns[i];
                 if (openDropdown.style.display === "block") {
@@ -177,6 +214,7 @@
             }
         }
     }
+
     function toggleDropdown6() {
         var dropdownMenu = document.getElementById("dropdownMenu6");
         if (dropdownMenu.style.display === "block") {
@@ -188,7 +226,8 @@
 
     window.onclick = function(event) {
         if (!event.target.matches('.btn6')) {
-            var dropdowns = document.getElementsByClassName("dropdown-menu6");
+            var dropdowns = document.getElementsByClassName(
+                "dropdown-menu6");
             for (var i = 0; i < dropdowns.length; i++) {
                 var openDropdown = dropdowns[i];
                 if (openDropdown.style.display === "block") {
@@ -209,7 +248,8 @@
             var clickover = $(event.target);
             var $navbar = $('.navbar-collapse');
             var _opened = $navbar.hasClass('show');
-            if (_opened === true && !clickover.hasClass('side-nav')) {
+            if (_opened === true && !clickover.hasClass(
+                    'side-nav')) {
                 $navbar.removeClass('show');
             }
         });
@@ -273,7 +313,8 @@
             Swal.fire({
                 icon: 'warning',
                 title: 'تنبيه',
-                text: 'لا يمكن اضافه ملفات أقل من ' + filesNum + ' ملف.',
+                text: 'لا يمكن اضافه ملفات أقل من ' + filesNum +
+                    ' ملف.',
                 showClass: {
                     popup: 'animate__animated animate__fadeInDown animate__slow'
                 },
@@ -289,7 +330,8 @@
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const listItem = document.createElement('li');
-            listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+            listItem.className =
+                'list-group-item d-flex justify-content-between align-items-center';
             listItem.dataset.filename = file.name;
             const fileName = document.createElement('span');
             fileName.textContent = file.name;
@@ -305,92 +347,97 @@
             fileList.appendChild(listItem);
         }
     }
+
     function toggleDropdown4(event) {
-    event.stopPropagation();
-    const menu4 = document.getElementById('dropdownMenu4');
-    const menu5 = document.getElementById('dropdownMenu5');
-    const menu6 = document.getElementById('dropdownMenu6');
+        event.stopPropagation();
+        const menu4 = document.getElementById('dropdownMenu4');
+        const menu5 = document.getElementById('dropdownMenu5');
+        const menu6 = document.getElementById('dropdownMenu6');
 
-    if (menu4.style.display === 'block') {
-        menu4.style.display = 'none';
-    } else {
-        menu4.style.display = 'block';
-        menu5.style.display = 'none';
-        menu6.style.display = 'none';
-    }
-}
-
-function toggleDropdown5(event) {
-    event.stopPropagation();
-    const menu4 = document.getElementById('dropdownMenu4');
-    const menu5 = document.getElementById('dropdownMenu5');
-    const menu6 = document.getElementById('dropdownMenu6');
-
-    if (menu5.style.display === 'block') {
-        menu5.style.display = 'none';
-    } else {
-        menu5.style.display = 'block';
-        menu4.style.display = 'none';
-        menu6.style.display = 'none';
-    }
-}
-
-function toggleDropdown6(event) {
-    event.stopPropagation();
-    const menu4 = document.getElementById('dropdownMenu4');
-    const menu5 = document.getElementById('dropdownMenu5');
-    const menu6 = document.getElementById('dropdownMenu6');
-
-    if (menu6.style.display === 'block') {
-        menu6.style.display = 'none';
-    } else {
-        menu6.style.display = 'block';
-        menu4.style.display = 'none';
-        menu5.style.display = 'none';
-    }
-}
-
-document.addEventListener('click', function(event) {
-    const menu4 = document.getElementById('dropdownMenu4');
-    const menu5 = document.getElementById('dropdownMenu5');
-    const menu6 = document.getElementById('dropdownMenu6');
-
-    if (!event.target.closest('.btn4') && !event.target.closest('#dropdownMenu4')) {
-        menu4.style.display = 'none';
+        if (menu4.style.display === 'block') {
+            menu4.style.display = 'none';
+        } else {
+            menu4.style.display = 'block';
+            menu5.style.display = 'none';
+            menu6.style.display = 'none';
+        }
     }
 
-    if (!event.target.closest('.btn5') && !event.target.closest('#dropdownMenu5')) {
-        menu5.style.display = 'none';
+    function toggleDropdown5(event) {
+        event.stopPropagation();
+        const menu4 = document.getElementById('dropdownMenu4');
+        const menu5 = document.getElementById('dropdownMenu5');
+        const menu6 = document.getElementById('dropdownMenu6');
+
+        if (menu5.style.display === 'block') {
+            menu5.style.display = 'none';
+        } else {
+            menu5.style.display = 'block';
+            menu4.style.display = 'none';
+            menu6.style.display = 'none';
+        }
     }
 
-    if (!event.target.closest('.btn6') && !event.target.closest('#dropdownMenu6')) {
-        menu6.style.display = 'none';
-    }
-});
+    function toggleDropdown6(event) {
+        event.stopPropagation();
+        const menu4 = document.getElementById('dropdownMenu4');
+        const menu5 = document.getElementById('dropdownMenu5');
+        const menu6 = document.getElementById('dropdownMenu6');
 
+        if (menu6.style.display === 'block') {
+            menu6.style.display = 'none';
+        } else {
+            menu6.style.display = 'block';
+            menu4.style.display = 'none';
+            menu5.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('click', function(event) {
+        const menu4 = document.getElementById('dropdownMenu4');
+        const menu5 = document.getElementById('dropdownMenu5');
+        const menu6 = document.getElementById('dropdownMenu6');
+
+        if (!event.target.closest('.btn4') && !event.target.closest(
+                '#dropdownMenu4')) {
+            menu4.style.display = 'none';
+        }
+
+        if (!event.target.closest('.btn5') && !event.target.closest(
+                '#dropdownMenu5')) {
+            menu5.style.display = 'none';
+        }
+
+        if (!event.target.closest('.btn6') && !event.target.closest(
+                '#dropdownMenu6')) {
+            menu6.style.display = 'none';
+        }
+    });
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- for input time  -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-        flatpickr("#start_time, #end_time, #fromTime,#toTime, #start_time_edit, #end_time_edit, #start_time_show, #end_time_show, #fromTime, #toTime", {
-            enableTime: true,        // Enable time picker
-            noCalendar: true,        // Disable calendar view
-            dateFormat: "h:i K",     // Set format for 12-hour time with AM/PM
-            time_24hr: false,        // Use 12-hour format (set to true for 24-hour format)
-            minuteIncrement: 1       // Set minute increment step
+    flatpickr(
+        "#start_time, #end_time, #fromTime,#toTime, #start_time_edit, #end_time_edit, #start_time_show, #end_time_show, #fromTime, #toTime", {
+            enableTime: true, // Enable time picker
+            noCalendar: true, // Disable calendar view
+            dateFormat: "h:i K", // Set format for 12-hour time with AM/PM
+            time_24hr: false, // Use 12-hour format (set to true for 24-hour format)
+            minuteIncrement: 1 // Set minute increment step
         });
-    </script>
+</script>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+</script>
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
 {{-- <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-messaging.js"></script> --}}
 
 <script type="module">
-
     var firebaseConfig = {
         apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
         authDomain: "taftesh-74633.firebaseapp.com",
@@ -403,46 +450,45 @@ document.addEventListener('click', function(event) {
     firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
 
-    function startFCM() {
+    /* function startFCM() {
 
-        messaging
-            .requestPermission()
-            .then(function() {
-                return messaging.getToken()
-            })
-            .then(function(response) {
-                console.log(messaging ,response)
+         messaging
+             .requestPermission()
+             .then(function() {
+                 return messaging.getToken()
+             })
+             .then(function(response) {
+                 console.log(messaging ,response)
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: '{{ route('firebase.token') }}',
-                    type: 'POST',
-                    data: {
-                        token: response
-                    },
-                    dataType: 'JSON',
-                    success: function(response) {
-                        alert('Token stored.');
-                    },
-                    error: function(error) {
-                        alert(error);
-                    },
-                });
-            }).catch(function(error) {
-                alert(error);
-            });
-    }
-    messaging.onMessage(function(payload) {
-        const title = payload.notification.title;
-        const options = {
-            body: payload.notification.body,
-            icon: payload.notification.icon,
-        };
-        new Notification(title, options);
-    });
-
-  </script>
+                 $.ajaxSetup({
+                     headers: {
+                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                     }
+                 });
+                 $.ajax({
+                     url: '{{ route('firebase.token') }}',
+                     type: 'POST',
+                     data: {
+                         token: response
+                     },
+                     dataType: 'JSON',
+                     success: function(response) {
+                         alert('Token stored.');
+                     },
+                     error: function(error) {
+                         alert(error);
+                     },
+                 });
+             }).catch(function(error) {
+                 alert(error);
+             });
+     }
+     messaging.onMessage(function(payload) {
+         const title = payload.notification.title;
+         const options = {
+             body: payload.notification.body,
+             icon: payload.notification.icon,
+         };
+         new Notification(title, options);
+     });*/
+</script>
