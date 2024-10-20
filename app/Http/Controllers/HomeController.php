@@ -22,7 +22,9 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-
+public function test(){
+    return view('test');
+}
     //
     public function index(Request $request)
     {
