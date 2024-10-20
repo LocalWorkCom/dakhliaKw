@@ -10,7 +10,7 @@ class NotificationSendController extends Controller
 {
     public function updateDeviceToken(Request $request)
     {
-        dd( $request->token);
+       // dd( $request->token);
         Auth::user()->fcm_token =  $request->token;
 
         Auth::user()->save();
