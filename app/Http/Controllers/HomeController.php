@@ -51,7 +51,6 @@ class HomeController extends Controller
                     case 'الموظفين':
                         $counts[$statistic->name] = User::where('flag', 'employee')->count();
                         $routes[$statistic->name] = route('user.employees', 1);
-
                         break;
                     case 'المستخدمين':
                         $counts[$statistic->name] = User::where('flag', 'user')->count();
@@ -299,11 +298,6 @@ class HomeController extends Controller
             // Count violations for each group
             $violations2 = Violation::leftJoin('users', 'users.id', 'violations.user_id')
                 ->leftJoin('inspectors', 'inspectors.user_id', 'users.id')
-                // ->leftJoin('departements', 'users.department_id', 'departements.id')
-                // ->where(function ($query) {
-                //     $query->where('users.department_id', Auth::user()->department_id)
-                //         ->orWhere('departements.parent_id', Auth::user()->department_id);
-                // })
                 ->whereBetween('violations.created_at', [date('Y-m-01'), date('Y-m-t')])
                 ->where('inspectors.group_id', $Group->id)
                 ->where('status', 1)
@@ -314,11 +308,6 @@ class HomeController extends Controller
 
             // Count inspectors for each group
             $inspectors = Inspector::leftJoin('users', 'users.id', 'inspectors.user_id')
-                // ->leftJoin('departements', 'users.department_id', 'departements.id')
-                // ->where(function ($query) {
-                //     $query->where('users.department_id', Auth::user()->department_id)
-                //         ->orWhere('departements.parent_id', Auth::user()->department_id);
-                // })
                 ->whereBetween('inspectors.created_at', [date('Y-m-01'), date('Y-m-t')])
                 ->where('inspectors.group_id', $Group->id)
                 ->count();
@@ -400,7 +389,6 @@ class HomeController extends Controller
             $Group['group_points'] = $group_points2;
             $Group['points'] = $points2;
             $Group['ids_instant_mission'] = $ids_instant_mission2;
-
             // Add to cumulative totals
             $totalGroupPoints += $group_points2;
             $totalPoints += $points2;
