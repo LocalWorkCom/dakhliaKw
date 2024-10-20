@@ -78,7 +78,7 @@ Route::get('/forget-password', function () {
 
 Route::any('/forget_password2', [UserController::class, 'forget_password2'])->name('forget_password2');
 Route::any('/reset_password', [UserController::class, 'reset_password'])->name('reset_password');
-Route::get('/test', [App\Http\Controllers\HomeController::class, 'test'])->name('home');
+// Route::get('/test', [App\Http\Controllers\HomeController::class, 'test'])->name('home');
 
 
 //  Auth verfication_code
