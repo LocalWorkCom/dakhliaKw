@@ -78,11 +78,12 @@ Route::get('/forget-password', function () {
 
 Route::any('/forget_password2', [UserController::class, 'forget_password2'])->name('forget_password2');
 Route::any('/reset_password', [UserController::class, 'reset_password'])->name('reset_password');
-// Route::get('/test', [App\Http\Controllers\HomeController::class, 'test'])->name('home');
 
 
 //  Auth verfication_code
 Route::middleware(['auth'])->group(function () {
+    Route::post('setToken', [NotificationSendController::class, 'setToken'])->name('firebase.token');
+
     Route::post('/store-token', [NotificationSendController::class, 'updateDeviceToken'])->name('store.token');
     Route::post('/send-web-notification', [NotificationSendController::class, 'sendNotification'])->name('send.web-notification');
 
