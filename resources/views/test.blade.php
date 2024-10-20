@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> 
 </div>
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

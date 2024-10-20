@@ -7,7 +7,7 @@ use Google\Service\ServiceControl\Auth;
 use Google\Service\Storage;
 use Illuminate\Http\Request;
 use Kreait\Laravel\Firebase\Facades\Firebase;
-use Google\Client as GoogleClient;
+use Google\Client as GoogleClient; 
 
 
 class NotificationSendController extends Controller

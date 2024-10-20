@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-public function test(){
+public function test(){ 
     return view('test');
 }
     //
