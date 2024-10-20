@@ -27,5 +27,4 @@ yarn-error.log
 /storage/logs
 storage/logs/
 composer.lock
-firebase_credentials.json
 /storage/logs/laravel.log
