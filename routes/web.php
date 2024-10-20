@@ -28,6 +28,7 @@ use App\Http\Controllers\GroupPointsController;
 use App\Http\Controllers\WorkingTimeController;
 use App\Http\Controllers\qualificationController;
 use App\Http\Controllers\InstantmissionController;
+use App\Http\Controllers\NotificationSendController;
 use App\Http\Controllers\paperTransactionController;
 use App\Http\Controllers\statisticController;
 use App\Http\Controllers\ViolationTypesController;
@@ -77,10 +78,15 @@ Route::get('/forget-password', function () {
 
 Route::any('/forget_password2', [UserController::class, 'forget_password2'])->name('forget_password2');
 Route::any('/reset_password', [UserController::class, 'reset_password'])->name('reset_password');
+Route::get('/test', [App\Http\Controllers\HomeController::class, 'test'])->name('home');
 
 
 //  Auth verfication_code
 Route::middleware(['auth'])->group(function () {
+    Route::post('/store-token', [NotificationSendController::class, 'updateDeviceToken'])->name('store.token');
+    Route::post('/send-web-notification', [NotificationSendController::class, 'sendNotification'])->name('send.web-notification');
+
+
     Route::get('/violation_report', [ViolationReportController::class, 'getdata'])->name('violation_report.getdata');
 
     Route::get('/', [HomeController::class, 'index'])->name('home');

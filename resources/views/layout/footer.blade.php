@@ -383,26 +383,65 @@ document.addEventListener('click', function(event) {
             minuteIncrement: 1       // Set minute increment step
         });
     </script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-messaging.js"></script>
+
 <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
 
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-      apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
-      authDomain: "taftesh-74633.firebaseapp.com",
-      projectId: "taftesh-74633",
-      storageBucket: "taftesh-74633.appspot.com",
-      messagingSenderId: "930391301074",
-      appId: "1:930391301074:web:45a7ad03354d8d069dc60b",
-      measurementId: "G-G2FVZL2SQ7"
+    var firebaseConfig = {
+        apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
+        authDomain: "taftesh-74633.firebaseapp.com",
+        projectId: "taftesh-74633",
+        storageBucket: "taftesh-74633.appspot.com",
+        messagingSenderId: "930391301074",
+        appId: "1:930391301074:web:45a7ad03354d8d069dc60b",
+        measurementId: "G-G2FVZL2SQ7"
     };
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+    function startFCM() {
+        console.log(messaging)
+
+        messaging
+            .requestPermission()
+            .then(function() {
+                return messaging.getToken()
+            })
+            .then(function(response) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '{{ route('store.token') }}',
+                    type: 'POST',
+                    data: {
+                        token: response
+                    },
+                    dataType: 'JSON',
+                    success: function(response) {
+                        alert('Token stored.');
+                    },
+                    error: function(error) {
+                        alert(error);
+                    },
+                });
+            }).catch(function(error) {
+                alert(error);
+            });
+    }
+    messaging.onMessage(function(payload) {
+        const title = payload.notification.title;
+        const options = {
+            body: payload.notification.body,
+            icon: payload.notification.icon,
+        };
+        new Notification(title, options);
+    });
+
   </script>
