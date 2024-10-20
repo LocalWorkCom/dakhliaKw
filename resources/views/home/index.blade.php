@@ -203,7 +203,83 @@
         </div>
     </div>
     
-
+    <div class="row desktop-view" id="third-chart">
+        <div class="container col-11 mt-3 p-0 d-flex" style="background-color: transparent;" dir="rtl">
+            <div class="col-12 circle-graph-card" style="background-color: #ffffff;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <!-- Header with Month Name -->
+                    @php
+                        setlocale(LC_TIME, 'ar_AE.utf8'); // Set locale to Arabic
+                        $month_name = Carbon::create()->month(date('n'))->translatedFormat('F'); // Arabic month name
+                    @endphp
+                    <div class="d-flex graph">
+                        <img src="{{ asset('frontend/images/report.svg') }}" alt="logo">
+                        <h2 class="col-12 h2-charts mb-3" style="text-align: right;">
+                            تقرير شهر <span id="month_name">{{ $month_name }}</span>
+                        </h2>
+                    </div>
+    
+                    <!-- Filters and Print Button Section -->
+                    <div class="d-flex align-items-center">
+                        @php
+                            $currentMonth = date('n'); // Get current month
+                            $currentYear = date('Y'); // Get current year
+                        @endphp
+    
+                        <select id="month" class="month mx-2" name="month">
+                            @foreach (getMonthNames() as $index => $month)
+                                <option value="{{ $index + 1 }}" 
+                                    {{ $index + 1 == $currentMonth ? 'selected' : '' }}>
+                                    {{ $month }}
+                                </option>
+                            @endforeach
+                        </select>
+    
+                        <select id="year" class="month mx-2" name="year">
+                            @foreach (getListOfYears() as $year)
+                                <option value="{{ $year }}" 
+                                    {{ $year == $currentYear ? 'selected' : '' }}>
+                                    {{ $year }}
+                                </option>
+                            @endforeach
+                        </select>
+    
+                        <!-- Print Chart Button -->
+                        <button onclick="PrintImage()" class="btn btn-secondary mx-2"
+                            style="background-color: #274373; font-size: 15px; height: 48px; border: none;">
+                            طباعة التقرير
+                        </button>
+                    </div>
+                </div>
+    
+                <!-- Second Row: Pie Chart and Info -->
+                <div class="row">
+                    <div class="col-md-5 col-sm-12 d-flex">
+                        <div class="d-block col-md-12 mt-5" id="data-info1">
+                            <div class="d-flex mb-3">
+                                <div class="color" style="background-color: #aa1717;"></div>
+                                <h2 class="info col-5" id="info1">عدد المخالفات</h2>
+                                <h2 class="h2 mx-5">{{ $violations }}</h2>
+                            </div>
+                            <div class="d-flex mb-3">
+                                <div class="color" style="background-color: #f8a723;"></div>
+                                <h2 class="info col-5" id="info2">عدد الزيارات</h2>
+                                <h2 class="h2 mx-5">{{ $points }}</h2>
+                            </div>
+                            <div class="d-flex mb-3">
+                                <div class="color" style="background-color: #274373;"></div>
+                                <h2 class="info col-5" id="info3">عدد المفتشين</h2>
+                                <h2 class="h2 mx-5">{{ $inspectors }}</h2>
+                            </div>
+                        </div>
+    
+                        <canvas id="myPieChart2" width="150" height="90" class="mt-2"></canvas>
+                        <div id="NoData"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
@@ -352,6 +428,49 @@
                 datasets: [{
                     backgroundColor: pieChartColors,
                     data: dataValues
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'تفاصيل'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        const dataValues2 = [{{ $violations }}, {{ $points }}, {{ $inspectors }}];
+        const labels2 = ["عدد المخالفات", "عدد النقاط", "عدد المفتشين"];
+        const pieChartColors2 = ["#AA1717", "#F8A723", "#274373"];
+
+        <?php
+        if ($violations == 0 && $points == 0 && $inspectors == 0) {?>
+
+        $('#NoData').html("No Data");
+        <?php }
+        ?>
+
+        // Create the pie chart
+        const ctx2 = document.getElementById('myPieChart2').getContext('2d');
+        const myPieChart2 = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: labels2,
+                datasets: [{
+                    backgroundColor: pieChartColors2,
+                    data: dataValues2
                 }]
             },
             options: {
