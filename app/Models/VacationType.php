@@ -10,6 +10,15 @@ class VacationType extends Model
     use HasFactory;
     protected $table = "vacation_types";
     protected $fillable = [
-        'name'
+        'name',
+        'flag'
+    ];
+    protected $hidden = [
+        'created_departement',
+        'created_by',
+        'updated_at',
+        'active',
+        'updated_by',
+        'created_at',
     ];
 }

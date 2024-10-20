@@ -270,6 +270,9 @@ class settingController extends Controller
             }*/
             return $edit_permission . $delete_permission;
         })
+            ->addColumn('flag', function ($row) {
+                return ($row->flag) ? 'نعم' : 'لا';
+            })
             ->rawColumns(['action'])
             ->make(true);
     }
@@ -289,9 +292,9 @@ class settingController extends Controller
             return response()->json(['success' => false, 'message' => $validatedData->errors()]);
         }
         $requestinput = $request->except('_token');
-        //dd($request->nameadd);
         $job = new VacationType();
         $job->name = $request->nameadd;
+        $job->flag = (isset($request->flag) && $request->flag) ? 1 : 0;
         $job->save();
 
         $message = "تم اضافة نوع الأجازه";
@@ -319,6 +322,8 @@ class settingController extends Controller
             return response()->json(['error' => 'هذه الأجازه غير موجوده'], 404);
         }
         $job->name = $request->name;
+        $job->flag = $request->flag;
+
         $job->save();
         $message = 'تم تعديل نوع الأجازه';
         return redirect()->route('vacationType.index', compact('message'));
