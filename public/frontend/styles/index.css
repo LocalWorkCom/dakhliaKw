@@ -1683,11 +1683,11 @@ input::placeholder {
 .mobile-view .h2 {
     color: rgb(158, 156, 156);
 }
-#myPieChart {
+/* #myPieChart {
     display: block;
     height: 350px !important;
     width: 601px !important;
-}
+} */
 .month {
     width: 258px;
     height: 50px;
