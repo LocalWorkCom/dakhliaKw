@@ -129,53 +129,50 @@
         });
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var nameInput = document.getElementById('name');
-            var orderInput = document.getElementById('order');
-            var nextButton = document.getElementById('next-button');
-            var nameError = document.getElementById('name-error');
-            var orderError = document.getElementById('order-error');
+       document.addEventListener('DOMContentLoaded', function() {
+    var nameInput = document.getElementById('name');
+    var orderInput = document.getElementById('order');
+    var nextButton = document.getElementById('next-button');
+    var nameError = document.getElementById('name-error');
+    var orderError = document.getElementById('order-error');
 
-            nameInput.addEventListener('input', function() {
-                if (nameInput.value.trim() !== '') {
-                    nextButton.disabled = false;
-                } else {
-                    nextButton.disabled = true;
-                }
-            });
-            orderInput.addEventListener('input', function() {
-                if (orderInput.value.trim() !== '') {
-                    nextButton.disabled = false;
-                } else {
-                    nextButton.disabled = true;
-                }
-            });
+    // Function to validate both inputs
+    function validateInputs() {
+        let isValid = true;
 
-            nextButton.addEventListener('click', function() {
-                if (nameInput.value.trim() === '') {
-                    nameError.textContent = 'يرجى إدخال اسم القطاع';
-                } else {
-                    nameError.textContent = ''; // Clear any previous error message
-                    document.getElementById('first-container').classList.add('hidden');
-                    document.getElementById('second-container').classList.remove('hidden');
-                }
+        // Check if name field is filled
+        if (nameInput.value.trim() === '') {
+            nameError.textContent = 'يرجى إدخال اسم القطاع';
+            isValid = false;
+        } else {
+            nameError.textContent = ''; // Clear error
+        }
 
-            });
-            nextButton.addEventListener('click', function() {
-                if (orderInput.value.trim() === '') {
-                    orderError.textContent = 'يرجى إدخال ترتيب القطاع ';
-                } else {
-                    orderError.textContent = ''; // Clear any previous error message
-                    document.getElementById('first-container').classList.add('hidden');
-                    document.getElementById('second-container').classList.remove('hidden');
-                }
+        // Check if order field is filled
+        if (orderInput.value.trim() === '') {
+            orderError.textContent = 'يرجى إدخال ترتيب القطاع';
+            isValid = false;
+        } else {
+            orderError.textContent = ''; // Clear error
+        }
 
-            });
+        return isValid;
+    }
 
-            document.getElementById('back-button').addEventListener('click', function() {
-                document.getElementById('second-container').classList.add('hidden');
-                document.getElementById('first-container').classList.remove('hidden');
-            });
-        });
+    // Check validation when "Next" button is clicked
+    nextButton.addEventListener('click', function() {
+        if (validateInputs()) {
+            document.getElementById('first-container').classList.add('hidden');
+            document.getElementById('second-container').classList.remove('hidden');
+        }
+    });
+
+    // Back button functionality
+    document.getElementById('back-button').addEventListener('click', function() {
+        document.getElementById('second-container').classList.add('hidden');
+        document.getElementById('first-container').classList.remove('hidden');
+    });
+});
+
     </script>
 @endpush

@@ -5,8 +5,7 @@
     </div>
 </footer>
 @stack('scripts')
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 
 <script>
@@ -418,8 +417,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- for input time  -->
-<link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     flatpickr(
@@ -432,8 +430,7 @@
         });
 </script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
-</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 {{-- <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
  --}}{{-- <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-messaging.js"></script> --}}
@@ -445,16 +442,10 @@
     src='https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js'>
 </script> --}}
 
-<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js">
-</script>
-<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js">
-</script>
-<script defer
-    src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js">
-</script>
-<script defer
-    src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js">
-</script>
+<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
 
 <script type="module">
     $().ready(function() {
@@ -470,22 +461,31 @@
         // Initialize Firebase
         // const app = initializeApp(firebaseConfig);
         firebase.initializeApp(firebaseConfig);
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/firebase-messaging-sw.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                }).catch(function(err) {
+                    console.log('Service Worker registration failed:', err);
+                });
+        }
+
         // Function to get the FCM token
         function getFCMToken() {
             //   const messaging = getMessaging(app);
             const messaging = firebase.messaging();
             console.log(messaging)
-            getToken(messaging, {
-                    vapidKey: 'BKSKyV8Qf9J5A7TuxgYQdX9cXjZuru8zS3-UkgpGtzkRC0q_VeCj3ArzaJvCJywm-LkhTfNjYwbFuRxhb3Ycz8E	'
-                })
+            messaging.getToken(messaging, {
+                vapidKey: 'BKSKyV8Qf9J5A7TuxgYQdX9cXjZuru8zS3-UkgpGtzkRC0q_VeCj3ArzaJvCJywm-LkhTfNjYwbFuRxhb3Ycz8E'
+            })
                 .then((currentToken) => {
+                    console.log("Attempting to retrieve FCM Token...");
                     if (currentToken) {
                         console.log('FCM Token:', currentToken);
                         // Send the token to your server or use it for sending notifications
                     } else {
                         console.log(
-                            'No registration token available. Request permission to generate one.'
-                        );
+                            'No registration token available. Request permission to generate one.');
                     }
                 })
                 .catch((err) => {

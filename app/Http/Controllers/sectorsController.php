@@ -101,7 +101,7 @@ class sectorsController extends Controller
             'order' => [
                 'required',
                 'string',
-                function ($attribute, $value, $fail) use ($request) {   
+                function ($attribute, $value, $fail) use ($request) {
                     if (DB::table('sectors')->whereNot('id', $request->id)->where('order', $value)->exists()) {
                         $fail('عفوا هذا الترتيب خاص بقطاع اخر');
                     }
@@ -184,13 +184,12 @@ class sectorsController extends Controller
      */
     public function update(Request $request)
     {
-
         $rules = [
             'name' => 'required|string',
             'order' => [
                 'required',
                 'string',
-                function ($attribute, $value, $fail) use ($request) {   
+                function ($attribute, $value, $fail) use ($request) {
                     if (DB::table('sectors')->whereNot('id', $request->id)->where('order', $value)->exists()) {
                         $fail('عفوا هذا الترتيب خاص بقطاع اخر');
                     }
