@@ -482,8 +482,7 @@
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
         const auth = getAuth(app); // Initialize Firebase Auth
-        const database = getDatabase(
-            app); // Initialize Firebase Database
+        const database = getDatabase(app); // Initialize Firebase Database
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register(
@@ -514,9 +513,7 @@
                         console.log('FCM Token:', currentToken);
                         $.ajaxSetup({
                             headers: {
-                                'X-CSRF-TOKEN': $(
-                                        'meta[name="csrf-token"]'
-                                    )
+                                'X-CSRF-TOKEN': $( 'meta[name="csrf-token"]' )
                                     .attr('content')
                             }
                         });
