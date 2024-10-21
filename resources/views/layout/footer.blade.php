@@ -21,12 +21,12 @@
 
             // Serialize the form data
             var formData = $(this)
-        .serialize(); // Changed to $(this)
+                .serialize(); // Changed to $(this)
 
             // Submit AJAX request
             $.ajax({
                 url: $(this).attr(
-                'action'), // Changed to $(this)
+                    'action'), // Changed to $(this)
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -40,7 +40,7 @@
                             type: 'get',
                             success: function(
                                 response
-                                ) {
+                            ) {
                                 // Handle success response
                                 var selectOptions =
                                     '<option value="">اختر الادارة</option>';
@@ -48,7 +48,7 @@
                                     .forEach(
                                         function(
                                             department
-                                            ) {
+                                        ) {
                                             selectOptions
                                                 +=
                                                 '<option value="' +
@@ -59,7 +59,7 @@
                                                 .name +
                                                 '</option>';
                                         }
-                                        );
+                                    );
                                 $('#from_departement')
                                     .html(
                                         selectOptions
@@ -75,16 +75,17 @@
                         resetModal();
                         $('#extern-department')
                             .modal(
-                            'hide'); // Changed modal ID
+                                'hide'
+                            ); // Changed modal ID
                     } else {
                         $.each(response.message,
                             function(key,
-                            value) {
+                                value) {
                                 $('#' + key +
                                     '-error'
-                                    ).html(
+                                ).html(
                                     value[0]
-                                    );
+                                );
                             });
                     }
                 },
@@ -97,9 +98,9 @@
                             value) {
                             $('#' + key +
                                 '-error'
-                                ).html(
+                            ).html(
                                 value[0]
-                                );
+                            );
                         });
                     }
                 }
@@ -118,7 +119,7 @@
     window.onclick = function(event) {
         if (!event.target.matches('.btn')) {
             var dropdowns = document.getElementsByClassName(
-            "dropdown-menu");
+                "dropdown-menu");
             for (var i = 0; i < dropdowns.length; i++) {
                 var openDropdown = dropdowns[i];
                 if (openDropdown.style.display === "block") {
@@ -438,57 +439,62 @@
 <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-messaging.js"></script> --}}
 
 <script type="module">
-    var firebaseConfig = {
-        apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
-        authDomain: "taftesh-74633.firebaseapp.com",
-        projectId: "taftesh-74633",
-        storageBucket: "taftesh-74633.appspot.com",
-        messagingSenderId: "930391301074",
-        appId: "1:930391301074:web:45a7ad03354d8d069dc60b",
-        measurementId: "G-G2FVZL2SQ7"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const messaging = firebase.messaging();
+    $().ready(function() {
+        var firebaseConfig = {
+            apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
+            authDomain: "taftesh-74633.firebaseapp.com",
+            projectId: "taftesh-74633",
+            storageBucket: "taftesh-74633.appspot.com",
+            messagingSenderId: "930391301074",
+            appId: "1:930391301074:web:45a7ad03354d8d069dc60b",
+            measurementId: "G-G2FVZL2SQ7"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
 
-    /* function startFCM() {
+        //  function startFCM() {
 
-         messaging
-             .requestPermission()
-             .then(function() {
-                 return messaging.getToken()
-             })
-             .then(function(response) {
-                 console.log(messaging ,response)
+        messaging
+            .requestPermission()
+            .then(function() {
+                return messaging.getToken()
+            })
+            .then(function(response) {
+                console.log(messaging, response)
 
-                 $.ajaxSetup({
-                     headers: {
-                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                     }
-                 });
-                 $.ajax({
-                     url: '{{ route('firebase.token') }}',
-                     type: 'POST',
-                     data: {
-                         token: response
-                     },
-                     dataType: 'JSON',
-                     success: function(response) {
-                         alert('Token stored.');
-                     },
-                     error: function(error) {
-                         alert(error);
-                     },
-                 });
-             }).catch(function(error) {
-                 alert(error);
-             });
-     }
-     messaging.onMessage(function(payload) {
-         const title = payload.notification.title;
-         const options = {
-             body: payload.notification.body,
-             icon: payload.notification.icon,
-         };
-         new Notification(title, options);
-     });*/
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $(
+                                'meta[name="csrf-token"]'
+                            )
+                            .attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '{{ route('firebase.token') }}',
+                    type: 'POST',
+                    data: {
+                        token: response
+                    },
+                    dataType: 'JSON',
+                    success: function(response) {
+                        alert('Token stored.');
+                    },
+                    error: function(error) {
+                        alert(error);
+                    },
+                });
+            }).catch(function(error) {
+                alert(error);
+            });
+        //  }
+        messaging.onMessage(function(payload) {
+            const title = payload.notification.title;
+            const options = {
+                body: payload.notification.body,
+                icon: payload.notification.icon,
+            };
+            new Notification(title, options);
+        });
+    })
 </script>
