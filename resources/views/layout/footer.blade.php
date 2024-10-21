@@ -437,8 +437,20 @@
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
 {{-- <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-messaging.js"></script> --}}
+{{-- <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase.js"></script>
+ --}}
+ <script type="module" src='https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js'></script>
+ <script type="module" src='https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js'></script>
 
 <script type="module">
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import {
+        getMessaging,
+        getToken
+    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js";
+
     $().ready(function() {
         var firebaseConfig = {
             apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
@@ -449,7 +461,43 @@
             appId: "1:930391301074:web:45a7ad03354d8d069dc60b",
             measurementId: "G-G2FVZL2SQ7"
         };
-        firebase.initializeApp(firebaseConfig);
+        // Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Function to get the FCM token
+function getFCMToken() {
+    const messaging = getMessaging(app);
+
+    getToken(messaging, { vapidKey: 'AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk' })
+        .then((currentToken) => {
+            if (currentToken) {
+                console.log('FCM Token:', currentToken);
+                // Send the token to your server or use it for sending notifications
+            } else {
+                console.log('No registration token available. Request permission to generate one.');
+            }
+        })
+        .catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+        });
+}
+
+// Check if notifications are supported and ask for permission
+if (Notification.permission === 'default') {
+    Notification.requestPermission().then(function(permission) {
+        if (permission === 'granted') {
+            console.log('Notification permission granted.');
+            getFCMToken();
+        } else {
+            console.log('Unable to get permission to notify.');
+        }
+    });
+} else if (Notification.permission === 'granted') {
+    getFCMToken();
+} else {
+    console.log('Notifications are blocked.');
+}
+      /*   firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
 
         //  function startFCM() {
@@ -495,6 +543,6 @@
                 icon: payload.notification.icon,
             };
             new Notification(title, options);
-        });
+        }); */
     })
 </script>
