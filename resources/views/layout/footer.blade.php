@@ -494,7 +494,7 @@
         function getFCMToken() {
             // const messaging = getMessaging(app);
             //const messaging = firebase.messaging();
-             console.log(messaging)
+            //  console.log(messaging)
             getToken(messaging, {
                     vapidKey: 'BKSKyV8Qf9J5A7TuxgYQdX9cXjZuru8zS3-UkgpGtzkRC0q_VeCj3ArzaJvCJywm-LkhTfNjYwbFuRxhb3Ycz8E'
                 })
