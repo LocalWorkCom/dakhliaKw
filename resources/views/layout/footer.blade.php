@@ -432,7 +432,7 @@
         });
 </script>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
 </script>
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
 {{-- <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
