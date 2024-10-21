@@ -185,7 +185,7 @@
                                         alt="logo"
                                         style="margin-left: 7px;">
                                     <a
-                                        href="{{ route('instant_mission.index') }}">الأوامر
+                                        href="{{ route('instant_mission.index') }}">أوامر
                                         الخدمة</a>
                                 </li>
                             @endif
