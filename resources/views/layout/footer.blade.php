@@ -434,23 +434,29 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
 </script>
-<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
-{{-- <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
+{{-- <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
+ --}}{{-- <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-messaging.js"></script> --}}
 {{-- <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase.js"></script>
  --}}
- <script type="module" src='https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js'></script>
- <script type="module" src='https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js'></script>
+{{-- <script type="module"
+    src='https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js'></script>
+<script type="module"
+    src='https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js'>
+</script> --}}
+
+<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js">
+</script>
+<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js">
+</script>
+<script defer
+    src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js">
+</script>
+<script defer
+    src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js">
+</script>
 
 <script type="module">
-    import {
-        initializeApp
-    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-    import {
-        getMessaging,
-        getToken
-    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js";
-
     $().ready(function() {
         var firebaseConfig = {
             apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
@@ -462,87 +468,97 @@
             measurementId: "G-G2FVZL2SQ7"
         };
         // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+        // const app = initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
+        // Function to get the FCM token
+        function getFCMToken() {
+            //   const messaging = getMessaging(app);
+            const messaging = firebase.messaging();
+            console.log(messaging)
+            getToken(messaging, {
+                    vapidKey: 'BKSKyV8Qf9J5A7TuxgYQdX9cXjZuru8zS3-UkgpGtzkRC0q_VeCj3ArzaJvCJywm-LkhTfNjYwbFuRxhb3Ycz8E	'
+                })
+                .then((currentToken) => {
+                    if (currentToken) {
+                        console.log('FCM Token:', currentToken);
+                        // Send the token to your server or use it for sending notifications
+                    } else {
+                        console.log(
+                            'No registration token available. Request permission to generate one.'
+                        );
+                    }
+                })
+                .catch((err) => {
+                    console.log(
+                        'An error occurred while retrieving token. ',
+                        err);
+                });
+        }
 
-// Function to get the FCM token
-function getFCMToken() {
-    const messaging = getMessaging(app);
-
-    getToken(messaging, { vapidKey: 'AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk' })
-        .then((currentToken) => {
-            if (currentToken) {
-                console.log('FCM Token:', currentToken);
-                // Send the token to your server or use it for sending notifications
-            } else {
-                console.log('No registration token available. Request permission to generate one.');
-            }
-        })
-        .catch((err) => {
-            console.log('An error occurred while retrieving token. ', err);
-        });
-}
-
-// Check if notifications are supported and ask for permission
-if (Notification.permission === 'default') {
-    Notification.requestPermission().then(function(permission) {
-        if (permission === 'granted') {
-            console.log('Notification permission granted.');
+        // Check if notifications are supported and ask for permission
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then(function(permission) {
+                if (permission === 'granted') {
+                    console.log(
+                        'Notification permission granted.');
+                    getFCMToken();
+                } else {
+                    console.log(
+                        'Unable to get permission to notify.'
+                    );
+                }
+            });
+        } else if (Notification.permission === 'granted') {
             getFCMToken();
         } else {
-            console.log('Unable to get permission to notify.');
+            console.log('Notifications are blocked.');
         }
-    });
-} else if (Notification.permission === 'granted') {
-    getFCMToken();
-} else {
-    console.log('Notifications are blocked.');
-}
-      /*   firebase.initializeApp(firebaseConfig);
-        const messaging = firebase.messaging();
+        /*   firebase.initializeApp(firebaseConfig);
+          const messaging = firebase.messaging();
 
-        //  function startFCM() {
+          //  function startFCM() {
 
-        messaging
-            .requestPermission()
-            .then(function() {
-                return messaging.getToken()
-            })
-            .then(function(response) {
-                console.log(messaging, response)
+          messaging
+              .requestPermission()
+              .then(function() {
+                  return messaging.getToken()
+              })
+              .then(function(response) {
+                  console.log(messaging, response)
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $(
-                                'meta[name="csrf-token"]'
-                            )
-                            .attr('content')
-                    }
-                });
-                $.ajax({
-                    url: '{{ route('firebase.token') }}',
-                    type: 'POST',
-                    data: {
-                        token: response
-                    },
-                    dataType: 'JSON',
-                    success: function(response) {
-                        alert('Token stored.');
-                    },
-                    error: function(error) {
-                        alert(error);
-                    },
-                });
-            }).catch(function(error) {
-                alert(error);
-            });
-        //  }
-        messaging.onMessage(function(payload) {
-            const title = payload.notification.title;
-            const options = {
-                body: payload.notification.body,
-                icon: payload.notification.icon,
-            };
-            new Notification(title, options);
-        }); */
+                  $.ajaxSetup({
+                      headers: {
+                          'X-CSRF-TOKEN': $(
+                                  'meta[name="csrf-token"]'
+                              )
+                              .attr('content')
+                      }
+                  });
+                  $.ajax({
+                      url: '{{ route('firebase.token') }}',
+                      type: 'POST',
+                      data: {
+                          token: response
+                      },
+                      dataType: 'JSON',
+                      success: function(response) {
+                          alert('Token stored.');
+                      },
+                      error: function(error) {
+                          alert(error);
+                      },
+                  });
+              }).catch(function(error) {
+                  alert(error);
+              });
+          //  }
+          messaging.onMessage(function(payload) {
+              const title = payload.notification.title;
+              const options = {
+                  body: payload.notification.body,
+                  icon: payload.notification.icon,
+              };
+              new Notification(title, options);
+          }); */
     })
 </script>

@@ -306,10 +306,10 @@
     margin-bottom: 20px;
     padding-inline: 35px;
 }
-#myPieChart {
+/* #myPieChart {
     height: 225px !important;
     width: 375px !important;
-}
+} */
 .h2-charts {
     font-size: 25px;
     line-height: 30.78px;
@@ -720,10 +720,10 @@
         font-size: 19px;
         line-height: 30.78px;
     }
-    #myPieChart {
+    /* #myPieChart {
         height: 212px !important;
         width: 370px !important;
-    }
+    } */
     .color{
         display: none;
     }
@@ -745,10 +745,10 @@
     .graph-card i, .canvas-card i, .circle-graph-card i {
         font-size: 19px;
     }
-    #myPieChart {
+    /* #myPieChart {
         height: 183px !important;
         width: 358px !important;
-    }
+    } */
 }
 @media (max-width: 1100px){
     .navbar{
@@ -883,10 +883,10 @@
         margin-bottom: 19px;
         padding-inline: 20px;
     }
-    #myPieChart {
+    /* #myPieChart {
         height: 210px !important;
         width: 340px !important;
-    }
+    } */
 }
 @media (max-width: 992px){
     .navbar{

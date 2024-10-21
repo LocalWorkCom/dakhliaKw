@@ -823,7 +823,7 @@ class HomeController extends Controller
             'inspectors' => $inspectors
         ]);
     }
-    
+
     function compareGragh(Request $request)
     {
         $filter_id = $request->filter_id;
@@ -833,7 +833,7 @@ class HomeController extends Controller
         $totalViolations = 0;
         $totalIdsInstantMission = 0;
         $totalPoints = 0;
-        $uniquegroupPoints = 0;
+        // $uniquegroupPoints = 0;
         if ($type == 'group') {
 
             $group_points2 = 0;
@@ -955,6 +955,8 @@ class HomeController extends Controller
                 $totalIdsInstantMission += $ids_instant_mission2;
             }
         } else if ($type == 'point') {
+
+            $totalViolations =  Violation::where('status', 1)->where('flag', 1)->where('point_id', $filter_id)->count();
         } else if ($type == 'inspector') {
             $group_points2 = 0;
             $points2 = 0;
@@ -1031,6 +1033,8 @@ class HomeController extends Controller
             $totalIdsInstantMission += $ids_instant_mission2;
         } else if ($type == 'group_point') {
 
+
+            $totalViolations =  Violation::where('status', 1)->where('flag', 1)->where('point_id', $filter_id)->count();
         } else if ($type == 'team') {
             $group_points2 = 0;
             $points2 = 0;
@@ -1107,5 +1111,14 @@ class HomeController extends Controller
                 // }
             }
         }
+
+        return response()->json([
+            'totalViolations' => $totalViolations,
+            'totalGroupPoints' => $totalGroupPoints,
+            'totalInspectors' => $totalInspectors,
+            'totalIdsInstantMission' => $totalIdsInstantMission,
+            'totalPoints' => $totalPoints,
+
+        ]);
     }
 }
