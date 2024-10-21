@@ -1,10 +1,10 @@
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js');
+/*importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js');
+*/
 
-/*
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getMessaging } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js";
-*/
+
 const firebaseConfig = {
     apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
     authDomain: "taftesh-74633.firebaseapp.com",
