@@ -442,10 +442,10 @@
     src='https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js'>
 </script> --}}
 
-<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+{{-- <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script> --}}
+{{-- <script defer src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script> --}}
+{{-- <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script> --}}
 
 <script type="module">
     import {
@@ -455,6 +455,12 @@
         getMessaging,
         getToken
     } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js";
+    import {
+        getAuth
+    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"; // Firebase Auth
+    import {
+        getDatabase
+    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"; // Firebase Database
 
     $().ready(function() {
 
@@ -472,6 +478,9 @@
         // firebase.initializeApp(firebaseConfig);
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
+        const auth = getAuth(app); // Initialize Firebase Auth
+        const database = getDatabase(app); // Initialize Firebase Database
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/firebase-messaging-sw.js')
                 .then(function(registration) {
