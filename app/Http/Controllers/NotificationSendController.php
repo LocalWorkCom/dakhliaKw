@@ -16,7 +16,7 @@ class NotificationSendController extends Controller
     protected $notification;
     public function __construct()
     {
-        $this->notification = Firebase::messaging();
+      //  $this->notification = Firebase::messaging();
     }
 
     public function setToken(Request $request)
