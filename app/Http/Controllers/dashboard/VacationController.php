@@ -510,9 +510,10 @@ class VacationController extends Controller
                 }
                 $EndDate = ExpectedEndDate($vacation)[0];
                     $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
+                    
                     if ($inspectors < 2) {
                         $title = 'تنبيه من دوريات';
-                        $message = 'هذه الدوريه أصبح بها مفتش واحد';
+                        $message = '   بعد اجازه مفتش هذه الدوريه أصبح بها مفتش واحد';
 
                         $users = User::where('rule_id', 2)->get();
                         foreach ($users as $user) {

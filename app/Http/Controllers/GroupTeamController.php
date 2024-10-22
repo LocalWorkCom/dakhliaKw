@@ -33,8 +33,14 @@ class GroupTeamController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($id)
+    public function index(Request $request,$id)
     {
+        $notify = $request->query('notifi');
+        if($notify){
+            $updateNotify = Notification::findOrFail($notify);
+            $updateNotify->status = 1;
+            $updateNotify->save();
+        }
         $workTrees = WorkingTree::all();
         $GroupTeamsss = GroupTeam::where('group_id', $id)->get();
 
