@@ -46,7 +46,7 @@
 
             <div id="dropdownMenu2" class="dropdown-menu2">
                 @foreach (getNotifications() as $notifi)
-                <a href="{{ route('groupTeam.index',['id'=>$notifi->group_id]) }}" target="_blank" rel="noopener noreferrer">
+                <a href="{{ route('groupTeam.index',['id'=>$notifi->group_id]) }}"  rel="noopener noreferrer">
                     <p>{{ $notifi->title }}</p>
                     <p>{{ $notifi->teams->name ?? 'N/A' }}, {{ $notifi->message }}</p>
                 </a>
