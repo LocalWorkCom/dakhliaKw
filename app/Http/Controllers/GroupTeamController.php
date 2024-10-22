@@ -456,7 +456,7 @@ class GroupTeamController extends Controller
             $title = 'تنبيه من دوريات';
             $message = 'هذه الدوريه أصبح بها مفتش واحد';
 
-            $users = User::where('rule_id', 2)->pluck('id')->toArray();
+            $users = User::where('rule_id', 2)->get();
             foreach ($users as $user) {
                 send_push_notification(null, $user->fcm_token, $title, $message);
                 $notify = new Notification();
@@ -464,7 +464,7 @@ class GroupTeamController extends Controller
                 $notify->title = $title ;
                 $notify->group_id = $team->group_id;
                 $notify->team_id = $team->id;
-                $notify->user_id = $user;
+                $notify->user_id = $user->id;
                 $notify->status = 0;
                 $notify->save();
             }

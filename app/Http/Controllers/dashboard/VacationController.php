@@ -507,11 +507,11 @@ class VacationController extends Controller
                     //call notification
                     $EndDate = ExpectedEndDate($vacation)[0];
                     $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
-                    if (count($inspectors) < 2) {
+                    if ($inspectors < 2) {
                         $title = 'تنبيه من دوريات';
                         $message = 'هذه الدوريه أصبح بها مفتش واحد';
 
-                        $users = User::where('rule_id', 2)->pluck('id')->toArray();
+                        $users = User::where('rule_id', 2)->get();
                         foreach ($users as $user) {
                             send_push_notification(null, $user->fcm_token, $title, $message);
                             $notify = new Notification();
@@ -519,7 +519,7 @@ class VacationController extends Controller
                             $notify->title = $title;
                             $notify->group_id = $group_id;
                             $notify->team_id = $team_id;
-                            $notify->user_id = $user;
+                            $notify->user_id =  $user->id;
                             $notify->status = 0;
                             $notify->save();
                         }
