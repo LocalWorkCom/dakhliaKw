@@ -445,19 +445,28 @@
     src='https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js'>
 </script> --}}
 
-<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js">
-</script>
-<script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js">
-</script>
-<script defer
-    src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js">
-</script>
-<script defer
-    src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js">
-</script>
-
+{{-- <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script> --}}
+{{-- <script defer src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script> --}}
+{{-- <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script> --}}
+ 
 <script type="module">
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import {
+        getMessaging,
+        getToken
+    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js";
+    import {
+        getAuth
+    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"; // Firebase Auth
+    import {
+        getDatabase
+    } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"; // Firebase Database
+
     $().ready(function() {
+
         var firebaseConfig = {
             apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
             authDomain: "taftesh-74633.firebaseapp.com",
@@ -469,18 +478,62 @@
         };
         // Initialize Firebase
         // const app = initializeApp(firebaseConfig);
-        firebase.initializeApp(firebaseConfig);
+        // firebase.initializeApp(firebaseConfig);
+        const app = initializeApp(firebaseConfig);
+        const messaging = getMessaging(app);
+        const auth = getAuth(app); // Initialize Firebase Auth
+        const database = getDatabase(
+            app); // Initialize Firebase Database
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(
+                    '/firebase-messaging-sw.js')
+                .then(function(registration) {
+                    console.log(
+                        'Service Worker registered with scope:',
+                        registration.scope);
+                }).catch(function(err) {
+                    console.log(
+                        'Service Worker registration failed:',
+                        err);
+                });
+        }
+
         // Function to get the FCM token
         function getFCMToken() {
-            //   const messaging = getMessaging(app);
-            const messaging = firebase.messaging();
-            console.log(messaging)
+            // const messaging = getMessaging(app);
+            //const messaging = firebase.messaging();
+            // console.log(messaging)
             getToken(messaging, {
-                    vapidKey: 'BKSKyV8Qf9J5A7TuxgYQdX9cXjZuru8zS3-UkgpGtzkRC0q_VeCj3ArzaJvCJywm-LkhTfNjYwbFuRxhb3Ycz8E	'
+                    vapidKey: 'BKSKyV8Qf9J5A7TuxgYQdX9cXjZuru8zS3-UkgpGtzkRC0q_VeCj3ArzaJvCJywm-LkhTfNjYwbFuRxhb3Ycz8E'
                 })
                 .then((currentToken) => {
+                    console.log(
+                        "Attempting to retrieve FCM Token...");
                     if (currentToken) {
                         console.log('FCM Token:', currentToken);
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $(
+                                        'meta[name="csrf-token"]'
+                                    )
+                                    .attr('content')
+                            }
+                        });
+                        $.ajax({
+                            url: '{{ route('firebase.token') }}',
+                            type: 'POST',
+                            data: {
+                                fcm_token: currentToken
+                            },
+                            dataType: 'JSON',
+                            success: function(response) {
+                                // alert('Token stored.');
+                            },
+                            error: function(error) {
+                                alert(error);
+                            },
+                        });
                         // Send the token to your server or use it for sending notifications
                     } else {
                         console.log(
@@ -489,6 +542,8 @@
                     }
                 })
                 .catch((err) => {
+                    console.log(messaging);
+
                     console.log(
                         'An error occurred while retrieving token. ',
                         err);
