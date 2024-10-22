@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Google\Service\ServiceControl\Auth;
-use Google\Service\Storage;
+// use Auth;
+// use Google\Service\Storage;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Google\Client as GoogleClient;
+use Google\Client as GoogleClient; // Correct the import for Google Client
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 class NotificationSendController extends Controller
@@ -16,7 +18,7 @@ class NotificationSendController extends Controller
     protected $notification;
     public function __construct()
     {
-      //  $this->notification = Firebase::messaging();
+        //  $this->notification = Firebase::messaging();
     }
 
     public function setToken(Request $request)
@@ -59,20 +61,22 @@ class NotificationSendController extends Controller
     //         'body' => 'required|string',
     //     ]);
 
-    //     $user = User::find($request->user_id);
+    //     $user = Auth::user();
     //     $fcm = $user->fcm_token;
 
     //     if (!$fcm) {
     //         return response()->json(['message' => 'User does not have a device token'], 400);
     //     }
 
-    //     $title = $request->title;
-    //     $description = $request->body;
-    //     $projectId = config('1:930391301074:web:45a7ad03354d8d069dc60b'); # INSERT COPIED PROJECT ID
+    //     $title = 'gfgfg';
+    //     $description = 'body';
+    //     $projectId = 'your-project-id'; // Replace with your Firebase project ID
 
-    //     $credentialsFilePath = Storage::path('app/json/file.json');
+    //     // Get the path to the credentials file using Laravel's Storage facade
+    //     $credentialsFilePath = Storage::path('json/file.json'); // Replace 'json/file.json' with the correct path
+
     //     $client = new GoogleClient();
-    //     $client->setAuthConfig($credentialsFilePath);
+    //     $client->setAuthConfig($credentialsFilePath); // Load the credentials file
     //     $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
     //     $client->refreshTokenWithAssertion();
     //     $token = $client->getAccessToken();

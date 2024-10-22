@@ -29,4 +29,11 @@ class Notification extends Model
     {
         return $this->belongsTo(InspectorMission::class, 'mission_id');
     }
+    public function groups()
+    {
+        return $this->belongsTo(Groups::class, 'group_id');
+    }   public function teams()
+    {
+        return $this->belongsTo(GroupTeam::class, 'team_id');
+    }
 }

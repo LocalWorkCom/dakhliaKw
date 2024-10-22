@@ -494,7 +494,7 @@ class settingController extends Controller
     }
     public function UpdateSetting(Request $request)
     {
-        // dd($request);
+        //dd($request);
         $messages = [
             'key.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'value.required' => 'القيمة مطلوبة',
@@ -511,7 +511,7 @@ class settingController extends Controller
         // Handle validation failure
         if ($validatedData->fails()) {
             // session()->flash('errors', $validatedData->errors());
-            return redirect()->back()->withErrors($validatedData)->withInput()->with('showModal', true);
+            return redirect()->back()->withErrors($validatedData)->withInput()->with('editModal', true);
         }
         $Setting  = Setting::find($request->id_edit);
         $Setting->key = $request->key;
