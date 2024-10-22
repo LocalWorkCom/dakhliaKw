@@ -39,22 +39,19 @@
             </div>
             <button class="btn2 btn-2 mx-5"
                 style="border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
-                onclick="toggleDropdown2()">
+                onclick="toggleDropdown()" >
                 <a class="bell mx-md-5">
                     <i class="fa-regular fa-bell"></i>
                 </a>
             </button>
             <div id="dropdownMenu2" class="dropdown-menu2">
-                <p>notification notification notification notification </p>
+                @foreach (getNotifications() as $notifi)
+                <p>{{ $notifi->title }} </p>
+                <p> {{ $notifi->teams->name }},{{ $notifi->message }} </p>
                 <hr>
-                <p>notification notification notification notification </p>
-                <hr>
-                <p>notification notification notification notification </p>
-                <hr>
-                <p>notification notification notification notification </p>
-                <hr>
-                <p>notification notification notification notification </p>
-                <hr>
+                @endforeach
+
+
             </div>
             <div class="input-group mx-2">
                 <button type="button" id="search-btn" class="btn mt-4"

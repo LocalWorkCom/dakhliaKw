@@ -123,6 +123,7 @@ class WorkingTimeController extends Controller
      */
     public function update(Request $request)
     {
+        //dd($request->all());
         $messages = [
             'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'start_time_edit.required' => 'بداية فترة العمل مطلوبة ولا يمكن تركها فارغة.',

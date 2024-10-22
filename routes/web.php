@@ -85,7 +85,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('setToken', [NotificationSendController::class, 'setToken'])->name('firebase.token');
 
     Route::post('/store-token', [NotificationSendController::class, 'updateDeviceToken'])->name('store.token');
-    Route::post('/send-web-notification', [NotificationSendController::class, 'sendNotification'])->name('send.web-notification');
+    Route::get('/send-web-notification', [NotificationSendController::class, 'sendFcmNotification'])->name('send.web-notification');
 
 
     Route::get('/violation_report', [ViolationReportController::class, 'getdata'])->name('violation_report.getdata');
@@ -145,7 +145,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/working_time/create', [WorkingTimeController::class, 'store'])->name('working_time.store')->middleware('check.permission:create WorkingTime');
     Route::any('/working_time/edit/{id}', [WorkingTimeController::class, 'edit'])->name('working_time.edit')->middleware('check.permission:edit WorkingTime');
 
-    Route::any('/working_time/update', [WorkingTimeController::class, 'update'])->name('working_time.update')->middleware('check.permission:edit WorkingTime');
+    Route::post('/working_time/update', [WorkingTimeController::class, 'update'])->name('working_time.update');
     Route::any('/working_time/show/{id}', [WorkingTimeController::class, 'show'])->name('working_time.show')->middleware('check.permission:view WorkingTime');
 
     // instantmission

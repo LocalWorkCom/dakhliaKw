@@ -99,8 +99,11 @@
         function openEditModal(id, key, value) {
             $('#edit').modal('show');
             document.getElementById('key_edit').value = key;
+            document.getElementById('key_hidden').value=key;
             document.getElementById('value_edit').value = value;
             document.getElementById('id_edit').value = id;
+            console.log(document.getElementById('key_hidden').value)
+
         }
 
         function SaveEdit(params) {
@@ -230,6 +233,8 @@
                                     </label>
                                     <input type="text" id="key_edit" name="key" class="form-control"
                                         placeholder=" اكتب " value="{{ old('key') }}" disabled>
+                                        <input type="hidden" id="key_hidden" name="key" class="form-control"
+                                        placeholder=" اكتب " value="{{ old('key') }}" >
                                     @if ($errors->has('key'))
                                         <span class="text-danger">{{ $errors->first('key') }}</span>
                                     @endif
@@ -290,7 +295,7 @@
                             <div class="form-group mt-4 mb-3">
                                 <label class="d-flex justify-content-start pt-3 pb-2" for="name_show">
                                     اسم الاعداد </label>
-                                <input type="text" id="name_show" name="nameadd_show" class="form-control" 
+                                <input type="text" id="name_show" name="nameadd_show" class="form-control"
                                     placeholder="اكتب الاسم" disabled>
                             </div>
 
