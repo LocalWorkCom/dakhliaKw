@@ -129,12 +129,16 @@ class WorkingTimeController extends Controller
             'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'start_time_edit.required' => 'بداية فترة العمل مطلوبة ولا يمكن تركها فارغة.',
             'end_time_edit.required' => 'نهاية فترة العمل مطلوبة ولا يمكن تركها فارغة.',
+            'color.unique' => 'اللون المحدد موجود بالفعل، يرجى اختيار لون آخر.',
+
         ];
 
         $validatedData = Validator::make($request->all(), [
             'name_edit' => 'required',
             'start_time_edit' => 'required',
             'end_time_edit' => 'required',
+            'color' => 'required|unique:working_times,color',
+
         ], $messages);
 
         if ($validatedData->fails()) {

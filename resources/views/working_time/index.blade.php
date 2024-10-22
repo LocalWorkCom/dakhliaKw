@@ -27,13 +27,13 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
             <!-- <div class="row d-flex justify-content-between " dir="rtl">
-                        <div class="form-group mt-4 mx-3  d-flex">
-                            <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
-                                <img src="{{ asset('frontend/images/time.svg') }}" alt="">
-                                اضافة فترة
-                            </button>
-                        </div>
-                    </div> -->
+                            <div class="form-group mt-4 mx-3  d-flex">
+                                <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
+                                    <img src="{{ asset('frontend/images/time.svg') }}" alt="">
+                                    اضافة فترة
+                                </button>
+                            </div>
+                        </div> -->
 
             @if (session('success'))
                 <div class="alert alert-success">
@@ -116,7 +116,7 @@
                                         فترة العمل</label>
                                     <input type="color" id="color" name="color" class="form-control" value="#ffffff"
                                         required>
-                                        <div id="colorError" class="error-message text-danger" style="display: none;"></div>
+                                    <div id="colorError" class="error-message text-danger" style="display: none;"></div>
 
                                 </div>
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
@@ -192,7 +192,8 @@
                                         فترة العمل</label>
                                     <input type="color" id="color_edit" name="color_edit" class="form-control"
                                         value="#ffffff" required>
-                                        <div id="coloreditError" class="error-message text-danger" style="display: none;"></div>
+                                    <div id="coloreditError" class="error-message text-danger" style="display: none;">
+                                    </div>
 
                                 </div>
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
@@ -360,29 +361,31 @@
                 }
             });
         });
+
         function openViewModal(id, name) {
-                        $.ajax({
-                            url: '/working_time/show/' + id,
-                            method: 'GET',
-                            success: function(response) {
-                                if (response.success) {
-                                    var data = response.data;
-                                    // Populate modal fields with data
-                                    document.getElementById('name_show').value = data.name;
-                                    document.getElementById('start_time_show').value = data.start_time;
-                                    document.getElementById('end_time_show').value = data.end_time;
-                                    document.getElementById('color_show').value = data.color;
-                                    // document.getElementById('id_show').value = data.id;
-                                    $('#view').modal('show');
-                                } else {
-                                    alert(response.message);
-                                }
-                            },
-                            error: function() {
-                                alert('Error retrieving data');
-                            }
-                        });
+            $.ajax({
+                url: '/working_time/show/' + id,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        var data = response.data;
+                        // Populate modal fields with data
+                        document.getElementById('name_show').value = data.name;
+                        document.getElementById('start_time_show').value = data.start_time;
+                        document.getElementById('end_time_show').value = data.end_time;
+                        document.getElementById('color_show').value = data.color;
+                        // document.getElementById('id_show').value = data.id;
+                        $('#view').modal('show');
+                    } else {
+                        alert(response.message);
                     }
+                },
+                error: function() {
+                    alert('Error retrieving data');
+                }
+            });
+        }
+
         function openadd() {
             $('#add').modal('show');
         }
@@ -450,54 +453,54 @@
         }
     </script>
     <script>
-       document.getElementById('createForm').addEventListener('submit', function(event) {
-    var name = document.getElementById('name').value.trim();
-    var startTime = document.getElementById('start_time').value.trim();
-    var endTime = document.getElementById('end_time').value.trim();
-    var color = document.getElementById('color').value.trim();
+        document.getElementById('createForm').addEventListener('submit', function(event) {
+            var name = document.getElementById('name').value.trim();
+            var startTime = document.getElementById('start_time').value.trim();
+            var endTime = document.getElementById('end_time').value.trim();
+            var color = document.getElementById('color').value.trim();
 
-    var hasError = false;
+            var hasError = false;
 
-    // Clear previous error messages
-    document.getElementById('nameError').style.display = 'none';
-    document.getElementById('startTimeError').style.display = 'none';
-    document.getElementById('endTimeError').style.display = 'none';
-    document.getElementById('colorError').style.display = 'none';
+            // Clear previous error messages
+            document.getElementById('nameError').style.display = 'none';
+            document.getElementById('startTimeError').style.display = 'none';
+            document.getElementById('endTimeError').style.display = 'none';
+            document.getElementById('colorError').style.display = 'none';
 
-    // Validate the name field
-    if (!name) {
-        document.getElementById('nameError').textContent = 'اسم الفترة مطلوب';
-        document.getElementById('nameError').style.display = 'block';
-        hasError = true;
-    }
+            // Validate the name field
+            if (!name) {
+                document.getElementById('nameError').textContent = 'اسم الفترة مطلوب';
+                document.getElementById('nameError').style.display = 'block';
+                hasError = true;
+            }
 
-    // Validate the start_time field
-    if (!startTime) {
-        document.getElementById('startTimeError').textContent = 'بداية فترة العمل مطلوبة';
-        document.getElementById('startTimeError').style.display = 'block';
-        hasError = true;
-    }
+            // Validate the start_time field
+            if (!startTime) {
+                document.getElementById('startTimeError').textContent = 'بداية فترة العمل مطلوبة';
+                document.getElementById('startTimeError').style.display = 'block';
+                hasError = true;
+            }
 
-    // Validate the end_time field
-    if (!endTime) {
-        document.getElementById('endTimeError').textContent = 'نهاية فترة العمل مطلوبة';
-        document.getElementById('endTimeError').style.display = 'block';
-        hasError = true;
-    }
+            // Validate the end_time field
+            if (!endTime) {
+                document.getElementById('endTimeError').textContent = 'نهاية فترة العمل مطلوبة';
+                document.getElementById('endTimeError').style.display = 'block';
+                hasError = true;
+            }
 
-    // If there's any validation error, prevent form submission
-    if (hasError) {
-        event.preventDefault();
-    } else {
-        // Check for backend validation errors
-        const colorErrorMessage = '{{ $errors->first('color') }}';
-        if (colorErrorMessage) {
-            document.getElementById('colorError').textContent = colorErrorMessage;
-            document.getElementById('colorError').style.display = 'block';
-            event.preventDefault(); // Prevent form submission
-        }
-    }
-});
+            // If there's any validation error, prevent form submission
+            if (hasError) {
+                event.preventDefault();
+            } else {
+                // Check for backend validation errors
+                const colorErrorMessage = '{{ $errors->first('color') }}';
+                if (colorErrorMessage) {
+                    document.getElementById('colorError').textContent = colorErrorMessage;
+                    document.getElementById('colorError').style.display = 'block';
+                    event.preventDefault(); // Prevent form submission
+                }
+            }
+        });
 
         // document.addEventListener('DOMContentLoaded', function() {
         //     var editForm = document.getElementById('editForm');
