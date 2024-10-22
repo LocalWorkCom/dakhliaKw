@@ -9,24 +9,23 @@
 
     <div class="row ">
         <div class="container welcome col-11">
-        <div class="d-flex justify-content-between">
-            <p> نظام العمــــــــــل </p>
-            <button type="button" class="wide-btn" style="color: #0D992C;"
-                        onclick="window.location.href='{{ route('working_tree.add') }}'">
-                     
-                        اضافة نظام عمل جديد   <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                    </button>
-        </div>
+            <div class="d-flex justify-content-between">
+                <p> نظام العمــــــــــل </p>
+                <button type="button" class="wide-btn" style="color: #0D992C;"
+                    onclick="window.location.href='{{ route('working_tree.add') }}'">
+                    اضافة نظام عمل جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                </button>
+            </div>
         </div>
     </div>
     <br>
     <div class="row">
         <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
             <!-- <div class="row " dir="rtl">
-                <div class="form-group mt-4  mx-2 col-12 d-flex ">
-                  
-                </div>
-            </div> -->
+                    <div class="form-group mt-4  mx-2 col-12 d-flex ">
+
+                    </div>
+                </div> -->
             @include('inc.flash')
 
             <div class="col-lg-12">
@@ -99,12 +98,12 @@
                                     var editButton = '';
                                     var showButton = '';
 
-                                        editButton =
-                                            `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i> تعديل</a>`;
-                                    
-                                        showButton =
-                                            `<a href="${showUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
-                                    
+                                    editButton =
+                                        `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i> تعديل</a>`;
+
+                                    showButton =
+                                        `<a href="${showUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
+
                                     // Checking if the vacation start date condition is met
 
                                     return `${editButton}${showButton}`;
@@ -138,15 +137,15 @@
                             },
                             "pagingType": "full_numbers",
                             "fnDrawCallback": function(oSettings) {
-                                console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                                console.log('Page ' + this.api().page.info().pages)
+                                var page = this.api().page.info().pages;
+                                console.log($('#users-table tr').length);
+                                if (page == 1) {
+                                    //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                    $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
-                                        }
-                                    }
+                                }
+                            }
                         });
                     });
                 </script>
