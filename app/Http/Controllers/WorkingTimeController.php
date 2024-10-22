@@ -141,7 +141,7 @@ class WorkingTimeController extends Controller
         }
 
         try {
-            $WorkingTimeitem = WorkingTime::findOrFail($request->id_edit);
+            $WorkingTimeitem = WorkingTime::findOrFail($request->id);
             $WorkingTimeitem->name = $request->name_edit;
             $WorkingTimeitem->start_time = $request->start_time_edit;
             $WorkingTimeitem->end_time = $request->end_time_edit;
@@ -159,9 +159,9 @@ class WorkingTimeController extends Controller
 
             $WorkingTimeitem->save();
 
-            return redirect()->route('working_time.index')->with('success', 'Permission updated successfully.');
+            return redirect()->route('working_time.index')->with('success', 'تم التعديل بنجاح');
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return redirect()->back()->withErrors($e->getMessage());
         }
     }
 
