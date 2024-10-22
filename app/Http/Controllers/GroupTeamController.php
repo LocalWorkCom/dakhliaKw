@@ -458,7 +458,7 @@ class GroupTeamController extends Controller
 
             $users = User::where('rule_id', 2)->pluck('id')->toArray();
             foreach ($users as $user) {
-                Notifications::send($user, new FcmNotification($title, $message));
+                send_push_notification(null, $user->fcm_token, $title, $message);
                 $notify = new Notification();
                 $notify->message =$message;
                 $notify->title = $title ;
@@ -470,7 +470,6 @@ class GroupTeamController extends Controller
             }
         }
 
-        //call notification
 
         // Prepare to generate or update InspectorMission records
         $start_day_date = date('Y-m-d');
