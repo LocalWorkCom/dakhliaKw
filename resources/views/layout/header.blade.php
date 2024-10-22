@@ -39,7 +39,7 @@
             </div>
             <button class="btn2 btn-2 mx-5"
                 style="border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
-                onclick="toggleDropdown()" >
+                onclick="toggleDropdown2()" >
                 <a class="bell mx-md-5">
                     <i class="fa-regular fa-bell"></i>
                 </a>
@@ -483,6 +483,8 @@
     }
 
     function toggleDropdown2() {
+        console.log("gjmjhghjn");
+
         var dropdown = document.getElementById('dropdownMenu2');
         dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
             'block';
