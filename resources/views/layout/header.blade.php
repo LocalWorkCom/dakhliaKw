@@ -410,7 +410,7 @@
         // Attach closeDropdowns function to window events
         window.addEventListener('load', closeDropdowns);
     });
-</script> --}}
+</script> 
 <script>
     // function toggleDropdown() {
     //     var dropdown = document.getElementById('dropdownMenu');
