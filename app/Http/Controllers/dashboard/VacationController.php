@@ -507,7 +507,7 @@ class VacationController extends Controller
                     //call notification
                     $EndDate = ExpectedEndDate($vacation)[0];
                     $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
-                    if (count($inspectors) < 2) {
+                    if ($inspectors < 2) {
                         $title = 'تنبيه من دوريات';
                         $message = 'هذه الدوريه أصبح بها مفتش واحد';
 

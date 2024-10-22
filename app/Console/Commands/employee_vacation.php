@@ -55,7 +55,7 @@ class employee_vacation extends Command
                         $inspectorMission->save();
                         $inspectors = InspectorMission::where('group_team_id', $inspectorMission->group_team_id)->where('vacation_id', null)->whereDate('date', '=', $today)->count();
 
-                        if (count($inspectors) < 2) {
+                        if ($inspectors < 2) {
                             $title = 'تنبيه من دوريات';
                             $message = 'هذه الدوريه أصبح بها مفتش واحد';
 
