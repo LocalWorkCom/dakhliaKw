@@ -505,7 +505,10 @@ class VacationController extends Controller
                         }
                     }
                     //call notification
-                    $EndDate = ExpectedEndDate($vacation)[0];
+
+                    session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
+                }
+                $EndDate = ExpectedEndDate($vacation)[0];
                     $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
                     if ($inspectors < 2) {
                         $title = 'تنبيه من دوريات';
@@ -524,8 +527,6 @@ class VacationController extends Controller
                             $notify->save();
                         }
                     }
-                    session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
-                }
             } else {
                 session()->flash('error', 'المفتش غير موجود.');
                 return redirect()->back();
