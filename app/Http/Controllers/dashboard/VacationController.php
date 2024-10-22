@@ -11,6 +11,8 @@ use App\Models\EmployeeVacation;
 use App\Models\InspectorMission;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
@@ -491,7 +493,8 @@ class VacationController extends Controller
 
                     foreach ($inspectorMissions as $mission) {
                         $mission_date =  Carbon::parse($mission->date);
-
+                        $team_id = $mission->group_team_id;
+                        $group_id = $mission->group_id;
                         // Check if the mission date is within the vacation period
                         if ($mission_date->diffInDays($vacation->start_date) < $daysNumber) {
                             // Update the InspectorMission record with the vacation ID
@@ -501,8 +504,30 @@ class VacationController extends Controller
                             $mission->save();
                         }
                     }
+                    //call notification
+
                     session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
                 }
+                $EndDate = ExpectedEndDate($vacation)[0];
+                    $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
+                    
+                    if ($inspectors < 2) {
+                        $title = 'تنبيه من دوريات';
+                        $message = '   بعد اجازه مفتش هذه الدوريه أصبح بها مفتش واحد';
+
+                        $users = User::where('rule_id', 2)->get();
+                        foreach ($users as $user) {
+                            send_push_notification(null, $user->fcm_token, $title, $message);
+                            $notify = new Notification();
+                            $notify->message = $message;
+                            $notify->title = $title;
+                            $notify->group_id = $group_id;
+                            $notify->team_id = $team_id;
+                            $notify->user_id =  $user->id;
+                            $notify->status = 0;
+                            $notify->save();
+                        }
+                    }
             } else {
                 session()->flash('error', 'المفتش غير موجود.');
                 return redirect()->back();

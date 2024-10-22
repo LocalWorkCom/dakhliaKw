@@ -5,8 +5,7 @@
     </div>
 </footer>
 @stack('scripts')
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 
 <script>
@@ -418,8 +417,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- for input time  -->
-<link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     flatpickr(
@@ -432,8 +430,7 @@
         });
 </script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
-</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 {{-- <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
  --}}{{-- <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-messaging.js"></script> --}}
@@ -449,7 +446,9 @@
 {{-- <script defer src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script> --}}
 {{-- <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script> --}}
- 
+
+
+{{-- firebase code  --}}
 <script type="module">
     import {
         initializeApp
@@ -477,47 +476,40 @@
             measurementId: "G-G2FVZL2SQ7"
         };
         // Initialize Firebase
-        // const app = initializeApp(firebaseConfig);
-        // firebase.initializeApp(firebaseConfig);
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
-        const auth = getAuth(app); // Initialize Firebase Auth
-        const database = getDatabase(
-            app); // Initialize Firebase Database
+        const auth = getAuth(app);
+        const database = getDatabase(app);
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register(
                     '/firebase-messaging-sw.js')
                 .then(function(registration) {
-                    console.log(
-                        'Service Worker registered with scope:',
-                        registration.scope);
+                    // console.log(
+                    //     'Service Worker registered with scope:',
+                    //     registration.scope);
                 }).catch(function(err) {
-                    console.log(
-                        'Service Worker registration failed:',
-                        err);
+                    // console.log(
+                    //     'Service Worker registration failed:',
+                    //     err);
                 });
         }
+        var isAuth = {{ Auth::check() ? 'true' : 'false' }};
+        var userFcmToken = {!! Auth::check() && Auth::user()->fcm_token ? json_encode(Auth::user()->fcm_token) : 'null' !!};
 
         // Function to get the FCM token
         function getFCMToken() {
-            // const messaging = getMessaging(app);
-            //const messaging = firebase.messaging();
-            // console.log(messaging)
+            console.log(messaging);
             getToken(messaging, {
                     vapidKey: 'BKSKyV8Qf9J5A7TuxgYQdX9cXjZuru8zS3-UkgpGtzkRC0q_VeCj3ArzaJvCJywm-LkhTfNjYwbFuRxhb3Ycz8E'
                 })
                 .then((currentToken) => {
-                    console.log(
-                        "Attempting to retrieve FCM Token...");
+                    ///  console.log("Attempting to retrieve FCM Token...");
                     if (currentToken) {
-                        console.log('FCM Token:', currentToken);
+                        //   console.log('FCM Token:', currentToken);
                         $.ajaxSetup({
                             headers: {
-                                'X-CSRF-TOKEN': $(
-                                        'meta[name="csrf-token"]'
-                                    )
-                                    .attr('content')
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             }
                         });
                         $.ajax({
@@ -528,92 +520,43 @@
                             },
                             dataType: 'JSON',
                             success: function(response) {
-                                // alert('Token stored.');
+                                // Token stored
+                                console.log('Token successfully stored.');
                             },
                             error: function(error) {
-                                alert(error);
+                                console.error('Error storing token:', error);
                             },
                         });
-                        // Send the token to your server or use it for sending notifications
                     } else {
-                        console.log(
-                            'No registration token available. Request permission to generate one.'
-                        );
+                        console.log('No registration token available. Request permission to generate one.');
                     }
                 })
                 .catch((err) => {
-                    console.log(messaging);
-
-                    console.log(
-                        'An error occurred while retrieving token. ',
-                        err);
+                    console.error('An error occurred while retrieving token.', err);
                 });
         }
 
-        // Check if notifications are supported and ask for permission
-        if (Notification.permission === 'default') {
-            Notification.requestPermission().then(function(permission) {
-                if (permission === 'granted') {
-                    console.log(
-                        'Notification permission granted.');
-                    getFCMToken();
-                } else {
-                    console.log(
-                        'Unable to get permission to notify.'
-                    );
-                }
-            });
-        } else if (Notification.permission === 'granted') {
-            getFCMToken();
+        // Only run the FCM logic if the user is authenticated and fcm_token is null
+        if (isAuth === true && userFcmToken === null) {
+            console.log("Authenticated user with no FCM token. Attempting to retrieve FCM token...");
+            if (Notification.permission === 'default') {
+                Notification.requestPermission().then(function(permission) {
+                    if (permission === 'granted') {
+                        console.log('Notification permission granted.');
+                        getFCMToken();
+                    } else {
+                        console.log('Unable to get permission to notify.');
+                    }
+                });
+            } else if (Notification.permission === 'granted') {
+                getFCMToken();
+            } else {
+                console.log('Notifications are blocked.');
+            }
+        } else if (isAuth === true) {
+            console.log("User already has an FCM token.");
         } else {
-            console.log('Notifications are blocked.');
+            console.log("User not authenticated.");
         }
-        /*   firebase.initializeApp(firebaseConfig);
-          const messaging = firebase.messaging();
-
-          //  function startFCM() {
-
-          messaging
-              .requestPermission()
-              .then(function() {
-                  return messaging.getToken()
-              })
-              .then(function(response) {
-                  console.log(messaging, response)
-
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $(
-                                  'meta[name="csrf-token"]'
-                              )
-                              .attr('content')
-                      }
-                  });
-                  $.ajax({
-                      url: '{{ route('firebase.token') }}',
-                      type: 'POST',
-                      data: {
-                          token: response
-                      },
-                      dataType: 'JSON',
-                      success: function(response) {
-                          alert('Token stored.');
-                      },
-                      error: function(error) {
-                          alert(error);
-                      },
-                  });
-              }).catch(function(error) {
-                  alert(error);
-              });
-          //  }
-          messaging.onMessage(function(payload) {
-              const title = payload.notification.title;
-              const options = {
-                  body: payload.notification.body,
-                  icon: payload.notification.icon,
-              };
-              new Notification(title, options);
-          }); */
     })
 </script>

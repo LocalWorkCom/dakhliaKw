@@ -15,6 +15,7 @@ use App\Models\GroupSectorHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\InspectorGroupHistory;
+use App\Models\Notification;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Google\Client as GoogleClient;
@@ -121,7 +122,7 @@ if (!function_exists('send_sms_code')) {
  * @image => name of file image in database
  * @realname =>real name file in db
  * @model => $model where to save files in
- * @request => the file input request which holds the file uploading 
+ * @request => the file input request which holds the file uploading
  */
 
 if (!function_exists('UploadFiles')) {
@@ -459,11 +460,11 @@ function getTokenDevice($inspector_id)
 }
 if (!function_exists('send_push_notification')) {
     /* function send_push_notification($mission_id,$token,$title,$message){
-        $serverkey = 'AAAAFN778j8:APA91bFt1GglZf07Po-5ccwa8tYHuaIz0ymvDZCeDKJ2bxpaNrj2eM1TbON3_EdkhjkcH9IhKsaTOUv0mHSXHWQ-O2t61J6OwgoBmzoftKS-1uKBzTmwlGs0kkGClVYcP0TTXtFArxIT';// this is a Firebase server key 
+        $serverkey = 'AAAAFN778j8:APA91bFt1GglZf07Po-5ccwa8tYHuaIz0ymvDZCeDKJ2bxpaNrj2eM1TbON3_EdkhjkcH9IhKsaTOUv0mHSXHWQ-O2t61J6OwgoBmzoftKS-1uKBzTmwlGs0kkGClVYcP0TTXtFArxIT';// this is a Firebase server key
         // device_token
             $data = array(
                 'to' => $token,
-                'notification' => 
+                'notification' =>
                         array(
                         'body' => $message,
                         'title' => $title),
@@ -471,10 +472,10 @@ if (!function_exists('send_push_notification')) {
                                 "mission_id"=> $mission_id,
                                 // "mode"=>"rate",
                                 "title"=>$title
-                            
+
                             )
                         );
-       
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,"https://fcm.googleapis.com/fcm/send");
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -527,4 +528,14 @@ if (!function_exists('send_push_notification')) {
         $err = curl_error($ch);
         curl_close($ch);
     }
+}
+
+
+function getNotifications(){
+    $notifications = Notification::with('groups','teams')->where('user_id',Auth::user()->id)->where('status',0)->get();
+
+    if($notifications){
+        return $notifications;
+    }
+    return null;
 }

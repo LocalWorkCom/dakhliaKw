@@ -420,15 +420,197 @@
                     }
                 });
             });
+
+            // Function to update the Pie Chart (assuming you're using Chart.js)
+            function updatePieChart(violations, points, inspectors) {
+                var ctx = document.getElementById('myPieChart').getContext('2d');
+                if (violations == 0 && points == 0 && inspectors == 0) {
+
+                    $('#NoData').html("No Data");
+                } else {
+                    $('#NoData').html("");
+
+                }
+                var pieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['مخالفات', 'زيارات', 'مفتشون'],
+                        datasets: [{
+                            label: 'Statistics',
+                            data: [violations, points, inspectors],
+                            backgroundColor: ['#aa1717', '#f8a723', '#274373'],
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            }
+        });
+    </script>
+
+    <script>
+        const groups = @json($Groups);
+
+        // Use the map function to extract the names of the groups
+        const xValues = groups.map(group => group.name);
+
+        // Display the extracted group names in the console (for verification)
+        const ViolationData = groups.map(group => group.violations);
+        const PointsData = groups.map(group => group.points);
+        const IspectorData = groups.map(group => group.inspectors);
+        const GroupPointsData = groups.map(group => group.group_points);
+        const InstantmissionData = groups.map(group => group.ids_instant_mission);
+
+        const chartColors = ["#AA1717", "#F8A723", "#274373", "#3C9A34", "#43B8CE"];
+        // Create the bar chart
+        new Chart("barChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [{
+                        label: "مخالفات",
+                        backgroundColor: chartColors[0],
+                        data: ViolationData,
+                        barThickness: 20
+                    },
+                    {
+                        label: "زيارات",
+                        backgroundColor: chartColors[1],
+                        data: PointsData,
+                        barThickness: 20
+                    },
+                    {
+                        label: "مفتشين",
+                        backgroundColor: chartColors[2],
+                        data: IspectorData,
+                        barThickness: 20
+                    },
+                    {
+                        label: "المواقع",
+                        backgroundColor: chartColors[3],
+                        data: GroupPointsData,
+                        barThickness: 20
+                    },
+                    {
+                        label: "اوامر خدمة",
+                        backgroundColor: chartColors[4],
+                        data: InstantmissionData,
+                        barThickness: 20
+                    }
+                ]
+            },
+            options: {
+                legend: {
+                    display: true
+                },
+                title: {
+                    display: true,
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
+        const dataValues = [{{$violations}}, {{$points}}, {{ $inspectors}}];
+        const labels = ["عدد المخالفات", "عدد النقاط", "عدد المفتشين"];
+        const pieChartColors = ["#AA1717", "#F8A723", "#274373"];
+
+        <?php
+        if ($violations == 0 && $points == 0 && $inspectors == 0) {?>
+
+        $('#NoData').html("No Data");
+        <?php }
+        ?>
+
+        // Create the pie chart
+        const ctx = document.getElementById('myPieChart').getContext('2d');
+        const myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    backgroundColor: pieChartColors,
+                    data: dataValues
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'تفاصيل'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        const dataValues2 = [{{$violations}}, {{$points}}, {{ $inspectors}}];
+        const labels2 = ["عدد المخالفات", "عدد النقاط", "عدد المفتشين"];
+        const pieChartColors2 = ["#AA1717", "#F8A723", "#274373"];
+
+        <?php
+        if ($violations == 0 && $points == 0 && $inspectors == 0) {?>
+
+        $('#NoData').html("No Data");
+        <?php }
+        ?>
+
+        // Create the pie chart
+        const ctx2 = document.getElementById('myPieChart2').getContext('2d');
+        const myPieChart2 = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: labels2,
+                datasets: [{
+                    backgroundColor: pieChartColors2,
+                    data: dataValues2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'تفاصيل'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                            }
+                        }
+                    }
+                }
+            }
         });
         // Function to update the Pie Chart (assuming you're using Chart.js)
         function updatePieChart(violations, points, inspectors) {
             var ctx = document.getElementById('myPieChart').getContext('2d');
             if (violations == 0 && points == 0 && inspectors == 0) {
 
-                $('#NoData').html("No Data");
-            } else {
-                $('#NoData').html("");
+        function PrintImage() {
+            var canvas = document.getElementById("myPieChart");
+            var infoContent = document.querySelector("#data-info1").outerHTML; // Select the info block content
+            var monthName = document.getElementById("month_name").innerText; // Get the Arabic month name
 
             }
             var pieChart = new Chart(ctx, {

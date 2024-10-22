@@ -20,17 +20,27 @@ use App\Models\EmployeeVacation;
 use App\Models\Grouppoint;
 use App\Models\Groups;
 use App\Models\instantmission;
+use App\Models\Notification;
 use App\Models\PersonalMission;
 use App\Models\Point;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\FcmNotification;
+use Illuminate\Support\Facades\Notification as Notifications;
 
 class GroupTeamController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index($id)
+    public function index(Request $request,$id)
     {
+        $notify = $request->query('notifi');
+        if($notify){
+            $updateNotify = Notification::findOrFail($notify);
+            $updateNotify->status = 1;
+            $updateNotify->save();
+        }
         $workTrees = WorkingTree::all();
         $GroupTeamsss = GroupTeam::where('group_id', $id)->get();
 
@@ -447,6 +457,25 @@ class GroupTeamController extends Controller
 
         // Save the changes to the team
         $team->save();
+        $inspectorIdsArray = explode(',', $team->inspector_ids);
+        if (count($inspectorIdsArray) < 2) {
+            $title = 'تنبيه من دوريات';
+            $message = 'هذه الدوريه أصبح بها مفتش واحد';
+
+            $users = User::where('rule_id', 2)->get();
+            foreach ($users as $user) {
+                send_push_notification(null, $user->fcm_token, $title, $message);
+                $notify = new Notification();
+                $notify->message =$message;
+                $notify->title = $title ;
+                $notify->group_id = $team->group_id;
+                $notify->team_id = $team->id;
+                $notify->user_id = $user->id;
+                $notify->status = 0;
+                $notify->save();
+            }
+        }
+
 
         // Prepare to generate or update InspectorMission records
         $start_day_date = date('Y-m-d');
@@ -1125,7 +1154,7 @@ class GroupTeamController extends Controller
                 // Remove the group point ID from the old mission's list of group points
                 $ids_group_point = $old_mission->ids_group_point;
                 if (($key = array_search($group_point_id, $ids_group_point)) !== false) {
-                    //  dd(($ids_group_point[$key])) ;  
+                    //  dd(($ids_group_point[$key])) ;
                     unset($ids_group_point[$key]);
                     // dd($ids_group_point);
                     $ids_group_point = array_values($ids_group_point);

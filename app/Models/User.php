@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
 //use Laravel\Sanctum\HasApiTokens;
 use Laravel\Passport\HasApiTokens;
 
@@ -45,7 +46,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token; // Assuming you store the FCM token in the 'fcm_token' column
+    }
     public function getIsVerifiedAttribute()
     {
         return $this->code === $this->verfication_code; // Adjust logic as needed
