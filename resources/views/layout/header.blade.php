@@ -36,9 +36,9 @@
                     </button>
                 @endif
             </div>
-
-            <button class="btn btn-2 mx-5" style="border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
-                onclick="toggleDropdown('dropdownMenu2')">
+            <button class="btn2 btn-2 mx-5"
+                style="border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
+                onclick="toggleNotifydown2()">
                 <a class="bell mx-md-5">
                     <i class="fa-regular fa-bell"></i>
                 </a>
@@ -384,11 +384,14 @@
         </div>
     </div>
 </div>
-{{-- <script>
+<script>
+    $().ready(function() {
+        $('#dropdownMenu2').fadeOut('fast');
+    })
     document.addEventListener('DOMContentLoaded', function() {
         // Close dropdowns on page load
         document.getElementById('dropdownMenu').style.display = 'none';
-        document.getElementById('dropdownMenu2').style.display = 'none';
+        // document.getElementById('dropdownMenu2').style.display = 'none';
         document.getElementById('dropdownMenu4').style.display = 'none';
         document.getElementById('dropdownMenu5').style.display = 'none';
         document.getElementById('dropdownMenu7').style.display = 'none';
@@ -397,7 +400,7 @@
         // Optional: Close dropdowns if they are open on page load
         function closeDropdowns() {
             let dropdowns = document.querySelectorAll(
-                '.dropdown-menu, .dropdown-menu2, .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
+                '.dropdown-menu, .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
             );
             dropdowns.forEach(function(dropdown) {
                 dropdown.style.display = 'none';
@@ -407,7 +410,7 @@
         // Attach closeDropdowns function to window events
         window.addEventListener('load', closeDropdowns);
     });
-</script> --}}
+</script> 
 <script>
     // function toggleDropdown() {
     //     var dropdown = document.getElementById('dropdownMenu');
@@ -420,12 +423,18 @@
     //     alert("Button clicked!");
     //     console.log("gjmjhghjn");
 
-    //     var dropdown = document.getElementById('dropdownMenu2');
-    //     if (dropdown) {
-    //         dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
-    //     }
-    // }
-    // });
+        var dropdown = document.getElementById('dropdownMenu2');
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
+            'block';
+    }
+
+    function toggleNotifydown2() {
+        console.log("Notification");
+
+        //   var dropdown = $('#dropdownMenu2');
+        $('#dropdownMenu2').fadeToggle("slow");
+        //   dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :'block';
+    }
 
     function toggleDropdown3(event) {
         var dropdown = document.getElementById('dropdownMenu3');
@@ -455,19 +464,14 @@
         event.stopPropagation(); // Prevent closing other dropdowns
     }
 
-    // Function to toggle dropdown based on ID
-    function toggleDropdown(dropdownId) {
-        // Close all other dropdowns first
-        closeAllDropdowns();
 
-        // Toggle the target dropdown
-        var dropdown = document.getElementById(dropdownId);
-        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
-    }
 
-    // Function to close all dropdowns
-    function closeAllDropdowns() {
-        let dropdowns = document.querySelectorAll('.dropdown-menu, .dropdown-menu2');
+
+    // Close dropdowns if clicked outside
+    document.addEventListener('click', function(event) {
+        let dropdowns = document.querySelectorAll(
+            '.dropdown-menu, .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
+        );
         dropdowns.forEach(function(dropdown) {
             dropdown.style.display = 'none';
         });
