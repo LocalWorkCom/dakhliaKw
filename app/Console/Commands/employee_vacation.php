@@ -59,7 +59,7 @@ class employee_vacation extends Command
                             $title = 'تنبيه من دوريات';
                             $message = 'هذه الدوريه أصبح بها مفتش واحد';
 
-                            $users = User::where('rule_id', 2)->pluck('id')->toArray();
+                            $users = User::where('rule_id', 2)->get();
                             foreach ($users as $user) {
                                 send_push_notification(null, $user->fcm_token, $title, $message);
                                 $notify = new Notification();
@@ -67,7 +67,7 @@ class employee_vacation extends Command
                                 $notify->title = $title;
                                 $notify->group_id = $inspectorMission->group_id;
                                 $notify->team_id = $inspectorMission->group_team_id;
-                                $notify->user_id = $user;
+                                $notify->user_id =  $user->id;
                                 $notify->status = 0;
                                 $notify->save();
                             }
