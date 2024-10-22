@@ -433,8 +433,7 @@
 
         //   var dropdown = $('#dropdownMenu2');
         $('#dropdownMenu2').fadeToggle("slow");
-        //   dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
-        'block';
+        //   dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :'block';
     }
 
     function toggleDropdown3(event) {
