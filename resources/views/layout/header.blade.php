@@ -45,13 +45,15 @@
             </button>
 
             <div id="dropdownMenu2" class="dropdown-menu2">
-                @foreach (getNotifications() as $notifi)
-                <a href="{{ route('groupTeam.index',['id'=>$notifi->group_id,'notifi'=>$notifi->id]) }}"  rel="noopener noreferrer">
+                @forelse (getNotifications() as $notifi)
+                <a href="{{ route('groupTeam.index', ['id' => $notifi->group_id, 'notifi' => $notifi->id]) }}" rel="noopener noreferrer">
                     <p>{{ $notifi->title }}</p>
                     <p>{{ $notifi->teams->name ?? 'N/A' }}, {{ $notifi->message }}</p>
                 </a>
-                    <hr>
-                @endforeach
+                <hr>
+            @empty
+                <p>لا يوجد تنبيهات</p>
+            @endforelse
             </div>
             <div class="input-group mx-2">
                 <button type="button" id="search-btn" class="btn mt-4" data-mdb-ripple-init>
