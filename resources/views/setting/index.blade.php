@@ -99,7 +99,7 @@
         function openEditModal(id, key, value) {
             $('#edit').modal('show');
             document.getElementById('key_edit').value = key;
-            document.getElementById('key_hidden').value=key;
+            document.getElementById('key_hidden').value = key;
             document.getElementById('value_edit').value = value;
             document.getElementById('id_edit').value = id;
             console.log(document.getElementById('key_hidden').value)
@@ -154,7 +154,7 @@
                                     <label for="keyadd" class="d-flex justify-content-start pt-3 pb-2">ادخل الاسم
                                     </label>
                                     <input type="text" id="keyadd" name="key" class="form-control"
-                                        placeholder=" اكتب " value="{{ old('key') }}" >
+                                        placeholder=" اكتب " value="{{ old('key') }}">
                                     @if ($errors->has('key'))
                                         <span class="text-danger">{{ $errors->first('key') }}</span>
                                     @endif
@@ -233,8 +233,8 @@
                                     </label>
                                     <input type="text" id="key_edit" name="key" class="form-control"
                                         placeholder=" اكتب " value="{{ old('key') }}" disabled>
-                                        <input type="hidden" id="key_hidden" name="key" class="form-control"
-                                        placeholder=" اكتب " value="{{ old('key') }}" >
+                                    <input type="hidden" id="key_hidden" name="key" class="form-control"
+                                        placeholder=" اكتب " value="{{ old('key') }}">
                                     @if ($errors->has('key'))
                                         <span class="text-danger">{{ $errors->first('key') }}</span>
                                     @endif
@@ -318,7 +318,20 @@
     </div>
 @endsection
 @push('scripts')
+@if (session('showModal'))
     <script>
+        $(document).ready(function() {
+            $('#myModal1').modal('show');
+        });
+    </script>
+@endif
+    <script>
+
+      function openViewModal(id, name, value) {
+    $('#view').modal('show');
+    document.getElementById('name_show').value = name;
+    document.getElementById('value_show').value = value;
+}
         $(document).ready(function() {
             $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm';
             var table = $('#users-table').DataTable({
