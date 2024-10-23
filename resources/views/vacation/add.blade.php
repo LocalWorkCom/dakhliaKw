@@ -79,25 +79,17 @@
                         </div>
                     </div>
 
-                    {{-- <div class="form-group col-md-5 mx-md-2" style="display: none" id="toggleDiv" width="600px">
-                        <label for="country_id" style="display: flex;">الدولة</label>
-                        <select id="country_id" name="country_id" class="select2 form-control">
-                            <option value="">اختر الدولة</option>
-                            @foreach ($countries as $item)
-                                <option value="{{ $item->id }}">{{ $item->country_name_ar }}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
-
-                    <div class="form-group col-md-5 mx-md-2 " id="toggleDiv1" style="visibility: hidden">
-                        <label for="country_id" style=" display: flex; justify-content: flex-start;"> الدولة</label>
-                        <select id="country_id" name="country_id" class="form-control  select2">
-                            <option value="">اختر الدولة</option>
-                            @foreach ($countries as $item)
-                                <option value="{{ $item->id }}">
-                                    {{ $item->country_name_ar }}</option>
-                            @endforeach
-                        </select>
+                    <div class="form row mx-md-3 mt-4 d-flex justify-content-center">
+                        <div class="form-group col-md-10 mx-md-2 " id="toggleDiv1" style="visibility: hidden">
+                            <label for="country_id" style=" display: flex; justify-content: flex-end;"> الدولة</label>
+                            <select id="country_id" name="country_id" class="form-control  select2">
+                                <option value="">اختر الدولة</option>
+                                @foreach ($countries as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ $item->country_name_ar }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="container col-10 mt-5 mb-5 ">
                         <div class="form-row col-10 " dir="ltr">

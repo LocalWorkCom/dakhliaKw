@@ -117,9 +117,9 @@ class VacationController  extends Controller
     }
     function getAllVacations(Request $request)
     {
-        $PendingVacations = EmployeeVacation::where('status', $request->status)->where('employee_id', auth()->user()->id)->get();
-        $AcceptedVacations = EmployeeVacation::where('status', $request->status)->where('employee_id', auth()->user()->id)->get();
-        $RejectedVacations = EmployeeVacation::where('status', $request->status)->where('employee_id', auth()->user()->id)->get();
+        $PendingVacations = EmployeeVacation::where('status', 'Pending')->where('employee_id', auth()->user()->id)->get();
+        $AcceptedVacations = EmployeeVacation::where('status', 'Approved')->where()->where('employee_id', auth()->user()->id)->get();
+        $RejectedVacations = EmployeeVacation::where('status', 'Rejected')->where('employee_id', auth()->user()->id)->get();
       
         $success['PendingVacations'] = $PendingVacations;
         $success['AcceptedVacations'] = $AcceptedVacations;
