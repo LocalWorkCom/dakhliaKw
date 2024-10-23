@@ -168,28 +168,33 @@ class settingController extends Controller
     }
     //add GRAD
     public function addgrads(Request $request)
-    {
-        $rules = [
-            'nameadd' => 'required|string',
-        ];
+{
+    $rules = [
+        'nameadd' => ['required', 'string', 'min:1', 'regex:/\S+/'], // Ensures non-whitespace input
+        'typeadd' => 'required', // Validates typeadd to ensure a proper selection
+    ];
 
-        $messages = [
-            'nameadd.required' => 'يجب ادخال اسم الرتبه ',
-        ];
+    $messages = [
+        'nameadd.required' => 'الاسم مطلوب.',
+        'nameadd.regex' => 'الاسم لا يمكن أن يحتوي على مسافات فقط.',
+        'typeadd.required' => 'نوع الرتبة مطلوب.',
+    ];
 
-        $validatedData = Validator::make($request->all(), $rules, $messages);
-        if ($validatedData->fails()) {
-            return response()->json(['success' => false, 'message' => $validatedData->errors()]);
-        }
-        $requestinput = $request->except('_token');
-        $grade = new grade();
-        $grade->name = $request->nameadd;
-        $grade->type = $request->typeadd;
-        $grade->save();
-        $message = "تم اضافه الرتبه";
-        return redirect()->route('grads.index', compact('message'));
-        //return redirect()->back()->with(compact('activeTab','message'));
+    $validatedData = Validator::make($request->all(), $rules, $messages);
+
+    if ($validatedData->fails()) {
+        return response()->json(['success' => false, 'message' => $validatedData->errors()]);
     }
+
+    // Save the grade
+    $grade = new Grade();
+    $grade->name = $request->nameadd;
+    $grade->type = $request->typeadd;
+    $grade->save();
+
+    return redirect()->route('grads.index')->with('message', 'تم اضافه الرتبه');
+}
+
     //show GRAD
     public function showgrads($id)
     {

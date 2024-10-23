@@ -56,15 +56,15 @@
                     @endif
                     {{-- {{ dd($user) }} --}}
 
-                    <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+                    <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-row pt-5 pb-3 d-flex justify-content-around flex-row-reverse"
                             style="background-color:#f5f8fd; border-bottom:0.1px solid lightgray;">
                             <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
                                 {{-- {{ dd($user->type) }} --}}
-                                {{-- <!--   @if ($user->type == 'man') --}}
-
+                                <!--   @if ($user->type == 'man')
+    -->
                                 <div class="radio-btns mx-md-4 ">
                                     <input type="radio" class="form-check-input" id="male" name="gender"
                                         value="man" style="height:20px; width:20px;"
@@ -77,21 +77,21 @@
                                         @if ($user->type == 'female') checked @endif>
                                     <label class="form-check-label mx-md-2" for="female">انثى</label>
                                 </div>
-
-                                {{-- @else --}}
-
+                                <!--
+@else
+    -->
                                 <!-- <div class="radio-btns mx-md-4 ">
-                                                                                        <input type="radio" class="form-check-input" id="male" name="gender"
-                                                                                            value="man" style="height:20px; width:20px;">
-                                                                                        <label class="form-check-label mx-2" for="male">ذكر</label>
-                                                                                    </div>
-                                                                                    <div class="radio-btns mx-md-4 ">
-                                                                                        <input type="radio" class="form-check-input" id="female" name="gender"
-                                                                                            value="female" style="height:20px; width:20px;" checked>
-                                                                                        <label class="form-check-label mx-md-2" for="female">انثى</label>
-                                                                                    </div> -->
-
-                                {{-- @endif --> --}}
+                                                                        <input type="radio" class="form-check-input" id="male" name="gender"
+                                                                            value="man" style="height:20px; width:20px;">
+                                                                        <label class="form-check-label mx-2" for="male">ذكر</label>
+                                                                    </div>
+                                                                    <div class="radio-btns mx-md-4 ">
+                                                                        <input type="radio" class="form-check-input" id="female" name="gender"
+                                                                            value="female" style="height:20px; width:20px;" checked>
+                                                                        <label class="form-check-label mx-md-2" for="female">انثى</label>
+                                                                    </div> -->
+                                <!--
+    @endif -->
                                 <label for="input44">الفئة</label>
                             </div>
                             <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
@@ -148,12 +148,13 @@
 
 
                         </div>
+
                         <div class="form-row mx-3 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input1"><i class="fa-solid fa-asterisk"
                                         style="color:red; font-size:10px;"></i> الاسم</label>
                                 <input type="text" id="input1" name="name" class="form-control"
-                                    placeholder="الاسم" value="{{ $user->name }}" dir="rtl" required>
+                                    placeholder="الاسم" value="{{ $user->name }}" dir="rtl">
                             </div>
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input2">
@@ -183,6 +184,19 @@
 
                         </div>
 
+                        {{-- <div class="form-row mx-2 d-flex justify-content-center flex-row-reverse">
+                            <div class="form-group col-md-10 mx-2">
+                                <label for="input8">الوظيفة</label>
+                                <select id="input8" name="job" class="form-control select2" placeholder="المهام">
+                                    <option  disabled>اختار من القائمة</option>
+                                    @foreach ($job as $item)
+                                    <option value="{{ $item->id }}" {{ $user->job_id == $item->id ? 'selected' : ''}}>
+                    {{ $item->name }}
+                    </option>
+                    @endforeach
+                    </select>
+            </div>
+        </div> --}}
 
                         <div class="form-row  mx-3 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-5 mx-2">
@@ -257,6 +271,23 @@
                                     </select>
                                 </div>
                             </div>
+                            {{-- <div class="form-row mx-2  d-flex justify-content-center flex-row-reverse">
+                                <div class="form-group col-md-10 mx-2">
+                                    <label for="input25"> القسم</label>
+                                    <select id="input25" name="department_id" class="form-control select2"
+                                        placeholder="القسم">
+                                        <option  disabled>اختار من القائمة</option>
+
+                                        @foreach ($department as $item)
+                                            <option value="{{ $item->id }}"
+        {{ $user->department_id == $item->id ? 'selected' : '' }}>
+        {{ $item->name }}
+        </option>
+        @endforeach
+
+        </select>
+    </div>
+    </div> --}}
                         @endif
 
                         <div class="form-row mx-2 mx-2 d-flex justify-content-center flex-row-reverse">
@@ -284,7 +315,7 @@
                             <div class="form-group col-md-5 mx-md-2">
                                 <label for="input44">العنوان </label>
                                 <!--  <input type="text" id="input44" name="address_1" class="form-control"
-                                                                                    placeholder="  العنوان" value="{{ $user->address1 }}"> -->
+                                                                    placeholder="  العنوان" value="{{ $user->address1 }}"> -->
                                 <textarea id="input44" name="address_1" class="form-control" placeholder="  العنوان"
                                     value="{{ $user->address1 }}">{{ $user->address1 }}</textarea>
                             </div>
@@ -311,10 +342,36 @@
 
                                 </select>
                             </div>
-
+                            {{-- <div class="form-group col-md-5 mx-md-2">
+                                <label for="input44">العنوان 2</label>
+                                <input type="text" id="input44" name="address_2" class="form-control"
+                                    placeholder="  العنوان" value="{{ $user->address2 }}">
+    </div> --}}
                         </div>
                         <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
+                            {{-- <div class="form-group col-md-5 mx-2">
+                                <label for="sector">قطاع </label>
+                                <input type="text" id="input66" name="sector" class="form-control"
+                                    placeholder="قطاع " value="{{ old('sector') }}" >
+        <select id="sector" name="sector" class="form-control select2" placeholder="المنطقة">
+            <option selected value="null">اختار من القائمة</option>
+            @foreach ($sector as $item)
+            <option value="{{ $item->id }}" {{ $user->sector == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
+            @endforeach
+        </select>
+    </div> --}}
+                            {{-- <div class="form-group col-md-5 mx-md-2">
+                                <label for="Provinces"> المحافظة</label>
+                                <input type="text" id="input44" name="Provinces" class="form-control"
+                                    placeholder="  المحافظة" value="{{ $user->Provinces }}">
 
+    <select id="Provinces" name="Provinces" class="form-control select2" placeholder="المحافظة">
+        <option value="null">اختار من القائمة</option>
+        @foreach ($govermnent as $item)
+        <option value="{{ $item->id }}" {{ $user->Provinces == $item->id ? 'selected' : '' }}> {{ $item->name }}</option>
+        @endforeach
+    </select>
+    </div> --}}
                             <div class="form-group col-md-5 mx-md-2">
                                 <label for="region"> المنطقة</label>
                                 {{-- <input type="text" id="region" name="region" class="form-control"
@@ -324,8 +381,8 @@
                                     <option value="null">اختار من القائمة</option>
 
                                     @foreach ($area as $item)
-                                        <option value="{{ $item->id }}"
-                                            @if ($user->region == $item->id) selected @endif> {{ $item->name }}
+                                        <option value="{{ $item->id }}" @if($user->region == $item->id) selected @endif
+                                            > {{ $item->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -336,6 +393,44 @@
                                 <input type="text" id="input22" name="end_of_service" class="form-control"
                                     placeholder="مدة الخدمة " value="{{ $user->length_of_service }}">
                             </div>
+                        </div>
+
+                        <div class="form-row  mx-md-2 d-flex justify-content-center flex-row-reverse">
+                            {{-- <div class="form-group col-md-5 mx-md-2">
+                                <label for="input14">الاقدامية</label>
+                                <input type="text" id="input14" name="seniority" class="form-control"
+                                    placeholder="الاقدامية" value="{{ $user->seniority }}">
+    </div> --}}
+
+                            {{-- {{dd($department)}} --}}
+
+                        </div>
+
+                        <div class="form-row mx-2 mx-3 d-flex justify-content-center flex-row-reverse">
+                            {{-- <div class="form-group col-md-5 mx-2">
+                                <label for="input16">موقع العمل</label>
+                                <input type="text" id="input16" name="work_location" class="form-control"
+                                    placeholder="موقع العمل" value="{{ $user->work_location }}">
+    </div> --}}
+
+                            {{-- <div class="form-group col-md-5 mx-2">
+                                                        <label for="input17">المنصب</label>
+                                                        <input type="text" id="input17" name="position" class="form-control"
+                                                            placeholder="المنصب" value="{{ $user->position  }}">
+    </div> --}}
+                            {{-- <div class="form-group col-md-5 mx-2">
+                                <label for="input18">المؤهل</label>
+                                <input type="text" id="input18" name="qualification" class="form-control"
+                                    placeholder="المؤهل" value="{{ $user->qualification }}">
+
+    <select id="qualification" name="qualification" class="form-control" placeholder="المجموعة">
+        <option selected disabled>اختار من القائمة</option>
+        @foreach ($qualifications as $item)
+        <option value="{{ $item->id }}" {{ $user->qualification == $item->id ? 'selected' : ''}}> {{ $item->name }}
+        </option>
+        @endforeach
+    </select>
+    </div> --}}
                         </div>
 
                         <div class="form-row mx-2 mx-3 d-flex justify-content-center flex-row-reverse">
@@ -350,6 +445,11 @@
                                     placeholder="تاريخ الالتحاق" value="{{ $user->joining_date }}">
                             </div>
                         </div>
+                        {{-- <div class="form-group col-md-5 mx-2">
+                                    <label for="input21">العمر</label>
+                                    <input type="text" id="input21" name="age" class="form-control" placeholder="العمر"
+                                        value="{{ $user->age  }}">
+    </div> --}}
 
                         <div class="form-row mx-2 mx-2 d-flex justify-content-center flex-row-reverse">
 
@@ -407,43 +507,6 @@
 
     </section>
     <script>
-        function validateForm() {
-            let isValid = true;
-
-            // Get required inputs
-            const requiredInputs = [{
-                    id: 'input1',
-                    name: 'name'
-                },
-                {
-                    id: 'input2',
-                    name: 'email'
-                },
-                {
-                    id: 'input4',
-name:'phone'
- },
-                {
-                    id: 'input11',
-                    name: 'civil_number'
-                }
-            ];
-
-            requiredInputs.forEach(input => {
-                const field = document.getElementById(input.id);
-                const value = field.value.trim();
-                field.classList.remove('is-invalid'); // Reset previous invalid state
-
-                // Check for empty spaces
-                if (value === '' || /\s{2,}/.test(value)) {
-                    field.classList.add('is-invalid'); // Add invalid class
-                    isValid = false; // Set isValid to false
-                    alert(`${input.name} لا يجب أن يكون فارغاً أو يحتوي على مسافات فقط.`);
-                }
-            });
-
-            return isValid; // Return validation status
-        }
         //     $(document).ready(function() {
         //     $('#sector').on('change', function() {
         //         var sector_id = $(this).val();
@@ -553,10 +616,9 @@ name:'phone'
         // });
     </script>
     <script>
-        $('.select2').select2({
+         $('.select2').select2({
             dir: "rtl"
         });
-
         function togglePasswordVisibility() {
             var passwordField = document.getElementById('input3');
             var toggleIcon = document.getElementById('toggleIcon');

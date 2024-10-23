@@ -95,7 +95,7 @@
                             </div>
                             <!-- Save button -->
                             <div class="text-end">
-                                <button type="submit" class="btn-blue" onclick="confirmAdd()">اضافه</button>
+                                <button type="submit" class="btn-blue" onclick="confirmAdd(event)">اضافه</button>
                             </div>
                         </form>
                     </div>
@@ -109,39 +109,35 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> تعديل اسم الرتبه ؟</h5>
-
+                        <h5 class="modal-title" id="label">تعديل اسم الرتبه ؟</h5>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                 </div>
-                <div class="modal-body  mt-3 mb-5">
+                <div class="modal-body mt-3 mb-5">
                     <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
-                        <form class="edit-grade-form" id="edit-form" action=" {{ route('grads.update') }}" method="POST">
+                        <form class="edit-grade-form" id="edit-form" action="{{ route('grads.update') }}" method="POST">
                             @csrf
-                            <div class="form-group ">
+                            <div class="form-group">
                                 <label for="name">الاسم</label>
-                                <input type="text" id="nameedit" value="" name="name" class="form-control"
-                                    dir="rtl" required>
-                                <input type="text" id="idedit" value="" name="id" hidden
-                                    class="form-control">
-
+                                <input type="text" id="nameedit" name="name" class="form-control" dir="rtl" required>
+                                <span class="text-danger span-error" id="nameedit-error" dir="rtl"></span> <!-- Error message for name -->
                             </div>
+                            <input type="hidden" id="idedit" name="id" value=""> <!-- Hidden field for ID -->
+
                             <div class="form-group">
                                 <label for="typeedit">نوع الرتبه</label>
-                                <select name="typeedit" id="typeedit" aria-placeholder="اختر نوع الرتبه"
-                                    class="form-control">
+                                <select name="typeedit" id="typeedit" class="form-control" required>
                                     <option value="" selected disabled>اختر نوع الرتبه</option>
                                     <option value="0">ظابط</option>
                                     <option value="1">صف ظابط</option>
-                                    <option value="2"> فرد</option>
+                                    <option value="2">فرد</option>
                                 </select>
-                                <span class="text-danger span-error" id="typeedit-error" dir="rtl"></span>
-
+                                <span class="text-danger span-error" id="typeedit-error" dir="rtl"></span> <!-- Error message for type -->
                             </div>
+
                             <!-- Save button -->
                             <div class="text-end">
-                                <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
+                                <button type="submit" class="btn-blue" onclick="confirmEdit(event)">تعديل</button>
                             </div>
                         </form>
                     </div>
@@ -149,6 +145,7 @@
             </div>
         </div>
     </div>
+
     {{-- model for delete form --}}
     <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -213,45 +210,83 @@
             form.submit();
         }
 
-        function openedit(id, name , type) {
+        function openedit(id, name, type) {
             document.getElementById('nameedit').value = name;
             document.getElementById('idedit').value = id;
-            document.getElementById('typeedit').value = type;  // Set the value for type
+            document.getElementById('typeedit').value = type; // Set the value for type
 
             $('#edit').modal('show');
         }
 
-        function confirmEdit() {
-            var id = document.getElementById('id').value;
-            var name = document.getElementById('nameedit').value;
-            console.log(name);
-            var form = document.getElementById('edit-form')
-        }
+        function confirmEdit(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get input fields
+    var name = document.getElementById('nameedit').value.trim();
+    var type = document.getElementById('typeedit').value; // Get the selected rank type
+
+    // Clear previous error messages
+    document.getElementById('nameedit-error').textContent = '';
+    document.getElementById('typeedit-error').textContent = ''; // Clear type error
+
+    var hasError = false;
+
+    // Check if the name is empty
+    if (name === '') {
+        document.getElementById('nameedit-error').textContent = 'الاسم مطلوب.';
+        hasError = true;
+    }
+
+    // Check if the type is selected
+    if (type === '') {
+        document.getElementById('typeedit-error').textContent = 'نوع الرتبه مطلوب.';
+        hasError = true;
+    }
+
+    // If no errors, submit the form
+    if (!hasError) {
+        document.getElementById('edit-form').submit(); // Submit the form
+    }
+}
+
 
         function openadd() {
             $('#add').modal('show');
         }
 
-        function confirmAdd() {
-            var name = document.getElementById('nameadd').value;
+        function confirmAdd(event) {
+            event.preventDefault(); // Prevent default form submission
 
-            var form = document.getElementById('add-form');
-            var inputs = form.querySelectorAll('[required]');
-            var valid = true;
+            // Get input fields and trim any leading/trailing spaces
+            var name = document.getElementById('nameadd').value.trim();
+            var type = document.getElementById('typeadd').value;
 
-            inputs.forEach(function(input) {
-                if (!input.value) {
-                    valid = false;
-                    input.style.borderColor = 'red'; // Optional: highlight empty inputs
-                } else {
-                    input.style.borderColor = ''; // Reset border color if input is filled
-                }
-            });
+            // Clear previous errors
+            document.getElementById('nameadd-error').textContent = '';
+            document.getElementById('typeadd-error').textContent = '';
 
-            if (valid) {
-                form.submit();
+            var hasError = false;
+
+            // Check if the name is empty or consists only of spaces
+            if (name === '' || name.length === 0) {
+                document.getElementById('nameadd-error').textContent = 'الاسم مطلوب ولا يمكن أن يحتوي على مسافات فقط.';
+                hasError = true;
+            }
+
+            // Validate if a type has been selected
+            if (!type) {
+                document.getElementById('typeadd-error').textContent = 'نوع الرتبة مطلوب.';
+                hasError = true;
+            }
+
+            // If no errors, submit the form
+            if (!hasError) {
+                document.getElementById('add-form').submit(); // Submit the form
             }
         }
+
+
+
 
         $(document).ready(function() {
             $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
@@ -305,15 +340,15 @@
                 },
                 "pagingType": "full_numbers",
                 "fnDrawCallback": function(oSettings) {
-                                     console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                    console.log('Page ' + this.api().page.info().pages)
+                    var page = this.api().page.info().pages;
+                    console.log($('#users-table tr').length);
+                    if (page == 1) {
+                        //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
-                                        }
-                                    }
+                    }
+                }
             });
 
 

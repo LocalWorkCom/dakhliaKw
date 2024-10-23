@@ -5,23 +5,23 @@
 @endsection
 {{-- <body> --}}
 <section>
-<div class="row " dir="rtl">
-<div class="container  col-11" style="background-color:transparent;">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+    <div class="row " dir="rtl">
+        <div class="container  col-11" style="background-color:transparent;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
 
-                @if ($user->flag == 'user')
-                    <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
-                @elseif ($user->flag == 'employee')
-                    <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
-                @endif
-                <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض </a></li>
-            </ol>
+                    @if ($user->flag == 'user')
+                        <li class="breadcrumb-item"><a href="{{ route('user.index', 0) }}">المستخدمين</a></li>
+                    @elseif ($user->flag == 'employee')
+                        <li class="breadcrumb-item"><a href="{{ route('user.employees', 1) }}">الموظفين</a></li>
+                    @endif
+                    <li class="breadcrumb-item active" aria-current="page"> <a href=""> عرض </a></li>
+                </ol>
 
-        </nav>
+            </nav>
+        </div>
     </div>
-</div>
     <div class="row ">
         <div class="container welcome col-11">
             @if ($user->flag == 'user')
@@ -70,21 +70,21 @@
 
                         <tr>
                             <th scope="row"> البريد الالكترونى</th>
-                            <td>{{ $user->email }} </td>
+                            <td>{{ $user->email ?? 'لا يوجد بريد ألكترونى' }} </td>
                         </tr>
                         <tr>
-                            <th scope="row"> رقم الهاتف </th>
+                            <th scope="row"> رقم المحمول </th>
                             <td>
-                                {{ $user->phone }}
+                                {{ $user->phone ?? 'لا يوجد رقم المحمول' }}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row"> الملاحظات </th>
-                            <td> {{ $user->description }} </td>
+                            <td> {{ $user->description ?? 'لا يوجد ملاحظات' }} </td>
                         </tr>
                         <tr>
                             <th scope="row"> رقم العسكري</th>
-                            <td> {{ $user->military_number }} </td>
+                            <td> {{ $user->military_number ?? 'لا يوجد رقم عسكرى' }} </td>
                         </tr>
 
                         {{-- <tr>
@@ -100,16 +100,22 @@
 
                         <tr>
                             <th scope="row"> المسمي الوظيفي </th>
-                            <td> {{ $user->job_title }} </td>
+                            <td> {{ $user->job_title ?? 'لا يوجد مسمى وظيفى' }} </td>
                         </tr>
+
+                        @php
+                            $nationalityName = $user->nationality
+                                ? \App\Models\Country::where('id', $user->nationality)->value('country_name_ar')
+                                : 'لا يوجد جنسيه';
+                        @endphp
 
                         <tr>
                             <th scope="row"> الجنسيه </th>
-                            <td> {{ $user->nationality }} </td>
+                            <td>{{ $nationalityName }}</td>
                         </tr>
                         <tr>
                             <th scope="row"> الرقم المدني </th>
-                            <td> {{ $user->Civil_number }} </td>
+                            <td> {{ $user->Civil_number ?? 'لا يوجد رقم مدنى' }} </td>
                         </tr>
                         {{-- <tr>
                             <th scope="row"> المؤهل </th>
@@ -124,16 +130,16 @@
                         </tr> --}}
                         <tr>
                             <th scope="row"> تاريخ الميلاد </th>
-                            <td> {{ $user->date_of_birth }} </td>
+                            <td> {{ $user->date_of_birth ?? 'لا يوجد تاريخ ميلاد' }} </td>
                         </tr>
                         <tr>
                             <th scope="row"> تاريخ الالتحاق </th>
-                            <td> {{ $user->joining_date }} </td>
+                            <td> {{ $user->joining_date ?? 'لا يوجد تاريخ التحاق' }} </td>
                         </tr>
                         <tr>
                             <th scope="row"> مدة الخدمه </th>
                             {{-- <td> {{ $end_of_service }} </td> --}}
-                            <td> {{ $user->length_of_service }} </td>
+                            <td> {{ $user->length_of_service ?? 'لا يوجد مده خدمه' }} </td>
                         </tr>
                         <tr>
                             <th scope="row"> الرتبه </th>
@@ -152,7 +158,7 @@
 
                         <tr>
                             <th scope="row"> رقم الملف </th>
-                            <td> {{ $user->file_number }} </td>
+                            <td> {{ $user->file_number ?? 'لا يوجد رقم ملف' }} </td>
                         </tr>
 
                         {{-- <tr>
@@ -198,10 +204,10 @@
                                 <td> موظف </td>
                             @endif
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <th scope="row"> الاقدامية </th>
-                            <td> {{ $user->seniority }} </td>
-                        </tr>
+                            <td> {{ $user->seniority ?? 'لا يوجد اقدميه' }} </td>
+                        </tr> --}}
 
                         <tr>
                             <th scope="row">الإدارة العامة</th>
@@ -257,7 +263,7 @@
                         {{-- <tr>
                             <th> قطاع</th>
                             <td>
-                          
+
                                 @foreach ($sector as $item)
                                     @if ($user->sector == $item->id)
                                         <label>
@@ -265,13 +271,13 @@
                                         </label>
                                     @endif
                                 @endforeach
-                               
+
                             </td>
                         </tr> --}}
                         <tr>
                             {{-- <th> قطاع</th> --}}
                             {{-- <td>
-                                
+
                                 @foreach ($sector as $item)
                                     @if ($user->sector == $item->id)
                                         <label>
@@ -279,13 +285,13 @@
                                         </label>
                                     @endif
                                 @endforeach
-                      
+
                             </td> --}}
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <th> المحافظة</th>
                             {{-- <td>
-                                
+
                                 @foreach ($govermnent as $item)
                                     @if ($user->Provinces == $item->id)
                                         <label>
@@ -293,26 +299,39 @@
                                         </label>
                                     @endif
                                 @endforeach
-                              
+
                             </td> --}}
-                        </tr>
+                        {{-- </tr> --}}
                         <tr>
                             <th> المنطقة</th>
                             <td>
-                             
+
+                                @php
+                                    $regionFound = false;
+                                @endphp
+
                                 @foreach ($area as $item)
                                     @if ($user->region == $item->id)
                                         <label>
                                             {{ $item->name }}
                                         </label>
-                                    @endif
-                                @endforeach
-                             
-                            </td>
-                        </tr>
+                                        @php
+                                            $regionFound = true;
+                                        @endphp
+                                    @break
+                                @endif
+                            @endforeach
+
+                            @if (!$regionFound)
+                                <label>
+                                    لا يوجد منطقه
+                                </label>
+                            @endif
+                        </td>
+                    </tr>
 
 
-                        {{-- <tr>
+                    {{-- <tr>
                             <th scope="row" >    الصوره  </th>
                             <td >
                                 <div class="row">
@@ -334,17 +353,17 @@
                             </td>
                         </tr> --}}
 
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
+        </div>
 
 
 
-            <!-- enddddddddd of datashow table toqa -->
+        <!-- enddddddddd of datashow table toqa -->
 
 
 
-            {{-- <div class="p-5">
+        {{-- <div class="p-5">
 
                     <div class="form-row mx-2 mt-4 d-flex flex-row-reverse">
                         <div class="form-group col-md-6">
@@ -480,7 +499,7 @@
                             <label for="input17">المنصب</label>
                             <input type="text" id="input17" name="position" class="form-control" placeholder="المنصب" value="{{ $user->position  }}">
                         </div> --}}
-            {{-- <div class="form-group col-md-6">
+        {{-- <div class="form-group col-md-6">
                             <label for="input18">المؤهل</label>
                             <input type="text" id="input18" name="qualification" class="form-control"
                                 placeholder="المؤهل" value="{{ $user->qualification }}" disabled>
@@ -497,11 +516,11 @@
                                 placeholder="تاريخ الالتحاق" value="{{ $user->joining_date }}" disabled>
                         </div> --}}
 
-            {{-- <div class="form-group col-md-6">
+        {{-- <div class="form-group col-md-6">
                             <label for="input21">العمر</label>
                             <input type="text" id="input21" name="age" class="form-control" placeholder="العمر" value="{{ $user->age  }}">
                         </div> --}}
-            {{-- <div class="form-group col-md-6">
+        {{-- <div class="form-group col-md-6">
                             <label for="input22">مدة الخدمة</label>
                             <input type="date" id="input22" name="end_of_service" class="form-control"
                                 placeholder="مدة الخدمة " value="{{ $end_of_service }}" disabled>
@@ -526,35 +545,35 @@
                             </div>
 
                         </div> --}}
-            {{-- <div class="form-group col-md-6">
+        {{-- <div class="form-group col-md-6">
                             <label for="input23">الصورة</label>
                             <input type="file" class="form-control" name="image" id="input23"
                                 placeholder="الصورة" value="{{  }}">
                         </div> --}}
 
-            {{-- </div> --}}
-            <!-- Save button -->
+        {{-- </div> --}}
+        <!-- Save button -->
 
-            {{-- </div> --}}
-        </div>
+        {{-- </div> --}}
     </div>
-    {{-- Modal for Image Popup --}}
-    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
-                    {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+</div>
+{{-- Modal for Image Popup --}}
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">عرض الصورة</h5>
+                {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button> --}}
-                </div>
-                <div class="modal-body text-center">
-                    <img id="modalImage" src="#" class="img-fluid" alt="صورة">
-                </div>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="#" class="img-fluid" alt="صورة">
             </div>
         </div>
     </div>
+</div>
 
 
 
