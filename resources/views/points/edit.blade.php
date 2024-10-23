@@ -20,16 +20,16 @@
     نقاط الوزاره / تعديل
 @endsection
 @section('content')
-<div class="row " dir="rtl">
-<div class="container  col-11" style="background-color:transparent;">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('points.index') }}"> نقاط الوزاره </a></li>
-                <li class="breadcrumb-item active" aria-current="page"> <a> تعديل</a></li>
-            </ol>
-        </nav>
-    </div>
+    <div class="row " dir="rtl">
+        <div class="container  col-11" style="background-color:transparent;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="/">الرئيسيه</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('points.index') }}"> نقاط الوزاره </a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> <a> تعديل</a></li>
+                </ol>
+            </nav>
+        </div>
     </div>
     <br>
     <form class="edit-grade-form" id="Points-form" action=" {{ route('points.update') }}" method="POST">
@@ -75,9 +75,9 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="governorate"> اختر المحافظة </label>
-                        <select name="governorate" id="governorate"  class=" form-control custom-select custom-select-lg mb-3 select2 "
-                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" 
-                            required>
+                        <select name="governorate" id="governorate"
+                            class=" form-control custom-select custom-select-lg mb-3 select2 "
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
                             <option value="">محافظه </option>
                         </select>
                     </div>
@@ -85,8 +85,9 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="region"> اختر المنطقة </label>
-                        <select name="region" id="region"  class=" form-control custom-select custom-select-lg mb-3 select2 "
-                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;"  required>
+                        <select name="region" id="region"
+                            class=" form-control custom-select custom-select-lg mb-3 select2 "
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
                             <option value="">منطقه </option>
                         </select>
                     </div>
@@ -133,8 +134,9 @@
                 <div class="form-row   mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3 col-6">
                         <label class="pb-3" for="time_type"> اختر نظام العمل </label>
-                        <select name="time_type" id="time_type" class=" form-control custom-select custom-select-lg mb-3 select2 "
-                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;"  required>
+                        <select name="time_type" id="time_type"
+                            class=" form-control custom-select custom-select-lg mb-3 select2 "
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
                             <option value="0" @if ($data->work_type == 0) selected @endif>نظام 24 ساعه</option>
                             <option value="1" @if ($data->work_type == 1) selected @endif>نظام دوام جزئى
                             </option>
@@ -249,7 +251,7 @@
                                 alt="img" height="20px" width="20px"> اضافة</button>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     </form>
 @endsection
@@ -546,7 +548,7 @@
                             } else {
                                 $('#region').empty().append(
                                         '<option value=""disabled selected>اختر المنطقه </option>'
-                                        )
+                                    )
                                     .prop(
                                         'disabled', true);
                                 $('#region').prop('disabled', false);
@@ -610,8 +612,8 @@
                     success: function(data) {
                         console.log(data);
                         $('#governorate').empty().append(
-                                '<option value="" disabled selected>اختر المحافظه </option>'
-                            );
+                            '<option value="" disabled selected>اختر المحافظه </option>'
+                        );
 
                         // Check if data is an array
                         if (Array.isArray(data)) {
@@ -633,7 +635,7 @@
                                     '<option value=""disabled selected>اختر المنطقه </option>')
                                 .prop(
                                     'disabled', true);
-                                    $('#region').prop('disabled', false);
+                            $('#region').prop('disabled', false);
                         }
 
                         // Update Select2 component
@@ -644,7 +646,7 @@
                         console.error('AJAX request failed', xhr);
                         $('#governorate').empty().append(
                             '<option disabled>حدث خطأ في تحميل البيانات</option>');
-                            $('#governorate').prop('disabled', false);
+                        $('#governorate').prop('disabled', false);
 
                         // Update Select2 component
                         $('#governorate').trigger('change');
@@ -668,8 +670,8 @@
                     success: function(data) {
                         console.log(data);
                         $('#region').empty().append(
-                                '<option value="" disabled selected>اختر المنطقه </option>'
-                            );
+                            '<option value="" disabled selected>اختر المنطقه </option>'
+                        );
 
                         // Check if data is an array
                         if (Array.isArray(data)) {
@@ -691,7 +693,7 @@
                                     '<option value=""disabled selected>اختر المنطقه </option>')
                                 .prop(
                                     'disabled', true);
-                                    $('#region').prop('disabled', false);
+                            $('#region').prop('disabled', false);
                         }
 
                         // Update Select2 component
@@ -702,7 +704,7 @@
                         console.error('AJAX request failed', xhr);
                         $('#region').empty().append(
                             '<option disabled>حدث خطأ في تحميل البيانات</option>');
-                            $('#region').prop('disabled', false);
+                        $('#region').prop('disabled', false);
 
                         // Update Select2 component
                         $('#region').trigger('change');

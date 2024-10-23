@@ -102,18 +102,18 @@ class groupPointsController extends Controller
     public function edit(string $id)
     {
         $data = Grouppoint::findOrFail($id);
-    
+
         // Decode points_ids if it is a JSON string; otherwise, use it as is
         $pointsIds = is_array($data->points_ids) ? $data->points_ids : json_decode($data->points_ids, true);
-    
+
         $selectedPoints = Point::whereIn('id', $pointsIds)->get();
-    
+
         // Get unique government IDs from the selected points
         $governmentIds = $selectedPoints->pluck('government_id')->unique();
-    
+
         // Fetch all points for the same government
         $allPoints = Point::whereIn('government_id', $governmentIds)->get();
-    
+
         // Get all points in the Grouppoint table that belong to the same government(s)
         $pointsInGroup = Grouppoint::whereIn('government_id', $governmentIds)
             ->pluck('points_ids')->where('deleted', 0)
@@ -122,18 +122,18 @@ class groupPointsController extends Controller
             })
             ->flatten()
             ->unique();
-    
+
         // Filter points to include only those that are not already in another group
         $availablePoints = $allPoints->filter(function ($point) use ($pointsInGroup) {
             return !$pointsInGroup->contains($point->id);
         });
-    
+
         // Collect IDs from available points
         $availablePointIds = $availablePoints->pluck('id')->unique();
-    
+
         // Merge selected points with available points
         $mergedPointIds = $selectedPoints->pluck('id')->merge($availablePointIds);
-    
+
         // Fetch the final set of points by their IDs
         $finalPoints = Point::whereIn('id', $mergedPointIds)->get();
     
@@ -142,7 +142,7 @@ class groupPointsController extends Controller
             'selectedPoints' => $finalPoints
         ]);
     }
-    
+
 
 
     /**
