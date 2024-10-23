@@ -1,8 +1,11 @@
 @extends('layout.main')
 @push('style')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
-    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
+    <script type="text/javascript" charset="utf8"
+        src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
     </script>
 @endpush
 @section('title')
@@ -16,8 +19,11 @@
                 <div class="d-flex justify-content-between">
                     <p> المنـــاطق</p>
                     {{-- @if (Auth::user()->hasPermission('create Region')) --}}
-                    <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
-                        اضافة منطقة جديدة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                    <button type="button" class="btn-all  " onclick="openadd()"
+                        style="color: #0D992C;">
+                        اضافة منطقة جديدة <img
+                            src="{{ asset('frontend/images/add-btn.svg') }}"
+                            alt="img">
                     </button>
                     {{-- @endif --}}
                 </div>
@@ -32,21 +38,25 @@
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
                         <!-- {{-- @if (Auth::user()->hasPermission('create Region')) --}}
 
-                                        <button type="button" class="btn-all  "
-                                        onclick="openadd()" style="color: #0D992C;">
-                                           
-                                            اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                        </button>
-                                        {{-- @endif --}} -->
+                                            <button type="button" class="btn-all  "
+                                            onclick="openadd()" style="color: #0D992C;">
+
+                                                اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                            </button>
+                                            {{-- @endif --}} -->
 
                         <div class="form-group moftsh  mx-3  d-flex">
-                            <h4 style="margin-left:10px;line-height: 1.8;"> تصفية  حسب   </h4>
-                            <select name="government-select" id="government-select" onchange="filterRegions()"
+                            <h4 style="margin-left:10px;line-height: 1.8;"> تصفية
+                                حسب </h4>
+                            <select name="government-select" id="government-select"
+                                onchange="filterRegions()"
                                 class=" form-group mx-md-2 btn-all  custom-select custom-select-lg mb-3 select2   "
                                 style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
-                                <option value="" selected disabled > المحافظه</option>
+                                <option value="" selected disabled> المحافظه
+                                </option>
                                 @foreach (getgovernments() as $government)
-                                    <option value="{{ $government->id }}" @if ($government->id == $id) selected @endif>
+                                    <option value="{{ $government->id }}"
+                                        @if ($government->id == $id) selected @endif>
                                         {{ $government->name }}</option>
                                 @endforeach
                             </select>
@@ -86,26 +96,33 @@
     </section>
 
     {{-- this for add form --}}
-    <div class="modal fade" id="add" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
+    <div class="modal fade" id="add" tabindex="-1"
+        aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> أضافه منطقه جديد</h5>
+                        <h5 class="modal-title" id="lable"> أضافه منطقه جديد
+                        </h5>
 
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"> &times;
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="container pt-4 pb-4" style="border: 0.2px solid rgb(166, 165, 165);">
-                        <form class="edit-grade-form" id="add-form" action=" {{ route('regions.store') }}" method="POST">
+                    <div class="container pt-4 pb-4"
+                        style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form class="edit-grade-form" id="add-form"
+                            action=" {{ route('regions.store') }}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <label for="nameadd">الاسم</label>
-                                <input type="text" id="nameadd" name="nameadd" class="form-control" required>
+                                <input type="text" id="nameadd" name="nameadd"
+                                    class="form-control" required>
                                 @error('nameadd')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <div class="alert alert-danger">{{ $message }}
+                                    </div>
                                 @enderror
                             </div>
 
@@ -113,20 +130,24 @@
                                 <label for="governmentid">المحافظات </label>
                                 <select name="governmentid" id="governmentid"
                                     class=" form-group col-md-12 custom-select custom-select-lg mb-3 select2 "
-                                    style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
+                                    style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;"
+                                    required>
                                     <option value="">اختر المحافظه</option>
                                     @foreach (getgovernments() as $government)
-                                        <option value="{{ $government->id }}">{{ $government->name }}</option>
+                                        <option value="{{ $government->id }}">
+                                            {{ $government->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('government-id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <div class="alert alert-danger">{{ $message }}
+                                    </div>
                                 @enderror
 
                             </div>
                             <!-- Save button -->
                             <div class="text-end">
-                                <button type="submit" class="btn-blue" onclick="confirmAdd()">اضافه</button>
+                                <button type="submit" class="btn-blue"
+                                    onclick="confirmAdd()">اضافه</button>
                             </div>
                         </form>
                     </div>
@@ -135,46 +156,57 @@
         </div>
     </div>
     {{-- this for edit form --}}
-    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
+    <div class="modal fade" id="edit" tabindex="-1"
+        aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> تعديل اسم المنطقه ؟</h5>
+                        <h5 class="modal-title" id="lable"> تعديل اسم المنطقه ؟
+                        </h5>
 
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"> &times;
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="container pt-4 pb-4" style="border: 0.2px solid rgb(166, 165, 165);">
-                        <form class="edit-grade-form" id="edit-form" action=" {{ route('regions.update') }}"
+                    <div class="container pt-4 pb-4"
+                        style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form class="edit-grade-form" id="edit-form"
+                            action=" {{ route('regions.update') }}"
                             method="POST">
                             @csrf
                             <div class="form-group">
                                 <label for="name">الاسم</label>
-                                <input type="text" id="nameedit" value="" name="name" class="form-control"
-                                    dir="rtl" required>
-                                <input type="text" id="idedit" value="" name="id" hidden
+                                <input type="text" id="nameedit"
+                                    value="" name="name"
+                                    class="form-control" dir="rtl" required>
+                                <input type="text" id="idedit"
+                                    value="" name="id" hidden
                                     class="form-control">
 
                             </div>
                             <div class="form-group">
                                 <label for="government">المحافظات</label>
-                                <select name="government" id="government" class="form-group col-md-12 " required>
+                                <select name="government" id="government"
+                                    class="form-group col-md-12 " required>
                                     <option value="">اختر المحافظه</option>
                                     @foreach (getgovernments() as $government)
-                                        <option value="{{ $government->id }}">{{ $government->name }}</option>
+                                        <option value="{{ $government->id }}">
+                                            {{ $government->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('government')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <div class="alert alert-danger">
+                                        {{ $message }}</div>
                                 @enderror
 
                             </div>
                             <!-- Save button -->
                             <div class="text-end">
-                                <button type="submit" class="btn-blue" onclick="confirmEdit()">تعديل</button>
+                                <button type="submit" class="btn-blue"
+                                    onclick="confirmEdit()">تعديل</button>
                             </div>
                         </form>
                     </div>
@@ -215,7 +247,9 @@
     </div> --}}
 @endsection
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js">
+    </script>
 
     <script>
         $('.select2').select2({
@@ -265,15 +299,19 @@
         var table;
 
         $(document).ready(function() {
-            $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
+            $.fn.dataTable.ext.classes.sPageButton =
+            'btn-pagination btn-sm'; // Change Pagination Button Class
 
             table = $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
+                bResetDisplay: true,
                 ajax: {
                     url: '{{ route('getAllregions') }}',
                     data: function(d) {
-                        d.government_id = $('#government-select').val(); // Add government_id to request
+                        d.government_id = $(
+                            '#government-select')
+                    .val(); // Add government_id to request
                     }
                 },
                 columns: [{
@@ -312,19 +350,36 @@
                 },
                 "pagingType": "full_numbers",
                 "fnDrawCallback": function(oSettings) {
-                                        console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                    console.log('Page ' + this.api().page.info()
+                        .pages)
+                    var page = this.api().page.info().pages;
+                    console.log($('#users-table tr').length);
+                    if (page == 1) {
+                        //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                        $('.dataTables_paginate').css(
+                            'visibility', 'hidden'); // to hide
 
-                                        }
-                                    }
+                    }
+                }
             });
 
+            $(".dataTables_filter input")
+                .unbind() // Unbind previous default bindings
+                .bind("input", function(e) { // Bind our desired behavior
+                    // If the length is 3 or more characters, or the user pressed ENTER, search
+                    if (this.value.length >= 3 || e.keyCode == 13) {
+                        // Call the API search function
+                        dtable.search(this.value).draw();
+                    }
+                    // Ensure we clear the search if they backspace far enough
+                    if (this.value == "") {
+                        dtable.search("").draw();
+                    }
+                    return;
+                });
             $('#government-select').change(function() {
-                table.ajax.reload(); // Reload DataTable data on dropdown change
+                table.ajax
+            .reload(); // Reload DataTable data on dropdown change
             });
         });
 

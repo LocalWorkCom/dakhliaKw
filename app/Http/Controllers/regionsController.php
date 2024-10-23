@@ -52,7 +52,7 @@ class regionsController extends Controller
     }
     //add government
     public function addgovernment(Request $request){
-       
+
         $requestinput=$request->except('_token');
         $job = new Government();
         $job->name=$request->nameadd;
@@ -94,7 +94,7 @@ class regionsController extends Controller
      */
     public function index($id)
     {
-        
+
         return view("regions.index",compact("id"));
     }
     public function getregions(Request $request)
@@ -124,8 +124,8 @@ class regionsController extends Controller
         return $row->government_name;
     })
     ->rawColumns(['action'])
-    ->make(true);
-        
+    ->make(true); 
+
     }
     public function getGovernorates($sector)
     {
@@ -153,7 +153,7 @@ class regionsController extends Controller
      */
     public function store(Request $request)
     {
-            
+
         $requestinput=$request->except('_token');
         $region = new Region();
         $region->name=$request->nameadd;
@@ -164,7 +164,7 @@ class regionsController extends Controller
         return redirect()->route('regions.index',compact('message' ,'id'));
     }
 
-   
+
     public function update(Request $request)
     {
         $region = Region::find($request->id);
