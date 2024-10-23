@@ -8,6 +8,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreWorkingTimeRequest;
 use App\Http\Requests\UpdateWorkingTimeRequest;
+use Illuminate\Validation\Rule;
 
 class WorkingTimeController extends Controller
 {
@@ -124,44 +125,38 @@ class WorkingTimeController extends Controller
      */
     public function update(Request $request)
     {
-        //dd($request->all());
+        $workingTime = WorkingTime::find($request->id_edit);
+
+        // Check if the working time record exists
+        if (!$workingTime) {
+            return redirect()->back()->withErrors('No working time found with the provided ID.');
+        }
         $messages = [
             'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'start_time_edit.required' => 'بداية فترة العمل مطلوبة ولا يمكن تركها فارغة.',
             'end_time_edit.required' => 'نهاية فترة العمل مطلوبة ولا يمكن تركها فارغة.',
-            'color.unique' => 'اللون المحدد موجود بالفعل، يرجى اختيار لون آخر.',
-
+            'color_edit.unique' => 'اللون المحدد موجود بالفعل، يرجى اختيار لون آخر.',
         ];
 
         $validatedData = Validator::make($request->all(), [
             'name_edit' => 'required',
             'start_time_edit' => 'required',
             'end_time_edit' => 'required',
-            'color' => 'required|unique:working_times,color',
-
-        ], $messages);
+            'color_edit' => [
+                'required',
+                Rule::unique('working_times', 'color')->ignore($workingTime->id), // Ignore current record's color
+            ],        ], $messages);
 
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
 
         try {
-            $WorkingTimeitem = WorkingTime::findOrFail($request->id);
+            $WorkingTimeitem = WorkingTime::findOrFail($request->id_edit);
             $WorkingTimeitem->name = $request->name_edit;
             $WorkingTimeitem->start_time = $request->start_time_edit;
             $WorkingTimeitem->end_time = $request->end_time_edit;
             $WorkingTimeitem->color = $request->color_edit;
-
-            // Generate a new random color if the color is null
-            /*if (is_null($WorkingTimeitem->color)) {
-                do {
-                    $color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-                    $existColors = ['#000000ab', '#ffffff', '#d6d6d6', '#fdfdfdc2', '#c9f5f9', '#4edfd0ba'];
-                } while (WorkingTime::where('color', $color)->whereNotIn('color', $existColors)->exists());
-
-                $WorkingTimeitem->color = $color;
-            }*/
-
             $WorkingTimeitem->save();
 
             return redirect()->route('working_time.index')->with('success', 'تم التعديل بنجاح');
@@ -169,6 +164,7 @@ class WorkingTimeController extends Controller
             return redirect()->back()->withErrors($e->getMessage());
         }
     }
+
 
 
     // public function update(Request $request)

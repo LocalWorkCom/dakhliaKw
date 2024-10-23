@@ -27,13 +27,13 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
             <!-- <div class="row d-flex justify-content-between " dir="rtl">
-                            <div class="form-group mt-4 mx-3  d-flex">
-                                <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
-                                    <img src="{{ asset('frontend/images/time.svg') }}" alt="">
-                                    اضافة فترة
-                                </button>
-                            </div>
-                        </div> -->
+                                        <div class="form-group mt-4 mx-3  d-flex">
+                                            <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
+                                                <img src="{{ asset('frontend/images/time.svg') }}" alt="">
+                                                اضافة فترة
+                                            </button>
+                                        </div>
+                                    </div> -->
 
             @if (session('success'))
                 <div class="alert alert-success">
@@ -71,6 +71,55 @@
             </div>
         </div>
     </div>
+    <!-- view Form Modal -->
+    <div class="modal fade" id="view" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" dir="rtl">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center ">
+                        <h5 class="modal-title"> عرض فترة </h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div id="" class="mb-3 mt-3 d-flex justify-content-center">
+                        <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
+                            <div class="form-group mt-4 mb-3">
+                                <label class="d-flex justify-content-start pt-3 pb-2" for="name_show">
+                                    اسم الفتره</label>
+                                <input type="text" id="name_show" name="name_show" class="form-control"
+                                    placeholder="اسم الفتره" disabled>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="d-flex justify-content-start pb-2" for="start_time_show">
+                                    بداية فترة العمل</label>
+                                <input type="text" id="start_time_show" name="start_time_show" class="form-control"
+                                    disabled>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="d-flex justify-content-start pb-2" for="end_time_show">
+                                    نهاية
+                                    فترة العمل</label>
+                                <input type="text" id="end_time_show" name="end_time_show" class="form-control" disabled>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="d-flex justify-content-start pb-2" for="color_show"> لون
+                                    فترة العمل</label>
+                                <input type="color" id="color_show" name="color_show" class="form-control" value="#ffffff"
+                                    disabled>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Create Form Modal -->
     <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -101,21 +150,23 @@
                                         فترة العمل</label>
                                     <input type="text" id="start_time" class="form-control" placeholder="Select time"
                                         name="start_time" required>
-                                    <div id="startTimeError" class="error-message text-danger" style="display: none;"></div>
+                                    <div id="startTimeError" class="error-message text-danger" style="display: none;">
+                                    </div>
 
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="d-flex justify-content-start pb-2" for="end_time"> نهاية
                                         فترة العمل</label>
                                     <input type="text" id="end_time" name="end_time" class="form-control" required>
-                                    <div id="endTimeError" class="error-message text-danger" style="display: none;"></div>
+                                    <div id="endTimeError" class="error-message text-danger" style="display: none;">
+                                    </div>
 
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="d-flex justify-content-start pb-2" for="color"> لون
                                         فترة العمل</label>
-                                    <input type="color" id="color" name="color" class="form-control" value="#ffffff"
-                                        required>
+                                    <input type="color" id="color" name="color" class="form-control"
+                                        value="#ffffff" required>
                                     <div id="colorError" class="error-message text-danger" style="display: none;"></div>
 
                                 </div>
@@ -158,7 +209,18 @@
                 <div class="modal-body" dir="rtl">
                     <form id="editForm" action="{{ route('working_time.update') }}" method="post">
                         @csrf
-                        <input type="hidden" id="id_edit" name="id_edit">
+                        @method('POST')
+                        @if ($errors->any())
+                            <script>
+                                $(document).ready(function() {
+                                    $('#edit').modal('show');
+                                    @foreach ($errors->all() as $error)
+                                        alert('{{ $error }}');
+                                    @endforeach
+                                });
+                            </script>
+                        @endif
+                        <input type="hidden" id="idedit" name="id_edit" value="">
                         <div id="firstModalBody1" class="mb-3 mt-3 d-flex justify-content-center">
                             <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
                                 <div class="form-group mt-4 mb-3">
@@ -192,7 +254,7 @@
                                         فترة العمل</label>
                                     <input type="color" id="color_edit" name="color_edit" class="form-control"
                                         value="#ffffff" required>
-                                    <div id="coloreditError" class="error-message text-danger" style="display: none;">
+                                    <div id="editColorError" class="error-message text-danger" style="display: none;">
                                     </div>
 
                                 </div>
@@ -222,56 +284,6 @@
         </div>
     </div>
 
-    <!-- view Form Modal -->
-    <div class="modal fade" id="view" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" dir="rtl">
-                <div class="modal-header d-flex justify-content-center">
-                    <div class="title d-flex flex-row align-items-center ">
-                        <h5 class="modal-title"> عرض فترة </h5>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        &times;
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div id="" class="mb-3 mt-3 d-flex justify-content-center">
-                        <div class="container" style="border: 0.2px solid rgb(166, 165, 165);">
-                            <div class="form-group mt-4 mb-3">
-                                <label class="d-flex justify-content-start pt-3 pb-2" for="name_show">
-                                    اسم الفتره</label>
-                                <input type="text" id="name_show" name="name_show" class="form-control"
-                                    placeholder="اسم الفتره" disabled>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="d-flex justify-content-start pb-2" for="start_time_show">
-                                    بداية فترة العمل</label>
-                                <input type="text" id="start_time_show" name="start_time_show" class="form-control"
-                                    disabled>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="d-flex justify-content-start pb-2" for="end_time_show">
-                                    نهاية
-                                    فترة العمل</label>
-                                <input type="text" id="end_time_show" name="end_time_show" class="form-control"
-                                    disabled>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="d-flex justify-content-start pb-2" for="color_show"> لون
-                                    فترة العمل</label>
-                                <input type="color" id="color_show" name="color_show" class="form-control"
-                                    value="#ffffff" disabled>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 @push('scripts')
     <script>
@@ -416,16 +428,13 @@
         }
 
         function openedit(id, name, start_time_edit, end_time_edit, color_edit) {
+            document.getElementById('idedit').value = id; // Ensure this is set correctly
             document.getElementById('name_edit').value = name;
             document.getElementById('start_time_edit').value = start_time_edit;
             document.getElementById('end_time_edit').value = end_time_edit;
             document.getElementById('color_edit').value = color_edit;
 
-            document.getElementById('idedit').value = id;
-
             $('#edit').modal('show');
-
-
         }
 
         function confirmEdit() {
@@ -502,59 +511,68 @@
             }
         });
 
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     var editForm = document.getElementById('editForm');
-        //     var firstModalBody1 = document.getElementById('firstModalBody1');
-        //     var secondModalBody1 = document.getElementById('secondModalBody1');
-
-        //     editForm.addEventListener('submit', function(event) {
-        //         event.preventDefault();
-        //         console.log('Form submitted');
-
-        //         var isValid1 = editForm.checkValidity();
-        //         if (isValid1) {
-        //             console.log('Form is valid');
-
-        //             // Perform AJAX form submission
-        //             $.ajax({
-        //                 type: editForm.method,
-        //                 url: editForm.action,
-        //                 data: $(editForm).serialize(),
-        //                 success: function(response) {
-        //                     console.log('AJAX success');
-        //                     if (response.success) {
-        //                         // Handle successful update
-        //                         $('#edit').modal('hide');
-        //                         alert('Updated successfully');
-        //                     } else {
-        //                         alert('Update failed: ' + response.message);
-        //                     }
-        //                 },
-        //                 error: function(error) {
-        //                     console.error('AJAX error', error);
-        //                 }
-        //             });
-        //         } else {
-        //             // Show validation errors
-        //             editForm.reportValidity();
-        //         }
-        //     });
-        // });
+        // Handle validation in the edit form
         document.addEventListener('DOMContentLoaded', function() {
-            // Event listener for when the modal is closed
-            $('#add').on('hidden.bs.modal', function() {
-                // Clear all input fields inside the modal
-                document.getElementById('createForm').reset();
+            var editForm = document.getElementById('editForm');
 
-                // Optionally clear any validation error messages or styles
-                document.getElementById('nameError').style.display = 'none';
-                document.getElementById('startTimeError').style.display = 'none';
-                document.getElementById('endTimeError').style.display = 'none';
+            editForm.addEventListener('submit', function(event) {
+                var editName = document.getElementById('name_edit').value.trim();
+                var editStartTime = document.getElementById('start_time_edit').value.trim();
+                var editEndTime = document.getElementById('end_time_edit').value.trim();
+                var editColor = document.getElementById('color_edit').value.trim();
 
-                // If any fields have nameError applied, reset those too
-                document.getElementById('nameError').style.borderColor = '';
-                document.getElementById('start_time').style.borderColor = '';
-                document.getElementById('end_time').style.borderColor = '';
+                var editHasError = false;
+
+                // Clear previous error messages
+                document.getElementById('name_editError').style.display = 'none';
+                document.getElementById('start_time_editError').style.display = 'none';
+                document.getElementById('end_time_editError').style.display = 'none';
+                document.getElementById('editColorError').style.display = 'none';
+
+                // Validate the name field
+                if (!editName) {
+                    document.getElementById('name_editError').textContent = 'اسم الفترة مطلوب';
+                    document.getElementById('name_editError').style.display = 'block';
+                    editHasError = true;
+                }
+
+                // Validate the start_time field
+                if (!editStartTime) {
+                    document.getElementById('start_time_editError').textContent = 'بداية فترة العمل مطلوبة';
+                    document.getElementById('start_time_editError').style.display = 'block';
+                    editHasError = true;
+                }
+
+                // Validate the end_time field
+                if (!editEndTime) {
+                    document.getElementById('end_time_editError').textContent = 'نهاية فترة العمل مطلوبة';
+                    document.getElementById('end_time_editError').style.display = 'block';
+                    editHasError = true;
+                }
+
+                // If there's any validation error, prevent form submission
+                if (editHasError) {
+                    event.preventDefault();
+                } else {
+                    // Backend validation error check for color field
+                    const editColorErrorMessage = '{{ $errors->first('color_edit') }}';
+                    if (editColorErrorMessage) {
+                        document.getElementById('editColorError').textContent = editColorErrorMessage;
+                        document.getElementById('editColorError').style.display = 'block';
+                        event.preventDefault(); // Prevent form submission
+                    }
+                }
+            });
+
+            // Reset form and clear validation errors when modal is hidden
+            $('#edit').on('hidden.bs.modal', function() {
+                editForm.reset();
+
+                // Clear any validation error messages
+                document.getElementById('name_editError').style.display = 'none';
+                document.getElementById('start_time_editError').style.display = 'none';
+                document.getElementById('end_time_editError').style.display = 'none';
+                document.getElementById('editColorError').style.display = 'none';
             });
         });
     </script>
