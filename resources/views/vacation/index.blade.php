@@ -293,8 +293,11 @@
                                         buttons +=
                                             `<a href="#" class="edit btn btn-sm" style="background-color: #2b837b;" onclick="openAndPrint('${urls.permit}'); return false;">  <i class="fa-solid fa-print"></i> تصريح</a>`;
                                     } else if (row.VacationStatus == 'متجاوزة') {
-                                        buttons +=
-                                            `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #9dad1f;" onclick="update_type('direct_exceed', '${row.id}')"><i class="fa fa-eye"></i> باشر بعد التجاوز</a>`;
+                                        if (!row.end_date) {
+
+                                            buttons +=
+                                                `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #9dad1f;" onclick="update_type('direct_exceed', '${row.id}')"><i class="fa fa-eye"></i> باشر بعد التجاوز</a>`;
+                                        }
                                     } else if (row.VacationStatus == 'حالية') {
                                         if (!row.is_cut) {
                                             buttons +=
@@ -329,13 +332,13 @@
                             },
                             pagingType: "full_numbers",
                             "fnDrawCallback": function(oSettings) {
-                                        console.log($('#users-table tr').length);
-                                        console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                                console.log($('#users-table tr').length);
+                                console.log('Page ' + this.api().page.info().pages)
+                                var page = this.api().page.info().pages;
+                                console.log($('#users-table tr').length);
+                                if (page == 1) {
+                                    //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                    $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
                                 }
                             }
