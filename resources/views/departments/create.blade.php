@@ -8,9 +8,9 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item "><a href="{{ route('home') }}">الرئيسيه</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">القطاعات </a></li>
+                <li class="breadcrumb-item"><a href="{{ route('departments.index') }}">الأدارات </a></li>
                 <li class="breadcrumb-item active" aria-current="page"> <a href="{{ route('departments.create') }}">
-                        اضافة قطاع</a></li>
+                        اضافة أداره</a></li>
             </ol>
         </nav>
 </div>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="form-row mx-2 d-flex justify-content-center">
-                 
+
                     <div class="form-group col-md-10 mx-md-2">
                         <label for="description">الوصف </label>
                         <input type="text" name="description" class="form-control" value="{{ old('description') }}">
@@ -64,9 +64,9 @@
                         <select name="employess[]" id="employess" class="form-group col-md-12 " multiple dir="rtl" style=" height: 150px;font-size: 18px;border: 0.2px solid lightgray; overflow-y: auto;">
                             @foreach($employee as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach 
+                            @endforeach
                         </select>
-                        
+
                     </div>
                 </div>
 
@@ -191,7 +191,7 @@
 //                         }
 //                         // $('#mangered').append('<option value="' + employee.id + '">' + employee.name + '</option>');
 //                     });
-                       
+
 //                     });
     </script>
 @endsection

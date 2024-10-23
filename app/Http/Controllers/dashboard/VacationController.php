@@ -326,7 +326,7 @@ class VacationController extends Controller
                     return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
                 }
             } elseif ($value->status != 'Rejected' && $value->end_date) {
-                if ($value->end_date <= $request->start_date && $value->start_date <= $request->start_date) {
+                if ($value->end_date >= $request->start_date && $value->start_date <= $request->start_date) {
                     return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
                 }
             }
@@ -608,9 +608,18 @@ class VacationController extends Controller
                 $vacation->is_exceed = 1;
                 $vacation->end_date = Carbon::parse($request->end_date)->subDay();
             } elseif ($request->type == 'direct_exceed') {
+                // dd(0);
                 $inspector = Inspector::where('user_id', $vacation->employee_id)->first();
 
                 if ($inspector) {
+                    $end_date = $request->end_date;
+                    $end_date = Carbon::parse($end_date);
+                    $start_date =  Carbon::parse($vacation->start_date);
+                    $daysNumber = $start_date->diffInDays($end_date, false) + 1;
+                    if (!$vacation->is_exceeded) {
+                        $vacation->days_number = $daysNumber;
+                        $vacation->save();
+                    }
                     // Fetch InspectorMission records for the found inspector ID
                     $inspectorMissions = InspectorMission::where('inspector_id', $inspector->id)
 
@@ -620,14 +629,7 @@ class VacationController extends Controller
                     if ($inspectorMissions->isEmpty()) {
                         session()->flash('info', 'لا توجد مهام للمفتش لتحديثها.');
                     } else {
-                        $end_date = $request->end_date;
-                        $end_date = Carbon::parse($end_date);
-                        $start_date =  Carbon::parse($vacation->start_date);
-                        $daysNumber = $start_date->diffInDays($end_date, false) + 1;
-                        if (!$vacation->is_exceeded) {
-                            $vacation->days_number = $daysNumber;
-                            $vacation->save();
-                        }
+                     
                         // Ensure this field exists in your EmployeeVacation model
                         foreach ($inspectorMissions as $index => $mission) {
                             // Check if the mission date is within the vacation period

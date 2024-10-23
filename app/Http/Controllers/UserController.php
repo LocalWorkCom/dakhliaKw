@@ -536,7 +536,7 @@ class UserController extends Controller
         $user->save();
         // $id = 1;
 
-        return redirect()->back()->with('success', 'User created successfully.');
+        return redirect()->back()->with('success', 'تم الغاء تعيين الموظف بنجاح');
     }
 
     /**
@@ -689,7 +689,7 @@ class UserController extends Controller
             $newUser->description = $request->description;
             $newUser->file_number = $request->file_number;
             $newUser->type_military = $request->type_military;
-            // 
+            //
             $newUser->employee_type = $request->solderORcivil;
             $newUser->flag = "employee";
             $newUser->grade_id = $request->grade_id;
@@ -786,6 +786,7 @@ class UserController extends Controller
                 $department = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
             }
         }
+
         // $department = departements::all();
         $hisdepartment = $user->createdDepartments;
         return view('user.edit', compact('user', 'rule', 'grade', 'department', 'hisdepartment', 'end_of_service', 'job', 'sector', 'area', 'nationality', 'govermnent', 'qualifications'));

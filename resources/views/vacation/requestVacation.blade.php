@@ -68,7 +68,7 @@
                 <div class="row qoute " dir="rtl">
                     <p class=" "> يرجى التكرم بالموافقة علي اجازه
                         <span> ( {{ $vacation->vacation_type->name }} )</span>
-                        للمذكور اعلاه و لمدة
+                        للمذكور اعلاه ولمدة
                         <span> ( {{convertToArabicNumerals($vacation->days_number) }} )</span>
                         ايام و الممنوحة له بالنشرة رقم
                         <span> ( 2020/12 )</span>
@@ -147,8 +147,8 @@
                 </div>
 
                 <div class="row qoute " dir="rtl">
-                    <p class="mt-5 mb-5"> تتم تحديد الاجازة للمذكؤر اعلاه و ارسلت للادارة العامة لشؤن قوة الشرطة و ذلك
-                        بتارييخ .. / .. / ....
+                    <p class="mt-5 mb-5"> تتم تحديد الاجازة للمذكور اعلاه وارسلت للادارة العامة لشؤن قوة الشرطة و ذلك
+                        بتاريخ .. / .. / ....
                     </p>
                 </div>
 

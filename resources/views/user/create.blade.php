@@ -194,7 +194,7 @@
 
                     {{-- <div class="form-group col-md-5 mx-2">
                         <label for="sector">قطاع </label>
-                   
+
                             <select id="sector" name="sector" class="form-control select2" placeholder="المنطقة">
                                 <option selected >اختار من القائمة</option>
                                 @foreach ($sector as $item)
@@ -205,13 +205,13 @@
         </div> --}}
                     {{-- </div>
 
-                
+
                 <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse"> --}}
                     <div class="form-group col-md-5 mx-2">
                         <label for="input4"> <i class="fa-solid fa-asterisk"
-                                style="color:red; font-size:10px;"></i> رقم الهاتف</label>
+                                style="color:red; font-size:10px;"></i> رقم المحمول</label>
                         <input type="text" id="input4" name="phone" class="form-control"
-                            placeholder=" رقم الهاتف" value="{{ old('phone') }}">
+                            placeholder=" رقم المحمول" value="{{ old('phone') }}">
                     </div>
                     <div class="form-group col-md-5 mx-2">
                         <label for="region"> المنطقة</label>
@@ -345,7 +345,7 @@
                         </select>
                     </div>
                 </div>
-                {{-- 
+                {{--
                 <div class="form-row mx-md-3  d-flex justify-content-center flex-row-reverse">
                     <div class="form-group col-md-5 mx-2">
                         <label for="input16">موقع العمل</label>

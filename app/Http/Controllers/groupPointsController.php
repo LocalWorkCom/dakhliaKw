@@ -40,25 +40,17 @@ class groupPointsController extends Controller
             'name' => 'required|string',
             'governorate' => 'required|exists:governments,id',
             'pointsIDs' => 'required|array|exists:group_points,id',
-
         ];
 
-        // // Define custom messages
         $messages = [
             'name.required' => 'يجب ادخال اسم القطاع',
-            'name.string' => 'يجب ان لا يحتوى اسم القطاع على رموز',
-            'pointsIDs.required' => 'يجب اختيار نقطه واحده على الاقل',
-            'pointsIDs.exists' => 'هذه النقطه غير متاحه'
-
+            'governorate.required' => 'يجب اختيار محافظة',
+            'pointsIDs.required' => 'يجب اختيار نقطة واحدة على الأقل',
         ];
 
-        // // Validate the request
         $validatedData = Validator::make($request->all(), $rules, $messages);
 
-        // // Validate the request
-        // $request->validate($rules, $messages);
         if ($validatedData->fails()) {
-
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         $sector_id = Sector::whereJsonContains('governments_IDs', $request->governorate)->value('id');
@@ -102,47 +94,50 @@ class groupPointsController extends Controller
     public function edit(string $id)
     {
         $data = Grouppoint::findOrFail($id);
-    
+
         // Decode points_ids if it is a JSON string; otherwise, use it as is
         $pointsIds = is_array($data->points_ids) ? $data->points_ids : json_decode($data->points_ids, true);
-    
         $selectedPoints = Point::whereIn('id', $pointsIds)->get();
-    
+
         // Get unique government IDs from the selected points
         $governmentIds = $selectedPoints->pluck('government_id')->unique();
-    
+
         // Fetch all points for the same government
         $allPoints = Point::whereIn('government_id', $governmentIds)->get();
-    
+        $groupPoints = GroupPoint::where('government_id', 4)
+        ->where('flag', 0)
+        ->where('deleted', 0)
+        ->get();
         // Get all points in the Grouppoint table that belong to the same government(s)
-        $pointsInGroup = Grouppoint::whereIn('government_id', $governmentIds)
-            ->pluck('points_ids')->where('deleted', 0)
-            ->map(function ($item) {
-                return is_array($item) ? $item : json_decode($item, true); // Convert JSON/serialized data to array
-            })
-            ->flatten()
-            ->unique();
-    
-        // Filter points to include only those that are not already in another group
-        $availablePoints = $allPoints->filter(function ($point) use ($pointsInGroup) {
-            return !$pointsInGroup->contains($point->id);
-        });
-    
+        // $pointsInGroup = Grouppoint::whereIn('government_id', $governmentIds)
+        //     ->pluck('points_ids')->where('deleted', 0)->where('flag', 0)
+        //     ->map(function ($item) {
+        //         return is_array($item) ? $item : json_decode($item, true); // Convert JSON/serialized data to array
+        //     })
+        //     ->flatten()
+        //     ->unique();
+        //     dd($pointsInGroup);
+        // // Filter points to include only those that are not already in another group
+        // $availablePoints = $allPoints->filter(function ($point) use ($pointsInGroup) {
+        //     return $pointsInGroup->contains($point->id);
+        // });
         // Collect IDs from available points
-        $availablePointIds = $availablePoints->pluck('id')->unique();
-    
+        $availablePointIds = $groupPoints->pluck('points_ids')->unique();
+       // dd($data ,$pointsIds,$selectedPoints,$availablePoints,$availablePointIds);
+
         // Merge selected points with available points
         $mergedPointIds = $selectedPoints->pluck('id')->merge($availablePointIds);
-    
+
         // Fetch the final set of points by their IDs
         $finalPoints = Point::whereIn('id', $mergedPointIds)->get();
-    
+        //dd($finalPoints);
+
         return view('grouppoints.edit', [
             'data' => $data,
             'selectedPoints' => $finalPoints
         ]);
     }
-    
+
 
 
     /**

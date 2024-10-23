@@ -38,22 +38,19 @@
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
                         <!-- {{-- @if (Auth::user()->hasPermission('create Region')) --}}
 
-                                            <button type="button" class="btn-all  "
-                                            onclick="openadd()" style="color: #0D992C;">
+                                                    <button type="button" class="btn-all  "
+                                                    onclick="openadd()" style="color: #0D992C;">
 
-                                                اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                            </button>
-                                            {{-- @endif --}} -->
+                                                        اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                                    </button>
+                                                    {{-- @endif --}} -->
 
                         <div class="form-group moftsh  mx-3  d-flex">
-                            <h4 style="margin-left:10px;line-height: 1.8;"> تصفية
-                                حسب </h4>
-                            <select name="government-select" id="government-select"
-                                onchange="filterRegions()"
+                            <h4 style="margin-left:10px;line-height: 1.8;"> تصفية حسب </h4>
+                            <select name="government-select" id="government-select" onchange="filterRegions()"
                                 class=" form-group mx-md-2 btn-all  custom-select custom-select-lg mb-3 select2   "
                                 style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
-                                <option value="" selected disabled> المحافظه
-                                </option>
+                                <option value="" selected disabled> المحافظه</option>
                                 @foreach (getgovernments() as $government)
                                     <option value="{{ $government->id }}"
                                         @if ($government->id == $id) selected @endif>
@@ -102,52 +99,37 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> أضافه منطقه جديد
-                        </h5>
-
+                        <h5 class="modal-title" id="lable"> أضافه منطقه جديد</h5>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"> &times;
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="container pt-4 pb-4"
-                        style="border: 0.2px solid rgb(166, 165, 165);">
-                        <form class="edit-grade-form" id="add-form"
-                            action=" {{ route('regions.store') }}" method="POST">
+                    <div class="container pt-4 pb-4" style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form class="edit-grade-form" id="add-form" action="{{ route('regions.store') }}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <label for="nameadd">الاسم</label>
-                                <input type="text" id="nameadd" name="nameadd"
-                                    class="form-control" required>
-                                @error('nameadd')
-                                    <div class="alert alert-danger">{{ $message }}
-                                    </div>
-                                @enderror
+                                <input type="text" id="nameadd" name="nameadd" class="form-control" required>
+                                <span class="text-danger span-error" id="nameadd-error" dir="rtl"></span>
                             </div>
 
                             <div class="form-group">
                                 <label for="governmentid">المحافظات </label>
                                 <select name="governmentid" id="governmentid"
-                                    class=" form-group col-md-12 custom-select custom-select-lg mb-3 select2 "
-                                    style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;"
-                                    required>
+                                    class="form-group col-md-12 custom-select custom-select-lg mb-3 select2"
+                                    style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
                                     <option value="">اختر المحافظه</option>
                                     @foreach (getgovernments() as $government)
                                         <option value="{{ $government->id }}">
                                             {{ $government->name }}</option>
                                     @endforeach
                                 </select>
-                                @error('government-id')
-                                    <div class="alert alert-danger">{{ $message }}
-                                    </div>
-                                @enderror
-
+                                <span class="text-danger span-error" id="governmentid-error" dir="rtl"></span>
                             </div>
+
                             <!-- Save button -->
                             <div class="text-end">
-                                <button type="submit" class="btn-blue"
-                                    onclick="confirmAdd()">اضافه</button>
+                                <button type="submit" class="btn-blue" onclick="confirmAdd(event)">اضافه</button>
                             </div>
                         </form>
                     </div>
@@ -155,6 +137,7 @@
             </div>
         </div>
     </div>
+
     {{-- this for edit form --}}
     <div class="modal fade" id="edit" tabindex="-1"
         aria-labelledby="representativeLabel" aria-hidden="true">
@@ -162,51 +145,43 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
                     <div class="title d-flex flex-row align-items-center">
-                        <h5 class="modal-title" id="lable"> تعديل اسم المنطقه ؟
-                        </h5>
-
+                        <h5 class="modal-title" id="label">تعديل اسم المنطقه ؟</h5>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"> &times;
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="container pt-4 pb-4"
-                        style="border: 0.2px solid rgb(166, 165, 165);">
-                        <form class="edit-grade-form" id="edit-form"
-                            action=" {{ route('regions.update') }}"
+                    <div class="container pt-4 pb-4" style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form class="edit-grade-form" id="edit-form" action="{{ route('regions.update') }}"
                             method="POST">
                             @csrf
+
                             <div class="form-group">
                                 <label for="name">الاسم</label>
-                                <input type="text" id="nameedit"
-                                    value="" name="name"
-                                    class="form-control" dir="rtl" required>
-                                <input type="text" id="idedit"
-                                    value="" name="id" hidden
-                                    class="form-control">
-
+                                <input type="text" id="nameedit" name="name" class="form-control" dir="rtl"
+                                    required>
+                                <span class="text-danger span-error" id="nameedit-error" dir="rtl"></span>
+                                <!-- Error message for name -->
                             </div>
+
+                            <input type="hidden" id="idedit" name="id" value="">
+                            <!-- Hidden field for ID -->
+
                             <div class="form-group">
                                 <label for="government">المحافظات</label>
-                                <select name="government" id="government"
-                                    class="form-group col-md-12 " required>
+                                <select name="government" id="government" class="form-group col-md-12" required>
                                     <option value="">اختر المحافظه</option>
                                     @foreach (getgovernments() as $government)
                                         <option value="{{ $government->id }}">
                                             {{ $government->name }}</option>
                                     @endforeach
                                 </select>
-                                @error('government')
-                                    <div class="alert alert-danger">
-                                        {{ $message }}</div>
-                                @enderror
-
+                                <span class="text-danger span-error" id="governmentidedit-error" dir="rtl"></span>
+                                <!-- Error message for government -->
                             </div>
+
                             <!-- Save button -->
                             <div class="text-end">
-                                <button type="submit" class="btn-blue"
-                                    onclick="confirmEdit()">تعديل</button>
+                                <button type="submit" class="btn-blue" onclick="confirmEdit(event)">تعديل</button>
                             </div>
                         </form>
                     </div>
@@ -214,6 +189,7 @@
             </div>
         </div>
     </div>
+
     {{-- model for delete form --}}
     {{-- <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -266,15 +242,38 @@
 
         }
 
-        function confirmEdit() {
-            var id = document.getElementById('idedit').value;
-            var name = document.getElementById('nameedit').value;
-            var government = document.getElementById('government').value;
-            var form = document.getElementById('edit-form');
+        function confirmEdit(event) {
+            event.preventDefault(); // Prevent default form submission
 
-            // form.submit();
+            // Get input fields and trim any leading/trailing spaces
+            var name = document.getElementById('nameedit').value.trim();
+            var governmentId = document.getElementById('government').value; // Get the selected government ID
 
+            // Clear previous errors
+            document.getElementById('nameedit-error').textContent = '';
+            document.getElementById('governmentidedit-error').textContent = ''; // Clear government error
+
+            var hasError = false;
+
+            // Check if the name is empty or consists only of spaces
+            if (name === '' || name.length === 0) {
+                document.getElementById('nameedit-error').textContent = 'الاسم مطلوب ولا يمكن أن يحتوي على مسافات فقط.';
+                hasError = true;
+            }
+
+            // Check if the government select is not selected
+            if (governmentId === '') {
+                document.getElementById('governmentidedit-error').textContent = 'المحافظه مطلوبه.';
+                hasError = true;
+            }
+
+            // If no errors, submit the form
+            if (!hasError) {
+                document.getElementById('edit-form').submit(); // Submit the form
+            }
         }
+
+
 
         function openadd() {
 
@@ -287,15 +286,40 @@
                 });
             });
         }
+        //    var government = document.getElementById('governmentid').value;
 
-        function confirmAdd() {
-            var name = document.getElementById('nameadd').value;
-            var government = document.getElementById('governmentid').value;
-            var form = document.getElementById('add-form');
 
-            // form.submit();
+        function confirmAdd(event) {
+            event.preventDefault(); // Prevent default form submission
 
+            // Get input fields and trim any leading/trailing spaces
+            var name = document.getElementById('nameadd').value.trim();
+            var governmentId = document.getElementById('governmentid').value; // Get the selected government ID
+
+            // Clear previous errors
+            document.getElementById('nameadd-error').textContent = '';
+            document.getElementById('governmentid-error').textContent = ''; // Clear government error
+
+            var hasError = false;
+
+            // Check if the name is empty or consists only of spaces
+            if (name === '' || name.length === 0) {
+                document.getElementById('nameadd-error').textContent = 'الاسم مطلوب ولا يمكن أن يحتوي على مسافات فقط.';
+                hasError = true;
+            }
+
+            // Check if the government select is not selected
+            if (governmentId === '') {
+                document.getElementById('governmentid-error').textContent = 'المحافظه مطلوبه.';
+                hasError = true;
+            }
+
+            // If no errors, submit the form
+            if (!hasError) {
+                document.getElementById('add-form').submit(); // Submit the form
+            }
         }
+
         var table;
 
         $(document).ready(function() {
@@ -350,14 +374,12 @@
                 },
                 "pagingType": "full_numbers",
                 "fnDrawCallback": function(oSettings) {
-                    console.log('Page ' + this.api().page.info()
-                        .pages)
+                    console.log('Page ' + this.api().page.info().pages)
                     var page = this.api().page.info().pages;
                     console.log($('#users-table tr').length);
                     if (page == 1) {
                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                        $('.dataTables_paginate').css(
-                            'visibility', 'hidden'); // to hide
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
                     }
                 }
