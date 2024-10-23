@@ -7,7 +7,8 @@
                 @endphp
 
                 @if (!empty($user))
-                    <button class="btn btn-2 mt-3" onclick="toggleDropdown('dropdownMenu')">
+                    <button class="btn btn-2 mt-3"
+                        onclick="toggleDropdown('dropdownMenu')">
                         <i class="fa-solid fa-angle-down mx-2"></i>
                         {{ $user->name }}
                         <i class="fa-solid fa-user mx-2"></i>
@@ -16,21 +17,24 @@
                     <div id="dropdownMenu" class="dropdown-menu">
                         <ul>
                             <li>
-                                <a href="{{ route('profile') }}" style="color:black;"> صفحة المستخدم
+                                <a href="{{ route('profile') }}"
+                                    style="color:black;"> صفحة المستخدم
                                     <i class="fa-solid fa-user mx-2"></i>
                                 </a>
                             </li>
                             <hr>
                             <li>
                                 <a href="{{ route('logout') }}">تسجيل خروج
-                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <i
+                                        class="fa-solid fa-right-from-bracket"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 @else
                     <button class="btn btn-2 mt-3">
-                        <a href="{{ route('login') }}" style="color: #ffffff; text-decoration:none;">
+                        <a href="{{ route('login') }}"
+                            style="color: #ffffff; text-decoration:none;">
                             سجل الدخول <i class="fa-solid fa-user mx-2"></i>
                         </a>
                     </button>
@@ -38,7 +42,7 @@
             </div>
             <button class="btn2 btn-2 mx-5"
                 style="border-inline: 1px solid rgb(41, 41, 41); height: 100%;"
-                onclick="toggleNotifydown2()">
+                onclick="toggleNotify()">
                 <a class="bell mx-md-5">
                     <i class="fa-regular fa-bell"></i>
                 </a>
@@ -46,25 +50,30 @@
 
             <div id="dropdownMenu2" class="dropdown-menu2">
                 @forelse (getNotifications() as $notifi)
-                <a href="{{ route('groupTeam.index', ['id' => $notifi->group_id, 'notifi' => $notifi->id]) }}" rel="noopener noreferrer">
-                    <p>{{ $notifi->title }}</p>
-                    <p>{{ $notifi->teams->name ?? 'N/A' }}, {{ $notifi->message }}</p>
-                </a>
-                <hr>
-            @empty
-                <p>لا يوجد تنبيهات</p>
-            @endforelse
+                    <a href="{{ route('groupTeam.index', ['id' => $notifi->group_id, 'notifi' => $notifi->id]) }}"
+                        rel="noopener noreferrer">
+                        <p>{{ $notifi->title }}</p>
+                        <p>{{ $notifi->teams->name ?? 'N/A' }},
+                            {{ $notifi->message }}</p>
+                    </a>
+                    <hr>
+                @empty
+                    <p>لا يوجد تنبيهات</p>
+                @endforelse
             </div>
             <div class="input-group mx-2">
-                <button type="button" id="search-btn" class="btn mt-4" data-mdb-ripple-init>
+                <button type="button" id="search-btn" class="btn mt-4"
+                    data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
                 </button>
                 <div class="form-outline mt-4">
-                    <input type="search" id="q" name="q" class="form-control" placeholder="بحث"
+                    <input type="search" id="q" name="q"
+                        class="form-control" placeholder="بحث"
                         @isset($q)
                         value="{{ $q }}" @endisset />
                 </div>
-                <select name="search" id="search" class="mt-4" style="direction:rtl;">
+                <select name="search" id="search" class="mt-4"
+                    style="direction:rtl;">
                     <option value="users"
                         @isset($search) @if ($search == 'users') selected @endif @endisset>
                         المستخدمين
@@ -85,40 +94,51 @@
         <div class="first-section d-flex justify-content-between mt-1 ">
             <h2 style="color: #FFFFFF">{{ showUserDepartment() }} -</h2>
             <h2>الرقابة والتفتيش</h2>
-            <img class="mt-2" src="{{ asset('frontend/images/logo.svg') }}" alt="">
+            <img class="mt-2" src="{{ asset('frontend/images/logo.svg') }}"
+                alt="">
         </div>
     </div>
     <div class="navbar navbar-expand-md mb-4" role="navigation" dir="rtl">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarCollapse" aria-controls="navbarCollapse"
+            aria-expanded="false" aria-label="Toggle navigation">
             <i class="fa-solid fa-bars side-nav"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav d-flex justify-content-between w-100">
-                <li class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
+                <li
+                    class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('frontend/images/home.svg') }}" alt="logo">
+                        <img src="{{ asset('frontend/images/home.svg') }}"
+                            alt="logo">
                         <h6>الرئيسية</h6>
                     </a>
                 </li>
                 <li class="nav-item {{ request()->routeIs('user.index') || request()->routeIs('rule.index') ? 'active' : '' }} btn7"
                     onclick="toggleDropdown7(event)">
                     <a href="#">
-                        <img src="{{ asset('frontend/images/users.svg') }}" alt="logo">
-                        <h6 class="btn7">المستخدمين <i class="fa-solid fa-angle-down"></i></h6>
+                        <img src="{{ asset('frontend/images/users.svg') }}"
+                            alt="logo">
+                        <h6 class="btn7">المستخدمين <i
+                                class="fa-solid fa-angle-down"></i></h6>
                     </a>
                     <div id="dropdownMenu7" class="dropdown-menu7">
                         <ul>
-                            <li class="{{ request()->routeIs('user.index') ? 'active' : '' }}">
+                            <li
+                                class="{{ request()->routeIs('user.index') ? 'active' : '' }}">
                                 <i class="fa-solid fa-user"
                                     style="margin-left: 7px; margin-top: 5px; font-size:15px"></i>
-                                <a href="{{ route('user.index', 0) }}">المستخدمين</a>
+                                <a
+                                    href="{{ route('user.index', 0) }}">المستخدمين</a>
                             </li>
                             @if (Auth::user()->hasPermission('view Rule'))
-                                <li class="{{ request()->routeIs('rule.index') ? 'active' : '' }}">
-                                    <img src="{{ asset('frontend/images/task.svg') }}" alt="logo"
+                                <li
+                                    class="{{ request()->routeIs('rule.index') ? 'active' : '' }}">
+                                    <img src="{{ asset('frontend/images/task.svg') }}"
+                                        alt="logo"
                                         style="margin-left: 7px;">
-                                    <a href="{{ route('rule.index') }}">المهام</a>
+                                    <a
+                                        href="{{ route('rule.index') }}">المهام</a>
                                 </li>
                             @endif
                             {{--   @if (Auth::user()->hasPermission('view Permission'))
@@ -134,50 +154,60 @@
                 <li class="nav-item {{ request()->routeIs('user.employees') ? 'active' : '' }} btn3  @isset($search) @if ($search == 'emps') active @endif @endisset"
                     onclick="toggleDropdown3(event)">
                     <a href="{{ route('user.employees', 1) }}">
-                        <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
+                        <img src="{{ asset('frontend/images/employees.svg') }}"
+                            alt="logo">
                         <h6 class="btn3">الموظفين</h6>
                     </a>
                 </li>
                 <li class="nav-item {{ request()->routeIs('inspectors.index') || request()->routeIs('group.view') || request()->routeIs('instant_mission.index') || request()->routeIs('vacations.list') ? 'active' : '' }} btn5"
                     onclick="toggleDropdown5(event)">
                     <a href="#">
-                        <img src="{{ asset('frontend/images/moftsheen.svg') }}" alt="logo">
-                        <h6 class="btn5">التفتيش <i class="fa-solid fa-angle-down"></i></h6>
+                        <img src="{{ asset('frontend/images/moftsheen.svg') }}"
+                            alt="logo">
+                        <h6 class="btn5">التفتيش <i
+                                class="fa-solid fa-angle-down"></i></h6>
                     </a>
                     <div id="dropdownMenu5" class="dropdown-menu5">
                         <ul>
                             <li>
-                                <img src="{{ asset('frontend/images/inspectors.svg') }}" alt="logo"
-                                    style="margin-left: 7px;">
-                                <a href="{{ route('inspectors.index') }}">المفتشون</a>
+                                <img src="{{ asset('frontend/images/inspectors.svg') }}"
+                                    alt="logo" style="margin-left: 7px;">
+                                <a
+                                    href="{{ route('inspectors.index') }}">المفتشون</a>
                             </li>
                             @if (Auth::user()->hasPermission('view Groups'))
                                 <li>
-                                    <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo"
+                                    <img src="{{ asset('frontend/images/groups.svg') }}"
+                                        alt="logo"
                                         style="margin-left: 7px;">
-                                    <a href="{{ route('group.view') }}">المجموعات</a>
+                                    <a
+                                        href="{{ route('group.view') }}">المجموعات</a>
                                 </li>
                             @endif
                             @if (Auth::user()->hasPermission('view instantmission'))
                                 <li>
-                                    <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo"
+                                    <img src="{{ asset('frontend/images/groups.svg') }}"
+                                        alt="logo"
                                         style="margin-left: 7px;">
-                                    <a href="{{ route('instant_mission.index') }}">أوامر
+                                    <a
+                                        href="{{ route('instant_mission.index') }}">أوامر
                                         الخدمة</a>
                                 </li>
                             @endif
 
                             @if (Auth::user()->hasPermission('view EmployeeVacation'))
                                 <li>
-                                    <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
+                                    <img src="{{ asset('frontend/images/holidays.svg') }}"
+                                        alt="logo"
                                         style="margin-left: 7px;">
-                                    <a href="{{ route('vacations.list') }}">الإجازات</a>
+                                    <a
+                                        href="{{ route('vacations.list') }}">الإجازات</a>
                                 </li>
                             @endif
 
                             <li>
-                                <img src="{{ asset('frontend/images/groups.svg') }}" alt="logo"
-                                    style="margin-left: 7px;">
+                                <img src="{{ asset('frontend/images/groups.svg') }}"
+                                    alt="logo" style="margin-left: 7px;">
                                 <a href="{{ route('statistic.show') }}">
                                     الأحصائيات </a>
                             </li>
@@ -188,23 +218,29 @@
                     <li class="nav-item {{ request()->routeIs('viollation') ? 'active' : '' }} btn3  @isset($search) @if ($search == 'emps') active @endif @endisset"
                         onclick="toggleDropdown6(event)">
                         <a href="#">
-                            <img src="{{ asset('frontend/images/employees.svg') }}" alt="logo">
-                            <h6 class="btn6">المخالفات <i class="fa-solid fa-angle-down"></i></h6>
+                            <img src="{{ asset('frontend/images/employees.svg') }}"
+                                alt="logo">
+                            <h6 class="btn6">المخالفات <i
+                                    class="fa-solid fa-angle-down"></i></h6>
                         </a>
                         <div id="dropdownMenu6" class="dropdown-menu6">
                             <ul>
                                 @if (Auth::user()->hasPermission('view Violation'))
                                     <li
                                         class="nav-item {{ request()->routeIs('viollation') ? 'active' : '' }} btn3  @isset($search) @if ($search == 'emps') active @endif @endisset">
-                                        <i class="fa-solid fa-xmark" style="margin-left: 7px;"></i>
-                                        <a href="{{ route('viollation') }}">المخالفات</a>
+                                        <i class="fa-solid fa-xmark"
+                                            style="margin-left: 7px;"></i>
+                                        <a
+                                            href="{{ route('viollation') }}">المخالفات</a>
                                     </li>
                                 @endif
                                 @if (Auth::user()->hasPermission('view ViolationTypes'))
                                     <li
                                         class="nav-item {{ request()->routeIs('violations.index') ? 'active' : '' }} btn3">
-                                        <i class="fa-solid fa-xmark" style="margin-left: 7px;"></i>
-                                        <a href="{{ route('violations.index') }}">أنواع
+                                        <i class="fa-solid fa-xmark"
+                                            style="margin-left: 7px;"></i>
+                                        <a
+                                            href="{{ route('violations.index') }}">أنواع
                                             المخالفات</a>
                                     </li>
                                 @endif
@@ -212,10 +248,11 @@
                         </div>
                     </li>
                 @endif
-                <li class="nav-item {{ request()->routeIs('inspector.mission') ? 'active' : '' }}">
+                <li
+                    class="nav-item {{ request()->routeIs('inspector.mission') ? 'active' : '' }}">
                     <a href="{{ route('inspector.mission') }}">
-                        <img src="{{ asset('frontend/images/table.svg') }}" alt="logo"
-                            style="height:35px; width:35px;">
+                        <img src="{{ asset('frontend/images/table.svg') }}"
+                            alt="logo" style="height:35px; width:35px;">
                         <h6>الجدول العام</h6>
                     </a>
                 </li>
@@ -223,7 +260,8 @@
                     <li
                         class="nav-item {{ request()->routeIs('departments.index') ? 'active' : '' }} @isset($search) @if ($search == 'dept') active @endif @endisset">
                         <a href="{{ route('departments.index') }}">
-                            <img src="{{ asset('frontend/images/managements.svg') }}" alt="logo">
+                            <img src="{{ asset('frontend/images/managements.svg') }}"
+                                alt="logo">
                             <h6>الادارات</h6>
                         </a>
                     </li>
@@ -237,33 +275,45 @@
                     <li class="nav-item {{ request()->routeIs('grads.index') || request()->routeIs('job.index') || request()->routeIs('qualifications.index') || request()->routeIs('government.all') || request()->routeIs('regions.index') || request()->routeIs('sectors.index') || request()->routeIs('points.index') || request()->routeIs('vacationType.index') || request()->routeIs('permission.index') || request()->routeIs('working_time.index') || request()->routeIs('working_trees.list') || request()->routeIs('absence.index') ? 'active' : '' }}"
                         onclick="toggleDropdown4(event)">
                         <a href="#">
-                            <img src="{{ asset('frontend/images/settings.svg') }}" alt="logo">
-                            <h6 class="btn4">الإعدادات <i class="fa-solid fa-angle-down"></i></h6>
+                            <img src="{{ asset('frontend/images/settings.svg') }}"
+                                alt="logo">
+                            <h6 class="btn4">الإعدادات <i
+                                    class="fa-solid fa-angle-down"></i></h6>
                         </a>
                         <div id="dropdownMenu4" class="dropdown-menu4">
                             <ul>
-                                <div class="row col-12 d-flex justify-content-around">
+                                <div
+                                    class="row col-12 d-flex justify-content-around">
                                     <div class="col-6">
                                         @if (Auth::user()->hasPermission('view Setting'))
-                                            <li class="{{ request()->routeIs('settings.index') ? 'active' : '' }}">
-                                                <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"
+                                            <li
+                                                class="{{ request()->routeIs('settings.index') ? 'active' : '' }}">
+                                                <img src="{{ asset('frontend/images/police.svg') }}"
+                                                    alt="logo"
                                                     style="margin-left: 7px;">
-                                                <a href="{{ route('settings.index') }}">الاعدادات</a>
+                                                <a
+                                                    href="{{ route('settings.index') }}">الاعدادات</a>
                                             </li>
                                         @endif
                                         @if (Auth::user()->hasPermission('view grade'))
-                                            <li class="{{ request()->routeIs('grads.index') ? 'active' : '' }}">
-                                                <img src="{{ asset('frontend/images/police.svg') }}" alt="logo"
+                                            <li
+                                                class="{{ request()->routeIs('grads.index') ? 'active' : '' }}">
+                                                <img src="{{ asset('frontend/images/police.svg') }}"
+                                                    alt="logo"
                                                     style="margin-left: 7px;">
-                                                <a href="{{ route('grads.index') }}">الرتب
+                                                <a
+                                                    href="{{ route('grads.index') }}">الرتب
                                                     العسكرية</a>
                                             </li>
                                         @endif
                                         @if (Auth::user()->hasPermission('view job'))
-                                            <li class="{{ request()->routeIs('job.index') ? 'active' : '' }}">
-                                                <img src="{{ asset('frontend/images/jobs.svg') }}" alt="logo"
+                                            <li
+                                                class="{{ request()->routeIs('job.index') ? 'active' : '' }}">
+                                                <img src="{{ asset('frontend/images/jobs.svg') }}"
+                                                    alt="logo"
                                                     style="margin-left: 7px;">
-                                                <a href="{{ route('job.index') }}">المسمى
+                                                <a
+                                                    href="{{ route('job.index') }}">المسمى
                                                     الوظيفى
                                                 </a>
                                             </li>
@@ -276,33 +326,45 @@
                 </li>
                 @endif --}}
                                         @if (Auth::user()->hasPermission('view Government'))
-                                            <li class="{{ request()->routeIs('government.all') ? 'active' : '' }}">
+                                            <li
+                                                class="{{ request()->routeIs('government.all') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('government.all') }}">المحافظات</a>
+                                                    alt="logo"
+                                                    style="margin-left: 7px;">
+                                                <a
+                                                    href="{{ route('government.all') }}">المحافظات</a>
                                             </li>
                                         @endif
                                         @if (Auth::user()->hasPermission('view Region'))
-                                            <li class="{{ request()->routeIs('regions.index') ? 'active' : '' }}">
+                                            <li
+                                                class="{{ request()->routeIs('regions.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
+                                                    alt="logo"
+                                                    style="margin-left: 7px;">
+                                                <a
+                                                    href="{{ route('regions.index', ['id' => 0]) }}">المناطق</a>
                                             </li>
                                         @endif
 
                                         @if (Auth::user()->hasPermission('view Sector'))
-                                            <li class="{{ request()->routeIs('sectors.index') ? 'active' : '' }}">
+                                            <li
+                                                class="{{ request()->routeIs('sectors.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('sectors.index') }}">القطاعات</a>
+                                                    alt="logo"
+                                                    style="margin-left: 7px;">
+                                                <a
+                                                    href="{{ route('sectors.index') }}">القطاعات</a>
                                             </li>
                                         @endif
 
                                         @if (Auth::user()->hasPermission('view Point'))
-                                            <li class="{{ request()->routeIs('points.index') ? 'active' : '' }}">
+                                            <li
+                                                class="{{ request()->routeIs('points.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('points.index') }}">النقاط</a>
+                                                    alt="logo"
+                                                    style="margin-left: 7px;">
+                                                <a
+                                                    href="{{ route('points.index') }}">النقاط</a>
                                             </li>
                                         @endif
 
@@ -311,9 +373,11 @@
                                         @if (Auth::user()->hasPermission('view VacationType'))
                                             <li
                                                 class="{{ request()->routeIs('vacationType.index') ? 'active' : '' }}">
-                                                <img src="{{ asset('frontend/images/holidays.svg') }}" alt="logo"
+                                                <img src="{{ asset('frontend/images/holidays.svg') }}"
+                                                    alt="logo"
                                                     style="margin-left: 7px;">
-                                                <a href="{{ route('vacationType.index') }}">أنواع
+                                                <a
+                                                    href="{{ route('vacationType.index') }}">أنواع
                                                     الأجازات</a>
                                             </li>
                                         @endif
@@ -330,8 +394,10 @@
                                             <li
                                                 class="{{ request()->routeIs('working_time.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/governorates.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('working_time.index') }}">فترات
+                                                    alt="logo"
+                                                    style="margin-left: 7px;">
+                                                <a
+                                                    href="{{ route('working_time.index') }}">فترات
                                                     العمل</a>
                                             </li>
                                         @endif
@@ -340,17 +406,22 @@
                                             <li
                                                 class="{{ request()->routeIs('working_trees.list') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/permission.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('working_trees.list') }}">نظام
+                                                    alt="logo"
+                                                    style="margin-left: 7px;">
+                                                <a
+                                                    href="{{ route('working_trees.list') }}">نظام
                                                     العمل</a>
                                             </li>
                                         @endif
 
                                         @if (Auth::user()->hasPermission('view Absence'))
-                                            <li class="{{ request()->routeIs('absence.index') ? 'active' : '' }}">
+                                            <li
+                                                class="{{ request()->routeIs('absence.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/permission.svg') }}"
-                                                    alt="logo" style="margin-left: 7px;">
-                                                <a href="{{ route('absence.index') }}">مسميات
+                                                    alt="logo"
+                                                    style="margin-left: 7px;">
+                                                <a
+                                                    href="{{ route('absence.index') }}">مسميات
                                                     العجز
                                                 </a>
                                             </li>
@@ -365,17 +436,21 @@
                     </li>
                 @endif
                 @if (Auth::user()->hasPermission('view Iotelegram'))
-                    <li class="nav-item {{ request()->routeIs('iotelegrams.list') ? 'active' : '' }}">
+                    <li
+                        class="nav-item {{ request()->routeIs('iotelegrams.list') ? 'active' : '' }}">
                         <a href="{{ route('iotelegrams.list') }}">
-                            <img src="{{ asset('frontend/images/imports.svg') }}" alt="logo">
+                            <img src="{{ asset('frontend/images/imports.svg') }}"
+                                alt="logo">
                             <h6>الوارد</h6>
                         </a>
                     </li>
                 @endif
                 @if (Auth::user()->hasPermission('view outgoings'))
-                    <li class="nav-item {{ request()->routeIs('Export.index') ? 'active' : '' }}">
+                    <li
+                        class="nav-item {{ request()->routeIs('Export.index') ? 'active' : '' }}">
                         <a href="{{ route('Export.index') }}">
-                            <img src="{{ asset('frontend/images/exports.svg') }}" alt="logo">
+                            <img src="{{ asset('frontend/images/exports.svg') }}"
+                                alt="logo">
                             <h6>الصادر</h6>
                         </a>
                     </li>
@@ -388,30 +463,36 @@
     $().ready(function() {
         $('#dropdownMenu2').fadeOut('fast');
     })
-    document.addEventListener('DOMContentLoaded', function() {
-        // Close dropdowns on page load
-        document.getElementById('dropdownMenu').style.display = 'none';
-        // document.getElementById('dropdownMenu2').style.display = 'none';
-        document.getElementById('dropdownMenu4').style.display = 'none';
-        document.getElementById('dropdownMenu5').style.display = 'none';
-        document.getElementById('dropdownMenu7').style.display = 'none';
+    /* document.addEventListener('DOMContentLoaded', function() {
+         // Close dropdowns on page load
+         document.getElementById('dropdownMenu').style.display = 'none';
+         // document.getElementById('dropdownMenu2').style.display = 'none';
+         document.getElementById('dropdownMenu4').style.display = 'none';
+         document.getElementById('dropdownMenu5').style.display = 'none';
+         document.getElementById('dropdownMenu7').style.display = 'none';
 
 
-        // Optional: Close dropdowns if they are open on page load
-        function closeDropdowns() {
-            let dropdowns = document.querySelectorAll(
-                '.dropdown-menu, .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
-            );
-            dropdowns.forEach(function(dropdown) {
-                dropdown.style.display = 'none';
-            });
-        }
+         // Optional: Close dropdowns if they are open on page load
+         function closeDropdowns() {
+             let dropdowns = document.querySelectorAll(
+                 '.dropdown-menu, .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
+             );
+             dropdowns.forEach(function(dropdown) {
+                 dropdown.style.display = 'none';
+             });
+         }
 
-        // Attach closeDropdowns function to window events
-        window.addEventListener('load', closeDropdowns);
-    });
-</script> --}}
+         // Attach closeDropdowns function to window events
+         window.addEventListener('load', closeDropdowns);
+     });*/
+</script>
 <script>
+    function toggleNotify() {
+        console.log("Notification");
+        $('#dropdownMenu2').fadeToggle("slow");
+
+
+    }
     // function toggleDropdown() {
     //     var dropdown = document.getElementById('dropdownMenu');
     //     dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
@@ -423,18 +504,12 @@
     //     alert("Button clicked!");
     //     console.log("gjmjhghjn");
 
-        var dropdown = document.getElementById('dropdownMenu2');
-        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
-            'block';
-    }
+    //         var dropdown = document.getElementById('dropdownMenu2');
+    //        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
+    //            'block';
+    //    } */
 
-    function toggleNotifydown2() {
-        console.log("Notification");
 
-        //   var dropdown = $('#dropdownMenu2');
-        $('#dropdownMenu2').fadeToggle("slow");
-        //   dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :'block';
-    }
 
     function toggleDropdown3(event) {
         var dropdown = document.getElementById('dropdownMenu3');
@@ -475,12 +550,13 @@
         dropdowns.forEach(function(dropdown) {
             dropdown.style.display = 'none';
         });
-    }
+    });
 
     // Close dropdowns if clicking outside of them
     document.addEventListener('click', function(event) {
         let isDropdownButton = event.target.closest('.btn, .btn2');
-        let isDropdownContent = event.target.closest('.dropdown-menu, .dropdown-menu2');
+        let isDropdownContent = event.target.closest(
+            '.dropdown-menu, .dropdown-menu2');
 
         if (!isDropdownButton && !isDropdownContent) {
             closeAllDropdowns();
