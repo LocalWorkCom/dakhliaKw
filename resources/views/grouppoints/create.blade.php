@@ -21,7 +21,7 @@
         <div class="container welcome col-11">
             <p> نقـــاط الوزاره </p>
         </div>
-    </div> 
+    </div>
     {{-- {{ dd($governments) }} --}}
     <br>
     <form class="edit-grade-form" id="Qta3-form" action=" {{ route('grouppoints.store') }}" method="POST">
@@ -174,7 +174,7 @@
                         dataType: 'json',
                         success: function(data) {
                             console.log(data);
-                            
+
                             var pointsSelect = $('#pointsIDs');
                             pointsSelect.empty().append(
                                 '<option value="" selected disabled>اختر</option>');
@@ -227,6 +227,6 @@
                     $('#pointsIDs').trigger('change');
                 }
             });
-        
+
     </script>
 @endpush
