@@ -177,7 +177,8 @@ ul {
     font-weight: 400;
 }
 #dropdownMenu2 a {
-    color: red;
+   /* color: red;*/
+   color: #1c1b1b;
     background-color: #ffffff;
     font-size: 18px;
 }
