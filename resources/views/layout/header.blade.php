@@ -482,9 +482,9 @@
              });
          }
 
-         // Attach closeDropdowns function to window events
-         window.addEventListener('load', closeDropdowns);
-     });*/
+        // Attach closeDropdowns function to window events
+        window.addEventListener('load', closeDropdowns);
+    });
 </script>
 <script>
     function toggleNotify() {
