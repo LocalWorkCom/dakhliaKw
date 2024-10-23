@@ -68,10 +68,26 @@
                 </div>
 
                 <div class="row qoute " dir="rtl">
-                    <p class=" "> نحيطكم علما بأن المذكؤر أعلاه
-                    <p>قد باشر العمل لدينا بتاريخ <span>
-                            {{ convertToArabicNumerals(\Carbon\Carbon::parse($vacation->end_date)->translatedFormat('l j F Y')) }}
-                        </span></p>
+                    <p>
+                        نحيطكم علما بأن المذكور أعلاه
+                        قد باشر العمل لدينا بتاريخ
+
+                        <span>
+                            @php
+                                if ($vacation->end_date) {
+                                    // If end_date is set, add 1 day to it
+                                    $StartWorkDate = AddDays($vacation->end_date, 1);
+                                } elseif ($vacation->status == 'Rejected') {
+                                    // If status is 'Rejected' and end_date is not set, use a placeholder
+                                    $StartWorkDate = '______________';
+                                } else {
+                                    // If neither condition is met, use the expected end date from another function
+                                    $StartWorkDate = ExpectedEndDate($vacation)[1];
+                                }
+                            @endphp
+                            {{ convertToArabicNumerals(\Carbon\Carbon::parse($StartWorkDate)->translatedFormat('l j F Y')) }}
+                        </span>
+                    </p>
                     <p>بعد حصوله على أجازة <span>{{ $vacation->vacation_type->name }}</span> مدتها
                         <?php
                         $startDate = \Carbon\Carbon::parse($vacation->start_date);
@@ -79,7 +95,7 @@
                         $daysLeft = $startDate->diffInDays($endDate, false);
                         
                         ?>
-                        <span>{{ convertToArabicNumerals($daysLeft+1) }}</span> أيام
+                        <span>{{ convertToArabicNumerals($daysLeft + 1) }}</span> أيام
                     </p>
                     <!-- Continue with your HTML structure -->
                     </p>
@@ -132,8 +148,8 @@
                 </div>
 
                 <div class="row qoute " dir="rtl">
-                    <p class="mt-5 mb-5"> تتم تحديد الاجازة للمذكؤر اعلاه و ارسلت للادارة العامة لشؤن قوة الشرطة و
-                        ذلك بتارييخ .. / .. / ....
+                    <p class="mt-5 mb-5"> تتم تحديد الاجازة للمذكور اعلاه وارسلت للادارة العامة لشؤن قوة الشرطة و
+                        ذلك بتاريخ .. / .. / ....
                     </p>
                 </div>
 

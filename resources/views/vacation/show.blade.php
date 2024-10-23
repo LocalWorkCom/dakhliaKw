@@ -1,7 +1,7 @@
 @extends('layout.main')
 
 @section('title')
-    اضافة
+    عرض
 @endsection
 @section('content')
     <div class="row " dir="rtl">
@@ -60,13 +60,38 @@
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">تاريخ النهاية:</th>
                             <td>
-                                {{ $vacation->status == 'Rejected' || $vacation->status == 'Pending' ? '____________' : ExpectedEndDate($vacation)[0] }}
+                                @php
+                                    if ($vacation->end_date) {
+                                        // If end_date is set, add 1 day to it
+                                        $EndDate = $vacation->end_date;
+                                    } elseif ($vacation->status == 'Rejected') {
+                                        // If status is 'Rejected' and end_date is not set, use a placeholder
+                                        $EndDate = '______________';
+                                    } else {
+                                        // If neither condition is met, use the expected end date from another function
+                                        $EndDate = ExpectedEndDate($vacation)[0];
+                                    }
+                                @endphp
+                                {{ $EndDate }}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" style="background: #f5f6fa;">تاريخ المباشرة:</th>
                             <td>
-                                {{ $vacation->status == 'Rejected' || $vacation->status == 'Pending' ? '____________' : ExpectedEndDate($vacation)[1] }}
+                                @php
+
+                                    if ($vacation->end_date) {
+                                        // If end_date is set, add 1 day to it
+                                        $StartWorkDate = AddDays($vacation->end_date, 1);
+                                    } elseif ($vacation->status == 'Rejected') {
+                                        // If status is 'Rejected' and end_date is not set, use a placeholder
+                                        $StartWorkDate = '______________';
+                                    } else {
+                                        // If neither condition is met, use the expected end date from another function
+                                        $StartWorkDate = ExpectedEndDate($vacation)[1];
+                                    }
+                                @endphp
+                                {{ $StartWorkDate }}
                             </td>
                         </tr>
 

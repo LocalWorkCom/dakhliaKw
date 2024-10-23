@@ -71,4 +71,5 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/countries', [VacationController::class, 'getCountries']);
     Route::get('/vacation_types', [VacationController::class, 'getVacationTypes']);
     Route::post('/vacation_request', [VacationController::class, 'requestVacation']);
+    Route::get('/all_vacations', [VacationController::class, 'getAllVacations']);
 });
