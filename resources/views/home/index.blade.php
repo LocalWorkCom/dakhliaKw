@@ -3,8 +3,8 @@
     الرئيسيه
 @endsection
 @section('style')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 @endsection
 @section('content')
     <div class="row ">
@@ -14,16 +14,19 @@
     </div>
     <br>
     <div class="row">
-        <div class="container  col-11 mt-3 p-0 " style=" background-color: transparent;">
+        <div class="container  col-11 mt-3 p-0 "
+            style=" background-color: transparent;">
             <div class="row col-12 d-flex" style="flex-direction: row-reverse;">
                 {{-- @if (appear('stat')) --}}
                 @foreach ($Statistics as $statistic)
                     <div class="col-md-3 col-sm-12 col-12 " dir="rtl"
                         style="display: {{ !in_array($statistic->id, $UserStatistic->toArray()) ? 'none' : 'block' }}">
                         <a href="{{ $routes[$statistic->name] }}">
-                            <div class="graph-card" style="background-color: #ffffff;">
+                            <div class="graph-card"
+                                style="background-color: #ffffff;">
                                 <div class="d-flex">
-                                    <i class="fa-solid fa-user-group" style="color: #8E52B1;"></i>
+                                    <i class="fa-solid fa-user-group"
+                                        style="color: #8E52B1;"></i>
                                     <h2 class="mx-3">{{ $statistic->name }}</h2>
                                 </div>
                                 <h1>
@@ -41,21 +44,28 @@
 
 
     <div class="row desktop-view">
-        <div class="container col-11 mt-3 p-0" style="background-color: transparent;" dir="rtl">
+        <div class="container col-11 mt-3 p-0"
+            style="background-color: transparent;" dir="rtl">
             <div class="row">
                 <div class="col-12" id="first-chart">
-                    <div class="circle-graph-card" style="background-color: #ffffff;">
+                    <div class="circle-graph-card"
+                        style="background-color: #ffffff;">
                         <div class="d-block align-items-center mb-5">
                             <!-- Header with Month Name -->
                             @php
                                 use Carbon\Carbon;
                                 setlocale(LC_TIME, 'ar_AE.utf8'); // Set locale to Arabic
-                                $month_name = Carbon::create()->month(date('n'))->translatedFormat('F'); // Arabic month name
+                                $month_name = Carbon::create()
+                                    ->month(date('n'))
+                                    ->translatedFormat('F'); // Arabic month name
                             @endphp
                             <div class="d-flex graph">
-                                <img src="{{ asset('frontend/images/report.svg') }}" alt="logo">
-                                <h2 class="col-12 h2-charts mb-3" style="text-align: right;">
-                                    تقرير شهر <span id="month_name">{{ $month_name }}</span>
+                                <img src="{{ asset('frontend/images/report.svg') }}"
+                                    alt="logo">
+                                <h2 class="col-12 h2-charts mb-3"
+                                    style="text-align: right;">
+                                    تقرير شهر <span
+                                        id="month_name">{{ $month_name }}</span>
                                 </h2>
                             </div>
 
@@ -66,7 +76,8 @@
                                     $currentYear = date('Y'); // Get current year
                                 @endphp
 
-                                <select id="month" class="month mx-2" name="month">
+                                <select id="month" class="month mx-2"
+                                    name="month">
                                     @foreach (getMonthNames() as $index => $month)
                                         <option value="{{ $index + 1 }}"
                                             {{ $index + 1 == $currentMonth ? 'selected' : '' }}>
@@ -75,9 +86,11 @@
                                     @endforeach
                                 </select>
 
-                                <select id="year" class="month mx-2" name="year">
+                                <select id="year" class="month mx-2"
+                                    name="year">
                                     @foreach (getListOfYears() as $year)
-                                        <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>
+                                        <option value="{{ $year }}"
+                                            {{ $year == $currentYear ? 'selected' : '' }}>
                                             {{ $year }}
                                         </option>
                                     @endforeach
@@ -94,18 +107,24 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-12" id="data-info1">
                                 <div class="d-flex justify-content-between mb-3">
-                                    <div class="color" style="background-color: #aa1717;"></div>
-                                    <h2 class="info" id="info1">عدد المخالفات</h2>
+                                    <div class="color"
+                                        style="background-color: #aa1717;"></div>
+                                    <h2 class="info" id="info1">عدد المخالفات
+                                    </h2>
                                     <h2 class="h2">{{ $violations }}</h2>
                                 </div>
                                 <div class="d-flex justify-content-between mb-3">
-                                    <div class="color" style="background-color: #f8a723;"></div>
-                                    <h2 class="info" id="info2">عدد الزيارات</h2>
+                                    <div class="color"
+                                        style="background-color: #f8a723;"></div>
+                                    <h2 class="info" id="info2">عدد الزيارات
+                                    </h2>
                                     <h2 class="h2">{{ $points }}</h2>
                                 </div>
                                 <div class="d-flex justify-content-between mb-3">
-                                    <div class="color" style="background-color: #274373;"></div>
-                                    <h2 class="info" id="info3">عدد المفتشين</h2>
+                                    <div class="color"
+                                        style="background-color: #274373;"></div>
+                                    <h2 class="info" id="info3">عدد المفتشين
+                                    </h2>
                                     <h2 class="h2">{{ $inspectors }}</h2>
                                 </div>
                             </div>
@@ -122,9 +141,12 @@
             <div class="container-fluid px-4">
                 <div class="row">
                     <!-- Filter Section (Dropdown + Search Button Side by Side) -->
-                    <div class="col-md-9 d-flex align-items-center justify-content-start">
-                        <label for="filter_type" class="month_label">اختر نوع الفلتر:</label>
-                        <select id="filter_type" class="month form-select me-2" style="width: 300px;">
+                    <div
+                        class="col-md-9 d-flex align-items-center justify-content-start">
+                        <label for="filter_type" class="month_label">اختر نوع
+                            الفلتر:</label>
+                        <select id="filter_type" class="month form-select me-2"
+                            style="width: 300px;">
                             <option value="">اختر نوع الفلتر</option>
                             <option value="group" selected>مجموعة</option>
                             <option value="team">دورية</option>
@@ -134,20 +156,21 @@
                         </select>
                         <div class="d-flex align-items-center mx-2">
                             <label for="date_from" class="month_label">من</label>
-                            <input type="date" name="date_from" id="date_from" class="month mx-2"
-                                value="{{ date('Y-m-01') }}">
+                            <input type="date" name="date_from" id="date_from"
+                                class="month mx-2" value="{{ date('Y-m-01') }}">
                         </div>
 
                         <div class="d-flex align-items-center mx-2">
                             <label for="date_to" class="month_label">الى</label>
-                            <input type="date" name="date_to" id="date_to" class="month mx-2"
-                                value="{{ date('Y-m-t') }}">
+                            <input type="date" name="date_to" id="date_to"
+                                class="month mx-2" value="{{ date('Y-m-t') }}">
                         </div>
                     </div>
 
 
                     <div class="col-md-3">
-                        <button id="compareBtn" class="btn" style="background-color:  #274373;color:white">
+                        <button id="compareBtn" class="btn"
+                            style="background-color:  #274373;color:white">
                             مقارنة
                         </button>
                     </div>
@@ -158,42 +181,61 @@
                 <div class="row">
                     <!-- Second Chart Section -->
                     <div class="col-md-6">
-                        <div class="circle-graph-card p-4" style="background-color: #ffffff">
-                          
+                        <div class="circle-graph-card p-4"
+                            style="background-color: #ffffff">
+
 
                             <div class="mb-3">
-                                <select id="GroupID1" class="month form-select mb-2">
+                                <select id="GroupID1"
+                                    class="month form-select mb-2">
                                     <option value="">اختر المجموعة</option>
                                     @foreach ($GroupDatas as $Group)
-                                        <option value="{{ $Group->id }}">{{ $Group->name }}</option>
+                                        <option value="{{ $Group->id }}">
+                                            {{ $Group->name }}</option>
                                     @endforeach
                                 </select>
 
-                                <select id="GroupTeam1" class="month form-select mb-2" style="display: none">
-                                    <option value="" selected>اختر الفرقة</option>
+                                <select id="GroupTeam1"
+                                    class="month form-select mb-2"
+                                    style="display: none">
+                                    <option value="" selected>اختر الفرقة
+                                    </option>
                                     @foreach ($GroupTeamDatas as $GroupTeam)
-                                        <option value="{{ $GroupTeam->id }}">{{ $GroupTeam->name }}</option>
+                                        <option value="{{ $GroupTeam->id }}">
+                                            {{ $GroupTeam->name }}</option>
                                     @endforeach
                                 </select>
 
-                                <select id="Inspector1" class="month form-select mb-2" style="display: none">
-                                    <option value="" selected>اختر مفتش</option>
+                                <select id="Inspector1"
+                                    class="month form-select mb-2"
+                                    style="display: none">
+                                    <option value="" selected>اختر مفتش
+                                    </option>
                                     @foreach ($inspectorDatas as $Inspector)
-                                        <option value="{{ $Inspector->id }}">{{ $Inspector->name }}</option>
+                                        <option value="{{ $Inspector->id }}">
+                                            {{ $Inspector->name }}</option>
                                     @endforeach
                                 </select>
 
-                                <select id="Point1" class="month form-select mb-2" style="display: none">
-                                    <option value="" selected>اختر النقطة</option>
+                                <select id="Point1"
+                                    class="month form-select mb-2"
+                                    style="display: none">
+                                    <option value="" selected>اختر النقطة
+                                    </option>
                                     @foreach ($PointDatas as $Point)
-                                        <option value="{{ $Point->id }}">{{ $Point->name }}</option>
+                                        <option value="{{ $Point->id }}">
+                                            {{ $Point->name }}</option>
                                     @endforeach
                                 </select>
 
-                                <select id="GroupPoint1" class="month form-select mb-2" style="display: none">
-                                    <option value="" selected>اختر مجموعة نقاط</option>
+                                <select id="GroupPoint1"
+                                    class="month form-select mb-2"
+                                    style="display: none">
+                                    <option value="" selected>اختر مجموعة
+                                        نقاط</option>
                                     @foreach ($GroupPointDatas as $GroupPoint)
-                                        <option value="{{ $GroupPoint->id }}">{{ $GroupPoint->name }}</option>
+                                        <option value="{{ $GroupPoint->id }}">
+                                            {{ $GroupPoint->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -201,25 +243,35 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="info-section">
-                                        <div class="d-flex justify-content-between mb-2" id="violation_dev2">
-                                            <div class="color" style="background-color: #aa1717;"></div>
+                                        <div class="d-flex justify-content-between mb-2"
+                                            id="violation_dev2">
+                                            <div class="color"
+                                                style="background-color: #aa1717;">
+                                            </div>
                                             <h2 class="info">عدد المخالفات</h2>
                                             <h2 id="violation_num2">0</h2>
                                         </div>
-                                        <div class="d-flex justify-content-between mb-2" id="points_dev2">
-                                            <div class="color" style="background-color: #f8a723;"></div>
+                                        <div class="d-flex justify-content-between mb-2"
+                                            id="points_dev2">
+                                            <div class="color"
+                                                style="background-color: #f8a723;">
+                                            </div>
                                             <h2 class="info">عدد الزيارات</h2>
                                             <h2 id="points_num2">0</h2>
                                         </div>
-                                        <div class="d-flex justify-content-between" id="inspector_dev2">
-                                            <div class="color" style="background-color: #274373;"></div>
+                                        <div class="d-flex justify-content-between"
+                                            id="inspector_dev2">
+                                            <div class="color"
+                                                style="background-color: #274373;">
+                                            </div>
                                             <h2 class="info">عدد المفتشين</h2>
                                             <h2 id="inspector_num2">0</h2>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <canvas id="myPieChart2" class="mt-3"></canvas>
+                                    <canvas id="myPieChart2"
+                                        class="mt-3"></canvas>
                                     <div id="NoData2"></div>
                                 </div>
                             </div>
@@ -228,42 +280,61 @@
 
                     <!-- Third Chart Section -->
                     <div class="col-md-6">
-                        <div class="circle-graph-card p-4" style="background-color: #ffffff">
-                          
+                        <div class="circle-graph-card p-4"
+                            style="background-color: #ffffff">
+
 
                             <div class="mb-3">
-                                <select id="GroupID2" class="month form-select mb-2">
+                                <select id="GroupID2"
+                                    class="month form-select mb-2">
                                     <option value="">اختر المجموعة</option>
                                     @foreach ($GroupDatas as $Group)
-                                        <option value="{{ $Group->id }}">{{ $Group->name }}</option>
+                                        <option value="{{ $Group->id }}">
+                                            {{ $Group->name }}</option>
                                     @endforeach
                                 </select>
 
-                                <select id="GroupTeam2" class="month form-select mb-2" style="display: none">
-                                    <option value="" selected>اختر الفرقة</option>
+                                <select id="GroupTeam2"
+                                    class="month form-select mb-2"
+                                    style="display: none">
+                                    <option value="" selected>اختر الفرقة
+                                    </option>
                                     @foreach ($GroupTeamDatas as $GroupTeam)
-                                        <option value="{{ $GroupTeam->id }}">{{ $GroupTeam->name }}</option>
+                                        <option value="{{ $GroupTeam->id }}">
+                                            {{ $GroupTeam->name }}</option>
                                     @endforeach
                                 </select>
 
-                                <select id="Inspector2" class="month form-select mb-2" style="display: none">
-                                    <option value="" selected>اختر مفتش</option>
+                                <select id="Inspector2"
+                                    class="month form-select mb-2"
+                                    style="display: none">
+                                    <option value="" selected>اختر مفتش
+                                    </option>
                                     @foreach ($inspectorDatas as $Inspector)
-                                        <option value="{{ $Inspector->id }}">{{ $Inspector->name }}</option>
+                                        <option value="{{ $Inspector->id }}">
+                                            {{ $Inspector->name }}</option>
                                     @endforeach
                                 </select>
 
-                                <select id="Point2" class="month form-select mb-2" style="display: none">
-                                    <option value="" selected>اختر النقطة</option>
+                                <select id="Point2"
+                                    class="month form-select mb-2"
+                                    style="display: none">
+                                    <option value="" selected>اختر النقطة
+                                    </option>
                                     @foreach ($PointDatas as $Point)
-                                        <option value="{{ $Point->id }}">{{ $Point->name }}</option>
+                                        <option value="{{ $Point->id }}">
+                                            {{ $Point->name }}</option>
                                     @endforeach
                                 </select>
 
-                                <select id="GroupPoint2" class="month form-select mb-2" style="display: none">
-                                    <option value="" selected>اختر مجموعة نقاط</option>
+                                <select id="GroupPoint2"
+                                    class="month form-select mb-2"
+                                    style="display: none">
+                                    <option value="" selected>اختر مجموعة
+                                        نقاط</option>
                                     @foreach ($GroupPointDatas as $GroupPoint)
-                                        <option value="{{ $GroupPoint->id }}">{{ $GroupPoint->name }}</option>
+                                        <option value="{{ $GroupPoint->id }}">
+                                            {{ $GroupPoint->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -271,25 +342,35 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="info-section">
-                                        <div class="d-flex justify-content-between mb-2" id="violation_dev3">
-                                            <div class="color" style="background-color: #aa1717;"></div>
+                                        <div class="d-flex justify-content-between mb-2"
+                                            id="violation_dev3">
+                                            <div class="color"
+                                                style="background-color: #aa1717;">
+                                            </div>
                                             <h2 class="info">عدد المخالفات</h2>
                                             <h2 id="violation_num3">0</h2>
                                         </div>
-                                        <div class="d-flex justify-content-between mb-2" id="points_dev3">
-                                            <div class="color" style="background-color: #f8a723;"></div>
+                                        <div class="d-flex justify-content-between mb-2"
+                                            id="points_dev3">
+                                            <div class="color"
+                                                style="background-color: #f8a723;">
+                                            </div>
                                             <h2 class="info">عدد الزيارات</h2>
                                             <h2 id="points_num3">0</h2>
                                         </div>
-                                        <div class="d-flex justify-content-between" id="inspector_dev3">
-                                            <div class="color" style="background-color: #274373;"></div>
+                                        <div class="d-flex justify-content-between"
+                                            id="inspector_dev3">
+                                            <div class="color"
+                                                style="background-color: #274373;">
+                                            </div>
                                             <h2 class="info">عدد المفتشين</h2>
                                             <h2 id="inspector_num3">0</h2>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <canvas id="myPieChart3" class="mt-3"></canvas>
+                                    <canvas id="myPieChart3"
+                                        class="mt-3"></canvas>
                                     <div id="NoData3"></div>
                                 </div>
                             </div>
@@ -303,39 +384,53 @@
     </div>
 
     <div class="row desktop-view">
-        <div class="container col-11 mt-3 p-0" style="background-color: transparent;" dir="rtl">
+        <div class="container col-11 mt-3 p-0"
+            style="background-color: transparent;" dir="rtl">
             <div class="row mt-4">
-                <div class="col-12 canvas-card" style="background-color: #FFFFFF;">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="col-12 canvas-card"
+                    style="background-color: #FFFFFF;">
+                    <div
+                        class="d-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex graph">
-                            <img src="{{ asset('frontend/images/report.svg') }}" alt="logo">
-                            <h2 class="mx-3 h2-charts mb-4" style="text-align: right;">
+                            <img src="{{ asset('frontend/images/report.svg') }}"
+                                alt="logo">
+                            <h2 class="mx-3 h2-charts mb-4"
+                                style="text-align: right;">
                                 احصائيات الفرق والمجموعات والمفتشون
                             </h2>
                         </div>
 
                         <!-- Filters and Print Button -->
                         <div class="d-flex flex-wrap align-items-center">
-                            <select id="Group" class="month mx-2" name="group_id">
-                                <option value="" disabled selected>اختر المجموعة</option>
+                            <select id="Group" class="month mx-2"
+                                name="group_id">
+                                <option value="" disabled selected>اختر
+                                    المجموعة</option>
                                 @foreach ($Groups as $Group)
-                                    <option value="{{ $Group->id }}">{{ $Group->name }}</option>
+                                    <option value="{{ $Group->id }}">
+                                        {{ $Group->name }}</option>
                                 @endforeach
                             </select>
 
-                            <select id="GroupTeam" class="month mx-2" name="group_team_id">
-                                <option value="" selected>اختر الفرقة</option>
+                            <select id="GroupTeam" class="month mx-2"
+                                name="group_team_id">
+                                <option value="" selected>اختر الفرقة
+                                </option>
                             </select>
 
                             <div class="d-flex align-items-center mx-2">
-                                <label for="date_from" class="month_label">من</label>
-                                <input type="date" name="date_from" id="date_from" class="month mx-2"
+                                <label for="date_from"
+                                    class="month_label">من</label>
+                                <input type="date" name="date_from"
+                                    id="date_from" class="month mx-2"
                                     value="{{ date('Y-m-01') }}">
                             </div>
 
                             <div class="d-flex align-items-center mx-2">
-                                <label for="date_to" class="month_label">الى</label>
-                                <input type="date" name="date_to" id="date_to" class="month mx-2"
+                                <label for="date_to"
+                                    class="month_label">الى</label>
+                                <input type="date" name="date_to"
+                                    id="date_to" class="month mx-2"
                                     value="{{ date('Y-m-t') }}">
                             </div>
 
@@ -346,7 +441,8 @@
                             </button>
 
                             <!-- Print Chart Button -->
-                            <button onclick="PrintImage2()" class="btn btn-secondary mx-2"
+                            <button onclick="PrintImage2()"
+                                class="btn btn-secondary mx-2"
                                 style="background-color: #274373; font-size: 15px; height: 48px; border: none;">
                                 طباعة التقرير
                             </button>
@@ -356,40 +452,52 @@
 
                     <div id="data-info2">
                         <div class="d-flex col-12 mt-3">
-                            <div class="color" style="background-color:#AA1717"></div>
+                            <div class="color" style="background-color:#AA1717">
+                            </div>
                             <h2 class="info col-2">عدد مخالفات</h2>
-                            <h2 class="h2 mx-5" id="violations">{{ $totalViolations }}</h2>
+                            <h2 class="h2 mx-5" id="violations">
+                                {{ $totalViolations }}</h2>
                         </div>
                         <div class="d-flex col-12">
-                            <div class="color" style="background-color:#F8A723"></div>
+                            <div class="color" style="background-color:#F8A723">
+                            </div>
                             <h2 class="info col-2">عدد زيارات</h2>
-                            <h2 class="h2 mx-5" id="points">{{ $totalPoints }}</h2>
+                            <h2 class="h2 mx-5" id="points">
+                                {{ $totalPoints }}</h2>
                         </div>
                         <div class="d-flex col-12">
-                            <div class="color" style="background-color:#274373"></div>
+                            <div class="color" style="background-color:#274373">
+                            </div>
                             <h2 class="info col-2">عدد المفتشين</h2>
-                            <h2 class="h2 mx-5" id="inspectors">{{ $totalInspectors }}</h2>
+                            <h2 class="h2 mx-5" id="inspectors">
+                                {{ $totalInspectors }}</h2>
                         </div>
                         <div class="d-flex col-12">
-                            <div class="color" style="background-color:#3C9A34"></div>
+                            <div class="color" style="background-color:#3C9A34">
+                            </div>
                             <h2 class="info col-2">عدد المواقع</h2>
-                            <h2 class="h2 mx-5" id="group_points">{{ $totalGroupPoints }}</h2>
+                            <h2 class="h2 mx-5" id="group_points">
+                                {{ $totalGroupPoints }}</h2>
                         </div>
                         <div class="d-flex col-12">
-                            <div class="color" style="background-color:#43B8CE"></div>
+                            <div class="color" style="background-color:#43B8CE">
+                            </div>
                             <h2 class="info col-2">عدد اوامر الخدمة</h2>
-                            <h2 class="h2 mx-5" id="instant_mission">{{ $totalIdsInstantMission }}</h2>
+                            <h2 class="h2 mx-5" id="instant_mission">
+                                {{ $totalIdsInstantMission }}</h2>
                         </div>
                     </div>
 
-                    <canvas id="barChart" style="width:100%; height: 300px;" class="barChart"></canvas>
+                    <canvas id="barChart" style="width:100%; height: 300px;"
+                        class="barChart"></canvas>
                     <div id="NoData2"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -397,7 +505,8 @@
             $('#month, #year').on('change', function() {
                 var month = $('#month').val();
                 var year = $('#year').val();
-                var selectedMonthText = $('#month option:selected').text(); // Get the month name
+                var selectedMonthText = $('#month option:selected')
+                    .text(); // Get the month name
                 $('#month_name').html(selectedMonthText);
 
                 // Send AJAX request to the filter route
@@ -410,12 +519,17 @@
                     },
                     success: function(response) {
                         // Update the UI with the new filtered data
-                        $('h2:contains("عدد المخالفات") + .h2').text(response.violations);
-                        $('h2:contains("عدد الزيارات") + .h2').text(response.points);
-                        $('h2:contains("عدد المفتشين") + .h2').text(response.inspectors);
+                        $('h2:contains("عدد المخالفات") + .h2')
+                            .text(response.violations);
+                        $('h2:contains("عدد الزيارات") + .h2')
+                            .text(response.points);
+                        $('h2:contains("عدد المفتشين") + .h2')
+                            .text(response.inspectors);
 
                         // If you have any charts, update them here as well
-                        updatePieChart(response.violations, response.points, response
+                        updatePieChart(response
+                            .violations, response
+                            .points, response
                             .inspectors);
                     }
                 });
@@ -423,7 +537,8 @@
 
             // Function to update the Pie Chart (assuming you're using Chart.js)
             function updatePieChart(violations, points, inspectors) {
-                var ctx = document.getElementById('myPieChart').getContext('2d');
+                var ctx = document.getElementById('myPieChart').getContext(
+                    '2d');
                 if (violations == 0 && points == 0 && inspectors == 0) {
 
                     $('#NoData').html("No Data");
@@ -437,12 +552,16 @@
                         labels: ['مخالفات', 'زيارات', 'مفتشون'],
                         datasets: [{
                             label: 'Statistics',
-                            data: [violations, points, inspectors],
-                            backgroundColor: ['#aa1717', '#f8a723', '#274373'],
+                            data: [violations, points,
+                                inspectors
+                            ],
+                            backgroundColor: ['#aa1717',
+                                '#f8a723', '#274373'
+                            ],
                         }]
                     },
                     options: {
-                        responsive: true
+                        responsive: false
                     }
                 });
             }
@@ -516,7 +635,9 @@
         });
     </script>
     <script>
-        const dataValues = [{{$violations}}, {{$points}}, {{ $inspectors}}];
+        const dataValues = [{{ $violations }}, {{ $points }},
+            {{ $inspectors }}
+        ];
         const labels = ["عدد المخالفات", "عدد النقاط", "عدد المفتشين"];
         const pieChartColors = ["#AA1717", "#F8A723", "#274373"];
 
@@ -539,7 +660,7 @@
                 }]
             },
             options: {
-                responsive: true,
+                responsive: false,
                 plugins: {
                     legend: {
                         display: true,
@@ -559,7 +680,9 @@
                 }
             }
         });
-        const dataValues2 = [{{$violations}}, {{$points}}, {{ $inspectors}}];
+        const dataValues2 = [{{ $violations }}, {{ $points }},
+            {{ $inspectors }}
+        ];
         const labels2 = ["عدد المخالفات", "عدد النقاط", "عدد المفتشين"];
         const pieChartColors2 = ["#AA1717", "#F8A723", "#274373"];
 
@@ -607,153 +730,158 @@
             var ctx = document.getElementById('myPieChart').getContext('2d');
             if (violations == 0 && points == 0 && inspectors == 0) {
 
-        function PrintImage() {
-            var canvas = document.getElementById("myPieChart");
-            var infoContent = document.querySelector("#data-info1").outerHTML; // Select the info block content
-            var monthName = document.getElementById("month_name").innerText; // Get the Arabic month name
-
-            }
-            var pieChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['مخالفات', 'زيارات', 'مفتشون'],
-                    datasets: [{
-                        label: 'Statistics',
-                        data: [violations, points, inspectors],
-                        backgroundColor: ['#aa1717', '#f8a723', '#274373'],
-                    }]
-                },
-                options: {
-                    responsive: true
+                function PrintImage() {
+                    var canvas = document.getElementById("myPieChart");
+                    var infoContent = document.querySelector("#data-info1")
+                        .outerHTML; // Select the info block content
+                    var monthName = document.getElementById("month_name")
+                        .innerText; // Get the Arabic month name
                 }
-            });
-        }
-
-        function updatePieChart2(violations, points, inspectors, instant_mission, group_point, type) {
-            var ctx = document.getElementById('myPieChart2').getContext('2d');
-
-            // Show/Hide No Data message
-            if (violations == 0 && points == 0 && inspectors == 0) {
-                $('#NoData2').html("No Data").show();
-            } else {
-                $('#NoData2').html("").hide();
+                var pieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['مخالفات', 'زيارات', 'مفتشون'],
+                        datasets: [{
+                            label: 'Statistics',
+                            data: [violations, points, inspectors],
+                            backgroundColor: ['#aa1717', '#f8a723',
+                                '#274373'
+                            ],
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
             }
 
-            // Update stats display
-            $('#inspector_num2').text(inspectors);
-            $('#violation_num2').text(violations);
-            $('#points_num2').text(points);
+            function updatePieChart2(violations, points, inspectors,
+                instant_mission, group_point, type) {
+                var ctx = document.getElementById('myPieChart2').getContext('2d');
 
-            var labels = [],
-                data = [],
-                backgroundColor = [];
-
-            if (type == 'group' || type == 'team') {
-                labels = ['مخالفات', 'زيارات', 'مفتشون'];
-                data = [violations, points, inspectors];
-                backgroundColor = ['#aa1717', '#f8a723', '#274373'];
-            } else if (type == 'inspector') {
-                labels = ['مخالفات', 'زيارات'];
-                data = [violations, points];
-                backgroundColor = ['#aa1717', '#f8a723'];
-                $('#inspector_dev2').attr('style', 'display: none !important;');
-
-
-            } else if (type == 'point') {
-                labels = ['مخالفات'];
-                data = [violations];
-                backgroundColor = ['#aa1717'];
-                $('#inspector_dev2').attr('style', 'display: none !important;');
-                $('#violation_dev2').attr('style', 'display: none !important;');
-
-            } else if (type == 'group_point') {
-                labels = ['مخالفات', 'زيارات'];
-                data = [violations, points];
-                backgroundColor = ['#aa1717', '#f8a723'];
-
-                $('#inspector_dev2').attr('style', 'display: none !important;');
-
-            }
-
-            // Render Pie Chart
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Statistics',
-                        data: data,
-                        backgroundColor: backgroundColor,
-                    }]
-                },
-                options: {
-                    responsive: true,
+                // Show/Hide No Data message
+                if (violations == 0 && points == 0 && inspectors == 0) {
+                    $('#NoData2').html("No Data").show();
+                } else {
+                    $('#NoData2').html("").hide();
                 }
-            });
-        }
 
-        function updatePieChart3(violations, points, inspectors, instant_mission, group_point, type) {
-            var ctx = document.getElementById('myPieChart3').getContext('2d');
+                // Update stats display
+                $('#inspector_num2').text(inspectors);
+                $('#violation_num2').text(violations);
+                $('#points_num2').text(points);
 
-            // Show/Hide No Data message
-            if (violations == 0 && points == 0 && inspectors == 0) {
-                $('#NoData3').html("No Data").show();
-            } else {
-                $('#NoData3').html("").hide();
-            }
+                var labels = [],
+                    data = [],
+                    backgroundColor = [];
 
-            // Update stats display
-            $('#inspector_num3').text(inspectors);
-            $('#violation_num3').text(violations);
-            $('#points_num3').text(points);
-
-            var labels = [],
-                data = [],
-                backgroundColor = [];
-
-            if (type == 'group' || type == 'team') {
-                labels = ['مخالفات', 'زيارات', 'مفتشون'];
-                data = [violations, points, inspectors];
-                backgroundColor = ['#aa1717', '#f8a723', '#274373'];
-            } else if (type == 'inspector') {
-                labels = ['مخالفات', 'زيارات'];
-                data = [violations, points];
-                backgroundColor = ['#aa1717', '#f8a723'];
-
-                $('#violation_dev3').attr('style', 'display: none !important;');
+                if (type == 'group' || type == 'team') {
+                    labels = ['مخالفات', 'زيارات', 'مفتشون'];
+                    data = [violations, points, inspectors];
+                    backgroundColor = ['#aa1717', '#f8a723', '#274373'];
+                } else if (type == 'inspector') {
+                    labels = ['مخالفات', 'زيارات'];
+                    data = [violations, points];
+                    backgroundColor = ['#aa1717', '#f8a723'];
+                    $('#inspector_dev2').attr('style', 'display: none !important;');
 
 
-            } else if (type == 'point') {
-                labels = ['مخالفات'];
-                data = [violations];
-                backgroundColor = ['#aa1717'];
+                } else if (type == 'point') {
+                    labels = ['مخالفات'];
+                    data = [violations];
+                    backgroundColor = ['#aa1717'];
+                    $('#inspector_dev2').attr('style', 'display: none !important;');
+                    $('#violation_dev2').attr('style', 'display: none !important;');
 
-                $('#inspector_dev3').attr('style', 'display: none !important;');
-                $('#violation_dev3').attr('style', 'display: none !important;');
-            } else if (type == 'group_point') {
-                labels = ['مخالفات', 'زيارات'];
-                data = [violations, points];
-                backgroundColor = ['#aa1717', '#f8a723'];
+                } else if (type == 'group_point') {
+                    labels = ['مخالفات', 'زيارات'];
+                    data = [violations, points];
+                    backgroundColor = ['#aa1717', '#f8a723'];
 
-                $('#inspector_dev3').attr('style', 'display: none !important;');
-            }
+                    $('#inspector_dev2').attr('style', 'display: none !important;');
 
-            // Render Pie Chart
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Statistics',
-                        data: data,
-                        backgroundColor: backgroundColor,
-                    }]
-                },
-                options: {
-                    responsive: true,
                 }
-            });
-        }
+
+                // Render Pie Chart
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Statistics',
+                            data: data,
+                            backgroundColor: backgroundColor,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                    }
+                });
+            }
+
+            function updatePieChart3(violations, points, inspectors,
+                instant_mission, group_point, type) {
+                var ctx = document.getElementById('myPieChart3').getContext('2d');
+
+                // Show/Hide No Data message
+                if (violations == 0 && points == 0 && inspectors == 0) {
+                    $('#NoData3').html("No Data").show();
+                } else {
+                    $('#NoData3').html("").hide();
+                }
+
+                // Update stats display
+                $('#inspector_num3').text(inspectors);
+                $('#violation_num3').text(violations);
+                $('#points_num3').text(points);
+
+                var labels = [],
+                    data = [],
+                    backgroundColor = [];
+
+                if (type == 'group' || type == 'team') {
+                    labels = ['مخالفات', 'زيارات', 'مفتشون'];
+                    data = [violations, points, inspectors];
+                    backgroundColor = ['#aa1717', '#f8a723', '#274373'];
+                } else if (type == 'inspector') {
+                    labels = ['مخالفات', 'زيارات'];
+                    data = [violations, points];
+                    backgroundColor = ['#aa1717', '#f8a723'];
+
+                    $('#violation_dev3').attr('style', 'display: none !important;');
+
+
+                } else if (type == 'point') {
+                    labels = ['مخالفات'];
+                    data = [violations];
+                    backgroundColor = ['#aa1717'];
+
+                    $('#inspector_dev3').attr('style', 'display: none !important;');
+                    $('#violation_dev3').attr('style', 'display: none !important;');
+                } else if (type == 'group_point') {
+                    labels = ['مخالفات', 'زيارات'];
+                    data = [violations, points];
+                    backgroundColor = ['#aa1717', '#f8a723'];
+
+                    $('#inspector_dev3').attr('style', 'display: none !important;');
+                }
+
+                // Render Pie Chart
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Statistics',
+                            data: data,
+                            backgroundColor: backgroundColor,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                    }
+                });
+            }
     </script>
 
     <script>
@@ -823,7 +951,9 @@
         });
     </script>
     <script>
-        const dataValues = [{{ $violations }}, {{ $points }}, {{ $inspectors }}];
+        const dataValues = [{{ $violations }}, {{ $points }},
+            {{ $inspectors }}
+        ];
         const labels = ["عدد المخالفات", "عدد النقاط", "عدد المفتشين"];
         const pieChartColors = ["#AA1717", "#F8A723", "#274373"];
 
@@ -870,8 +1000,10 @@
 
         function PrintImage() {
             var canvas = document.getElementById("myPieChart");
-            var infoContent = document.querySelector("#data-info1").outerHTML; // Select the info block content
-            var monthName = document.getElementById("month_name").innerText; // Get the Arabic month name
+            var infoContent = document.querySelector("#data-info1")
+                .outerHTML; // Select the info block content
+            var monthName = document.getElementById("month_name")
+                .innerText; // Get the Arabic month name
 
             // Create a new window for printing
             var win = window.open('', '_blank');
@@ -911,7 +1043,8 @@
 
         function PrintImage2() {
             var canvas = document.getElementById("barChart");
-            var infoContent = document.querySelector("#data-info2").outerHTML; // Select the info block content
+            var infoContent = document.querySelector("#data-info2")
+                .outerHTML; // Select the info block content
 
             // Create a new window for printing
             var win = window.open('', '_blank');
@@ -951,7 +1084,8 @@
             win.document.close();
         }
 
-        function updateChart2(violations, points, inspectors, instant_mission, group_points, groups, teams, inspectors) {
+        function updateChart2(violations, points, inspectors, instant_mission,
+            group_points, groups, teams, inspectors) {
             // var ctx = document.getElementById('barChart').getContext('2d');
             var xValues;
             var groupId = $('#Group').val();
@@ -988,15 +1122,18 @@
                 ViolationData = inspectors.map(inspector => inspector.violations);
                 PointsData = inspectors.map(inspector => inspector.points);
                 IspectorData = inspectors.map(inspector => inspector.inspectors);
-                GroupPointsData = inspectors.map(inspector => inspector.group_points);
-                InstantmissionData = inspectors.map(inspector => inspector.ids_instant_mission);
+                GroupPointsData = inspectors.map(inspector => inspector
+                    .group_points);
+                InstantmissionData = inspectors.map(inspector => inspector
+                    .ids_instant_mission);
             }
             if (!groupId && !groupTeamId) {
 
                 if (groups.length == 0) {
                     chart = false;
                 }
-                xValues = groups.map(group => group.name); // Fallback option if both are undefined
+                xValues = groups.map(group => group
+                    .name); // Fallback option if both are undefined
                 ViolationData = groups.map(group => group.violations);
                 PointsData = groups.map(group => group.points);
                 IspectorData = groups.map(group => group.inspectors);
@@ -1012,7 +1149,9 @@
             if (chart) {
                 $('#NoData2').html("");
                 $('#barChart').show();
-                const chartColors = ["#AA1717", "#F8A723", "#274373", "#3C9A34", "#43B8CE"];
+                const chartColors = ["#AA1717", "#F8A723", "#274373", "#3C9A34",
+                    "#43B8CE"
+                ];
                 // Create the bar chart
                 new Chart("barChart", {
                     type: "bar",
@@ -1135,32 +1274,63 @@
                     method: 'GET',
                     data: searchData, // Pass the search data
                     success: function(response) {
-                        console.log("Response: ", response);
-                        $('#violations1').html(response.totalViolations1);
-                        $('#points1').html(response.totalPoints1);
-                        $('#inspectors1').html(response.totalInspectors1);
-                        $('#instant_mission1').html(response.totalIdsInstantMission1);
-                        $('#group_points1').html(response.totalGroupPoints1);
-
-                        $('#violations2').html(response.totalViolations2);
-                        $('#points2').html(response.totalPoints2);
-                        $('#inspectors2').html(response.totalInspectors2);
-                        $('#instant_mission2').html(response.totalIdsInstantMission2);
-                        $('#group_points2').html(response.totalGroupPoints2);
-
-                        updatePieChart2(response.totalViolations1, response.totalPoints1,
+                        console.log("Response: ",
+                            response);
+                        $('#violations1').html(response
+                            .totalViolations1);
+                        $('#points1').html(response
+                            .totalPoints1);
+                        $('#inspectors1').html(response
+                            .totalInspectors1);
+                        $('#instant_mission1').html(
                             response
-                            .totalInspectors1, response.totalIdsInstantMission1, response
-                            .totalGroupPoints1, type);
-
-                        updatePieChart3(response.totalViolations2, response.totalPoints2,
+                            .totalIdsInstantMission1
+                        );
+                        $('#group_points1').html(
                             response
-                            .totalInspectors2, response.totalIdsInstantMission2, response
-                            .totalGroupPoints2, type)
+                            .totalGroupPoints1);
+
+                        $('#violations2').html(response
+                            .totalViolations2);
+                        $('#points2').html(response
+                            .totalPoints2);
+                        $('#inspectors2').html(response
+                            .totalInspectors2);
+                        $('#instant_mission2').html(
+                            response
+                            .totalIdsInstantMission2
+                        );
+                        $('#group_points2').html(
+                            response
+                            .totalGroupPoints2);
+
+                        updatePieChart2(response
+                            .totalViolations1,
+                            response.totalPoints1,
+                            response
+                            .totalInspectors1,
+                            response
+                            .totalIdsInstantMission1,
+                            response
+                            .totalGroupPoints1, type
+                        );
+
+                        updatePieChart3(response
+                            .totalViolations2,
+                            response.totalPoints2,
+                            response
+                            .totalInspectors2,
+                            response
+                            .totalIdsInstantMission2,
+                            response
+                            .totalGroupPoints2, type
+                        )
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);
-                        alert('Error occurred during the search.');
+                        alert(
+                            'Error occurred during the search.'
+                            );
                     }
                 });
             });
@@ -1187,20 +1357,37 @@
                     method: 'GET',
                     data: searchData, // Pass the search data
                     success: function(response) {
-                        console.log("Response: ", response);
-                        $('#violations').html(response.totalViolations);
-                        $('#points').html(response.totalPoints);
-                        $('#inspectors').html(response.totalInspectors);
-                        $('#instant_mission').html(response.totalIdsInstantMission);
-                        $('#group_points').html(response.totalGroupPoints);
-                        updateChart2(response.totalViolations, response.totalPoints, response
-                            .totalInspectors, response.totalIdsInstantMission, response
-                            .totalGroupPoints, response.groups, response.teams, response
+                        console.log("Response: ",
+                            response);
+                        $('#violations').html(response
+                            .totalViolations);
+                        $('#points').html(response
+                            .totalPoints);
+                        $('#inspectors').html(response
+                            .totalInspectors);
+                        $('#instant_mission').html(
+                            response
+                            .totalIdsInstantMission);
+                        $('#group_points').html(response
+                            .totalGroupPoints);
+                        updateChart2(response
+                            .totalViolations,
+                            response.totalPoints,
+                            response
+                            .totalInspectors,
+                            response
+                            .totalIdsInstantMission,
+                            response
+                            .totalGroupPoints,
+                            response.groups,
+                            response.teams, response
                             .inspectors)
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);
-                        alert('Error occurred during the search.');
+                        alert(
+                            'Error occurred during the search.'
+                            );
                     }
                 });
             });
@@ -1216,17 +1403,25 @@
                     method: 'GET',
                     success: function(response) {
                         // Assuming `response` is an array of group teams with `id` and `name` properties
-                        var groupTeamSelect = $('#GroupTeam');
+                        var groupTeamSelect = $(
+                            '#GroupTeam');
 
                         // Clear previous options, except for the default one
                         groupTeamSelect.empty().append(
-                            '<option value="" selected>اختر الفرقة</option>');
+                            '<option value="" selected>اختر الفرقة</option>'
+                        );
 
                         // Iterate through the response and add options dynamically
-                        $.each(response, function(index, team) {
-                            groupTeamSelect.append('<option value="' + team.id + '">' +
-                                team.name +
-                                '</option>');
+                        $.each(response, function(index,
+                            team) {
+                            groupTeamSelect
+                                .append(
+                                    '<option value="' +
+                                    team.id +
+                                    '">' +
+                                    team.name +
+                                    '</option>'
+                                );
                         });
                     },
                     error: function() {

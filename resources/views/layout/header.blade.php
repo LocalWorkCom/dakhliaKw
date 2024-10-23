@@ -52,11 +52,13 @@
                 @forelse (getNotifications() as $notifi)
                     <a href="{{ route('groupTeam.index', ['id' => $notifi->group_id, 'notifi' => $notifi->id]) }}"
                         rel="noopener noreferrer">
-                        <p>{{ $notifi->title }}</p>
-                        <p>{{ $notifi->teams->name ?? 'N/A' }},
-                            {{ $notifi->message }}</p>
+                        <div class="notify">
+                            <p>{{ $notifi->title }}</p>
+                            <p>{{ $notifi->teams->name ?? 'N/A' }},
+                            </p>
+                        </div>
                     </a>
-                    <hr>
+                    <hr />
                 @empty
                     <p>لا يوجد تنبيهات</p>
                 @endforelse
