@@ -462,6 +462,9 @@ Route::middleware(['auth'])->group(function () {
     //statistics
     Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');
     Route::get('/statistics/search', [statisticController::class, 'getFilteredData'])->name('statistic.search');
+
+    Route::get('/vacation/endDate', [VacationController::class, 'getExpectedEndDate'])->name('vacation.end_date');
+
 });
 
 
