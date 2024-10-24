@@ -31,7 +31,7 @@ class DepartmentController extends Controller
         $users = User::where('flag', 'employee')->where('department_id', NULL)->get();
 
         $parentDepartment = $departments = departements::where('parent_id', Auth::user()->department_id)->first();
-        // Get the children of the parent department 
+        // Get the children of the parent department
 
         // $departments = $parentDepartment ? $parentDepartment->children : collect();
         // if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
@@ -149,13 +149,17 @@ class DepartmentController extends Controller
 
         $departments = departements::with('children', 'parent')->get();
 
-        $employee = User::WhereNull('rule_id') // Include rows where 'rule_id' is null
-            ->where('flag', 'employee')
-            ->where(function ($query) {
-                $query->whereNull('department_id')
-                    ->orWhere('department_id', auth()->user()->department_id); // Include rows where 'rule_id' is null
-            })
-            ->get();
+        $employee = User::where('flag', 'employee')
+        ->where(function ($query) {
+            $query->whereNull('rule_id') // Include rows where 'rule_id' is null
+                  ->orWhereNotIn('rule_id', [1, 2]); // Exclude rule_id 1 and 2 for non-null values
+        })
+        ->where(function ($query) {
+            $query->whereNull('department_id') // Include rows where department_id is null
+                  ->orWhere('department_id', auth()->user()->department_id); // Or matches the user's department_id
+        })
+        ->get();
+
         return view('departments.create', compact('users', 'departments', 'employee'));
     }
 
@@ -286,13 +290,26 @@ class DepartmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(departements $department)
+    public function edit(Departements $department)
     {
+        // Get all users (if you need them for a different part of the form)
         $users = User::all();
-        $employee = User::where('department_id', $department->id)->orwhere('department_id', NULL)->get();
-        // dd($employee);
+
+        // Query employees with filtering on rule_id and department_id
+        $employee = User::where('flag', 'employee')
+            ->where(function ($query) {
+                $query->whereNull('rule_id')  // Include rows where 'rule_id' is null
+                      ->orWhereNotIn('rule_id', [1, 2]);  // Exclude rule_id 1 and 2 for non-null values
+            })
+            ->where(function ($query) use ($department) {
+                $query->whereNull('department_id')  // Include rows where department_id is null
+                      ->orWhere('department_id', $department->id);  // Or matches the department being edited
+            })
+            ->get();
+
         return view('departments.edit', compact('department', 'users', 'employee'));
     }
+
 
     public function edit_1(departements $department)
     {

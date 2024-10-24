@@ -61,13 +61,13 @@
                                 <input name="Id_number" type="text" id="search-input" dir="rtl" placeholder="ابحث هنا ....." style="width: 100% !important;">
                             </div>
                             @foreach ($users as $user)
-                              <div class="option" 
-                                     data-id="{{ $user->id }}" 
+                              <div class="option"
+                                     data-id="{{ $user->id }}"
                                      data-name="{{ $user->name }}"
-                                     data-phone="{{ $user->phone }}" 
+                                     data-phone="{{ $user->phone }}"
                                      data-grade_id="{{ $user->grade ? $user->grade->name : '' }}">
                                     {{ $user->name }}
-                                </div> 
+                                </div>
                             @endforeach
 
                         </div>
@@ -148,7 +148,7 @@
                     </div>
                 </div>
                 <div class="form-group d-flex">
-                    <div class="radio-btn  d-flex"> 
+                    <div class="radio-btn  d-flex">
                         <input type="radio" id="internslok"   @if ($inspector->type == 'internslok') checked @endif name="type" value="internslok" required>
                         <label for="internslok">مفتش متدرب سلوك أنضباطى</label>
                     </div>
@@ -177,7 +177,7 @@
 
                         <button type="submit" class="btn-blue">
                             <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img" height="20px"
-                                width="20px"> اضافة
+                                width="20px"> تعديل
                         </button>
                     </div>
                 </div>

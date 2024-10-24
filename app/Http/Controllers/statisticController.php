@@ -19,83 +19,78 @@ class statisticController extends Controller
 
     public function index()
     {
-        if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
-            $inspectors = Inspector::all();
-            $points = Grouppoint::where('deleted', 0)->get();
-            $violations = ViolationTypes::all();
-        } else {
-            $inspectors = Inspector::where('department_id', Auth()->user()->department_id)->get();
-            $points = collect(); // Ensure $points is always defined
-        }
+        // Fetch necessary data based on user role
+        [$inspectors, $points, $violations] = $this->fetchStatisticsData();
 
         $results = null;
         return view('statistics.index', compact('inspectors', 'points', 'violations', 'results'));
     }
+
     public function getFilteredData(Request $request)
     {
-        // Fetch inspectors, points, and violations based on user role
-        if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
-            $inspectors = Inspector::all();
-            $points = Grouppoint::where('deleted', 0)->get();
-            $violations = ViolationTypes::all();
-        } else {
-            $inspectors = Inspector::where('department_id', Auth::user()->department_id)->get();
-            $points = collect();
-            $violations = ViolationTypes::all();
-        }
-    
+        // Fetch necessary data based on user role
+        [$inspectors, $points, $violations] = $this->fetchStatisticsData();
+
         // Get filter inputs from the request
         $date = $request->input('date');
         $pointId = $request->input('point');
         $violationTypeId = $request->input('violation');
         $inspectorId = $request->input('inspector');
-    
+
         // Default to current month if no date is selected
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
-    
-        // Handle date filtering (either by specific date or by the current month)
-        if ($date && $date != '-1') {
-            $missions = InspectorMission::whereDate('date', $date);
-            $violationsQuery = Violation::whereDate('created_at', $date);
-        } else {
-            $missions = InspectorMission::whereBetween('date', [$startOfMonth, $endOfMonth]);
-            $violationsQuery = Violation::whereBetween('created_at', [$startOfMonth, $endOfMonth]);
-        }
-    
+
+        // Initialize queries for missions and violations
+        $missionsQuery = InspectorMission::query();
+        $violationsQuery = Violation::where('status', 1); // Ensure only active violations are considered
+
+        // Handle date filtering
+        $missionsQuery->when($date && $date != '-1', function ($query) use ($date) {
+            return $query->whereDate('date', $date);
+        }, function ($query) use ($startOfMonth, $endOfMonth) {
+            return $query->whereBetween('date', [$startOfMonth, $endOfMonth]);
+        });
+
+        $violationsQuery->when($date && $date != '-1', function ($query) use ($date) {
+            return $query->whereDate('created_at', $date);
+        }, function ($query) use ($startOfMonth, $endOfMonth) {
+            return $query->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
+        });
+
         // Apply filters based on user inputs
-    
-        // Violation filter
         if ($violationTypeId && $violationTypeId != '-1') {
             $violationsQuery->whereRaw("FIND_IN_SET(?, violation_type)", [$violationTypeId]);
         }
-    
-        // Point filter
+
         if ($pointId && $pointId != '-1') {
-            $missions->whereJsonContains('ids_group_point', $pointId);
-            $pointIds = Grouppoint::where('id', $pointId)
+            // Ensure $pointId is treated as an array
+            $pointIds = is_array($pointId) ? $pointId : [$pointId];
+
+            // Retrieve actual point IDs from Grouppoint
+            $grouppointIds = Grouppoint::whereIn('id', $pointIds)
                 ->where('deleted', 0)
                 ->pluck('points_ids')
                 ->flatten()
                 ->toArray();
-    
+
+            $missionsQuery->whereIn('ids_group_point', $grouppointIds);
             $violationsQuery->whereIn('point_id', $pointIds);
         }
-    
-        // Inspector filter
+
         if ($inspectorId && $inspectorId != '-1') {
-            $missions->where('inspector_id', $inspectorId);
+            $missionsQuery->where('inspector_id', $inspectorId);
             $userId = Inspector::where('id', $inspectorId)->value('user_id');
             if ($userId) {
                 $violationsQuery->where('user_id', $userId);
             }
         }
-    
+
         // Get counts based on the filtered results
-        $inspectorCount = $missions->get()->unique('inspector_id')->count();
-        $pointCount = $missions->get()->unique('ids_group_point')->count();
+        $inspectorCount = $missionsQuery->distinct('inspector_id')->count('inspector_id');
+        $pointCount = $missionsQuery->distinct('ids_group_point')->count('ids_group_point');
         $violationCount = $violationsQuery->count();
-    
+
         // Prepare the results for the view
         $results = [
             'date' => $date && $date != '-1' ? $date : 'الشهر الحالى',
@@ -103,11 +98,33 @@ class statisticController extends Controller
             'inspectorCount' => $inspectorCount,
             'pointCount' => $pointCount,
         ];
-    
+
         // Return view with the filtered results
         return view('statistics.index', compact('inspectors', 'points', 'violations', 'results'));
     }
-    
+
+    // Private method to fetch statistics data based on user role
+    private function fetchStatisticsData()
+    {
+        // Check user role and fetch data accordingly
+        if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
+            $inspectors = Inspector::all();
+            $points = Point::all(); // Use all() to fetch all points
+            $violations = ViolationTypes::all();
+        } else {
+            $inspectors = Inspector::where('department_id', Auth::user()->department_id)->get();
+            $points = collect(); // No points for non-admin users
+            $violations = ViolationTypes::all(); // Still fetch all violation types
+        }
+
+        // Return the fetched data
+        return [$inspectors, $points, $violations];
+    }
+
+
+
+
+
 
 
     /**
