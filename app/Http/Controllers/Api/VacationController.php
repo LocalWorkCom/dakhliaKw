@@ -117,14 +117,26 @@ class VacationController  extends Controller
     }
     function getAllVacations(Request $request)
     {
-        $PendingVacations = EmployeeVacation::where('status', $request->status)->where('employee_id', auth()->user()->id)->get();
-        $AcceptedVacations = EmployeeVacation::where('status', $request->status)->where('employee_id', auth()->user()->id)->get();
-        $RejectedVacations = EmployeeVacation::where('status', $request->status)->where('employee_id', auth()->user()->id)->get();
-      
+        $PendingVacations = EmployeeVacation::where('status', 'Pending')->where('employee_id', auth()->user()->id)->get();
+        $AcceptedVacations = EmployeeVacation::where('status', 'Approved')->whereNull('end_date')->where('employee_id', auth()->user()->id)->get();
+
+        $CompletedVacations = EmployeeVacation::where('status', 'Approved')
+            ->whereNotNull('end_date')
+            ->where('employee_id', auth()->user()->id)
+            ->get()
+            ->map(function ($vacation) {
+                $startDate = Carbon::parse($vacation->start_date);
+                $endDate = Carbon::parse($vacation->end_date);
+                $vacation->actual_days = $startDate->diffInDays($endDate) + 1; // Include both start and end date
+                return $vacation;
+            });
+        $RejectedVacations = EmployeeVacation::where('status', 'Rejected')->where('employee_id', auth()->user()->id)->get();
+
         $success['PendingVacations'] = $PendingVacations;
         $success['AcceptedVacations'] = $AcceptedVacations;
+        $success['CompletedVacations'] = $CompletedVacations;
         $success['RejectedVacations'] = $RejectedVacations;
-        
+
 
         return $this->respondSuccess($success, 'Get Data successfully.');
     }

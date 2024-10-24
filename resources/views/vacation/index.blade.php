@@ -286,10 +286,24 @@
                                                 `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c96f3d;" onclick="update_type('direct_work', '${row.id}')"><i class="fa-brands fa-stack-overflow"></i> مباشرة العمل</a>`;
                                         }
                                     } else if (row.VacationStatus == 'مقدمة') {
-                                        buttons +=
-                                            `<form id="acceptForm" action="${urls.accept}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color: #14a736;" onclick="document.getElementById('acceptForm').submit();"><i class="fa fa-check"></i> موافقة</a></form>`;
-                                        buttons +=
-                                            `<form id="rejectForm" action="${urls.reject}" method="POST" style="display:inline;">@csrf<a href="#" class="edit btn btn-sm" style="background-color:#bf2433;" onclick="document.getElementById('rejectForm').submit();"><i class="fa fa-times"></i> رفض</a></form>`;
+                                        buttons += `
+    <form id="acceptForm_${row.id}" action="${urls.accept}" method="POST" style="display:inline;">
+        @csrf
+        <a class="edit btn btn-sm" style="background-color: #14a736;" 
+           onclick="document.getElementById('acceptForm_${row.id}').submit();">
+            <i class="fa fa-check"></i> موافقة
+        </a>
+    </form>`;
+
+                                        buttons += `
+    <form id="rejectForm_${row.id}" action="${urls.reject}" method="POST" style="display:inline;">
+        @csrf
+        <a class="edit btn btn-sm" style="background-color: #bf2433;" 
+           onclick="document.getElementById('rejectForm_${row.id}').submit();">
+            <i class="fa fa-times"></i> رفض
+        </a>
+    </form>`;
+
                                         buttons +=
                                             `<a href="#" class="edit btn btn-sm" style="background-color: #2b837b;" onclick="openAndPrint('${urls.permit}'); return false;">  <i class="fa-solid fa-print"></i> تصريح</a>`;
                                     } else if (row.VacationStatus == 'متجاوزة') {

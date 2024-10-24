@@ -543,7 +543,7 @@ class VacationController extends Controller
     {
         // Find the vacation record
         $vacation = EmployeeVacation::find($id);
-
+// dd($id);
         if ($vacation) {
             // Update the status to Rejected
             $vacation->status = 'Rejected';
