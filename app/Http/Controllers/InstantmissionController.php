@@ -22,7 +22,7 @@ class InstantmissionController extends Controller
      */
     public function index()
     {
-        return view('instantMissions.view'); 
+        return view('instantMissions.view');
     }
 
     public function getInstantMission()
@@ -56,7 +56,7 @@ class InstantmissionController extends Controller
      */
     public function create()
     {
-        
+
         $inspectors_group = Inspector::where('department_id',Auth()->user()->department_id)->select('group_id')
         ->groupBy('group_id')->pluck('group_id');
        // dd(Auth::user()->rule->name);
@@ -73,10 +73,10 @@ class InstantmissionController extends Controller
             $inspectors = Inspector::where('department_id',Auth()->user()->department_id)->get();
          }
 
-     
+
        //  dd($groups);
-        
-        
+
+
         return view('instantMissions.create', compact('groups', 'groupTeams','inspectors'));
     }
     // getGroups
@@ -97,11 +97,11 @@ class InstantmissionController extends Controller
         {
             $team->where('group_id', $group_id);
             if($team_id!=-1) $team->where('id', $team_id)->get();
-             
-            
+
+
         }else{
             if($team_id!=-1) $team->where('id', $team_id)->get();
-            
+
         }
         $team=$team->get();
        /*  echo $group_id."<br>";
@@ -122,7 +122,7 @@ class InstantmissionController extends Controller
 
         // dd($team);
         // $inspectors = Inspector::whereIn('id',$team->inspector_ids)->get();
-        
+
         return response()->json($inspectors);
         // return view('instantMissions.create',compact('groups','groupTeams'));
     }
@@ -131,13 +131,13 @@ class InstantmissionController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         $messages = [
-            'label.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
-            'group_team_id.required' => ' الفرقة  مطلوب ولا يمكن تركه فارغاً.',
-            'group_id.required' => ' المجموعة مطلوب ولا يمكن تركه فارغاً.',
-            'location.required' => ' الموقع مطلوب ولا يمكن تركه فارغاً.',
-            'date.required' => ' التاريخ مطلوب ولا يمكن تركه فارغاً.',
+            'label.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+            'group_team_id.required' => 'الفرقة مطلوبة ولا يمكن تركها فارغة.',
+            'group_id.required' => 'المجموعة مطلوبة ولا يمكن تركها فارغة.',
+            'location.required' => 'الموقع مطلوب ولا يمكن تركه فارغاً.',
+            'date.required' => 'التاريخ مطلوب ولا يمكن تركه فارغاً.',
+            'date.after_or_equal' => 'التاريخ يجب أن يكون اليوم أو في المستقبل.', // Custom message for date validation
             // Add more custom messages here
         ];
 
@@ -146,7 +146,7 @@ class InstantmissionController extends Controller
             'group_team_id' => 'required',
             'group_id' => 'required',
             'location' => 'required',
-            'date' => 'required',
+            'date' => 'required|date|after_or_equal:today', // Validate that the date is today or in the future
         ], $messages);
 
         // Handle validation failure
@@ -179,8 +179,7 @@ class InstantmissionController extends Controller
         $new->created_departement =auth()->user()->department_id;
 
         $new->save();
-
-        if ($request->hasFile('images')) {
+        if ($request->file('images')) {
             $file = $request->images;
             $path = 'instantMission/images';
             // foreach ($file as $image) {
@@ -189,16 +188,9 @@ class InstantmissionController extends Controller
             // }
 
         }
-        // ;
-        $results = Event::dispatch(new MissionCreated($new));
-        
-        // $results = event(new MissionCreated($new));
-        if (!empty($results) && in_array(true, $results, true)) {
+
             return redirect()->route('instant_mission.index')->with('message', "تمت اضافة المهمة بنجاح");
-        } else {
-            // Handle specific errors based on listener responses
-            return redirect()->route('instant_mission.index')->with('message', "خطأ ");
-        }
+
     }
 
     /**
@@ -252,7 +244,7 @@ class InstantmissionController extends Controller
         $groupTeams = GroupTeam::whereIn('group_id', $inspectors_group)->get();
         $inspectors = Inspector::where('department_id',Auth()->user()->department_id)->get();
          }
-        
+
         // $groups = Groups::all();
         // $groupTeams = GroupTeam::where('group_id', $IM->group_id)->get();
         return view('instantMissions.edit', compact('groups', 'groupTeams', 'IM'));
@@ -270,12 +262,18 @@ class InstantmissionController extends Controller
             'label.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
             'group_team_id.required' => 'الفرقة مطلوبة ولا يمكن تركها فارغة.',
             'group_id.required' => 'المجموعة مطلوبة ولا يمكن تركها فارغة.',
+            'location.required' => 'الموقع مطلوب ولا يمكن تركه فارغاً.',
+            'date.required' => 'التاريخ مطلوب ولا يمكن تركه فارغاً.',
+            'date.after_or_equal' => 'التاريخ يجب أن يكون اليوم أو في المستقبل.', // Custom message for date validation
+            // Add more custom messages here
         ];
 
-        $validatedData = $request->validate([
+        $validatedData = Validator::make($request->all(), [
             'label' => 'required|string',
             'group_team_id' => 'required',
             'group_id' => 'required',
+            'location' => 'required',
+            'date' => 'required|date|after_or_equal:today', // Validate that the date is today or in the future
         ], $messages);
 
         $coordinates = getLatLongFromUrl($request->location);

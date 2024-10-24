@@ -1,8 +1,11 @@
 @extends('layout.main')
 @push('style')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
-    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
+    <script type="text/javascript" charset="utf8"
+        src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
     </script>
 @endpush
 @section('title')
@@ -16,8 +19,11 @@
                 <div class="d-flex justify-content-between">
                     <p> المنـــاطق</p>
                     {{-- @if (Auth::user()->hasPermission('create Region')) --}}
-                    <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
-                        اضافة منطقة جديدة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                    <button type="button" class="btn-all  " onclick="openadd()"
+                        style="color: #0D992C;">
+                        اضافة منطقة جديدة <img
+                            src="{{ asset('frontend/images/add-btn.svg') }}"
+                            alt="img">
                     </button>
                     {{-- @endif --}}
                 </div>
@@ -46,7 +52,8 @@
                                 style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
                                 <option value="" selected disabled> المحافظه</option>
                                 @foreach (getgovernments() as $government)
-                                    <option value="{{ $government->id }}" @if ($government->id == $id) selected @endif>
+                                    <option value="{{ $government->id }}"
+                                        @if ($government->id == $id) selected @endif>
                                         {{ $government->name }}</option>
                                 @endforeach
                             </select>
@@ -86,7 +93,8 @@
     </section>
 
     {{-- this for add form --}}
-    <div class="modal fade" id="add" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
+    <div class="modal fade" id="add" tabindex="-1"
+        aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -112,7 +120,8 @@
                                     style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
                                     <option value="">اختر المحافظه</option>
                                     @foreach (getgovernments() as $government)
-                                        <option value="{{ $government->id }}">{{ $government->name }}</option>
+                                        <option value="{{ $government->id }}">
+                                            {{ $government->name }}</option>
                                     @endforeach
                                 </select>
                                 <span class="text-danger span-error" id="governmentid-error" dir="rtl"></span>
@@ -130,7 +139,8 @@
     </div>
 
     {{-- this for edit form --}}
-    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
+    <div class="modal fade" id="edit" tabindex="-1"
+        aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -161,7 +171,8 @@
                                 <select name="government" id="government" class="form-group col-md-12" required>
                                     <option value="">اختر المحافظه</option>
                                     @foreach (getgovernments() as $government)
-                                        <option value="{{ $government->id }}">{{ $government->name }}</option>
+                                        <option value="{{ $government->id }}">
+                                            {{ $government->name }}</option>
                                     @endforeach
                                 </select>
                                 <span class="text-danger span-error" id="governmentidedit-error" dir="rtl"></span>
@@ -212,7 +223,9 @@
     </div> --}}
 @endsection
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js">
+    </script>
 
     <script>
         $('.select2').select2({
@@ -310,15 +323,19 @@
         var table;
 
         $(document).ready(function() {
-            $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
+            $.fn.dataTable.ext.classes.sPageButton =
+            'btn-pagination btn-sm'; // Change Pagination Button Class
 
             table = $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
+                bResetDisplay: true,
                 ajax: {
                     url: '{{ route('getAllregions') }}',
                     data: function(d) {
-                        d.government_id = $('#government-select').val(); // Add government_id to request
+                        d.government_id = $(
+                            '#government-select')
+                    .val(); // Add government_id to request
                     }
                 },
                 columns: [{
@@ -368,8 +385,23 @@
                 }
             });
 
+            $(".dataTables_filter input")
+                .unbind() // Unbind previous default bindings
+                .bind("input", function(e) { // Bind our desired behavior
+                    // If the length is 3 or more characters, or the user pressed ENTER, search
+                    if (this.value.length >= 3 || e.keyCode == 13) {
+                        // Call the API search function
+                        dtable.search(this.value).draw();
+                    }
+                    // Ensure we clear the search if they backspace far enough
+                    if (this.value == "") {
+                        dtable.search("").draw();
+                    }
+                    return;
+                });
             $('#government-select').change(function() {
-                table.ajax.reload(); // Reload DataTable data on dropdown change
+                table.ajax
+            .reload(); // Reload DataTable data on dropdown change
             });
         });
 

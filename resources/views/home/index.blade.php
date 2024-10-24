@@ -535,37 +535,39 @@
                 });
             });
 
-            // Function to update the Pie Chart (assuming you're using Chart.js)
-            function updatePieChart(violations, points, inspectors) {
-                var ctx = document.getElementById('myPieChart').getContext(
-                    '2d');
-                if (violations == 0 && points == 0 && inspectors == 0) {
 
-                    $('#NoData').html("No Data");
-                } else {
-                    $('#NoData').html("");
-
-                }
-                var pieChart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: ['مخالفات', 'زيارات', 'مفتشون'],
-                        datasets: [{
-                            label: 'Statistics',
-                            data: [violations, points,
-                                inspectors
-                            ],
-                            backgroundColor: ['#aa1717',
-                                '#f8a723', '#274373'
-                            ],
-                        }]
-                    },
-                    options: {
-                        responsive: false
-                    }
-                });
-            }
         });
+    </script>
+    // Function to update the Pie Chart (assuming you're using Chart.js)
+    function updatePieChart(violations, points, inspectors) {
+    var ctx = document.getElementById('myPieChart').getContext(
+    '2d');
+    if (violations == 0 && points == 0 && inspectors == 0) {
+
+    $('#NoData').html("No Data");
+    } else {
+    $('#NoData').html("");
+
+    }
+    var pieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+    labels: ['مخالفات', 'زيارات', 'مفتشون'],
+    datasets: [{
+    label: 'Statistics',
+    data: [violations, points,
+    inspectors
+    ],
+    backgroundColor: ['#aa1717',
+    '#f8a723', '#274373'
+    ],
+    }]
+    },
+    options: {
+    responsive: false
+    }
+    });
+    }
     </script>
 
     <script>
@@ -633,9 +635,8 @@
                 }
             }
         });
-    </script>
-    <script>
-        const dataValues = [{{ $violations }}, {{ $points }},
+
+        const dataValues_1 = [{{ $violations }}, {{ $points }},
             {{ $inspectors }}
         ];
         const labels = ["عدد المخالفات", "عدد النقاط", "عدد المفتشين"];
@@ -656,7 +657,7 @@
                 labels: labels,
                 datasets: [{
                     backgroundColor: pieChartColors,
-                    data: dataValues
+                    data: dataValues_1
                 }]
             },
             options: {
@@ -754,183 +755,182 @@
                     }
                 });
             }
+        }
 
-            function updatePieChart2(violations, points, inspectors,
-                instant_mission, group_point, type) {
-                var ctx = document.getElementById('myPieChart2').getContext('2d');
+        function updatePieChart2(violations, points, inspectors,
+            instant_mission, group_point, type) {
+            var ctx = document.getElementById('myPieChart2').getContext('2d');
 
-                // Show/Hide No Data message
-                if (violations == 0 && points == 0 && inspectors == 0) {
-                    $('#NoData2').html("No Data").show();
-                } else {
-                    $('#NoData2').html("").hide();
-                }
-
-                // Update stats display
-                $('#inspector_num2').text(inspectors);
-                $('#violation_num2').text(violations);
-                $('#points_num2').text(points);
-
-                var labels = [],
-                    data = [],
-                    backgroundColor = [];
-
-                if (type == 'group' || type == 'team') {
-                    labels = ['مخالفات', 'زيارات', 'مفتشون'];
-                    data = [violations, points, inspectors];
-                    backgroundColor = ['#aa1717', '#f8a723', '#274373'];
-                } else if (type == 'inspector') {
-                    labels = ['مخالفات', 'زيارات'];
-                    data = [violations, points];
-                    backgroundColor = ['#aa1717', '#f8a723'];
-                    $('#inspector_dev2').attr('style', 'display: none !important;');
-
-
-                } else if (type == 'point') {
-                    labels = ['مخالفات'];
-                    data = [violations];
-                    backgroundColor = ['#aa1717'];
-                    $('#inspector_dev2').attr('style', 'display: none !important;');
-                    $('#violation_dev2').attr('style', 'display: none !important;');
-
-                } else if (type == 'group_point') {
-                    labels = ['مخالفات', 'زيارات'];
-                    data = [violations, points];
-                    backgroundColor = ['#aa1717', '#f8a723'];
-
-                    $('#inspector_dev2').attr('style', 'display: none !important;');
-
-                }
-
-                // Render Pie Chart
-                new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Statistics',
-                            data: data,
-                            backgroundColor: backgroundColor,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                    }
-                });
+            // Show/Hide No Data message
+            if (violations == 0 && points == 0 && inspectors == 0) {
+                $('#NoData2').html("No Data").show();
+            } else {
+                $('#NoData2').html("").hide();
             }
 
-            function updatePieChart3(violations, points, inspectors,
-                instant_mission, group_point, type) {
-                var ctx = document.getElementById('myPieChart3').getContext('2d');
+            // Update stats display
+            $('#inspector_num2').text(inspectors);
+            $('#violation_num2').text(violations);
+            $('#points_num2').text(points);
 
-                // Show/Hide No Data message
-                if (violations == 0 && points == 0 && inspectors == 0) {
-                    $('#NoData3').html("No Data").show();
-                } else {
-                    $('#NoData3').html("").hide();
-                }
+            var labels = [],
+                data = [],
+                backgroundColor = [];
 
-                // Update stats display
-                $('#inspector_num3').text(inspectors);
-                $('#violation_num3').text(violations);
-                $('#points_num3').text(points);
-
-                var labels = [],
-                    data = [],
-                    backgroundColor = [];
-
-                if (type == 'group' || type == 'team') {
-                    labels = ['مخالفات', 'زيارات', 'مفتشون'];
-                    data = [violations, points, inspectors];
-                    backgroundColor = ['#aa1717', '#f8a723', '#274373'];
-                } else if (type == 'inspector') {
-                    labels = ['مخالفات', 'زيارات'];
-                    data = [violations, points];
-                    backgroundColor = ['#aa1717', '#f8a723'];
-
-                    $('#violation_dev3').attr('style', 'display: none !important;');
+            if (type == 'group' || type == 'team') {
+                labels = ['مخالفات', 'زيارات', 'مفتشون'];
+                data = [violations, points, inspectors];
+                backgroundColor = ['#aa1717', '#f8a723', '#274373'];
+            } else if (type == 'inspector') {
+                labels = ['مخالفات', 'زيارات'];
+                data = [violations, points];
+                backgroundColor = ['#aa1717', '#f8a723'];
+                $('#inspector_dev2').attr('style', 'display: none !important;');
 
 
-                } else if (type == 'point') {
-                    labels = ['مخالفات'];
-                    data = [violations];
-                    backgroundColor = ['#aa1717'];
+            } else if (type == 'point') {
+                labels = ['مخالفات'];
+                data = [violations];
+                backgroundColor = ['#aa1717'];
+                $('#inspector_dev2').attr('style', 'display: none !important;');
+                $('#violation_dev2').attr('style', 'display: none !important;');
 
-                    $('#inspector_dev3').attr('style', 'display: none !important;');
-                    $('#violation_dev3').attr('style', 'display: none !important;');
-                } else if (type == 'group_point') {
-                    labels = ['مخالفات', 'زيارات'];
-                    data = [violations, points];
-                    backgroundColor = ['#aa1717', '#f8a723'];
+            } else if (type == 'group_point') {
+                labels = ['مخالفات', 'زيارات'];
+                data = [violations, points];
+                backgroundColor = ['#aa1717', '#f8a723'];
 
-                    $('#inspector_dev3').attr('style', 'display: none !important;');
-                }
+                $('#inspector_dev2').attr('style', 'display: none !important;');
 
-                // Render Pie Chart
-                new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Statistics',
-                            data: data,
-                            backgroundColor: backgroundColor,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                    }
-                });
             }
-    </script>
 
-    <script>
-        const groups = @json($Groups);
+            // Render Pie Chart
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Statistics',
+                        data: data,
+                        backgroundColor: backgroundColor,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                }
+            });
+        }
+
+        function updatePieChart3(violations, points, inspectors,
+            instant_mission, group_point, type) {
+            var ctx = document.getElementById('myPieChart3').getContext('2d');
+
+            // Show/Hide No Data message
+            if (violations == 0 && points == 0 && inspectors == 0) {
+                $('#NoData3').html("No Data").show();
+            } else {
+                $('#NoData3').html("").hide();
+            }
+
+            // Update stats display
+            $('#inspector_num3').text(inspectors);
+            $('#violation_num3').text(violations);
+            $('#points_num3').text(points);
+
+            var labels = [],
+                data = [],
+                backgroundColor = [];
+
+            if (type == 'group' || type == 'team') {
+                labels = ['مخالفات', 'زيارات', 'مفتشون'];
+                data = [violations, points, inspectors];
+                backgroundColor = ['#aa1717', '#f8a723', '#274373'];
+            } else if (type == 'inspector') {
+                labels = ['مخالفات', 'زيارات'];
+                data = [violations, points];
+                backgroundColor = ['#aa1717', '#f8a723'];
+
+                $('#violation_dev3').attr('style', 'display: none !important;');
+
+
+            } else if (type == 'point') {
+                labels = ['مخالفات'];
+                data = [violations];
+                backgroundColor = ['#aa1717'];
+
+                $('#inspector_dev3').attr('style', 'display: none !important;');
+                $('#violation_dev3').attr('style', 'display: none !important;');
+            } else if (type == 'group_point') {
+                labels = ['مخالفات', 'زيارات'];
+                data = [violations, points];
+                backgroundColor = ['#aa1717', '#f8a723'];
+
+                $('#inspector_dev3').attr('style', 'display: none !important;');
+            }
+
+            // Render Pie Chart
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Statistics',
+                        data: data,
+                        backgroundColor: backgroundColor,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                }
+            });
+        }
+
+        const groups_1 = @json($Groups);
 
         // Use the map function to extract the names of the groups
-        const xValues = groups.map(group => group.name);
+        const xValues_1 = groups_1.map(group => group.name);
 
         // Display the extracted group names in the console (for verification)
-        const ViolationData = groups.map(group => group.violations);
-        const PointsData = groups.map(group => group.points);
-        const IspectorData = groups.map(group => group.inspectors);
-        const GroupPointsData = groups.map(group => group.group_points);
-        const InstantmissionData = groups.map(group => group.ids_instant_mission);
+        const ViolationData_1 = groups_1.map(group => group.violations);
+        const PointsData_1 = groups_1.map(group => group.points);
+        const IspectorData_1 = groups_1.map(group => group.inspectors);
+        const GroupPointsData_1 = groups_1.map(group => group.group_points);
+        const InstantmissionData_1 = groups_1.map(group => group.ids_instant_mission);
 
-        const chartColors = ["#AA1717", "#F8A723", "#274373", "#3C9A34", "#43B8CE"];
+        const chartColors_1 = ["#AA1717", "#F8A723", "#274373", "#3C9A34", "#43B8CE"];
         // Create the bar chart
         new Chart("barChart", {
             type: "bar",
             data: {
-                labels: xValues,
+                labels: xValues_1,
                 datasets: [{
                         label: "مخالفات",
-                        backgroundColor: chartColors[0],
-                        data: ViolationData,
+                        backgroundColor: chartColors_1[0],
+                        data: ViolationData_1,
                         barThickness: 20
                     },
                     {
                         label: "زيارات",
-                        backgroundColor: chartColors[1],
-                        data: PointsData,
+                        backgroundColor: chartColors_1[1],
+                        data: PointsData_1,
                         barThickness: 20
                     },
                     {
                         label: "مفتشين",
-                        backgroundColor: chartColors[2],
-                        data: IspectorData,
+                        backgroundColor: chartColors_1[2],
+                        data: IspectorData_1,
                         barThickness: 20
                     },
                     {
                         label: "المواقع",
                         backgroundColor: chartColors[3],
-                        data: GroupPointsData,
+                        data: GroupPointsData_1,
                         barThickness: 20
                     },
                     {
                         label: "اوامر خدمة",
-                        backgroundColor: chartColors[4],
-                        data: InstantmissionData,
+                        backgroundColor: chartColors_1[4],
+                        data: InstantmissionData_1,
                         barThickness: 20
                     }
                 ]
@@ -949,13 +949,12 @@
                 }
             }
         });
-    </script>
-    <script>
+
         const dataValues = [{{ $violations }}, {{ $points }},
             {{ $inspectors }}
         ];
-        const labels = ["عدد المخالفات", "عدد النقاط", "عدد المفتشين"];
-        const pieChartColors = ["#AA1717", "#F8A723", "#274373"];
+        const labels_1 = ["عدد المخالفات", "عدد النقاط", "عدد المفتشين"];
+        const pieChartColors_1 = ["#AA1717", "#F8A723", "#274373"];
 
         <?php
         if ($violations == 0 && $points == 0 && $inspectors == 0) {?>
@@ -965,13 +964,13 @@
         ?>
 
         // Create the pie chart
-        const ctx = document.getElementById('myPieChart').getContext('2d');
-        const myPieChart = new Chart(ctx, {
+        const ctx_1 = document.getElementById('myPieChart').getContext('2d');
+        const myPieChart_1 = new Chart(ctx_1, {
             type: 'pie',
             data: {
-                labels: labels,
+                labels: labels_1,
                 datasets: [{
-                    backgroundColor: pieChartColors,
+                    backgroundColor: pieChartColors_1,
                     data: dataValues
                 }]
             },
@@ -1330,7 +1329,7 @@
                         console.error('Error:', error);
                         alert(
                             'Error occurred during the search.'
-                            );
+                        );
                     }
                 });
             });
@@ -1387,7 +1386,7 @@
                         console.error('Error:', error);
                         alert(
                             'Error occurred during the search.'
-                            );
+                        );
                     }
                 });
             });

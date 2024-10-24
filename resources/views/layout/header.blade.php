@@ -8,7 +8,7 @@
 
                 @if (!empty($user))
                     <button class="btn btn-2 mt-3"
-                        onclick="toggleDropdown('dropdownMenu')">
+                        onclick="toggleDropdown()">
                         <i class="fa-solid fa-angle-down mx-2"></i>
                         {{ $user->name }}
                         <i class="fa-solid fa-user mx-2"></i>
@@ -464,29 +464,38 @@
 <script>
     $().ready(function() {
         $('#dropdownMenu2').fadeOut('fast');
+        $('#dropdownMenu').fadeOut('fast');
+
     })
-    /* document.addEventListener('DOMContentLoaded', function() {
-         // Close dropdowns on page load
-         document.getElementById('dropdownMenu').style.display = 'none';
-         // document.getElementById('dropdownMenu2').style.display = 'none';
-         document.getElementById('dropdownMenu4').style.display = 'none';
-         document.getElementById('dropdownMenu5').style.display = 'none';
-         document.getElementById('dropdownMenu7').style.display = 'none';
+    document.addEventListener('DOMContentLoaded', function() {
+        // Close dropdowns on page load
+        // document.getElementById('dropdownMenu').style.display = 'none';
+        // document.getElementById('dropdownMenu2').style.display = 'none';
+        document.getElementById('dropdownMenu4').style.display = 'none';
+        document.getElementById('dropdownMenu5').style.display = 'none';
+        document.getElementById('dropdownMenu7').style.display = 'none';
 
 
-         // Optional: Close dropdowns if they are open on page load
-         function closeDropdowns() {
-             let dropdowns = document.querySelectorAll(
-                 '.dropdown-menu, .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
-             );
-             dropdowns.forEach(function(dropdown) {
-                 dropdown.style.display = 'none';
-             });
-         }
+        // Optional: Close dropdowns if they are open on page load
+        function closeDropdowns() {
+            let dropdowns = document.querySelectorAll(
+                ' .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
+
+            );//  , '.dropdown-menu', '.dropdown-menu2'.dropdown-menu,
+            dropdowns.forEach(function(dropdown) {
+                dropdown.style.display = 'none';
+            });
+        }
 
         // Attach closeDropdowns function to window events
         window.addEventListener('load', closeDropdowns);
     });
+
+    function toggleDropdown() {
+
+        console.log("Profile");
+        $('#dropdownMenu').fadeToggle("slow");
+    }
 </script>
 <script>
     function toggleNotify() {
@@ -495,11 +504,7 @@
 
 
     }
-    // function toggleDropdown() {
-    //     var dropdown = document.getElementById('dropdownMenu');
-    //     dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
-    //         'block';
-    // }
+
 
     // // document.addEventListener("DOMContentLoaded", function () {
     // function toggleDropdown2() {
@@ -547,8 +552,8 @@
     // Close dropdowns if clicked outside
     document.addEventListener('click', function(event) {
         let dropdowns = document.querySelectorAll(
-            '.dropdown-menu, .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
-        );
+            ' .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
+        );//.dropdown-menu,
         dropdowns.forEach(function(dropdown) {
             dropdown.style.display = 'none';
         });
@@ -564,6 +569,15 @@
             closeAllDropdowns();
         }
     });
+
+    function closeAllDropdowns() {
+        let dropdowns = document.querySelectorAll(
+            ' .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
+        ); //.dropdown-menu,
+        dropdowns.forEach(function(dropdown) {
+            dropdown.style.display = 'none';
+        });
+    }
     // document.addEventListener('click', function(event) {
     //     let dropdowns = document.querySelectorAll(
     //         '.dropdown-menu, .dropdown-menu2, .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
