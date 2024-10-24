@@ -175,7 +175,16 @@ class pointsController extends Controller
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
             $googleMapsUrl = $request->map_link;
-            $coordinates = getLatLongFromUrl($googleMapsUrl);
+            // $googleMapsUrl = '"https://maps.app.goo.gl/HMQTaXarnrLgatHU8"';
+            $cleanUrl = trim($googleMapsUrl, '"');
+
+            // Now pass $cleanUrl to your function
+            $coordinates = getLatLongFromUrl($cleanUrl);
+            // $coordinates = getLatLongFromUrl($googleMapsUrl);
+            // Check if coordinates were found
+            if ($coordinates === null) {
+                return redirect()->back()->withErrors(['map_link' => 'Could not retrieve coordinates from the provided URL.'])->withInput();
+            }
 
             // Storing the point data
             $point = new Point();
@@ -318,13 +327,13 @@ class pointsController extends Controller
                 $groupPoints->each(function ($groupPoint) use ($government_id, $sector_id, $newName) {
                     $groupPoint->government_id = $government_id;
                     $groupPoint->sector_id = $sector_id;
-                    
+
                     if ($groupPoint->flag == 0) {
                         $groupPoint->name = $newName;
                     }
-                    
+
                     $groupPoint->save();
-                
+
                     if ($groupPoint->deleted == 0) {
                         // Get the ID as a string
                         $id_Group = (string) $groupPoint->id;
@@ -333,28 +342,28 @@ class pointsController extends Controller
                         // Find records that contain this ID
                         $records = InspectorMission::whereJsonContains('ids_group_point', $id_Group)->whereBetween('date', [$today, $lastDayOfMonth])
                         ->get();
-                
+
                         // Remove the ID from each record
                         $records->each(function ($record) use ($id_Group) {
                             // Check if ids_group_point is already an array or needs decoding
-                            $idsGroupPoint = is_array($record->ids_group_point) 
-                                ? $record->ids_group_point 
+                            $idsGroupPoint = is_array($record->ids_group_point)
+                                ? $record->ids_group_point
                                 : json_decode($record->ids_group_point, true);
-                
+
                             // Remove the ID from the array
                             $idsGroupPoint = array_filter($idsGroupPoint, function ($id) use ($id_Group) {
                                 return $id !== $id_Group;
                             });
-                
+
                             // Update the record with the modified array
-                            $record->ids_group_point = is_array($record->ids_group_point) 
-                                ? $idsGroupPoint 
+                            $record->ids_group_point = is_array($record->ids_group_point)
+                                ? $idsGroupPoint
                                 : json_encode($idsGroupPoint);
                             $record->save();
                         });
                     }
                 });
-               
+
             }else{
                 $pointId = '' . $point->id . '';
 
@@ -363,13 +372,13 @@ class pointsController extends Controller
                 $sector_id = $request->sector_id;
                 $newName = $request->name;
                 $groupPoints->each(function ($groupPoint) use ($government_id, $sector_id, $newName) {
-                    $groupPoint->government_id = $government_id; 
-                    $groupPoint->sector_id = $sector_id; 
+                    $groupPoint->government_id = $government_id;
+                    $groupPoint->sector_id = $sector_id;
                     if ($groupPoint->flag == 0) {
-                        $groupPoint->name = $newName; 
+                        $groupPoint->name = $newName;
                     }
                     $groupPoint->save();
-                }); 
+                });
             }
             $point->name = $request->name;
             $point->government_id = $request->governorate;
@@ -388,8 +397,8 @@ class pointsController extends Controller
             $point->created_by = auth()->id();
             $point->note = $request->note;
             $point->save();
-            
-                    
+
+
             // Update or create PointDays records
             if ($request->time_type == 1 && count($dayNames) === count($fromTimes) && count($fromTimes) === count($toTimes)) {
                 // Delete existing PointDays records for the point

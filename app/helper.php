@@ -169,7 +169,6 @@ function generateUniqueNumber($counter)
 
 function getLatLongFromUrl($url)
 {
-
     $shortenerDomains = [
         'bit.ly',
         'goo.gl',
@@ -180,14 +179,12 @@ function getLatLongFromUrl($url)
         'is.gd',
         'tiny.cc',
         'maps.app.goo.gl',
-        // 'gis.paci.gov.kw'
     ];
 
     // Parse the domain from the URL
     $host = parse_url($url, PHP_URL_HOST);
-    if (in_array($host, $shortenerDomains) == true) {
+    if (in_array($host, $shortenerDomains)) {
         $ch = curl_init();
-        // dd($ch);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // Follow redirects
@@ -196,18 +193,27 @@ function getLatLongFromUrl($url)
         curl_close($ch);
     }
 
-    $pattern = '/@([-+]?[\d]*\.?[\d]+),([-+]?[\d]*\.?[\d]+)/';
+    // Check for @lat,long format or other formats
+    $pattern = '/@([-+]?[0-9]*\.?[0-9]+),([-+]?[0-9]*\.?[0-9]+)/';
     preg_match($pattern, $url, $matches);
-    // dd($matches);
+
+    // Additional regex for Google Maps URL with query parameters
+    if (!$matches) {
+        $pattern = '/([-+]?[0-9]*\.?[0-9]+)[, ]+([-+]?[0-9]*\.?[0-9]+)/';
+        preg_match($pattern, $url, $matches);
+    }
+
+    // If matches are found, return them
     if (isset($matches[1]) && isset($matches[2])) {
         return [
             'latitude' => $matches[1],
-            'longitude' => $matches[2]
+            'longitude' => $matches[2],
         ];
     }
 
-    return null;
+    return null; // Return null if no coordinates are found
 }
+
 
 
 function UploadFilesWithoutReal($path, $image, $model, $request)

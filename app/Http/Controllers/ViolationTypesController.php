@@ -24,12 +24,13 @@ class ViolationTypesController extends Controller
     {
         /*   $type=array();
         $type[0]['id']='1';
-        $type[0]['name']='السلوك الانظباطي'; 
-        
-        $type[1]['id']='2'; 
+        $type[0]['name']='السلوك الانظباطي';
+
+        $type[1]['id']='2';
         $type[1]['name']='مباني';  */
         $type[] = array('id' => '79', 'name' => 'السلوك الانظباطي');
         $type[] = array('id' => '80', 'name' => 'مباني');
+
         $all = ViolationTypes::whereJsonContains('type_id', '79')
             ->orWhereJsonContains('type_id', '80')->count();
         $behavior = ViolationTypes::whereJsonContains('type_id',  '79')->count();

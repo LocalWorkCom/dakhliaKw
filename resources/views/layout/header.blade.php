@@ -7,8 +7,7 @@
                 @endphp
 
                 @if (!empty($user))
-                    <button class="btn btn-2 mt-3"
-                        onclick="toggleDropdown()">
+                    <button class="btn btn-2 mt-3" onclick="toggleDropdown()">
                         <i class="fa-solid fa-angle-down mx-2"></i>
                         {{ $user->name }}
                         <i class="fa-solid fa-user mx-2"></i>
@@ -463,14 +462,18 @@
 </div>
 <script>
     $().ready(function() {
-        $('#dropdownMenu2').fadeOut('fast');
-        $('#dropdownMenu').fadeOut('fast');
+        /*  $('#dropdownMenu2').fadeOut('fast');
+         $('#dropdownMenu').fadeOut('fast'); */
+        $('#dropdownMenu2').css('display', 'none')
+        $('#dropdownMenu').css('display', 'none')
+
+
 
     })
     document.addEventListener('DOMContentLoaded', function() {
         // Close dropdowns on page load
-        // document.getElementById('dropdownMenu').style.display = 'none';
-        // document.getElementById('dropdownMenu2').style.display = 'none';
+        document.getElementById('dropdownMenu').style.display = 'none';
+        document.getElementById('dropdownMenu2').style.display = 'none';
         document.getElementById('dropdownMenu4').style.display = 'none';
         document.getElementById('dropdownMenu5').style.display = 'none';
         document.getElementById('dropdownMenu7').style.display = 'none';
@@ -479,9 +482,9 @@
         // Optional: Close dropdowns if they are open on page load
         function closeDropdowns() {
             let dropdowns = document.querySelectorAll(
-                ' .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
+                ' .dropdown-menu4, .dropdown-menu5, .dropdown-menu7 ,.dropdown-menu, .dropdown-menu2'
 
-            );//  , '.dropdown-menu', '.dropdown-menu2'.dropdown-menu,
+            ); //  , '.dropdown-menu', '.dropdown-menu2'.dropdown-menu,
             dropdowns.forEach(function(dropdown) {
                 dropdown.style.display = 'none';
             });
@@ -492,17 +495,26 @@
     });
 
     function toggleDropdown() {
-
+        toggleClose();
         console.log("Profile");
-        $('#dropdownMenu').fadeToggle("slow");
+        // $('#dropdownMenu').fadeToggle("slow");
+        // if ($('#dropdownMenu').css('display') == 'none') {
+        $('#dropdownMenu').css('display', 'block')
+
+        //  } else $('#dropdownMenu').css('display', 'none')
+
     }
 </script>
 <script>
     function toggleNotify() {
+        toggleClose();
         console.log("Notification");
-        $('#dropdownMenu2').fadeToggle("slow");
+        // $('#dropdownMenu2').fadeToggle("slow");
 
+        //  if ($('#dropdownMenu2').css('display') == 'none') {
+        $('#dropdownMenu2').css('display', 'block')
 
+        // } else $('#dropdownMenu2').css('display', 'none')
     }
 
 
@@ -514,11 +526,12 @@
     //         var dropdown = document.getElementById('dropdownMenu2');
     //        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
     //            'block';
-    //    } */
+    //    }
 
 
 
     function toggleDropdown3(event) {
+        toggleClose();
         var dropdown = document.getElementById('dropdownMenu3');
         dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
             'block';
@@ -526,6 +539,7 @@
     }
 
     function toggleDropdown4(event) {
+        toggleClose();
         var dropdown = document.getElementById('dropdownMenu4');
         dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
             'block';
@@ -533,6 +547,7 @@
     }
 
     function toggleDropdown5(event) {
+        toggleClose();
         var dropdown = document.getElementById('dropdownMenu5');
         dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
             'block';
@@ -540,6 +555,7 @@
     }
 
     function toggleDropdown7(event) {
+        toggleClose();
         var dropdown = document.getElementById('dropdownMenu7');
         dropdown.style.display = (dropdown.style.display === 'block') ? 'none' :
             'block';
@@ -550,14 +566,31 @@
 
 
     // Close dropdowns if clicked outside
-    document.addEventListener('click', function(event) {
+    /*document.addEventListener('click', function(event) {
         let dropdowns = document.querySelectorAll(
-            ' .dropdown-menu4, .dropdown-menu5, .dropdown-menu7'
-        );//.dropdown-menu,
+            ' .dropdown-menu4, .dropdown-menu5, .dropdown-menu7, .dropdown-menu, .dropdown-menu2'
+        ); //.dropdown-menu,
         dropdowns.forEach(function(dropdown) {
-            dropdown.style.display = 'none';
+            console.log(dropdown)
+            if (dropdown.style.display = 'block')
+                dropdown.style.display = 'none';
+            // $(dropdown).fadeOut('fast')
         });
-    });
+
+
+    });*/
+    function toggleClose() {
+        let dropdowns = document.querySelectorAll(
+            ' .dropdown-menu4, .dropdown-menu5, .dropdown-menu7, .dropdown-menu, .dropdown-menu2'
+        ); //.dropdown-menu,
+        console.log('toggleClose')
+        dropdowns.forEach(function(dropdown) {
+            console.log(dropdown)
+            // if (dropdown.style.display == 'block')
+            dropdown.style.display = 'none';
+            // $(dropdown).fadeOut('fast')
+        });
+    }
 
     // Close dropdowns if clicking outside of them
     document.addEventListener('click', function(event) {
@@ -566,7 +599,7 @@
             '.dropdown-menu, .dropdown-menu2');
 
         if (!isDropdownButton && !isDropdownContent) {
-            closeAllDropdowns();
+            // closeAllDropdowns();
         }
     });
 

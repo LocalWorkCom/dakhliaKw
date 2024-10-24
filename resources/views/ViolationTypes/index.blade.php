@@ -24,7 +24,7 @@
                     {{-- @if (Auth::user()->hasPermission('create VacationType')) --}}
                     <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
 
-                        اضافة مخالفه <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        اضافة نوع مخالفه <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
                     {{-- @endif --}}
                 </div>

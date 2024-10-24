@@ -415,18 +415,18 @@
                     id: 'input1',
                     name: 'name'
                 },
-                {
-                    id: 'input2',
-                    name: 'email'
-                },
-                {
-                    id: 'input4',
-name:'phone'
- },
-                {
-                    id: 'input11',
-                    name: 'civil_number'
-                }
+//                 {
+//                     id: 'input2',
+//                     name: 'email'
+//                 },
+//                 {
+//                     id: 'input4',
+// name:'phone'
+//  },
+//                 {
+//                     id: 'input11',
+//                     name: 'civil_number'
+//                 }
             ];
 
             requiredInputs.forEach(input => {

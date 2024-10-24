@@ -67,7 +67,15 @@
                         <div class="form-row mx-md-2 d-flex justify-content-center">
                             <div class="form-group col-md-10">
                                 <label for="employees">الموظفين</label>
-                                <select name="employees[]" id="employees" class="form-group col-md-12 mx-md-2" multiple
+                                <select name="employees[]" id="employees" class="form-group col-md-12 mx-md-2" style="height: 150px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl" multiple>
+                                    @foreach ($employee as $employe)
+                                    <option value="{{ $employe->id }}"
+                                       @if($department->employees->contains($employe->id))  selected @endif>
+                                        {{ $employe->name }}
+                                    </option>
+                                @endforeach
+                                  </select>
+                                {{-- <select name="employees[]" id="employees" class="form-group col-md-12 mx-md-2" multiple
                                     style="height: 150px; font-size: 18px; border:0.2px solid lightgray;" dir="rtl">
                                     @foreach ($employee as $employe)
                                         <option value="{{ $employe->id }}"
@@ -75,7 +83,7 @@
                                             {{ $employe->name }}
                                         </option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                             </div>
                         </div>
                 </div>

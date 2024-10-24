@@ -30,7 +30,7 @@ class ViollationController extends Controller
 {
     //
     public function index(Request $request)
-    {
+    { 
         $groups = Groups::all();
         $inspectors_group = Inspector::where('department_id', Auth()->user()->department_id)->select('group_id')
             ->groupBy('group_id')->pluck('group_id');

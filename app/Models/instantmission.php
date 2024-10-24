@@ -20,14 +20,18 @@ class instantmission extends Model
     {
         return $this->belongsTo(GroupTeam::class,'group_team_id');
     }
+    public function inspector()
+    {
+        return $this->belongsTo(Inspector::class,'inspector_id');
+    }
     public function violations()
     {
         return $this->hasMany(Violation::class);
     }
-    protected static function booted()
-{
-    static::created(function ($mission) {
-        event(new MissionCreated($mission));
-    });
-}
+//     protected static function booted()
+// {
+//     static::created(function ($mission) {
+//         event(new MissionCreated($mission));
+//     });
+// }
 }

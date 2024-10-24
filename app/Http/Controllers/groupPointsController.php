@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 
-class groupPointsController extends Controller
+class GroupPointsController extends Controller
 {
     /**
      * Display a listing of the resource.
