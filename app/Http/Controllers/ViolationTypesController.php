@@ -28,8 +28,9 @@ class ViolationTypesController extends Controller
 
         $type[1]['id']='2';
         $type[1]['name']='مباني';  */
-        $type[] = array('id' => '1', 'name' => 'السلوك الانضباطى');
-        $type[] = array('id' => '2', 'name' => 'مباني');
+        $type[] = array('id' => '79', 'name' => 'السلوك الانظباطي');
+        $type[] = array('id' => '80', 'name' => 'مباني');
+
         $all = ViolationTypes::whereJsonContains('type_id', '79')
             ->orWhereJsonContains('type_id', '80')->count();
         $behavior = ViolationTypes::whereJsonContains('type_id',  '79')->count();
@@ -57,6 +58,7 @@ class ViolationTypesController extends Controller
         // Fetch the filtered data
         $data = $data->get();
 
+        // dd($data);
         foreach ($data as $item) {
             $item->type_names = departements::whereIn('id', $item->type_id)
                 ->pluck('name')->implode(', ');
