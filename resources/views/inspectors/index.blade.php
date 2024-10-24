@@ -20,7 +20,7 @@
                 <button type="button" class="btn-all  " onclick="window.location.href='{{ route('inspectors.create') }}'"
                     style="    color: #0D992C;">
 
-                    اضافة مفتش جديده <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                    اضافة مفتش جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                 </button>
                 {{-- @endif --}}
             </div>
@@ -256,7 +256,7 @@
                                         }
                                     }
         });
-      
+
         var defaultFilterButton = $('.btn-filter[data-filter="all"]');
         var defaultFilterText = defaultFilterButton.text().trim();
         $('#inspector-heading').text('المفتــــــشون - ' + defaultFilterText);
