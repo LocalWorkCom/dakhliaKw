@@ -28,6 +28,7 @@ class ViolationTypesController extends Controller
 
         $type[1]['id']='2';
         $type[1]['name']='مباني';  */
+
         $type[] = array('id' => '79', 'name' => 'السلوك الانظباطي');
         $type[] = array('id' => '80', 'name' => 'مباني');
 

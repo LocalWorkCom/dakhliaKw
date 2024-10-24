@@ -45,7 +45,9 @@ class GroupPointsController extends Controller
         $messages = [
             'name.required' => 'يجب ادخال اسم القطاع',
             'governorate.required' => 'يجب اختيار محافظة',
+            'governorate.exists' => 'المحافظة المختارة غير موجودة',
             'pointsIDs.required' => 'يجب اختيار نقطة واحدة على الأقل',
+            'pointsIDs.exists' => 'النقاط المختارة غير موجودة',
         ];
 
         $validatedData = Validator::make($request->all(), $rules, $messages);
@@ -157,7 +159,7 @@ class GroupPointsController extends Controller
             'name.required' => 'يجب ادخال اسم القطاع',
             'name.string' => 'يجب ان لا يحتوى اسم القطاع على رموز',
             'pointsIDs.required' => 'يجب اختيار نقطه واحده على الاقل',
-            'pointsIDs.exists' => ''
+            'pointsIDs.exists' => 'النقاط المختارة غير موجودة',
 
         ];
         // // Validate the request
