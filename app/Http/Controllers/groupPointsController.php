@@ -51,7 +51,7 @@ class GroupPointsController extends Controller
         ];
 
         $validatedData = Validator::make($request->all(), $rules, $messages);
-
+       // dd(validatedData->fails());
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
