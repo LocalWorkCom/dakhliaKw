@@ -12,7 +12,15 @@ class EmployeeVacation extends Model
     protected $table = "employee_vacations";
 
     use SoftDeletes;
-
+    protected $hidden = [
+        'created_departement',
+        'created_by',
+        'updated_at',
+        'active',
+        'updated_by',
+        'created_at',
+        'deleted_at'
+    ];
     protected $dates = ['deleted_at'];
     public function created_by()
     {
