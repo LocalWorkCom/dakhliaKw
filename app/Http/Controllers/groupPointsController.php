@@ -35,7 +35,7 @@ class GroupPointsController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all()); 
+        //dd($request->all());
         $rules = [
             'name' => 'required|string',
             'governorate' => 'required|exists:governments,id',
@@ -159,7 +159,7 @@ class GroupPointsController extends Controller
             'name.required' => 'يجب ادخال اسم القطاع',
             'name.string' => 'يجب ان لا يحتوى اسم القطاع على رموز',
             'pointsIDs.required' => 'يجب اختيار نقطه واحده على الاقل',
-            'pointsIDs.exists' => ''
+            'pointsIDs.exists' => 'النقاط المختارة غير موجودة',
 
         ];
         // // Validate the request
