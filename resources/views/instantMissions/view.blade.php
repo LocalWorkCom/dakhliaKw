@@ -7,16 +7,17 @@
 
 @section('content')
 @section('title')
-    الاوامر
+أوامر الخدمه
 @endsection
 <section>
     <div class="row">
         <div class="container welcome col-11">
             <div class="d-flex justify-content-between">
-                <p>الاوامر</p>
+                <p>أوامر الخدمه
+                </p>
                 <button type="button" class="wide-btn"
                     onclick="window.location.href='{{ route('instant_mission.create') }}'" style="    color: #0D992C;">
-                    اضافة مهمة جديدة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                    اضافة أمر خدمه جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                 </button>
             </div>
         </div>
@@ -48,7 +49,7 @@
                                 {{ session('message') }}
                             </div>
                         @endif
-{{-- 
+{{--
                     @if (session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
@@ -132,7 +133,7 @@
                     // permissiondelete = permissiondelete.replace(':id', row.id);
                     return `
                         <a href="` + show + `"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i>عرض  </a>
-                    
+
                        `;
                 }
 
