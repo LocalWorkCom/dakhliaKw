@@ -53,6 +53,7 @@ class VacationController  extends Controller
         if ($request->has('check_country')) {
             $rules['country_id'] = 'required';
         }
+        $country_id = isset($request->country_id) && $request->country_id ? $request->country_id : null;
 
 
         $messages = [
@@ -69,8 +70,8 @@ class VacationController  extends Controller
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
         $check_vacation = EmployeeVacation::where('employee_id', auth()->user()->id)->get();
-        // pending
         foreach ($check_vacation as $value) {
+
             if ($value->status == 'Pending') {
                 $ExpectedEndDate = ExpectedEndDate($value)[0];
 
@@ -80,7 +81,7 @@ class VacationController  extends Controller
                     // return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
                 }
             } elseif ($value->status != 'Rejected' && $value->end_date) {
-                if ($value->end_date <= $request->start_date && $value->start_date <= $request->start_date) {
+                if ($value->end_date >= $request->start_date && $value->start_date <= $request->start_date) {
                     return $this->respondError('Duplicate vacation ', ['error' => 'يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف'], 403);
 
                     // return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
@@ -102,7 +103,7 @@ class VacationController  extends Controller
         $Vacation->employee_id =  auth()->user()->id;
         $Vacation->created_by = auth()->id();
         $Vacation->vacation_type_id  = $request->vacation_type_id;
-        $Vacation->country_id = $request->country_id;
+        $Vacation->country_id = $country_id;
         $Vacation->days_number = $request->days_num;
         $Vacation->start_date = $request->start_date;
         $Vacation->save();
@@ -117,20 +118,87 @@ class VacationController  extends Controller
     }
     function getAllVacations(Request $request)
     {
-        $PendingVacations = EmployeeVacation::where('status', 'Pending')->where('employee_id', auth()->user()->id)->get();
-        $AcceptedVacations = EmployeeVacation::where('status', 'Approved')->whereNull('end_date')->where('employee_id', auth()->user()->id)->get();
+        $baseUrl = url('/'); 
 
-        $CompletedVacations = EmployeeVacation::where('status', 'Approved')
-            ->whereNotNull('end_date')
-            ->where('employee_id', auth()->user()->id)
+        $PendingVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
+            ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
+            ->where('employee_vacations.status', 'Pending')
+            ->whereNull('employee_vacations.end_date')
+            ->where('employee_vacations.employee_id', auth()->user()->id)
+            ->select(
+                'employee_vacations.*',
+                'countries.country_name_ar as country_name',
+                'vacation_types.name as vacation_type_name',
+                'employee_vacations.report_image as report_image'
+            )
             ->get()
-            ->map(function ($vacation) {
-                $startDate = Carbon::parse($vacation->start_date);
-                $endDate = Carbon::parse($vacation->end_date);
-                $vacation->actual_days = $startDate->diffInDays($endDate) + 1; // Include both start and end date
+            ->map(function ($vacation) use ($baseUrl) {
+                $vacation->report_image = $vacation->report_image
+                    ? $baseUrl . $vacation->report_image
+                    : null;
                 return $vacation;
             });
-        $RejectedVacations = EmployeeVacation::where('status', 'Rejected')->where('employee_id', auth()->user()->id)->get();
+
+        $AcceptedVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
+            ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
+            ->where('employee_vacations.status', 'Approved')
+            ->whereNull('employee_vacations.end_date')
+            ->where('employee_vacations.employee_id', auth()->user()->id)
+            ->select(
+                'employee_vacations.*',
+                'countries.country_name_ar as country_name',
+                'vacation_types.name as vacation_type_name',
+                'employee_vacations.report_image as report_image'
+            )
+            ->get()
+            ->map(function ($vacation) use ($baseUrl) {
+                $vacation->report_image = $vacation->report_image
+                    ? $baseUrl . $vacation->report_image
+                    : null;
+                return $vacation;
+            });
+
+        $CompletedVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
+            ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
+            ->where('employee_vacations.status', 'Approved')
+            ->whereNotNull('employee_vacations.end_date')
+            ->where('employee_vacations.employee_id', auth()->user()->id)
+            ->select(
+                'employee_vacations.*',
+                'countries.country_name_ar as country_name',
+                'vacation_types.name as vacation_type_name',
+                'employee_vacations.report_image as report_image'
+            )
+            ->get()
+            ->map(function ($vacation) use ($baseUrl) {
+                $startDate = Carbon::parse($vacation->start_date);
+                $endDate = Carbon::parse($vacation->end_date);
+                $vacation->actual_days = $startDate->diffInDays($endDate) + 1;
+
+                $vacation->report_image = $vacation->report_image
+                    ? $baseUrl . $vacation->report_image
+                    : null;
+                return $vacation;
+            });
+
+        $RejectedVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
+            ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
+            ->where('employee_vacations.status', 'Rejected')
+            ->where('employee_vacations.employee_id', auth()->user()->id)
+            ->select(
+                'employee_vacations.*',
+                'countries.country_name_ar as country_name',
+                'vacation_types.name as vacation_type_name',
+                'employee_vacations.report_image as report_image'
+            )
+            ->get()
+            ->map(function ($vacation) use ($baseUrl) {
+                $vacation->report_image = $vacation->report_image
+                    ? $baseUrl . $vacation->report_image
+                    : null;
+                return $vacation;
+            });
+
 
         $success['PendingVacations'] = $PendingVacations;
         $success['AcceptedVacations'] = $AcceptedVacations;

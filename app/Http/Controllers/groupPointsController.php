@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 
-class groupPointsController extends Controller
+class GroupPointsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -45,7 +45,9 @@ class groupPointsController extends Controller
         $messages = [
             'name.required' => 'يجب ادخال اسم القطاع',
             'governorate.required' => 'يجب اختيار محافظة',
+            'governorate.exists' => 'المحافظة المختارة غير موجودة',
             'pointsIDs.required' => 'يجب اختيار نقطة واحدة على الأقل',
+            'pointsIDs.exists' => 'النقاط المختارة غير موجودة',
         ];
 
         $validatedData = Validator::make($request->all(), $rules, $messages);

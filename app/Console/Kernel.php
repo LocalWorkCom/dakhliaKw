@@ -23,7 +23,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:inspector_mission')->monthly();
         $schedule->command('app:inspector_points')->monthly();
         $schedule->command('app:group_sector')->monthly();
-        $schedule->command('app:employee_vacation')->dailyAt('23:00');
+        $schedule->command('app:update_employee_vacation')->dailyAt('23:00');
+        $schedule->command('app:employee_vacation')->dailyAt('23:01');
         //new
         $schedule->command('app:inspector_notify')->dailyAt('00:00');
 

@@ -28,6 +28,7 @@ class ViolationTypesController extends Controller
 
         $type[1]['id']='2';
         $type[1]['name']='مباني';  */
+        
         $type[] = array('id' => '1', 'name' => 'السلوك الانضباطى');
         $type[] = array('id' => '2', 'name' => 'مباني');
         $all = ViolationTypes::whereJsonContains('type_id', '79')

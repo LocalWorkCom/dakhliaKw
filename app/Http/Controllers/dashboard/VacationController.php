@@ -509,25 +509,25 @@ class VacationController extends Controller
                     session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
                 }
                 $EndDate = ExpectedEndDate($vacation)[0];
-                    $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
-                    
-                    if ($inspectors < 2) {
-                        $title = 'تنبيه من دوريات';
-                        $message = '   بعد اجازه مفتش هذه الدوريه أصبح بها مفتش واحد';
+                $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
 
-                        $users = User::where('rule_id', 2)->get();
-                        foreach ($users as $user) {
-                            send_push_notification(null, $user->fcm_token, $title, $message);
-                            $notify = new Notification();
-                            $notify->message = $message;
-                            $notify->title = $title;
-                            $notify->group_id = $group_id;
-                            $notify->team_id = $team_id;
-                            $notify->user_id =  $user->id;
-                            $notify->status = 0;
-                            $notify->save();
-                        }
+                if ($inspectors < 2) {
+                    $title = 'تنبيه من دوريات';
+                    $message = '   بعد اجازه مفتش هذه الدوريه أصبح بها مفتش واحد';
+
+                    $users = User::where('rule_id', 2)->get();
+                    foreach ($users as $user) {
+                        send_push_notification(null, $user->fcm_token, $title, $message);
+                        $notify = new Notification();
+                        $notify->message = $message;
+                        $notify->title = $title;
+                        $notify->group_id = $group_id;
+                        $notify->team_id = $team_id;
+                        $notify->user_id =  $user->id;
+                        $notify->status = 0;
+                        $notify->save();
                     }
+                }
             } else {
                 session()->flash('error', 'المفتش غير موجود.');
                 return redirect()->back();
@@ -543,7 +543,7 @@ class VacationController extends Controller
     {
         // Find the vacation record
         $vacation = EmployeeVacation::find($id);
-// dd($id);
+        // dd($id);
         if ($vacation) {
             // Update the status to Rejected
             $vacation->status = 'Rejected';
@@ -629,7 +629,7 @@ class VacationController extends Controller
                     if ($inspectorMissions->isEmpty()) {
                         session()->flash('info', 'لا توجد مهام للمفتش لتحديثها.');
                     } else {
-                     
+
                         // Ensure this field exists in your EmployeeVacation model
                         foreach ($inspectorMissions as $index => $mission) {
                             // Check if the mission date is within the vacation period
@@ -681,6 +681,12 @@ class VacationController extends Controller
         $vacation = EmployeeVacation::find($id);
         // Return the view with the data to be printed
         return view('vacation.requestVacation', compact('vacation'));
+    }
+    public function getExpectedEndDate(Request $request) {
+      
+        $vacation = EmployeeVacation::find($request->id);
+        $end_date = ExpectedEndDate($vacation)[0];
+        return json_encode($end_date);
     }
 
 
