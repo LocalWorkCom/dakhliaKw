@@ -204,7 +204,7 @@
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2" dir="rtl">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn">
-                                        <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> اضافة
+                                        <img src="{{ asset('frontend/images/white-add.svg') }}" alt="img"> تعديل
                                     </button>
                                     <button type="button" class="btn-all p-2"
                                         style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
