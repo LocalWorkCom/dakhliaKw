@@ -356,12 +356,12 @@ function GetEmployeeVacationType($employeeVacation)
         if ($employeeVacation->start_date > $today) {
             return $notBegin;
         } else if ($employeeVacation->start_date < $today && $expectedEndDate < $today) {
-            if ($employeeVacation->end_data || $employeeVacation->end_date > $expectedEndDate) {
+            if ($employeeVacation->end_data || ($employeeVacation->end_date > $expectedEndDate && $employeeVacation->end_date < $today)) {
                 return $finished;
             } else {
 
                 if ($employeeVacation->is_exceeded) {
-                    if ($employeeVacation->end_date) {
+                    if ($employeeVacation->end_date && $employeeVacation->end_date < $today) {
                         return $finished;
                     } else {
 
@@ -531,10 +531,11 @@ if (!function_exists('send_push_notification')) {
 }
 
 
-function getNotifications(){
-    $notifications = Notification::with('groups','teams')->where('user_id',Auth::user()->id)->where('status',0)->get();
+function getNotifications()
+{
+    $notifications = Notification::with('groups', 'teams')->where('user_id', Auth::user()->id)->where('status', 0)->get();
 
-    if($notifications){
+    if ($notifications) {
         return $notifications;
     }
     return null;
