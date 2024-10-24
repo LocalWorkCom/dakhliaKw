@@ -117,12 +117,40 @@ class VacationController  extends Controller
     }
     function getAllVacations(Request $request)
     {
-        $PendingVacations = EmployeeVacation::where('status', 'Pending')->where('employee_id', auth()->user()->id)->get();
-        $AcceptedVacations = EmployeeVacation::where('status', 'Approved')->whereNull('end_date')->where('employee_id', auth()->user()->id)->get();
 
-        $CompletedVacations = EmployeeVacation::where('status', 'Approved')
-            ->whereNotNull('end_date')
-            ->where('employee_id', auth()->user()->id)
+        $PendingVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
+            ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
+            ->where('employee_vacations.status', 'Pending')
+            ->whereNull('employee_vacations.end_date')
+            ->where('employee_vacations.employee_id', auth()->user()->id)
+            ->select(
+                'employee_vacations.*',
+                'countries.name as country_name',
+                'vacation_types.name as vacation_type_name'
+            )
+            ->get();
+        $AcceptedVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
+            ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
+            ->where('employee_vacations.status', 'Approved')
+            ->whereNull('employee_vacations.end_date')
+            ->where('employee_vacations.employee_id', auth()->user()->id)
+            ->select(
+                'employee_vacations.*',
+                'countries.name as country_name',
+                'vacation_types.name as vacation_type_name'
+            )
+            ->get();
+
+        $CompletedVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
+            ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
+            ->where('employee_vacations.status', 'Approved')
+            ->whereNotNull('employee_vacations.end_date')
+            ->where('employee_vacations.employee_id', auth()->user()->id)
+            ->select(
+                'employee_vacations.*',
+                'countries.name as country_name',
+                'vacation_types.name as vacation_type_name'
+            )
             ->get()
             ->map(function ($vacation) {
                 $startDate = Carbon::parse($vacation->start_date);
@@ -130,7 +158,17 @@ class VacationController  extends Controller
                 $vacation->actual_days = $startDate->diffInDays($endDate) + 1; // Include both start and end date
                 return $vacation;
             });
-        $RejectedVacations = EmployeeVacation::where('status', 'Rejected')->where('employee_id', auth()->user()->id)->get();
+
+        $RejectedVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
+            ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
+            ->where('employee_vacations.status', 'Rejected')
+            ->where('employee_vacations.employee_id', auth()->user()->id)
+            ->select(
+                'employee_vacations.*',
+                'countries.name as country_name',
+                'vacation_types.name as vacation_type_name'
+            )
+            ->get();
 
         $success['PendingVacations'] = $PendingVacations;
         $success['AcceptedVacations'] = $AcceptedVacations;
