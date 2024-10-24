@@ -64,6 +64,7 @@
                                 @enderror
                             </div>
                         </div>
+                        {{ dd($employee) }}
                         <div class="form-row mx-md-2 d-flex justify-content-center">
                             <div class="form-group col-md-10">
                                 <label for="employees">الموظفين</label>
