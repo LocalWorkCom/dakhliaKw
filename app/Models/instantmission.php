@@ -28,10 +28,10 @@ class instantmission extends Model
     {
         return $this->hasMany(Violation::class);
     }
-    protected static function booted()
-{
-    static::created(function ($mission) {
-        event(new MissionCreated($mission));
-    });
-}
+//     protected static function booted()
+// {
+//     static::created(function ($mission) {
+//         event(new MissionCreated($mission));
+//     });
+// }
 }

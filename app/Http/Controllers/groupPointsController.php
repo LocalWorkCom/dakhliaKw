@@ -35,7 +35,7 @@ class GroupPointsController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+        //dd($request->all()); 
         $rules = [
             'name' => 'required|string',
             'governorate' => 'required|exists:governments,id',
