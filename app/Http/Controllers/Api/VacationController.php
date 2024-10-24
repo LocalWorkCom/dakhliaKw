@@ -53,6 +53,7 @@ class VacationController  extends Controller
         if ($request->has('check_country')) {
             $rules['country_id'] = 'required';
         }
+        $country_id = isset($request->country_id) && $request->country_id ? $request->country_id : null;
 
 
         $messages = [
@@ -102,7 +103,7 @@ class VacationController  extends Controller
         $Vacation->employee_id =  auth()->user()->id;
         $Vacation->created_by = auth()->id();
         $Vacation->vacation_type_id  = $request->vacation_type_id;
-        $Vacation->country_id = $request->country_id;
+        $Vacation->country_id = $country_id;
         $Vacation->days_number = $request->days_num;
         $Vacation->start_date = $request->start_date;
         $Vacation->save();
@@ -117,6 +118,7 @@ class VacationController  extends Controller
     }
     function getAllVacations(Request $request)
     {
+        $baseUrl = url('/'); 
 
         $PendingVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
             ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
@@ -126,9 +128,17 @@ class VacationController  extends Controller
             ->select(
                 'employee_vacations.*',
                 'countries.country_name_ar as country_name',
-                'vacation_types.name as vacation_type_name'
+                'vacation_types.name as vacation_type_name',
+                'employee_vacations.report_image as report_image'
             )
-            ->get();
+            ->get()
+            ->map(function ($vacation) use ($baseUrl) {
+                $vacation->report_image = $vacation->report_image
+                    ? $baseUrl . $vacation->report_image
+                    : null;
+                return $vacation;
+            });
+
         $AcceptedVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
             ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
             ->where('employee_vacations.status', 'Approved')
@@ -137,9 +147,16 @@ class VacationController  extends Controller
             ->select(
                 'employee_vacations.*',
                 'countries.country_name_ar as country_name',
-                'vacation_types.name as vacation_type_name'
+                'vacation_types.name as vacation_type_name',
+                'employee_vacations.report_image as report_image'
             )
-            ->get();
+            ->get()
+            ->map(function ($vacation) use ($baseUrl) {
+                $vacation->report_image = $vacation->report_image
+                    ? $baseUrl . $vacation->report_image
+                    : null;
+                return $vacation;
+            });
 
         $CompletedVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
             ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
@@ -149,13 +166,18 @@ class VacationController  extends Controller
             ->select(
                 'employee_vacations.*',
                 'countries.country_name_ar as country_name',
-                'vacation_types.name as vacation_type_name'
+                'vacation_types.name as vacation_type_name',
+                'employee_vacations.report_image as report_image'
             )
             ->get()
-            ->map(function ($vacation) {
+            ->map(function ($vacation) use ($baseUrl) {
                 $startDate = Carbon::parse($vacation->start_date);
                 $endDate = Carbon::parse($vacation->end_date);
-                $vacation->actual_days = $startDate->diffInDays($endDate) + 1; // Include both start and end date
+                $vacation->actual_days = $startDate->diffInDays($endDate) + 1;
+
+                $vacation->report_image = $vacation->report_image
+                    ? $baseUrl . $vacation->report_image
+                    : null;
                 return $vacation;
             });
 
@@ -166,9 +188,17 @@ class VacationController  extends Controller
             ->select(
                 'employee_vacations.*',
                 'countries.country_name_ar as country_name',
-                'vacation_types.name as vacation_type_name'
+                'vacation_types.name as vacation_type_name',
+                'employee_vacations.report_image as report_image'
             )
-            ->get();
+            ->get()
+            ->map(function ($vacation) use ($baseUrl) {
+                $vacation->report_image = $vacation->report_image
+                    ? $baseUrl . $vacation->report_image
+                    : null;
+                return $vacation;
+            });
+
 
         $success['PendingVacations'] = $PendingVacations;
         $success['AcceptedVacations'] = $AcceptedVacations;
