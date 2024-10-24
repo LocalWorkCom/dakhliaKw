@@ -69,8 +69,8 @@ class VacationController  extends Controller
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
         $check_vacation = EmployeeVacation::where('employee_id', auth()->user()->id)->get();
-        // pending
         foreach ($check_vacation as $value) {
+
             if ($value->status == 'Pending') {
                 $ExpectedEndDate = ExpectedEndDate($value)[0];
 
@@ -80,7 +80,7 @@ class VacationController  extends Controller
                     // return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
                 }
             } elseif ($value->status != 'Rejected' && $value->end_date) {
-                if ($value->end_date <= $request->start_date && $value->start_date <= $request->start_date) {
+                if ($value->end_date >= $request->start_date && $value->start_date <= $request->start_date) {
                     return $this->respondError('Duplicate vacation ', ['error' => 'يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف'], 403);
 
                     // return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
