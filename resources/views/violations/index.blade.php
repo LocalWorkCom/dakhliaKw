@@ -44,7 +44,7 @@
                         <div class="form-group moftsh select-box-2 mx-3  d-flex">
                             <!-- <h4 style=" line-height: 1.8;"> المجموعة :</h4> -->
                             <select id="group_id" name="group_id"
-                                class="form-control" placeholder="المجموعة">
+                                class="form-control select2" placeholder="المجموعة">
 
                                 <option value="-1" selected> كل المجموعات
                                 </option>
@@ -61,7 +61,7 @@
                         <div class="form-group moftsh select-box-2  mx-3  d-flex">
                             <!-- <h4 style=" line-height: 1.8;"> الفريق :</h4> -->
                             <select id="group_team_id" name="group_team_id"
-                                class="form-control" placeholder="الفرق">
+                                class="form-control select2" placeholder="الفرق">
 
                                 <option value="-1" selected> كل الدوريات
                                 </option>
@@ -76,7 +76,7 @@
                         <div class="form-group moftsh select-box-2 mx-3  d-flex">
                             <!-- <h4 style=" line-height: 1.8;"> المفتش :</h4> -->
                             <select id="inspectors" name="inspectors"
-                                class="form-control" placeholder="المفتش">
+                                class="form-control select2" placeholder="المفتش">
 
                                 <option value="-1" selected> كل المفتشين
                                 </option>
@@ -137,50 +137,51 @@
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            $('#group_id').on('change', function() {
-                var group_id = $(this).val();
+        $('.select2').select2({
+            dir: "rtl"
+        });
+        $('#group_id').change(function() {
+            var group_id = $(this).val();
 
 
-                //if (group_id!=-1) {
-                $.ajax({
-                    url: '/getGroups/' + group_id,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#group_team_id').empty();
-                        $('#group_team_id').append(
-                            '<option selected value="-1"> كل الدوريات </option>'
-                            );
-                        $.each(data, function(key,
-                            employee) {
-                            console.log(
-                                employee);
-                            $('#group_team_id')
-                                .append(
-                                    '<option value="' +
-                                    employee
-                                    .id + '">' +
-                                    employee
-                                    .name +
-                                    '</option>'
-                                    );
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error:', error);
-                        console.log('XHR:', xhr
-                            .responseText);
-                    }
-                });
-                /*} /* else {
+            //if (group_id!=-1) {
+            $.ajax({
+                url: '/getGroups/' + group_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
                     $('#group_team_id').empty();
-                } */
+                    $('#group_team_id').append(
+                        '<option selected value="-1"> كل الدوريات </option>'
+                    );
+                    $.each(data, function(key,
+                        employee) {
+                        console.log(
+                            employee);
+                        $('#group_team_id')
+                            .append(
+                                '<option value="' +
+                                employee
+                                .id + '">' +
+                                employee
+                                .name +
+                                '</option>'
+                            );
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr
+                        .responseText);
+                }
             });
+            /*} /* else {
+                $('#group_team_id').empty();
+            } */
         });
 
-        $(document).ready(function() {
-            $('#group_team_id').on('change', function() {
+/**Team change */
+$('#group_team_id').change(function() {
                 var group_team_id = $(this).val();
                 var group_id = $('#group_id').val();
                 console.log(group_team_id);
@@ -196,7 +197,7 @@
                         $('#inspectors').empty();
                         $('#inspectors').append(
                             '<option value="-1"> كل المفتشين   </option>'
-                            );
+                        );
                         $.each(data, function(key,
                             employee) {
                             // console.log(employee);
@@ -208,7 +209,7 @@
                                     employee
                                     .name +
                                     '</option>'
-                                    );
+                                );
                         });
                     },
                     error: function(xhr, status, error) {
@@ -221,7 +222,7 @@
                     $('#inspectors').empty();
                 }*/
             });
-        });
+
     </script>
     <script>
         function search() {
@@ -261,7 +262,7 @@
 
 
             $.fn.dataTable.ext.classes.sPageButton =
-            'btn-pagination btn-sm'; // Change Pagination Button Class
+                'btn-pagination btn-sm'; // Change Pagination Button Class
             @php
                 $Dataurl = url('violation/getAll');
                 $url = '';
