@@ -35,7 +35,7 @@ class GroupPointsController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all()); 
+        //dd($request->all());
         $rules = [
             'name' => 'required|string',
             'governorate' => 'required|exists:governments,id',
@@ -49,7 +49,7 @@ class GroupPointsController extends Controller
         ];
 
         $validatedData = Validator::make($request->all(), $rules, $messages);
-
+       // dd(validatedData->fails());
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
