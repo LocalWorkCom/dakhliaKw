@@ -133,43 +133,58 @@
                         event.preventDefault();
                     });
 
-                    function UpdateDate() {
-                        var end_date = $('#end_date').val();
-                        var type = $('#type').val();
-                        var id = $('#id').val();
+                    function getExpectedEndDate(id) {
 
-                        // Correctly replace ':id' in the URL
-                        var url = '{{ route('vacation.update', ':id') }}'.replace(':id', id);
-
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            data: {
-                                'end_date': end_date,
-                                'type': type,
-                                '_token': '{{ csrf_token() }}'
-                            },
-                            success: function(data) {
-                                console.log('Success:', data);
-                                // Optionally, you can close the modal and refresh the DataTable
-                                $('#representative').modal('hide');
-                                // $('#users-table').DataTable().ajax.reload();
-                                window.location.reload();
-                            },
-                            error: function(xhr, status, error) {
-                                console.log('Error:', error);
-                                console.log('XHR:', xhr.responseText);
-                            }
+                        return new Promise((resolve, reject) => {
+                            $.ajax({
+                                type: 'GET',
+                                dataType: 'json',
+                                data: {
+                                    id: id
+                                },
+                                url: '/vacation/endDate',
+                                success: function(response) {
+                                    resolve(response);
+                                },
+                                error: function(xhr, status, error) {
+                                    reject(error);
+                                }
+                            });
                         });
                     }
 
-                    function update_type(type, id) {
+
+
+
+                    async function update_type(type, id) {
                         $('#type').val(type);
                         $('#id').val(id);
+
                         if (type != 'cut') {
                             $('#end_date_label').html('تاريخ المباشرة');
+                        } else {
+                            try {
+                                const EndDate = await getExpectedEndDate(id);
+
+                                const endDateInput = document.getElementById('end_date');
+                                const today = new Date();
+
+                                // Format today's date as 'YYYY-MM-DD'
+                                const todayStr = today.toISOString().split('T')[0];
+
+                                // Set max date to one month from today
+                                const maxDate = new Date();
+                                maxDate.setMonth(maxDate.getMonth() + 1);
+                                const maxDateStr = maxDate.toISOString().split('T')[0];
+
+                                endDateInput.min = todayStr;
+                                endDateInput.max = EndDate || maxDateStr; // Fallback if EndDate is null
+                            } catch (error) {
+                                console.error('Error updating type:', error);
+                            }
                         }
                     }
+
 
                     $(document).ready(function() {
                         $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
@@ -287,22 +302,22 @@
                                         }
                                     } else if (row.VacationStatus == 'مقدمة') {
                                         buttons += `
-    <form id="acceptForm_${row.id}" action="${urls.accept}" method="POST" style="display:inline;">
-        @csrf
-        <a class="edit btn btn-sm" style="background-color: #14a736;" 
-           onclick="document.getElementById('acceptForm_${row.id}').submit();">
-            <i class="fa fa-check"></i> موافقة
-        </a>
-    </form>`;
+                                            <form id="acceptForm_${row.id}" action="${urls.accept}" method="POST" style="display:inline;">
+                                                @csrf
+                                                <a class="edit btn btn-sm" style="background-color: #14a736;" 
+                                                onclick="document.getElementById('acceptForm_${row.id}').submit();">
+                                                    <i class="fa fa-check"></i> موافقة
+                                                </a>
+                                            </form>`;
 
                                         buttons += `
-    <form id="rejectForm_${row.id}" action="${urls.reject}" method="POST" style="display:inline;">
-        @csrf
-        <a class="edit btn btn-sm" style="background-color: #bf2433;" 
-           onclick="document.getElementById('rejectForm_${row.id}').submit();">
-            <i class="fa fa-times"></i> رفض
-        </a>
-    </form>`;
+                                                <form id="rejectForm_${row.id}" action="${urls.reject}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    <a class="edit btn btn-sm" style="background-color: #bf2433;" 
+                                                    onclick="document.getElementById('rejectForm_${row.id}').submit();">
+                                                        <i class="fa fa-times"></i> رفض
+                                                    </a>
+                                                </form>`;
 
                                         buttons +=
                                             `<a href="#" class="edit btn btn-sm" style="background-color: #2b837b;" onclick="openAndPrint('${urls.permit}'); return false;">  <i class="fa-solid fa-print"></i> تصريح</a>`;
@@ -314,8 +329,11 @@
                                         }
                                     } else if (row.VacationStatus == 'حالية') {
                                         if (!row.is_cut) {
-                                            buttons +=
-                                                `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c55a49;" onclick="update_type('cut', '${row.id}')"><i class="fa fa-eye"></i> قطع الاجازة</a>`;
+                                            if (row.days_number > 1) {
+
+                                                buttons +=
+                                                    `<a data-bs-toggle="modal" data-bs-target="#representative" class="edit btn btn-sm" style="background-color: #c55a49;" onclick="update_type('cut', '${row.id}')"><i class="fa fa-eye"></i> قطع الاجازة</a>`;
+                                            }
                                         }
                                     }
 
