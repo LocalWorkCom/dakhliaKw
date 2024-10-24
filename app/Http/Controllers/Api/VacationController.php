@@ -125,7 +125,7 @@ class VacationController  extends Controller
             ->where('employee_vacations.employee_id', auth()->user()->id)
             ->select(
                 'employee_vacations.*',
-                'countries.name as country_name',
+                'countries.country_name_ar as country_name',
                 'vacation_types.name as vacation_type_name'
             )
             ->get();
@@ -136,7 +136,7 @@ class VacationController  extends Controller
             ->where('employee_vacations.employee_id', auth()->user()->id)
             ->select(
                 'employee_vacations.*',
-                'countries.name as country_name',
+                'countries.country_name_ar as country_name',
                 'vacation_types.name as vacation_type_name'
             )
             ->get();
@@ -148,7 +148,7 @@ class VacationController  extends Controller
             ->where('employee_vacations.employee_id', auth()->user()->id)
             ->select(
                 'employee_vacations.*',
-                'countries.name as country_name',
+                'countries.country_name_ar as country_name',
                 'vacation_types.name as vacation_type_name'
             )
             ->get()
@@ -165,7 +165,7 @@ class VacationController  extends Controller
             ->where('employee_vacations.employee_id', auth()->user()->id)
             ->select(
                 'employee_vacations.*',
-                'countries.name as country_name',
+                'countries.country_name_ar as country_name',
                 'vacation_types.name as vacation_type_name'
             )
             ->get();
