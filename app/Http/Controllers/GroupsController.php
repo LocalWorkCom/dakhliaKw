@@ -191,7 +191,7 @@ class GroupsController extends Controller
             }
         }
 
-        return redirect()->route('group.view')->with('success', 'تم اضافه مفتشين بنجاح.');
+        return redirect()->route('group.view')->with('success', 'تم الأضافه بنجاح.');
     }
 
     /**
@@ -234,7 +234,7 @@ class GroupsController extends Controller
 
             return redirect()->route('group.view');
         } catch (\Exception $e) {
-            session()->flash('error',  'An error occurred while creating the group. Please try again');
+            session()->flash('error',  'تم حدوث خطأ. برجى المحاوله فى وقت لاحق .');
 
             return redirect()->back();
         }
@@ -259,7 +259,7 @@ class GroupsController extends Controller
         if ($group) {
             return response()->json(['success' => true, 'data' => $data]);
         } else {
-            return response()->json(['success' => false, 'message' => 'Record not found'], 404);
+            return response()->json(['success' => false, 'message' => 'غير موجود'], 404);
         }
         // return view('group.show', compact('group'));
     }
@@ -281,7 +281,7 @@ class GroupsController extends Controller
         if ($group) {
             return response()->json(['success' => true, 'data' => $data]);
         } else {
-            return response()->json(['success' => false, 'message' => 'Record not found'], 404);
+            return response()->json(['success' => false, 'message' => 'غير موجود'], 404);
         }
     }
 
@@ -394,7 +394,7 @@ class GroupsController extends Controller
     {
         $group->delete();
 
-        return redirect()->route('group.view')->with('message', 'Group deleted successfully');
+        return redirect()->route('group.view')->with('message', 'تم الحذف بنجاح');
     }
     function GetGroupTeams(Request $request)
     {
