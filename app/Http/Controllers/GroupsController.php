@@ -7,6 +7,7 @@ use App\Models\Government;
 use App\Models\Groups;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
+use App\Models\InspectorMission;
 use App\Models\Sector;
 use App\Models\WorkingTime;
 
@@ -131,8 +132,12 @@ class GroupsController extends Controller
                         $GroupTeam->save();
                     }
 
+                    $inspector_missions = InspectorMission::where('inspector_id', $inspector->id)->where('date', '>=', today())->get();
+                    foreach ($inspector_missions as  $inspector_mission) {
+                        $inspector_mission->delete();
+                    }
                     // Add history record for removal
-                    addInspectorHistory($inspector->id, null,  null, 0);
+                    // addInspectorHistory($inspector->id, null,  null, 0);
                 }
             }
         }
@@ -170,9 +175,12 @@ class GroupsController extends Controller
                         $GroupTeam->inspector_ids = $new_inspector_ids;
                         $GroupTeam->save();
                     }
-
+                    $inspector_missions = InspectorMission::where('inspector_id', $inspector->id)->where('date', '>=', today())->get();
+                    foreach ($inspector_missions as  $inspector_mission) {
+                        $inspector_mission->delete();
+                    }
                     // Add history record for removal
-                    addInspectorHistory($inspector->id, null, null, 0);
+                    // addInspectorHistory($inspector->id, null, null, 0);
                 }
             }
         }
