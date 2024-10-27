@@ -6,9 +6,48 @@
 </script>
 @push('style')
     <style>
-        .selected-option {
-            background-color: #e7e7e7;
-            color: black;
+        .custom-multiselect {
+            position: relative;
+            width: 100%;
+            border: 0.2px solid rgb(199, 196, 196);
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            outline: none;
+            font-size: 16px;
+            box-sizing: border-box;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
+        .options-container {
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            position: absolute;
+            top: 50px;
+            width: 100%;
+            background-color: #fff;
+            z-index: 100;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .options-container .option {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .options-container .option:hover {
+            background-color: #f0f0f0;
         }
     </style>
 @endpush
@@ -41,12 +80,24 @@
                         <button class="btn-all px-3 mx-2 btn-filter btn-active" data-filter="all" style="color: #274373;">
                             الكل ({{ $all }})
                         </button>
-                        <button class="btn-all px-3 mx-2 btn-filter" data-filter="buildings" style="color: #274373;">
+                        <div class="form-group moftsh select-box-2 mx-3  d-flex">
+                            <h4 style="line-height: 1.8;"> المخالفه : </h4>
+                            <select id="filter" name="filter"
+                                class="form-control custom-select custom-select-lg mb-3 select2">
+                                <option value="" data-filter="">كل المخالفات</option>
+                                @foreach (getDepartments() as $item)
+                                    <option value="{{ $item->id }}" data-filter="{{ $item->id }}">
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        {{-- <button class="btn-all px-3 mx-2 btn-filter" data-filter="buildings" style="color: #274373;">
                             ادارة مباني ({{ $buildings }})
                         </button>
                         <button class="btn-all px-3 mx-2 btn-filter" data-filter="behavior" style="color: #274373;">
                             سلوك انضباطي ({{ $behavior }})
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
 
@@ -105,37 +156,27 @@
                                             dir="rtl">{{ $errors->first('nameadd') }}</span>
                                     @endif
                                 </div>
-
-                                <div class="form-group  mb-3">
-                                    <div class="select-wrapper">
-                                        <div class="select-box d-flex justify-content-between" id="select-box">
-                                            <p> قسم الخاص بالمخالفه</p>
-                                            <i class="fa-solid fa-angle-down" style="color: #A3A1A1;"></i>
-                                        </div>
-                                        <div class="options" id="options">
-                                            <div class="search-box">
-                                                <input type="text" id="search-input" placeholder="ابحث هنا ....."
-                                                    style="width: 100% !important;" dir="rtl">
-
-                                            </div>
-                                            @for ($i = 0; $i < count($type); $i++)
-                                                <div class="option" style="    display: flex; justify-content: flex-end;">
-                                                    <label for="option{{ $type[$i]['id'] }}"> {{ $type[$i]['name'] }}
-                                                    </label>
-                                                    <input type="checkbox" id="option{{ $type[$i]['id'] }}"
-                                                        value="{{ $type[$i]['id'] }}" name="types[]">
-
-                                                </div>
-                                            @endfor
-
+                                <div class="form-group mb-3">
+                                    <label class="d-flex justify-content-start pb-2" for="types"
+                                        style="flex-direction: row-reverse;">
+                                        الاداره الخاصه بالمخالفه
+                                    </label>
+                                    <div class="custom-multiselect">
+                                        <input type="text" id="selectedItems" placeholder="اختر الاداره..."
+                                            class="search-input" readonly onclick="toggleOptions()">
+                                        <div class="options-container" id="optionsContainer">
+                                            @foreach (getDepartments() as $department)
+                                                <label class="option">
+                                                    <input type="checkbox" value="{{ $department->id }}" name="types[]"
+                                                        onchange="updateSelectedItems()">
+                                                    {{ $department->name }}
+                                                </label>
+                                            @endforeach
                                         </div>
                                     </div>
-                                    @if ($errors->has('types'))
-                                        <span class="text-danger span-error" id="types-error"
-                                            dir="rtl">{{ $errors->first('types') }}</span>
-                                    @endif
-                                    <div id="selected-values" class="mt-2"></div>
                                 </div>
+
+
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2" dir="rtl">
                                     <button type="submit" class="btn-all mx-2 p-2"
                                         style="background-color: #274373; color: #ffffff;" id="openSecondModalBtn">
@@ -187,6 +228,7 @@
                                     <input type="text" id="nameedit" name="nameedit" class="form-control"
                                         placeholder="اسم المخالفه" required>
                                 </div>
+                                
                                 <div class="form-group  mb-3">
                                     <label class="d-flex justify-content-start pb-2" for="types"
                                         style=" flex-direction: row-reverse;">
@@ -295,9 +337,11 @@
             var table = $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
+                bResetDisplay: true,
                 ajax: {
                     url: '{{ route('violations.getAllviolations') }}',
                     data: function(d) {
+
                         d.filter = filter;
                     }
                 },
@@ -366,21 +410,20 @@
             var defaultFilterButton = $('.btn-filter[data-filter="all"]');
             var defaultFilterText = defaultFilterButton.text().trim();
             $('#violation-type-heading').text('انواع المخالفات - ' + defaultFilterText);
-            $('.btn-filter').click(function() {
-                filter = $(this).data('filter'); // Update the filter variable
-                var filterText = $(this).text().trim(); // Get the text of the active button
+            $('#filter').change(function() {
+                const selectedOption = $(this).find('option:selected'); // Get the selected option
+                var filterText = selectedOption.text().trim(); // Get the text of the selected option
+                filter = selectedOption.data('filter'); // Get the data-filter value
 
-                // Remove 'btn-active' class from all buttons and add to the clicked one
-                $('.btn-filter').removeClass('btn-active');
-                $(this).addClass('btn-active');
 
-                $('#violation-type-heading').text('انواع المخالفات - ' +
-                    filterText); // Update the <p> content
+                // Update the heading text
+                $('#violation-type-heading').text('انواع المخالفات - ' + filterText);
 
-                table.page(0).draw(true); // Reload table data
+                // Reset to the first page and reload the table
+                table.page(0).draw(true);
                 table.ajax.reload();
-
             });
+
         });
     </script>
 
@@ -458,5 +501,35 @@
                 }
             });
         });
+    </script>
+    <script>
+        // Show/Hide options on input focus
+        // Toggle the visibility of the options container
+        function toggleOptions() {
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.style.display =
+                optionsContainer.style.display === 'none' || optionsContainer.style.display === '' ?
+                'block' :
+                'none';
+        }
+
+        // Hide options container when clicking outside
+        document.addEventListener('click', function(e) {
+            const optionsContainer = document.getElementById('optionsContainer');
+            const selectedItems = document.getElementById('selectedItems');
+            if (!optionsContainer.contains(e.target) && e.target !== selectedItems) {
+                optionsContainer.style.display = 'none';
+            }
+        });
+
+        // Update the input with selected items
+        function updateSelectedItems() {
+            const selectedItems = document.getElementById('selectedItems');
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const selectedValues = Array.from(checkboxes).map(cb => cb.parentElement.textContent.trim());
+
+            // Display the selected items in the input field
+            selectedItems.value = selectedValues.join(', ');
+        }
     </script>
 @endpush
