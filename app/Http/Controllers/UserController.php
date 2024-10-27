@@ -854,6 +854,9 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
+
+        $user->address1 = $request->address_1;
+        $user->address2 = $request->address_2;
         $user->description = $request->description;
         $user->military_number = $military_number;
         $user->job_title = $request->job_title;
@@ -891,6 +894,9 @@ class UserController extends Controller
             $file = $request->image;
             $path = 'users/user_profile';
             UploadFilesWithoutReal($path, 'image', $user, $file);
+        } else {
+            // Keep the old image if no new image is uploaded
+            $user->image = $user->getOriginal('image');
         }
 
         if ($user->flag == "user") {

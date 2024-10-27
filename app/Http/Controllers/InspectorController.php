@@ -92,7 +92,7 @@ class InspectorController extends Controller
         $inspector->save();
 
         return redirect()->route('inspectors.index')
-            ->with('success', 'Inspector updated successfully.')
+            ->with('success', 'تم أضافه المفتش لمجموعه')
             ->with('showModal', true);
     }
 
@@ -134,9 +134,11 @@ class InspectorController extends Controller
             $edit_permission =  '<a href="' . route('inspectors.edit', $row->id) . '" class="btn btn-sm"  style="background-color: #F7AF15;">
                                             <i class="fa fa-edit"></i> تعديل
                                         </a>';
-            $remove_permission =  '<a href="' . route('inspectors.remove', $row->id) . '" class="btn btn-sm"  style=" background-color: #E3641E;">
-                                       <i class="fa-solid fa-user-tie"></i> تحويل لموظف
-                                    </a>';
+                                        $remove_permission = '<a class="btn btn-sm"  style="background-color: green;"  onclick="openTransferModal(' . $row->id . ')">   <i class="fa fa-plus"></i> تحويل لموظف</a>';
+
+            // $remove_permission =  '<a href="' . route('inspectors.remove', $row->id) . '" class="btn btn-sm"  style=" background-color: #E3641E;">
+            //                            <i class="fa-solid fa-user-tie"></i> تحويل لموظف
+            //                         </a>';
             return  $show_permission . ' ' . $edit_permission . ' ' . $group_permission . ' ' . $remove_permission;
         })
             ->addColumn('name', function ($row) {
@@ -197,18 +199,25 @@ class InspectorController extends Controller
                 ->get();
         }
         //dd($users);
+
         return view('inspectors.create', compact('users'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function TransferToEmployee($id)
+    public function TransferToEmployee(Request $request)
     {
-        $inspector = Inspector::find($id);
+        //dd($request);
+        $inspector = Inspector::find($request->id_employee);
+        if(!$inspector){
+            return redirect()->back()
+            ->with('error', 'تعذر الحصول على بيانات المفتش ')
+            ->with('showModal', false);
+        }
         $inspector->flag = 1;
         $inspector->save();
-        $inspectorIds[] = $id;
+        $inspectorIds[] = $request->id_employee;
         $removedInspectors = [];
 
         $currentGroups = GroupTeam::where('group_id', $inspector->group_id)->get();
@@ -234,12 +243,14 @@ class InspectorController extends Controller
             }
         }
 
-        $inspector_missions = InspectorMission::where('inspector_id', $id)->where('date', '>=', today())->get();
+        $inspector_missions = InspectorMission::where('inspector_id', $request->id_employee)->where('date', '>=', today())->get();
         foreach ($inspector_missions as  $inspector_mission) {
             $inspector_mission->delete();
         }
-
-        return redirect()->back()->with('تم تحويل المفتش لموظف');
+        return redirect()->back()
+        ->with('success', 'تم تحويل المفتش لموظف')
+        ->with('showModal', true);
+      //  return redirect()->back()->with('تم تحويل المفتش لموظف');
     }
     public function store(Request $request)
     {

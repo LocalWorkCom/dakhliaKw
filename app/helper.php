@@ -224,7 +224,7 @@ function UploadFilesWithoutReal($path, $image, $model, $request)
     $filename = time() . '.' . $thumbnail->getClientOriginalExtension();
     $thumbnail->move($destinationPath, $filename);
 
-    $model->$image = asset($path) . '/' . $filename;
+    $model->$image = url($path . '/' . $filename);
 
     $model->save();
 }

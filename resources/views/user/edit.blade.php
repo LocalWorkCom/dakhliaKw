@@ -278,8 +278,6 @@
                             </div>
                         </div>
 
-
-
                         <div class="form-row mx-md-2  d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-5 mx-md-2">
                                 <label for="input44">العنوان </label>
@@ -377,15 +375,19 @@
                                     rows="3">{{ $user->description }}</textarea>
                             </div>
                         </div>
-                        <div class="form-row mx-2 mx-2 d-flex justify-content-center flex-row-reverse">
+                        <div class="form-row mx-2 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-10">
                                 <label for="input23">الصورة</label>
-                                <input type="file" class="form-control" name="image" id="input23"
-                                    placeholder="الصورة" value="{{ $user->image }}">
+                                <input type="file" class="form-control" name="image" id="input23" placeholder="الصورة"  onclick="hideCurrentImage()">
                             </div>
 
-                            <div style="background-image:  url('{{ $user->image }}')">
-                            </div>
+                            @if($user->image)
+                                <div class="col-md-10 mt-3"style='direction:rtl' id="current-image">
+                                    <label style='direction:rtl'>الصورة الحالية:</label>
+                                    <div style="width: 150px; height: 150px; background-image: url('{{ asset($user->image) }}'); background-size: cover; background-position: center; border: 1px solid #ccc;">
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
                 </div>
@@ -394,7 +396,7 @@
                 <div class="container col-10 mt-5 mb-5 ">
                     <div class="form-row col-10 " dir="ltr">
                         <button class="btn-blue " type="submit">
-                            اضافة </button>
+                            تعديل </button>
                     </div>
                 </div>
                 <br>
@@ -407,6 +409,9 @@
 
     </section>
     <script>
+          function hideCurrentImage() {
+        document.getElementById('current-image').style.display = 'none';
+    }
         function validateForm() {
             let isValid = true;
 
