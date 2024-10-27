@@ -134,7 +134,7 @@ class InspectorController extends Controller
             $edit_permission =  '<a href="' . route('inspectors.edit', $row->id) . '" class="btn btn-sm"  style="background-color: #F7AF15;">
                                             <i class="fa fa-edit"></i> تعديل
                                         </a>';
-                                        $remove_permission = '<a class="btn btn-sm"  style="background-color: green;"  onclick="openTransferModal(' . $row->id . ')">   <i class="fa fa-plus"></i> تحويل لموظف</a>';
+                                        $remove_permission = '<a class="btn btn-sm" style=" background-color: #E3641E;"  onclick="openTransferModal(' . $row->id . ')">   <i class="fa-solid fa-user-tie"></i> تحويل لموظف</a>';
 
             // $remove_permission =  '<a href="' . route('inspectors.remove', $row->id) . '" class="btn btn-sm"  style=" background-color: #E3641E;">
             //                            <i class="fa-solid fa-user-tie"></i> تحويل لموظف
@@ -211,16 +211,21 @@ class InspectorController extends Controller
         //dd($request);
         $inspector = Inspector::find($request->id_employee);
         if(!$inspector){
+
             return redirect()->back()
             ->with('error', 'تعذر الحصول على بيانات المفتش ')
             ->with('showModal', false);
         }
+        $group =$inspector->group_id;
+
+         $inspector->group_id= null;
         $inspector->flag = 1;
+
         $inspector->save();
         $inspectorIds[] = $request->id_employee;
         $removedInspectors = [];
 
-        $currentGroups = GroupTeam::where('group_id', $inspector->group_id)->get();
+        $currentGroups = GroupTeam::where('group_id', $group)->get();
 
         // First, handle transfers and track removed inspectors
         foreach ($currentGroups as $currentGroup) {
@@ -310,7 +315,7 @@ class InspectorController extends Controller
 
             $inspector->user_id = $request->user_id;
             $inspector->Id_number = $user->Civil_number;
-            $inspector->department_id = $user->department_id;
+            // $inspector->department_id = $user->department_id;
             $inspector->save();
         }
 
@@ -382,7 +387,7 @@ class InspectorController extends Controller
 
         $inspector->user_id = $request->user_id;
         $inspector->Id_number = $user->Civil_number;
-        $inspector->department_id = $user->department_id;
+        // $inspector->department_id = $user->department_id;
         $inspector->save();
         // $inspector->save();
         // dd($inspector->id);
