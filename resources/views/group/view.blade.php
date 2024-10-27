@@ -1,6 +1,8 @@
 @extends('layout.main')
 
 @push('style')
+<link href = "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+rel = "stylesheet"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
@@ -134,14 +136,14 @@
                                         },
                                         pagingType: "full_numbers",
                                         "fnDrawCallback": function(oSettings) {
-                                            console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                                            console.log('Page ' + this.api().page.info().pages)
+                                            var page = this.api().page.info().pages;
+                                            console.log($('#users-table tr').length);
+                                            if (page == 1) {
+                                                //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                                                $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
-                                        }
+                                            }
                                         }
                                     });
                                 });
@@ -185,9 +187,20 @@
                                 <div class="form-group mt-4 mb-3">
                                     <label class="d-flex justify-content-start pt-3 pb-2" for="sector_id"> اختر
                                         القطاع </label>
-                                    <select name="sector_id" id="sector_id" class="form-control select2"
+                                    {{-- <select name="sector_id" id="sector_id" class="form-control select2"
                                         style="border: 0.2px solid rgb(199, 196, 196);width:100%;">
                                         <option value="">قطاع </option>
+                                        @foreach ($sectors as $sector)
+                                            <option value="{{ $sector->id }}"
+                                                @if ($sector->id == old('sector_id')) selected @endif>{{ $sector->name }}
+                                            </option>
+                                        @endforeach
+                                    </select> --}}
+
+                                    <select class="form-control select2"
+                                        style="border: 0.2px solid rgb(199, 196, 196);width:100%;" name="sector_id"
+                                        id="sector_id" required>
+                                        <option selected disabled>اختار من القائمة</option>
                                         @foreach ($sectors as $sector)
                                             <option value="{{ $sector->id }}"
                                                 @if ($sector->id == old('sector_id')) selected @endif>{{ $sector->name }}
@@ -251,12 +264,21 @@
     </div>
 
     <script>
-        @if (session('showModal'))
-            $(document).ready(function() {
-                $('#myModal1').modal('show');
 
-            });
-        @endif
+    @if (session('showModal'))
+        $(document).ready(function() {
+        $('#myModal1').modal('show');
+
+        });
+    @endif
+
+    $('#sector_id').select2({
+    width: '100%',
+    minimumResultsForSearch: 0,
+    dropdownParent: $('#myModal1'), // Ensures dropdown stays within modal bounds
+    placeholder: 'اختار من القائمة',
+    allowClear: true
+    });
     </script>
 
 
@@ -453,6 +475,13 @@
 @endsection
 
 @push('scripts')
+
+
+    <script src = "https://code.jquery.com/jquery-3.6.0.min.js" >
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
     {{-- <script>
         $(document).ready(function() {
             console.log("Document ready, initializing DataTable");
@@ -492,6 +521,16 @@
         });
     </> --}}
     <script>
+        $(document).ready(function() {
+            $('#sector_edit_id').select2({
+                width: '100%',
+                minimumResultsForSearch: 0,
+                dropdownParent: $('#edit'),
+                placeholder: 'اختار من القائمة',
+                allowClear: true
+            });
+        });
+
         function openViewModal(id, name) {
             // console.log("id", id);
             $.ajax({
@@ -534,7 +573,6 @@
                         // Set the selected sector in the dropdown
                         $('#sector_edit_id').val(data.group.sector_id).trigger('change');
                         // $('#sector_edit_id').select2(); // Initialize Select2
-
 
                         // Show the modal
                         $('#edit').modal('show');
@@ -609,9 +647,9 @@
         // });
     </script>
     <script>
-        $('.select2').select2({
-            // dir: "rtl"
-        });
+        // $('.select2').select2({
+        //     // dir: "rtl"
+        // });
         document.addEventListener('DOMContentLoaded', function() {
             // Get elements
             var openSecondModalBtn = document.getElementById('openSecondModalBtn');
