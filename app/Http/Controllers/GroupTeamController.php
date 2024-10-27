@@ -52,20 +52,25 @@ class GroupTeamController extends Controller
         $data = GroupTeam::with('group')->with('working_tree')->where('group_id', $id)->get();
         // dd($data);
         foreach ($data as $key) {
-            # code...
+            // Retrieve the inspector_ids for the current group
             $inspector_ids = GroupTeam::find($key->id)->inspector_ids;
-
+        
             if ($inspector_ids) {
-                // Split the inspector_ids column into an array
+                // Trim the inspector_ids to remove any leading/trailing whitespace
+                $inspector_ids = trim($inspector_ids);
+        
+                // Split the trimmed inspector_ids column into an array
                 $inspectorIds = explode(',', $inspector_ids);
-
-                // Count the number of inspectors
-                $inspectorCount = count($inspectorIds);
+        
+                // Count the number of inspectors, filtering out any empty values
+                $inspectorCount = count(array_filter($inspectorIds, 'trim')); // Count non-empty trimmed values
             } else {
                 $inspectorCount = 0; // Handle the case where the group is not found
             }
+        
             $key['inspectorCount'] = $inspectorCount;
         }
+        
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
