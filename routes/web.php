@@ -457,7 +457,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/Inspectors/{Inspector}/edit', [InspectorController::class, 'edit'])->name('inspectors.edit')->middleware('check.permission:edit Inspector');
     Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update')->middleware('check.permission:edit Inspector');
     Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup')->middleware('check.permission:edit Inspector');
-    Route::get('/Inspectors/TransferToEmployee/{id}', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove')->middleware('check.permission:edit Inspector');
+    Route::post('/Inspectors/TransferToEmployee', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove')->middleware('check.permission:edit Inspector');
 
     //statistics
     Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');

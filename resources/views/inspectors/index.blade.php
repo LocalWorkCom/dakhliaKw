@@ -51,6 +51,35 @@
                     </button>
                 </div>
             </div>
+            @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
+                {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorAlert">
+                {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if(session('showModal'))
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    // Show the modal
+                    $('#myModal').modal('show');
+                });
+                setTimeout(function() {
+                $('#myModal').modal('hide');
+            }, 30000);
+            </script>
+        @endif
 
 
             <div class="col-lg-12">
@@ -75,6 +104,51 @@
                             </thead>
                         </table>
                     </div>
+                      <!-- Transfer Form Modal -->
+                      <div class="modal fade" id="TranferMdel" tabindex="-1" aria-labelledby="myModalLabel"
+                      aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                              <div class="modal-header d-flex justify-content-center">
+                                  <div class="title d-flex flex-row align-items-center">
+                                      <h5 class="modal-title"> التحويل لموظف</h5>
+                                      <img src="{{ asset('frontend/images/group-add-modal.svg') }}" alt="">
+
+                                  </div>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                      aria-label="Close">&times;</button>
+                              </div>
+                              <div class="modal-body mt-3 mb-3">
+                                  <div class="container pt-5 pb-2" style="border: 0.2px solid rgb(166, 165, 165);">
+                                      <form id="transfer-form" action="{{ route('inspectors.remove') }}"
+                                          method="POST">
+                                          @csrf
+                                          <input type="hidden" name="id_employee" id="id_employee" value="">
+                                          <div class="mb-3">
+                                            <label style="justify-content: flex-end;"> هل انت متأكد من تحويل المفتش لموظف ؟ </label>
+                                        </div>
+                                          <div class="text-end pt-3">
+                                              <button type="button" class="btn-all p-2 "
+                                                  style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
+                                                  data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
+                                                  {{-- <img src="{{ asset('frontend/images/red-close.svg') }}"
+                                                      alt="img"> --}}
+                                                       لا
+                                              </button>
+                                              <button type="submit" class="btn-all mx-2 p-2"
+                                                  style="background-color: #274373; color: #ffffff;">
+                                                  {{-- <img src="{{ asset('frontend/images/white-add.svg') }}"
+                                                      alt="img"> --}}
+                                                  نعم
+                                              </button>
+
+                                          </div>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
                     <!-- Add Form Modal -->
                     <div class="modal fade" id="myModal1" tabindex="-1" aria-labelledby="myModalLabel"
                         aria-hidden="true">
@@ -94,9 +168,8 @@
                                         <form id="add-form" action="{{ route('inspectors.addToGroup') }}"
                                             method="POST">
                                             @csrf
-
                                             <div class="mb-3">
-                                                <label for="group_id" style="    justify-content: flex-end;">اختر
+                                                <label for="group_id" style="justify-content: flex-end;">اختر
                                                     المجموعه
                                                 </label>
                                                 <select class="form-control select2"
@@ -146,7 +219,7 @@
                                 <div class="modal-body mb-3 mt-3 d-flex justify-content-center">
                                     <div class="body-img-modal d-block ">
                                         <img src="{{ asset('frontend/images/ordered.svg') }}" alt="">
-                                        <p>تمت الاضافه بنجاح</p>
+                                        <p>تمت العمليه بنجاح</p>
                                     </div>
                                 </div>
 
@@ -166,6 +239,13 @@
 @push('scripts')
 
 <script>
+    $('#group_id').select2({
+    width: '100%',
+    minimumResultsForSearch: 0,
+    dropdownParent: $('#myModal1'), // Ensures dropdown stays within modal bounds
+    placeholder: 'اختار من القائمة',
+    allowClear: true
+});
     $(document).ready(function() {
         $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
 
@@ -309,10 +389,29 @@
             }
         }
     }
-</script>
-<script>
-    $('.select2').select2({
-        // dir: "rtl"
+
+    function openTransferModal(id) {
+        $('#TranferMdel').modal('show');
+        document.getElementById('id_employee').value = id;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Set a 30-second timer to fade out and remove alerts
+        setTimeout(function() {
+            const successAlert = document.getElementById('successAlert');
+            const errorAlert = document.getElementById('errorAlert');
+
+            if (successAlert) {
+                successAlert.classList.remove('show');
+                successAlert.classList.add('fade');
+                setTimeout(() => successAlert.remove(), 1000); // Delay removal for fade effect
+            }
+            if (errorAlert) {
+                errorAlert.classList.remove('show');
+                errorAlert.classList.add('fade');
+                setTimeout(() => errorAlert.remove(), 1000); // Delay removal for fade effect
+            }
+        }, 30000); // 30 seconds
     });
 </script>
 @endpush
