@@ -155,6 +155,35 @@
 
 
 
+                    function UpdateDate() {
+                        var end_date = $('#end_date').val();
+                        var type = $('#type').val();
+                        var id = $('#id').val();
+
+                        // Correctly replace ':id' in the URL
+                        var url = '{{ route('vacation.update', ':id') }}'.replace(':id', id);
+
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: {
+                                'end_date': end_date,
+                                'type': type,
+                                '_token': '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+                                console.log('Success:', data);
+                                // Optionally, you can close the modal and refresh the DataTable
+                                $('#representative').modal('hide');
+                                // $('#users-table').DataTable().ajax.reload();
+                                window.location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.log('Error:', error);
+                                console.log('XHR:', xhr.responseText);
+                            }
+                        });
+                    }
 
                     async function update_type(type, id) {
                         $('#type').val(type);
