@@ -198,11 +198,11 @@ class reportsController extends Controller
         if (!$inspectorId) {
             return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
         }
-        $sector = GroupTeam::with('group.sector')
-            ->whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])
-            ->first()
-            ->group
-            ->sector_id;
+        $groupTeam = GroupTeam::with('group.sector')
+        ->whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])
+        ->first();
+
+    $sector = $groupTeam ? optional($groupTeam->group)->sector_id : null;
         // Retrieve the points associated with the sector
         $sectorPoints = Point::where('sector_id', $sector)
             ->select('id', 'name')
@@ -228,10 +228,6 @@ class reportsController extends Controller
                 "id" => 0,
                 "name" => " مبانى",
             ],
-
-
-
-
         ];
         $success['points'] = $response;
         $success['types'] = $types;
@@ -595,7 +591,7 @@ class reportsController extends Controller
         $is_off = InspectorMission::whereDate('date', $today)
             ->where('inspector_id', $inspectorId)
             ->value('day_off');
-      
+
         $notifies = Notification::with('mission')
             ->where('user_id', auth()->user()->id)
             ->whereDate('created_at', $today) // Ensure the date comparison is for the correct day

@@ -29,40 +29,36 @@ class ViolationTypesController extends Controller
         $type[1]['id']='2';
         $type[1]['name']='مباني';  */
 
-        $type[] = array('id' => '79', 'name' => 'السلوك الانظباطي');
-        $type[] = array('id' => '80', 'name' => 'مباني');
 
-        $all = ViolationTypes::whereJsonContains('type_id', '79')
-            ->orWhereJsonContains('type_id', '80')->count();
-        $behavior = ViolationTypes::whereJsonContains('type_id',  '79')->count();
-        $buildings = ViolationTypes::whereJsonContains('type_id', '80')->count();
+
+        $all = ViolationTypes::where('type_id',  '<>', '0')->count();
+        // $behavior = ViolationTypes::whereJsonContains('type_id',  '79')->count();
+        // $buildings = ViolationTypes::whereJsonContains('type_id', '80')->count();
         //  $type=json_encode($type);
-        // dd($type);
-        return view("ViolationTypes.index", compact('type', 'all', 'behavior', 'buildings'));
+
+        return view("ViolationTypes.index", compact('all'));
     }
 
     public function getviolations()
     {
-        // Start with the query, don't call get() immediately
-        $data = ViolationTypes::whereJsonContains('type_id', '79')
-            ->orWhereJsonContains('type_id', '80');
+        // Query for violations excluding those with type_id = 0
+        $data = ViolationTypes::where('type_id', '<>', '0');
 
-        // Apply the filters only if necessary
-        $filter = request('filter');
+        $filter = request('filter'); // Get filter from request
 
-        if ($filter == 'behavior') {
-            $data->whereJsonContains('type_id',  '79');
-        } elseif ($filter == 'buildings') {
-            $data->whereJsonContains('type_id', '80');
+        if ($filter && $filter != 'all') {
+            // Apply filter if provided (assuming type_id is a JSON array)
+            $data = $data->whereJsonContains('type_id', $filter);
         }
 
-        // Fetch the filtered data
-        $data = $data->get();
+        $data = $data->get(); // Fetch the data
 
-        // dd($data);
         foreach ($data as $item) {
-            $item->type_names = departements::whereIn('id', $item->type_id)
-                ->pluck('name')->implode(', ');
+            // Decode the JSON type_id field and fetch corresponding department names
+            $typeIds = json_decode($item->type_id, true); // Ensure type_id is parsed as an array
+            $item->type_names = Departements::whereIn('id', $typeIds)
+                ->pluck('name')
+                ->implode(', '); // Join names with commas
         }
 
         // Return the DataTables response

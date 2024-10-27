@@ -40,7 +40,6 @@ class ViollationController extends Controller
             $inspectors = Inspector::all();
         } else {
             $groups = Groups::whereIn('id', $inspectors_group)->get();
-            // dd($groups);
             $groupTeams = GroupTeam::whereIn('group_id', $inspectors_group)->get();
             $inspectors = Inspector::where('department_id', Auth()->user()->department_id)->get();
         }
