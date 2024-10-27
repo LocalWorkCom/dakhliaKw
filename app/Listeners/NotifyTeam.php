@@ -21,7 +21,7 @@ class NotifyTeam
     {
         //
     }
- 
+
     /**
      * Handle the event.
      */
@@ -29,7 +29,7 @@ class NotifyTeam
     {
         $mission = $event->mission;
         $team = $event->mission->groupTeam;
-       
+
         if ($event->mission->inspector_id == null) {
            // dd($event->mission->inspector_id);
             $inspector_ids = explode(',', $team->inspector_ids);
@@ -79,8 +79,10 @@ class NotifyTeam
                 }
             }
             // dd($flag);
-            $inspector_ids = explode(',', $team->inspector_ids);
-            // Send notification to the team
+            $inspector_ids = array_filter(array_map('trim', explode(',', $team->inspector_ids)), function($value) {
+                return $value !== '';
+            });
+                        // Send notification to the team
             // Notification::send($inspector_ids, new MissionAssignedNotification($event->mission));
             foreach ($inspector_ids as $inspector) {
                 $token = getTokenDevice($inspector);
@@ -95,7 +97,7 @@ class NotifyTeam
                 ]);
                 send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
 
-              
+
             }
 
             return $flag;
@@ -164,9 +166,9 @@ class NotifyTeam
           //  print_r(now());
             send_push_notification($event->mission->id, $token, 'أمر خدمة جديد', 'لقد تم اسماد أمر خدمة جديد لك.');
            }
-         
 
-         
+
+
             return $flag;
         }
     }
