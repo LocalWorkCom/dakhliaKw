@@ -57,8 +57,12 @@ class InstantmissionController extends Controller
     public function create()
     {
 
-        $inspectors_group = Inspector::where('department_id', Auth()->user()->department_id)->select('group_id')
-            ->groupBy('group_id')->pluck('group_id');
+        $inspectors_group = Inspector::whereHas('user', function($query) {
+            $query->where('department_id', Auth::user()->department_id);
+        })
+        ->select('group_id')
+        ->groupBy('group_id')
+        ->pluck('group_id');
         // dd(Auth::user()->rule->name);
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $groups = Groups::all();
