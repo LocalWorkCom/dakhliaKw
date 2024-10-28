@@ -261,12 +261,12 @@
 
                         <div class="form-row mx-2 mx-2 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-10">
-                                <label for="input13">هل يمكن لهذا لموظف ان يكون مستخدم ؟ </label>
+                                {{-- <label for="input13">هل يمكن لهذا لموظف ان يكون مستخدم ؟ </label> --}}
                                 {{-- <span>نعم : اختار مستخدم</span>
                                     <span>/</span>
                                     <span>لا : اختار موظف</span> --}}
 
-                                <select id="input13" name="flag" class="form-control select2">
+                                <select id="input13" hidden name="flag" class="form-control">
                                     @if ($user->flag == 'user')
                                         <option value="user" selected>مستخدم</option>
                                         {{-- <option value="employee">موظف</option> --}}
