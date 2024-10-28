@@ -132,7 +132,7 @@ class pointsController extends Controller
     public function store(Request $request)
     {
         //dd($request->all());
-        $rules = [
+        $validator = Validator::make($request->all(), [
             'name' => [
                 'required',
                 'string',
@@ -147,10 +147,7 @@ class pointsController extends Controller
             'time_type' => 'required',
             'day_name' => 'required|array',
             'note' => 'nullable|string',
-        ];
-
-        // Define custom messages
-        $messages = [
+        ], [
             'name.required' => 'يجب ادخال اسم نقطه',
             'name.unique' => 'يجب إدخال اسم نقطة مختلف',
             'name.string' => 'يجب ان لا يحتوى اسم النقطه على رموز',
@@ -161,13 +158,30 @@ class pointsController extends Controller
             'day_name.required' => 'يجب اختيار الايام الخاصه بنظام العمل',
             'map_link.required' => 'يجب ادخال الموقع',
             'map_link.url' => 'عفوا يجب ان يكون الموقع رابط لجوجل ماب',
-        ];
+        ]);
 
-        // Validate the request
-        $validatedData = Validator::make($request->all(), $rules, $messages);
+        if ($request->input('time_type') == 1) {
+            $validator->addRules([
+                'from' => 'required|array|min:1',
+                'to' => 'required|array|min:1',
+            ]);
+        }
 
-        if ($validatedData->fails()) {
-            return redirect()->back()->withErrors($validatedData)->withInput();
+        $validator->after(function ($validator) use ($request) {
+            if ($request->input('time_type') == 1) {
+                $missingFromTimes = array_filter($request->input('from', []), fn($value) => is_null($value) || $value === '');
+                $missingToTimes = array_filter($request->input('to', []), fn($value) => is_null($value) || $value === '');
+
+                if ($missingFromTimes || $missingToTimes) {
+                    $validator->errors()->add('time_fields', 'يجب إدخال وقت البداية والنهاية لكل عنصر.');
+                }
+            }
+        });
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput($request->all());
         }
 
         DB::transaction(function () use ($request) {
