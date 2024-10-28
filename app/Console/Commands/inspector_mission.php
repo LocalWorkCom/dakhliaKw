@@ -100,9 +100,8 @@ class inspector_mission extends Command
                     $inspectorMission->working_time_id = $WorkingTreeTime->working_time_id ? $WorkingTreeTime->working_time_id : null;
                     $inspectorMission->date = $date;
                     $inspectorMission->day_number = $day_in_cycle;
+                    
                     if ($vacation_days != 0) {
-
-
                         $inspectorMission->vacation_id = $EmployeeVacation->id;
                     }
                     $inspectorMission->day_off =  $WorkingTreeTime->working_time_id ? 0 : 1;
@@ -138,15 +137,7 @@ class inspector_mission extends Command
                                 WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
                                 ->where('day_num', $day_in_cycle)
                                 ->first();
-                        }
-                     
-
-
-
-                        // if ($day_in_cycle == 4) {
-
-                        // }
-
+                        }                 
 
                         $user_id  = Inspector::find($Inspector)->user_id;
                         if ($vacation_days == 0) {

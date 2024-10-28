@@ -48,7 +48,7 @@ class ViolationTypesController extends Controller
 
         if ($filter && $filter != 'all') {
             // Apply filter if provided (assuming type_id is a JSON array)
-            $data = $data->whereJsonContains('type_id', $filter);
+            $data = $data->where('type_id', $filter);
         }
 
         $data = $data->get(); // Fetch the data
@@ -112,7 +112,7 @@ class ViolationTypesController extends Controller
         }
         $item = new ViolationTypes();
         $item->name = $request->nameadd;
-        $item->type_id     = $request->types;
+        $item->type_id     = json_encode($request->types);
         $item->created_by = Auth::id();
         $item->updated_by = Auth::id();
         $item->save();
@@ -149,7 +149,7 @@ class ViolationTypesController extends Controller
 
         $ViolationTypes = ViolationTypes::find($request->id);
         $ViolationTypes->name = $request->nameedit;
-        $ViolationTypes->type_id = $request->types;
+        $ViolationTypes->type_id = json_encode($request->types);
         $ViolationTypes->save();
 
         return redirect()->route('violations.index')->with('success', 'تم تعديل المخالفه بنجاح');
