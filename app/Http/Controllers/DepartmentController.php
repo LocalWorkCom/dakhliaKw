@@ -209,7 +209,14 @@ class DepartmentController extends Controller
         $departements->parent_id = Auth::user()->department_id;
         $departements->created_by = Auth::user()->id;
         $departements->save();
-
+        $existingManagerDepartments = Departements::where('manger', $request->manger)->whereNot('id', $departements->id)->get();
+        if ($existingManagerDepartments) {
+            foreach ($existingManagerDepartments as $existingManagerDepartment) {
+                $existingManagerDepartments = Departements::find($existingManagerDepartment->id);
+                $existingManagerDepartment->manger = null;
+                $existingManagerDepartment->save();
+            }
+        }
         $user = User::find($request->manger);
         $user->department_id = $departements->id;
         $user->save();
@@ -369,10 +376,28 @@ class DepartmentController extends Controller
                 }
             }
 
+            $existingManagerDepartments = Departements::where('manger', $newmanagerrequest)
+                ->whereNot('id', $department->id)
+                ->get();
+
+            foreach ($existingManagerDepartments as $existingManagerDepartment) {
+                $existingManagerDepartment->manger = null;
+                $existingManagerDepartment->save();
+            }
             $newManager = User::find($newmanagerrequest);
+
             if ($newManager) {
                 $newManager->department_id = $department->id;
                 $newManager->save();
+            }
+        }else{
+            $existingManagerDepartments = Departements::where('manger', $currentManagerId)
+                ->whereNot('id', $department->id)
+                ->get();
+
+            foreach ($existingManagerDepartments as $existingManagerDepartment) {
+                $existingManagerDepartment->manger = null;
+                $existingManagerDepartment->save();
             }
         }
 
