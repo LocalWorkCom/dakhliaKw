@@ -17,11 +17,11 @@
                 <div class="form-group">
                     <button type="button" class="wide-btn "
                         onclick="window.location.href='{{ route('departments.create') }}'" style="    color: #0D992C;">
-              اضافة جديد
-              <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        اضافة جديد
+                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
                     @if (Auth::user()->hasPermission('create Postman'))
-                  <!--   <button type="button" class="wide-btn mx-md-3 mx-1"
+                        <!--   <button type="button" class="wide-btn mx-md-3 mx-1"
                         onclick="window.location.href='{{ route('postmans.create') }}'">
                         اضافة مندوب
                        <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
@@ -35,7 +35,11 @@
         <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
             <div class="row" dir="rtl">
 
-
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
             </div>
 
@@ -66,20 +70,20 @@
     $(document).ready(function() {
         $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm'; // Change Pagination Button Class
         @php
-                                        $Dataurl= url('api/department') ;
-                                        if(isset($mode)){
-                                            if($mode=='search')
-                                                 $Dataurl=url('searchDept/departments')."/".$q;
-                                        }
-                                       // dd($Dataurl);
-                                                                        
-                                        @endphp  
-                                        console.log('Rasha',"{{$Dataurl}}")  
+            $Dataurl = url('api/department');
+            if (isset($mode)) {
+                if ($mode == 'search') {
+                    $Dataurl = url('searchDept/departments') . '/' . $q;
+                }
+            }
+            // dd($Dataurl);
+        @endphp
+        console.log('Rasha', "{{ $Dataurl }}")
         $('#users-table').DataTable({
             processing: true,
             serverSide: true,
-             ajax: '{{$Dataurl}}/',
-            
+            ajax: '{{ $Dataurl }}/',
+
             columns: [{
                     data: 'id',
                     sWidth: '50px',
@@ -126,8 +130,8 @@
                     return `
                     <a href="${departmentShow}"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i> عرض</a>
                         <a href="${departmentEdit}" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i>تعديل  </a>
-                        
-                        
+
+
                         `;
                 }
             }],
@@ -155,14 +159,14 @@
             },
             "pagingType": "full_numbers",
             "fnDrawCallback": function(oSettings) {
-                console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                console.log('Page ' + this.api().page.info().pages)
+                var page = this.api().page.info().pages;
+                console.log($('#users-table tr').length);
+                if (page == 1) {
+                    //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
+                    $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
 
-                                        }
+                }
             }
         });
 
