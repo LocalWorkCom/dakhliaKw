@@ -8,6 +8,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreWorkingTimeRequest;
 use App\Http\Requests\UpdateWorkingTimeRequest;
+use DateTime;
 use Illuminate\Validation\Rule;
 
 class WorkingTimeController extends Controller
@@ -50,7 +51,7 @@ class WorkingTimeController extends Controller
     public function store(Request $request)
     {
         //
-        // dd($request);
+         //dd($request);
 
         $messages = [
             'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
@@ -71,11 +72,12 @@ class WorkingTimeController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         try {
-
+            $startTime = DateTime::createFromFormat('h:i A', $request->start_time)->format('H:i');
+            $endTime = DateTime::createFromFormat('h:i A', $request->end_time)->format('H:i');
             $WorkingTime = new WorkingTime();
             $WorkingTime->name = $request->name;
-            $WorkingTime->start_time = $request->start_time;
-            $WorkingTime->end_time = $request->end_time;
+            $WorkingTime->start_time = $startTime;
+            $WorkingTime->end_time = $endTime;
             // dd($WorkingTime);
             // Generate a random color that is not in the database
             /*do {
@@ -152,10 +154,12 @@ class WorkingTimeController extends Controller
         }
 
         try {
+            $startTime = DateTime::createFromFormat('h:i A', $request->start_time)->format('H:i');
+            $endTime = DateTime::createFromFormat('h:i A', $request->end_time)->format('H:i');
             $WorkingTimeitem = WorkingTime::findOrFail($request->id_edit);
             $WorkingTimeitem->name = $request->name_edit;
-            $WorkingTimeitem->start_time = $request->start_time_edit;
-            $WorkingTimeitem->end_time = $request->end_time_edit;
+            $WorkingTimeitem->start_time = $startTime;
+            $WorkingTimeitem->end_time = $endTime;
             $WorkingTimeitem->color = $request->color_edit;
             $WorkingTimeitem->save();
 

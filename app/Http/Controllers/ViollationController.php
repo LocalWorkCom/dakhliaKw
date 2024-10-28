@@ -30,9 +30,13 @@ class ViollationController extends Controller
 {
     //
     public function index(Request $request)
-    { 
+    {
         $groups = Groups::all();
-        $inspectors_group = Inspector::where('department_id', Auth()->user()->department_id)->select('group_id')
+        $userDepartmentId = Auth::user()->department_id;
+        $inspectors_group = Inspector::with('user')->where('flag', 0)
+            ->whereHas('user', function ($query) use ($userDepartmentId) {
+                $query->where('department_id', $userDepartmentId);
+            })->select('group_id')
             ->groupBy('group_id')->pluck('group_id');
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $groups = Groups::all();
@@ -41,7 +45,11 @@ class ViollationController extends Controller
         } else {
             $groups = Groups::whereIn('id', $inspectors_group)->get();
             $groupTeams = GroupTeam::whereIn('group_id', $inspectors_group)->get();
-            $inspectors = Inspector::where('department_id', Auth()->user()->department_id)->get();
+            $userDepartmentId = Auth::user()->department_id;
+            $inspectors = Inspector::with('user')->where('flag', 0)
+                ->whereHas('user', function ($query) use ($userDepartmentId) {
+                    $query->where('department_id', $userDepartmentId);
+                })->get();
         }
         $date = $request->date;
         $group = $request->group;

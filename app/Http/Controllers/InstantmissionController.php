@@ -57,12 +57,12 @@ class InstantmissionController extends Controller
     public function create()
     {
 
-        $inspectors_group = Inspector::whereHas('user', function($query) {
+        $inspectors_group = Inspector::whereHas('user', function ($query) {
             $query->where('department_id', Auth::user()->department_id);
         })
-        ->select('group_id')
-        ->groupBy('group_id')
-        ->pluck('group_id');
+            ->select('group_id')
+            ->groupBy('group_id')
+            ->pluck('group_id');
         // dd(Auth::user()->rule->name);
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $groups = Groups::all();
@@ -72,7 +72,11 @@ class InstantmissionController extends Controller
             $groups = Groups::whereIn('id', $inspectors_group)->get();
             // dd($groups);
             $groupTeams = GroupTeam::whereIn('group_id', $inspectors_group)->get();
-            $inspectors = Inspector::where('department_id', Auth()->user()->department_id)->get();
+            $userDepartmentId = Auth::user()->department_id;
+            $inspectors = Inspector::with('user')->where('flag', 0)
+                ->whereHas('user', function ($query) use ($userDepartmentId) {
+                    $query->where('department_id', $userDepartmentId);
+                })->get();
         }
 
 
@@ -198,7 +202,11 @@ class InstantmissionController extends Controller
     {
         $IM = instantmission::find($id);
         $groups = Groups::all();
-        $inspectors_group = Inspector::where('department_id', Auth()->user()->department_id)->select('group_id')
+        $userDepartmentId = Auth::user()->department_id;
+        $inspectors_group = Inspector::with('user')->where('flag', 0)
+            ->whereHas('user', function ($query) use ($userDepartmentId) {
+                $query->where('department_id', $userDepartmentId);
+            })->select('group_id')
             ->groupBy('group_id')->pluck('group_id');
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $groups = Groups::all();
@@ -208,7 +216,11 @@ class InstantmissionController extends Controller
             $groups = Groups::whereIn('id', $inspectors_group)->get();
             // dd($groups);
             $groupTeams = GroupTeam::whereIn('group_id', $inspectors_group)->get();
-            $inspectors = Inspector::where('department_id', Auth()->user()->department_id)->get();
+            $userDepartmentId = Auth::user()->department_id;
+            $inspectors = Inspector::with('user')->where('flag', 0)
+                ->whereHas('user', function ($query) use ($userDepartmentId) {
+                    $query->where('department_id', $userDepartmentId);
+                })->get();
         }
         $groupTeams = GroupTeam::where('group_id', $IM->group_id)->get();
 
@@ -223,8 +235,11 @@ class InstantmissionController extends Controller
     public function edit($id)
     {
         $IM = instantmission::find($id);
-
-        $inspectors_group = Inspector::where('department_id', Auth()->user()->department_id)->select('group_id')
+        $userDepartmentId = Auth::user()->department_id;
+        $inspectors_group = Inspector::with('user')->where('flag', 0)
+            ->whereHas('user', function ($query) use ($userDepartmentId) {
+                $query->where('department_id', $userDepartmentId);
+            })->select('group_id')
             ->groupBy('group_id')->pluck('group_id');
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
             $groups = Groups::all();
@@ -235,7 +250,11 @@ class InstantmissionController extends Controller
             $groups = Groups::whereIn('id', $inspectors_group)->get();
             // dd($groups);
             $groupTeams = GroupTeam::whereIn('group_id', $inspectors_group)->get();
-            $inspectors = Inspector::where('department_id', Auth()->user()->department_id)->get();
+            $userDepartmentId = Auth::user()->department_id;
+            $inspectors = Inspector::with('user')->where('flag', 0)
+                ->whereHas('user', function ($query) use ($userDepartmentId) {
+                    $query->where('department_id', $userDepartmentId);
+                })->get();
         }
 
         // $groups = Groups::all();
