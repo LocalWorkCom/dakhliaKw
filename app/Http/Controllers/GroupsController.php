@@ -46,12 +46,13 @@ class GroupsController extends Controller
             ->addColumn('num_inspectors', function ($row) {
                 if (auth()->user()->rule_id == 2) {
 
-                    $count = Inspector::where('group_id', $row->id)->count();
+                    $count = Inspector::where('group_id', $row->id)->where('flag', 0)->count();
                 } else {
                     $departmentId = auth()->user()->department_id; // Or however you determine the department ID
 
                     $count = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                         ->where('users.department_id', $departmentId)
+                        ->where('flag', 0)
                         ->where('users.id', '<>', auth()->user()->id)->where('group_id', $row->id)
                         ->count();
                 }
