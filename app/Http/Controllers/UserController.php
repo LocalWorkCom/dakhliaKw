@@ -100,17 +100,26 @@ class UserController extends Controller
                         ->get();
                 }
             } else {
+                $childDepartmentIds = $parentDepartment->getAllChildren()->pluck('id');
+
                 if ($flagType == 'employee') {
+
                     $data = User::where('flag', $flagType)
-                        ->where('department_id', $parentDepartment->id)
+                        ->where(function ($query) use ($parentDepartment, $childDepartmentIds) {
+                            $query->where('department_id', $parentDepartment->id)
+                                ->orWhereIn('department_id', $childDepartmentIds);
+                        })
                         ->get();
                 } else {
                     $data = User::where('flag', $flagType)
-                        ->where('department_id', $parentDepartment->id)
-                        ->whereHas('rule', function ($query) {
-                            $query->where('hidden', false);
-                        })
-                        ->get();
+                    ->where(function ($query) use ($parentDepartment, $childDepartmentIds) {
+                        $query->where('department_id', $parentDepartment->id)
+                              ->orWhereIn('department_id', $childDepartmentIds);
+                    })
+                    ->whereHas('rule', function ($query) {
+                        $query->where('hidden', false);
+                    })
+                    ->get();
                 }
             }
         }
