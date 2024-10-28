@@ -33,10 +33,10 @@ class GroupTeamController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request,$id)
+    public function index(Request $request, $id)
     {
         $notify = $request->query('notifi');
-        if($notify){
+        if ($notify) {
             $updateNotify = Notification::findOrFail($notify);
             $updateNotify->status = 1;
             $updateNotify->save();
@@ -54,23 +54,23 @@ class GroupTeamController extends Controller
         foreach ($data as $key) {
             // Retrieve the inspector_ids for the current group
             $inspector_ids = GroupTeam::find($key->id)->inspector_ids;
-        
+
             if ($inspector_ids) {
                 // Trim the inspector_ids to remove any leading/trailing whitespace
                 $inspector_ids = trim($inspector_ids);
-        
+
                 // Split the trimmed inspector_ids column into an array
                 $inspectorIds = explode(',', $inspector_ids);
-        
+
                 // Count the number of inspectors, filtering out any empty values
                 $inspectorCount = count(array_filter($inspectorIds, 'trim')); // Count non-empty trimmed values
             } else {
                 $inspectorCount = 0; // Handle the case where the group is not found
             }
-        
+
             $key['inspectorCount'] = $inspectorCount;
         }
-        
+
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             return '<button class="btn btn-primary btn-sm">Edit</button>';
@@ -471,8 +471,8 @@ class GroupTeamController extends Controller
             foreach ($users as $user) {
                 send_push_notification(null, $user->fcm_token, $title, $message);
                 $notify = new Notification();
-                $notify->message =$message;
-                $notify->title = $title ;
+                $notify->message = $message;
+                $notify->title = $title;
                 $notify->group_id = $team->group_id;
                 $notify->team_id = $team->id;
                 $notify->user_id = $user->id;
@@ -971,15 +971,19 @@ class GroupTeamController extends Controller
             foreach ($Group['teams'] as  $Team) {
                 // dd(sizeof($Group['teams']));
 
+                $inspectorIds = is_array($Team->inspector_ids)
+                    ? $Team->inspector_ids
+                    : explode(',', $Team->inspector_ids);
 
                 // Retrieve all inspectors associated with the team in the current group
-                $inspectorIds = InspectorMission::where('group_id', $Group->id)
-                    ->where('group_team_id', $Team->id)
+                // $inspectorIds = InspectorMission::where('group_id', $Team->group_id)
+                //     ->where('group_team_id', $Team->id)
 
-                    ->groupBy('inspector_id')
-                    ->pluck('inspector_id');
+                //     ->groupBy('inspector_id')
+                //     ->pluck('inspector_id');
+                // dd($inspectorIds, $Team->id, $Team->group_id);
                 // Get the inspector objects
-                $inspectors = Inspector::whereIn('id', $inspectorIds->toArray())->get();
+                $inspectors = Inspector::whereIn('id', $inspectorIds)->get();
                 $Team['inspectors'] = $inspectors;
 
                 // Initialize an array to hold colors for each day in the month
@@ -1030,6 +1034,10 @@ class GroupTeamController extends Controller
                             ->where('group_id', $Group->id)
                             ->where('group_team_id', $Team->id)
                             ->first();
+                        if ($Team->id == 32) {
+
+                            // dd($inspector->id,  $Team->id, $Group->id);
+                        }
 
                         if ($inspector_mission) {
 
@@ -1099,8 +1107,10 @@ class GroupTeamController extends Controller
                                 $colors[] = '#b9b5b4';
                             }
                         } else {
+
                             // Default color if no mission is found
                             $inspector_mission = null;
+
                             $colors[] = '#d6d6d6';
                             $vacations[] = null;
                             $pointsArray[] = null;

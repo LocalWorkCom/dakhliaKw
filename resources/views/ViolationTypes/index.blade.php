@@ -228,7 +228,7 @@
                                     <input type="text" id="nameedit" name="nameedit" class="form-control"
                                         placeholder="اسم المخالفه" required>
                                 </div>
-                                
+
                                 <div class="form-group  mb-3">
                                     <label class="d-flex justify-content-start pb-2" for="types"
                                         style=" flex-direction: row-reverse;">
@@ -476,7 +476,11 @@
                 inputs.forEach(function(input) {
                     input.style.borderColor = ''; // Reset border color
                 });
-                document.getElementById('select-box').style.borderColor = ''; // Reset border color
+
+                var selectBox = document.getElementById('select-box');
+                if (selectBox) {
+                    selectBox.style.borderColor = ''; // Reset border color
+                }
 
                 // Validate required inputs
                 inputs.forEach(function(input) {
@@ -490,8 +494,9 @@
                 // Validate checkboxes
                 if (!typesSelected) {
                     valid = false;
-                    document.getElementById('select-box').style.borderColor =
-                        'red'; // Highlight empty inputs
+                    if (selectBox) {
+                        selectBox.style.borderColor = 'red'; // Highlight empty inputs
+                    }
                     alert('من فضلك اختر الأداره الخاصه بالشكوى');
                 }
 
