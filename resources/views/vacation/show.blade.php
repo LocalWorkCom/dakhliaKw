@@ -96,7 +96,7 @@
                         </tr>
 
 
-                        @if ($vacation->report_image && $vacation->vacation_type_id == 2)
+                        @if ($vacation->report_image)
                             <tr>
                                 <th scope="row" style="background: #f5f6fa;"> الصور المرفقه </th>
                                 <td>

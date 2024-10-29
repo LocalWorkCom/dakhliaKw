@@ -19,6 +19,7 @@ class VacationTypeSeeder extends Seeder
             ['name' => 'مرضي', 'active' => 1],
             ['name' => 'رسمية', 'active' => 1],
             ['name' => 'طارئة', 'active' => 1],
+            ['name' => 'سفر', 'active' => 1],
         ];
 
         // Insert data into the table
