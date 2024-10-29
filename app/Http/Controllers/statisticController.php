@@ -112,7 +112,12 @@ class statisticController extends Controller
             $points = Point::all(); // Use all() to fetch all points
             $violations = ViolationTypes::all();
         } else {
-            $inspectors = Inspector::where('department_id', Auth::user()->department_id)->get();
+            $userDepartmentId = Auth::user()->department_id;
+
+            $inspectors = Inspector::where('flag', 0)
+            ->whereHas('user', function ($query) use ($userDepartmentId) {
+                $query->where('department_id', $userDepartmentId);
+            })->get();
             $points = collect(); // No points for non-admin users
             $violations = ViolationTypes::all(); // Still fetch all violation types
         }
