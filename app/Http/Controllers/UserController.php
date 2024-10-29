@@ -544,6 +544,8 @@ class UserController extends Controller
         $user->department_id  = Null;
         $user->rule_id  = Null;
         $user->password  = Null;
+        $user->flag  = 'employee';
+
         $user->save();
         // $id = 1;
         // $unsigned = Departements::where('manger', $id)->first();
