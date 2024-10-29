@@ -250,11 +250,9 @@ class InspectorController extends Controller
                     $currentGroup->inspector_manager = null;
                 }
             }
-
             // Save changes to the group
             $currentGroup->save();
         }
-
 
         $inspector_missions = InspectorMission::where('inspector_id', $request->id_employee)->where('date', '>=', today())->get();
         foreach ($inspector_missions as  $inspector_mission) {
@@ -263,7 +261,6 @@ class InspectorController extends Controller
         return redirect()->back()
             ->with('success', 'تم تحويل المفتش لموظف')
             ->with('showModal', true);
-        //  return redirect()->back()->with('تم تحويل المفتش لموظف');
     }
     public function store(Request $request)
     {
