@@ -126,7 +126,7 @@ class InspectorController extends Controller
             if ($row->group_id !=  null) {
                 $inspectorExists = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$row->id])->exists();
                 $group_permission = !$inspectorExists
-                ?'<a class="btn btn-sm"  style="background-color: #7e7d7c;"  onclick="openAddModal(' . $row->id . ', ' . $row->group_id . ')">  <i class="fa fa-edit"></i> تعديل مجموعه</a>': '';
+                    ? '<a class="btn btn-sm"  style="background-color: #7e7d7c;"  onclick="openAddModal(' . $row->id . ', ' . $row->group_id . ')">  <i class="fa fa-edit"></i> تعديل مجموعه</a>' : '';
                 //$group_permission = '<a class="btn btn-sm"  style="background-color: #7e7d7c;"  onclick="openAddModal(' . $row->id . ', ' . $row->group_id . ')">  <i class="fa fa-edit"></i> تعديل مجموعه</a>';
             } else {
                 $group_permission = '<a class="btn btn-sm"  style="background-color: green;"  onclick="openAddModal(' . $row->id . ',0)">   <i class="fa fa-plus"></i> أضافه</a>';
@@ -228,26 +228,30 @@ class InspectorController extends Controller
 
         $currentGroups = GroupTeam::where('group_id', $group)->get();
 
-        // First, handle transfers and track removed inspectors
         foreach ($currentGroups as $currentGroup) {
             $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
 
             // Identify inspectors that are no longer in the new list
             $inspectorsToRemove = array_diff($currentInspectorIds, $inspectorIds);
 
-            // Remove these inspectors from the current group
-            foreach ($inspectorsToRemove as $inspectorId) {
+            if (empty($inspectorsToRemove)) {
+                // No inspectors to remove; clear the field
+                $currentGroup->inspector_ids = null;
+            } else {
+                // Remove inspectors and update the `inspector_ids` field once
+                $updatedInspectorIds = array_diff($currentInspectorIds, $inspectorsToRemove);
+                $currentGroup->inspector_ids = implode(',', $updatedInspectorIds);
 
-                $currentGroup->inspector_ids = implode(',', array_diff($currentInspectorIds, [$inspectorId]));
-                $currentGroup->save();
-
-                // If the inspector was a manager, clear the manager field
-                if ($currentGroup->inspector_manager == $inspectorId) {
+                // Check if the removed inspector was a manager and clear `inspector_manager` if needed
+                if (in_array($currentGroup->inspector_manager, $inspectorsToRemove)) {
                     $currentGroup->inspector_manager = null;
-                    $currentGroup->save();
                 }
             }
+
+            // Save changes to the group
+            $currentGroup->save();
         }
+
 
         $inspector_missions = InspectorMission::where('inspector_id', $request->id_employee)->where('date', '>=', today())->get();
         foreach ($inspector_missions as  $inspector_mission) {
