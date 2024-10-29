@@ -48,7 +48,7 @@ class ViolationTypesController extends Controller
 
         if ($filter && $filter != 'all') {
             // Apply filter if provided (assuming type_id is a JSON array)
-            $data = $data->where('type_id', $filter);
+            $data = $data->whereJsonContains('type_id', $filter);
         }
 
         $data = $data->get(); // Fetch the data
