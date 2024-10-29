@@ -124,8 +124,10 @@ class InspectorController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
             if ($row->group_id !=  null) {
-
-                $group_permission = '<a class="btn btn-sm"  style="background-color: #7e7d7c;"  onclick="openAddModal(' . $row->id . ', ' . $row->group_id . ')">  <i class="fa fa-edit"></i> تعديل مجموعه</a>';
+                $inspectorExists = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$row->id])->exists();
+                $group_permission = !$inspectorExists
+                ?'<a class="btn btn-sm"  style="background-color: #7e7d7c;"  onclick="openAddModal(' . $row->id . ', ' . $row->group_id . ')">  <i class="fa fa-edit"></i> تعديل مجموعه</a>': '';
+                //$group_permission = '<a class="btn btn-sm"  style="background-color: #7e7d7c;"  onclick="openAddModal(' . $row->id . ', ' . $row->group_id . ')">  <i class="fa fa-edit"></i> تعديل مجموعه</a>';
             } else {
                 $group_permission = '<a class="btn btn-sm"  style="background-color: green;"  onclick="openAddModal(' . $row->id . ',0)">   <i class="fa fa-plus"></i> أضافه</a>';
             }
@@ -134,11 +136,10 @@ class InspectorController extends Controller
             $edit_permission =  '<a href="' . route('inspectors.edit', $row->id) . '" class="btn btn-sm"  style="background-color: #F7AF15;">
                                             <i class="fa fa-edit"></i> تعديل
                                         </a>';
-                                        $remove_permission = '<a class="btn btn-sm" style=" background-color: #E3641E;"  onclick="openTransferModal(' . $row->id . ')">   <i class="fa-solid fa-user-tie"></i> تحويل لموظف</a>';
 
-            // $remove_permission =  '<a href="' . route('inspectors.remove', $row->id) . '" class="btn btn-sm"  style=" background-color: #E3641E;">
-            //                            <i class="fa-solid fa-user-tie"></i> تحويل لموظف
-            //                         </a>';
+            $remove_permission =  '<a class="btn btn-sm" style="background-color: #E3641E;" onclick="openTransferModal(' . $row->id . ')">
+                       <i class="fa-solid fa-user-tie"></i> تحويل لموظف
+                   </a>';
             return  $show_permission . ' ' . $edit_permission . ' ' . $group_permission . ' ' . $remove_permission;
         })
             ->addColumn('name', function ($row) {
@@ -210,15 +211,15 @@ class InspectorController extends Controller
     {
         //dd($request);
         $inspector = Inspector::find($request->id_employee);
-        if(!$inspector){
+        if (!$inspector) {
 
             return redirect()->back()
-            ->with('error', 'تعذر الحصول على بيانات المفتش ')
-            ->with('showModal', false);
+                ->with('error', 'تعذر الحصول على بيانات المفتش ')
+                ->with('showModal', false);
         }
-        $group =$inspector->group_id;
+        $group = $inspector->group_id;
 
-         $inspector->group_id= null;
+        $inspector->group_id = null;
         $inspector->flag = 1;
 
         $inspector->save();
@@ -253,9 +254,9 @@ class InspectorController extends Controller
             $inspector_mission->delete();
         }
         return redirect()->back()
-        ->with('success', 'تم تحويل المفتش لموظف')
-        ->with('showModal', true);
-      //  return redirect()->back()->with('تم تحويل المفتش لموظف');
+            ->with('success', 'تم تحويل المفتش لموظف')
+            ->with('showModal', true);
+        //  return redirect()->back()->with('تم تحويل المفتش لموظف');
     }
     public function store(Request $request)
     {
