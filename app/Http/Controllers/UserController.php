@@ -124,19 +124,38 @@ class UserController extends Controller
             }
         }
 
+        foreach ($data as $user) {
+            $user->has_inspector_record = $user->inspectors()->exists(); // Assuming 'inspector' is a relationship on 'User'
+        }
 
+        return DataTables::of($data)
+        ->addColumn('action', function ($row) {
+            // Use has_inspector_record to conditionally show "Unassigned" button
+            $useredit = route('user.edit', $row->id);
+            $usershow = route('user.show', $row->id);
+            $unsigned = route('user.unsigned', $row->id);
+            $visibility = $row->department_id !== null ? 'd-block-inline' : 'd-none';
+            $unassignedButton = !$row->has_inspector_record ?
+                "<a href='{$unsigned}' class='btn btn-sm {$visibility}' style='background-color: #28a39c;'>
+                    <i class='fa-solid fa-user-minus'></i> الغاء التعيين
+                </a>" : '';
 
-        return DataTables::of($data)->addColumn('action', function ($row) {
-
-            return $row;
+            return "
+                <a href='{$usershow}' class='btn btn-sm' style='background-color: #274373;'>
+                    <i class='fa fa-eye'></i> عرض
+                </a>
+                <a href='{$useredit}' class='btn btn-sm' style='background-color: #F7AF15;'>
+                    <i class='fa fa-edit'></i> تعديل
+                </a>
+                {$unassignedButton}
+            ";
         })
-            ->addColumn('department', function ($row) { // New column for departments count
-
-                $department = departements::where('id', $row->department_id)->pluck('name')->first();
-                return $department;
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+        ->addColumn('department', function ($row) {
+            $department = Departements::where('id', $row->department_id)->pluck('name')->first();
+            return $department;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
     }
 
     // public function login(Request $request)
