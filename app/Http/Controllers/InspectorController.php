@@ -225,34 +225,34 @@ class InspectorController extends Controller
         $inspector->save();
         $inspectorIds[] = $request->id_employee;
         $removedInspectors = [];
+        $value_remove = $request->id_employee;
 
-        $currentGroups = GroupTeam::where('group_id', $group)->get();
+        $groupTeam = GroupTeam::where('group_id', $group)->get();
 
-        foreach ($currentGroups as $currentGroup) {
+        foreach ($groupTeam as $currentGroup) {
             $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
 
             // Identify inspectors that are no longer in the new list
-            $inspectorsToRemove = array_diff($currentInspectorIds, $inspectorIds);
 
-            if (empty($inspectorsToRemove)) {
-                // No inspectors to remove; clear the field
-                $currentGroup->inspector_ids = null;
-                if ($currentGroup->inspector_manager == $request->id_employee) {
-                    $currentGroup->inspector_manager = null;
-                }
+            // $inspectorsToRemove = array_filter($currentInspectorIds, $request->id_employee);
+            $updatedInspectorIds = array_filter($currentInspectorIds, function ($id) use ($value_remove) {
+                return $id != $value_remove;
+            });
+
+            if (empty($updatedInspectorIds)) {
+                // If no inspectors left, set it to NULL
+                $groupTeam->inspector_ids = null;
             } else {
-                // Remove inspectors and update the `inspector_ids` field once
-                $updatedInspectorIds = array_diff($currentInspectorIds, $inspectorsToRemove);
-                $currentGroup->inspector_ids = implode(',', $updatedInspectorIds);
-
-                // Check if the removed inspector was a manager and clear `inspector_manager` if needed
-                if (in_array($currentGroup->inspector_manager, $inspectorsToRemove)) {
-                    $currentGroup->inspector_manager = null;
-                }
+                // Otherwise, re-implode the updated IDs back into a comma-separated string
+                $groupTeam->inspector_ids = implode(',', $updatedInspectorIds);
+            }
+            // Check if the removed inspector was the manager
+            if ($groupTeam->inspector_manager == $value_remove) {
+                $groupTeam->inspector_manager = null;
             }
 
             // Save changes to the group
-            $currentGroup->save();
+            $groupTeam->save();
         }
 
 
