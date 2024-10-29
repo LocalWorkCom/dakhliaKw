@@ -542,9 +542,16 @@ class UserController extends Controller
         ]);
         $user = User::find($id);
         $user->department_id  = Null;
+        $user->rule_id  = Null;
+        $user->password  = Null;
         $user->save();
         // $id = 1;
+        // $unsigned = Departements::where('manger', $id)->first();
 
+        // if ($unsigned) {
+        //     $unsigned->manger = null;
+        //     $unsigned->save();
+        // }
         return redirect()->back()->with('success', 'تم الغاء تعيين الموظف بنجاح');
     }
 
@@ -806,7 +813,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request);
+         //dd($request);
         $user = User::find($id);
 
         $military_number = $request->solderORcivil === 'military' ? $request->military_number : null;
@@ -924,7 +931,7 @@ class UserController extends Controller
         }
 
         $user->save();
-
+       // dd($user);
         $id = $user->flag == "user" ? "0" : "1";
         session()->flash('success', 'تم الحفظ بنجاح.');
         if ($user->flag == "user") {

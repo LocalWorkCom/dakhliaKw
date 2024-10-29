@@ -62,9 +62,6 @@
                         <div class="form-row pt-5 pb-3 d-flex justify-content-around flex-row-reverse"
                             style="background-color:#f5f8fd; border-bottom:0.1px solid lightgray;">
                             <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
-                                {{-- {{ dd($user->type) }} --}}
-                                {{-- <!--   @if ($user->type == 'man') --}}
-
                                 <div class="radio-btns mx-md-4 ">
                                     <input type="radio" class="form-check-input" id="male" name="gender"
                                         value="man" style="height:20px; width:20px;"
@@ -77,21 +74,6 @@
                                         @if ($user->type == 'female') checked @endif>
                                     <label class="form-check-label mx-md-2" for="female">انثى</label>
                                 </div>
-
-                                {{-- @else --}}
-
-                                <!-- <div class="radio-btns mx-md-4 ">
-                                                                                        <input type="radio" class="form-check-input" id="male" name="gender"
-                                                                                            value="man" style="height:20px; width:20px;">
-                                                                                        <label class="form-check-label mx-2" for="male">ذكر</label>
-                                                                                    </div>
-                                                                                    <div class="radio-btns mx-md-4 ">
-                                                                                        <input type="radio" class="form-check-input" id="female" name="gender"
-                                                                                            value="female" style="height:20px; width:20px;" checked>
-                                                                                        <label class="form-check-label mx-md-2" for="female">انثى</label>
-                                                                                    </div> -->
-
-                                {{-- @endif --> --}}
                                 <label for="input44">الفئة</label>
                             </div>
                             <div class="form-group d-flex  justify-content-center col-md-5 mx-2 pb-2">
@@ -615,8 +597,8 @@
                     $('#input12Div').fadeOut('fast');
                 }
                 $('#military_number_id').fadeOut('fast');
-                /*  $('#police').prop('checked', false);
-                 $('#police_').prop('checked', true); */
+                  $('#police').prop('checked', false);
+                 $('#police_').prop('checked', true);
             }
 
             // Check initial selection
