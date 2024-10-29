@@ -237,6 +237,9 @@ class InspectorController extends Controller
             if (empty($inspectorsToRemove)) {
                 // No inspectors to remove; clear the field
                 $currentGroup->inspector_ids = null;
+                if ($currentGroup->inspector_manager == $request->id_employee) {
+                    $currentGroup->inspector_manager = null;
+                }
             } else {
                 // Remove inspectors and update the `inspector_ids` field once
                 $updatedInspectorIds = array_diff($currentInspectorIds, $inspectorsToRemove);
