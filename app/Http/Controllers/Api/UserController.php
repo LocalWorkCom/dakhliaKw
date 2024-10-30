@@ -266,7 +266,7 @@ class UserController extends Controller
             return $this->respondError('Validation Error.', $validator->errors(), 400);
         }
 
-        $user = User::where('military_number', $request->military_number)->join('inspectors', 'user_id', 'users.id')->first();
+        $user = User::where('military_number', $request->military_number)->orWhere('Civil_number', $request->military_number)->join('inspectors', 'user_id', 'users.id')->first();
 
         if ($user) {
             // $success['user'] = $user->only(['id', 'name', 'email', 'phone', 'country_code', 'code','image']);
