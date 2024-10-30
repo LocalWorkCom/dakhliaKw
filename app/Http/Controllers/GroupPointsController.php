@@ -185,7 +185,7 @@ $available = Grouppoint::where('government_id', $government)
         $pointsIDs = is_array($request->pointsIDs) ? $request->pointsIDs : json_decode($request->pointsIDs, true);
 
         // Retrieve the old points_ids from the database
-       
+
 
         // Find removed values
         $removedPointsIDs = array_diff($oldPointsIDs, $pointsIDs);
@@ -223,6 +223,8 @@ $available = Grouppoint::where('government_id', $government)
 }
 
         return redirect()->route('points.index')->with('message', 'تم تعديل مجموعه ');
+
+
     }
 
     /**
