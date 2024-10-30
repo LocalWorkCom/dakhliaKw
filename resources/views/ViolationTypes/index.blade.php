@@ -276,28 +276,26 @@
           $('.select2').select2({
             dir: "rtl"
         });
-       
+
         function openedit(id, name, selectedTypesJson) {
             console.log('Opening edit modal for ID:', id);
             console.log('Selected Types JSON:', selectedTypesJson);
 
             let selectedTypes;
             try {
-                // Directly parse the JSON without additional replacements
                 selectedTypes = JSON.parse(selectedTypesJson);
             } catch (e) {
                 console.error('Error parsing selected types JSON:', e);
-                return; // Exit if JSON parsing fails
+                return;
             }
 
-            // Set modal fields
             document.getElementById('idedit').value = id;
             document.getElementById('nameedit').value = name;
 
             // Multi-select handling
             let multiSelectElement = document.getElementById('types');
             Array.from(multiSelectElement.options).forEach(option => {
-                option.selected = selectedTypes.includes(option.value); // Set selection based on parsed JSON
+                option.selected = selectedTypes.includes(option.value);
             });
             $('#types').val(selectedTypes).trigger('change');
 
