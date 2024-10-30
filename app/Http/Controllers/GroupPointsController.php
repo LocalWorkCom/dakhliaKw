@@ -105,40 +105,40 @@ class GroupPointsController extends Controller
      */
     public function edit(string $id)
     {
-        $data = Grouppoint::findOrFail($id);
-        // dd($data);
-        // Fetch the selected points
-        $selectedPoints = Point::whereIn('id', $data->points_ids)->get();
+         $data = Grouppoint::findOrFail($id);
+       $selected = is_string($data->points_ids) ? json_decode($data->points_ids, true) : (array) $data->points_ids;
 
-        // Get unique government IDs from the selected points
-        $governmentIds = $selectedPoints->pluck('government_id')->unique();
+// Get government_id
+$government = $data->government_id;
 
-        // Fetch all points for the same government
-        $allPoints = Point::whereIn('government_id', $governmentIds)->get();
+// Get available points_ids
+$available = Grouppoint::where('government_id', $government)
+    ->where('flag', 0)
+    ->where('deleted', 0)
+    ->pluck('points_ids')
+    ->flatMap(function ($json) {
+        // Check if the item is a string before decoding
+        return is_string($json) ? json_decode($json, true) : (array) $json; // Decode each JSON string or cast to array
+    })
+    ->toArray();
 
-        // Get all points in the Grouppoint table that belong to the same government(s)
-        $pointsInGroup = Grouppoint::whereIn('government_id', $governmentIds)
-            ->pluck('points_ids')
-            ->map(function ($item) {
-                return is_array($item) ? $item : json_decode($item, true); // Convert JSON/serialized data to array
-            })
-            ->flatten()
-            ->unique();
+        // Merge selected and available arrays
+        $merged = array_merge($selected, $available);
 
-        // Filter points to include only those that are not already in another group
-        $availablePoints = $allPoints->filter(function ($point) use ($pointsInGroup) {
-            return !$pointsInGroup->contains($point->id);
-        });
-        $mergedPoints = $pointsInGroup->merge($availablePoints->pluck('id')->toArray());
+        // Remove duplicates (optional)
+        $merged = array_unique($merged);
 
-        // Ensure uniqueness after merging
-        $mergedPoints = $mergedPoints->unique();
-        $points = Point::whereIn('id', $mergedPoints)->get();
+        // If needed, encode back to JSON
+        $mergedJson = array_values($merged); // This also re-indexes the array
+        //dd($mergedJson);
+        $points = Point::whereIn('id', $mergedJson)->get();
 
-        //dd($mergedPoints);
+        // Now you can use $mergedJson for your further logic or saving back to the database
 
-        //  $selectedPoints = $data->pluck('points_ids')->toArray();
-
+        return view('grouppoints.edit', [
+            'data' => $data,
+            'selectedPoints' => $points
+        ]);
 
         return view('grouppoints.edit', [
             'data' => $data,
