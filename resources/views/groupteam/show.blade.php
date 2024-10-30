@@ -152,7 +152,7 @@
                     <div class="form-group mt-4 mx-md-2 col-12 d-flex">
                         <button type="button" class="wide-btn"
                             onclick="window.location.href='{{ route('permission.create') }}'">
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">  
+                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                         </button>
                     </div>
                 </div> --}}
@@ -234,7 +234,7 @@
                     return `
                        <a href="` + teamShow + `" class="btn btn-sm" style="background-color: #274373;"> <i class="fa fa-eye"></i>عرض  </a>
                        <a href="` + teamEdit + `" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i> تعديل او اضافه مفتش </a>
-                     
+
                     `;
                 }
 
@@ -263,15 +263,16 @@
             },
             "pagingType": "full_numbers",
             "fnDrawCallback": function(oSettings) {
-                console.log('Page ' + this.api().page.info().pages)
-                var page = this.api().page.info().pages;
-                console.log($('#users-table tr').length);
-                if (page == 1) {
-                    //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                    $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
+                    var api = this.api();
+                    var pageInfo = api.page.info();
 
+                    // Check if the total number of records is less than or equal to the number of entries per page
+                    if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+                    } else {
+                        $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
+                    }
                 }
-            }
 
         });
     });

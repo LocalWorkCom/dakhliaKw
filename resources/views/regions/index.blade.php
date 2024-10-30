@@ -1,11 +1,8 @@
 @extends('layout.main')
 @push('style')
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
-    <script type="text/javascript" charset="utf8"
-        src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
-    <script type="text/javascript" charset="utf8"
-        src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
     </script>
 @endpush
 @section('title')
@@ -19,11 +16,8 @@
                 <div class="d-flex justify-content-between">
                     <p> المنـــاطق</p>
                     {{-- @if (Auth::user()->hasPermission('create Region')) --}}
-                    <button type="button" class="btn-all  " onclick="openadd()"
-                        style="color: #0D992C;">
-                        اضافة منطقة جديدة <img
-                            src="{{ asset('frontend/images/add-btn.svg') }}"
-                            alt="img">
+                    <button type="button" class="btn-all  " onclick="openadd()" style="color: #0D992C;">
+                        اضافة منطقة جديدة <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
                     {{-- @endif --}}
                 </div>
@@ -38,12 +32,12 @@
                     <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
                         <!-- {{-- @if (Auth::user()->hasPermission('create Region')) --}}
 
-                                                    <button type="button" class="btn-all  "
-                                                    onclick="openadd()" style="color: #0D992C;">
+                                                        <button type="button" class="btn-all  "
+                                                        onclick="openadd()" style="color: #0D992C;">
 
-                                                        اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                                    </button>
-                                                    {{-- @endif --}} -->
+                                                            اضافة جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                                        </button>
+                                                        {{-- @endif --}} -->
 
                         <div class="form-group moftsh  mx-3  d-flex">
                             <h4 style="margin-left:10px;line-height: 1.8;"> تصفية حسب </h4>
@@ -52,8 +46,7 @@
                                 style="text-align: center; color:#ff8f00;height: 40px;font-size: 19px; padding-inline:10px;">
                                 <option value="" selected disabled> المحافظه</option>
                                 @foreach (getgovernments() as $government)
-                                    <option value="{{ $government->id }}"
-                                        @if ($government->id == $id) selected @endif>
+                                    <option value="{{ $government->id }}" @if ($government->id == $id) selected @endif>
                                         {{ $government->name }}</option>
                                 @endforeach
                             </select>
@@ -93,8 +86,7 @@
     </section>
 
     {{-- this for add form --}}
-    <div class="modal fade" id="add" tabindex="-1"
-        aria-labelledby="representativeLabel" aria-hidden="true">
+    <div class="modal fade" id="add" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -139,8 +131,7 @@
     </div>
 
     {{-- this for edit form --}}
-    <div class="modal fade" id="edit" tabindex="-1"
-        aria-labelledby="representativeLabel" aria-hidden="true">
+    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="representativeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -223,9 +214,7 @@
     </div> --}}
 @endsection
 @push('scripts')
-    <script
-        src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
     <script>
         $('.select2').select2({
@@ -324,7 +313,7 @@
 
         $(document).ready(function() {
             $.fn.dataTable.ext.classes.sPageButton =
-            'btn-pagination btn-sm'; // Change Pagination Button Class
+                'btn-pagination btn-sm'; // Change Pagination Button Class
 
             table = $('#users-table').DataTable({
                 processing: true,
@@ -334,8 +323,8 @@
                     url: '{{ route('getAllregions') }}',
                     data: function(d) {
                         d.government_id = $(
-                            '#government-select')
-                    .val(); // Add government_id to request
+                                '#government-select')
+                            .val(); // Add government_id to request
                     }
                 },
                 columns: [{
@@ -374,13 +363,14 @@
                 },
                 "pagingType": "full_numbers",
                 "fnDrawCallback": function(oSettings) {
-                    console.log('Page ' + this.api().page.info().pages)
-                    var page = this.api().page.info().pages;
-                    console.log($('#users-table tr').length);
-                    if (page == 1) {
-                        //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                        $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
+                    var api = this.api();
+                    var pageInfo = api.page.info();
 
+                    // Check if the total number of records is less than or equal to the number of entries per page
+                    if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+                    } else {
+                        $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
                     }
                 }
             });
@@ -401,7 +391,7 @@
                 });
             $('#government-select').change(function() {
                 table.ajax
-            .reload(); // Reload DataTable data on dropdown change
+                    .reload(); // Reload DataTable data on dropdown change
             });
         });
 

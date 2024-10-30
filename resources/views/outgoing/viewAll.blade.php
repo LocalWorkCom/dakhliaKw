@@ -16,18 +16,18 @@
                     <p> الصـــــــــادرات</p>
                     <div class="form-group ">
                         @if (Auth::user()->hasPermission('archive outgoings'))
-                        <button type="button" class="btn-all mx-3 "
-                            onclick="window.location.href='{{ route('Export.AllArchive') }}'" style="color: #C1920C;">
-                            عرض الارشيف
-                            <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
-                        </button>
+                            <button type="button" class="btn-all mx-3 "
+                                onclick="window.location.href='{{ route('Export.AllArchive') }}'" style="color: #C1920C;">
+                                عرض الارشيف
+                                <img src="{{ asset('frontend/images/archive-btn.svg') }}" alt="img">
+                            </button>
                         @endif
                         @if (Auth::user()->hasPermission('create outgoings'))
-                        <button type="button" class="btn-all  "
-                            onclick="window.location.href='{{ route('Export.create') }}'" style="color: #0D992C;">
-                            اضافة جديد
-                            <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                        </button>
+                            <button type="button" class="btn-all  "
+                                onclick="window.location.href='{{ route('Export.create') }}'" style="color: #0D992C;">
+                                اضافة جديد
+                                <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                            </button>
                         @endif
                     </div>
                 </div>
@@ -39,7 +39,7 @@
             <div class="container  col-11 mt-3 p-0 ">
 
                 <div class="row " dir="rtl">
-                  <div class="form-group mt-4  mx-2 col-12 d-flex ">
+                    <div class="form-group mt-4  mx-2 col-12 d-flex ">
                         {{-- @if (Auth::user()->hasPermission('archive outgoings'))
                         <button type="button" class="btn-all mx-3 "
                             onclick="window.location.href='{{ route('Export.AllArchive') }}'" style="color: #C1920C;">
@@ -55,7 +55,7 @@
                         </button>
                         @endif --}}
 
-                    </div> 
+                    </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="bg-white ">
@@ -65,7 +65,8 @@
                             </div>
                         @endif
                         <div>
-                            <table id="users-table" class="display table table-responsive-sm  table-bordered table-hover dataTable">
+                            <table id="users-table"
+                                class="display table table-responsive-sm  table-bordered table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>رقم الصادر</th>
@@ -184,43 +185,46 @@
                         searchable: false
                     }
                 ],
-                order: [[1, 'desc']],
+                order: [
+                    [1, 'desc']
+                ],
 
                 "oLanguage": {
-                                "sSearch": "",
-                                "sSearchPlaceholder":"بحث",
-                                                                            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
-                                            "sInfoEmpty": 'لا توجد بيانات متاحه',
-                                            "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
-                                            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
-                                            "sZeroRecords": 'نأسف لا توجد نتيجة',
-                                            "oPaginate": {
-                                                "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
-                                                "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
-                                                "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
-                                                "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
-                                                    }
+                    "sSearch": "",
+                    "sSearchPlaceholder": "بحث",
+                    "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+                    "sInfoEmpty": 'لا توجد بيانات متاحه',
+                    "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
+                    "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+                    "sZeroRecords": 'نأسف لا توجد نتيجة',
+                    "oPaginate": {
+                        "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
+                        "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
+                        "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
+                        "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
+                    }
 
 
-                                        },
-                                        layout: {
-                                            bottomEnd: {
-                                                paging: {
-                                                    firstLast: false
-                                                }
-                                            }
-                                        },
-                                         "pagingType": "full_numbers",
-                                         "fnDrawCallback": function(oSettings) {
-                                            console.log('Page '+this.api().page.info().pages)
-                                            var page=this.api().page.info().pages;
-                                            console.log($('#users-table tr').length);
-                                            if (page ==1) {
-                                            //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                                $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                },
+                layout: {
+                    bottomEnd: {
+                        paging: {
+                            firstLast: false
+                        }
+                    }
+                },
+                "pagingType": "full_numbers",
+                "fnDrawCallback": function(oSettings) {
+                    var api = this.api();
+                    var pageInfo = api.page.info();
 
-                                            }
-                                    }
+                    // Check if the total number of records is less than or equal to the number of entries per page
+                    if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+                    } else {
+                        $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
+                    }
+                }
 
             });
 

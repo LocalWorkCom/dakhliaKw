@@ -53,7 +53,7 @@
                                         <th>القطاع </th>
                                         <th>المحافظه</th>
                                         <th>المنطقه</th>
-                                     
+
                                         <th>دوام النقطه</th>
                                         <th style="width:150px;">العمليات</th>
                                     </tr>
@@ -70,88 +70,60 @@
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm';
-            var table = $('#users-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '{{ route('getAllpoints') }}',
-                }, // Correct URL concatenation
-                columns: [{
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'group_name',
-                        name: 'group_name'
-                    },
-                    {
-                        data: 'sector_name',
-                        name: 'sector_name'
-                    },
-                    {
-                        data: 'government_name',
-                        name: 'government_name'
-                    },
-                    {
-                        data: 'region_name',
-                        name: 'region_name'
-                    },
-                   
-                    {
-                        data: 'work_type',
-                        name: 'work_type'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        sWidth: '100px',
-                        orderable: false,
-                        searchable: false
-                    }
-                ],
-                order: [
-                    [1, 'desc']
-                ],
-                "oLanguage": {
-                    "sSearch": "",
-                    "sSearchPlaceholder": "بحث",
-                    "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
-                    "sInfoEmpty": 'لا توجد بيانات متاحه',
-                    "sInfoFiltered": '(تم تصفية  من _MAX_ اجمالى البيانات)',
-                    "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
-                    "sZeroRecords": 'نأسف لا توجد نتيجة',
-                    "oPaginate": {
-                        "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>', // This is the link to the first page
-                        "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>', // This is the link to the previous page
-                        "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>', // This is the link to the next page
-                        "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>' // This is the link to the last page
-                    }
+      $(document).ready(function() {
+    $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm';
 
+    var table = $('#users-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '{{ route('getAllpoints') }}',
+        },
+        columns: [
+            { data: 'name', name: 'name' },
+            { data: 'group_name', name: 'group_name' },
+            { data: 'sector_name', name: 'sector_name' },
+            { data: 'government_name', name: 'government_name' },
+            { data: 'region_name', name: 'region_name' },
+            { data: 'work_type', name: 'work_type' },
+            {
+                data: 'action',
+                name: 'action',
+                sWidth: '100px',
+                orderable: false,
+                searchable: false
+            }
+        ],
+        order: [[1, 'desc']],
+        "oLanguage": {
+            "sSearch": "",
+            "sSearchPlaceholder": "بحث",
+            "sInfo": 'اظهار صفحة _PAGE_ من _PAGES_',
+            "sInfoEmpty": 'لا توجد بيانات متاحه',
+            "sInfoFiltered": '(تم تصفية من _MAX_ اجمالى البيانات)',
+            "sLengthMenu": 'اظهار _MENU_ عنصر لكل صفحة',
+            "sZeroRecords": 'نأسف لا توجد نتيجة',
+            "oPaginate": {
+                "sFirst": '<i class="fa fa-fast-backward" aria-hidden="true"></i>',
+                "sPrevious": '<i class="fa fa-chevron-left" aria-hidden="true"></i>',
+                "sNext": '<i class="fa fa-chevron-right" aria-hidden="true"></i>',
+                "sLast": '<i class="fa fa-step-forward" aria-hidden="true"></i>'
+            }
+        },
+        "pagingType": "full_numbers",
+        "fnDrawCallback": function(oSettings) {
+            var api = this.api();
+            var pageInfo = api.page.info();
 
-                },
-                layout: {
-                    bottomEnd: {
-                        paging: {
-                            firstLast: false
-                        }
-                    }
-                },
-                "pagingType": "full_numbers",
-                "fnDrawCallback": function(oSettings) {
-                                     console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+            // Check if the total number of records is less than or equal to the number of entries per page
+            if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+            } else {
+                $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
+            }
+        }
+    });
+});
 
-                                        }
-                                    }
-            });
-
-
-        });
     </script>
 @endpush

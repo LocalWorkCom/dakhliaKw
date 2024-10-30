@@ -19,7 +19,7 @@
                     <button type="button" class="btn-all  " onclick="window.location.href='{{ route('sectors.create') }}'"
                         style="color: #0D992C;">
 
-                        اضافة قطاع جديد  <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                        اضافة قطاع جديد <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
                     </button>
                 @endif
                 {{-- @endif --}}
@@ -32,14 +32,14 @@
         <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
             <div class="row " dir="rtl">
                 <!-- <div class="form-group mt-4  mx-md-2 col-12 d-flex ">
-                            {{-- @if (Auth::user()->hasPermission('create Sector')) --}}
-                            <button type="button" class="btn-all  "
-                            onclick="window.location.href='{{ route('sectors.create') }}'" style="color: #0D992C;">
-                                 <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
-                                اضافة قطاع جديد
-                            </button>
-                            {{-- @endif --}}
-                        </div> -->
+                                {{-- @if (Auth::user()->hasPermission('create Sector')) --}}
+                                <button type="button" class="btn-all  "
+                                onclick="window.location.href='{{ route('sectors.create') }}'" style="color: #0D992C;">
+                                     <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
+                                    اضافة قطاع جديد
+                                </button>
+                                {{-- @endif --}}
+                            </div> -->
             </div>
             <div class="col-lg-12">
                 <div class="bg-white">
@@ -127,15 +127,16 @@
                 },
                 "pagingType": "full_numbers",
                 "fnDrawCallback": function(oSettings) {
-                                     console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                    var api = this.api();
+                    var pageInfo = api.page.info();
 
-                                        }
-                                    }
+                    // Check if the total number of records is less than or equal to the number of entries per page
+                    if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+                    } else {
+                        $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
+                    }
+                }
             });
 
 
