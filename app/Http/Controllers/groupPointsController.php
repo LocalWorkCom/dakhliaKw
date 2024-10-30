@@ -35,57 +35,60 @@ class GroupPointsController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+       // print_r($request->all());
         $rules = [
             'name' => 'required|string',
             'governorate' => 'required|exists:governments,id',
-            'pointsIDs' => 'required|array|exists:group_points,id',
+           // 'pointsIDs' => 'required|array|exists:points,id',
+
         ];
 
+        // // Define custom messages
         $messages = [
             'name.required' => 'يجب ادخال اسم القطاع',
-            'governorate.required' => 'يجب اختيار محافظة',
-            'governorate.exists' => 'المحافظة المختارة غير موجودة',
-            'pointsIDs.required' => 'يجب اختيار نقطة واحدة على الأقل',
-            'pointsIDs.exists' => 'النقاط المختارة غير موجودة',
+            'name.string' => 'يجب ان لا يحتوى اسم القطاع على رموز',
+            'pointsIDs.required' => 'يجب اختيار نقطه واحده على الاقل',
+           // 'pointsIDs.exists' => ''
+
         ];
 
+        // // Validate the request
         $validatedData = Validator::make($request->all(), $rules, $messages);
+        //dd($validatedData->fails());
+        // // Validate the request
+        // $request->validate($rules, $messages);
         if ($validatedData->fails()) {
+
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
-        $sector_id = Sector::whereJsonContains('governments_IDs', $request->governorate)->value('id');
-        $pointsids = Grouppoint::whereIn('id', $request->pointsIDs)->pluck('points_ids')->toArray();
-        $ids = array_merge(...$pointsids);
+        $sector_id = Sector::whereJsonContains('governments_IDs',$request->governorate)->value('id');
+        $points_IDs=Grouppoint::whereIn('id',$request->pointsIDs)->pluck('points_ids')
+    ->flatMap(function ($item) {
+        // Decode only if $item is a JSON string
+        return is_string($item) ? json_decode($item, true) : $item;
+    })
+    ->filter() // Remove any null values (in case json_decode fails)
+    ->toArray();
+          //  dd($points_IDs);
 
         $points = new Grouppoint();
         $points->name = $request->name;
-        $points->points_ids = $ids;
+        $points->points_ids = $points_IDs;
         $points->government_id  = $request->governorate;
-        $points->sector_id  = $sector_id;
+        $points->sector_id  = $sector_id ;
         $points->flag  = 1;
+
         $points->save();
         $pointsIDs = is_array($request->pointsIDs) ? $request->pointsIDs : json_decode($request->pointsIDs, true);
-
-        $query = Grouppoint::where('flag', 0);
-
-        foreach ($pointsIDs as $pointID) {
-            $query->orWhereRaw('JSON_CONTAINS(points_ids, ?)', [json_encode((string) $pointID)]);
-        }
-
-        $deleted = $query->get();
-        // $deleted = Grouppoint::where('flag', 0)
-        //     ->whereIn('id', $pointsIDs)
-        //     ->get();
-
+        $deleted = Grouppoint::where('flag', 0)
+            ->whereIn('id',$pointsIDs)->get();
+            //dd($deleted);
         // Optional: Perform actions with the retrieved records
         foreach ($deleted as $record) {
             // Example action: Delete the record
-            $record->deleted = 1;
+            $record->deleted=1;
             $record->save();
         }
-       // dd($request->pointsIDs, $pointsIDs,$deleted);
-
         return redirect()->route('points.index')->with('message', 'تم أضافه مجموعه');
     }
 
@@ -103,52 +106,45 @@ class GroupPointsController extends Controller
     public function edit(string $id)
     {
         $data = Grouppoint::findOrFail($id);
-       // dd($data->government_id);
-        // Decode points_ids if it is a JSON string; otherwise, use it as is
-        $pointsIds = is_array($data->points_ids) ? $data->points_ids : json_decode($data->points_ids, true);
-        $selectedPoints = Point::whereIn('id', $pointsIds)->get();
+        // dd($data);
+        // Fetch the selected points
+        $selectedPoints = Point::whereIn('id', $data->points_ids)->get();
 
         // Get unique government IDs from the selected points
         $governmentIds = $selectedPoints->pluck('government_id')->unique();
-       // dd($governmentIds);
+
         // Fetch all points for the same government
         $allPoints = Point::whereIn('government_id', $governmentIds)->get();
-        $groupPoints = GroupPoint::where('government_id', $governmentIds)
-        ->where('flag', 0)
-        ->where('deleted', 0)
-        ->get();
 
         // Get all points in the Grouppoint table that belong to the same government(s)
-        // $pointsInGroup = Grouppoint::whereIn('government_id', $governmentIds)
-        //     ->pluck('points_ids')->where('deleted', 0)->where('flag', 0)
-        //     ->map(function ($item) {
-        //         return is_array($item) ? $item : json_decode($item, true); // Convert JSON/serialized data to array
-        //     })
-        //     ->flatten()
-        //     ->unique();
-        //     dd($pointsInGroup);
-        // // Filter points to include only those that are not already in another group
-        // $availablePoints = $allPoints->filter(function ($point) use ($pointsInGroup) {
-        //     return $pointsInGroup->contains($point->id);
-        // });
-        // Collect IDs from available points
-        $availablePointIds = $groupPoints->pluck('points_ids')->unique();
-       // dd($data ,$pointsIds,$selectedPoints,$availablePoints,$availablePointIds);
+        $pointsInGroup = Grouppoint::whereIn('government_id', $governmentIds)
+            ->pluck('points_ids')
+            ->map(function ($item) {
+                return is_array($item) ? $item : json_decode($item, true); // Convert JSON/serialized data to array
+            })
+            ->flatten()
+            ->unique();
 
+        // Filter points to include only those that are not already in another group
+        $availablePoints = $allPoints->filter(function ($point) use ($pointsInGroup) {
+            return !$pointsInGroup->contains($point->id);
+        });
+        $mergedPoints = $pointsInGroup->merge($availablePoints->pluck('id')->toArray());
 
-        // Merge selected points with available points
-        $mergedPointIds = $selectedPoints->pluck('id')->merge($availablePointIds);
+        // Ensure uniqueness after merging
+        $mergedPoints = $mergedPoints->unique();
+        $points = Point::whereIn('id', $mergedPoints)->get();
 
-        // Fetch the final set of points by their IDs
-        $finalPoints = Point::whereIn('id', $mergedPointIds)->get();
+        //dd($mergedPoints);
+
+        //  $selectedPoints = $data->pluck('points_ids')->toArray();
+
 
         return view('grouppoints.edit', [
             'data' => $data,
-            'selectedPoints' => $finalPoints
+            'selectedPoints' => $points
         ]);
     }
-
-
 
     /**
      * Update the specified resource in storage.
@@ -167,7 +163,7 @@ class GroupPointsController extends Controller
             'name.required' => 'يجب ادخال اسم القطاع',
             'name.string' => 'يجب ان لا يحتوى اسم القطاع على رموز',
             'pointsIDs.required' => 'يجب اختيار نقطه واحده على الاقل',
-            'pointsIDs.exists' => 'النقاط المختارة غير موجودة',
+            'pointsIDs.exists' => ''
 
         ];
         // // Validate the request
@@ -176,7 +172,7 @@ class GroupPointsController extends Controller
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
-        // dd($id);
+       // dd($id);
         $points = Grouppoint::find($request->id);
         $oldPointsIDs = $points->points_ids;
         $points->name = $request->name;
@@ -194,7 +190,7 @@ class GroupPointsController extends Controller
         // Find removed values
         $removedPointsIDs = array_diff($oldPointsIDs, $pointsIDs);
 
-        //dd($removedPointsIDs);
+//dd($removedPointsIDs);
 
         // Handle deletion of records with flag = 0 and matching points_ids
         $deleted = Grouppoint::where('flag', 0)
@@ -206,18 +202,26 @@ class GroupPointsController extends Controller
             ->get();
 
         foreach ($deleted as $record) {
-            $record->deleted = 1;
-            $record->save();
+            // Optional: Perform actions with the retrieved records
+            $record->delete();
         }
         // Add removed values to Grouppoint with flag = 0
         foreach ($removedPointsIDs as $removedID) {
-            $idpoint = Grouppoint::where('flag', 0)
-                ->whereJsonContains('points_ids', $removedID)
-                ->first();
-            //dd($idpoint);
-            $idpoint->deleted = 0;
-            $idpoint->save();
+    $pointNew = Point::find($removedID);
+    if ($pointNew) { // Check if the Point exists
+        // Find the corresponding Grouppoint instance
+        $grouppoint = Grouppoint::where('points_ids', 'like', '%"' . $removedID . '"%')->first(); // Adjust query as needed
+//dd($pointNew ,$removedID,$grouppoint);
+
+        if ($grouppoint) { // Ensure the Grouppoint exists
+            $grouppoint->update([
+                'deleted' => 0,
+                'flag' => 0,
+            ]);
         }
+    }
+}
+
         return redirect()->route('points.index')->with('message', 'تم تعديل مجموعه ');
     }
 
