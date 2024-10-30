@@ -31,32 +31,42 @@ class ViollationController extends Controller
     //
     public function index(Request $request)
     {
-        $groups = Groups::all();
         $userDepartmentId = Auth::user()->department_id;
-        $inspectors_group = Inspector::with('user')->where('flag', 0)
-            ->whereHas('user', function ($query) use ($userDepartmentId) {
-                $query->where('department_id', $userDepartmentId);
-            })->select('group_id')
-            ->groupBy('group_id')->pluck('group_id');
-        if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
+        $isAdmin = in_array(Auth::user()->rule->name, ['localworkadmin', 'superadmin']);
+
+        // Fetch groups and inspectors based on user role
+        if ($isAdmin) {
             $groups = Groups::all();
             $groupTeams = GroupTeam::all();
             $inspectors = Inspector::all();
         } else {
-            $groups = Groups::whereIn('id', $inspectors_group)->get();
-            $groupTeams = GroupTeam::whereIn('group_id', $inspectors_group)->get();
-            $userDepartmentId = Auth::user()->department_id;
-            $inspectors = Inspector::with('user')->where('flag', 0)
+            $inspectors_group = Inspector::with('user')
+                ->where('flag', 0)
                 ->whereHas('user', function ($query) use ($userDepartmentId) {
                     $query->where('department_id', $userDepartmentId);
-                })->get();
+                })
+                ->select('group_id')
+                ->groupBy('group_id')
+                ->pluck('group_id');
+
+            $groups = Groups::whereIn('id', $inspectors_group)->get();
+            $groupTeams = GroupTeam::whereIn('group_id', $inspectors_group)->get();
+            $inspectors = Inspector::with('user')
+                ->where('flag', 0)
+                ->whereHas('user', function ($query) use ($userDepartmentId) {
+                    $query->where('department_id', $userDepartmentId);
+                })
+                ->get();
         }
+
         $date = $request->date;
         $group = $request->group;
         $team = $request->team;
         $inspector = $request->inspector;
+
         return view('violations.index', compact('groups', 'groupTeams', 'inspectors', 'date', 'group', 'team', 'inspector'));
     }
+
     public function getViolations(Request $request)
     {
         $date = $request->date;
