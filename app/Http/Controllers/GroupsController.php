@@ -106,6 +106,27 @@ class GroupsController extends Controller
 
         return view('group.inspector', compact('inspectors', 'inspectorsIngroup', 'id', 'group'));
     }
+    public function searchInspectors(Request $request)
+{
+    $searchTerm = $request->get('search');
+    $departmentId = auth()->user()->department_id; // Get the current user's department ID
+
+    $inspectors = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
+        ->where('inspectors.flag', 0)
+        ->where(function ($query) use ($searchTerm, $departmentId) {
+            $query->where('inspectors.name', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('users.name', 'LIKE', "%{$searchTerm}%");
+        })
+        ->where(function ($query) {
+            // Ensure to filter based on group assignment
+            $query->whereNull('inspectors.group_id');
+        })
+        ->select("inspectors.*")
+        ->get();
+
+    return response()->json($inspectors);
+}
+
 
     public function groupAddInspectors(Request $request, $id)
     {
