@@ -82,6 +82,7 @@ class VacationController  extends Controller
                 }
             } elseif ($value->status != 'Rejected' && $value->end_date) {
                 if ($value->end_date >= $request->start_date && $value->start_date <= $request->start_date) {
+                    
                     return $this->respondError('Duplicate vacation ', ['error' => 'يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف'], 403);
 
                     // return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
@@ -118,7 +119,7 @@ class VacationController  extends Controller
     }
     function getAllVacations(Request $request)
     {
-        $baseUrl = url('/'); 
+        $baseUrl = url('/');
 
         $PendingVacations = EmployeeVacation::leftJoin('countries', 'employee_vacations.country_id', '=', 'countries.id')
             ->leftJoin('vacation_types', 'employee_vacations.vacation_type_id', '=', 'vacation_types.id')
