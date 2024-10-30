@@ -67,9 +67,16 @@ class GroupPointsController extends Controller
         $points->save();
         $pointsIDs = is_array($request->pointsIDs) ? $request->pointsIDs : json_decode($request->pointsIDs, true);
 
-        $deleted = Grouppoint::where('flag', 0)
-            ->whereIn('id', $pointsIDs)
-            ->get();
+        $query = Grouppoint::where('flag', 0);
+
+        foreach ($pointsIDs as $pointID) {
+            $query->orWhereRaw('JSON_CONTAINS(points_ids, ?)', [json_encode((string) $pointID)]);
+        }
+
+        $deleted = $query->get();
+        // $deleted = Grouppoint::where('flag', 0)
+        //     ->whereIn('id', $pointsIDs)
+        //     ->get();
 
         // Optional: Perform actions with the retrieved records
         foreach ($deleted as $record) {
