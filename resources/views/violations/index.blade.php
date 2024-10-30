@@ -210,7 +210,7 @@
             }*/
         });
     </script>
-       <script>
+    <script>
         $(document).ready(function() {
             $('#date').on('change', function() {
                 const selectedDate = $(this).val();
@@ -372,19 +372,17 @@
 
         });
 
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const group = urlParams.get('group');
-            const team = urlParams.get('team');
-            const inspector = urlParams.get('inspector');
+        // window.onload = function() {
+        //     const urlParams = new URLSearchParams(window.location.search);
+        //     const group = urlParams.get('group');
+        //     const team = urlParams.get('team');
+        //     const inspector = urlParams.get('inspector');
 
-            // Check if any query parameters are set
-            if (group !== null || team !== null || inspector !== null) {
-                // Redirect to the base URL without query parameters
-                window.location.href = "https://developement.testdomain100.online/viollation";
-            }
-        };
+        //     // Check if any query parameters are set
+        //     if (group !== null || team !== null || inspector !== null) {
+        //         // Redirect to the base URL without query parameters
+        //         window.location.href = "https://developement.testdomain100.online/viollation";
+        //     }
+        // };
     </script>
-
-
 @endpush
