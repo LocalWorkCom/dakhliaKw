@@ -312,17 +312,17 @@ class GroupTeamController extends Controller
         // Retrieve the new name and inspector IDs from the request
         $newName = $request->name;
         $service_order = $request->service_order;
-        $inspector_manager = $request->inspector_manager;
+       // $inspector_manager = $request->inspector_manager;
 
         $newInspectors = $request->inspectors_ids ? (array) $request->inspectors_ids : [];
         $oldInspectorIds = $team->inspector_ids ? explode(',', $team->inspector_ids) : [];
         // dd($newInspectors, $oldInspectorIds);
-        if ($inspector_manager != $team->inspector_manager) {
+        // if ($inspector_manager != $team->inspector_manager) {
 
-            if (!in_array($inspector_manager, $newInspectors)) {
-                $newInspectors[] = $inspector_manager;
-            }
-        }
+        //     if (!in_array($inspector_manager, $newInspectors)) {
+        //         $newInspectors[] = $inspector_manager;
+        //     }
+        // }
         foreach ($newInspectors as $key) {
             $inspector = Inspector::find($key);
             if ($inspector->group_id != $team->group_id) {
@@ -444,12 +444,12 @@ class GroupTeamController extends Controller
         }
 
         $team->name = $newName;
-        if (in_array($inspector_manager, $removedArr)) {
-            $team->inspector_manager = null;
-        } else {
+        // if (in_array($inspector_manager, $removedArr)) {
+        //     $team->inspector_manager = null;
+        // } else {
 
-            $team->inspector_manager = $inspector_manager;
-        }
+        //     $team->inspector_manager = $inspector_manager;
+        // }
         $team->working_tree_id = $request->working_tree_id;
         $team->service_order = ($service_order) ? $service_order : 0;
 

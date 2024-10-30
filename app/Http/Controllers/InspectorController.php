@@ -209,59 +209,54 @@ class InspectorController extends Controller
      */
     public function TransferToEmployee(Request $request)
     {
-        //dd($request);
         $inspector = Inspector::find($request->id_employee);
         if (!$inspector) {
-
             return redirect()->back()
                 ->with('error', 'تعذر الحصول على بيانات المفتش ')
                 ->with('showModal', false);
         }
-        $group = $inspector->group_id;
 
+        $group = $inspector->group_id;
         $inspector->group_id = null;
         $inspector->flag = 1;
-
         $inspector->save();
-        $inspectorIds[] = $request->id_employee;
-        $removedInspectors = [];
 
-        $currentGroups = GroupTeam::where('group_id', $group)->get();
+        $value_remove = $request->id_employee;
+        $groupTeams = GroupTeam::where('group_id', $group)->get();
 
-        foreach ($currentGroups as $currentGroup) {
+        foreach ($groupTeams as $currentGroup) {
             $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
 
-            // Identify inspectors that are no longer in the new list
-            $inspectorsToRemove = array_diff($currentInspectorIds, $inspectorIds);
+            // Remove the specified inspector ID from the group
+            $updatedInspectorIds = array_filter($currentInspectorIds, function ($id) use ($value_remove) {
+                return $id != $value_remove;
+            });
 
-            if (empty($inspectorsToRemove)) {
-                // No inspectors to remove; clear the field
-                $currentGroup->inspector_ids = null;
-                if ($currentGroup->inspector_manager == $request->id_employee) {
-                    $currentGroup->inspector_manager = null;
-                }
+            if (empty($updatedInspectorIds)) {
+                $currentGroup->inspector_ids = null; // Set to NULL if no inspectors left
             } else {
-                // Remove inspectors and update the `inspector_ids` field once
-                $updatedInspectorIds = array_diff($currentInspectorIds, $inspectorsToRemove);
-                $currentGroup->inspector_ids = implode(',', $updatedInspectorIds);
-
-                // Check if the removed inspector was a manager and clear `inspector_manager` if needed
-                if (in_array($currentGroup->inspector_manager, $inspectorsToRemove)) {
-                    $currentGroup->inspector_manager = null;
-                }
+                $currentGroup->inspector_ids = implode(',', $updatedInspectorIds); // Re-implode remaining IDs
             }
-            // Save changes to the group
+
+            // Save the updated group
             $currentGroup->save();
         }
 
-        $inspector_missions = InspectorMission::where('inspector_id', $request->id_employee)->where('date', '>=', today())->get();
-        foreach ($inspector_missions as  $inspector_mission) {
-            $inspector_mission->delete();
+        // Delete future inspector missions for the removed inspector
+        $inspectorMissions = InspectorMission::where('inspector_id', $request->id_employee)
+                                              ->where('date', '>=', today())
+                                              ->get();
+        addInspectorHistory($request->id_employee, $group, $currentGroup->id, 1);
+
+        foreach ($inspectorMissions as $inspectorMission) {
+            $inspectorMission->delete();
         }
+
         return redirect()->back()
             ->with('success', 'تم تحويل المفتش لموظف')
             ->with('showModal', true);
     }
+
     public function store(Request $request)
     {
         //  dd($request->all());

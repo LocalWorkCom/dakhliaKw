@@ -25,6 +25,7 @@ use Illuminate\Console\View\Components\Alert;
 use Illuminate\Validation\Rule as ValidationRule;
 use App\helper; // Adjust this namespace as per your helper file location
 use App\Models\Country;
+use App\Models\Inspector;
 use App\Models\Qualification;
 use App\Models\Region;
 use App\Models\Sector;
@@ -508,24 +509,20 @@ class UserController extends Controller
         $nationality = Country::all();
         $sector = Sector::all();
         $qualifications = Qualification::all();
-        // dd($user->department_id);
-        // if ($flag == "0") {
-        //     $alldepartment = departements::where('id', $user->department_id)->orwhere('parent_id', $user->department_id)->get();
-        // } else {
-        //     $alldepartment = departements::where('id', $user->public_administration)->orwhere('parent_id', $user->public_administration)->get();
-        // }
+
+        $inspectors=Inspector::where('flag',0)->pluck('user_id')->toArray();
 
         if (Auth::user()->rule->name == "localworkadmin" || Auth::user()->rule->name == "superadmin") {
-            $alluser = User::where('flag', 'employee')->get();
+            $alluser = User::where('flag', 'employee')->whereNotIn('id',$inspectors)->get();
         } else {
-            $alluser = User::where('flag', 'employee')
-                ->leftJoin('departements', 'departements.id', '=', 'users.department_id') // Use leftJoin to handle `department_id = null`
+            $alluser = User::where('flag', 'employee')->whereNotIn('id',$inspectors)
+                ->leftJoin('departements', 'departements.id', '=', 'users.department_id')
                 ->where(function ($query) {
-                    $query->where('users.department_id', Auth::user()->department_id) // Match user’s department
-                        ->orWhere('departements.parent_id', Auth::user()->department_id) // Match department’s parent ID
-                        ->orWhereNull('users.department_id'); // Include users without a department
+                    $query->where('users.department_id', Auth::user()->department_id)
+                        ->orWhere('departements.parent_id', Auth::user()->department_id)
+                        ->orWhereNull('users.department_id');
                 })
-                ->select('users.*') // Ensure only `users` columns are selected
+                ->select('users.*')
                 ->get();
         }
 
@@ -567,12 +564,12 @@ class UserController extends Controller
 
         $user->save();
         // $id = 1;
-        // $unsigned = Departements::where('manger', $id)->first();
+        $unsigned = Departements::where('manger', $id)->first();
 
-        // if ($unsigned) {
-        //     $unsigned->manger = null;
-        //     $unsigned->save();
-        // }
+        if ($unsigned) {
+            $unsigned->manger = null;
+            $unsigned->save();
+        }
         return redirect()->back()->with('success', 'تم الغاء تعيين الموظف بنجاح');
     }
 

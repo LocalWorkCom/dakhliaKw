@@ -70,7 +70,7 @@
                         <span class="text-danger">{{ $errors->first('working_tree_id') }}</span>
                     @endif
                 </div>
-                <div class="form-group col-md-11 mx-4">
+                {{-- <div class="form-group col-md-11 mx-4">
                     <label for="inspector_manager" class="d-flex justify-content-start pt-3 pb-2">اختر
                          مدير الدورية</label>
                     <select class="form-control select2" style="border: 0.2px solid rgb(199, 196, 196);width:100%;"name="inspector_manager" id="inspector_manager">
@@ -84,7 +84,7 @@
                     @if ($errors->has('inspector_manager'))
                         <span class="text-danger">{{ $errors->first('inspector_manager') }}</span>
                     @endif
-                </div>
+                </div> --}}
                 <div class="form-group mt-5 mx-4 col-10 mt-4 mb-3" hidden>
 
                     <div class="check-one d-flex justify-content-start inspector-item">
@@ -141,5 +141,5 @@
                 // dir: "rtl"
             });
             </script>
-            
+
         @endpush
