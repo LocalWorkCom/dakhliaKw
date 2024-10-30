@@ -1,11 +1,8 @@
 @extends('layout.main')
 
-<link rel="stylesheet" type="text/css"
-    href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
-<script type="text/javascript" charset="utf8"
-    src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
-<script type="text/javascript" charset="utf8"
-    src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
 </script>
 @push('style')
 @endpush
@@ -31,26 +28,22 @@
                     <div class="form-group moftsh mt-4  mx-4  d-flex">
                         <p class="filter "> تصفية حسب :</p>
                         <div class="check-one d-flex pt-2">
-                            <input type="checkbox" class="mx-2" name="all_date"
-                                checked id="all_date">
+                            <input type="checkbox" class="mx-2" name="all_date" checked id="all_date">
                             <label for=""> كل الايام </label>
                         </div>
                         <div class="form-group moftsh select-box-2  mx-3  d-flex">
                             <!-- <h4 style="    line-height: 1.8;"> التاريخ :</h4> -->
-                            <input type="date" name="date" id="date"
-                                value="{{ $date ? $date : date('Y-m-d') }}">
+                            <input type="date" name="date" id="date" value="{{ $date ? $date : date('Y-m-d') }}">
 
                         </div>
                         <div class="form-group moftsh select-box-2 mx-3  d-flex">
                             <!-- <h4 style=" line-height: 1.8;"> المجموعة :</h4> -->
-                            <select id="group_id" name="group_id"
-                                class="form-control select2" placeholder="المجموعة">
+                            <select id="group_id" name="group_id" class="form-control select2" placeholder="المجموعة">
 
                                 <option value="-1" selected> كل المجموعات
                                 </option>
                                 @foreach ($groups as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ $group == $item->id ? 'selected' : '' }}>
+                                    <option value="{{ $item->id }}" {{ $group == $item->id ? 'selected' : '' }}>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -60,14 +53,13 @@
 
                         <div class="form-group moftsh select-box-2  mx-3  d-flex">
                             <!-- <h4 style=" line-height: 1.8;"> الفريق :</h4> -->
-                            <select id="group_team_id" name="group_team_id"
-                                class="form-control select2" placeholder="الفرق">
+                            <select id="group_team_id" name="group_team_id" class="form-control select2"
+                                placeholder="الفرق">
 
                                 <option value="-1" selected> كل الدوريات
                                 </option>
                                 @foreach ($groupTeams as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ $team == $item->id ? 'selected' : '' }}>
+                                    <option value="{{ $item->id }}" {{ $team == $item->id ? 'selected' : '' }}>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -75,33 +67,28 @@
                         </div>
                         <div class="form-group moftsh select-box-2 mx-3  d-flex">
                             <!-- <h4 style=" line-height: 1.8;"> المفتش :</h4> -->
-                            <select id="inspectors" name="inspectors"
-                                class="form-control select2" placeholder="المفتش">
+                            <select id="inspectors" name="inspectors" class="form-control select2" placeholder="المفتش">
 
                                 <option value="-1" selected> كل المفتشين
                                 </option>
                                 @foreach ($inspectors as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ $inspector == $item->id ? 'selected' : '' }}>
+                                    <option value="{{ $item->id }}" {{ $inspector == $item->id ? 'selected' : '' }}>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group moftsh  mx-3  d-flex">
-                            <button class="btn-all px-3 "
-                                style="color: #212529; background-color: #f8f8f8;"
+                            <button class="btn-all px-3 " style="color: #212529; background-color: #f8f8f8;"
                                 onclick="search()">
                                 بحث
                             </button>
                         </div>
                     </div>
                     <div class="form-group mt-4 mx-4  d-flex justify-content-end ">
-                        <button class="btn-all px-3 "
-                            style="color: #FFFFFF; background-color: #274373;"
+                        <button class="btn-all px-3 " style="color: #FFFFFF; background-color: #274373;"
                             onclick="window.print()">
-                            <img src="{{ asset('frontend/images/print.svg') }}"
-                                alt=""> طباعة
+                            <img src="{{ asset('frontend/images/print.svg') }}" alt=""> طباعة
                         </button>
                     </div>
                 </div>
@@ -180,49 +167,58 @@
             } */
         });
 
-/**Team change */
-$('#group_team_id').change(function() {
-                var group_team_id = $(this).val();
-                var group_id = $('#group_id').val();
-                console.log(group_team_id);
+        /**Team change */
+        $('#group_team_id').change(function() {
+            var group_team_id = $(this).val();
+            var group_id = $('#group_id').val();
+            console.log(group_team_id);
 
 
-                // if (group_id!=-1) {
-                $.ajax({
-                    url: '/getInspector/' + group_team_id +
-                        '/' + group_id,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#inspectors').empty();
-                        $('#inspectors').append(
-                            '<option value="-1"> كل المفتشين   </option>'
-                        );
-                        $.each(data, function(key,
-                            employee) {
-                            // console.log(employee);
-                            $('#inspectors')
-                                .append(
-                                    '<option value="' +
-                                    employee
-                                    .id + '">' +
-                                    employee
-                                    .name +
-                                    '</option>'
-                                );
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error:', error);
-                        console.log('XHR:', xhr
-                            .responseText);
-                    }
-                });
-                /*} else {
+            // if (group_id!=-1) {
+            $.ajax({
+                url: '/getInspector/' + group_team_id +
+                    '/' + group_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
                     $('#inspectors').empty();
-                }*/
+                    $('#inspectors').append(
+                        '<option value="-1"> كل المفتشين   </option>'
+                    );
+                    $.each(data, function(key,
+                        employee) {
+                        // console.log(employee);
+                        $('#inspectors')
+                            .append(
+                                '<option value="' +
+                                employee
+                                .id + '">' +
+                                employee
+                                .name +
+                                '</option>'
+                            );
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('XHR:', xhr
+                        .responseText);
+                }
             });
-
+            /*} else {
+                $('#inspectors').empty();
+            }*/
+        });
+    </script>
+       <script>
+        $(document).ready(function() {
+            $('#date').on('change', function() {
+                const selectedDate = $(this).val();
+                //  $('#selectedDate').text('Selected Date: ' + selectedDate);
+                $('#all_date').prop('checked', false).val('0');
+                console.log('Date changed to: ', selectedDate);
+            });
+        });
     </script>
     <script>
         function search() {
@@ -375,16 +371,20 @@ $('#group_team_id').change(function() {
 
 
         });
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const group = urlParams.get('group');
+            const team = urlParams.get('team');
+            const inspector = urlParams.get('inspector');
+
+            // Check if any query parameters are set
+            if (group !== null || team !== null || inspector !== null) {
+                // Redirect to the base URL without query parameters
+                window.location.href = "https://developement.testdomain100.online/viollation";
+            }
+        };
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $('#date').on('change', function() {
-                const selectedDate = $(this).val();
-                //  $('#selectedDate').text('Selected Date: ' + selectedDate);
-                $('#all_date').prop('checked', false).val('0');
-                console.log('Date changed to: ', selectedDate);
-            });
-        });
-    </script>
+
 @endpush
