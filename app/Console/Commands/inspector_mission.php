@@ -63,7 +63,7 @@ class inspector_mission extends Command
                 $day_of_month_val = $GroupTeam->last_day;
 
                 for ($day_of_month = $day_of_month_val; $day_of_month <= $num_days; $day_of_month++) {
-                    // check day off or not 
+                    // check day off or not
 
                     $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
                     // $is_day_off =  $WorkingTree->is_holiday;
@@ -100,7 +100,7 @@ class inspector_mission extends Command
                     $inspectorMission->working_time_id = $WorkingTreeTime->working_time_id ? $WorkingTreeTime->working_time_id : null;
                     $inspectorMission->date = $date;
                     $inspectorMission->day_number = $day_in_cycle;
-                    
+
                     if ($vacation_days != 0) {
                         $inspectorMission->vacation_id = $EmployeeVacation->id;
                     }
@@ -137,7 +137,7 @@ class inspector_mission extends Command
                                 WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
                                 ->where('day_num', $day_in_cycle)
                                 ->first();
-                        }                 
+                        }
 
                         $user_id  = Inspector::find($Inspector)->user_id;
                         if ($vacation_days == 0) {
