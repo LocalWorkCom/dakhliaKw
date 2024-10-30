@@ -65,7 +65,6 @@ class GroupPointsController extends Controller
         $points->sector_id  = $sector_id;
         $points->flag  = 1;
         $points->save();
-        //dd($request->pointsIDs);
         $pointsIDs = is_array($request->pointsIDs) ? $request->pointsIDs : json_decode($request->pointsIDs, true);
 
         $deleted = Grouppoint::where('flag', 0)
@@ -78,6 +77,8 @@ class GroupPointsController extends Controller
             $record->deleted = 1;
             $record->save();
         }
+       // dd($request->pointsIDs, $pointsIDs,$deleted);
+
         return redirect()->route('points.index')->with('message', 'تم أضافه مجموعه');
     }
 
@@ -127,7 +128,7 @@ class GroupPointsController extends Controller
         $availablePointIds = $groupPoints->pluck('points_ids')->unique();
        // dd($data ,$pointsIds,$selectedPoints,$availablePoints,$availablePointIds);
 
-       
+
         // Merge selected points with available points
         $mergedPointIds = $selectedPoints->pluck('id')->merge($availablePointIds);
 
