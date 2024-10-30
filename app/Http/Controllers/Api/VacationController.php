@@ -89,7 +89,7 @@ class VacationController  extends Controller
                 }
             }
             //not rejected
-            elseif ($value->status != 'Rejected' && !$value->end_date) {
+            elseif ($value->status != 'Rejected' && !$value->end_date)  {
                 $currentDate = date('Y-m-d');
                 $ExpectedEndDate = ExpectedEndDate($value)[0];
 

@@ -163,7 +163,7 @@ class UserController extends Controller
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
 
-        $user = User::where('military_number', $request->military_number)->first();
+        $user = User::where('military_number', $request->military_number)->orWhere('Civil_number', $request->military_number)->first();
 
 
         if (!$user) {

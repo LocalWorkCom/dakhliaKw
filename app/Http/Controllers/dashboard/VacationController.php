@@ -472,6 +472,30 @@ class VacationController extends Controller
         // Find the vacation record
         $vacation = EmployeeVacation::find($id);
 
+        $check_vacation = EmployeeVacation::where('employee_id', $id)->get();
+        // pending
+        foreach ($check_vacation as $value) {
+            if ($value->status == 'Pending') {
+                $ExpectedEndDate = ExpectedEndDate($value)[0];
+
+                if ($ExpectedEndDate >= $vacation->start_date && $value->start_date <= $vacation->start_date) {
+                    return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
+                }
+            } elseif ($value->status != 'Rejected' && $value->end_date) {
+                if ($value->end_date >= $vacation->start_date && $value->start_date <= $vacation->start_date) {
+                    return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
+                }
+            }
+            //not rejected
+            elseif ($value->status != 'Rejected' && !$value->end_date) {
+                $currentDate = date('Y-m-d');
+                $ExpectedEndDate = ExpectedEndDate($value)[0];
+
+                if ($currentDate <= $vacation->start_date && $value->start_date <= $vacation->start_date && $ExpectedEndDate >= $vacation->start_date) {
+                    return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
+                }
+            }
+        }
         if ($vacation) {
             // Update the status to Approved
             $vacation->status = 'Approved';
