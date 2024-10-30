@@ -63,18 +63,21 @@ class ViolationTypesController extends Controller
 
         // Return the DataTables response
         return DataTables::of($data)
-            ->addColumn('action', function ($row) {
-                $name = "$row->name";
-                $typesJson = json_encode($row->type_id); // Ensure this is an array
+        ->addColumn('action', function ($row) {
+            $name = addslashes($row->name); // Escape the name for safety
+        $typesJson = json_encode($row->type_id);
+        $edit_permission = "<a class='btn btn-sm' style='background-color: #F7AF15;'
+        onclick='openedit(" . $row->id . ", \"" . $name . "\", " . $typesJson . ")'>
+        <i class='fa fa-edit'></i> تعديل</a>";
 
-                $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit(' . $row->id . ', \'' . $name . '\', \'' . htmlspecialchars($typesJson, ENT_QUOTES, 'UTF-8') . '\')"><i class="fa fa-edit"></i> تعديل</a>';
-                return  $edit_permission;
-            })
-            ->addColumn('type_name', function ($row) {
-                return $row->type_names;
-            })
-            ->rawColumns(['action', 'type_name'])
-            ->make(true);
+            return $edit_permission;
+        })
+        ->addColumn('type_name', function ($row) {
+            return $row->type_names;
+        })
+        ->rawColumns(['action', 'type_name'])
+        ->make(true);
+
     }
 
     /**
@@ -141,7 +144,7 @@ class ViolationTypesController extends Controller
     public function update(Request $request)
     {
 
-        // dd($request);
+         //dd($request);
         $request->validate([
             'nameedit' => 'required|string|max:255',
             'types' => 'array'

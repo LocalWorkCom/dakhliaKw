@@ -229,12 +229,15 @@
                                         placeholder="اسم المخالفه" required>
                                 </div>
 
-                                <div class="form-group  mb-3">
+                                <div class="form-group  mb-3" style="height: 142px;">
                                     <label class="d-flex justify-content-start pb-2" for="types"
                                         style=" flex-direction: row-reverse;">
                                         الاداره الخاصه بالمخالفه</label>
-                                    <select class="w-100 px-2 select2" name="types[]" id="types" multiple
-                                        style="border: 0.2px solid rgb(199, 196, 196);" required dir="rtl">
+                                        <select name="types[]" id="types" multiple
+                                        class=" form-control custom-select custom-select-lg mb-3 select2 col-12"
+                                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required dir="rtl">
+                                    {{-- <select class="w-100 px-2 select2" name="types[]" id="types" multiple
+                                        style="border: 0.2px solid rgb(199, 196, 196);" required dir="rtl"> --}}
                                         @foreach (getDepartments() as $department)
                                             <option value="{{ $department->id }}"> {{ $department->name }}</option>
                                         @endforeach
@@ -270,46 +273,35 @@
 @endsection
 @push('scripts')
     <script>
-        function openedit(id, name, types) {
-            document.getElementById('nameedit').value = name;
+          $('.select2').select2({
+            dir: "rtl"
+        });
+       
+        function openedit(id, name, selectedTypesJson) {
+            console.log('Opening edit modal for ID:', id);
+            console.log('Selected Types JSON:', selectedTypesJson);
+
+            let selectedTypes;
+            try {
+                // Directly parse the JSON without additional replacements
+                selectedTypes = JSON.parse(selectedTypesJson);
+            } catch (e) {
+                console.error('Error parsing selected types JSON:', e);
+                return; // Exit if JSON parsing fails
+            }
+
+            // Set modal fields
             document.getElementById('idedit').value = id;
+            document.getElementById('nameedit').value = name;
 
-            // Ensure types is an array
-            if (typeof types === 'string') {
-                try {
-                    types = JSON.parse(types);
-                } catch (e) {
-                    console.error('Error parsing types:', e);
-                    types = [];
-                }
-            }
+            // Multi-select handling
+            let multiSelectElement = document.getElementById('types');
+            Array.from(multiSelectElement.options).forEach(option => {
+                option.selected = selectedTypes.includes(option.value); // Set selection based on parsed JSON
+            });
+            $('#types').val(selectedTypes).trigger('change');
 
-            console.log('Types:', types); // Debugging
-
-            let select = document.getElementById('types');
-            let options = select.options;
-
-            // Clear previous selections
-            for (let i = 0; i < options.length; i++) {
-                options[i].selected = true;
-            }
-            console.log('options:', options);
-            // Set new selections
-            for (let i = 0; i < options.length; i++) {
-
-                // let optionValue = parseInt(options[i].value);
-                let optionValue = options[i].value;
-                // console.log('options:', options);
-                console.log('Option value (parsed):', optionValue); // Debugging
-
-                if (types.includes(optionValue)) {
-                    options[i].selected = true;
-                    options[i].setAttribute('selected', 'selected');
-                    options[i].classList.add('selected-option');
-                    console.log('Option selected:', options[i]); // Debugging
-                }
-            }
-
+            // Open modal
             $('#edit').modal('show');
         }
 
