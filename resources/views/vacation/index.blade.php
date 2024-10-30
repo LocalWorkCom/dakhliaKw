@@ -321,7 +321,7 @@
 
                                     if (row.VacationStatus == 'منتهية') {
                                         buttons += `
-                                      
+
                                         <a href="#" class="edit btn btn-sm" style="background-color: #2099c5;" onclick="openAndPrint('${urls.printReturn}'); return false;">
                                             <i class="fa-solid fa-print"></i> طباعة العودة
                                         </a>`
@@ -333,7 +333,7 @@
                                         buttons += `
                                             <form id="acceptForm_${row.id}" action="${urls.accept}" method="POST" style="display:inline;">
                                                 @csrf
-                                                <a class="edit btn btn-sm" style="background-color: #14a736;" 
+                                                <a class="edit btn btn-sm" style="background-color: #14a736;"
                                                 onclick="document.getElementById('acceptForm_${row.id}').submit();">
                                                     <i class="fa fa-check"></i> موافقة
                                                 </a>
@@ -342,7 +342,7 @@
                                         buttons += `
                                                 <form id="rejectForm_${row.id}" action="${urls.reject}" method="POST" style="display:inline;">
                                                     @csrf
-                                                    <a class="edit btn btn-sm" style="background-color: #bf2433;" 
+                                                    <a class="edit btn btn-sm" style="background-color: #bf2433;"
                                                     onclick="document.getElementById('rejectForm_${row.id}').submit();">
                                                         <i class="fa fa-times"></i> رفض
                                                     </a>
@@ -393,14 +393,14 @@
                             },
                             pagingType: "full_numbers",
                             "fnDrawCallback": function(oSettings) {
-                                console.log($('#users-table tr').length);
-                                console.log('Page ' + this.api().page.info().pages)
-                                var page = this.api().page.info().pages;
-                                console.log($('#users-table tr').length);
-                                if (page == 1) {
-                                    //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                    $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
+                                var api = this.api();
+                                var pageInfo = api.page.info();
 
+                                // Check if the total number of records is less than or equal to the number of entries per page
+                                if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                                    $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+                                } else {
+                                    $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
                                 }
                             }
                         });

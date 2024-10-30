@@ -119,10 +119,13 @@
                             @csrf
                             <div class="form-group">
                                 <label for="name">الاسم</label>
-                                <input type="text" id="nameedit" name="name" class="form-control" dir="rtl" required>
-                                <span class="text-danger span-error" id="nameedit-error" dir="rtl"></span> <!-- Error message for name -->
+                                <input type="text" id="nameedit" name="name" class="form-control" dir="rtl"
+                                    required>
+                                <span class="text-danger span-error" id="nameedit-error" dir="rtl"></span>
+                                <!-- Error message for name -->
                             </div>
-                            <input type="hidden" id="idedit" name="id" value=""> <!-- Hidden field for ID -->
+                            <input type="hidden" id="idedit" name="id" value="">
+                            <!-- Hidden field for ID -->
 
                             <div class="form-group">
                                 <label for="typeedit">نوع الرتبه</label>
@@ -132,7 +135,8 @@
                                     <option value="1">صف ظابط</option>
                                     <option value="2">فرد</option>
                                 </select>
-                                <span class="text-danger span-error" id="typeedit-error" dir="rtl"></span> <!-- Error message for type -->
+                                <span class="text-danger span-error" id="typeedit-error" dir="rtl"></span>
+                                <!-- Error message for type -->
                             </div>
 
                             <!-- Save button -->
@@ -219,35 +223,35 @@
         }
 
         function confirmEdit(event) {
-    event.preventDefault(); // Prevent default form submission
+            event.preventDefault(); // Prevent default form submission
 
-    // Get input fields
-    var name = document.getElementById('nameedit').value.trim();
-    var type = document.getElementById('typeedit').value; // Get the selected rank type
+            // Get input fields
+            var name = document.getElementById('nameedit').value.trim();
+            var type = document.getElementById('typeedit').value; // Get the selected rank type
 
-    // Clear previous error messages
-    document.getElementById('nameedit-error').textContent = '';
-    document.getElementById('typeedit-error').textContent = ''; // Clear type error
+            // Clear previous error messages
+            document.getElementById('nameedit-error').textContent = '';
+            document.getElementById('typeedit-error').textContent = ''; // Clear type error
 
-    var hasError = false;
+            var hasError = false;
 
-    // Check if the name is empty
-    if (name === '') {
-        document.getElementById('nameedit-error').textContent = 'الاسم مطلوب.';
-        hasError = true;
-    }
+            // Check if the name is empty
+            if (name === '') {
+                document.getElementById('nameedit-error').textContent = 'الاسم مطلوب.';
+                hasError = true;
+            }
 
-    // Check if the type is selected
-    if (type === '') {
-        document.getElementById('typeedit-error').textContent = 'نوع الرتبه مطلوب.';
-        hasError = true;
-    }
+            // Check if the type is selected
+            if (type === '') {
+                document.getElementById('typeedit-error').textContent = 'نوع الرتبه مطلوب.';
+                hasError = true;
+            }
 
-    // If no errors, submit the form
-    if (!hasError) {
-        document.getElementById('edit-form').submit(); // Submit the form
-    }
-}
+            // If no errors, submit the form
+            if (!hasError) {
+                document.getElementById('edit-form').submit(); // Submit the form
+            }
+        }
 
 
         function openadd() {
@@ -340,13 +344,14 @@
                 },
                 "pagingType": "full_numbers",
                 "fnDrawCallback": function(oSettings) {
-                    console.log('Page ' + this.api().page.info().pages)
-                    var page = this.api().page.info().pages;
-                    console.log($('#users-table tr').length);
-                    if (page == 1) {
-                        //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                        $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
+                    var api = this.api();
+                    var pageInfo = api.page.info();
 
+                    // Check if the total number of records is less than or equal to the number of entries per page
+                    if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+                    } else {
+                        $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
                     }
                 }
             });

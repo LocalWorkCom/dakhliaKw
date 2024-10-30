@@ -7,7 +7,7 @@
 
 @section('content')
 @section('title')
-مسميات العجز
+    مسميات العجز
 @endsection
 <section>
     <div class="row">
@@ -205,15 +205,16 @@
             },
             "pagingType": "full_numbers",
             "fnDrawCallback": function(oSettings) {
-                console.log('Page '+this.api().page.info().pages)
-                                        var page=this.api().page.info().pages;
-                                        console.log($('#users-table tr').length);
-                                        if (page ==1) {
-                                         //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                            $('.dataTables_paginate').css('visibility', 'hidden');  // to hide
+                    var api = this.api();
+                    var pageInfo = api.page.info();
 
-                                        }
-            }
+                    // Check if the total number of records is less than or equal to the number of entries per page
+                    if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                        $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+                    } else {
+                        $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
+                    }
+                }
 
         });
     });
@@ -275,9 +276,9 @@
                         // Handle the response
                         // Optionally, reload the page
                         firstModalBody1.classList.add('d-none');
-                       secondModalBody1.classList.remove('d-none');
+                        secondModalBody1.classList.remove('d-none');
                         window.location.reload();
-                        
+
                     },
                     error: function(error) {
                         console.error('AJAX error', error);
@@ -290,7 +291,7 @@
             }
         });
 
-    
+
     });
 </script>
 @endsection

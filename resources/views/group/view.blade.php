@@ -1,8 +1,7 @@
 @extends('layout.main')
 
 @push('style')
-<link href = "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
-rel = "stylesheet"/>
+    <link href = "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel = "stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css" defer>
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer>
@@ -136,13 +135,14 @@ rel = "stylesheet"/>
                                         },
                                         pagingType: "full_numbers",
                                         "fnDrawCallback": function(oSettings) {
-                                            console.log('Page ' + this.api().page.info().pages)
-                                            var page = this.api().page.info().pages;
-                                            console.log($('#users-table tr').length);
-                                            if (page == 1) {
-                                                //   $('.dataTables_paginate').hide();//css('visiblity','hidden');
-                                                $('.dataTables_paginate').css('visibility', 'hidden'); // to hide
+                                            var api = this.api();
+                                            var pageInfo = api.page.info();
 
+                                            // Check if the total number of records is less than or equal to the number of entries per page
+                                            if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                                                $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+                                            } else {
+                                                $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
                                             }
                                         }
                                     });
@@ -264,21 +264,20 @@ rel = "stylesheet"/>
     </div>
 
     <script>
+        @if (session('showModal'))
+            $(document).ready(function() {
+                $('#myModal1').modal('show');
 
-    @if (session('showModal'))
-        $(document).ready(function() {
-        $('#myModal1').modal('show');
+            });
+        @endif
 
+        $('#sector_id').select2({
+            width: '100%',
+            minimumResultsForSearch: 0,
+            dropdownParent: $('#myModal1'), // Ensures dropdown stays within modal bounds
+            placeholder: 'اختار من القائمة',
+            allowClear: true
         });
-    @endif
-
-    $('#sector_id').select2({
-    width: '100%',
-    minimumResultsForSearch: 0,
-    dropdownParent: $('#myModal1'), // Ensures dropdown stays within modal bounds
-    placeholder: 'اختار من القائمة',
-    allowClear: true
-    });
     </script>
 
 
@@ -475,12 +474,9 @@ rel = "stylesheet"/>
 @endsection
 
 @push('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
-    <script src = "https://code.jquery.com/jquery-3.6.0.min.js" >
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
     {{-- <script>
         $(document).ready(function() {
