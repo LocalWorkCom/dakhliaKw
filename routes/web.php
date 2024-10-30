@@ -185,6 +185,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/groups', [GroupsController::class, 'getgroups'])->name('api.groups')->middleware('check.permission:view Groups');
     Route::get('/group/create/Inspectors/{id}', [GroupsController::class, 'groupCreateInspectors'])->name('group.groupcreateInspectors')->middleware('check.permission:create Groups');
     Route::post('/group/add/Inspectors/{id}', [GroupsController::class, 'groupAddInspectors'])->name('group.groupAddInspectors')->middleware('check.permission:create Groups');
+    Route::get('/inspectors/search', [GroupsController::class, 'searchInspectors'])->name('inspectors.search');
 
     // export
     //Start Export routes
