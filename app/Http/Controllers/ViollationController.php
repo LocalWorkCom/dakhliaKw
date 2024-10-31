@@ -60,11 +60,18 @@ class ViollationController extends Controller
         }
 
         $date = $request->date;
+        $now=date('Y-m-d');
+        $allDate='1';
+        if($now != $date)
+        {
+            $allDate='0';
+        }
+        //dd($now);
         $group = $request->group;
         $team = $request->team;
         $inspector = $request->inspector;
 
-        return view('violations.index', compact('groups', 'groupTeams', 'inspectors', 'date', 'group', 'team', 'inspector'));
+        return view('violations.index', compact('groups', 'groupTeams', 'inspectors', 'date', 'group', 'team', 'inspector','allDate'));
     }
 
     public function getViolations(Request $request)
