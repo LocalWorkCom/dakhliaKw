@@ -137,9 +137,9 @@ class InspectorController extends Controller
                                             <i class="fa fa-edit"></i> تعديل
                                         </a>';
 
-            $remove_permission =  '<a class="btn btn-sm" style="background-color: #E3641E;" onclick="openTransferModal(' . $row->id . ')">
+            $remove_permission = !$inspectorExists ? '<a class="btn btn-sm" style="background-color: #E3641E;" onclick="openTransferModal(' . $row->id . ')">
                        <i class="fa-solid fa-user-tie"></i> تحويل لموظف
-                   </a>';
+                   </a>' : '';
             return  $show_permission . ' ' . $edit_permission . ' ' . $group_permission . ' ' . $remove_permission;
         })
             ->addColumn('name', function ($row) {
@@ -224,7 +224,7 @@ class InspectorController extends Controller
         $value_remove = $request->id_employee;
         $groupTeams = GroupTeam::where('group_id', $group)->get();
 
-       /*  foreach ($groupTeams as $currentGroup) {
+        /*  foreach ($groupTeams as $currentGroup) {
             $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
 
             // Remove the specified inspector ID from the group
@@ -244,8 +244,8 @@ class InspectorController extends Controller
 
         // Delete future inspector missions for the removed inspector
         $inspectorMissions = InspectorMission::where('inspector_id', $request->id_employee)
-                                              ->where('date', '>=', today())
-                                              ->get();
+            ->where('date', '>=', today())
+            ->get();
         addInspectorHistory($request->id_employee, $group, $groupTeams[0]->id, 1);
 
         foreach ($inspectorMissions as $inspectorMission) {
