@@ -11,6 +11,7 @@ use App\Models\Grouppoint;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
 use App\Models\InspectorMission;
+use App\Models\instantmission;
 use App\Models\Notification;
 use App\Models\Point;
 use App\Models\PointDays;
@@ -147,7 +148,7 @@ class reportsController extends Controller
                 'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
                 'abcence_day' => $absence->date,
                 'mission_id' => $absence->mission_id,
-                'can_update'=> $absence->inspector_id == $inspectorId ? true : false,
+                'can_update' => $absence->inspector_id == $inspectorId ? true : false,
                 'InspectorId' => $absence->inspector_id ?? null,
                 'report_id' => $absence->id,
                 'point_id' => $absence->point_id,
@@ -199,10 +200,10 @@ class reportsController extends Controller
             return $this->respondError('failed to get data', ['error' => 'عفوا هذا المستخدم لم يعد مفتش'], 404);
         }
         $groupTeam = GroupTeam::with('group.sector')
-        ->whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])
-        ->first();
+            ->whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])
+            ->first();
 
-    $sector = $groupTeam ? optional($groupTeam->group)->sector_id : null;
+        $sector = $groupTeam ? optional($groupTeam->group)->sector_id : null;
         // Retrieve the points associated with the sector
         $sectorPoints = Point::where('sector_id', $sector)
             ->select('id', 'name')
@@ -410,6 +411,7 @@ class reportsController extends Controller
             } else {
                 // Handle violations without point_id with unique keys
                 $noPointKey = 'violation_' . $violation->id; // Create a unique key for this violation
+                $instans_missions = instantmission::find($violation->mission_id);
                 $pointViolations[$noPointKey] = [
                     'date' => $violation->created_at->format('Y-m-d'),
                     'is_instansmission' => true,
@@ -420,7 +422,7 @@ class reportsController extends Controller
                     'shift' => [
                         'start_time' => null,
                         'end_time' => null,
-                        'time' => date("g:i:s A", strtotime($violation->created_at))
+                        'time' => date("g:i:s A", strtotime($instans_missions->created_at))
                     ],
                     'team_name' => $teamName,
                     'violationsOfPoint' => [
