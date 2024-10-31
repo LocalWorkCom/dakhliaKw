@@ -52,7 +52,7 @@ class GroupsController extends Controller
 
                     $count = Inspector::leftJoin('users', 'inspectors.user_id', '=', 'users.id')
                         ->where('users.department_id', $departmentId)
-                        ->where('flag', 0)
+                        ->where('inspectors.flag', 0)
                         ->where('users.id', '<>', auth()->user()->id)->where('group_id', $row->id)
                         ->count();
                 }
