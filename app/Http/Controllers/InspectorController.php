@@ -123,6 +123,8 @@ class InspectorController extends Controller
         $data = $data->get();
 
         return DataTables::of($data)->addColumn('action', function ($row) {
+            $remove_permission = null;
+            $group_permission = null ;
             if ($row->group_id !=  null) {
                 $inspectorExists = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$row->id])->exists();
                 $group_permission = !$inspectorExists
