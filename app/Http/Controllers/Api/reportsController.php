@@ -422,7 +422,7 @@ class reportsController extends Controller
                     'shift' => [
                         'start_time' => null,
                         'end_time' => null,
-                        'time' => date("g:i:s A", strtotime($instans_missions->created_at))
+'time' => date("g:i:s", strtotime($instans_missions->created_at)) . (date("A", strtotime($instans_missions->created_at)) == 'AM' ? ' ص' : ' م')
                     ],
                     'team_name' => $teamName,
                     'violationsOfPoint' => [
