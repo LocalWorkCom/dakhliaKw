@@ -539,7 +539,7 @@ if (!function_exists('send_push_notification')) {
 
 function getNotifications()
 {
-    $notifications = Notification::with('groups', 'teams')->where('user_id', Auth::user()->id)->where('status', 0)->get();
+    $notifications = Notification::with('groups', 'teams')->where('user_id', Auth::user()->id)->whereNotNull('group_id')->where('status', 0)->get();
 
     if ($notifications) {
         return $notifications;
