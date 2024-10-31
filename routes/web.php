@@ -443,7 +443,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     /**
-     * Violation Show
+     * Violation Show 
      */
     Route::get('/viollation', [ViollationController::class, 'index'])->name('viollation')->middleware('check.permission:view Violation');
     Route::get('violation/getAll', [ViollationController::class, 'getviolations'])->name('violations.getAll')->middleware('check.permission:view Violation');

@@ -31,8 +31,10 @@
                     <div class="form-group moftsh mt-4  mx-4  d-flex">
                         <p class="filter "> تصفية حسب :</p>
                         <div class="check-one d-flex pt-2">
-                            <input type="checkbox" class="mx-2" name="all_date"
-                                checked id="all_date">
+                            <input type="checkbox" class="mx-2"
+                                value="{{ $allDate }}" name="all_date"
+                                @if ($allDate == 1) checked @endif
+                                id="all_date">
                             <label for=""> كل الايام </label>
                         </div>
                         <div class="form-group moftsh select-box-2  mx-3  d-flex">
@@ -236,8 +238,9 @@
     <script>
         function search() {
             var url = "{{ url('viollation') }}";
+            //debugger;
             var dateItem = $('#date').val();
-            var alldate = $('#all_date').val();
+            var all_date = $('#all_date').val();
             var group = $('#group_id').val();
             var team = $('#group_team_id').val();
             var inspectors = $('#inspectors').val();
@@ -249,6 +252,9 @@
                     addurl += 'date=' + dateItem;
                 }
             }
+            console.log('addurl =>' + addurl)
+
+            console.log('Date =>' + dateItem)
             if (group) {
                 if (addurl == '') addurl += '?';
                 else addurl += '&';
@@ -373,14 +379,15 @@
 
                     // Check if the total number of records is less than or equal to the number of entries per page
                     if (pageInfo.recordsTotal <=
-                        10) { // Adjust this number based on your page length
+                        10
+                    ) { // Adjust this number based on your page length
                         $('.dataTables_paginate').css(
                             'visibility', 'hidden'
-                            ); // Hide pagination
+                        ); // Hide pagination
                     } else {
                         $('.dataTables_paginate').css(
                             'visibility', 'visible'
-                            ); // Show pagination
+                        ); // Show pagination
                     }
                 }
 

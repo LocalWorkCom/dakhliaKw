@@ -220,7 +220,7 @@ $available = Grouppoint::where('government_id', $government)
             ]);
         }
     }
-}
+    }
 
         return redirect()->route('points.index')->with('message', 'تم تعديل مجموعه ');
     }
