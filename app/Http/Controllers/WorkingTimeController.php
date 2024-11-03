@@ -88,7 +88,7 @@ class WorkingTimeController extends Controller
             $WorkingTime->color = $request->color;
             $WorkingTime->save();
             // Dynamically create model instance based on the model class string
-            return view('working_time.index')->with('success', 'Permission created successfully.');
+            return view('working_time.index')->with('success', 'تم أنشاء فترت العمل بنجاح');
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }
@@ -154,12 +154,38 @@ class WorkingTimeController extends Controller
         }
 
         try {
-            $startTime = DateTime::createFromFormat('h:i A', $request->start_time)->format('H:i');
-            $endTime = DateTime::createFromFormat('h:i A', $request->end_time)->format('H:i');
+            // Handle both 12-hour and 24-hour formats
+            $startTimeInput = $request->start_time_edit;
+            $endTimeInput = $request->end_time_edit;
+
+            // Try to parse the start time
+            $startTime = DateTime::createFromFormat('h:i A', $startTimeInput);
+            if ($startTime === false) {
+                // If it fails, try 24-hour format
+                $startTime = DateTime::createFromFormat('H:i', $startTimeInput);
+            }
+
+            // Try to parse the end time
+            $endTime = DateTime::createFromFormat('h:i A', $endTimeInput);
+            if ($endTime === false) {
+                // If it fails, try 24-hour format
+                $endTime = DateTime::createFromFormat('H:i', $endTimeInput);
+            }
+
+            // Check if parsing was successful
+            if ($startTime === false || $endTime === false) {
+                return redirect()->back()->withErrors('Invalid time format. Please use "h:i A" (e.g., "02:30 PM") or "H:i" (e.g., "14:30").')->withInput();
+            }
+
+            // Format times to 24-hour format
+            $startTimeFormatted = $startTime->format('H:i');
+            $endTimeFormatted = $endTime->format('H:i');
+
+            // Update the WorkingTime item
             $WorkingTimeitem = WorkingTime::findOrFail($request->id_edit);
             $WorkingTimeitem->name = $request->name_edit;
-            $WorkingTimeitem->start_time = $startTime;
-            $WorkingTimeitem->end_time = $endTime;
+            $WorkingTimeitem->start_time = $startTimeFormatted;
+            $WorkingTimeitem->end_time = $endTimeFormatted;
             $WorkingTimeitem->color = $request->color_edit;
             $WorkingTimeitem->save();
 
