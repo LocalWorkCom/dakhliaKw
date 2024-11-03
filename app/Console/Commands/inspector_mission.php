@@ -194,8 +194,10 @@ class inspector_mission extends Command
     function updatePrevVacation($Inspector)
     {
         $currentDate = Carbon::now();
+        $user_id  = Inspector::find($Inspector)->user_id;
 
-        $EmployeeVacation = EmployeeVacation::where('employee_id', $Inspector)
+
+        $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)
             ->where('status', 'Approved')
             ->where('start_date', '<=', $currentDate) // Vacation started before or in current month
             ->where(function ($query) use ($currentDate) {
@@ -205,55 +207,57 @@ class inspector_mission extends Command
             ->first();
 
         if ($EmployeeVacation) {
-            // Parse the start and end dates of the vacation
-            $start_date = Carbon::parse($EmployeeVacation->start_date);
-            $end_date = $EmployeeVacation->end_date ? Carbon::parse($EmployeeVacation->end_date) : Carbon::parse($currentDate);
+                # code...
+                // Parse the start and end dates of the vacation
+                $start_date = Carbon::parse($EmployeeVacation->start_date);
+                $end_date = $EmployeeVacation->end_date ? Carbon::parse($EmployeeVacation->end_date) : Carbon::parse($currentDate);
 
-            // Define the boundaries for last and current months
-            $firstDayOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
-            $lastDayOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
-            $firstDayOfCurrentMonth = Carbon::now()->startOfMonth();
+                // Define the boundaries for last and current months
+                $firstDayOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
+                $lastDayOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
+                $firstDayOfCurrentMonth = Carbon::now()->startOfMonth();
 
-            // Calculate vacation days in the last month if vacation started last month
-            $vacationDaysLastMonth = 0;
-            if ($start_date < $firstDayOfCurrentMonth) {
-                $lastMonthStart = $start_date->greaterThanOrEqualTo($firstDayOfLastMonth) ? $start_date : $firstDayOfLastMonth;
-                $lastMonthEnd = $end_date->lessThanOrEqualTo($lastDayOfLastMonth) ? $end_date : $lastDayOfLastMonth;
+                // Calculate vacation days in the last month if vacation started last month
+                $vacationDaysLastMonth = 0;
+                if ($start_date < $firstDayOfCurrentMonth) {
+                    $lastMonthStart = $start_date->greaterThanOrEqualTo($firstDayOfLastMonth) ? $start_date : $firstDayOfLastMonth;
+                    $lastMonthEnd = $end_date->lessThanOrEqualTo($lastDayOfLastMonth) ? $end_date : $lastDayOfLastMonth;
 
-                $vacationDaysLastMonth = $lastMonthStart->diffInDays($lastMonthEnd) + 1;
-            }
+                    $vacationDaysLastMonth = $lastMonthStart->diffInDays($lastMonthEnd) + 1;
+                }
 
-            // Calculate remaining vacation days for the current month
-            $totalVacationDays = $EmployeeVacation->days_number;
-            $remainingDays = $totalVacationDays - $vacationDaysLastMonth;
+                // Calculate remaining vacation days for the current month
+                $totalVacationDays = $EmployeeVacation->days_number;
+                $remainingDays = $totalVacationDays - $vacationDaysLastMonth;
 
-            // Check if remaining days extend into the current month
-            $vacationDaysCurrentMonth = 0;
-            // if ($remainingDays > 0) {
-            $currentMonthEnd = $end_date->lessThanOrEqualTo($currentDate) ? $end_date : Carbon::parse($currentDate);
-            $currentMonthStart = $firstDayOfCurrentMonth->greaterThan($start_date) ? $firstDayOfCurrentMonth : $start_date;
-            $vacationDaysCurrentMonth = $currentMonthStart->diffInDays($currentMonthEnd) + 1;
-            // }
+                // Check if remaining days extend into the current month
+                $vacationDaysCurrentMonth = 0;
+                // if ($remainingDays > 0) {
+                $currentMonthEnd = $end_date->lessThanOrEqualTo($currentDate) ? $end_date : Carbon::parse($currentDate);
+                $currentMonthStart = $firstDayOfCurrentMonth->greaterThan($start_date) ? $firstDayOfCurrentMonth : $start_date;
+                $vacationDaysCurrentMonth = $currentMonthStart->diffInDays($currentMonthEnd) + 1;
+                // }
 
-            // Set vacation days based on calculations
-            $vacation_days_last_month = $vacationDaysLastMonth;
-            $vacation_days_current_month = $vacationDaysCurrentMonth;
+                // Set vacation days based on calculations
+                $vacation_days_last_month = $vacationDaysLastMonth;
+                $vacation_days_current_month = $vacationDaysCurrentMonth;
 
-            $vacation_days = $vacation_days_current_month;
+                $vacation_days = $vacation_days_current_month;
 
 
 
-            $inspectorMissions = InspectorMission::where('inspector_id', $Inspector)
-                ->whereBetween('date', [
-                    Carbon::now()->startOfMonth()->toDateString(),
-                    Carbon::now()->endOfMonth()->toDateString(),
-                ])
-                ->orderBy('date')
-                ->get();
-            for ($i = 0; $i < $vacation_days; $i++) {
-                $inspectorMissions[$i]->vacation_id = $EmployeeVacation->id;
-                $inspectorMissions[$i]->save();
-            }
+                $inspectorMissions = InspectorMission::where('inspector_id', $Inspector)
+                    ->whereBetween('date', [
+                        Carbon::now()->startOfMonth()->toDateString(),
+                        Carbon::now()->endOfMonth()->toDateString(),
+                    ])
+                    ->orderBy('date')
+                    ->get();
+                for ($i = 0; $i < $vacation_days; $i++) {
+                    $inspectorMissions[$i]->vacation_id = $EmployeeVacation->id;
+                    $inspectorMissions[$i]->save();
+                }
+            
         }
     }
 }
