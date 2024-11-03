@@ -51,6 +51,8 @@ class employee_vacation extends Command
                             ->first();
 
                         // Update the InspectorMission record with the vacation ID
+                        $inspectorMission->ids_group_point = null;
+
                         $inspectorMission->vacation_id = $EmployeeeVacation->id;
                         $inspectorMission->save();
                         $inspectors = InspectorMission::where('group_team_id', $inspectorMission->group_team_id)->where('vacation_id', null)->whereDate('date', '=', $today)->count();
