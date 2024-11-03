@@ -971,16 +971,16 @@ class GroupTeamController extends Controller
             foreach ($Group['teams'] as  $Team) {
                 // dd(sizeof($Group['teams']));
 
-                $inspectorIds = is_array($Team->inspector_ids)
-                    ? $Team->inspector_ids
-                    : explode(',', $Team->inspector_ids);
+                // $inspectorIds = is_array($Team->inspector_ids)
+                //     ? $Team->inspector_ids
+                //     : explode(',', $Team->inspector_ids);
 
                 // Retrieve all inspectors associated with the team in the current group
-                // $inspectorIds = InspectorMission::where('group_id', $Team->group_id)
-                //     ->where('group_team_id', $Team->id)
-
-                //     ->groupBy('inspector_id')
-                //     ->pluck('inspector_id');
+                $inspectorIds = InspectorMission::where('group_id', $Team->group_id)
+                    ->where('group_team_id', $Team->id)
+                    ->whereMonth('date', Carbon::now()->month)  // Filters by the current month
+                    ->groupBy('inspector_id')
+                    ->pluck('inspector_id');
                 // dd($inspectorIds, $Team->id, $Team->group_id);
                 // Get the inspector objects
                 $inspectors = Inspector::whereIn('id', $inspectorIds)->get();
@@ -1134,7 +1134,6 @@ class GroupTeamController extends Controller
         $Groups = $Groups->filter(function ($group) {
             return count($group['teams']) > 0;
         });
-        // dd($Groups);
         // Return the view with the Groups data
         return view('inspectorMission.index', compact('Groups', 'working_times', 'inspectors'));
     }
