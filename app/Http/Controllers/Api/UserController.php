@@ -65,7 +65,7 @@ class UserController extends Controller
         // Attempt authentication
         if (!Auth::attempt($credentials)) {
             return $this->respondError('Password Error', [
-                'credential' => ['كلمة المرور لا تتطابق مع سجلاتنا']
+                'crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']
             ], 403);
         }
     
