@@ -1034,10 +1034,7 @@ class GroupTeamController extends Controller
                             ->where('group_id', $Group->id)
                             ->where('group_team_id', $Team->id)
                             ->first();
-                        if ($Team->id == 32) {
-
-                            // dd($inspector->id,  $Team->id, $Group->id);
-                        }
+                      
 
                         if ($inspector_mission) {
 

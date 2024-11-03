@@ -83,7 +83,7 @@ class inspector_mission extends Command
                     $user_id  = Inspector::find($Inspector)->user_id;
                     if ($vacation_days == 0) {
 
-                        $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first(); //1/9/2024
+                        $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('status', 'Approved')->where('start_date', '=',  $date)->first(); //1/9/2024
                         if ($EmployeeVacation) {
                             $vacation_days = $EmployeeVacation->days_number; //3
                         }
@@ -142,7 +142,7 @@ class inspector_mission extends Command
                         $user_id  = Inspector::find($Inspector)->user_id;
                         if ($vacation_days == 0) {
 
-                            $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first(); //1/9/2024
+                            $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('status', 'Approved')->where('start_date', '=',  $date)->first(); //1/9/2024
                             if ($EmployeeVacation) {
                                 $vacation_days = $EmployeeVacation->days_number; //3
                             }
