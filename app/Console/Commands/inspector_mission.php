@@ -10,6 +10,7 @@ use App\Models\InspectorMission;
 use App\Models\WorkingTime;
 use App\Models\WorkingTree;
 use App\Models\WorkingTreeTime;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -38,6 +39,8 @@ class inspector_mission extends Command
     {
         // Set the start date to the 1st of the current month
 
+        $currentDate = Carbon::now();
+        $lastMonth = $currentDate->copy()->subMonth()->startOfMonth();
         $start_day_date = date('Y-m-01');
         $num_days = date('t', strtotime($start_day_date)); // Get the number of days in the month
         $Inspectors = Inspector::where('flag', 0)->pluck('id')->toArray(); // get inspectors ids
@@ -67,18 +70,14 @@ class inspector_mission extends Command
 
                     $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
                     // $is_day_off =  $WorkingTree->is_holiday;
-                    // dd($is_day_off);
-                    // if not  day off get working tree
+              
 
                     $WorkingTreeTime =
                         WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
                         ->where('day_num', $day_in_cycle)
                         ->first();
 
-                    // if ($day_in_cycle == 4) {
-
-                    // }
-
+            
 
                     $user_id  = Inspector::find($Inspector)->user_id;
                     if ($vacation_days == 0) {
@@ -86,6 +85,18 @@ class inspector_mission extends Command
                         $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('status', 'Approved')->where('start_date', '=',  $date)->first(); //1/9/2024
                         if ($EmployeeVacation) {
                             $vacation_days = $EmployeeVacation->days_number; //3
+                        } else {
+
+                            $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)
+                                ->where('status', 'Approved')
+                                ->where('start_date', '>=', $lastMonth)
+                                ->where('start_date', '<=', $currentDate)
+                                ->where('end_date', '>=', $currentDate)
+                                ->first();
+
+                            if ($EmployeeVacation) {
+                                $vacation_days = $EmployeeVacation->days_number;
+                            }
                         }
                     }
 
@@ -145,6 +156,17 @@ class inspector_mission extends Command
                             $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('status', 'Approved')->where('start_date', '=',  $date)->first(); //1/9/2024
                             if ($EmployeeVacation) {
                                 $vacation_days = $EmployeeVacation->days_number; //3
+                            } else {
+                                $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)
+                                    ->where('status', 'Approved')
+                                    ->where('start_date', '>=', $lastMonth)
+                                    ->where('start_date', '<=', $currentDate)
+                                    ->where('end_date', '>=', $currentDate)
+                                    ->first();
+
+                                if ($EmployeeVacation) {
+                                    $vacation_days = $EmployeeVacation->days_number;
+                                }
                             }
                         }
 
