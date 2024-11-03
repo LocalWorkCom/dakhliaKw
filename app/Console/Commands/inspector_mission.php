@@ -87,31 +87,6 @@ class inspector_mission extends Command
                         $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('status', 'Approved')->where('start_date', '=',  $date)->first(); //1/9/2024
                         if ($EmployeeVacation) {
                             $vacation_days = $EmployeeVacation->days_number; //3
-                        } else {
-                            $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)
-                                ->where('status', 'Approved')
-                                ->where('start_date', '<=', $date) // Vacation started before or in current month
-                                ->where(function ($query) use ($date) {
-                                    $query->where('end_date', '>=', $date)   // End date is in the future
-                                        ->orWhereNull('end_date');               // or no end date (ongoing)
-                                })
-                                ->first();
-
-                            if ($EmployeeVacation) {
-                                // Calculate the number of vacation days that fall within the current month
-                                $start_date = Carbon::parse($EmployeeVacation->start_date);
-                                $end_date = Carbon::parse($EmployeeVacation->end_date);
-
-                                // Adjust start date if the vacation started last month
-                                $currentMonthStart = $start_date->greaterThan($firstDayOfCurrentMonth) ? $start_date : $firstDayOfCurrentMonth;
-                                $currentMonthEnd = $end_date->lessThan($date) ? $end_date : $date;
-
-                                // Calculate vacation days in the current month
-                                $vacation_days_in_current_month = $currentMonthStart->diffInDays($currentMonthEnd) + 1;
-
-                                // Set the vacation days to the calculated value for the current month
-                                $vacation_days = $vacation_days_in_current_month;
-                            }
                         }
                     }
 
@@ -171,30 +146,6 @@ class inspector_mission extends Command
                             $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('status', 'Approved')->where('start_date', '=',  $date)->first(); //1/9/2024
                             if ($EmployeeVacation) {
                                 $vacation_days = $EmployeeVacation->days_number; //3
-                            } else {
-                                $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)
-                                    ->where('status', 'Approved')
-                                    ->where('start_date', '<=', $date) // Vacation started before or in current month
-                                    ->where(function ($query) use ($date) {
-                                        $query->where('end_date', '>=', $date)   // End date is in the future
-                                            ->orWhereNull('end_date');               // or no end date (ongoing)
-                                    })
-                                    ->first();
-                                if ($EmployeeVacation) {
-                                    // Calculate the number of vacation days that fall within the current month
-                                    $start_date = Carbon::parse($EmployeeVacation->start_date);
-                                    $end_date = Carbon::parse($EmployeeVacation->end_date);
-
-                                    // Adjust start date if the vacation started last month
-                                    $currentMonthStart = $start_date->greaterThan($firstDayOfCurrentMonth) ? $start_date : $firstDayOfCurrentMonth;
-                                    $currentMonthEnd = $end_date->lessThan($date) ? $end_date : $date;
-
-                                    // Calculate vacation days in the current month
-                                    $vacation_days_in_current_month = $currentMonthStart->diffInDays($currentMonthEnd) + 1;
-
-                                    // Set the vacation days to the calculated value for the current month
-                                    $vacation_days = $vacation_days_in_current_month;
-                                }
                             }
                         }
 
@@ -236,6 +187,72 @@ class inspector_mission extends Command
                     $GroupTeam->last_day = $day_in_cycle;
                     $GroupTeam->save();
                 }
+            }
+            $this->updatePrevVacation($Inspector);
+        }
+    }
+    function updatePrevVacation($Inspector)
+    {
+        $currentDate = Carbon::now();
+
+        $EmployeeVacation = EmployeeVacation::where('employee_id', $Inspector)
+            ->where('status', 'Approved')
+            ->where('start_date', '<=', $currentDate) // Vacation started before or in current month
+            ->where(function ($query) use ($currentDate) {
+                $query->where('end_date', '>=', $currentDate)   // End date is in the future
+                    ->orWhereNull('end_date');               // or no end date (ongoing)
+            })
+            ->first();
+
+        if ($EmployeeVacation) {
+            // Parse the start and end dates of the vacation
+            $start_date = Carbon::parse($EmployeeVacation->start_date);
+            $end_date = $EmployeeVacation->end_date ? Carbon::parse($EmployeeVacation->end_date) : Carbon::parse($currentDate);
+
+            // Define the boundaries for last and current months
+            $firstDayOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
+            $lastDayOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
+            $firstDayOfCurrentMonth = Carbon::now()->startOfMonth();
+
+            // Calculate vacation days in the last month if vacation started last month
+            $vacationDaysLastMonth = 0;
+            if ($start_date < $firstDayOfCurrentMonth) {
+                $lastMonthStart = $start_date->greaterThanOrEqualTo($firstDayOfLastMonth) ? $start_date : $firstDayOfLastMonth;
+                $lastMonthEnd = $end_date->lessThanOrEqualTo($lastDayOfLastMonth) ? $end_date : $lastDayOfLastMonth;
+
+                $vacationDaysLastMonth = $lastMonthStart->diffInDays($lastMonthEnd) + 1;
+            }
+
+            // Calculate remaining vacation days for the current month
+            $totalVacationDays = $EmployeeVacation->days_number;
+            $remainingDays = $totalVacationDays - $vacationDaysLastMonth;
+
+            // Check if remaining days extend into the current month
+            $vacationDaysCurrentMonth = 0;
+            // if ($remainingDays > 0) {
+            $currentMonthEnd = $end_date->lessThanOrEqualTo($currentDate) ? $end_date : Carbon::parse($currentDate);
+            $currentMonthStart = $firstDayOfCurrentMonth->greaterThan($start_date) ? $firstDayOfCurrentMonth : $start_date;
+            $vacationDaysCurrentMonth = $currentMonthStart->diffInDays($currentMonthEnd) + 1;
+            // }
+
+            // Set vacation days based on calculations
+            $vacation_days_last_month = $vacationDaysLastMonth;
+            $vacation_days_current_month = $vacationDaysCurrentMonth;
+
+            $vacation_days = $vacation_days_current_month;
+
+
+
+            $inspectorMissions = InspectorMission::where('inspector_id', $Inspector)
+                ->whereBetween('date', [
+                    Carbon::now()->startOfMonth()->toDateString(),
+                    Carbon::now()->endOfMonth()->toDateString(),
+                ])
+                ->orderBy('date')
+                ->get();
+            for ($i = 0; $i < $vacation_days; $i++) {
+                $inspectorMissions[$i]->vacation_id = $EmployeeVacation->id;
+                $inspectorMissions[$i]->save();
             }
         }
     }
