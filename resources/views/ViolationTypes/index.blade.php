@@ -156,7 +156,7 @@
                                             dir="rtl">{{ $errors->first('nameadd') }}</span>
                                     @endif
                                 </div>
-                                <div class="form-group mb-3">
+                                {{-- <div class="form-group mb-3">
                                     <label class="d-flex justify-content-start pb-2" for="types"
                                         style="flex-direction: row-reverse;">
                                         الاداره الخاصه بالمخالفه
@@ -174,8 +174,23 @@
                                             @endforeach
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
+                                <div class="form-group  mb-3" style="height: 142px;">
+                                    <label class="d-flex justify-content-start pb-2" for="selectedItems"
+                                        style=" flex-direction: row-reverse;">
+                                        الاداره الخاصه بالمخالفه</label>
+                                        <select name="types[]" id="selectedItems" multiple
+                                        class=" form-control custom-select custom-select-lg mb-3 select2 col-12 mltyselect2"
+                                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required dir="rtl">
+                                    {{-- <select class="w-100 px-2 select2" name="types[]" id="types" multiple
+                                        style="border: 0.2px solid rgb(199, 196, 196);" required dir="rtl"> --}}
+                                        @foreach (getDepartments() as $department)
+                                            <option value="{{ $department->id }}"> {{ $department->name }}</option>
+                                        @endforeach
 
+                                    </select>
+
+                                </div>
 
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2" dir="rtl">
                                     <button type="submit" class="btn-all mx-2 p-2"
@@ -234,7 +249,7 @@
                                         style=" flex-direction: row-reverse;">
                                         الاداره الخاصه بالمخالفه</label>
                                         <select name="types[]" id="types" multiple
-                                        class=" form-control custom-select custom-select-lg mb-3 select2 col-12"
+                                        class=" form-control custom-select custom-select-lg mb-3 select2 col-12 mltyselect2"
                                         style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required dir="rtl">
                                     {{-- <select class="w-100 px-2 select2" name="types[]" id="types" multiple
                                         style="border: 0.2px solid rgb(199, 196, 196);" required dir="rtl"> --}}
@@ -273,10 +288,19 @@
 @endsection
 @push('scripts')
     <script>
-          $('.select2').select2({
-            dir: "rtl"
-        });
+    // Initialize Select2 for #types with RTL support
+    $('#types').select2({
+        dir: "rtl",
+        placeholder: "اختر الاداره...",
+        allowClear: true // Optional: Allows the user to clear the selection
+    });
 
+    // Initialize Select2 for #selectedItems with RTL support
+    $('#selectedItems').select2({
+        dir: "rtl",
+        placeholder: "اختر الاداره...",
+        allowClear: true // Optional: Allows the user to clear the selection
+    });
         function openedit(id, name, selectedTypesJson) {
             console.log('Opening edit modal for ID:', id);
             console.log('Selected Types JSON:', selectedTypesJson);
@@ -449,52 +473,53 @@
             });
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('add-form').addEventListener('submit', function(event) {
-                event.preventDefault();
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     document.getElementById('add-form').addEventListener('submit', function(event) {
+        //         event.preventDefault();
 
-                var name = document.getElementById('nameadd').value;
-                var checkboxes = document.querySelectorAll('input[name="types[]"]');
-                var typesSelected = Array.from(checkboxes).some(checkbox => checkbox.checked);
+        //         var name = document.getElementById('nameadd').value;
+        //         var checkboxes = document.querySelectorAll('input[name="types[]"]');
+        //         var typesSelected = Array.from(checkboxes).some(checkbox => checkbox.checked);
 
-                var form = document.getElementById('add-form');
-                var inputs = form.querySelectorAll('[required]');
-                var valid = true;
+        //         var form = document.getElementById('add-form');
+        //         var inputs = form.querySelectorAll('[required]');
+        //         var valid = true;
 
-                // Clear previous error messages and styles
-                inputs.forEach(function(input) {
-                    input.style.borderColor = ''; // Reset border color
-                });
+        //         // Clear previous error messages and styles
+        //         inputs.forEach(function(input) {
+        //             input.style.borderColor = ''; // Reset border color
+        //         });
 
-                var selectBox = document.getElementById('select-box');
-                if (selectBox) {
-                    selectBox.style.borderColor = ''; // Reset border color
-                }
+        //         var selectBox = document.getElementById('select-box');
+        //         dd()
+        //         if (selectBox) {
+        //             selectBox.style.borderColor = ''; // Reset border color
+        //         }
 
-                // Validate required inputs
-                inputs.forEach(function(input) {
-                    if (!input.value) {
-                        valid = false;
-                        input.style.borderColor = 'red'; // Highlight empty inputs
-                        alert('من فضلك ادخل اسم نوع الشكوى');
-                    }
-                });
+        //         // Validate required inputs
+        //         inputs.forEach(function(input) {
+        //             if (!input.value) {
+        //                 valid = false;
+        //                 input.style.borderColor = 'red'; // Highlight empty inputs
+        //                 alert('من فضلك ادخل اسم نوع الشكوى');
+        //             }
+        //         });
 
-                // Validate checkboxes
-                if (!typesSelected) {
-                    valid = false;
-                    if (selectBox) {
-                        selectBox.style.borderColor = 'red'; // Highlight empty inputs
-                    }
-                    alert('من فضلك اختر الأداره الخاصه بالشكوى');
-                }
+        //         // Validate checkboxes
+        //         if (!typesSelected) {
+        //             valid = false;
+        //             if (selectBox) {
+        //                 selectBox.style.borderColor = 'red'; // Highlight empty inputs
+        //             }
+        //             alert('من فضلك اختر الأداره الخاصه بالشكوى');
+        //         }
 
-                // If all validations pass, submit the form
-                if (valid) {
-                    this.submit();
-                }
-            });
-        });
+        //         // If all validations pass, submit the form
+        //         if (valid) {
+        //             this.submit();
+        //         }
+        //     });
+        // });
     </script>
     <script>
         // Show/Hide options on input focus
