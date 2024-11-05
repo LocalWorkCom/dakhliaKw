@@ -673,7 +673,7 @@ class reportsController extends Controller
     {
         $today = now()->toDateString(); // Today's date
         $notifies = Notification::with('mission')
-            ->where('user_id', auth()->user()->id)
+            ->where('user_id', auth()->user()->id)->whereIn('type',[1,2])
             ->whereDate('created_at', $today) // Ensure the date comparison is for the correct day
             ->get();
         // Check if there are any notifications
@@ -685,6 +685,7 @@ class reportsController extends Controller
                     'message' => $notification->message,
                     'user_id' => $notification->user_id,
                     'mission_id' => $notification->mission_id,
+                    'type' => $notification->type == 2 ? 'mission' : 'vacation',
                     'status' => $notification->status == 0 ?  false : true,
                 ];
             });

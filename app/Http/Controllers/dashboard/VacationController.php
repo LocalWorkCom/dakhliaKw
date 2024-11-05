@@ -537,7 +537,7 @@ class VacationController extends Controller
                 $user_id = Inspector::find($inspector->id)->user_id;
                 DB::table('notifications')->insert([
                     'user_id' => $user_id,
-                    // 'mission_id' => $event->mission->id,
+                    'type' => 1,
                     'title' => 'تم القبول',
                     'message' => 'تم قبول أجازتك',
                     'created_at' => now(),
@@ -558,6 +558,8 @@ class VacationController extends Controller
                         $notify = new Notification();
                         $notify->message = $message;
                         $notify->title = $title;
+                        $notify->type = 3;
+
                         $notify->group_id = $group_id;
                         $notify->team_id = $team_id;
                         $notify->user_id =  $user->id;
@@ -589,7 +591,7 @@ class VacationController extends Controller
             $user_id = Inspector::find($vacation->employee_id)->user_id;
             DB::table('notifications')->insert([
                 'user_id' => $user_id,
-                // 'mission_id' => $event->mission->id,
+                'type' => 1,
                 'title' => 'تم الرفض',
                 'message' => 'تم رفض أجازتك',
                 'created_at' => now(),
