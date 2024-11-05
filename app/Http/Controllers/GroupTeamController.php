@@ -473,6 +473,8 @@ class GroupTeamController extends Controller
                 $notify = new Notification();
                 $notify->message = $message;
                 $notify->title = $title;
+                $notify->type = 3;
+
                 $notify->group_id = $team->group_id;
                 $notify->team_id = $team->id;
                 $notify->user_id = $user->id;
@@ -1034,7 +1036,7 @@ class GroupTeamController extends Controller
                             ->where('group_id', $Group->id)
                             ->where('group_team_id', $Team->id)
                             ->first();
-                      
+
 
                         if ($inspector_mission) {
 

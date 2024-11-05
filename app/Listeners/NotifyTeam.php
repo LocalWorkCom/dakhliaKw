@@ -91,6 +91,7 @@ class NotifyTeam
                     'user_id' => $user_id,
                     'mission_id' => $event->mission->id,
                     'title' => 'new mission.',
+                    'type' => 2,
                     'message' => 'A new mission has been assigned to your team.',
                     'created_at' => now(),
                     'updated_at' => now(),

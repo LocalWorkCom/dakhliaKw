@@ -62,10 +62,11 @@ class ViollationController extends Controller
         $date = $request->date;
         $now=date('Y-m-d');
         $allDate='1';
-        if($now != $date)
+        if(isset($request->date))
+       { if($now != $date)
         {
             $allDate='0';
-        }
+        }}
         //dd($now);
         $group = $request->group;
         $team = $request->team;
