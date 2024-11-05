@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class VacationController extends Controller
@@ -482,7 +483,7 @@ class VacationController extends Controller
                     return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
                 }
             } elseif ($value->status != 'Rejected' && $value->end_date) {
-                if ($value->end_date >= $vacation->start_date && $value->start_date <= $vacation->start_date) {
+                if ($value->end_date >= $vacation->start_date) {
                     return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
                 }
             }
@@ -532,6 +533,18 @@ class VacationController extends Controller
 
                     session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
                 }
+                $token = getTokenDevice($inspector->id);
+                $user_id = Inspector::find($inspector->id)->user_id;
+                DB::table('notifications')->insert([
+                    'user_id' => $user_id,
+                    // 'mission_id' => $event->mission->id,
+                    'title' => 'تم القبول',
+                    'message' => 'تم قبول أجازتك',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                send_push_notification(null, $token, 'تم القبول', 'تم قبول أجازتك');
+
                 $EndDate = ExpectedEndDate($vacation)[0];
                 $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
 
@@ -572,7 +585,17 @@ class VacationController extends Controller
             // Update the status to Rejected
             $vacation->status = 'Rejected';
             $vacation->save();
-
+            $token = getTokenDevice($vacation->employee_id);
+            $user_id = Inspector::find($vacation->employee_id)->user_id;
+            DB::table('notifications')->insert([
+                'user_id' => $user_id,
+                // 'mission_id' => $event->mission->id,
+                'title' => 'تم الرفض',
+                'message' => 'تم رفض أجازتك',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            send_push_notification(null, $token, 'تم الرفض', 'تم رفض أجازتك');
             session()->flash('success', 'تم رفض الإجازة بنجاح.');
         } else {
             session()->flash('error', 'الإجازة غير موجودة.');
@@ -707,7 +730,7 @@ class VacationController extends Controller
         return view('vacation.requestVacation', compact('vacation'));
     }
     public function getExpectedEndDate(Request $request) {
-      
+
         $vacation = EmployeeVacation::find($request->id);
         $end_date = ExpectedEndDate($vacation)[0];
         return json_encode($end_date);
