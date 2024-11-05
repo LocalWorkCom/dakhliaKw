@@ -81,7 +81,7 @@ class ViollationController extends Controller
         $group = $request->group;
         $team = $request->team;
         $inspector = $request->inspector;
-
+       // dd($request);
         // Base query for paper transactions
         $second = paperTransaction::with(['inspector', 'point'])
             ->selectRaw('paper_transactions.id, "معاملات ورقيه" as name, CONCAT_WS("\n\r", CONCAT_WS(":", "رقم القيد", paper_transactions.registration_number), CONCAT_WS(":", "رقم الأحوال", paper_transactions.civil_number)) as ViolationType, "معاملات ورقيه" as Type, "2" as mode')

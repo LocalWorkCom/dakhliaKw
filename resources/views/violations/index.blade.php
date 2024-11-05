@@ -289,6 +289,7 @@
                     }
                     $url .= 'date=' . $date;
                 }
+
                 if (isset($group) && $group != '-1') {
                     if ($url == '') {
                         $url .= '?';
@@ -316,7 +317,9 @@
                 $Dataurl .= $url;
                 //dd($Dataurl);
             @endphp
+
             $('#users-table').DataTable({
+
                 processing: true,
                 serverSide: true,
                 searching: false,
