@@ -72,4 +72,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/vacation_types', [VacationController::class, 'getVacationTypes']);
     Route::post('/vacation_request', [VacationController::class, 'requestVacation']);
     Route::get('/all_vacations', [VacationController::class, 'getAllVacations']);
+
+    //add attendance
+    Route::any('/attendance/types', [InspectorMissionController::class, 'get_Alltypes']);
+    Route::any('/attendance/add',  [InspectorMissionController::class, 'addAttendance']);
+    Route::any('/attendance/all', [InspectorMissionController::class, 'getAllAtendance']);
+
 });

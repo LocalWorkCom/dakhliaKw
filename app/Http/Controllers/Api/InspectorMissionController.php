@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Attendance;
 use App\Models\paperTransaction;
 use App\Models\PersonalMission;
 use App\Models\Violation;
@@ -16,11 +17,17 @@ use App\Models\Point;
 use App\Models\PointDays;
 use App\Http\Controllers\Controller;
 use App\Models\Absence;
+use App\Models\AttendanceEmployee;
+use App\Models\ForceName;
+use App\Models\grade;
 use App\Models\GroupTeam;
+use App\Models\User;
+use App\Models\ViolationTypes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use IntlDateFormatter;
+use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
 
 class InspectorMissionController extends Controller
 {
@@ -339,4 +346,292 @@ class InspectorMissionController extends Controller
 
         return response()->json($response, $code);
     }
+    public function get_Alltypes(Request $request)
+    {
+        $type = ViolationTypes::where('type_id', '0')->get();
+        $grade = grade::where('type', 0)->get();
+        $names = ForceName::get();
+
+        if ($grade->isNotEmpty()) {
+            $success['grade2'] = $grade->map(function ($item) {
+                return $item->only(['id', 'name']);
+            });
+        } else {
+            $success['grade2'] = '';
+        }
+        $grade3 = grade::where('type', 2)->get();
+
+        if ($grade->isNotEmpty()) {
+            $success['grade3'] = $grade3->map(function ($item) {
+                return $item->only(['id', 'name']);
+            });
+        } else {
+            $success['grade3'] = '';
+        }
+        if ($type->isNotEmpty()) {
+            $success['type'] = $type->map(function ($item) {
+                return $item->only(['id', 'name']);
+            });
+        } else {
+            $success['type'] = '';
+        }
+        $success['names'] = $names->map(function ($item) {
+            return $item->only(['id', 'name']);
+        });
+        return $this->respondSuccess($success, 'Get Data successfully.');
+    }
+    public function getAttendance(Request $request) {}
+
+    public function addAttendance(Request $request)
+    {
+        $messages = [
+            'mission_id.required' => 'يرجى ارسال رقم امر الخدمه',
+        ];
+
+        $validatedData = Validator::make($request->all(), [
+            'mission_id' => 'required',
+        ], $messages);
+
+        if ($validatedData->fails()) {
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+        }
+
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
+        if (!$request->id) {
+            $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
+
+            $attendance = new Attendance();
+            $attendance->date = Carbon::now()->format('Y-m-d');
+            $attendance->mission_id = $request->mission_id;
+            $attendance->instant_id = $request->instant_mission_id;
+            $attendance->total = $attendanceCount;
+            $attendance->inspector_id = $inspectorId->id;
+            $attendance->parent = null;
+            $attendance->flag = 1;
+            $attendance->save();
+
+            $attendanceEmployees = [];
+
+            if ($attendance) {
+                if ($request->has('AtendanceEmployee')) {
+                    foreach ($request->AtendanceEmployee as $item) {
+
+                        $employeeValidator = Validator::make($item, [
+                            'name' => 'required',
+                            'type_employee' => 'required',
+                            'grade' => 'required'
+                        ], $messages);
+
+                        if ($employeeValidator->fails()) {
+                            return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
+                        }
+
+                        $emp = new AttendanceEmployee();
+                        $emp->name = $item['name'];
+                        $emp->grade_id = $item['grade'] ?? null;
+                        $emp->type_id = $item['type_employee'] ?? null;
+                        $emp->attendance_id = $attendance->id;
+                        $emp->force_id = $item['department'] ?? null;
+                        $emp->save();
+
+                        $attendanceEmployees[] = $emp;
+                    }
+                }
+            }
+        } else {
+            $record = Attendance::where('id', $request->id)->first();
+            $isParent = $record->parent;
+            if ($isParent != 0) {
+                $record->flag = 0;
+                $record->save();
+                $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
+
+                $attendance = new Attendance();
+                $attendance->date = Carbon::now()->format('Y-m-d');
+                $attendance->mission_id = $request->mission_id;
+                $attendance->instant_id = $request->instant_mission_id;
+                $attendance->total = $attendanceCount;
+                $attendance->inspector_id = $inspectorId->id;
+                $attendance->parent = null;
+                $attendance->flag = 1;
+                $attendance->save();
+
+                $attendanceEmployees = [];
+
+                if ($attendance) {
+                    if ($request->has('AtendanceEmployee')) {
+                        foreach ($request->AtendanceEmployee as $item) {
+
+                            $employeeValidator = Validator::make($item, [
+                                'name' => 'required',
+                                'type_employee' => 'required',
+                                'grade' => 'required'
+                            ], $messages);
+
+                            if ($employeeValidator->fails()) {
+                                return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
+                            }
+
+                            $emp = new AttendanceEmployee();
+                            $emp->name = $item['name'];
+                            $emp->grade_id = $item['grade'] ?? null;
+                            $emp->type_id = $item['type_employee'] ?? null;
+                            $emp->attendance_id = $attendance->id;
+                            $emp->force_id = $item['department'] ?? null;
+                            $emp->save();
+
+                            $attendanceEmployees[] = $emp;
+                        }
+                    }
+                }
+            } else {
+                $records = Attendance::where('parent', $isParent)->pluck('id')->toArray();
+                foreach ($records as $recordId) {
+                    $recs = Attendance::find($recordId);
+                    $recs->flag = 0;
+                    $recs->save();
+                }
+                $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
+
+                $attendance = new Attendance();
+                $attendance->date = Carbon::now()->format('Y-m-d');
+                $attendance->mission_id = $request->mission_id;
+                $attendance->instant_id = $request->instant_mission_id;
+                $attendance->total = $attendanceCount;
+                $attendance->inspector_id = $inspectorId->id;
+                $attendance->parent = $request->id;
+                $attendance->flag = 1;
+                $attendance->save();
+
+                $attendanceEmployees = [];
+
+                if ($attendance) {
+                    if ($request->has('AtendanceEmployee')) {
+                        foreach ($request->AtendanceEmployee as $item) {
+
+                            $employeeValidator = Validator::make($item, [
+                                'name' => 'required',
+                                'type_employee' => 'required',
+                                'grade' => 'required'
+                            ], $messages);
+
+                            if ($employeeValidator->fails()) {
+                                return $this->respondError('Validation Error.', $employeeValidator->errors(), 400);
+                            }
+
+                            $emp = new AttendanceEmployee();
+                            $emp->name = $item['name'];
+                            $emp->grade_id = $item['grade'] ?? null;
+                            $emp->type_id = $item['type_employee'] ?? null;
+                            $emp->attendance_id = $attendance->id;
+                            $emp->force_id = $item['department'] ?? null;
+                            $emp->save();
+
+                            $attendanceEmployees[] = $emp;
+                        }
+                    }
+                }
+            }
+        }
+
+        $success = [
+            'Attendance' => $attendance,
+            'AttendanceEmployees' => $attendanceEmployees,
+        ];
+
+        return $this->respondSuccess($success, 'Data Saved successfully.');
+    }
+
+    public function getAllAtendance(Request $request)
+    {
+        $messages = [
+            'mission_id.required' => 'يرجى ارسال رقم امر الخدمه',
+        ];
+
+        $validatedData = Validator::make($request->all(), [
+            'mission_id' => 'required',
+        ], $messages);
+
+        if ($validatedData->fails()) {
+            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+        }
+
+        $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
+        $instantMission = InstantMission::with('group', 'groupTeam')->findOrFail($request->mission_id);
+
+        // Handle GIS link or location
+        if (str_contains($instantMission->location, 'gis.paci.gov.kw')) {
+            $location = null;
+            $kwFinder = $instantMission->location;
+        } else {
+            $location = $instantMission->location;
+            $kwFinder = null;
+        }
+
+        $time = Carbon::parse($instantMission->created_at)->format('H:i');
+        $time_arabic = ($instantMission->created_at->format('A') === 'AM') ? 'صباحا' : 'مساءا';
+
+        $success['shift'] = [
+            'date' => $instantMission->created_at->format('Y-m-d'),
+            'time' => $time,
+        ];
+
+        $success['instantMissions'] = [
+            'instant_mission_id' => $instantMission->id,
+            'name' => $instantMission->label,
+            'location' => $location,
+            'KWfinder' => $kwFinder,
+            'description' => $instantMission->description,
+            'group' => $instantMission->group_id ? $instantMission->group->name : 'N/A',
+            'team' => $instantMission->group_team_id ? $instantMission->groupTeam->name : 'N/A',
+            'date' => $instantMission->created_at->format('Y-m-d'),
+            'time' => $time,
+            'time_name' => $time_arabic,
+            'latitude' => $instantMission->latitude,
+            'longitude' => $instantMission->longitude,
+        ];
+
+        $attendanceRecords = Attendance::where('instant_id', $request->mission_id)
+            ->where('flag', 1)
+            ->get();
+
+        $success['Attendance'] = $attendanceRecords->map(function ($attendance) {
+            $attendanceEmployees = AttendanceEmployee::with('force', 'grade')->where('attendance_id', $attendance->id)->get();
+            $inspector =   Inspector::find($attendance->inspector_id)->value('user_id');
+            $user = User::with('grade')->find($inspector);
+            $name = $user->name;
+            $grade = $user->grade ? $user->grade->name : 'N/A';
+
+            $forceNames = $attendanceEmployees->unique('force_id')
+                ->map(function ($employee) {
+                    return $employee->force ? $employee->force->name : 'Unknown';
+                })
+                ->toArray();
+
+            return [
+                'id' => $attendance->id,
+                'force_name' => 'ادارة (' . implode(', ', $forceNames) . ')',
+                'total_force' => $attendanceEmployees->unique('force_id')->count(),
+                'total_police' => $attendanceEmployees->where('type_id', 2)->count(),
+                'total_individuals' => $attendanceEmployees->where('type_id', 1)->count(),
+                'total_workers' => $attendanceEmployees->where('type_id', 3)->count(),
+                'total_civilian' => $attendanceEmployees->where('type_id', 4)->count(),
+                'force_names' => $attendanceEmployees->map(function ($emp, $index) {
+                    return [
+                        'index' => $index + 1,
+                        'name' => $emp->name,
+                        'grade' => $emp->grade_id ? $emp->grade->name : '',
+                    ];
+                }),
+                'created_at' => $attendance->parent == 0 ? $attendance->created_at : Attendance::find($attendance->parent)->created_at,
+                'created_at_time' => $attendance->parent == 0 ? $attendance->created_at->format('H:i:s') : Attendance::find($attendance->parent)->created_at->format('H:i:s'),
+                'inspector_name' => $name,
+                'inspector_grade' => $grade,
+            ];
+        });
+
+        return response()->json($success);
+    }
+
+
 }
