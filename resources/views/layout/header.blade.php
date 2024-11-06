@@ -319,6 +319,15 @@
                                                 </a>
                                             </li>
                                         @endif
+                                        {{-- @if (Auth::user()->hasPermission('view job')) --}}
+                                        <li class="{{ request()->routeIs('forcenames.index') ? 'active' : '' }}">
+                                            <img src="{{ asset('frontend/images/jobs.svg') }}"
+                                                alt="logo"
+                                                style="margin-left: 7px;">
+                                            <a href="{{ route('forcenames.index') }}"> أدارات الخدمه
+                                            </a>
+                                        </li>
+                                    {{-- @endif --}}
                                         {{-- @if (Auth::user()->hasPermission('view Qualification'))
                                             <li class="{{ request()->routeIs('qualifications.index') ? 'active' : '' }}">
                                     <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"

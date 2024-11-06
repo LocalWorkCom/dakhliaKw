@@ -131,7 +131,7 @@ class ApiAbsenceController extends Controller
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
 
-        $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
+        $inspectorId = Inspector::where('user_id',  auth()->user()->id)->first();
         //  dd(auth()->user()->inspectors);
         $today = Carbon::today()->toDateString();
         $police_number = $request->police_number;

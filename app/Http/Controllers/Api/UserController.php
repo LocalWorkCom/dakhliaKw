@@ -28,70 +28,71 @@ class UserController extends Controller
             'military_number.required' => 'رقم الهوية مطلوب.',
             'password.required' => 'كلمة المرور مطلوبة.',
         ];
-    
+
         // Validate request data
         $validatedData = Validator::make($request->all(), [
             'military_number' => 'required|string',
             'password' => 'required|string',
             'device_token' => 'min:2'
         ], $messages);
-    
+
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-    
+
         $keyLogin = $request->military_number;
         $password = $request->password;
-    
+
         // Retrieve user by military_number or civil_number
         $user = User::where('military_number', $keyLogin)
             ->orWhere('civil_number', $keyLogin)
             ->join('inspectors', 'user_id', '=', 'users.id')
-            ->select('users.*', 'inspectors.id as inspectorId', 'inspectors.group_id')
+            ->select('users.*', 'inspectors.id as inspectorId', 'inspectors.group_id' , 'inspectors.flag as flagIns' )
             ->first();
-    
+
         if (!$user) {
             return $this->respondError('Validation Error.', [
                 'military_number' => ['رقم الهوية لا يتطابق مع سجلات المفتشين']
             ], 400);
         }
-    
-        // Prepare credentials for authentication
+        if ($user->flag !== 'employee' && $user->rule_id !== 4  && $user->flagIns !== 0 ) {
+            return $this->respondError('Validation Error.','لا يسمح لك بدخول الهيئة', 400);
+        }
         $credentials = [
             $user->military_number ? 'military_number' : 'civil_number' => $keyLogin,
             'password' => $password
         ];
-    
+
         // Attempt authentication
         if (!Auth::attempt($credentials)) {
             return $this->respondError('Password Error', [
                 'crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']
             ], 403);
         }
-    
+
         // Generate token and update user info
         $token = $user->createToken('auth_token')->accessToken;
         $user->device_token = $request->device_token;
         $user->token = $token;
         $user->save();
-    
+
         // Determine user manager status and off-day status
         $isManager = false;
         $groupTeam = GroupTeam::where('group_id', $user->group_id)
             ->whereRaw('find_in_set(?, inspector_ids)', [$user->inspectorId])
             ->first();
-    
+
         if ($groupTeam && $user->inspectorId == $groupTeam->inspector_manager) {
             $isManager = true;
         }
-    
+
         $today = Carbon::today()->format('Y-m-d');
         $isOff = InspectorMission::where('inspector_id', $user->inspectorId)
             ->whereDate('date', $today)
             ->value('day_off');
-    
+
         $timeEdit = Setting::where('key', 'timer')->value('value');
-    
+
         // Prepare success response data
         $success = [
             'token' => $token,
@@ -110,10 +111,10 @@ class UserController extends Controller
                 'grade' => $user->grade ? $user->grade->name : 'مدني'
             ]
         ];
-    
+
         return $this->respondSuccess($success, 'User logged in successfully.');
     }
-    
+
 
 
 

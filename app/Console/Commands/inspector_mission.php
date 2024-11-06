@@ -253,11 +253,14 @@ class inspector_mission extends Command
                     ])
                     ->orderBy('date')
                     ->get();
-                for ($i = 0; $i < $vacation_days; $i++) {
-                    $inspectorMissions[$i]->vacation_id = $EmployeeVacation->id;
-                    $inspectorMissions[$i]->save();
-                }
-            
+                    if($inspectorMissions->count()){
+                        for ($i = 0; $i < $vacation_days; $i++) {
+                            $inspectorMissions[$i]->vacation_id = $EmployeeVacation->id;
+                            $inspectorMissions[$i]->save();
+                        }
+                    }
+
+
         }
     }
 }

@@ -422,7 +422,7 @@ class reportsController extends Controller
                     'shift' => [
                         'start_time' => null,
                         'end_time' => null,
-'time' => date("g:i:s", strtotime($instans_missions->created_at)) . (date("A", strtotime($instans_missions->created_at)) == 'AM' ? ' ص' : ' م')
+                        'time' => date("g:i:s", strtotime($instans_missions->created_at)) . (date("A", strtotime($instans_missions->created_at)) == 'AM' ? ' ص' : ' م')
                     ],
                     'team_name' => $teamName,
                     'violationsOfPoint' => [
@@ -671,10 +671,10 @@ class reportsController extends Controller
 
     public function getNotifi(Request $request)
     {
-        $today = now()->toDateString(); // Today's date
+        $today = now()->toDateString();
         $notifies = Notification::with('mission')
-            ->where('user_id', auth()->user()->id)->whereIn('type',[1,2])
-            ->whereDate('created_at', $today) // Ensure the date comparison is for the correct day
+            ->where('user_id', auth()->user()->id)->whereIn('type', [1, 2])
+            ->whereDate('created_at', $today)
             ->get();
         // Check if there are any notifications
         if ($notifies->isNotEmpty()) {
