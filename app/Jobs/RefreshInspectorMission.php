@@ -61,13 +61,22 @@ class RefreshInspectorMission implements ShouldQueue
                 //   to sum num of working day and holiday
                 $total_days_in_cycle = $WorkingTree->working_days_num + $WorkingTree->holiday_days_num;
                 // for loob by num of day's monthly
+                $inspectorMissions = InspectorMission::where('group_id', $GroupTeam->group_id)->where('group_team_id', $GroupTeam->id)
+                    ->whereBetween('date', [
+                        Carbon::now()->startOfMonth()->toDateString(),
+                        Carbon::now()->endOfMonth()->toDateString(),
+                    ])
+                    ->count();
 
-                // $day_of_month_val = $GroupTeam->last_day;
-                if ($WorkingTree->changed) {
+                if (!$inspectorMissions) {
 
-                    $day_of_month_val = InspectorMission::where('working_tree_id', $WorkingTree->id)->where('group_id', $GroupTeam->group_id)->where('group_team_id', $GroupTeam->id)
-                        ->where('date', Carbon::now()->toDateString())->where('inpsector_id', $Inspector)->first()->day_number;
-
+                    $day_of_month_val = $GroupTeam->last_day;
+                } else {
+                    $data = InspectorMission::where('group_id', $GroupTeam->group_id)->where('group_team_id', $GroupTeam->id)
+                        ->where('date', Carbon::now()->toDateString())->where('inspector_id', $Inspector)->first();
+                    $day_of_month_val = $data->day_number;
+                }
+                if ($WorkingTree->changed || $GroupTeam->changed || !$inspectorMissions) {
 
                     for ($day_of_month = $day_of_month_val; $day_of_month <= $num_days; $day_of_month++) {
                         // check day off or not
@@ -93,7 +102,7 @@ class RefreshInspectorMission implements ShouldQueue
                         }
 
                         InspectorMission::where('working_tree_id', $WorkingTree->id)->where('group_id', $GroupTeam->group_id)->where('group_team_id', $GroupTeam->id)
-                            ->where('date',  Carbon::now()->toDateString())->where('inspector_id', $Inspector)
+                            ->where('date', $date)->where('inspector_id', $Inspector)
                             ->delete();
                         // insert data for monthly
                         $inspectorMission = new InspectorMission();
@@ -125,80 +134,86 @@ class RefreshInspectorMission implements ShouldQueue
 
                     //     dd($day_of_month);
                     // }
-                    if ($GroupTeam->last_day > 1) {
-                        $firstLoop = $day_of_month - $GroupTeam->last_day;
-                        $day_in_cycle++;
-                        for ($i = $firstLoop; $i < $num_days; $i++) {
+                    // if ($day_of_month_val > 1) {
+                    //     $firstLoop = $day_of_month - $day_of_month_val;
+                    //     $day_in_cycle++;
+                    //     for ($i = $firstLoop; $i < $num_days; $i++) {
 
 
-                            // $is_day_off =  $WorkingTree->is_holiday;
-                            // if not  day off get working tree
+                    //         // $is_day_off =  $WorkingTree->is_holiday;
+                    //         // if not  day off get working tree
 
-                            $WorkingTreeTime =
-                                WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
-                                ->where('day_num', $day_in_cycle)
-                                ->first();
-                            if (!$WorkingTreeTime) {
-                                $day_in_cycle = 1;
-                                $WorkingTreeTime =
-                                    WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
-                                    ->where('day_num', $day_in_cycle)
-                                    ->first();
-                            }
+                    //         $WorkingTreeTime =
+                    //             WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
+                    //             ->where('day_num', $day_in_cycle)
+                    //             ->first();
+                    //         if (!$WorkingTreeTime) {
+                    //             $day_in_cycle = 1;
+                    //             $WorkingTreeTime =
+                    //                 WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
+                    //                 ->where('day_num', $day_in_cycle)
+                    //                 ->first();
+                    //         }
 
-                            $user_id  = Inspector::find($Inspector)->user_id;
-                            if ($vacation_days == 0) {
+                    //         $user_id  = Inspector::find($Inspector)->user_id;
+                    //         if ($vacation_days == 0) {
 
-                                $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('status', 'Approved')->where('start_date', '=',  $date)->first(); //1/9/2024
-                                if ($EmployeeVacation) {
-                                    $vacation_days = $EmployeeVacation->days_number; //3
-                                }
-                            }
-
-
-                            // insert data for monthly
-                            $inspectorMission = new InspectorMission();
-                            $inspectorMission->inspector_id = $Inspector;
-                            $inspectorMission->group_id = $GroupTeam->group_id;
-                            $inspectorMission->group_team_id = $GroupTeam->id;
-                            $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
-                            $inspectorMission->working_time_id = $WorkingTreeTime->working_time_id ? $WorkingTreeTime->working_time_id : null;
-                            $inspectorMission->date = $date;
-                            $inspectorMission->day_number = $day_in_cycle;
-                            if ($vacation_days != 0) {
+                    //             $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('status', 'Approved')->where('start_date', '=',  $date)->first(); //1/9/2024
+                    //             if ($EmployeeVacation) {
+                    //                 $vacation_days = $EmployeeVacation->days_number; //3
+                    //             }
+                    //         }
 
 
-                                $inspectorMission->vacation_id = $EmployeeVacation->id;
-                            }
-                            $inspectorMission->day_off =  $WorkingTreeTime->working_time_id ? 0 : 1;
-                            $inspectorMission->save();
-                            if ($vacation_days != 0) {
+                    //         // insert data for monthly
+                    //         $inspectorMission = new InspectorMission();
+                    //         $inspectorMission->inspector_id = $Inspector;
+                    //         $inspectorMission->group_id = $GroupTeam->group_id;
+                    //         $inspectorMission->group_team_id = $GroupTeam->id;
+                    //         $inspectorMission->working_tree_id = $GroupTeam->working_tree_id;
+                    //         $inspectorMission->working_time_id = $WorkingTreeTime->working_time_id ? $WorkingTreeTime->working_time_id : null;
+                    //         $inspectorMission->date = $date;
+                    //         $inspectorMission->day_number = $day_in_cycle;
+                    //         if ($vacation_days != 0) {
 
-                                $vacation_days--;
-                            }
 
-                            // Move to the next day
-                            $date = date('Y-m-d', strtotime($date . ' +1 day'));
-                            if ($day_in_cycle > $total_days_in_cycle) {
+                    //             $inspectorMission->vacation_id = $EmployeeVacation->id;
+                    //         }
+                    //         $inspectorMission->day_off =  $WorkingTreeTime->working_time_id ? 0 : 1;
+                    //         $inspectorMission->save();
+                    //         if ($vacation_days != 0) {
 
-                                $day_in_cycle = ($i - 1) % $total_days_in_cycle + 1;
-                            } else {
-                                $day_in_cycle++;
-                            }
-                        }
-                    }
+                    //             $vacation_days--;
+                    //         }
+
+                    //         // Move to the next day
+                    //         $date = date('Y-m-d', strtotime($date . ' +1 day'));
+                    //         if ($day_in_cycle > $total_days_in_cycle) {
+
+                    //             $day_in_cycle = ($i - 1) % $total_days_in_cycle + 1;
+                    //         } else {
+                    //             $day_in_cycle++;
+                    //         }
+                    //     }
+                    // }
 
                     if ($ids_inspector_arr[sizeof($ids_inspector_arr) - 1] == $Inspector) {
 
                         $GroupTeam->last_day = $day_in_cycle;
                         $GroupTeam->save();
                     }
+                    $GroupTeam->changed = 0;
+                    $GroupTeam->save();
+
+                    $WorkingTree->changed = 0;
+                    $WorkingTree->save();
+
                     $this->updatePrevVacation($Inspector);
                 }
             }
         }
     }
-    
+
     function updatePrevVacation($Inspector)
     {
         $currentDate = Carbon::now();

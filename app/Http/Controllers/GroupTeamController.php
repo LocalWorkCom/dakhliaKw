@@ -391,6 +391,10 @@ class GroupTeamController extends Controller
         // First, define the date range: from today until the end of the current month
         $startDate = date('Y-m-d');
         // $endDate = now()->endOfMonth();
+        if ($team->working_tree_id != $request->working_tree_id) {
+            $team->changed = 1;
+            $team->save();
+        }
 
         // Fetch all InspectorMissions from today until the end of the month for the current team and working tree ID
         $data_missions = InspectorMission::where('date', '>=', $startDate)
@@ -472,7 +476,7 @@ class GroupTeamController extends Controller
 
             $users = User::where('rule_id', 2)->get();
             foreach ($users as $user) {
-                send_push_notification(null, $user->fcm_token, $title, $message,null);
+                send_push_notification(null, $user->fcm_token, $title, $message, null);
                 $notify = new Notification();
                 $notify->message = $message;
                 $notify->title = $title;
