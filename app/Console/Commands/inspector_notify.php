@@ -110,7 +110,8 @@ class inspector_notify extends Command
                         $token = getTokenDevice($inspector->id);
                         if ($mission->day_off == 0) {
                             // Send notification to the Inspector object
-                           send_push_notification($instantMissionId,$token,'new mission.','A new mission has been assigned to your team.');
+                        //    send_push_notification($instantMissionId,$token,'new mission.','A new mission has been assigned to your team.',);
+                           send_push_notification($instantMissionId, $token, 'أمر خدمة جديد', 'لقد تم اسناد أمر خدمة جديد لفريقك.','mission');
 
                             // Log details before inserting
                             Log::info('Inserting notification', [
@@ -122,8 +123,8 @@ class inspector_notify extends Command
                             DB::table('notifications')->insert([
                                 'user_id' => $inspector->user_id,
                                 'mission_id' => $instantMissionId,
-                                'title' => 'new mission.',
-                                'message' => 'A new mission has been assigned to your team.',
+                                'title' => 'أمر خدمة جديد',
+                                'message' => 'لقد تم اسناد أمر خدمة جديد لفريقك.',
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ]);

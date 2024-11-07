@@ -90,13 +90,14 @@ class NotifyTeam
                 DB::table('notifications')->insert([
                     'user_id' => $user_id,
                     'mission_id' => $event->mission->id,
-                    'title' => 'new mission.',
+                    'title' => 'أمر خدمة جديد',
                     'type' => 2,
-                    'message' => 'A new mission has been assigned to your team.',
+                    'message' => 'لقد تم اسناد أمر خدمة جديد لفريقك.',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-                send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
+                // send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
+                send_push_notification($event->mission->id, $token, 'أمر خدمة جديد', 'لقد تم اسناد أمر خدمة جديد لفريقك.','mission');
 
 
             }
@@ -166,7 +167,7 @@ class NotifyTeam
                 'updated_at' => now(),
             ]);
           //  print_r(now());
-            send_push_notification($event->mission->id, $token, 'أمر خدمة جديد', 'لقد تم اسناد أمر خدمة جديد لك.');
+            send_push_notification($event->mission->id, $token, 'أمر خدمة جديد', 'لقد تم اسناد أمر خدمة جديد لك.','mission');
            }
 
 
