@@ -492,7 +492,7 @@ if (!function_exists('send_push_notification')) {
         $result=json_decode($output);
         curl_close ($ch);
     } */
-    function send_push_notification($mission_id, $usertoken, $title, $message, $type)
+    function send_push_notification($mission_id, $usertoken, $title, $message)
     {
         $projectId = "taftesh-74633"; //config('services.fcm.project_id'); # INSERT COPIED PROJECT ID
 

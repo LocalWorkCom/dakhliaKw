@@ -97,7 +97,7 @@ class NotifyTeam
                     'updated_at' => now(),
                 ]);
                 // send_push_notification($event->mission->id, $token, 'new mission.', 'A new mission has been assigned to your team.');
-                send_push_notification($event->mission->id, $token, 'أمر خدمة جديد', 'لقد تم اسناد أمر خدمة جديد لفريقك.','mission');
+                send_push_notification($event->mission->id, $token, 'أمر خدمة جديد', 'لقد تم اسناد أمر خدمة جديد لفريقك.');
 
 
             }
@@ -167,7 +167,7 @@ class NotifyTeam
                 'updated_at' => now(),
             ]);
           //  print_r(now());
-            send_push_notification($event->mission->id, $token, 'أمر خدمة جديد', 'لقد تم اسناد أمر خدمة جديد لك.','mission');
+            send_push_notification($event->mission->id, $token, 'أمر خدمة جديد', 'لقد تم اسناد أمر خدمة جديد لك.');
            }
 
 

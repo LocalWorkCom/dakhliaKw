@@ -544,7 +544,7 @@ class VacationController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-                send_push_notification(null, $token, 'تم القبول', 'تم قبول أجازتك','vacation');
+                send_push_notification(null, $token, 'تم القبول', 'تم قبول أجازتك');
 
                 $EndDate = ExpectedEndDate($vacation)[0];
                 $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
@@ -555,7 +555,7 @@ class VacationController extends Controller
 
                     $users = User::where('rule_id', 2)->get();
                     foreach ($users as $user) {
-                        send_push_notification(null, $user->fcm_token, $title, $message,null);
+                        send_push_notification(null, $user->fcm_token, $title, $message);
                         $notify = new Notification();
                         $notify->message = $message;
                         $notify->title = $title;
@@ -599,7 +599,7 @@ class VacationController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-            send_push_notification(null, $token, 'تم الرفض', 'تم رفض أجازتك','vacation');
+            send_push_notification(null, $token, 'تم الرفض', 'تم رفض أجازتك');
             session()->flash('success', 'تم رفض الإجازة بنجاح.');
         } else {
             session()->flash('error', 'الإجازة غير موجودة.');
