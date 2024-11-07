@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Absence;
 use App\Models\AbsenceEmployee;
 use App\Models\AbsenceViolation;
+use App\Models\Attendance;
+use App\Models\AttendanceEmployee;
 use App\Models\grade;
 use App\Models\Grouppoint;
 use App\Models\GroupTeam;
@@ -15,6 +17,7 @@ use App\Models\instantmission;
 use App\Models\Notification;
 use App\Models\Point;
 use App\Models\PointDays;
+use App\Models\User;
 use App\Models\Violation;
 use App\Models\ViolationTypes;
 use App\Models\WorkingTime;
@@ -222,6 +225,10 @@ class reportsController extends Controller
                 "name" => "حضور و غياب"
             ],
             [
+                'id' => 3,
+                'name' => 'حضور أمر خدمه'
+            ],
+            [
                 'id' => 1,
                 'name' => ' سلوك أنضباطى'
             ],
@@ -285,176 +292,176 @@ class reportsController extends Controller
 
         $absenceReport = [];
         $pointViolations = [];
+        $attendances=[];
+        if ($type === 0 || $type === 1) {
 
-        $violationQuery = Violation::with(['user', 'point', 'violatType', 'instantMission'])->where('status', 1)
-            ->where('user_id', auth()->user()->id);
-         //   dd($violationQuery->get());
-        if (!empty($dates) && count($dates) != 1) {
-            $violationQuery->where(function ($query) use ($dates) {
-                foreach ($dates as $date) {
-                    $startOfDay = Carbon::parse($date)->startOfDay();
-                    $endOfDay = Carbon::parse($date)->endOfDay();
-                    $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
-                }
-            });
-        } else {
-            $violationQuery->where(function ($query) use ($dates) {
-                foreach ($dates as $date) {
-                    $startOfDay = Carbon::parse($date)->startOfDay();
-                    $endOfDay = Carbon::parse($date)->endOfDay();
-                    $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
-                }
-            });
-        }
-
-
-        if (!empty($pointIds)) {
-            $violationQuery->whereIn('point_id', $pointIds);
-        }
-
-        if ($type !== null) {
-            $violationQuery->where('flag', operator: $type);
-        }
-
-        $violations = $violationQuery->orderBy('created_at', 'asc')->get();
-
-        foreach ($violations as $violation) {
-            // Get violation types
-            $violationTypeIds = explode(',', $violation->violation_type);
-            $violationTypes = ViolationTypes::whereIn('id', $violationTypeIds)->get();
-
-            // Include description as a violation type if it exists
-            if ($violation->description) {
-                $violationTypes->push((object)[
-                    'id' => -1,
-                    'name' => $violation->description
-                ]);
-            }
-
-            // Format violation types for output
-            $formattedViolationTypes = $violationTypes->map(function ($type) {
-                return [
-                    'id' => $type->id,
-                    'name' => $type->name
-                ];
-            })->toArray();
-
-            // Format images if they exist
-            if ($violation->image) {
-                $imageArray = explode(',', $violation->image);
-                $formattedImages = implode(', ', $imageArray);
+            $violationQuery = Violation::with(['user', 'point', 'violatType'])->where('status', 1)
+                ->where('user_id', auth()->user()->id);
+            //dd($violationQuery->get());
+            if (!empty($dates) && count($dates) != 1) {
+                $violationQuery->where(function ($query) use ($dates) {
+                    foreach ($dates as $date) {
+                        $startOfDay = Carbon::parse($date)->startOfDay();
+                        $endOfDay = Carbon::parse($date)->endOfDay();
+                        $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
+                    }
+                });
             } else {
-                $formattedImages = null;
+                $violationQuery->where(function ($query) use ($dates) {
+                    foreach ($dates as $date) {
+                        $startOfDay = Carbon::parse($date)->startOfDay();
+                        $endOfDay = Carbon::parse($date)->endOfDay();
+                        $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
+                    }
+                });
             }
 
-            // Determine point name and fetch point shift
-            $pointName = $violation->point_id ? $violation->point->name : 'لا يوجد نقطه';
-            $pointShift = PointDays::where('point_id', $violation->point_id)
-                ->where('name', Carbon::parse($violation->created_at)->dayOfWeek)
-                ->first();
 
-            // Initialize shift details
-            if ($violation->point_id) {
-                $shiftDetails = [
-                    'start_time' => '00:00',
-                    'end_time' => '23:59',
-                    'time' => null
-                ];
+            if (!empty($pointIds)) {
+                $violationQuery->whereIn('point_id', $pointIds);
+            }
 
-                // Override with actual shift if available
-                if ($pointShift && $pointShift->from && $pointShift->to) {
-                    $shiftDetails = [
-                        'start_time' => $pointShift->from,
-                        'end_time' => $pointShift->to,
-                        'time' => null // As per requirement
+            if ($type !== null) {
+                $violationQuery->where('flag',  $type);
+            }
+
+            $violations = $violationQuery->orderBy('created_at', 'asc')->get();
+
+            foreach ($violations as $violation) {
+                // Get violation types
+                $violationTypeIds = explode(',', $violation->violation_type);
+                $violationTypes = ViolationTypes::whereIn('id', $violationTypeIds)->get();
+
+                // Include description as a violation type if it exists
+                if ($violation->description) {
+                    $violationTypes->push((object)[
+                        'id' => -1,
+                        'name' => $violation->description
+                    ]);
+                }
+
+                // Format violation types for output
+                $formattedViolationTypes = $violationTypes->map(function ($type) {
+                    return [
+                        'id' => $type->id,
+                        'name' => $type->name
                     ];
+                })->toArray();
+
+                // Format images if they exist
+                if ($violation->image) {
+                    $imageArray = explode(',', $violation->image);
+                    $formattedImages = implode(', ', $imageArray);
+                } else {
+                    $formattedImages = null;
                 }
 
-                // Handle violations with point_id
-                // if (!isset($pointViolations[$pointName])) {
-                //     $pointViolations[$pointName] = [
-                //         'date' => $violation->created_at->format('Y-m-d'),
-                //         'is_instansmission' => false,
-                //         'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
-                //         'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
-                //         'point_id' => $violation->point_id,
-                //         'point_name' => $pointName,
-                //         'shift' => $shiftDetails,
-                //         'team_name' => $teamName,
-                //         'violationsOfPoint' => []
-                //     ];
-                // }
+                // Determine point name and fetch point shift
+                $pointName = $violation->point_id ? $violation->point->name : 'لا يوجد نقطه';
+                $pointShift = PointDays::where('point_id', $violation->point_id)
+                    ->where('name', Carbon::parse($violation->created_at)->dayOfWeek)
+                    ->first();
 
-                // Add the violation to the point's violations
-                $pointViolations[$pointName]['violationsOfPoint'][] = [
-                    'id' => $violation->id,
-                    'InspectorName' => $violation->user_id ? $violation->user->name : null,
-                    'Inspectorgrade' => $violation->user->grade->name ?? null,
-                    'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
-                    'name' => $violation->name,
-                    'Civil_number' => $violation->Civil_number ?? null,
-                    'military_number' => $violation->military_number ?? null,
-                    'file_number' => $violation->file_num ?? null,
-                    'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
-                    'violation_type' => $formattedViolationTypes,
-                    'inspector_name' => $violation->user_id ? $violation->user->name : null,
-                    'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
-                    'image' => $formattedImages ? $formattedImages : null,
-                    'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
-                    'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
-                    'updated_at' => $violation->updated_at,
-                    'mission_id' => $violation->mission_id ?? null,
-                    'point_id' => $violation->point_id ?? null,
-                    'flag_instantmission' => $violation->flag_instantmission,
-                    'violation_mode' => $violation->flag,
-                ];
-            } else {
-                // Handle violations without point_id with unique keys
-                $noPointKey = 'violation_' . $violation->id; // Create a unique key for this violation
-                $instans_missions = instantmission::find($violation->mission_id);
-                $pointViolations[$noPointKey] = [
-                    'date' => $violation->created_at->format('Y-m-d'),
-                    'is_instansmission' => true,
-                    'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
-                    'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
-                    'point_id' => null,
-                    'point_name' => null,
-                    'shift' => [
-                        'start_time' => null,
-                        'end_time' => null,
-                        'time' => date("g:i:s", strtotime($instans_missions->created_at)) . (date("A", strtotime($instans_missions->created_at)) == 'AM' ? ' ص' : ' م')
-                    ],
-                    'team_name' => $teamName,
-                    'violationsOfPoint' => [
-                        [
-                            'id' => $violation->id,
-                            'InspectorName' => $violation->user_id ? $violation->user->name : null,
-                            'Inspectorgrade' => $violation->user->grade->name ?? null,
-                            'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
-                            'name' => $violation->name,
-                            'Civil_number' => $violation->Civil_number ?? null,
-                            'military_number' => $violation->military_number ?? null,
-                            'file_number' => $violation->file_num ?? null,
-                            'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
-                            'violation_type' => $formattedViolationTypes,
-                            'inspector_name' => $violation->user_id ? $violation->user->name : null,
-                            'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
-                            'image' => $formattedImages ? $formattedImages : null,
-                            'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
-                            'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
-                            'updated_at' => $violation->updated_at,
-                            'mission_id' => $violation->mission_id ?? null,
-                            'point_id' => $violation->point_id ?? null,
-                            'flag_instantmission' => $violation->flag_instantmission,
-                            'violation_mode' => $violation->flag,
-                        ]
-                    ]
-                ];
+                // Initialize shift details
+                if ($violation->point_id) {
+                    $shiftDetails = [
+                        'start_time' => '00:00',
+                        'end_time' => '23:59',
+                        'time' => null
+                    ];
+
+                    // Override with actual shift if available
+                    if ($pointShift && $pointShift->from && $pointShift->to) {
+                        $shiftDetails = [
+                            'start_time' => $pointShift->from,
+                            'end_time' => $pointShift->to,
+                            'time' => null // As per requirement
+                        ];
+                    }
+
+                    // Handle violations with point_id
+                    // if (!isset($pointViolations[$pointName])) {
+                    //     $pointViolations[$pointName] = [
+                    //         'date' => $violation->created_at->format('Y-m-d'),
+                    //         'is_instansmission' => false,
+                    //         'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
+                    //         'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
+                    //         'point_id' => $violation->point_id,
+                    //         'point_name' => $pointName,
+                    //         'shift' => $shiftDetails,
+                    //         'team_name' => $teamName,
+                    //         'violationsOfPoint' => []
+                    //     ];
+                    // }
+
+                    // Add the violation to the point's violations
+                    $pointViolations[$pointName]['violationsOfPoint'][] = [
+                        'id' => $violation->id,
+                        'InspectorName' => $violation->user_id ? $violation->user->name : null,
+                        'Inspectorgrade' => $violation->user->grade->name ?? null,
+                        'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
+                        'name' => $violation->name,
+                        'Civil_number' => $violation->Civil_number ?? null,
+                        'military_number' => $violation->military_number ?? null,
+                        'file_number' => $violation->file_num ?? null,
+                        'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
+                        'violation_type' => $formattedViolationTypes,
+                        'inspector_name' => $violation->user_id ? $violation->user->name : null,
+                        'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
+                        'image' => $formattedImages ? $formattedImages : null,
+                        'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
+                        'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
+                        'updated_at' => $violation->updated_at,
+                        'mission_id' => $violation->mission_id ?? null,
+                        'point_id' => $violation->point_id ?? null,
+                        'flag_instantmission' => $violation->flag_instantmission,
+                        'violation_mode' => $violation->flag,
+                    ];
+                } else {
+                    // Handle violations without point_id with unique keys
+                    // $noPointKey = 'violation_' . $violation->id; // Create a unique key for this violation
+                    // $instans_missions = instantmission::find($violation->mission_id);
+                    // $pointViolations[$noPointKey] = [
+                    //     'date' => $violation->created_at->format('Y-m-d'),
+                    //     'is_instansmission' => true,
+                    //     'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
+                    //     'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
+                    //     'point_id' => null,
+                    //     'point_name' => null,
+                    //     'shift' => [
+                    //         'start_time' => null,
+                    //         'end_time' => null,
+                    //         'time' => date("g:i:s", strtotime($instans_missions->created_at)) . (date("A", strtotime($instans_missions->created_at)) == 'AM' ? ' ص' : ' م')
+                    //     ],
+                    //     'team_name' => $teamName,
+                    //     'violationsOfPoint' => [
+                    //         [
+                    //             'id' => $violation->id,
+                    //             'InspectorName' => $violation->user_id ? $violation->user->name : null,
+                    //             'Inspectorgrade' => $violation->user->grade->name ?? null,
+                    //             'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
+                    //             'name' => $violation->name,
+                    //             'Civil_number' => $violation->Civil_number ?? null,
+                    //             'military_number' => $violation->military_number ?? null,
+                    //             'file_number' => $violation->file_num ?? null,
+                    //             'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
+                    //             'violation_type' => $formattedViolationTypes,
+                    //             'inspector_name' => $violation->user_id ? $violation->user->name : null,
+                    //             'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
+                    //             'image' => $formattedImages ? $formattedImages : null,
+                    //             'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
+                    //             'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
+                    //             'updated_at' => $violation->updated_at,
+                    //             'mission_id' => $violation->mission_id ?? null,
+                    //             'point_id' => $violation->point_id ?? null,
+                    //             'flag_instantmission' => $violation->flag_instantmission,
+                    //             'violation_mode' => $violation->flag,
+                    //         ]
+                    //     ]
+                    // ];
+                }
             }
         }
-
-
-
 
         // Absences
         foreach ($dates as $date) {
@@ -564,9 +571,108 @@ class reportsController extends Controller
                 }
             }
         }
+
+        //Attendance
+        if ($type === 3) {
+            foreach ($dates as $date) {
+                $attendanceRecords = Attendance::where('inspector_id', $inspectorId)
+                    ->where('flag', 1);
+
+                // If dates are provided, filter by them
+                if (!empty($dates) && count($dates) != 1) {
+                    $attendanceRecords->where(function ($query) use ($dates) {
+                        foreach ($dates as $date) {
+                            $startOfDay = Carbon::parse($date)->startOfDay();
+                            $endOfDay = Carbon::parse($date)->endOfDay();
+                            $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
+                        }
+                    });
+                } else {
+                    $attendanceRecords->whereDate('created_at', Carbon::today());
+                }
+
+                $attendances = $attendanceRecords->get()->map(function ($attendance) use ($inspectorId) {
+                    // Fetch associated InstantMission for each attendance
+                    $instantMission = InstantMission::with('group', 'groupTeam')
+                        ->where('inspector_id', $inspectorId)
+                        ->where('id', $attendance->instant_id)
+                        ->first();
+
+                    // Initialize the instant mission details as null
+                    $attendance->instantMissions = null;
+
+                    // If an InstantMission exists, populate the instantMissions
+                    if ($instantMission) {
+                        $location = str_contains($instantMission->location, 'gis.paci.gov.kw') ? null : $instantMission->location;
+                        $kwFinder = str_contains($instantMission->location, 'gis.paci.gov.kw') ? $instantMission->location : null;
+
+                        $time = Carbon::parse($instantMission->created_at)->format('H:i');
+                        $time_arabic = ($instantMission->created_at->format('A') === 'AM') ? 'صباحا' : 'مساءا';
+
+                        // Assign instant mission details to the attendance object
+                        $attendance->instantMissions = [
+                            'instant_mission_id' => $instantMission->id,
+                            'name' => $instantMission->label,
+                            'location' => $location,
+                            'KWfinder' => $kwFinder,
+                            'description' => $instantMission->description,
+                            'group' => $instantMission->group_id ? $instantMission->group->name : 'N/A',
+                            'team' => $instantMission->group_team_id ? $instantMission->groupTeam->name : 'N/A',
+                            'date' => $instantMission->created_at->format('Y-m-d'),
+                            'time' => $time,
+                            'time_name' => $time_arabic,
+                            'latitude' => $instantMission->latitude,
+                            'longitude' => $instantMission->longitude,
+                        ];
+                    }
+
+                    // Get the attendance employees
+                    $attendanceEmployees = AttendanceEmployee::with('force', 'grade')
+                        ->where('attendance_id', $attendance->id)
+                        ->get();
+
+                    // Get inspector info
+                    $inspector = Inspector::find($attendance->inspector_id)->value('user_id');
+                    $user = User::with('grade')->find($inspector);
+                    $name = $user->name;
+                    $grade = $user->grade ? $user->grade->name : 'N/A';
+
+                    // Get unique force names
+                    $forceNames = $attendanceEmployees->unique('force_id')
+                        ->map(function ($employee) {
+                            return $employee->force ? $employee->force->name : 'Unknown';
+                        })
+                        ->toArray();
+
+                    return [
+                        'id' => $attendance->id,
+                        'force_name' => 'ادارة (' . implode(', ', $forceNames) . ')',
+                        'total_force' => $attendanceEmployees->unique('force_id')->count(),
+                        'total_police' => $attendanceEmployees->where('type_id', 2)->count(),
+                        'total_individuals' => $attendanceEmployees->where('type_id', 1)->count(),
+                        'total_workers' => $attendanceEmployees->where('type_id', 3)->count(),
+                        'total_civilian' => $attendanceEmployees->where('type_id', 4)->count(),
+                        'force_names' => $attendanceEmployees->map(function ($emp, $index) {
+                            return [
+                                'index' => $index + 1,
+                                'name' => $emp->name,
+                                'grade' => $emp->grade_id ? $emp->grade->name : '',
+                            ];
+                        }),
+                        'created_at' => $attendance->parent == 0 ? $attendance->created_at : Attendance::find($attendance->parent)->created_at,
+                        'created_at_time' => $attendance->parent == 0 ? $attendance->created_at->format('H:i:s') : Attendance::find($attendance->parent)->created_at->format('H:i:s'),
+                        'inspector_name' => $name,
+                        'inspector_grade' => $grade,
+                        'instantMissions' => $attendance->instantMissions, // Include the instant mission details
+                    ];
+                });
+            }
+        }
+
         $success = [
             'report' => $absenceReport,
             'violations' => array_values($pointViolations),
+            'attendance' => $attendances,
 
         ];
 
@@ -745,4 +851,456 @@ class reportsController extends Controller
             return $this->respondSuccess("success", 'Data Updated successfully.');
         }
     }
+
+
+    // public function getFilteration(Request $request)
+    // {
+    //     $messages = [
+    //         'point_id.*.exists' => 'عفوا هذه النقطه غير متاحه',
+    //         'date.*.date_format' => 'يرجى إدخال التاريخ بصيغه صحيحه yyyy-mm-dd',
+    //     ];
+
+    //     $validatedData = Validator::make($request->all(), [
+    //         'point_id' => [
+    //             'nullable',
+    //             'array',
+    //         ],
+    //         'point_id.*' => ['nullable', 'integer'],
+    //         'date' => ['nullable', 'array'],
+    //         'date.*' => ['nullable', 'date', 'date_format:Y-m-d'],
+    //         'type_id' => ['nullable', 'integer'],
+    //     ], $messages);
+
+    //     if ($validatedData->fails()) {
+    //         return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+    //     }
+
+    //     $dates = $request->input('date', []);
+    //     if (empty($dates)) {
+    //         $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
+    //         $endOfMonth = Carbon::now()->toDateString();
+    //         $dates = [];
+    //         while (strtotime($startOfMonth) <= strtotime($endOfMonth)) {
+    //             $dates[] = $startOfMonth;
+    //             $startOfMonth = Carbon::parse($startOfMonth)->addDay()->toDateString();
+    //         }
+    //     } else {
+    //         $dates = array_map(function ($date) {
+    //             return Carbon::parse($date)->toDateString();
+    //         }, $dates);
+    //     }
+
+    //     $pointIds = $request->input('point_id', []);
+    //     $type = $request->input('type_id');
+
+    //     $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
+
+    //     $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value(column: 'name');
+
+    //     $absenceReport = [];
+    //     $pointViolations = [];
+    //     $instansViolations = [];
+    //     $Attendance = [];
+
+
+    //     if ($type == 1) { //filter violation only
+    //         $violationQuery = Violation::with(['user', 'point', 'violatType'])
+    //             ->where('status', 1)
+    //             ->where('flag',  $type)
+    //             ->where('flag_instantmission', 0)
+    //             ->where('user_id', auth()->user()->id);
+    //         if (!empty($dates) && count($dates) != 1) {
+    //             $violationQuery->where(function ($query) use ($dates) {
+    //                 foreach ($dates as $date) {
+    //                     $startOfDay = Carbon::parse($date)->startOfDay();
+    //                     $endOfDay = Carbon::parse($date)->endOfDay();
+    //                     $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
+    //                 }
+    //             });
+    //         } else {
+    //             $violationQuery->where(function ($query) use ($dates) {
+    //                 foreach ($dates as $date) {
+    //                     $startOfDay = Carbon::parse($date)->startOfDay();
+    //                     $endOfDay = Carbon::parse($date)->endOfDay();
+    //                     $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
+    //                 }
+    //             });
+    //         }
+
+
+    //         if (!empty($pointIds)) {
+    //             $violationQuery->whereIn('point_id', $pointIds);
+    //         }
+
+    //         $violations = $violationQuery->orderBy('created_at', 'asc')->get();
+
+    //         foreach ($violations as $violation) {
+    //             // Get violation types
+    //             $violationTypeIds = explode(',', $violation->violation_type);
+    //             $violationTypes = ViolationTypes::whereIn('id', $violationTypeIds)->get();
+
+    //             // Include description as a violation type if it exists
+    //             if ($violation->description) {
+    //                 $violationTypes->push((object)[
+    //                     'id' => -1,
+    //                     'name' => $violation->description
+    //                 ]);
+    //             }
+
+    //             // Format violation types for output
+    //             $formattedViolationTypes = $violationTypes->map(function ($type) {
+    //                 return [
+    //                     'id' => $type->id,
+    //                     'name' => $type->name
+    //                 ];
+    //             })->toArray();
+
+    //             // Format images if they exist
+    //             if ($violation->image) {
+    //                 $imageArray = explode(',', $violation->image);
+    //                 $formattedImages = implode(', ', $imageArray);
+    //             } else {
+    //                 $formattedImages = null;
+    //             }
+
+    //             // Determine point name and fetch point shift
+    //             $pointName = $violation->point_id ? $violation->point->name : 'لا يوجد نقطه';
+    //             $pointShift = PointDays::where('point_id', $violation->point_id)
+    //                 ->where('name', Carbon::parse($violation->created_at)->dayOfWeek)
+    //                 ->first();
+
+    //             // Initialize shift details
+    //             if ($violation->point_id) {
+    //                 $shiftDetails = [
+    //                     'start_time' => '00:00',
+    //                     'end_time' => '23:59',
+    //                     'time' => null
+    //                 ];
+
+    //                 // Override with actual shift if available
+    //                 if ($pointShift && $pointShift->from && $pointShift->to) {
+    //                     $shiftDetails = [
+    //                         'start_time' => $pointShift->from,
+    //                         'end_time' => $pointShift->to,
+    //                         'time' => null // As per requirement
+    //                     ];
+    //                 }
+
+    //                 //Handle violations with point_id
+    //                 if (!isset($pointViolations[$pointName])) {
+    //                     $pointViolations[$pointName] = [
+    //                         'date' => $violation->created_at->format('Y-m-d'),
+    //                         'is_instansmission' => false,
+    //                         'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
+    //                         'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
+    //                         'point_id' => $violation->point_id,
+    //                         'point_name' => $pointName,
+    //                         'shift' => $shiftDetails,
+    //                         'team_name' => $teamName,
+    //                         'violationsOfPoint' => []
+    //                     ];
+    //                 }
+
+    //                 // Add the violation to the point's violations
+    //                 $pointViolations[$pointName]['violationsOfPoint'][] = [
+    //                     'id' => $violation->id,
+    //                     'InspectorName' => $violation->user_id ? $violation->user->name : null,
+    //                     'Inspectorgrade' => $violation->user->grade->name ?? null,
+    //                     'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
+    //                     'name' => $violation->name,
+    //                     'Civil_number' => $violation->Civil_number ?? null,
+    //                     'military_number' => $violation->military_number ?? null,
+    //                     'file_number' => $violation->file_num ?? null,
+    //                     'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
+    //                     'violation_type' => $formattedViolationTypes,
+    //                     'inspector_name' => $violation->user_id ? $violation->user->name : null,
+    //                     'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
+    //                     'image' => $formattedImages ? $formattedImages : null,
+    //                     'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
+    //                     'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
+    //                     'updated_at' => $violation->updated_at,
+    //                     'mission_id' => $violation->mission_id ?? null,
+    //                     'point_id' => $violation->point_id ?? null,
+    //                     'flag_instantmission' => $violation->flag_instantmission,
+    //                     'violation_mode' => $violation->flag,
+    //                 ];
+    //             }
+    //         }
+    //     } elseif ($type === null || $type == 2) {
+    //         foreach ($dates as $date) {
+    //             $today = Carbon::parse($date)->toDateString();
+    //             $index = Carbon::parse($date)->dayOfWeek;
+
+    //             $absencesQuery = Absence::where('inspector_id', $inspectorId)->where('flag', 1)
+    //                 ->whereDate('date', $today); // Use whereDate to filter by exact date
+
+    //             if (!empty($pointIds)) {
+    //                 $absencesQuery->whereIn('point_id', $pointIds);
+    //             }
+
+    //             $absences = $absencesQuery->get();
+
+    //             foreach ($absences as $absence) {
+    //                 $time = null;
+    //                 if ($absence->point->work_type != 0) {
+    //                     $time = PointDays::where('point_id', $absence->point_id)
+    //                         ->where('name', $index)
+    //                         ->first();
+    //                 }
+
+    //                 $pointTime = 'طوال اليوم';
+    //                 if ($time && $time->from && $time->to) {
+    //                     $pointTime = "من {$time->from} " . ($time->from > 12 ? 'مساءا' : 'صباحا') . " الى {$time->to} " . ($time->to > 12 ? 'مساءا' : 'صباحا');
+    //                 }
+    //                 $pointName = $absence->point_id ? $absence->point->name : null;
+
+    //                 $team_time = InspectorMission::whereDate('date', $today)
+    //                     ->where('inspector_id', $inspectorId)
+    //                     ->with('workingTime')
+    //                     ->get();
+    //                 // Check if the collection has any items
+    //                 if ($team_time->isNotEmpty() && $team_time->first()->day_off != 1) {
+    //                     // Assuming you want to access the first item
+    //                     $startTimeofTeam = $team_time->first()->workingTime->start_time;
+    //                     $endTimeofTeam = $team_time->first()->workingTime->end_time;
+    //                     $shiftDetails = [
+    //                         'start_time' => $startTimeofTeam,
+    //                         'end_time' => $endTimeofTeam,
+    //                         'time' => null
+    //                     ];
+    //                 } else {
+    //                     $shiftDetails = [
+    //                         'start_time' => null,
+    //                         'end_time' => null,
+    //                         'time' => null
+    //                     ];
+    //                 }
+    //                 $employeesAbsence = AbsenceEmployee::with(['gradeName', 'absenceType', 'typeEmployee'])
+    //                     ->where('absences_id', $absence->id)
+    //                     ->get();
+    //                 $absenceMembers = [];
+    //                 foreach ($employeesAbsence as $employeeAbsence) {
+    //                     $absenceMembers[] = [
+    //                         'employee_name' => $employeeAbsence->name,
+    //                         'employee_grade' => $employeeAbsence->gradeName->name ?? null,
+    //                         'employee_military_number' => $employeeAbsence->military_number ?? null,
+    //                         'employee_type_absence' => $employeeAbsence->absenceType->name ?? null,
+    //                         'type_employee' => $employeeAbsence->typeEmployee->name ?? null,
+    //                         'employee_civil_number' => $employeeAbsence->civil_number ?? null,
+    //                         'employee_file_number' => $employeeAbsence->file_num ?? null,
+    //                     ];
+    //                 }
+    //                 $data = [
+
+    //                     'abcence_day' => $absence->date,
+    //                     'point_id' => $absence->point_id,
+    //                     'point_name' => $absence->point->name,
+    //                     'point_time' => $pointTime,
+    //                     'shift' => $shiftDetails,
+    //                     'id' => $absence->id,
+    //                     'missiom_id' => $absence->mission_id,
+    //                     'inspector_name' => $absence->inspector->name,
+    //                     'inspector_grade' => auth()->user()->grade_id ? auth()->user()->grade->name : null,
+    //                     'team_name' => $teamName,
+    //                     'total_number' => $absence->total_number,
+    //                     'actual_number' => $absence->actual_number,
+    //                     'disability' => $absence->total_number - $absence->actual_number,
+    //                     'absence_members' => $absenceMembers,
+    //                     'created_at' => $absence->parent == 0 ? $absence->created_at : Absence::find($absence->parent)->created_at,
+    //                     'created_at_time' => $absence->parent == 0 ? $absence->created_at->format('H:i:s') : Absence::find($absence->parent)->created_at->format('H:i:s'),
+
+    //                 ];
+
+    //                 $absence_violations = AbsenceViolation::where('absence_id', $absence->id)->get();
+
+    //                 foreach ($absence_violations as $absence_violation) {
+    //                     $name = '';
+    //                     if ($absence_violation->violation_type_id == 1) {
+    //                         $name = "indvidual";
+    //                     } else if ($absence_violation->violation_type_id == 2) {
+    //                         $name = "police";
+    //                     } else if ($absence_violation->violation_type_id == 3) {
+    //                         $name = "worker";
+    //                     } else if ($absence_violation->violation_type_id == 4) {
+
+    //                         $name = "civil";
+    //                     }
+
+    //                     $data[$name] = $absence_violation->actual_number;
+    //                 }
+
+    //                 $absenceReport[] = $data;
+    //             }
+    //         }
+    //     } elseif ($type == 3) {
+    //         $violationQuery = Violation::with(['user', 'instantMission', 'violatType'])
+    //             ->where('status', 1)
+    //             ->where('point_id', null)
+    //             ->where('flag_instantmission', 1)
+    //             ->where('user_id', auth()->user()->id);
+
+    //         // Retrieve attendance records
+    //         $attendanceRecords = Attendance::where('inspector_id', $inspectorId)
+    //             ->where('flag', 1);
+
+    //         if (!empty($dates) && count($dates) != 1) {
+    //             $attendanceRecords->where(function ($query) use ($dates) {
+    //                 foreach ($dates as $date) {
+    //                     $startOfDay = Carbon::parse($date)->startOfDay();
+    //                     $endOfDay = Carbon::parse($date)->endOfDay();
+    //                     $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
+    //                 }
+    //             });
+    //         } else {
+    //             $attendanceRecords->whereDate('created_at', Carbon::today());
+    //         }
+
+    //         $Attendance = $attendanceRecords->get()->map(function ($attendance) use ($inspectorId) {
+    //             // Fetch associated InstantMission
+    //             $instantMission = InstantMission::with('group', 'groupTeam')
+    //                 ->where('inspector_id', $inspectorId)
+    //                 ->where('id', $attendance->instant_id)
+    //                 ->first();
+
+    //             $attendance->instantMissionDetails = null; // Default to null if no mission found
+
+    //             if ($instantMission) {
+    //                 // Handle GIS link or location
+    //                 if (str_contains($instantMission->location, 'gis.paci.gov.kw')) {
+    //                     $location = null;
+    //                     $kwFinder = $instantMission->location;
+    //                 } else {
+    //                     $location = $instantMission->location;
+    //                     $kwFinder = null;
+    //                 }
+
+    //                 $time = Carbon::parse($instantMission->created_at)->format('H:i');
+    //                 $time_arabic = ($instantMission->created_at->format('A') === 'AM') ? 'صباحا' : 'مساءا';
+
+    //                 // Assign the details to the attendance object
+    //                 $attendance->instantMissionDetails = [
+    //                     'instant_mission_id' => $instantMission->id,
+    //                     'name' => $instantMission->label,
+    //                     'location' => $location,
+    //                     'KWfinder' => $kwFinder,
+    //                     'description' => $instantMission->description,
+    //                     'group' => $instantMission->group_id ? $instantMission->group->name : 'N/A',
+    //                     'team' => $instantMission->group_team_id ? $instantMission->groupTeam->name : 'N/A',
+    //                     'date' => $instantMission->created_at->format('Y-m-d'),
+    //                     'time' => $time,
+    //                     'time_name' => $time_arabic,
+    //                     'latitude' => $instantMission->latitude,
+    //                     'longitude' => $instantMission->longitude,
+    //                 ];
+    //             }
+
+    //             $attendanceEmployees = AttendanceEmployee::with('force', 'grade')
+    //                 ->where('attendance_id', $attendance->id)
+    //                 ->get();
+    //             $inspector = Inspector::find($attendance->inspector_id)->value('user_id');
+    //             $user = User::with('grade')->find($inspector);
+    //             $name = $user->name;
+    //             $grade = $user->grade ? $user->grade->name : 'N/A';
+
+    //             $forceNames = $attendanceEmployees->unique('force_id')
+    //                 ->map(function ($employee) {
+    //                     return $employee->force ? $employee->force->name : 'Unknown';
+    //                 })
+    //                 ->toArray();
+
+    //             return [
+    //                 'id' => $attendance->id,
+    //                 'force_name' => 'ادارة (' . implode(', ', $forceNames) . ')',
+    //                 'total_force' => $attendanceEmployees->unique('force_id')->count(),
+    //                 'total_police' => $attendanceEmployees->where('type_id', 2)->count(),
+    //                 'total_individuals' => $attendanceEmployees->where('type_id', 1)->count(),
+    //                 'total_workers' => $attendanceEmployees->where('type_id', 3)->count(),
+    //                 'total_civilian' => $attendanceEmployees->where('type_id', 4)->count(),
+    //                 'force_names' => $attendanceEmployees->map(function ($emp, $index) {
+    //                     return [
+    //                         'index' => $index + 1,
+    //                         'name' => $emp->name,
+    //                         'grade' => $emp->grade_id ? $emp->grade->name : '',
+    //                     ];
+    //                 }),
+    //                 'created_at' => $attendance->parent == 0 ? $attendance->created_at : Attendance::find($attendance->parent)->created_at,
+    //                 'created_at_time' => $attendance->parent == 0 ? $attendance->created_at->format('H:i:s') : Attendance::find($attendance->parent)->created_at->format('H:i:s'),
+    //                 'inspector_name' => $name,
+    //                 'inspector_grade' => $grade,
+    //                 'instantMissionDetails' => $attendance->instantMissionDetails, // Include the instant mission details
+    //             ];
+    //         });
+
+    //         $violations = $violationQuery->orderBy('created_at', 'asc')->get();
+    //         foreach ($violations as $violation) {
+    //             $violationTypeIds = explode(',', $violation->violation_type);
+    //             $violationTypes = ViolationTypes::whereIn('id', $violationTypeIds)->get();
+
+    //             if ($violation->description) {
+    //                 $violationTypes->push((object)[
+    //                     'id' => -1,
+    //                     'name' => $violation->description
+    //                 ]);
+    //             }
+
+    //             $formattedViolationTypes = $violationTypes->map(function ($type) {
+    //                 return [
+    //                     'id' => $type->id,
+    //                     'name' => $type->name
+    //                 ];
+    //             })->toArray();
+
+    //             $formattedImages = $violation->image ? implode(', ', explode(',', $violation->image)) : null;
+
+    //             $noPointKey = 'violation_' . $violation->id;
+    //             $instans_missions = InstantMission::find($violation->mission_id);
+
+    //             $instansViolations[$noPointKey] = [
+    //                 'date' => $violation->created_at->format('Y-m-d'),
+    //                 'is_instansmission' => true,
+    //                 'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
+    //                 'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
+    //                 'point_id' => null,
+    //                 'point_name' => null,
+    //                 'shift' => [
+    //                     'start_time' => null,
+    //                     'end_time' => null,
+    //                     'time' => date("g:i:s", strtotime($instans_missions->created_at)) . (date("A", strtotime($instans_missions->created_at)) == 'AM' ? ' ص' : ' م')
+    //                 ],
+    //                 'team_name' => $teamName,
+    //                 'violationsOfinstansMission' => [
+    //                     'id' => $violation->id,
+    //                     'InspectorName' => $violation->user_id ? $violation->user->name : null,
+    //                     'Inspectorgrade' => $violation->user->grade->name ?? null,
+    //                     'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
+    //                     'name' => $violation->name,
+    //                     'Civil_number' => $violation->Civil_number ?? null,
+    //                     'military_number' => $violation->military_number ?? null,
+    //                     'file_number' => $violation->file_num ?? null,
+    //                     'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
+    //                     'violation_type' => $formattedViolationTypes,
+    //                     'inspector_name' => $violation->user_id ? $violation->user->name : null,
+    //                     'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
+    //                     'image' => $formattedImages ? $formattedImages : null,
+    //                     'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
+    //                     'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
+    //                     'updated_at' => $violation->updated_at,
+    //                     'mission_id' => $violation->mission_id ?? null,
+    //                     'point_id' => $violation->point_id ?? null,
+    //                     'flag_instantmission' => $violation->flag_instantmission,
+    //                     'violation_mode' => $violation->flag,
+    //                 ]
+    //             ];
+    //         }
+    //     } else {
+    //         return $this->respondError('Validation Error.', 'يجب ادخال رقم نوع صحيح', 400);
+    //     }
+    //     $success = [
+    //         'report' => $absenceReport,
+    //         'violations' => array_values($pointViolations),
+    //         'violationsInstans' => $instansViolations,
+    //         'Attendance' => $Attendance
+    //     ];
+    //     return $this->apiResponse(true, 'Data retrieved successfully.', $success, 200);
+    // }
 }

@@ -346,7 +346,7 @@ class GroupTeamController extends Controller
         $changeArr = array_diff($newInspectors, $oldInspectorIds);
         $removedArr = array_diff($oldInspectorIds, $newInspectors);
         // Check if there are any changes; if not, return with a message
-        if (empty($changeArr) && empty($removedArr) && $team->name === $newName && $team->working_tree_id == $request->working_tree_id && $service_order == $team->service_order &&  $inspector_manager == $team->inspector_manager) {
+        if (empty($changeArr) && empty($removedArr) && $team->name === $newName && $team->working_tree_id == $request->working_tree_id && $service_order == $team->service_order) {
             return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.']);
         }
 
@@ -472,7 +472,7 @@ class GroupTeamController extends Controller
 
             $users = User::where('rule_id', 2)->get();
             foreach ($users as $user) {
-                send_push_notification(null, $user->fcm_token, $title, $message);
+                send_push_notification(null, $user->fcm_token, $title, $message,null);
                 $notify = new Notification();
                 $notify->message = $message;
                 $notify->title = $title;
