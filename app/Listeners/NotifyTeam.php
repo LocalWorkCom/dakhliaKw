@@ -160,6 +160,7 @@ class NotifyTeam
                 'user_id' => $user_id,
                 'mission_id' => $event->mission->id,
                 'title' => 'امر خدمة جديد.',
+                'type' => 2,
                 'message' => 'لقد تم اسناد أمر خدمة جديد لك',
                 'created_at' => now(),
                 'updated_at' => now(),
