@@ -63,7 +63,7 @@ class employee_vacation extends Command
 
                             $users = User::where('rule_id', 2)->get();
                             foreach ($users as $user) {
-                                send_push_notification(null, $user->fcm_token, $title, $message,null);
+                                send_push_notification(null, $user->fcm_token, $title, $message);
                                 $notify = new Notification();
                                 $notify->message = $message;
                                 $notify->title = $title;

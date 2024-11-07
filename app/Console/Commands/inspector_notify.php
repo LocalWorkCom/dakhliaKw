@@ -111,7 +111,7 @@ class inspector_notify extends Command
                         if ($mission->day_off == 0) {
                             // Send notification to the Inspector object
                         //    send_push_notification($instantMissionId,$token,'new mission.','A new mission has been assigned to your team.',);
-                           send_push_notification($instantMissionId, $token, 'أمر خدمة جديد', 'لقد تم اسناد أمر خدمة جديد لفريقك.','mission');
+                           send_push_notification($instantMissionId, $token, 'أمر خدمة جديد', 'لقد تم اسناد أمر خدمة جديد لفريقك.');
 
                             // Log details before inserting
                             Log::info('Inserting notification', [
