@@ -288,7 +288,7 @@ class reportsController extends Controller
 
         $violationQuery = Violation::with(['user', 'point', 'violatType', 'instantMission'])->where('status', 1)
             ->where('user_id', auth()->user()->id);
-
+         //   dd($violationQuery->get());
         if (!empty($dates) && count($dates) != 1) {
             $violationQuery->where(function ($query) use ($dates) {
                 foreach ($dates as $date) {
@@ -371,19 +371,19 @@ class reportsController extends Controller
                 }
 
                 // Handle violations with point_id
-                if (!isset($pointViolations[$pointName])) {
-                    $pointViolations[$pointName] = [
-                        'date' => $violation->created_at->format('Y-m-d'),
-                        'is_instansmission' => false,
-                        'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
-                        'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
-                        'point_id' => $violation->point_id,
-                        'point_name' => $pointName,
-                        'shift' => $shiftDetails,
-                        'team_name' => $teamName,
-                        'violationsOfPoint' => []
-                    ];
-                }
+                // if (!isset($pointViolations[$pointName])) {
+                //     $pointViolations[$pointName] = [
+                //         'date' => $violation->created_at->format('Y-m-d'),
+                //         'is_instansmission' => false,
+                //         'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
+                //         'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
+                //         'point_id' => $violation->point_id,
+                //         'point_name' => $pointName,
+                //         'shift' => $shiftDetails,
+                //         'team_name' => $teamName,
+                //         'violationsOfPoint' => []
+                //     ];
+                // }
 
                 // Add the violation to the point's violations
                 $pointViolations[$pointName]['violationsOfPoint'][] = [
