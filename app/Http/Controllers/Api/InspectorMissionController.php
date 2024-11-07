@@ -65,6 +65,10 @@ class InspectorMissionController extends Controller
                 'end_time' => $team_time->first()->workingTime->end_time
             ];
         }
+        // $currentTime = Carbon::now()->format('H:i');
+        // $isBetween = Carbon::parse($team_time->first()->workingTime->start_time)->isBefore($currentTime) && Carbon::parse($team_time->first()->workingTime->end_time)->isAfter($currentTime);
+        // if (!$isBetween) {
+        // }
         // else{
 
         // }
@@ -418,7 +422,7 @@ class InspectorMissionController extends Controller
                         $employeeValidator = Validator::make($item, [
                             'name' => 'required',
                             'type_employee' => 'required',
-                           // 'grade' => 'required'
+                            // 'grade' => 'required'
                         ], $messages);
 
                         if ($employeeValidator->fails()) {
@@ -625,6 +629,4 @@ class InspectorMissionController extends Controller
 
         return $this->respondSuccess($success, 'Data Saved successfully.');
     }
-
-
 }
