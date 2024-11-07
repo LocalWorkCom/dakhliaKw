@@ -518,9 +518,9 @@ if (!function_exists('send_push_notification')) {
                     "body" => $message,
 
                 ],
-                "data" => [
-                    "type" => $type,
-                ]
+                // "data" => [
+                //     "type" => $type,
+                // ]
             ]
         ];
         $payload = json_encode($data);
