@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Validator;
 use App\Console\Commands\inspector_mission;
 use App\Http\Requests\StoreGroupTeamRequest;
 use App\Http\Requests\UpdateGroupTeamRequest;
+use App\Jobs\assignPointsFrom;
+use App\Jobs\RefreshInspectorMission;
+use App\Jobs\RefreshUpdateVacation;
 use App\Models\EmployeeVacation;
 use App\Models\Grouppoint;
 use App\Models\Groups;
@@ -312,7 +315,7 @@ class GroupTeamController extends Controller
         // Retrieve the new name and inspector IDs from the request
         $newName = $request->name;
         $service_order = $request->service_order;
-       // $inspector_manager = $request->inspector_manager;
+        // $inspector_manager = $request->inspector_manager;
 
         $newInspectors = $request->inspectors_ids ? (array) $request->inspectors_ids : [];
         $oldInspectorIds = $team->inspector_ids ? explode(',', $team->inspector_ids) : [];
@@ -1284,5 +1287,20 @@ class GroupTeamController extends Controller
                 }
             }
         }
+    }
+    public function RefreshInspectorMession()
+    {
+        $startOfMonth = Carbon::now();
+        $endOfMonth =  Carbon::now()->endOfMonth();
+
+
+        dispatch(new RefreshInspectorMission());
+        $groups = Groups::all();
+        foreach ($groups as $group) {
+            dispatch(new assignPointsFrom($startOfMonth, $endOfMonth, $group->sector_id, $group->id));
+        }
+        dispatch(new RefreshUpdateVacation());
+
+        return redirect()->route('inspector.mission');
     }
 }

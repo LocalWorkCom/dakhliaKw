@@ -32,6 +32,9 @@
                         <button class="btn-all px-3" style="color: #FFFFFF; background-color: #274373;" onclick="printDiv()">
                             <img src="{{ asset('frontend/images/print.svg') }}" alt=""> طباعة
                         </button>
+                        <button class="btn-all px-3" style="color: #FFFFFF; background-color: #274373;" onclick="confirmAndRedirect()">
+                            <img src="" alt=""> اعادة توزيع
+                        </button>
                         <div class="colors d-flex mx-5">
                             <div class="only rounded p-1 px-2 mx-1">دورية به مفتش فقط</div>
                             <div class="urgent rounded p-1 px-2 mx-1">أمر خدمة</div>
@@ -428,4 +431,12 @@
 
         }
     });
+    function confirmAndRedirect() {
+        // Display confirmation dialog
+        if (confirm("Do you want to complete this action?")) {
+            // If the user clicks "Yes," redirect to the specific route
+            window.location.href = "{{ route('refresh.inspector.mission') }}";
+        }
+    }
+
 </script>
