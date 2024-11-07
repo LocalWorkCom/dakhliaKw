@@ -513,10 +513,10 @@ if (!function_exists('send_push_notification')) {
         $data = [
             "message" => [
                 "token" => $usertoken,
+                "type" => $type,
                 "notification" => [
                     "title" => $title,
                     "body" => $message,
-                    "type" => $type,
 
                 ],
             ]
