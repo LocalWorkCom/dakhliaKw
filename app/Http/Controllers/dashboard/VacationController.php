@@ -533,8 +533,9 @@ class VacationController extends Controller
 
                     session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
                 }
-                $token = getTokenDevice($inspector->id);
                 $user_id = $vacation->employee_id;
+
+                $token = User::find($user_id)->value('device_token');
                 DB::table('notifications')->insert([
                     'user_id' => $user_id,
                     'type' => 1,
@@ -587,8 +588,9 @@ class VacationController extends Controller
             // Update the status to Rejected
             $vacation->status = 'Rejected';
             $vacation->save();
-            $token = getTokenDevice($vacation->employee_id);
             $user_id = $vacation->employee_id;
+
+            $token = User::find($user_id)->value('device_token');
             DB::table('notifications')->insert([
                 'user_id' => $user_id,
                 'type' => 1,
