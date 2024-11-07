@@ -17,6 +17,7 @@ use App\Models\Point;
 use App\Models\PointDays;
 use App\Http\Controllers\Controller;
 use App\Models\Absence;
+use App\Models\AbsenceType;
 use App\Models\AttendanceEmployee;
 use App\Models\ForceName;
 use App\Models\grade;
@@ -352,9 +353,12 @@ class InspectorMissionController extends Controller
     }
     public function get_Alltypes(Request $request)
     {
+        // dd($request->input('type', []));
         $type = ViolationTypes::where('type_id', '0')->get();
         $grade = grade::where('type', 0)->get();
         $names = ForceName::get();
+        $absenceType = AbsenceType::all();
+        $allViolationType = ViolationTypes::whereJsonContains('type_id',  $request->type)->get();
 
         if ($grade->isNotEmpty()) {
             $success['grade2'] = $grade->map(function ($item) {
@@ -379,6 +383,16 @@ class InspectorMissionController extends Controller
         } else {
             $success['type'] = '';
         }
+        if ($absenceType->isNotEmpty()) {
+            $success['absence_Type'] = $absenceType->map(function ($item) {
+                return $item->only(['id', 'name']);
+            });
+        } else {
+            $success['absence_Type'] = "لا يوجد بيانات";
+        }
+        $success['ViolationType'] = $allViolationType->map(function ($item) {
+            return $item->only(['id', 'name']);
+        });
         $success['names'] = $names->map(function ($item) {
             return $item->only(['id', 'name']);
         });
@@ -405,7 +419,7 @@ class InspectorMissionController extends Controller
 
             $attendance = new Attendance();
             $attendance->date = Carbon::now()->format('Y-m-d');
-            $attendance->mission_id = $request->mission_id;
+            $attendance->mission_id = $request->mission_id ?? null;
             $attendance->instant_id = $request->instant_mission_id;
             $attendance->total = $attendanceCount;
             $attendance->inspector_id = $inspectorId->id;
