@@ -63,7 +63,7 @@ class RefreshUpdateVacation implements ShouldQueue
 
                             $users = User::where('rule_id', 2)->get();
                             foreach ($users as $user) {
-                                send_push_notification(null, $user->fcm_token, $title, $message);
+                                send_push_notification(null, $user->fcm_token, $title, $message,null);
                                 $notify = new Notification();
                                 $notify->message = $message;
                                 $notify->title = $title;
