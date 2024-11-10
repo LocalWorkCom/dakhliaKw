@@ -362,6 +362,7 @@ class GroupsController extends Controller
             return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.'])->withInput()->with('editModal', true);
         }
 
+        
         $group->save();
 
         $startOfMonth = Carbon::now();
