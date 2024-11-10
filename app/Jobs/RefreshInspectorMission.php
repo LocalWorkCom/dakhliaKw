@@ -36,8 +36,13 @@ class RefreshInspectorMission implements ShouldQueue
         $currentDate = Carbon::now();
         $lastMonthEnd = $currentDate->copy()->subMonth()->endOfMonth();
         $firstDayOfCurrentMonth = $currentDate->copy()->startOfMonth();
-
+        $group_team_ids = [];
         $start_day_date = date('Y-m-d');
+        $inspectorMissions = InspectorMission::whereBetween('date', [
+                Carbon::now()->startOfMonth()->toDateString(),
+                Carbon::now()->endOfMonth()->toDateString(),
+            ])
+            ->count();
         $num_days = date('t', strtotime($start_day_date)); // Get the number of days in the month
         $Inspectors = Inspector::where('flag', 0)->pluck('id')->toArray(); // get inspectors ids
         // to get inspectors ids
@@ -58,26 +63,24 @@ class RefreshInspectorMission implements ShouldQueue
                     // Log::warning("Inspector ID $Inspector does not have a valid working tree or group team.");
                     continue;
                 }
+
                 //   to sum num of working day and holiday
                 $total_days_in_cycle = $WorkingTree->working_days_num + $WorkingTree->holiday_days_num;
                 // for loob by num of day's monthly
-                $inspectorMissions = InspectorMission::where('group_id', $GroupTeam->group_id)->where('group_team_id', $GroupTeam->id)
-                    ->whereBetween('date', [
-                        Carbon::now()->startOfMonth()->toDateString(),
-                        Carbon::now()->endOfMonth()->toDateString(),
-                    ])
-                    ->count();
+
 
                 if (!$inspectorMissions) {
 
                     $day_of_month_val = $GroupTeam->last_day;
                 } else {
                     $data = InspectorMission::where('group_id', $GroupTeam->group_id)->where('group_team_id', $GroupTeam->id)
-                        ->where('date', Carbon::now()->toDateString())->where('inspector_id', $Inspector)->first();
+                        ->where('date', $date)->where('inspector_id', $Inspector)->first();
                     $day_of_month_val = $data->day_number;
                 }
                 if ($WorkingTree->changed || $GroupTeam->changed || !$inspectorMissions) {
-
+                    if ($WorkingTree->changed && sizeof($group_team_ids) == 0) {
+                        $group_team_ids = GroupTeam::where('working_tree_id', $WorkingTree->id)->pluck('id')->toArray();
+                    }
                     for ($day_of_month = $day_of_month_val; $day_of_month <= $num_days; $day_of_month++) {
                         // check day off or not
 
@@ -101,7 +104,7 @@ class RefreshInspectorMission implements ShouldQueue
                             }
                         }
 
-                        InspectorMission::where('working_tree_id', $WorkingTree->id)->where('group_id', $GroupTeam->group_id)->where('group_team_id', $GroupTeam->id)
+                        InspectorMission::where('group_id', $GroupTeam->group_id)->where('group_team_id', $GroupTeam->id)
                             ->where('date', $date)->where('inspector_id', $Inspector)
                             ->delete();
                         // insert data for monthly
@@ -200,15 +203,20 @@ class RefreshInspectorMission implements ShouldQueue
                     if ($ids_inspector_arr[sizeof($ids_inspector_arr) - 1] == $Inspector) {
 
                         $GroupTeam->last_day = $day_in_cycle;
+                        $GroupTeam->changed = 0;
                         $GroupTeam->save();
                     }
-                    $GroupTeam->changed = 0;
-                    $GroupTeam->save();
+
+
+                    // $this->updatePrevVacation($Inspector);
+                }
+                if (($key = array_search($GroupTeam->id, $group_team_ids)) !== false) {
+                    unset($group_team_ids[$key]);
+                }
+                if (sizeof($group_team_ids) == 0) {
 
                     $WorkingTree->changed = 0;
                     $WorkingTree->save();
-
-                    $this->updatePrevVacation($Inspector);
                 }
             }
         }

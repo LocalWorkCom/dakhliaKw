@@ -218,13 +218,15 @@ class WorkingTreeController extends Controller
         $WorkingTree->working_days_num = $request->working_days_num - $holiday_days_num;
         $WorkingTree->save();
 
-
+        if ($WorkingTree->name == $request->name) {
+            $WorkingTree->changed = 1;
+            $WorkingTree->save();
+        }
         $found = false;
         $second = false;
         $total_new_days = $request->working_days_num;
         if ($total_old_days < $total_new_days) {
-            $WorkingTree->changed = 1;
-            $WorkingTree->save();
+
             session()->flash('success', 'تم التعديل بنجاح ولكن سوف يتم تطبيق التغير من بداية الشهر الجديد.');
             return redirect()->route('working_trees.list');
 
@@ -283,8 +285,7 @@ class WorkingTreeController extends Controller
             //     $inspector = $mission->inspector_id;
             // }
         } else if ($total_old_days > $total_new_days) {
-            $WorkingTree->changed = 1;
-            $WorkingTree->save();
+
             session()->flash('success', 'تم التعديل بنجاح ولكن سوف يتم تطبيق التغير من بداية الشهر الجديد.');
             return redirect()->route('working_trees.list');
 
