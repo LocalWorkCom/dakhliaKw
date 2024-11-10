@@ -10,6 +10,7 @@ use App\Http\Requests\StoreWorkingTimeRequest;
 use App\Http\Requests\UpdateWorkingTimeRequest;
 use DateTime;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class WorkingTimeController extends Controller
 {
@@ -29,8 +30,22 @@ class WorkingTimeController extends Controller
         // dd($data);
 
         return DataTables::of($data)->addColumn('action', function ($row) {
+            $edit_permission = null;
+            $show_permission = null;
+            $delete_permission = null;
 
-            return '<button class="btn btn-primary btn-sm">Edit</button>';
+            //return '<button class="btn btn-primary btn-sm">Edit</button>';
+
+             $show_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="openViewModal(' . $row->id . ',' . $row->name . ')">  <i class="fa fa-eye"></i> عرض </a>';
+             $edit_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="openedit(' . $row->id . ',' . $row->name . ',' . $row->start_time . ',' . $row->end_time . ',' . $row->color . ')">  <i class="fa fa-edit"></i> تعديل </a>';
+
+            if (Auth::user()->rule_id == 2) {
+                $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
+            }
+
+            $uploadButton = $edit_permission . $show_permission . $delete_permission;
+            return $uploadButton;
+            
         })
             ->rawColumns(['action'])
             ->make(true);
@@ -233,5 +248,23 @@ class WorkingTimeController extends Controller
     public function destroy(WorkingTime $workingTime)
     {
         //
+    }
+
+    public function delete(Request $request)
+    {        
+        $type = WorkingTime::find($request->id);
+        $workingTreeTimes = $type->workingTreeTimes()->exists();
+        if ($workingTreeTimes) {
+            return redirect()->route('working_time.index')->with('reject','لا يمكن حذف هذه فترة العمل يوجد نظام عمل لها');
+        }
+
+        $inspectorMissions = $type->inspectorMissions()->exists();
+        if ($inspectorMissions) {
+            return redirect()->route('working_time.index')->with('reject','لا يمكن حذف هذه فترة العمل يوجد جدول لها');
+        }
+
+        $type->delete();
+        return redirect()->route('working_time.index')->with('success', 'تم حذف فترة العمل');
+
     }
 }

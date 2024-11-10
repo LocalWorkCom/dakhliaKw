@@ -40,6 +40,13 @@
                     {{ session('success') }}
                 </div>
             @endif
+
+            @if (session('reject'))
+                <div class="alert alert-danger">
+                    {{ session('reject') }}
+                </div>
+            @endif
+
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -280,8 +287,62 @@
         </div>
     </div>
 
+    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="opendelete" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="opendelete"> !تنبــــــيه</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    </button>
+                </div>
+                <div class="modal-body  mt-3 mb-5">
+                    <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form id="delete-form" action="{{ route('working_time.delete') }}" method="POST">
+                            @csrf
+                            <div class="form-group d-flex justify-content-center ">
+                                <h5 class="modal-title " id="opendelete"> هل تريد حذف هذه الفترة ؟</h5>
+
+
+                                <input type="text" id="id" value="" hidden name="id"
+                                    class="form-control">
+                            </div>
+
+                            <!-- Save button -->
+                            <div class="text-end">
+                                <div class="modal-footer mx-2 d-flex justify-content-center">
+                                    <div class="text-end">
+                                        <button type="button" class="btn-blue" id="closeButton">لا</button>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 @push('scripts')
+
+<script>
+    $(document).ready(function() {
+        function closeModal() {
+            $('#delete').modal('hide');
+
+        }
+
+        $('#closeButton').on('click', function() {
+            closeModal();
+        });
+    });
+</script>
+
     <script>
         $(document).ready(function() {
             $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm';
@@ -331,15 +392,7 @@
                         searchable: false
                     }
                 ],
-                columnDefs: [{
-                    targets: -1,
-                    render: function(data, type, row) {
-                        return `
-                        <a href="#" class="btn btn-sm " style="background-color: #274373;" onclick="openViewModal('${row.id}', '${row.name}')"> <i class="fa fa-eye"></i>عرض  </a>
-                        <a href="#" class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit('${row.id}', '${row.name}','${row.start_time}','${row.end_time}','${row.color}')"> <i class="fa fa-edit"></i> تعديل </a>
-                    `;
-                    }
-                }],
+
                 oLanguage: {
                     sSearch: "",
                     sSearchPlaceholder: "بحث",
@@ -456,6 +509,20 @@
             if (valid) {
                 form.submit();
             }
+        }
+
+        function opendelete(id) {
+            document.getElementById('id').value = id;
+            $('#delete').modal('show');
+        }
+
+        function confirmDelete() {
+            var id = document.getElementById('id').value;
+            console.log(id);
+            var form = document.getElementById('delete-form');
+
+            form.submit();
+
         }
     </script>
     <script>

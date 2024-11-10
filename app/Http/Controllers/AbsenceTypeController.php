@@ -6,6 +6,7 @@ use App\Models\AbsenceType;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class AbsenceTypeController extends Controller
 {
@@ -23,7 +24,18 @@ class AbsenceTypeController extends Controller
 
         return DataTables::of($data)->addColumn('action', function ($row) {
 
-            return '<button class="btn btn-primary btn-sm">Edit</button>';
+            //return '<button class="btn btn-primary btn-sm">Edit</button>';
+
+            $edit_permission = null;
+            $delete_permission = null;
+            $edit_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="openEditModal(' . $row->id . ',' . $row->name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
+
+            if (Auth::user()->rule_id == 2) {
+                $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
+            }
+
+            $uploadButton = $edit_permission . $delete_permission;
+            return $uploadButton;
         })
             ->rawColumns(['action'])
             ->make(true);
@@ -116,5 +128,18 @@ class AbsenceTypeController extends Controller
     public function destroy(AbsenceType $absenceType)
     {
         //
+    }
+
+    public function delete(Request $request)
+    {        
+        $type = AbsenceType::find($request->id);
+        $absenceEmployees = $type->absenceEmployees()->exists();
+        if ($absenceEmployees) {
+            return redirect()->route('absence.index')->with('reject','لا يمكن حذف هذه مسميات العجز  يوجد موظفين لها');
+        }
+
+        $type->delete();
+        return redirect()->route('absence.index')->with('success', 'تم حذف مسميات العجز');
+
     }
 }

@@ -138,10 +138,10 @@
             </div>
             <div class="modal-body  mt-3 mb-5">
                 <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
-                    <form id="delete-form" action="{{ route('grads.delete') }}" method="POST">
+                    <form id="delete-form" action="{{ route('forcenames.delete') }}" method="POST">
                         @csrf
                         <div class="form-group d-flex justify-content-center ">
-                            <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الرتبه ؟</h5>
+                            <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الادارة ؟</h5>
 
 
                             <input type="text" id="id" hidden name="id" class="form-control"
