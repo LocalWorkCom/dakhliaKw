@@ -416,6 +416,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission')->middleware('check.permission:view InspectorMission');
+    Route::get('/inspectors-mession/refresh', [GroupTeamController::class, 'RefreshInspectorMession'])->name('refresh.inspector.mission')->middleware('check.permission:view InspectorMission');
     Route::get('/inspectors-mession/drag-drop', [GroupTeamController::class, 'DragDrop'])->name('point.dragdrop')->middleware('check.permission:edit InspectorMission');
 
     /**

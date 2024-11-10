@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Validator;
 use App\Console\Commands\inspector_mission;
 use App\Http\Requests\StoreGroupTeamRequest;
 use App\Http\Requests\UpdateGroupTeamRequest;
+use App\Jobs\assignPointsFrom;
+use App\Jobs\RefreshInspectorMission;
+use App\Jobs\RefreshUpdateVacation;
 use App\Models\EmployeeVacation;
 use App\Models\Grouppoint;
 use App\Models\Groups;
@@ -312,7 +315,7 @@ class GroupTeamController extends Controller
         // Retrieve the new name and inspector IDs from the request
         $newName = $request->name;
         $service_order = $request->service_order;
-       // $inspector_manager = $request->inspector_manager;
+        // $inspector_manager = $request->inspector_manager;
 
         $newInspectors = $request->inspectors_ids ? (array) $request->inspectors_ids : [];
         $oldInspectorIds = $team->inspector_ids ? explode(',', $team->inspector_ids) : [];
@@ -388,6 +391,10 @@ class GroupTeamController extends Controller
         // First, define the date range: from today until the end of the current month
         $startDate = date('Y-m-d');
         // $endDate = now()->endOfMonth();
+        if ($team->working_tree_id != $request->working_tree_id) {
+            $team->changed = 1;
+            $team->save();
+        }
 
         // Fetch all InspectorMissions from today until the end of the month for the current team and working tree ID
         $data_missions = InspectorMission::where('date', '>=', $startDate)
@@ -469,6 +476,7 @@ class GroupTeamController extends Controller
 
             $users = User::where('rule_id', 2)->get();
             foreach ($users as $user) {
+
                 send_push_notification(null, $user->fcm_token, $title, $message,0);
                 $notify = new Notification();
                 $notify->message = $message;
@@ -1284,5 +1292,20 @@ class GroupTeamController extends Controller
                 }
             }
         }
+    }
+    public function RefreshInspectorMession()
+    {
+        $startOfMonth = Carbon::now();
+        $endOfMonth =  Carbon::now()->endOfMonth();
+
+
+        dispatch(new RefreshInspectorMission());
+        $groups = Groups::all();
+        foreach ($groups as $group) {
+            dispatch(new assignPointsFrom($startOfMonth, $endOfMonth, $group->sector_id, $group->id));
+        }
+        dispatch(new RefreshUpdateVacation());
+
+        return redirect()->route('inspector.mission');
     }
 }
