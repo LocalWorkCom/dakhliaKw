@@ -17,6 +17,7 @@ use App\Models\Point;
 use App\Models\PointDays;
 use App\Http\Controllers\Controller;
 use App\Models\Absence;
+use App\Models\AbsenceType;
 use App\Models\AttendanceEmployee;
 use App\Models\ForceName;
 use App\Models\grade;
@@ -65,6 +66,10 @@ class InspectorMissionController extends Controller
                 'end_time' => $team_time->first()->workingTime->end_time
             ];
         }
+        // $currentTime = Carbon::now()->format('H:i');
+        // $isBetween = Carbon::parse($team_time->first()->workingTime->start_time)->isBefore($currentTime) && Carbon::parse($team_time->first()->workingTime->end_time)->isAfter($currentTime);
+        // if (!$isBetween) {
+        // }
         // else{
 
         // }
@@ -348,9 +353,12 @@ class InspectorMissionController extends Controller
     }
     public function get_Alltypes(Request $request)
     {
+        // dd($request->input('type', []));
         $type = ViolationTypes::where('type_id', '0')->get();
         $grade = grade::where('type', 0)->get();
         $names = ForceName::get();
+        $absenceType = AbsenceType::all();
+        $allViolationType = ViolationTypes::whereJsonContains('type_id',  $request->type)->get();
 
         if ($grade->isNotEmpty()) {
             $success['grade2'] = $grade->map(function ($item) {
@@ -375,21 +383,30 @@ class InspectorMissionController extends Controller
         } else {
             $success['type'] = '';
         }
+        if ($absenceType->isNotEmpty()) {
+            $success['absence_Type'] = $absenceType->map(function ($item) {
+                return $item->only(['id', 'name']);
+            });
+        } else {
+            $success['absence_Type'] = "لا يوجد بيانات";
+        }
+        $success['ViolationType'] = $allViolationType->map(function ($item) {
+            return $item->only(['id', 'name']);
+        });
         $success['names'] = $names->map(function ($item) {
             return $item->only(['id', 'name']);
         });
         return $this->respondSuccess($success, 'Get Data successfully.');
     }
-    public function getAttendance(Request $request) {}
 
     public function addAttendance(Request $request)
     {
         $messages = [
-            'mission_id.required' => 'يرجى ارسال رقم امر الخدمه',
+            'instant_mission_id.required' => 'يرجى ارسال رقم امر الخدمه',
         ];
 
         $validatedData = Validator::make($request->all(), [
-            'mission_id' => 'required',
+            'instant_mission_id' => 'required',
         ], $messages);
 
         if ($validatedData->fails()) {
@@ -402,7 +419,7 @@ class InspectorMissionController extends Controller
 
             $attendance = new Attendance();
             $attendance->date = Carbon::now()->format('Y-m-d');
-            $attendance->mission_id = $request->mission_id;
+            $attendance->mission_id = $request->mission_id ?? null;
             $attendance->instant_id = $request->instant_mission_id;
             $attendance->total = $attendanceCount;
             $attendance->inspector_id = $inspectorId->id;
@@ -419,7 +436,7 @@ class InspectorMissionController extends Controller
                         $employeeValidator = Validator::make($item, [
                             'name' => 'required',
                             'type_employee' => 'required',
-                            'grade' => 'required'
+                            // 'grade' => 'required'
                         ], $messages);
 
                         if ($employeeValidator->fails()) {
@@ -571,33 +588,13 @@ class InspectorMissionController extends Controller
         $time = Carbon::parse($instantMission->created_at)->format('H:i');
         $time_arabic = ($instantMission->created_at->format('A') === 'AM') ? 'صباحا' : 'مساءا';
 
-        $success['shift'] = [
-            'date' => $instantMission->created_at->format('Y-m-d'),
-            'time' => $time,
-        ];
-
-        $success['instantMissions'] = [
-            'instant_mission_id' => $instantMission->id,
-            'name' => $instantMission->label,
-            'location' => $location,
-            'KWfinder' => $kwFinder,
-            'description' => $instantMission->description,
-            'group' => $instantMission->group_id ? $instantMission->group->name : 'N/A',
-            'team' => $instantMission->group_team_id ? $instantMission->groupTeam->name : 'N/A',
-            'date' => $instantMission->created_at->format('Y-m-d'),
-            'time' => $time,
-            'time_name' => $time_arabic,
-            'latitude' => $instantMission->latitude,
-            'longitude' => $instantMission->longitude,
-        ];
-
         $attendanceRecords = Attendance::where('instant_id', $request->mission_id)
             ->where('flag', 1)
             ->get();
 
-        $success['Attendance'] = $attendanceRecords->map(function ($attendance) {
+        $success['Attendance'] = $attendanceRecords->map(function ($attendance) use ($instantMission, $location, $kwFinder, $time, $time_arabic) {
             $attendanceEmployees = AttendanceEmployee::with('force', 'grade')->where('attendance_id', $attendance->id)->get();
-            $inspector =   Inspector::find($attendance->inspector_id)->value('user_id');
+            $inspector = Inspector::find($attendance->inspector_id)->value('user_id');
             $user = User::with('grade')->find($inspector);
             $name = $user->name;
             $grade = $user->grade ? $user->grade->name : 'N/A';
@@ -627,11 +624,23 @@ class InspectorMissionController extends Controller
                 'created_at_time' => $attendance->parent == 0 ? $attendance->created_at->format('H:i:s') : Attendance::find($attendance->parent)->created_at->format('H:i:s'),
                 'inspector_name' => $name,
                 'inspector_grade' => $grade,
+                'instantMissions' => [
+                    'instant_mission_id' => $instantMission->id,
+                    'name' => $instantMission->label,
+                    'location' => $location,
+                    'KWfinder' => $kwFinder,
+                    'description' => $instantMission->description,
+                    'group' => $instantMission->group_id ? $instantMission->group->name : 'N/A',
+                    'team' => $instantMission->group_team_id ? $instantMission->groupTeam->name : 'N/A',
+                    'date' => $instantMission->created_at->format('Y-m-d'),
+                    'time' => $time,
+                    'time_name' => $time_arabic,
+                    'latitude' => $instantMission->latitude,
+                    'longitude' => $instantMission->longitude,
+                ]
             ];
         });
 
-        return response()->json($success);
+        return $this->respondSuccess($success, 'Data Saved successfully.');
     }
-
-
 }

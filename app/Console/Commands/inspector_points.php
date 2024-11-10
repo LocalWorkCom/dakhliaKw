@@ -34,12 +34,10 @@ class inspector_points extends Command
     /**
      * Execute the console command.
      */
-     public function __construct()
+    public function __construct()
     {
         parent::__construct();
     }
-   
-   
 
     public function handle()
     {
@@ -57,14 +55,14 @@ class inspector_points extends Command
     public function todayIndex($today)
     {
         $daysOfWeek = [
-        
+
             "الأحد",
             "الاثنين",
             "الثلاثاء",
             "الأربعاء",
             "الخميس",
             "الجمعة",
-            "السبت", 
+            "السبت",
         ];
 
         $todayDate = Carbon::parse($today);
@@ -74,12 +72,12 @@ class inspector_points extends Command
         return $index !== false ? $index : null;
     }
 
-    public function getAvailablePoints($index, $sector, $group, $team, $teamTimePeriods, $historyOfTeam, $pointCount, $userToday = null,$usedPointsGroupToday=null)
+    public function getAvailablePoints($index, $sector, $group, $team, $teamTimePeriods, $historyOfTeam, $pointCount, $userToday = null, $usedPointsGroupToday = null)
     {
         $idsOfHistory = [];
         $idsOfTodayUsed = [];
         $validPoints = [];
-        $idsOfTodayUsedGroup =[];
+        $idsOfTodayUsedGroup = [];
         if ($historyOfTeam) {
             $idsOfHistory = Grouppoint::whereIn('id', $historyOfTeam)->pluck('points_ids')
                 ->flatten()
@@ -132,9 +130,7 @@ class inspector_points extends Command
                     }
                 }
             } else {
-                ///////
                 $pointDay = $available_point->pointDays->where('name', $index)->first();
-
                 if ($pointDay) {
                     $is_available = $this->isTimeAvailable($pointDay->from, $pointDay->to, $teamTimePeriods[0][0], $teamTimePeriods[0][1]);
                     if ($is_available) {
@@ -238,7 +234,7 @@ class inspector_points extends Command
                 })->toArray();
 
                 $dayOffTeams = [];
-                $pointOfTeam =[];
+                $pointOfTeam = [];
                 $groupTeams = $groupTeams->shuffle(); // Shuffle to ensure random distribution
 
                 foreach ($groupTeams as $groupTeam) {
@@ -271,7 +267,7 @@ class inspector_points extends Command
 
                     if (empty($teamsWithDayOff) && !empty($teamTimePeriods)) {
                         // Get available points excluding those used today
-                        $pointOfTeam = $this->getAvailablePoints($todayIndex, $sector->id, $group->id, $groupTeam->group_team_id, $teamTimePeriods, $teamPointsYesterday[$groupTeam->group_team_id], $pointPerTeam, $usedPointsToday,$usedPointsGroupToday);
+                        $pointOfTeam = $this->getAvailablePoints($todayIndex, $sector->id, $group->id, $groupTeam->group_team_id, $teamTimePeriods, $teamPointsYesterday[$groupTeam->group_team_id], $pointPerTeam, $usedPointsToday, $usedPointsGroupToday);
                     }
                     $usedPointsToday = array_merge($usedPointsToday, $pointOfTeam);
 
@@ -293,11 +289,8 @@ class inspector_points extends Command
 
                     // Update team points count
                     $teamPointsCount[$groupTeam->group_team_id] = ($teamPointsCount[$groupTeam->group_team_id] ?? 0) + count($pointOfTeam);
-
                 }
             }
         }
     }
-
-
 }

@@ -7,6 +7,7 @@ use App\Models\grade;
 use App\Models\GroupTeam;
 use App\Models\InspectorMission;
 use App\Models\Setting;
+use App\Models\WorkingTime;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Carbon\Carbon;
@@ -47,7 +48,7 @@ class UserController extends Controller
         $user = User::where('military_number', $keyLogin)
             ->orWhere('civil_number', $keyLogin)
             ->join('inspectors', 'user_id', '=', 'users.id')
-            ->select('users.*', 'inspectors.id as inspectorId', 'inspectors.group_id' , 'inspectors.flag as flagIns' )
+            ->select('users.*', 'inspectors.id as inspectorId', 'inspectors.group_id', 'inspectors.flag as flagIns')
             ->first();
 
         if (!$user) {
@@ -55,21 +56,38 @@ class UserController extends Controller
                 'military_number' => ['رقم الهوية لا يتطابق مع سجلات المفتشين']
             ], 400);
         }
-        if ($user->flag !== 'employee' && $user->rule_id !== 4  && $user->flagIns !== 0 ) {
-            return $this->respondError('Validation Error.','لا يسمح لك بدخول الهيئة', 400);
+        if ($user->flag !== 'employee' && $user->rule_id !== 4  && $user->flagIns !== 0) {
+            return $this->respondError('Validation Error.', 'لا يسمح لك بدخول الهيئة', 400);
         }
         $credentials = [
             $user->military_number ? 'military_number' : 'civil_number' => $keyLogin,
             'password' => $password
         ];
+        $today = Carbon::today()->format('Y-m-d');
 
-        // Attempt authentication
+        // $shift = InspectorMission::where('inspector_id', $user->inspectorId)
+        //     ->whereDate('date',  $today)->whereDate('day_off', 0)
+        //     ->value('working_time_id');
+        // $shift_time = WorkingTime::find($shift);
+
+        // // Check if shift time exists
+        // if ($shift_time) {
+        //     // Get current time
+        //     $currentTime = Carbon::now()->format('H:i'); // Format it to match 'H:i' format
+
+        //     // Compare if current time is between start_time and end_time
+        //     $isBetween = Carbon::parse($shift_time->start_time)->isBefore($currentTime) && Carbon::parse($shift_time->end_time)->isAfter($currentTime);
+
+        //     if (!$isBetween) {
+        //         // Current time is not between start_time and end_time
+        //         return $this->respondError('Validation Error.', ' لا يسمح لك بالدخول خارج مواعيد العمل', 400);
+        //     }
+        // }       // Attempt authentication
         if (!Auth::attempt($credentials)) {
             return $this->respondError('Password Error', [
                 'crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']
             ], 403);
         }
-
         // Generate token and update user info
         $token = $user->createToken('auth_token')->accessToken;
         $user->device_token = $request->device_token;
@@ -86,7 +104,6 @@ class UserController extends Controller
             $isManager = true;
         }
 
-        $today = Carbon::today()->format('Y-m-d');
         $isOff = InspectorMission::where('inspector_id', $user->inspectorId)
             ->whereDate('date', $today)
             ->value('day_off');
@@ -286,8 +303,8 @@ class UserController extends Controller
         $user = Auth::user(); // Get the authenticated user
 
         if (!Hash::check($request->current_password, $user->password)) {
-            $message=[
-                'error'=>  ["كلمة المرور الحالية غير صحيحة"]
+            $message = [
+                'error' =>  ["كلمة المرور الحالية غير صحيحة"]
             ];
             return $this->respondError('Error.',  $message, 400);
         }
@@ -297,6 +314,5 @@ class UserController extends Controller
         $user->password = Hash::make($request->new_password);
         $user->save();
         return $this->respondSuccess($user, 'Password changed successfully.');
-
     }
 }
