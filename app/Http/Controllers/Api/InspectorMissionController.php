@@ -425,7 +425,7 @@ class InspectorMissionController extends Controller
 
             $attendance = new Attendance();
             $attendance->date = Carbon::now()->format('Y-m-d');
-           // $attendance->mission_id = $request->mission_id ?? null;
+            // $attendance->mission_id = $request->mission_id ?? null;
             $attendance->instant_id = $request->instant_mission_id;
             $attendance->total = $attendanceCount;
             $attendance->inspector_id = $inspectorId->id;
@@ -605,15 +605,18 @@ class InspectorMissionController extends Controller
             $name = $user->name;
             $grade = $user->grade ? $user->grade->name : 'N/A';
 
-            $forceNames = $attendanceEmployees->unique('force_id')
+            $forceData = $attendanceEmployees->unique('force_id')
                 ->map(function ($employee) {
-                    return $employee->force ? $employee->force->name : 'Unknown';
+                    return [
+                        'force_id' => $employee->force_id, // Add force_id
+                        'force_name' => $employee->force ? $employee->force->name : 'Unknown' // Add force_name
+                    ];
                 })
                 ->toArray();
 
             return [
                 'id' => $attendance->id,
-                'force_name' => 'ادارة (' . implode(', ', $forceNames) . ')',
+                'force_name' => 'ادارة (' . implode(', ', array_column($forceData, 'force_name')) . ')',
                 'total_force' => $attendanceEmployees->unique('force_id')->count(),
                 'total_police' => $attendanceEmployees->where('type_id', 2)->count(),
                 'total_individuals' => $attendanceEmployees->where('type_id', 1)->count(),
@@ -623,7 +626,11 @@ class InspectorMissionController extends Controller
                     return [
                         'index' => $index + 1,
                         'name' => $emp->name,
+                        'type_id' => $emp->type_id,
+                        'force_id' => $emp->force_id,
+                        'force_name' => $emp->force ? $emp->force->name : 'Unknown', 
                         'grade' => $emp->grade_id ? $emp->grade->name : '',
+                        'grade_id' => $emp->grade_id,
                     ];
                 }),
                 'created_at' => $attendance->parent == 0 ? $attendance->created_at : Attendance::find($attendance->parent)->created_at,
@@ -646,6 +653,7 @@ class InspectorMissionController extends Controller
                 ]
             ];
         });
+
 
         return $this->respondSuccess($success, 'Data Saved successfully.');
     }
