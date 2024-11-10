@@ -207,10 +207,8 @@ class inspector_points extends Command
         foreach ($groups as $group) {
             $teamCount += GroupTeam::where('group_id', $group->id)->count();
         }
-
         $num = floor($points / $teamCount);
-         // dd($teamCount ,$points ,$num ,$sector);
-
+        //dd($teamCount ,$points ,$num ,$sector);
         return $num;
     }
 
@@ -254,8 +252,8 @@ class inspector_points extends Command
 
                 foreach ($groupTeams as $groupTeam) {
                     $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ?: [];
-                    $pointPerTeam = $group->points_inspector;
-                    //$pointPerTeam = $this->countOfPoints($sector->id);
+                    //$pointPerTeam = $group->points_inspector;
+                    $pointPerTeam = $this->countOfPoints($sector->id);
                     $teamsWorkingTime = InspectorMission::with('workingTime')
                         ->where('group_id', $group->id)
                         ->where('group_team_id', $groupTeam->group_team_id)
