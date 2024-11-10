@@ -30,14 +30,20 @@ class grade extends Model
     {
         return $this->hasMany(AbsenceEmployee::class, 'grade');
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2d6f31f5579ad12dc870c4ccde69ae8381ffd607
     public function attendanceEmployees()
     {
         return $this->hasMany(AttendanceEmployee::class, 'grade_id');
     }
+<<<<<<< HEAD
 
     public function violations()
     {
         return $this->hasMany(Violation::class, 'grade');
     }
+=======
+>>>>>>> 2d6f31f5579ad12dc870c4ccde69ae8381ffd607
 }
