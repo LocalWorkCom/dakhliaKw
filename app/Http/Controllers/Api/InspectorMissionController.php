@@ -626,9 +626,10 @@ class InspectorMissionController extends Controller
                     return [
                         'index' => $index + 1,
                         'name' => $emp->name,
+                        'type'=>$emp->type->name,
                         'type_id' => $emp->type_id,
                         'force_id' => $emp->force_id,
-                        'force_name' => $emp->force ? $emp->force->name : 'Unknown', 
+                        'force_name' => $emp->force ? $emp->force->name : 'Unknown',
                         'grade' => $emp->grade_id ? $emp->grade->name : '',
                         'grade_id' => $emp->grade_id,
                     ];
