@@ -413,13 +413,17 @@ class InspectorMissionController extends Controller
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
 
+        if(!checkShift()){
+            return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
+
+         }
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
         if (!$request->id) {
             $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
 
             $attendance = new Attendance();
             $attendance->date = Carbon::now()->format('Y-m-d');
-            $attendance->mission_id = $request->mission_id ?? null;
+           // $attendance->mission_id = $request->mission_id ?? null;
             $attendance->instant_id = $request->instant_mission_id;
             $attendance->total = $attendanceCount;
             $attendance->inspector_id = $inspectorId->id;
@@ -465,7 +469,7 @@ class InspectorMissionController extends Controller
 
                 $attendance = new Attendance();
                 $attendance->date = Carbon::now()->format('Y-m-d');
-                $attendance->mission_id = $request->mission_id;
+                //$attendance->mission_id = $request->mission_id;
                 $attendance->instant_id = $request->instant_mission_id;
                 $attendance->total = $attendanceCount;
                 $attendance->inspector_id = $inspectorId->id;
@@ -512,7 +516,7 @@ class InspectorMissionController extends Controller
 
                 $attendance = new Attendance();
                 $attendance->date = Carbon::now()->format('Y-m-d');
-                $attendance->mission_id = $request->mission_id;
+                //$attendance->mission_id = $request->mission_id;
                 $attendance->instant_id = $request->instant_mission_id;
                 $attendance->total = $attendanceCount;
                 $attendance->inspector_id = $inspectorId->id;

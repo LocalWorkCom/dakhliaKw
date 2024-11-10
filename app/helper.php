@@ -15,7 +15,9 @@ use App\Models\GroupSectorHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\InspectorGroupHistory;
+use App\Models\InspectorMission;
 use App\Models\Notification;
+use App\Models\WorkingTime;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Google\Client as GoogleClient;
@@ -492,7 +494,7 @@ if (!function_exists('send_push_notification')) {
         $result=json_decode($output);
         curl_close ($ch);
     } */
-    function send_push_notification($mission_id, $usertoken, $title, $message,$type)
+    function send_push_notification($mission_id, $usertoken, $title, $message, $type)
     {
         $projectId = "taftesh-74633"; //config('services.fcm.project_id'); # INSERT COPIED PROJECT ID
 
@@ -549,4 +551,28 @@ function getNotifications()
         return $notifications;
     }
     return null;
+}
+
+
+function checkShift()
+{
+    $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
+    $today = Carbon::today()->toDateString();
+
+    $shift = InspectorMission::where('inspector_id', $inspectorId)
+        ->whereDate('date',  $today)
+        ->where('day_off', 0)
+        ->value('working_time_id');
+
+    $shift_time = WorkingTime::find($shift);
+
+    if ($shift_time) {
+        $currentTime = Carbon::now();
+        $startTime = Carbon::parse($shift_time->start_time);
+        $endTime = Carbon::parse($shift_time->end_time);
+
+        return $currentTime->between($startTime, $endTime);
+    }
+
+    return false; 
 }
