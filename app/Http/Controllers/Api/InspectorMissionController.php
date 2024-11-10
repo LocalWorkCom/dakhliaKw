@@ -475,7 +475,7 @@ class InspectorMissionController extends Controller
                 $attendance->instant_id = $request->instant_mission_id;
                 $attendance->total = $attendanceCount;
                 $attendance->inspector_id = $inspectorId->id;
-                $attendance->parent = $request->id;
+                $attendance->parent = $isParent;
                 $attendance->flag = 1;
                 $attendance->save();
 
