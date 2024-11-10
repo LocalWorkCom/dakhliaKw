@@ -413,12 +413,14 @@ class InspectorMissionController extends Controller
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
 
-        if(!checkShift()){
-            return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
+        // if(!checkShift()){
+        //     return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
 
-         }
+        //  }
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
         if (!$request->id) {
+            //dd($request->id);
+
             $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
 
             $attendance = new Attendance();
@@ -473,7 +475,7 @@ class InspectorMissionController extends Controller
                 $attendance->instant_id = $request->instant_mission_id;
                 $attendance->total = $attendanceCount;
                 $attendance->inspector_id = $inspectorId->id;
-                $attendance->parent = null;
+                $attendance->parent = $request->id;
                 $attendance->flag = 1;
                 $attendance->save();
 
@@ -520,7 +522,7 @@ class InspectorMissionController extends Controller
                 $attendance->instant_id = $request->instant_mission_id;
                 $attendance->total = $attendanceCount;
                 $attendance->inspector_id = $inspectorId->id;
-                $attendance->parent = $request->id;
+                $attendance->parent = $isParent;
                 $attendance->flag = 1;
                 $attendance->save();
 
