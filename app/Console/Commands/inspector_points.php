@@ -202,15 +202,17 @@ class inspector_points extends Command
     function countOfPoints($sector)
     {
         $groups = Groups::where('sector_id', $sector)->get();
-        $points = Grouppoint::where('deleted',  0)->where('sector_id', $sector)->count();
+        $points = Grouppoint::where('deleted', 0)->where('sector_id', $sector)->count();
         $teamCount = 0;
+
         foreach ($groups as $group) {
             $teamCount += GroupTeam::where('group_id', $group->id)->count();
         }
-        $num = floor($points / $teamCount);
-        //dd($teamCount ,$points ,$num ,$sector);
-        return $num;
+
+       // dd(ceil($points / max($teamCount, 1)));
+        return ceil($points / max($teamCount, 1));
     }
+
 
     public function teamOfGroup($yesterday, $today)
     {
@@ -248,12 +250,12 @@ class inspector_points extends Command
 
                 $dayOffTeams = [];
                 $pointOfTeam = [];
-                $groupTeams = $groupTeams->shuffle(); // Shuffle to ensure random distribution
+                $groupTeams = $groupTeams->shuffle();
 
                 foreach ($groupTeams as $groupTeam) {
                     $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ?: [];
-                    //$pointPerTeam = $group->points_inspector;
-                    $pointPerTeam = $this->countOfPoints($sector->id);
+                    $pointPerTeam = $group->points_inspector;
+                    //$pointPerTeam = $this->countOfPoints($sector->id);
                     $teamsWorkingTime = InspectorMission::with('workingTime')
                         ->where('group_id', $group->id)
                         ->where('group_team_id', $groupTeam->group_team_id)
