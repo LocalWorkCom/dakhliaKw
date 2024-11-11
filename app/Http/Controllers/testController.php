@@ -27,7 +27,6 @@ class testController extends Controller
         while ($startOfMonth->lte($endOfMonth)) {
             $today = $startOfMonth->toDateString();
             $yesterday = $startOfMonth->copy()->subDay()->toDateString();
-
             $this->teamOfGroup($yesterday, $today);
             $startOfMonth->addDay();
         }
@@ -51,25 +50,26 @@ class testController extends Controller
 
         return $index !== false ? $index : null;
     }
-    //function to get working times for team for today
 
-    public function teamOfGroup($yesterday, $today)
+    function countOfPoints($sector)
     {
-        $todayIndex = $this->todayIndex($today);
-        $allSectors = Sector::all();
+        $groups = Groups::where('sector_id', $sector)->get();
+        $points = Grouppoint::where('deleted', 0)->where('sector_id', $sector)->count();
+        $teamCount = 0;
 
-        // Initialize an array to store working times for each team
-        $sectorTeamWorkingTimes = [];
-
-        foreach ($allSectors as $sector) {
-            // Fetch all groups within the sector
-            $allGroups = Groups::where('sector_id', $sector->id)->get();
-
-            // Loop through each group in the sector
+        foreach ($groups as $group) {
+            $teamCount += GroupTeam::where('group_id', $group->id)->count();
+        }
+        return floor($points / $teamCount);
+    }
+    //function to get working times for team for today
+    public function getTeamsTimes($yesterday, $today)
+    {
+        $sectors = Sector::all();
+        foreach ($sectors as $sector) {
+            $allGroups = Groups::where('sector_id', $sector->id)->pluck('id')->toArray();
             foreach ($allGroups as $group) {
                 $teams = GroupTeam::where('group_id', $group->id)->pluck('id')->toArray();
-
-                // Get group team missions for yesterday and today
                 $groupTeams = InspectorMission::where('group_id', $group->id)
                     ->whereIn('group_team_id', $teams)
                     ->select('group_team_id', 'ids_group_point')
@@ -77,7 +77,6 @@ class testController extends Controller
                     ->distinct('group_team_id')
                     ->get();
 
-                // If no missions found for yesterday, fetch them for today
                 if ($groupTeams->isEmpty()) {
                     $groupTeams = InspectorMission::where('group_id', $group->id)
                         ->whereIn('group_team_id', $teams)
@@ -87,22 +86,21 @@ class testController extends Controller
                         ->get();
                 }
 
-                // Initialize the array for the sector
-                if (!isset($sectorTeamWorkingTimes[$sector->id])) {
-                    $sectorTeamWorkingTimes[$sector->id] = [];
-                }
+                // Get count of points already assigned to each team
+                $teamPointsCount = $groupTeams->mapWithKeys(function ($team) {
+                    return [
+                        $team->group_team_id => count($team->ids_group_point ?? [])
+                    ];
+                })->toArray();
 
-                // Loop through each team
+                $dayOffTeams = [];
+                $pointOfTeam = [];
+                $groupTeams = $groupTeams->shuffle();
+
                 foreach ($groupTeams as $groupTeam) {
-                    // Initialize array for team if not already set
-                    if (!isset($sectorTeamWorkingTimes[$sector->id][$groupTeam->group_team_id])) {
-                        $sectorTeamWorkingTimes[$sector->id][$groupTeam->group_team_id] = [
-                            'team_id' => $groupTeam->group_team_id,
-                            'working_times' => []
-                        ];
-                    }
-
-                    // Get the working times for the team on the given day (today)
+                    $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ?: [];
+                    //$pointPerTeam = $group->points_inspector;
+                    $pointPerTeam = $this->countOfPoints($sector->id);
                     $teamsWorkingTime = InspectorMission::with('workingTime')
                         ->where('group_id', $group->id)
                         ->where('group_team_id', $groupTeam->group_team_id)
@@ -111,31 +109,18 @@ class testController extends Controller
                         ->distinct('group_team_id')
                         ->get();
 
-                    // Add the working times (start_time, end_time) to the team entry
-                    foreach ($teamsWorkingTime as $mission) {
-                        $sectorTeamWorkingTimes[$sector->id][$groupTeam->group_team_id]['working_times'][] = [
-                            'start_time' => $mission->workingTime->start_time,
-                            'end_time' => $mission->workingTime->end_time,
-                        ];
-                    }
+                    $teamTimePeriods = $teamsWorkingTime->map(function ($mission) {
+                        return [$mission->workingTime->start_time, $mission->workingTime->end_time];
+                    })->toArray();
 
-                    // Get teams with a day off and skip them for today
                     $teamsWithDayOff = InspectorMission::where('group_id', $group->id)
                         ->where('group_team_id', $groupTeam->group_team_id)
                         ->whereDate('date', $today)
                         ->where('day_off', 1)
                         ->pluck('id')
                         ->toArray();
-
-                    if (!empty($teamsWithDayOff)) {
-                        continue; // Skip teams with a day off
-                    }
                 }
             }
         }
-
-        // Output or further process the collected working times for all teams in each sector
-        dd($sectorTeamWorkingTimes);
     }
-
 }
