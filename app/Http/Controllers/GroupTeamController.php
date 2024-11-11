@@ -477,7 +477,7 @@ class GroupTeamController extends Controller
             $users = User::where('rule_id', 2)->get();
             foreach ($users as $user) {
 
-                send_push_notification(null, $user->fcm_token, $title, $message,0);
+                send_push_notification(null, $user->fcm_token, $title, $message, 0);
                 $notify = new Notification();
                 $notify->message = $message;
                 $notify->title = $title;
@@ -789,7 +789,7 @@ class GroupTeamController extends Controller
                             : null;
 
                         $getExistPoints = InspectorMission::where('group_team_id', $GroupTeam->id)->where('group_id', $GroupTeam->group_id)
-                            ->where('working_tree_id', $GroupTeam->working_tree_id)->where('working_time_id', $WorkingTreeTime->working_time_id)
+                            ->where('working_tree_id', $GroupTeam->working_tree_id)->where('working_time_id', ($WorkingTreeTime->working_time_id) ? $WorkingTreeTime->working_time_id : null)
                             ->where('date', $date)->first();
                         if ($getExistPoints) {
                             $points = $getExistPoints->ids_group_point;
@@ -820,7 +820,7 @@ class GroupTeamController extends Controller
                         if ($vacation_days != 0) {
                             $inspectorMission->vacation_id = $EmployeeVacation->id;
                         }
-                        $inspectorMission->ids_group_point = $points;
+                        $inspectorMission->ids_group_point = $points ?? null;
                         $inspectorMission->day_off = $day_off;
                         $inspectorMission->save();
                         if ($vacation_days != 0) {
