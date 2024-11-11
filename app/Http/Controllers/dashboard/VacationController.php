@@ -544,7 +544,7 @@ class VacationController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-                send_push_notification(null, $token, 'تم القبول', 'تم قبول أجازتك','vacation');
+                send_push_notification(null, $token, 'تم القبول', 'تم قبول أجازتك', 'vacation');
 
                 $EndDate = ExpectedEndDate($vacation)[0];
                 $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
@@ -555,7 +555,7 @@ class VacationController extends Controller
 
                     $users = User::where('rule_id', 2)->get();
                     foreach ($users as $user) {
-                        send_push_notification(null, $user->fcm_token, $title, $message,null);
+                        send_push_notification(null, $user->fcm_token, $title, $message, null);
                         $notify = new Notification();
                         $notify->message = $message;
                         $notify->title = $title;
@@ -599,7 +599,7 @@ class VacationController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-            send_push_notification(null, $token, 'تم الرفض', 'تم رفض أجازتك','vacation');
+            send_push_notification(null, $token, 'تم الرفض', 'تم رفض أجازتك', 'vacation');
             session()->flash('success', 'تم رفض الإجازة بنجاح.');
         } else {
             session()->flash('error', 'الإجازة غير موجودة.');
@@ -655,14 +655,15 @@ class VacationController extends Controller
                 $vacation->is_cut = 1;
 
                 $vacation->end_date = $request->end_date;
-            } else if ($request->type == 'exceed') {
-                $vacation->is_exceed = 1;
-                $vacation->end_date = Carbon::parse($request->end_date)->subDay();
+                // } else if ($request->type == 'exceed') {
+                //     $vacation->is_exceed = 1;
+                //     $vacation->end_date = Carbon::parse($request->end_date)->subDay();
             } elseif ($request->type == 'direct_exceed') {
                 // dd(0);
                 $inspector = Inspector::where('user_id', $vacation->employee_id)->first();
 
                 if ($inspector) {
+
                     $end_date = $request->end_date;
                     $end_date = Carbon::parse($end_date);
                     $start_date =  Carbon::parse($vacation->start_date);
@@ -709,8 +710,25 @@ class VacationController extends Controller
                 } else {
                     $vacation->end_date = Carbon::parse($request->end_date)->subDay();
                 }
+
+                $check_row_vacation =  InspectorMission::where('inspector_id', $inspector->id)
+                    ->whereDate('date', $request->end_date)->first();
+                // dd($check_row_vacation);
+                if ($check_row_vacation) {
+                    $check_row_vacation->vacation_id = null;
+                    $check_row_vacation->save();
+                }
             } elseif ($request->type == 'direct_work') {
+                $inspector = Inspector::where('user_id', $vacation->employee_id)->first();
+
                 $vacation->end_date = Carbon::parse($request->end_date)->subDay();
+
+                $check_row_vacation =  InspectorMission::where('inspector_id', $inspector->id)
+                    ->whereDate('date', $request->end_date)->first();
+                if ($check_row_vacation) {
+                    $check_row_vacation->vacation_id = null;
+                    $check_row_vacation->save();
+                }
             }
 
 
@@ -733,7 +751,8 @@ class VacationController extends Controller
         // Return the view with the data to be printed
         return view('vacation.requestVacation', compact('vacation'));
     }
-    public function getExpectedEndDate(Request $request) {
+    public function getExpectedEndDate(Request $request)
+    {
 
         $vacation = EmployeeVacation::find($request->id);
         $end_date = ExpectedEndDate($vacation)[0];

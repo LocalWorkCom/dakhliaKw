@@ -78,11 +78,11 @@ class inspector_points extends Command
         $idsOfTodayUsed = [];
         $validPoints = [];
         $idsOfTodayUsedGroup = [];
-        if ($historyOfTeam) {
-            $idsOfHistory = Grouppoint::whereIn('id', $historyOfTeam)->pluck('points_ids')
-                ->flatten()
-                ->toArray();
-        }
+        // if ($historyOfTeam) {
+        //     $idsOfHistory = Grouppoint::whereIn('id', $historyOfTeam)->pluck('points_ids')
+        //         ->flatten()
+        //         ->toArray();
+        // }
         if ($userToday) {
             $idsOfTodayUsed = Grouppoint::whereIn('id', $userToday)
                 ->pluck('points_ids')
@@ -102,9 +102,9 @@ class inspector_points extends Command
         if (count($idsOfTodayUsedGroup) > 0) {
             $allPoints->whereNotIn('id', $idsOfTodayUsedGroup);
         }
-        if (count($idsOfHistory) > 0) {
-            $allPoints->whereNotIn('id', $idsOfHistory);
-        }
+        // if (count($idsOfHistory) > 0) {
+        //     $allPoints->whereNotIn('id', $idsOfHistory);
+        // }
         $availablePoints = $allPoints->get();
 
         $assignedPointsToday = [];
@@ -199,18 +199,65 @@ class inspector_points extends Command
         return $teamStartTimestamp <= $pointStartTimestamp && $teamStartTimestamp >= $pointEndTimestamp && $teamEndTimestamp >= $pointStartTimestamp;
     }
 
-    function countOfPoints($sector)
+    function countOfPoints($sector, $today)
     {
         $groups = Groups::where('sector_id', $sector)->get();
-        $points = Grouppoint::where('deleted',  0)->where('sector_id', $sector)->count();
         $teamCount = 0;
+        $validPoints = [];  // To store valid points available today
+        $assignedPointsToday = [];  // To store assigned points
+
+        $allPoints = Point::with('pointDays')->where('sector_id', $sector)->get();
+        $index = $this->todayIndex($today);  // Assuming this method returns today's index
+
+        // Loop through each point in the sector
+        foreach ($allPoints as $available_point) {
+            if ($available_point->work_type == 0) {  // If work type is 0, check if today is a workday
+                $is_off = in_array($index, $available_point->days_work);
+                if ($is_off) {
+                    $pointId = '' . $available_point->id . '';
+                    $id_groupoints = Grouppoint::whereJsonContains('points_ids', $pointId)
+                        ->where('deleted', 0)
+                        ->pluck('id', 'government_id')
+                        ->toArray();
+
+                    foreach ($id_groupoints as $government_id => $id) {
+                        $validPoints[] = [
+                            'id' => $id,
+                            'government_id' => $government_id
+                        ];
+                        $assignedPointsToday[] = $id;
+                    }
+                }
+            } else {  // If work type is not 0, check for the specific day (point day)
+                $pointDay = $available_point->pointDays->where('name', $index)->first();
+                if ($pointDay) {
+                    $pointId = '' . $available_point->id . '';
+                    $id_groupoints = Grouppoint::whereJsonContains('points_ids', $pointId)
+                        ->where('deleted', 0)
+                        ->pluck('id', 'government_id')
+                        ->toArray();
+                    foreach ($id_groupoints as $government_id => $id) {
+                        $validPoints[] = [
+                            'id' => $id,
+                            'government_id' => $government_id
+                        ];
+                        $assignedPointsToday[] = $id;
+                    }
+                }
+            }
+        }
+
+        // Calculate number of teams for the sector
         foreach ($groups as $group) {
             $teamCount += GroupTeam::where('group_id', $group->id)->count();
         }
-        $num = floor($points / $teamCount);
-        //dd($teamCount ,$points ,$num ,$sector);
-        return $num;
+
+        // Get the number of valid points available today
+        $pointsAvailableToday = count($validPoints);
+//dd($pointsAvailableToday,$teamCount ,floor($pointsAvailableToday/$teamCount) )  ;
+      return $teamCount == 0 ? 0 :floor($pointsAvailableToday/$teamCount);
     }
+
 
     public function teamOfGroup($yesterday, $today)
     {
@@ -221,6 +268,8 @@ class inspector_points extends Command
             $allGroups = Groups::where('sector_id', $sector->id)->get();
             $usedPointsGroupToday = [];
             $usedPointsToday = [];
+            $allGroups = $allGroups->shuffle();
+
             foreach ($allGroups as $group) {
                 $teams = GroupTeam::where('group_id', $group->id)->pluck('id')->toArray();
                 $groupTeams = InspectorMission::where('group_id', $group->id)
@@ -248,12 +297,12 @@ class inspector_points extends Command
 
                 $dayOffTeams = [];
                 $pointOfTeam = [];
-                $groupTeams = $groupTeams->shuffle(); // Shuffle to ensure random distribution
+                $groupTeams = $groupTeams->shuffle();
 
                 foreach ($groupTeams as $groupTeam) {
                     $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ?: [];
                     //$pointPerTeam = $group->points_inspector;
-                    $pointPerTeam = $this->countOfPoints($sector->id);
+                    $pointPerTeam = $this->countOfPoints($sector->id,$today);
                     $teamsWorkingTime = InspectorMission::with('workingTime')
                         ->where('group_id', $group->id)
                         ->where('group_team_id', $groupTeam->group_team_id)
@@ -277,7 +326,9 @@ class inspector_points extends Command
                         $dayOffTeams = array_merge($dayOffTeams, $teamsWithDayOff);
                         continue;
                     }
-
+                    // if($groupTeam->group_team_id == 44){
+                    //     dd($teamTimePeriods, $teamPointsYesterday[$groupTeam->group_team_id], $pointPerTeam, $usedPointsToday, $usedPointsGroupToday);
+                    // }
                     if (empty($teamsWithDayOff) && !empty($teamTimePeriods)) {
                         // Get available points excluding those used today
                         $pointOfTeam = $this->getAvailablePoints($todayIndex, $sector->id, $group->id, $groupTeam->group_team_id, $teamTimePeriods, $teamPointsYesterday[$groupTeam->group_team_id], $pointPerTeam, $usedPointsToday, $usedPointsGroupToday);

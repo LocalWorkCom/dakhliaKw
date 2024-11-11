@@ -32,6 +32,7 @@ use App\Http\Controllers\InstantmissionController;
 use App\Http\Controllers\NotificationSendController;
 use App\Http\Controllers\paperTransactionController;
 use App\Http\Controllers\statisticController;
+use App\Http\Controllers\testController;
 use App\Http\Controllers\ViolationTypesController;
 
 // use App\Http\Controllers\ViolationReportController;
@@ -459,6 +460,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('forceNames/add', [forceNamesController::class, 'store'])->name('forcenames.store');
     Route::post('forceNames/edit', [forceNamesController::class, 'update'])->name('forcenames.update');
     Route::post('forceNames/delete', [forceNamesController::class, 'delete'])->name('forcenames.delete');
+
+
+    Route::get('/testpoints', [testController::class, 'index']);
 
 });
 

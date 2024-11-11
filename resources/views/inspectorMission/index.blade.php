@@ -32,7 +32,8 @@
                         <button class="btn-all px-3" style="color: #FFFFFF; background-color: #274373;" onclick="printDiv()">
                             <img src="{{ asset('frontend/images/print.svg') }}" alt=""> طباعة
                         </button>
-                        <button class="btn-all px-3" style="color: #FFFFFF; background-color: #274373;" onclick="confirmAndRedirect()">
+                        <button class="btn-all px-3" style="color: #FFFFFF; background-color: #274373;"
+                            onclick="confirmAndRedirect()">
                             <img src="" alt=""> اعادة توزيع
                         </button>
                         <div class="colors d-flex mx-5">
@@ -152,14 +153,15 @@
                                                                         @foreach ($inspector['points'][$index2] as $index3 => $point)
                                                                             <li class="change-place"
                                                                                 id="point-{{ $point->id }}"
-                                                                                draggable="true">{{ $point->name }}<hr /></li>
+                                                                                draggable="true">{{ $point->name }}
+                                                                                <hr />
+                                                                            </li>
                                                                             <!-- Display points with draggable feature -->
                                                                         @endforeach
                                                                     @endif
                                                                     @if (
                                                                         // !$mission->day_off &&
-                                                                            isset($inspector['instant_missions'][$index2]) &&
-                                                                            count($inspector['instant_missions'][$index2]) > 0)
+                                                                        isset($inspector['instant_missions'][$index2]) && count($inspector['instant_missions'][$index2]) > 0)
                                                                         @foreach ($inspector['instant_missions'][$index2] as $instant_mission)
                                                                             <li class="urgent">
                                                                                 {{ $instant_mission->label }}</li>
@@ -318,6 +320,17 @@
             //     });
             //     return;
             // }
+            
+            if (event.target.classList.contains('rest')) {
+                Swal.fire({
+                    title: 'خطأ',
+                    text: 'لا يمكن نقل نقطة الى يوم اجازة',
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'تم !'
+                });
+                return;
+            }
 
             if (targetDate < today) {
                 Swal.fire({
@@ -431,6 +444,7 @@
 
         }
     });
+
     function confirmAndRedirect() {
         // Display confirmation dialog
         if (confirm("Do you want to complete this action?")) {
@@ -438,5 +452,4 @@
             window.location.href = "{{ route('refresh.inspector.mission') }}";
         }
     }
-
 </script>

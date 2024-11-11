@@ -76,6 +76,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     //add attendance
     Route::any('/attendance/types', [InspectorMissionController::class, 'get_Alltypes']);
     Route::any('/attendance/add',  [InspectorMissionController::class, 'addAttendance']);
-    Route::any('/attendance/all', [InspectorMissionController::class, 'getAllAtendance']);
+    Route::any('/attendance/all', [InspectorMissionController::class, 'getAllAttendance']);
 
 });
