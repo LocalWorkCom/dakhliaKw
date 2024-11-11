@@ -464,7 +464,7 @@ class InspectorMissionController extends Controller
         } else {
             $record = Attendance::where('id', $request->id)->first();
             $isParent = $record->parent;
-            if ($isParent != 0) {
+            if ($isParent == null) {
                 $record->flag = 0;
                 $record->save();
                 $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
@@ -475,7 +475,7 @@ class InspectorMissionController extends Controller
                 $attendance->instant_id = $request->instant_mission_id;
                 $attendance->total = $attendanceCount;
                 $attendance->inspector_id = $inspectorId->id;
-                $attendance->parent = $isParent;
+                $attendance->parent = $request->id;
                 $attendance->flag = 1;
                 $attendance->save();
 
