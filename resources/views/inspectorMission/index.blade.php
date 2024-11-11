@@ -324,7 +324,7 @@
             if (event.target.classList.contains('rest')) {
                 Swal.fire({
                     title: 'خطأ',
-                    text: 'لا يمكن نقل نقطة الى أيام',
+                    text: 'لا يمكن نقل نقطة الى يوم اجازة',
                     icon: 'error',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'تم !'
