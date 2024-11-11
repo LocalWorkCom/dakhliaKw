@@ -32,6 +32,7 @@ use App\Http\Controllers\InstantmissionController;
 use App\Http\Controllers\NotificationSendController;
 use App\Http\Controllers\paperTransactionController;
 use App\Http\Controllers\statisticController;
+use App\Http\Controllers\testController;
 use App\Http\Controllers\ViolationTypesController;
 
 // use App\Http\Controllers\ViolationReportController;
@@ -128,6 +129,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/absence/edit/{id}', [AbsenceTypeController::class, 'edit'])->name('absence_edit')->middleware('check.permission:edit Absence');
     Route::any('/absence_update', [AbsenceTypeController::class, 'update'])->name('absence_update')->middleware('check.permission:edit Absence');
     Route::any('/absence_store', [AbsenceTypeController::class, 'store'])->name('absence.store')->middleware('check.permission:create Absence');
+    Route::any('/absence/delete', [AbsenceTypeController::class, 'delete'])->name('absence.delete');
 
 
 
@@ -146,9 +148,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/working_time', [WorkingTimeController::class, 'getWorkingTime'])->name('api.working_time')->middleware('check.permission:view WorkingTime');
     Route::post('/working_time/create', [WorkingTimeController::class, 'store'])->name('working_time.store')->middleware('check.permission:create WorkingTime');
     Route::any('/working_time/edit/{id}', [WorkingTimeController::class, 'edit'])->name('working_time.edit')->middleware('check.permission:edit WorkingTime');
+    Route::any('/working_time/edit/{id}', [WorkingTimeController::class, 'edit'])->name('working_time.edit')->middleware('check.permission:edit WorkingTime');
 
     Route::post('/working_time/update', [WorkingTimeController::class, 'update'])->name('working_time.update');
-    Route::any('/working_time/show/{id}', [WorkingTimeController::class, 'show'])->name('working_time.show')->middleware('check.permission:view WorkingTime');
+    Route::any('/working_time/delete', [WorkingTimeController::class, 'delete'])->name('working_time.delete');
 
     // instantmission
     Route::any('/instant_mission', [InstantmissionController::class, 'index'])->name('instant_mission.index')->middleware('check.permission:view instantmission');
@@ -456,6 +459,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('forceNames/all', [forceNamesController::class, 'getAllNames'])->name('forcenames.getAllNames');
     Route::post('forceNames/add', [forceNamesController::class, 'store'])->name('forcenames.store');
     Route::post('forceNames/edit', [forceNamesController::class, 'update'])->name('forcenames.update');
+    Route::post('forceNames/delete', [forceNamesController::class, 'delete'])->name('forcenames.delete');
+
+
+    Route::get('/testpoints', [testController::class, 'index']);
 
 });
 

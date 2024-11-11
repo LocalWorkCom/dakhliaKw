@@ -75,7 +75,14 @@ class RefreshInspectorMission implements ShouldQueue
                 } else {
                     $data = InspectorMission::where('group_id', $GroupTeam->group_id)->where('group_team_id', $GroupTeam->id)
                         ->where('date', $date)->where('inspector_id', $Inspector)->first();
-                    $day_of_month_val = $data->day_number;
+                        if($data){
+                            $day_of_month_val = $data->day_number;
+
+                        }else{
+                           // dd($date,$Inspector,$GroupTeam->group_id,$GroupTeam->id,$data);
+                            $day_of_month_val = 1;
+
+                        }
                 }
                 if ($WorkingTree->changed || $GroupTeam->changed || !$inspectorMissions) {
                     if ($WorkingTree->changed && sizeof($group_team_ids) == 0) {

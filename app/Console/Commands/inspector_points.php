@@ -208,9 +208,7 @@ class inspector_points extends Command
         foreach ($groups as $group) {
             $teamCount += GroupTeam::where('group_id', $group->id)->count();
         }
-
-       // dd(ceil($points / max($teamCount, 1)));
-        return ceil($points / max($teamCount, 1));
+        return floor($points / $teamCount);
     }
 
 
@@ -254,8 +252,8 @@ class inspector_points extends Command
 
                 foreach ($groupTeams as $groupTeam) {
                     $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ?: [];
-                    $pointPerTeam = $group->points_inspector;
-                    //$pointPerTeam = $this->countOfPoints($sector->id);
+                    //$pointPerTeam = $group->points_inspector;
+                    $pointPerTeam = $this->countOfPoints($sector->id);
                     $teamsWorkingTime = InspectorMission::with('workingTime')
                         ->where('group_id', $group->id)
                         ->where('group_team_id', $groupTeam->group_team_id)
@@ -279,7 +277,9 @@ class inspector_points extends Command
                         $dayOffTeams = array_merge($dayOffTeams, $teamsWithDayOff);
                         continue;
                     }
-
+                    // if($groupTeam->group_team_id == 44){
+                    //     dd($teamTimePeriods, $teamPointsYesterday[$groupTeam->group_team_id], $pointPerTeam, $usedPointsToday, $usedPointsGroupToday);
+                    // }
                     if (empty($teamsWithDayOff) && !empty($teamTimePeriods)) {
                         // Get available points excluding those used today
                         $pointOfTeam = $this->getAvailablePoints($todayIndex, $sector->id, $group->id, $groupTeam->group_team_id, $teamTimePeriods, $teamPointsYesterday[$groupTeam->group_team_id], $pointPerTeam, $usedPointsToday, $usedPointsGroupToday);
