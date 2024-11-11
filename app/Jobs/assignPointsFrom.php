@@ -86,11 +86,11 @@ class assignPointsFrom implements ShouldQueue
         $idsOfTodayUsed = [];
         $validPoints = [];
         $idsOfHistoryGroups = [];
-        if ($historyOfTeam) {
-            $idsOfHistory = Grouppoint::whereIn('id', $historyOfTeam)->pluck('points_ids')
-                ->flatten()
-                ->toArray();
-        }
+        // if ($historyOfTeam) {
+        //     $idsOfHistory = Grouppoint::whereIn('id', $historyOfTeam)->pluck('points_ids')
+        //         ->flatten()
+        //         ->toArray();
+        // }
         if ($userToday) {
             $idsOfTodayUsed = Grouppoint::whereIn('id', $userToday)
                 ->pluck('points_ids')
@@ -107,9 +107,9 @@ class assignPointsFrom implements ShouldQueue
         if (count($idsOfTodayUsed) > 0) {
             $allPoints->whereNotIn('id', $idsOfTodayUsed);
         }
-        if (count($idsOfHistory) > 0) {
-            $allPoints->whereNotIn('id', $idsOfHistory);
-        }
+        // if (count($idsOfHistory) > 0) {
+        //     $allPoints->whereNotIn('id', $idsOfHistory);
+        // }
         if (count($idsOfHistoryGroups) > 0) {
             $allPoints->whereNotIn('id', $idsOfHistoryGroups);
         }
@@ -207,16 +207,63 @@ class assignPointsFrom implements ShouldQueue
 
         return $teamStartTimestamp <= $pointStartTimestamp && $teamStartTimestamp >= $pointEndTimestamp && $teamEndTimestamp >= $pointStartTimestamp;
     }
-    function countOfPoints($sector)
+    function countOfPoints($sector, $today)
     {
         $groups = Groups::where('sector_id', $sector)->get();
-        $points = Grouppoint::where('deleted', 0)->where('sector_id', $sector)->count();
         $teamCount = 0;
+        $validPoints = [];  // To store valid points available today
+        $assignedPointsToday = [];  // To store assigned points
 
+        $allPoints = Point::with('pointDays')->where('sector_id', $sector)->get();
+        $index = $this->todayIndex($today);  // Assuming this method returns today's index
+
+        // Loop through each point in the sector
+        foreach ($allPoints as $available_point) {
+            if ($available_point->work_type == 0) {  // If work type is 0, check if today is a workday
+                $is_off = in_array($index, $available_point->days_work);
+                if ($is_off) {
+                    $pointId = '' . $available_point->id . '';
+                    $id_groupoints = Grouppoint::whereJsonContains('points_ids', $pointId)
+                        ->where('deleted', 0)
+                        ->pluck('id', 'government_id')
+                        ->toArray();
+
+                    foreach ($id_groupoints as $government_id => $id) {
+                        $validPoints[] = [
+                            'id' => $id,
+                            'government_id' => $government_id
+                        ];
+                        $assignedPointsToday[] = $id;
+                    }
+                }
+            } else {  // If work type is not 0, check for the specific day (point day)
+                $pointDay = $available_point->pointDays->where('name', $index)->first();
+                if ($pointDay) {
+                    $pointId = '' . $available_point->id . '';
+                    $id_groupoints = Grouppoint::whereJsonContains('points_ids', $pointId)
+                        ->where('deleted', 0)
+                        ->pluck('id', 'government_id')
+                        ->toArray();
+                    foreach ($id_groupoints as $government_id => $id) {
+                        $validPoints[] = [
+                            'id' => $id,
+                            'government_id' => $government_id
+                        ];
+                        $assignedPointsToday[] = $id;
+                    }
+                }
+            }
+        }
+
+        // Calculate number of teams for the sector
         foreach ($groups as $group) {
             $teamCount += GroupTeam::where('group_id', $group->id)->count();
         }
-        return floor($points / $teamCount);
+
+        // Get the number of valid points available today
+        $pointsAvailableToday = count($validPoints);
+        //dd($pointsAvailableToday,$teamCount ,floor($pointsAvailableToday/$teamCount) )  ;
+        return $teamCount == 0 ? 0 : floor($pointsAvailableToday / $teamCount);
     }
 
     public function teamOfGroup($yesterday, $today, $sector, $group)
@@ -225,6 +272,8 @@ class assignPointsFrom implements ShouldQueue
         $allGroups = Groups::where('sector_id', $sector)->whereNot('id', $group)->pluck('id')->toArray();
 
         $historyPoints = [];
+        // $allGroups = $allGroups->shuffle();
+
         foreach ($allGroups as $allGroup) {
             $points = InspectorMission::where('group_id', $allGroup)
                 ->whereDate('date', $today)
@@ -265,11 +314,11 @@ class assignPointsFrom implements ShouldQueue
         $dayOffTeams = [];
         $usedPointsToday = [];
         $groupTeams = $groupTeams->shuffle();
-
+        $pointOfTeam=[];
         foreach ($groupTeams as $groupTeam) {
             $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ?: [];
             //$pointPerTeam = $Group->points_inspector;
-            $pointPerTeam = $this->countOfPoints($sector->id);
+            $pointPerTeam = $this->countOfPoints($sector, $today);
 
             $teamsWorkingTime = InspectorMission::with('workingTime')
                 ->where('group_id', $group)
@@ -282,29 +331,31 @@ class assignPointsFrom implements ShouldQueue
             $teamTimePeriods = $teamsWorkingTime->map(function ($mission) {
                 return [$mission->workingTime->start_time, $mission->workingTime->end_time];
             })->toArray();
-            // $currentTime = Carbon::now();
+            $currentTime = Carbon::now();
 
-            // $isWithinWorkingTime = $teamsWorkingTime->contains(function ($mission) use ($currentTime) {
-            //     $startTime = Carbon::parse($mission->workingTime->start_time);
-            //     $endTime = Carbon::parse($mission->workingTime->end_time);
+            $isWithinWorkingTime = $teamsWorkingTime->contains(function ($mission) use ($currentTime) {
+                $startTime = Carbon::parse($mission->workingTime->start_time);
+                $endTime = Carbon::parse($mission->workingTime->end_time);
 
-            //     return $currentTime->between($startTime, $endTime);
-            // });
-            // if (!$isWithinWorkingTime) {
-            //     $nextDayIndex = ($todayIndex + 1) % 7;
+                return $currentTime->between($startTime, $endTime) || $currentTime > $endTime;
+            });
+            if ($isWithinWorkingTime) {
+                $todayIndex = ($todayIndex + 1) % 7;
+                //dd($today);
+                $today = (Carbon::parse($today)->addDay())->toDateString();
 
-            //     $teamsWorkingTime = InspectorMission::with('workingTime')
-            //         ->where('group_id', $group)
-            //         ->where('group_team_id', $groupTeam->group_team_id)
-            //         ->whereDate('date', $today)
-            //         ->where('day_off', 0)
-            //         ->distinct('group_team_id')
-            //         ->get();
+            }
+            $teamsWorkingTime = InspectorMission::with('workingTime')
+            ->where('group_id', $group)
+            ->where('group_team_id', $groupTeam->group_team_id)
+            ->whereDate('date', $today)
+            ->where('day_off', 0)
+            ->distinct('group_team_id')
+            ->get();
 
-            //     $teamTimePeriods = $teamsWorkingTime->map(function ($mission) {
-            //         return [$mission->workingTime->start_time, $mission->workingTime->end_time];
-            //     })->toArray();
-            // }
+        $teamTimePeriods = $teamsWorkingTime->map(function ($mission) {
+            return [$mission->workingTime->start_time, $mission->workingTime->end_time];
+        })->toArray();
             $teamsWithDayOff = InspectorMission::where('group_id', $group)
                 ->where('group_team_id', $groupTeam->group_team_id)
                 ->whereDate('date', $today)

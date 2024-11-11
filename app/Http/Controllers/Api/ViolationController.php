@@ -143,7 +143,7 @@ class ViolationController  extends Controller
          * civil_military->3 مهنى  (رقم عسكرى - رقم ملف - رقم مدني  )
          * civil_military->1 مدني ( رقم مدني)
          */
-        if (!checkShift()) {
+        if (!checkShift() && $request->flag_instantmission == 0) {
             return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
         }
         if ($request->civil_military == 1  || $request->civil_military == 3) {
@@ -569,7 +569,7 @@ class ViolationController  extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-        if (!checkShift()) {
+        if (!checkShift() && $request->flag_instantmission == 0) {
             return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
         }
         // 1=> this violation of instant mission
