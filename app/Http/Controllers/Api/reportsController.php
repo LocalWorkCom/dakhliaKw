@@ -632,8 +632,9 @@ class reportsController extends Controller
                         ->get();
 
                     // Get inspector info
-                    $inspector = Inspector::find($attendance->inspector_id)->value('user_id');
-                    $user = User::with('grade')->find($inspector);
+                    $inspector = Inspector::find($attendance->inspector_id);
+                    // dd($inspector->user_id,$attendance->inspector_id);
+                    $user = User::with('grade')->find($inspector->user_id);
                     $name = $user->name;
                     $grade = $user->grade ? $user->grade->name : 'N/A';
 
