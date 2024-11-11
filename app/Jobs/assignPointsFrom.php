@@ -26,6 +26,19 @@ class assignPointsFrom implements ShouldQueue
 
     public function __construct(Carbon $startOfMonth, Carbon $endOfMonth, $sector, $group)
     {
+
+        // if ($WorkingTreeTime) {
+        //     $working_time = WorkingTime::find($WorkingTreeTime->working_time_id);
+
+        //     // Check if current time is within today's working hours
+        //     if ($working_time && $currentTime >= $working_time->start_time && $currentTime <= $working_time->end_time) {
+        //         // Start changes from tomorrow instead of today
+        //         $date = $next_day_date;
+        //     } else {
+        //         // Start changes from today
+        //         $date = $start_day_date;
+        //     }
+        // }
         $this->startOfMonth = $startOfMonth;
         $this->endOfMonth = $endOfMonth;
         $this->sector = $sector;
