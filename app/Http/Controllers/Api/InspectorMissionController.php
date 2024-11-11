@@ -535,7 +535,7 @@ class InspectorMissionController extends Controller
                             $employeeValidator = Validator::make($item, [
                                 'name' => 'required',
                                 'type_employee' => 'required',
-                               // 'grade' => 'required'
+                               //'grade' => 'required'
                             ], $messages);
 
                             if ($employeeValidator->fails()) {
