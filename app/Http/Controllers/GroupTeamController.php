@@ -1300,7 +1300,8 @@ class GroupTeamController extends Controller
 
 
         dispatch(new RefreshInspectorMission());
-        $groups = Groups::all();
+        $allgroups = Groups::all();
+        $groups=$allgroups->shuffle();
         foreach ($groups as $group) {
             dispatch(new assignPointsFrom($startOfMonth, $endOfMonth, $group->sector_id, $group->id));
         }
