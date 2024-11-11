@@ -114,17 +114,10 @@ class settingController extends Controller
     //delete JOB
     public function deletejob(Request $request)
     {
-        // $isForeignKeyUsed = DB::table('users')->where('job_id', $request->id)->exists();
-        // //dd($isForeignKeyUsed);
-        // if ($isForeignKeyUsed) {
-        //     return redirect()->route('job.index')->with(['message' => 'لا يمكن حذف هذه الوظيفه يوجد موظفين لها']);
-        // } else {
-        //     $type = job::find($request->id);
-        //     $type->delete();
-        //     return redirect()->route('job.index')->with(['message' => 'تم حذف الوظيفه']);
-        // }
-
         $type = job::find($request->id);
+        if (!$type) {
+            return redirect()->route('job.index')->with(['message' => 'يوجد خطا الرجاء المحاولة مرة اخرى']);
+        }
 
         $users = $type->users()->exists();
         if ($users) {
@@ -236,47 +229,37 @@ class settingController extends Controller
     //delete GRAD
     public function deletegrads(Request $request)
     {
+        try{
+            $type = grade::find($request->id);
+            if (!$type) {
+                return redirect()->route('grads.index')->with(['message' => 'يوجد خطا الرجاء المحاولة مرة اخرى']);
+            }
 
-        // $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);
-        // if ($isForeignKeyUsed) {
-        //     return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);
-        // } else {
-        //     $type = grade::find($request->id);
-        //     $type->delete();
-        //     return redirect()->route('grads.index')->with(['message' => 'تم حذف الرتبه']);
-        // }
+            $users = $type->users()->exists();
+            if ($users) {
+                return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);
+            }
 
-        $type = grade::find($request->id);
+            $absenceEmployees = $type->absenceEmployees()->exists();
+            if ($absenceEmployees) {
+                return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد غياب لها']);
+            }
 
-        // $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
-        // if ($isForeignKeyUsed) {
-        //     return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);
-        // }
+            $attendanceEmployees = $type->attendanceEmployees()->exists();
+            if ($attendanceEmployees) {
+                return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد حضور لها']);
+            }
 
-        $users = $type->users()->exists();
-        if ($users) {
-            return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);
-        }
+            $violations = $type->violations()->exists();
+            if ($violations) {
+                return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد جزاءات لها']);
+            }
 
-        $absenceEmployees = $type->absenceEmployees()->exists();
-        if ($absenceEmployees) {
-            return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد غياب لها']);
-        }
-
-        $attendanceEmployees = $type->attendanceEmployees()->exists();
-        if ($attendanceEmployees) {
-            return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد حضور لها']);
-        }
-
-        $violations = $type->violations()->exists();
-        if ($violations) {
-            return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد جزاءات لها']);
-        }
-
-        $type->delete();
-        return redirect()->route('grads.index')->with(['message' => 'تم حذف الرتبه']);
-
+            $type->delete();
+            return redirect()->route('grads.index')->with(['message' => 'تم حذف الرتبه']);
+        } catch (\Exception $e) {
+            return redirect()->route('grads.index')->with(['message' => 'يوجد خطا الرجاء المحاولة مرة اخرى']);
+        }     
     }
     //END GRAD
 
@@ -379,24 +362,17 @@ class settingController extends Controller
     //delete JOB
     public function deletevacationType(Request $request)
     {
-
         $type = VacationType::find($request->id);
+        if (!$type) {
+            return redirect()->back()->with(['message' => 'يوجد خطا الرجاء المحاولة مرة اخرى']);
+        }
+
         $employeeVacations = $type->employeeVacations()->exists();
         if ($employeeVacations) {
             return redirect()->back()->with(['message' => 'لا يمكن حذف هذه نوع الاجازه يوجد موظفين لها']);
         }
         $type->delete();
         return redirect()->route('vacationType.index')->with(['message' => 'تم حذف نوع الاجازه']);
-
-        
-        // $isForeignKeyUsed = DB::table('employee_vacations')->where('vacation_type_id', $request->id)->exists();
-        // //dd($isForeignKeyUsed);
-        // if ($isForeignKeyUsed) {
-        //     return redirect()->route('vacationType.index')->with(['message' => 'لا يمكن حذف هذه نوع الاجازه يوجد موظفين لها']);
-        // } else {
-        //     $type->delete();
-        //     return redirect()->route('vacationType.index')->with(['message' => 'تم حذف نوع الاجازه']);
-        // }
     }
     //END VACATION TYPE
 

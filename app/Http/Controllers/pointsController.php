@@ -97,9 +97,14 @@ class pointsController extends Controller
                 return $row->work_type == 0 ? 'دوام 24 ساعه' : ' دوام جزئى';
             })
             ->addColumn('action', function ($row) {
+                $delete_permission = null;
+
                 $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('points.edit', $row->id) . '"><i class="fa fa-edit"></i> تعديل</a>';
                 $show_permission = '<a class="btn btn-sm" style="background-color: #274373;" href="' . route('points.show', $row->id) . '"><i class="fa fa-eye"></i> عرض</a>';
-                return $show_permission . ' ' . $edit_permission;
+                if(Auth::user()->rule_id == 2){
+                    $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+                }
+                return $show_permission . ' ' . $edit_permission . ' ' . $delete_permission;
             })
             ->rawColumns(['action', 'group_name'])
             ->make(true);
@@ -446,6 +451,53 @@ class pointsController extends Controller
         });
 
         return redirect()->route('points.index')->with('message', 'تم تعديل نقطه');
+    }
+
+    public function delete(Request $request)
+    {        
+        $type = Point::find($request->id);
+        if (!$type) {
+            return redirect()->route('points.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
+        }
+
+        $group_points = Grouppoint::get();
+        if($group_points){
+            foreach($group_points as $group_point){
+                if(in_array($request->id, $group_point->points_ids)){
+                    if($group_point->id){
+                        return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد مجموعة نقاط لها');
+                    }
+                }
+            }
+        }
+
+        $absences = $type->absences()->exists();
+        if ($absences) {
+            return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد غياب لها');
+        }
+
+        $paperTransactions = $type->paperTransactions()->exists();
+        if ($paperTransactions) {
+            return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد اوراق لها');
+        }
+
+        $personalMissions = $type->personalMissions()->exists();
+        if ($personalMissions) {
+            return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد مهمة شخصية لها');
+        }
+
+        $pointDays = $type->pointDays()->exists();
+        if ($pointDays) {
+            return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد نقاط يومية لها');
+        }
+
+        $violations = $type->violations()->exists();
+        if ($violations) {
+            return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد جزاءات لها');
+        }
+
+        $type->delete();
+        return redirect()->route('points.index')->with('success', 'تم حذف قطاع');
     }
 
     /**
