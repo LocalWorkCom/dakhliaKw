@@ -189,9 +189,7 @@
         function confirmDelete() {
             var id = document.getElementById('id').value;
             var form = document.getElementById('delete-form');
-
             form.submit();
-
         }
 
     </script>
