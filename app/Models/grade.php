@@ -34,4 +34,9 @@ class grade extends Model
     {
         return $this->hasMany(AttendanceEmployee::class, 'grade_id');
     }
+
+    public function violations()
+    {
+        return $this->hasMany(Violation::class, 'grade');
+    }
 }
