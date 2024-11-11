@@ -125,7 +125,10 @@ class paperTransactionController extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
+        if(!checkShift()){
+            return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
 
+         }
         $today = Carbon::today()->toDateString();
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         $inspector = InspectorMission::where('inspector_id', $inspectorId)

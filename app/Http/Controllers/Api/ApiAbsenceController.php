@@ -130,7 +130,9 @@ class ApiAbsenceController extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-
+        if (!checkShift()) {
+            return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
+        }
         $inspectorId = Inspector::where('user_id',  auth()->user()->id)->first();
         //  dd(auth()->user()->inspectors);
         $today = Carbon::today()->toDateString();
@@ -292,7 +294,9 @@ class ApiAbsenceController extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-
+        if (!checkShift()) {
+            return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
+        }
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
         //  dd(auth()->user()->inspectors);
         $today = Carbon::today()->toDateString();
@@ -483,9 +487,8 @@ class ApiAbsenceController extends Controller
                         }
                     }
                 }
-            }else{
+            } else {
                 return $this->respondError('عفوا غير مسموح لك بالتعديل على هذه المخالفه', [], 403);
-
             }
         }
     }

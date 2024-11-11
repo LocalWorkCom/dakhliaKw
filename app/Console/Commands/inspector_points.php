@@ -199,6 +199,19 @@ class inspector_points extends Command
         return $teamStartTimestamp <= $pointStartTimestamp && $teamStartTimestamp >= $pointEndTimestamp && $teamEndTimestamp >= $pointStartTimestamp;
     }
 
+    function countOfPoints($sector)
+    {
+        $groups = Groups::where('sector_id', $sector)->get();
+        $points = Grouppoint::where('deleted',  0)->where('sector_id', $sector)->count();
+        $teamCount = 0;
+        foreach ($groups as $group) {
+            $teamCount += GroupTeam::where('group_id', $group->id)->count();
+        }
+        $num = floor($points / $teamCount);
+        //dd($teamCount ,$points ,$num ,$sector);
+        return $num;
+    }
+
     public function teamOfGroup($yesterday, $today)
     {
         $todayIndex = $this->todayIndex($today);
@@ -239,8 +252,8 @@ class inspector_points extends Command
 
                 foreach ($groupTeams as $groupTeam) {
                     $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ?: [];
-                    $pointPerTeam = $group->points_inspector;
-
+                    //$pointPerTeam = $group->points_inspector;
+                    $pointPerTeam = $this->countOfPoints($sector->id);
                     $teamsWorkingTime = InspectorMission::with('workingTime')
                         ->where('group_id', $group->id)
                         ->where('group_team_id', $groupTeam->group_team_id)

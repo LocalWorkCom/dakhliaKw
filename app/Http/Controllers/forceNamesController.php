@@ -22,11 +22,17 @@ class forceNamesController extends Controller
         return DataTables::of($data)->addColumn('action', function ($row) {
             $name = "'$row->name'";
             $edit_permission = null;
+            $delete_permission = null;
             // if (Auth::user()->hasPermission('edit job')) {
             $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit(' . $row->id . ',' . $name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
             // }
 
-            $uploadButton = $edit_permission;
+
+            if (Auth::user()->rule_id == 2) {
+                $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
+            }
+
+            $uploadButton = $edit_permission . $delete_permission;
             return $uploadButton;
         })
             ->rawColumns(['action'])
@@ -79,5 +85,18 @@ class forceNamesController extends Controller
         $new->save();
 
         return redirect()->back()->with('message','تم أضافه بنجاح');
+    }
+
+    public function delete(Request $request)
+    {
+        $type = ForceName::find($request->id);
+        $attendanceEmployees = $type->attendanceEmployees()->exists();
+        if ($attendanceEmployees) {
+            return redirect()->back()->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);
+        }
+
+        $type->delete();
+        return redirect()->back()->with(['message' => 'تم حذف الرتبه']);
+
     }
 }

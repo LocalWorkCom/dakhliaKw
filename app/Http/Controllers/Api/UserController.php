@@ -64,25 +64,7 @@ class UserController extends Controller
             'password' => $password
         ];
         $today = Carbon::today()->format('Y-m-d');
-
-        // $shift = InspectorMission::where('inspector_id', $user->inspectorId)
-        //     ->whereDate('date',  $today)->whereDate('day_off', 0)
-        //     ->value('working_time_id');
-        // $shift_time = WorkingTime::find($shift);
-
-        // // Check if shift time exists
-        // if ($shift_time) {
-        //     // Get current time
-        //     $currentTime = Carbon::now()->format('H:i'); // Format it to match 'H:i' format
-
-        //     // Compare if current time is between start_time and end_time
-        //     $isBetween = Carbon::parse($shift_time->start_time)->isBefore($currentTime) && Carbon::parse($shift_time->end_time)->isAfter($currentTime);
-
-        //     if (!$isBetween) {
-        //         // Current time is not between start_time and end_time
-        //         return $this->respondError('Validation Error.', ' لا يسمح لك بالدخول خارج مواعيد العمل', 400);
-        //     }
-        // }       // Attempt authentication
+     // Attempt authentication
         if (!Auth::attempt($credentials)) {
             return $this->respondError('Password Error', [
                 'crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']

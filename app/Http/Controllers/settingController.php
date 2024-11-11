@@ -51,9 +51,9 @@ class settingController extends Controller
             if (Auth::user()->hasPermission('edit job')) {
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit(' . $row->id . ',' . $name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
-            /*if (Auth::user()->hasPermission('delete job')) {
+            if (Auth::user()->hasPermission('delete job')) {
                 $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
-            }*/
+            }
             $uploadButton = $edit_permission . $delete_permission;
             return $uploadButton;
         })
@@ -114,16 +114,25 @@ class settingController extends Controller
     //delete JOB
     public function deletejob(Request $request)
     {
+        // $isForeignKeyUsed = DB::table('users')->where('job_id', $request->id)->exists();
+        // //dd($isForeignKeyUsed);
+        // if ($isForeignKeyUsed) {
+        //     return redirect()->route('job.index')->with(['message' => 'لا يمكن حذف هذه الوظيفه يوجد موظفين لها']);
+        // } else {
+        //     $type = job::find($request->id);
+        //     $type->delete();
+        //     return redirect()->route('job.index')->with(['message' => 'تم حذف الوظيفه']);
+        // }
 
-        $isForeignKeyUsed = DB::table('users')->where('job_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);
-        if ($isForeignKeyUsed) {
-            return redirect()->route('job.index')->with(['message' => 'لا يمكن حذف هذه الوظيفه يوجد موظفين لها']);
-        } else {
-            $type = job::find($request->id);
-            $type->delete();
-            return redirect()->route('job.index')->with(['message' => 'تم حذف الوظيفه']);
+        $type = job::find($request->id);
+
+        $users = $type->users()->exists();
+        if ($users) {
+            return redirect()->route('job.index')->with(['message' => 'لا يمكن حذف هذه الوظيفة يوجد موظفين لها']);
         }
+
+        $type->delete();
+        return redirect()->route('job.index')->with(['message' => 'تم حذف الوظيفه']);
     }
     //END JOB
 
@@ -151,9 +160,9 @@ class settingController extends Controller
             if (Auth::user()->hasPermission('edit grade')) {
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit(' . $row->id . ',' . $name . ',' . $row->type . ')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
-            /*if (Auth::user()->hasPermission('delete grade')) {
+            if (Auth::user()->hasPermission('delete grade')) {
                 $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
-            }*/
+            }
             $uploadButton = $edit_permission . $delete_permission;
             return $uploadButton;
         })
@@ -228,15 +237,46 @@ class settingController extends Controller
     public function deletegrads(Request $request)
     {
 
-        $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
+        // $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
         //dd($isForeignKeyUsed);
-        if ($isForeignKeyUsed) {
+        // if ($isForeignKeyUsed) {
+        //     return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);
+        // } else {
+        //     $type = grade::find($request->id);
+        //     $type->delete();
+        //     return redirect()->route('grads.index')->with(['message' => 'تم حذف الرتبه']);
+        // }
+
+        $type = grade::find($request->id);
+
+        // $isForeignKeyUsed = DB::table('users')->where('grade_id', $request->id)->exists();
+        // if ($isForeignKeyUsed) {
+        //     return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);
+        // }
+
+        $users = $type->users()->exists();
+        if ($users) {
             return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);
-        } else {
-            $type = grade::find($request->id);
-            $type->delete();
-            return redirect()->route('grads.index')->with(['message' => 'تم حذف الرتبه']);
         }
+
+        $absenceEmployees = $type->absenceEmployees()->exists();
+        if ($absenceEmployees) {
+            return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد غياب لها']);
+        }
+
+        $attendanceEmployees = $type->attendanceEmployees()->exists();
+        if ($attendanceEmployees) {
+            return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد حضور لها']);
+        }
+
+        $violations = $type->violations()->exists();
+        if ($violations) {
+            return redirect()->route('grads.index')->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد جزاءات لها']);
+        }
+
+        $type->delete();
+        return redirect()->route('grads.index')->with(['message' => 'تم حذف الرتبه']);
+
     }
     //END GRAD
 
@@ -268,11 +308,11 @@ class settingController extends Controller
             if (Auth::user()->hasPermission('edit VacationType')) {
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit(' . $row->id . ',' . $name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
-            /*if (Auth::user()->hasPermission('delete VacationType')) {
+            if (Auth::user()->hasPermission('delete VacationType')) {
                 if (!in_array($row->id, $hiddenIds)) {
                     $delete_permission = ' <a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
                 }
-            }*/
+            }
             return $edit_permission . $delete_permission;
         })
             ->addColumn('flag', function ($row) {
@@ -340,15 +380,23 @@ class settingController extends Controller
     public function deletevacationType(Request $request)
     {
 
-        $isForeignKeyUsed = DB::table('employee_vacations')->where('vacation_type_id', $request->id)->exists();
-        //dd($isForeignKeyUsed);
-        if ($isForeignKeyUsed) {
-            return redirect()->route('vacationType.index')->with(['message' => 'لا يمكن حذف هذه نوع الاجازه يوجد موظفين لها']);
-        } else {
-            $type = VacationType::find($request->id);
-            $type->delete();
-            return redirect()->route('vacationType.index')->with(['message' => 'تم حذف نوع الاجازه']);
+        $type = VacationType::find($request->id);
+        $employeeVacations = $type->employeeVacations()->exists();
+        if ($employeeVacations) {
+            return redirect()->back()->with(['message' => 'لا يمكن حذف هذه نوع الاجازه يوجد موظفين لها']);
         }
+        $type->delete();
+        return redirect()->route('vacationType.index')->with(['message' => 'تم حذف نوع الاجازه']);
+
+        
+        // $isForeignKeyUsed = DB::table('employee_vacations')->where('vacation_type_id', $request->id)->exists();
+        // //dd($isForeignKeyUsed);
+        // if ($isForeignKeyUsed) {
+        //     return redirect()->route('vacationType.index')->with(['message' => 'لا يمكن حذف هذه نوع الاجازه يوجد موظفين لها']);
+        // } else {
+        //     $type->delete();
+        //     return redirect()->route('vacationType.index')->with(['message' => 'تم حذف نوع الاجازه']);
+        // }
     }
     //END VACATION TYPE
 
