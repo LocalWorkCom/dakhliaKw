@@ -90,6 +90,10 @@ class forceNamesController extends Controller
     public function delete(Request $request)
     {
         $type = ForceName::find($request->id);
+        if (!$type) {
+            return redirect()->back()->with(['message' => 'يوجد خطا الرجاء المحاولة مرة اخرى']);
+        }
+
         $attendanceEmployees = $type->attendanceEmployees()->exists();
         if ($attendanceEmployees) {
             return redirect()->back()->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);

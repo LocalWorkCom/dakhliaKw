@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Point extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'points';
 
 
@@ -48,5 +49,15 @@ class Point extends Model
     public function absences()
     {
         return $this->hasMany(Absence::class, 'point_id');
+    }
+
+    public function personalMissions()
+    {
+        return $this->hasMany(PersonalMission::class);
+    }
+
+    public function violations()
+    {
+        return $this->hasMany(Violation::class);
     }
 }

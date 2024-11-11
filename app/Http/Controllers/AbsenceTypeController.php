@@ -133,6 +133,10 @@ class AbsenceTypeController extends Controller
     public function delete(Request $request)
     {        
         $type = AbsenceType::find($request->id);
+        if (!$type) {
+            return redirect()->route('absence.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
+        }
+
         $absenceEmployees = $type->absenceEmployees()->exists();
         if ($absenceEmployees) {
             return redirect()->route('absence.index')->with('reject','لا يمكن حذف هذه مسميات العجز  يوجد موظفين لها');

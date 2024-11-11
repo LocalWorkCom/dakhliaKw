@@ -253,6 +253,10 @@ class WorkingTimeController extends Controller
     public function delete(Request $request)
     {        
         $type = WorkingTime::find($request->id);
+        if (!$type) {
+            return redirect()->route('working_time.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
+        }
+
         $workingTreeTimes = $type->workingTreeTimes()->exists();
         if ($workingTreeTimes) {
             return redirect()->route('working_time.index')->with('reject','لا يمكن حذف هذه فترة العمل يوجد نظام عمل لها');
@@ -265,6 +269,5 @@ class WorkingTimeController extends Controller
 
         $type->delete();
         return redirect()->route('working_time.index')->with('success', 'تم حذف فترة العمل');
-
     }
 }

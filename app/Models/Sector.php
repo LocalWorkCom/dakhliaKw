@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Sector extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'sectors';
     public $timestamps = false;
 
@@ -28,5 +29,20 @@ class Sector extends Model
     public function points()
     {
         return $this->hasMany(Point::class);
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Groups::class);
+    }
+
+    public function groupSectorHistory()
+    {
+        return $this->hasMany(GroupSectorHistory::class);
+    }
+
+    public function grouppoint()
+    {
+        return $this->hasMany(Grouppoint::class);
     }
 }
