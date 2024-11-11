@@ -293,7 +293,7 @@ class reportsController extends Controller
         $absenceReport = [];
         $pointViolations = [];
         $attendances=[];
-        if ($type === 0 || $type === 1) {
+        if ($type == 0 || $type == 1) {
 
             $violationQuery = Violation::with(['user', 'point', 'violatType'])->where('status', 1)
                 ->where('user_id', auth()->user()->id);
@@ -573,7 +573,7 @@ class reportsController extends Controller
         }
 
         //Attendance
-        if ($type === 3) {
+        if ($type == 3) {
             foreach ($dates as $date) {
                 $attendanceRecords = Attendance::where('inspector_id', $inspectorId)
                     ->where('flag', 1);
