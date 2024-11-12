@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\InspectorMission;
 use Carbon\Carbon;
 use App\Models\grade;
 use App\Models\Absence;
@@ -15,6 +16,8 @@ use App\Models\AbsenceViolation;
 use App\Models\Point;
 use App\Models\PointDays;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Validator;
 
 class ApiAbsenceController extends Controller
@@ -130,7 +133,16 @@ class ApiAbsenceController extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-        if (!checkShift()) {
+        $today = Carbon::today()->format('Y-m-d');
+        // Retrieve the currently authenticated user
+        $inspector = Inspector::where('user_id', Auth::id())->first();
+        // dd($inspectorId);
+        $inspectorId = $inspector->id;
+        $team_time = InspectorMission::whereDate('date', $today)
+            ->where('inspector_id', $inspectorId)
+            ->with('workingTime')
+            ->get();
+        if (!checkShift() && $team_time->first()->day_off != 1) {
             return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
         }
         $inspectorId = Inspector::where('user_id',  auth()->user()->id)->first();
@@ -294,7 +306,16 @@ class ApiAbsenceController extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-        if (!checkShift()) {
+        $today = Carbon::today()->format('Y-m-d');
+        // Retrieve the currently authenticated user
+        $inspector = Inspector::where('user_id', Auth::id())->first();
+        // dd($inspectorId);
+        $inspectorId = $inspector->id;
+        $team_time = InspectorMission::whereDate('date', $today)
+            ->where('inspector_id', $inspectorId)
+            ->with('workingTime')
+            ->get();
+        if (!checkShift() && $team_time->first()->day_off != 1) {
             return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
         }
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();

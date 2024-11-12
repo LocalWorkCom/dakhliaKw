@@ -143,7 +143,16 @@ class ViolationController  extends Controller
          * civil_military->3 مهنى  (رقم عسكرى - رقم ملف - رقم مدني  )
          * civil_military->1 مدني ( رقم مدني)
          */
-        if (!checkShift() && $request->flag_instantmission == 0) {
+        $today = Carbon::today()->format('Y-m-d');
+        // Retrieve the currently authenticated user
+        $inspector = Inspector::where('user_id', Auth::id())->first();
+        // dd($inspectorId);
+        $inspectorId = $inspector->id;
+        $team_time = InspectorMission::whereDate('date', $today)
+            ->where('inspector_id', $inspectorId)
+            ->with('workingTime')
+            ->get();
+        if (!checkShift() && $request->flag_instantmission == 0 && $team_time->first()->day_off != 1 ) {
             return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
         }
         if ($request->civil_military == 1  || $request->civil_military == 3) {

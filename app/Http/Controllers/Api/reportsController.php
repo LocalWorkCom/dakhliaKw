@@ -19,6 +19,8 @@ use App\Models\Point;
 use App\Models\PointDays;
 use App\Models\User;
 use App\Models\Violation;
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\ViolationTypes;
 use App\Models\WorkingTime;
 use Carbon\Carbon;
