@@ -44,7 +44,7 @@ class WorkingTimeController extends Controller
 
             $uploadButton = $edit_permission . $show_permission . $delete_permission;
             return $uploadButton;
-            
+
         })
             ->rawColumns(['action'])
             ->make(true);
@@ -250,7 +250,7 @@ class WorkingTimeController extends Controller
     }
 
     public function delete(Request $request)
-    {        
+    {
         $type = WorkingTime::find($request->id);
         if (!$type) {
             return redirect()->route('working_time.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
