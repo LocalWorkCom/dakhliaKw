@@ -497,7 +497,7 @@ class pointsController extends Controller
         }
 
         $type->delete();
-        return redirect()->route('points.index')->with('success', 'تم حذف قطاع');
+        return redirect()->route('points.index')->with('success', 'تم حذف نقطه');
     }
 
     /**
