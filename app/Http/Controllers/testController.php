@@ -114,24 +114,19 @@ class testController extends Controller
     public function getTeamsTimes($yesterday, $today)
     {
         $sectors = Sector::all();
-        $allTeamTimes = [];
-
         foreach ($sectors as $sector) {
             $allGroups = Groups::where('sector_id', $sector->id)->get();
             foreach ($allGroups as $group) {
-                $teams = GroupTeam::where('group_id', $group)->pluck('id')->toArray();
-
-                // Fetch missions for yesterday
-                $groupTeams = InspectorMission::where('group_id', $group)
+                $teams = GroupTeam::where('group_id', $group->id)->pluck('id')->toArray();
+                $groupTeams = InspectorMission::where('group_id', $group->id)
                     ->whereIn('group_team_id', $teams)
                     ->select('group_team_id', 'ids_group_point')
                     ->whereDate('date', $yesterday)
                     ->distinct('group_team_id')
                     ->get();
 
-                // If no missions found for yesterday, try today
                 if ($groupTeams->isEmpty()) {
-                    $groupTeams = InspectorMission::where('group_id', $group)
+                    $groupTeams = InspectorMission::where('group_id', $group->id)
                         ->whereIn('group_team_id', $teams)
                         ->select('group_team_id', 'ids_group_point')
                         ->whereDate('date', $today)
@@ -139,12 +134,7 @@ class testController extends Controller
                         ->get();
                 }
 
-                // Log if no missions are found
-                if ($groupTeams->isEmpty()) {
-                    \Log::info("No missions found for group ID: {$group} on {$yesterday} or {$today}");
-                    continue;
-                }
-
+                // Get count of points already assigned to each team
                 $teamPointsCount = $groupTeams->mapWithKeys(function ($team) {
                     return [
                         $team->group_team_id => count($team->ids_group_point ?? [])
@@ -153,49 +143,32 @@ class testController extends Controller
 
                 $dayOffTeams = [];
                 $pointOfTeam = [];
-                $groupTeams = $groupTeams->shuffle(); // Optional: You may decide if shuffling is really necessary
+                $groupTeams = $groupTeams->shuffle();
 
                 foreach ($groupTeams as $groupTeam) {
                     $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ?: [];
                     //$pointPerTeam = $group->points_inspector;
                     $pointPerTeam = $this->countOfPoints($sector->id,$today);
                     $teamsWorkingTime = InspectorMission::with('workingTime')
-                        ->where('group_id', $group)
+                        ->where('group_id', $group->id)
                         ->where('group_team_id', $groupTeam->group_team_id)
                         ->whereDate('date', $today)
-                        ->where('day_off', 0) // Ensure it's not a day off
+                        ->where('day_off', 0)
                         ->distinct('group_team_id')
                         ->get();
 
-                    // Collect working time periods for the team
                     $teamTimePeriods = $teamsWorkingTime->map(function ($mission) {
-                        return [
-                            'start_time' => $mission->workingTime->start_time,
-                            'end_time' => $mission->workingTime->end_time
-                        ];
+                        return [$mission->workingTime->start_time, $mission->workingTime->end_time];
                     })->toArray();
 
-                    // Fetch teams with days off
-                    $teamsWithDayOff = InspectorMission::where('group_id', $group)
+                    $teamsWithDayOff = InspectorMission::where('group_id', $group->id)
                         ->where('group_team_id', $groupTeam->group_team_id)
                         ->whereDate('date', $today)
                         ->where('day_off', 1)
                         ->pluck('id')
                         ->toArray();
-
-                    // Add the results for each team to the final array
-                    $allTeamTimes[] = [
-                        'sector_id' => $sector->id,
-                        'group_id' => $group,
-                        'team_id' => $groupTeam->group_team_id,
-                        'working_times' => $teamTimePeriods,
-                        'teams_with_day_off' => $teamsWithDayOff,
-                    ];
                 }
             }
         }
-
-        dd($allTeamTimes) ; // Return or process this array as needed
     }
-
 }

@@ -454,22 +454,22 @@ class pointsController extends Controller
     }
 
     public function delete(Request $request)
-    {
+    {        
         $type = Point::find($request->id);
         if (!$type) {
             return redirect()->route('points.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
         }
 
-        // $group_points = Grouppoint::get();
-        // if($group_points){
-        //     foreach($group_points as $group_point){
-        //         if(in_array($request->id, $group_point->points_ids)){
-        //             if($group_point->id){
-        //                 return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد مجموعة نقاط لها');
-        //             }
-        //         }
-        //     }
-        // }
+        $group_points = Grouppoint::get();
+        if($group_points){
+            foreach($group_points as $group_point){
+                if(in_array($request->id, $group_point->points_ids)){
+                    if($group_point->id){
+                        return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد مجموعة نقاط لها');
+                    }
+                }
+            }
+        }
 
         $absences = $type->absences()->exists();
         if ($absences) {
