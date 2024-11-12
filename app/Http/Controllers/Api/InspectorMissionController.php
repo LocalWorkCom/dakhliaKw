@@ -68,8 +68,8 @@ class InspectorMissionController extends Controller
         } else {
             $inspector_shift = [
                 'name' => 'طوال اليوم',
-                'startTime' => '00:00',
-                'endTime' => '23:59'
+                'start_time' => '00:00',
+                'end_time' => '23:59'
             ];
         }
         // $currentTime = Carbon::now()->format('H:i');
