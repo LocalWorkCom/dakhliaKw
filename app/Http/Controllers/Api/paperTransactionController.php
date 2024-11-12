@@ -12,6 +12,8 @@ use App\Models\PointDays;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+
 
 class paperTransactionController extends Controller
 {
@@ -125,7 +127,16 @@ class paperTransactionController extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-        if(!checkShift()){
+        $today = Carbon::today()->format('Y-m-d');
+        // Retrieve the currently authenticated user
+        $inspector = Inspector::where('user_id', Auth::id())->first();
+        // dd($inspectorId);
+        $inspectorId = $inspector->id;
+        $team_time = InspectorMission::whereDate('date', $today)
+            ->where('inspector_id', $inspectorId)
+            ->with('workingTime')
+            ->get();
+        if (!checkShift() && $team_time->first()->day_off != 1) {
             return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
 
          }
