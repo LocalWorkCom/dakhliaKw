@@ -9,6 +9,8 @@ use App\DataTables\vacationTypeDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Government;
 use App\Models\grade;
+use App\Models\Grouppoint;
+use App\Models\Groups;
 use App\Models\InspectorMission;
 use App\Models\job;
 use App\Models\Setting;
@@ -259,7 +261,7 @@ class settingController extends Controller
             return redirect()->route('grads.index')->with(['message' => 'تم حذف الرتبه']);
         } catch (\Exception $e) {
             return redirect()->route('grads.index')->with(['message' => 'يوجد خطا الرجاء المحاولة مرة اخرى']);
-        }     
+        }
     }
     //END GRAD
 

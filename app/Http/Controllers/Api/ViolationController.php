@@ -569,7 +569,7 @@ class ViolationController  extends Controller
         if ($validatedData->fails()) {
             return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-        if (!checkShift() && $request->flag_instantmission == 0) {
+        if ((!checkShift() && $request->flag_instantmission == 0) || checkShift()) {
             return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
         }
         // 1=> this violation of instant mission
