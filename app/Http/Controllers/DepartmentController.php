@@ -458,40 +458,45 @@ class DepartmentController extends Controller
             return redirect()->route('departments.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
         }
 
-        $group_points = ViolationTypes::get();
-        if($group_points){
-            foreach($group_points as $group_point){
-                if(in_array($request->id, $group_point->points_ids)){
-                    if($group_point->id){
-                        return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد مجموعة نقاط لها');
-                    }
-                }
-            }
+        // $group_points = ViolationTypes::get();
+        // if($group_points){
+        //     foreach($group_points as $group_point){
+        //         if(in_array($request->id, $group_point->points_ids)){
+        //             if($group_point->id){
+        //                 return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد مجموعة نقاط لها');
+        //             }
+        //         }
+        //     }
+        // }
+
+        $violation_types = ViolationTypes::whereJsonContains('type_id', $request->id)->get();
+        if(count($violation_types) != 0){
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد انواع اجازات لها');
         }
 
-        $absences = $type->absences()->exists();
-        if ($absences) {
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد غياب لها');
+        $employeeVacations = $type->employeeVacations()->exists();
+        if ($employeeVacations) {
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد غياب لها');
         }
 
-        $paperTransactions = $type->paperTransactions()->exists();
-        if ($paperTransactions) {
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد اوراق لها');
+        $iotelegrams = $type->iotelegrams()->exists();
+        if ($iotelegrams) {
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد وارد لها');
         }
 
-        $personalMissions = $type->personalMissions()->exists();
-        if ($personalMissions) {
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد مهمة شخصية لها');
+        $outgoings = $type->outgoings()->exists();
+        if ($outgoings) {
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد outgoings لها');
         }
 
-        $pointDays = $type->pointDays()->exists();
-        if ($pointDays) {
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد نقاط يومية لها');
+        $employees = $type->employees()->exists();
+        if ($employees) {
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد مستخدمين لها');
         }
 
-        $violations = $type->violations()->exists();
-        if ($violations) {
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد جزاءات لها');
+        $children = $type->children()->exists();
+        if ($children) {
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد اقسام فرعية لها');
         }
 
         $type->delete();
