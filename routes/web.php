@@ -152,6 +152,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/working_time/update', [WorkingTimeController::class, 'update'])->name('working_time.update');
     Route::any('/working_time/delete', [WorkingTimeController::class, 'delete'])->name('working_time.delete');
+    Route::any('/working_time/show/{id}', [WorkingTimeController::class, 'show'])->name('working_time.show');
 
     // instantmission
     Route::any('/instant_mission', [InstantmissionController::class, 'index'])->name('instant_mission.index')->middleware('check.permission:view instantmission');

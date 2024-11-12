@@ -30,15 +30,13 @@ class WorkingTimeController extends Controller
         // dd($data);
 
         return DataTables::of($data)->addColumn('action', function ($row) {
-            $edit_permission = null;
-            $show_permission = null;
-            $delete_permission = null;
+       
+            $delete_permission = '';
 
             //return '<button class="btn btn-primary btn-sm">Edit</button>';
-            $action="openedit('" . $row->id . "','" . $row->name . "','" . $row->start_time . "','" . $row->end_time . "','" . $row->color . "')";
-            $view_act="openViewModal('" . $row->id . "','" . $row->name . "')";
-             $show_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="'.$view_act.'">  <i class="fa fa-eye"></i> عرض </a>';
-             $edit_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="'.$action.'">  <i class="fa fa-edit"></i> تعديل </a>';
+
+            $show_permission = '<a class="btn btn-sm" style="background-color: #274373;" onclick="openViewModal(' . $row->id . ', \'' . $row->name . '\')"><i class="fa fa-eye"></i> عرض</a>';
+            $edit_permission = '<a class="btn btn-sm" style="background-color: #274373;" onclick="openedit(' . $row->id . ', \'' . $row->name . '\', \'' . $row->start_time . '\', \'' . $row->end_time . '\', \'' . $row->color . '\')"><i class="fa fa-edit"></i> تعديل</a>';
 
             if (Auth::user()->rule_id == 2) {
                 $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
