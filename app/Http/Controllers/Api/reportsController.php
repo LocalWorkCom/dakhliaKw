@@ -292,12 +292,12 @@ class reportsController extends Controller
 
         $absenceReport = [];
         $pointViolations = [];
-        $attendances=[];
+        $attendances = [];
         if ($type == 0 || $type == 1) {
 
             $violationQuery = Violation::with(['user', 'point', 'violatType'])->where('status', 1)
                 ->where('user_id', auth()->user()->id);
-            //dd($violationQuery->get());
+
             if (!empty($dates) && count($dates) != 1) {
                 $violationQuery->where(function ($query) use ($dates) {
                     foreach ($dates as $date) {
@@ -574,100 +574,99 @@ class reportsController extends Controller
 
         //Attendance
         if ($type == 3) {
-            foreach ($dates as $date) {
-                $attendanceRecords = Attendance::where('inspector_id', $inspectorId)
-                    ->where('flag', 1);
+            $attendanceRecords = Attendance::where('inspector_id', $inspectorId)
+                ->where('flag', 1);
 
-                // If dates are provided, filter by them
-                if (!empty($dates) && count($dates) != 1) {
-                    $attendanceRecords->where(function ($query) use ($dates) {
-                        foreach ($dates as $date) {
-                            $startOfDay = Carbon::parse($date)->startOfDay();
-                            $endOfDay = Carbon::parse($date)->endOfDay();
-                            $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
-                        }
-                    });
-                } else {
-                    $attendanceRecords->whereDate('created_at', Carbon::today());
+            // If dates are provided, filter by them
+            if (!empty($dates)) {
+                // Apply the date range filter directly on the query
+                $attendanceRecords->where(function ($query) use ($dates) {
+                    foreach ($dates as $date) {
+                        $startOfDay = Carbon::parse($date)->startOfDay();
+                        $endOfDay = Carbon::parse($date)->endOfDay();
+                        $query->orWhereBetween('created_at', [$startOfDay, $endOfDay]);
+                    }
+                });
+            } else {
+                // Default to today's date if no specific dates are provided
+                $attendanceRecords->whereDate('created_at', Carbon::today());
+            }
+
+            $attendances = $attendanceRecords->get()->map(function ($attendance) use ($inspectorId) {
+                // Fetch associated InstantMission for each attendance
+                $instantMission = InstantMission::with('group', 'groupTeam')
+                    ->where('id', $attendance->instant_id)
+                    ->first();
+
+                // Initialize the instant mission details as null
+                $attendance->instantMissions = null;
+
+                // If an InstantMission exists, populate the instantMissions
+                if ($instantMission) {
+                    $location = str_contains($instantMission->location, 'gis.paci.gov.kw') ? null : $instantMission->location;
+                    $kwFinder = str_contains($instantMission->location, 'gis.paci.gov.kw') ? $instantMission->location : null;
+
+                    $time = Carbon::parse($instantMission->created_at)->format('H:i');
+                    $time_arabic = ($instantMission->created_at->format('A') === 'AM') ? 'صباحا' : 'مساءا';
+
+                    // Assign instant mission details to the attendance object
+                    $attendance->instantMissions = [
+                        'instant_mission_id' => $instantMission->id,
+                        'name' => $instantMission->label,
+                        'location' => $location,
+                        'KWfinder' => $kwFinder,
+                        'description' => $instantMission->description,
+                        'group' => $instantMission->group_id ? $instantMission->group->name : 'N/A',
+                        'team' => $instantMission->group_team_id ? $instantMission->groupTeam->name : 'N/A',
+                        'date' => $instantMission->created_at->format('Y-m-d'),
+                        'time' => $time,
+                        'time_name' => $time_arabic,
+                        'latitude' => $instantMission->latitude,
+                        'longitude' => $instantMission->longitude,
+                    ];
                 }
 
-                $attendances = $attendanceRecords->get()->map(function ($attendance) use ($inspectorId) {
-                    // Fetch associated InstantMission for each attendance
-                    $instantMission = InstantMission::with('group', 'groupTeam')
-                        // ->where('inspector_id', $inspectorId)
-                        ->where('id', $attendance->instant_id)
-                        ->first();
+                // Get the attendance employees
+                $attendanceEmployees = AttendanceEmployee::with('force', 'grade')
+                    ->where('attendance_id', $attendance->id)
+                    ->get();
 
-                    // Initialize the instant mission details as null
-                    $attendance->instantMissions = null;
+                // Get inspector info
+                $inspector = Inspector::find($attendance->inspector_id);
+                $user = User::with('grade')->find($inspector->user_id);
+                $name = $user->name;
+                $grade = $user->grade ? $user->grade->name : 'N/A';
 
-                    // If an InstantMission exists, populate the instantMissions
-                    if ($instantMission) {
-                        $location = str_contains($instantMission->location, 'gis.paci.gov.kw') ? null : $instantMission->location;
-                        $kwFinder = str_contains($instantMission->location, 'gis.paci.gov.kw') ? $instantMission->location : null;
+                // Get unique force names
+                $forceNames = $attendanceEmployees->unique('force_id')
+                    ->map(function ($employee) {
+                        return $employee->force ? $employee->force->name : 'Unknown';
+                    })
+                    ->toArray();
 
-                        $time = Carbon::parse($instantMission->created_at)->format('H:i');
-                        $time_arabic = ($instantMission->created_at->format('A') === 'AM') ? 'صباحا' : 'مساءا';
-
-                        // Assign instant mission details to the attendance object
-                        $attendance->instantMissions = [
-                            'instant_mission_id' => $instantMission->id,
-                            'name' => $instantMission->label,
-                            'location' => $location,
-                            'KWfinder' => $kwFinder,
-                            'description' => $instantMission->description,
-                            'group' => $instantMission->group_id ? $instantMission->group->name : 'N/A',
-                            'team' => $instantMission->group_team_id ? $instantMission->groupTeam->name : 'N/A',
-                            'date' => $instantMission->created_at->format('Y-m-d'),
-                            'time' => $time,
-                            'time_name' => $time_arabic,
-                            'latitude' => $instantMission->latitude,
-                            'longitude' => $instantMission->longitude,
+                return [
+                    'id' => $attendance->id,
+                    'force_name' => 'ادارة (' . implode(', ', $forceNames) . ')',
+                    'total_force' => $attendanceEmployees->count(),
+                    'total_police' => $attendanceEmployees->where('type_id', 2)->count(),
+                    'total_individuals' => $attendanceEmployees->where('type_id', 1)->count(),
+                    'total_workers' => $attendanceEmployees->where('type_id', 3)->count(),
+                    'total_civilian' => $attendanceEmployees->where('type_id', 4)->count(),
+                    'force_names' => $attendanceEmployees->map(function ($emp, $index) {
+                        return [
+                            'index' => $index + 1,
+                            'name' => $emp->name,
+                            'grade' => $emp->grade_id ? $emp->grade->name : '',
                         ];
-                    }
+                    }),
+                    'created_at' => $attendance->parent == 0 ? $attendance->created_at : Attendance::find($attendance->parent)->created_at,
+                    'created_at_time' => $attendance->parent == 0 ? $attendance->created_at->format('H:i:s') : Attendance::find($attendance->parent)->created_at->format('H:i:s'),
+                    'inspector_name' => $name,
+                    'inspector_grade' => $grade,
+                    'instantMissions' => $attendance->instantMissions, // Include the instant mission details
+                ];
+            });
 
-                    // Get the attendance employees
-                    $attendanceEmployees = AttendanceEmployee::with('force', 'grade')
-                        ->where('attendance_id', $attendance->id)
-                        ->get();
-
-                    // Get inspector info
-                    $inspector = Inspector::find($attendance->inspector_id);
-                    // dd($inspector->user_id,$attendance->inspector_id);
-                    $user = User::with('grade')->find($inspector->user_id);
-                    $name = $user->name;
-                    $grade = $user->grade ? $user->grade->name : 'N/A';
-
-                    // Get unique force names
-                    $forceNames = $attendanceEmployees->unique('force_id')
-                        ->map(function ($employee) {
-                            return $employee->force ? $employee->force->name : 'Unknown';
-                        })
-                        ->toArray();
-
-                    return [
-                        'id' => $attendance->id,
-                        'force_name' => 'ادارة (' . implode(', ', $forceNames) . ')',
-                        'total_force' => $attendanceEmployees->count(),
-                        'total_police' => $attendanceEmployees->where('type_id', 2)->count(),
-                        'total_individuals' => $attendanceEmployees->where('type_id', 1)->count(),
-                        'total_workers' => $attendanceEmployees->where('type_id', 3)->count(),
-                        'total_civilian' => $attendanceEmployees->where('type_id', 4)->count(),
-                        'force_names' => $attendanceEmployees->map(function ($emp, $index) {
-                            return [
-                                'index' => $index + 1,
-                                'name' => $emp->name,
-                                'grade' => $emp->grade_id ? $emp->grade->name : '',
-                            ];
-                        }),
-                        'created_at' => $attendance->parent == 0 ? $attendance->created_at : Attendance::find($attendance->parent)->created_at,
-                        'created_at_time' => $attendance->parent == 0 ? $attendance->created_at->format('H:i:s') : Attendance::find($attendance->parent)->created_at->format('H:i:s'),
-                        'inspector_name' => $name,
-                        'inspector_grade' => $grade,
-                        'instantMissions' => $attendance->instantMissions, // Include the instant mission details
-                    ];
-                });
-            }
         }
 
         $success = [
