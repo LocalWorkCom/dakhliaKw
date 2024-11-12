@@ -648,7 +648,7 @@ class reportsController extends Controller
                     return [
                         'id' => $attendance->id,
                         'force_name' => 'ادارة (' . implode(', ', $forceNames) . ')',
-                        'total_force' => $attendanceEmployees->unique('force_id')->count(),
+                        'total_force' => $attendanceEmployees->count(),
                         'total_police' => $attendanceEmployees->where('type_id', 2)->count(),
                         'total_individuals' => $attendanceEmployees->where('type_id', 1)->count(),
                         'total_workers' => $attendanceEmployees->where('type_id', 3)->count(),
