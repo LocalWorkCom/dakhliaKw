@@ -35,9 +35,10 @@ class WorkingTimeController extends Controller
             $delete_permission = null;
 
             //return '<button class="btn btn-primary btn-sm">Edit</button>';
-
-             $show_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="openViewModal(' . $row->id . ',' . $row->name . ')">  <i class="fa fa-eye"></i> عرض </a>';
-             $edit_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="openedit(' . $row->id . ',' . $row->name . ',' . $row->start_time . ',' . $row->end_time . ',' . $row->color . ')">  <i class="fa fa-edit"></i> تعديل </a>';
+            $action="openedit('" . $row->id . "','" . $row->name . "','" . $row->start_time . "','" . $row->end_time . "','" . $row->color . "')";
+            $view_act="openViewModal('" . $row->id . "','" . $row->name . "')";
+             $show_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="'.$view_act.'">  <i class="fa fa-eye"></i> عرض </a>';
+             $edit_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="'.$action.'">  <i class="fa fa-edit"></i> تعديل </a>';
 
             if (Auth::user()->rule_id == 2) {
                 $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
@@ -45,7 +46,7 @@ class WorkingTimeController extends Controller
 
             $uploadButton = $edit_permission . $show_permission . $delete_permission;
             return $uploadButton;
-            
+
         })
             ->rawColumns(['action'])
             ->make(true);
@@ -251,7 +252,7 @@ class WorkingTimeController extends Controller
     }
 
     public function delete(Request $request)
-    {        
+    {
         $type = WorkingTime::find($request->id);
         $workingTreeTimes = $type->workingTreeTimes()->exists();
         if ($workingTreeTimes) {
