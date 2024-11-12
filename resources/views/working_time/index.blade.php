@@ -27,13 +27,13 @@
     <div class="row">
         <div class="container  col-11 mt-3 p-0  pt-5 pb-4">
             <!-- <div class="row d-flex justify-content-between " dir="rtl">
-                                        <div class="form-group mt-4 mx-3  d-flex">
-                                            <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
-                                                <img src="{{ asset('frontend/images/time.svg') }}" alt="">
-                                                اضافة فترة
-                                            </button>
-                                        </div>
-                                    </div> -->
+                                            <div class="form-group mt-4 mx-3  d-flex">
+                                                <button class="btn-all px-3" style="color: #274373;" data-bs-toggle="modal" data-bs-target="#myModal1">
+                                                    <img src="{{ asset('frontend/images/time.svg') }}" alt="">
+                                                    اضافة فترة
+                                                </button>
+                                            </div>
+                                        </div> -->
 
             @if (session('success'))
                 <div class="alert alert-success">
@@ -155,7 +155,8 @@
                                 <div class="form-group mb-3">
                                     <label class="d-flex justify-content-start pb-2" for="start_time"> بداية
                                         فترة العمل</label>
-                                        <input type="time" id="start_time" name="start_time" class="form-control" required="required" placeholder="Select time" readonly="readonly">
+                                    <input type="time" id="start_time" name="start_time" class="form-control"
+                                        required="required" placeholder="Select time" readonly="readonly">
                                     {{-- <input type="text" id="start_time" class="form-control" placeholder="Select time"
                                         name="start_time" required> --}}
                                     <div id="startTimeError" class="error-message text-danger" style="display: none;">
@@ -242,15 +243,21 @@
                                     </div>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label class="d-flex justify-content-start pb-2" for="start_time_edit">بداية فترة العمل</label>
-                                    <input type="time" id="start_time_edit" name="start_time_edit" class="form-control" required>
-                                    <div id="start_time_editError" class="error-message text-danger" style="display: none;"></div>
+                                    <label class="d-flex justify-content-start pb-2" for="start_time_edit">بداية فترة
+                                        العمل</label>
+                                    <input type="time" id="start_time_edit" name="start_time_edit"
+                                        class="form-control" required>
+                                    <div id="start_time_editError" class="error-message text-danger"
+                                        style="display: none;"></div>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label class="d-flex justify-content-start pb-2" for="end_time_edit">نهاية فترة العمل</label>
-                                    <input type="time" id="end_time_edit" name="end_time_edit" class="form-control" required>
-                                    <div id="end_time_editError" class="error-message text-danger" style="display: none;"></div>
+                                    <label class="d-flex justify-content-start pb-2" for="end_time_edit">نهاية فترة
+                                        العمل</label>
+                                    <input type="time" id="end_time_edit" name="end_time_edit" class="form-control"
+                                        required>
+                                    <div id="end_time_editError" class="error-message text-danger"
+                                        style="display: none;"></div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="d-flex justify-content-start pb-2" for="color_edit"> لون
@@ -329,21 +336,18 @@
 
 @endsection
 @push('scripts')
-
-<script>
-    $(document).ready(function() {
-        function closeModal() {
-            $('#delete').modal('hide');
-
-        }
-
-        $('#closeButton').on('click', function() {
-            closeModal();
-        });
-    });
-</script>
-
     <script>
+        $(document).ready(function() {
+            function closeModal() {
+                $('#delete').modal('hide');
+
+            }
+
+            $('#closeButton').on('click', function() {
+                closeModal();
+            });
+        });
+
         $(document).ready(function() {
             $.fn.dataTable.ext.classes.sPageButton = 'btn-pagination btn-sm';
 
@@ -524,8 +528,6 @@
             form.submit();
 
         }
-    </script>
-    <script>
         document.getElementById('createForm').addEventListener('submit', function(event) {
             var name = document.getElementById('name').value.trim();
             var startTime = document.getElementById('start_time').value.trim();
