@@ -28,7 +28,7 @@ class Point extends Model
     }
     public function paperTransactions()
     {
-        return $this->hasMany(PaperTransaction::class);
+        return $this->hasMany(paperTransaction::class);
     }
     public function region()
     {
