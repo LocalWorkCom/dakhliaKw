@@ -65,11 +65,11 @@ class InspectorMissionController extends Controller
                 'start_time' => $team_time->first()->workingTime->start_time,
                 'end_time' => $team_time->first()->workingTime->end_time
             ];
-        }else{
+        } else {
             $inspector_shift = [
-                'name' => null,
-                'start_time' => null,
-                'end_time' =>null
+                'name' => 'طوال اليوم',
+                'startTime' => '00:00',
+                'endTime' => '23:59'
             ];
         }
         // $currentTime = Carbon::now()->format('H:i');
@@ -494,7 +494,7 @@ class InspectorMissionController extends Controller
                             $employeeValidator = Validator::make($item, [
                                 'name' => 'required',
                                 'type_employee' => 'required',
-                               // 'grade' => 'required'
+                                // 'grade' => 'required'
                             ], $messages);
 
                             if ($employeeValidator->fails()) {
@@ -541,7 +541,7 @@ class InspectorMissionController extends Controller
                             $employeeValidator = Validator::make($item, [
                                 'name' => 'required',
                                 'type_employee' => 'required',
-                               //'grade' => 'required'
+                                //'grade' => 'required'
                             ], $messages);
 
                             if ($employeeValidator->fails()) {
@@ -663,5 +663,4 @@ class InspectorMissionController extends Controller
 
         return $this->respondSuccess($success, 'Data Saved successfully.');
     }
-
 }
