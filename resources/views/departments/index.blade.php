@@ -167,8 +167,8 @@
                     departmentShow = departmentShow.replace(':id', row.id);
                     var departmentDelete = '';
                     @if(auth()->user()->rule_id == 2)
-                        //departmentDelete = '<a class="btn btn-sm" style="background-color: #C91D1D;" onclick="opendelete('row.id')"> <i class="fa-solid fa-trash"></i> حذف</a>';
-                        //departmentDelete = departmentDelete.replace(':id', row.id);
+                        var departmentDelete = '<a class="btn btn-sm" style="background-color: #C91D1D;"  onclick="opendelete(id)">  <i class="fa fa-trash"></i> حذف </a>';
+                        departmentDelete = departmentDelete.replace('id', row.id);
                     @endif
                     return departmentEdit+' '+departmentShow+' '+departmentDelete;
                 }
