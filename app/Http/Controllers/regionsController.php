@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Government;
 use App\Models\Region;
+use App\Models\Sector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -37,13 +38,18 @@ class regionsController extends Controller
             $name = "'$row->name'";
             $edit_permission=null;
             $region_permission=null;
+            $delete_permission=null;
             if(Auth::user()->hasPermission('edit Government')){
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit('.$row->id.','.$name.')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
             if(Auth::user()->hasPermission('view Region')){
                 $region_permission = '<a class="btn btn-sm"  style="background-color: #b77a48;"  href="'.route('regions.index',['id' => $row->id ]).'"> <i class="fa-solid fa-mountain-sun"></i> مناطق </a>';
             }
-            return $edit_permission .' '. $region_permission ;
+            //if(Auth::user()->hasPermission('delete Region')){
+            if(Auth::user()->rule_id == 2){
+                $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+            }
+            return $edit_permission .' '. $region_permission .' '.$delete_permission;
 
             // <a class="btn btn-primary btn-sm" href=' . route('government.show', $row->id) . '>التفاصيل</a>
         })
@@ -88,6 +94,47 @@ class regionsController extends Controller
         return redirect()->route('government.all',compact('message'));
      }
 
+    public function deletegovernment(Request $request)
+    {        
+        $type = Government::find($request->id);
+        if (!$type) {
+            return redirect()->route('government.all')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
+        }
+
+        $sectors = Sector::get();
+        if($sectors){
+            foreach($sectors as $sector){
+                if(in_array($request->id, $sector->governments_IDs)){
+                    if($sector->id){
+                        return redirect()->route('government.all')->with('reject','لا يمكن حذف هذه المحافظة يوجد قطاع لها');
+                    }
+                }
+            }
+        }
+
+        $points = $type->points()->exists();
+        if ($points) {
+            return redirect()->route('government.all')->with('reject','لا يمكن حذف هذه المحافظة يوجد نقاط لها');
+        }
+
+        $groupPointRelations = $type->groupPointRelations()->exists();
+        if ($groupPointRelations) {
+            return redirect()->route('government.all')->with('reject','لا يمكن حذف هذه المحافظة يوجد مجموعة نقاط لها');
+        }
+
+        $regionRelations = $type->regionRelations()->exists();
+        if ($regionRelations) {
+            return redirect()->route('government.all')->with('reject','لا يمكن حذف هذه المحافظة يوجد مناطق لها');
+        }
+
+        $userRelations = $type->userRelations()->exists();
+        if ($userRelations) {
+            return redirect()->route('government.all')->with('reject','لا يمكن حذف هذه المحافظة يوجد مستخدمين لها');
+        }
+
+        $type->delete();
+        return redirect()->route('government.all')->with('success', 'تم حذف محافظة');
+    }
     //END government
     /**
      * Display a listing of the resource.
@@ -114,11 +161,15 @@ class regionsController extends Controller
     return DataTables::of($data)->addColumn('action', function ($row) {
         $name = "'$row->name'";
         $editPermission = null;
+        $delete_permission = null;
         if(Auth::user()->hasPermission('edit Region')){
         $editPermission = '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit('.$row->id.','.$name.','.$row->government_id.')"> <i class="fa fa-edit"></i> تعديل </a>';
         }
+        if(Auth::user()->rule_id == 2){
+            $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+        }
         // $deletePermission = '<a class="btn btn-sm" style="background-color: #C91D1D;" onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';
-        return $editPermission ;
+        return $editPermission .' '. $delete_permission ;
     })
     ->addColumn('government_name', function ($row) {
         return $row->government_name;
@@ -180,6 +231,32 @@ class regionsController extends Controller
         $message='تم التعديل على المنطقه';
         $id=0;
         return redirect()->route('regions.index',compact('message' ,'id'));
+    }
+
+    public function deleteRegions(Request $request)
+    {        
+        $type = Region::find($request->id);
+        if (!$type) {
+            return redirect()->route('regions.index',0)->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
+        }
+
+        $points = $type->points()->exists();
+        if ($points) {
+            return redirect()->route('regions.index',0)->with('reject','لا يمكن حذف هذه منطقة يوجد نقاط لها');
+        }
+
+        $users = $type->users()->exists();
+        if ($users) {
+            return redirect()->route('regions.index',0)->with('reject','لا يمكن حذف هذه منطقة يوجد مجموعة مستخدمين لها');
+        }
+
+        $type->delete();
+        return redirect()->route('regions.index',0)->with('success', 'تم حذف منطقة');
+    }
+
+    public function delete(Request $request)
+    {        
+        
     }
 
     /**

@@ -37,6 +37,19 @@
                                 {{ session('message') }}
                             </div>
                         @endif
+
+                        @if (session('success'))
+                            <div class="alert alert-info">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if (session('reject'))
+                            <div class="alert alert-danger">
+                                {{ session('reject') }}
+                            </div>
+                        @endif
+
                         <div>
                             <table id="users-table"
                                 class="display table table-responsive-sm  table-bordered table-hover dataTable">
@@ -123,7 +136,7 @@
         </div>
     </div>
     {{-- model for delete form --}}
-    {{-- <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -133,10 +146,10 @@
                         </button>
                     </div>
                 </div>
-                <form id="delete-form" action="{{ route('grads.delete') }}" method="POST">
+                <form id="delete-form" action="{{ route('setting.government.delete') }}" method="POST">
                     @csrf
                     <div class="modal-body  d-flex justify-content-center">
-                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الرتبه ؟</h5>
+                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه المحافظة ؟</h5>
 
 
                         <input type="text" id="id" hidden name="id" class="form-control">
@@ -152,22 +165,35 @@
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div> 
 @endsection
 @push('scripts')
+
+<script>
+    $(document).ready(function() {
+        function closeModal() {
+            $('#delete').modal('hide');
+        }
+
+        $('#closeButton').on('click', function() {
+            closeModal();
+        });
+    });
+</script>
+
     <script>
-        // function opendelete(id) {
-        //     document.getElementById('id').value = id;
-        //     $('#delete').modal('show');
-        // }
+        function opendelete(id) {
+            document.getElementById('id').value = id;
+            $('#delete').modal('show');
+        }
 
-        // function confirmDelete() {
-        //     var id = document.getElementById('id').value;
-        //     var form = document.getElementById('delete-form');
+        function confirmDelete() {
+            var id = document.getElementById('id').value;
+            var form = document.getElementById('delete-form');
 
-        //     form.submit();
+            form.submit();
 
-        // }
+        }
 
         function openedit(id, name) {
             document.getElementById('nameedit').value = name;

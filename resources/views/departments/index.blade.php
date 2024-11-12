@@ -41,6 +41,12 @@
                     </div>
                 @endif
 
+                @if (session('reject'))
+                    <div class="alert alert-danger">
+                        {{ session('reject') }}
+                    </div>
+                @endif
+
             </div>
 
             <div class="col-lg-12">
@@ -65,6 +71,39 @@
             </div>
         </div>
     </div>
+
+    {{-- model for delete form --}}
+    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="deleteModalLabel"> !تنبــــــيه</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                        </button>
+                    </div>
+                </div>
+                <form id="delete-form" action="{{ route('departments.destroy') }}" method="POST">
+                    @csrf
+                    <div class="modal-body  d-flex justify-content-center">
+                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الادارة ؟</h5>
+
+
+                        <input type="text" id="id" hidden name="id" class="form-control">
+                    </div>
+                    <div class="modal-footer mx-2 d-flex justify-content-center">
+                        <div class="text-end">
+                            <button type="button" class="btn-blue">لا</button>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </section>
 <script>
     $(document).ready(function() {
@@ -120,19 +159,18 @@
             columnDefs: [{
                 targets: -1,
                 render: function(data, type, row) {
-                    var departmentEdit = '{{ route('departments.edit', ':id') }}';
+                    //var departmentEdit = '{{ route('departments.edit', ':id') }}';
+                    var departmentEdit = '<a href="{{ route('departments.edit', ':id') }}"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-edit"></i> تعديل</a>';
                     departmentEdit = departmentEdit.replace(':id', row.id);
-                    var departmentShow = '{{ route('departments.show', ':id') }}';
+                    //var departmentShow = '{{ route('departments.show', ':id') }}';
+                    var departmentShow = '<a href="{{ route('departments.show', ':id') }}" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-eye"></i>  عرض</a>';
                     departmentShow = departmentShow.replace(':id', row.id);
-                    var departmentDelete = '{{ route('departments.destroy', ':id') }}';
-                    departmentDelete = departmentDelete.replace(':id', row.id);
-
-                    return `
-                    <a href="${departmentShow}"  class="btn btn-sm " style="background-color: #274373;"> <i class="fa fa-eye"></i> عرض</a>
-                        <a href="${departmentEdit}" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-edit"></i>تعديل  </a>
-
-
-                        `;
+                    var departmentDelete = '';
+                    @if(auth()->user()->rule_id == 2)
+                        //departmentDelete = '<a class="btn btn-sm" style="background-color: #C91D1D;" onclick="opendelete('row.id')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+                        //departmentDelete = departmentDelete.replace(':id', row.id);
+                    @endif
+                    return departmentEdit+' '+departmentShow+' '+departmentDelete;
                 }
             }],
             "oLanguage": {
@@ -192,6 +230,27 @@
                 }
             });
         }
+    }
+
+    $(document).ready(function() {
+        function closeModal() {
+            $('#delete').modal('hide');
+        }
+
+        $('#closeButton').on('click', function() {
+            closeModal();
+        });
+    });
+
+    function opendelete(id) {
+        document.getElementById('id').value = id;
+        $('#delete').modal('show');
+    }
+
+    function confirmDelete() {
+        var id = document.getElementById('id').value;
+        var form = document.getElementById('delete-form');
+        form.submit();
     }
 </script>
 

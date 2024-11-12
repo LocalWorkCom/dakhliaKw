@@ -86,4 +86,9 @@ class departements extends Model
 
         return $children;
     }
+
+    public function employeeVacations()
+    {
+        return $this->hasMany(EmployeeVacation::class, 'created_departement');
+    }
 }

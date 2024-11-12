@@ -464,7 +464,7 @@ class InspectorMissionController extends Controller
         } else {
             $record = Attendance::where('id', $request->id)->first();
             $isParent = $record->parent;
-            if ($isParent != 0) {
+            if ($isParent == null) {
                 $record->flag = 0;
                 $record->save();
                 $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
@@ -475,7 +475,7 @@ class InspectorMissionController extends Controller
                 $attendance->instant_id = $request->instant_mission_id;
                 $attendance->total = $attendanceCount;
                 $attendance->inspector_id = $inspectorId->id;
-                $attendance->parent = $isParent;
+                $attendance->parent = $request->id;
                 $attendance->flag = 1;
                 $attendance->save();
 
@@ -488,7 +488,7 @@ class InspectorMissionController extends Controller
                             $employeeValidator = Validator::make($item, [
                                 'name' => 'required',
                                 'type_employee' => 'required',
-                                'grade' => 'required'
+                               // 'grade' => 'required'
                             ], $messages);
 
                             if ($employeeValidator->fails()) {
@@ -535,7 +535,7 @@ class InspectorMissionController extends Controller
                             $employeeValidator = Validator::make($item, [
                                 'name' => 'required',
                                 'type_employee' => 'required',
-                                'grade' => 'required'
+                               //'grade' => 'required'
                             ], $messages);
 
                             if ($employeeValidator->fails()) {
@@ -615,7 +615,7 @@ class InspectorMissionController extends Controller
             return [
                 'id' => $attendance->id,
                 'force_name' => 'ادارة (' . implode(', ', array_column($forceData, 'force_name')) . ')',
-                'total_force' => $attendanceEmployees->unique('force_id')->count(),
+                'total_force' => $attendanceEmployees->count(),
                 'total_police' => $attendanceEmployees->where('type_id', 2)->count(),
                 'total_individuals' => $attendanceEmployees->where('type_id', 1)->count(),
                 'total_workers' => $attendanceEmployees->where('type_id', 3)->count(),

@@ -54,13 +54,18 @@ class sectorsController extends Controller
             ->addColumn('action', function ($row) {
                 // $edit_permission = null;
                 // $show_permission = null ;
+                $delete_permission = null;
                 // if (Auth::user()->hasPermission('edit Sector')) {
                 $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;"  href=' . route('sectors.edit', $row->id) . '><i class="fa fa-edit"></i> تعديل</a>';
                 // }
                 // if (Auth::user()->hasPermission('view Sector')) {
                 $show_permission = '<a class="btn btn-sm" style="background-color: #274373;"  href=' . route('sectors.show', $row->id) . '> <i class="fa fa-eye"></i>عرض</a>';
                 // }
-                return $show_permission . ' ' . $edit_permission;
+
+                if(Auth::user()->rule_id == 2){
+                    $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+                }
+                return $show_permission . ' ' . $edit_permission. ' '. $delete_permission;
             })
             ->addColumn('government_name', function ($row) {
                 return $row->government_names;
@@ -224,6 +229,37 @@ class sectorsController extends Controller
         // $sector->updated_by = Auth::id();
         $sector->save();
         return redirect()->route('sectors.index')->with('message', 'تم تعديل القطاع ');
+    }
+
+    public function delete(Request $request)
+    {        
+        $type = Sector::find($request->id);
+        if (!$type) {
+            return redirect()->route('sectors.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
+        }
+
+        $points = $type->points()->exists();
+        if ($points) {
+            return redirect()->route('sectors.index')->with('reject','لا يمكن حذف هذا القطاع يوجد نقاط لها');
+        }
+
+        $groups = $type->groups()->exists();
+        if ($groups) {
+            return redirect()->route('sectors.index')->with('reject','لا يمكن حذف هذا القطاع العمل يوجد مجموعات لها');
+        }
+
+        $groupSectorHistory = $type->groupSectorHistory()->exists();
+        if ($groupSectorHistory) {
+            return redirect()->route('sectors.index')->with('reject','لا يمكن حذف هذا القطاع العمل يوجد ارشيف مجموعة قطاع لها');
+        }
+
+        $grouppoint = $type->grouppoint()->exists();
+        if ($grouppoint) {
+            return redirect()->route('sectors.index')->with('reject','لا يمكن حذف هذا القطاع العمل يوجد مجموعة نقاط لها');
+        }
+
+        $type->delete();
+        return redirect()->route('sectors.index')->with('success', 'تم حذف قطاع');
     }
 
     /**

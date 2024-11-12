@@ -65,6 +65,18 @@
                                 {{ session('message') }}
                             </div>
                         @endif
+
+                        @if (session('success'))
+                            <div class="alert alert-info">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if (session('reject'))
+                            <div class="alert alert-danger">
+                                {{ session('reject') }}
+                            </div>
+                        @endif
                         <div>
                             <table id="users-table"
                                 class="display table table-responsive-sm  table-bordered table-hover dataTable">
@@ -182,7 +194,7 @@
     </div>
 
     {{-- model for delete form --}}
-    {{-- <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-center">
@@ -192,10 +204,10 @@
                         </button>
                     </div>
                 </div>
-                <form id="delete-form" action="{{ route('regions.delete') }}" method="POST">
+                <form id="delete-form" action="{{ route('setting.Regions.delete') }}" method="POST">
                     @csrf
                     <div class="modal-body  d-flex justify-content-center">
-                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه الرتبه ؟</h5>
+                        <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف هذه المحافظة ؟</h5>
 
 
                         <input type="text" id="id" hidden name="id" class="form-control">
@@ -211,7 +223,7 @@
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div> 
 @endsection
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
@@ -400,5 +412,30 @@
                 table.ajax.reload(); // Reload DataTable with new filter
             }
         }
+
+        function opendelete(id) {
+            document.getElementById('id').value = id;
+            $('#delete').modal('show');
+        }
+
+        function confirmDelete() {
+            var id = document.getElementById('id').value;
+            var form = document.getElementById('delete-form');
+
+            form.submit();
+
+        }
     </script>
+
+<script>
+    $(document).ready(function() {
+        function closeModal() {
+            $('#delete').modal('hide');
+        }
+
+        $('#closeButton').on('click', function() {
+            closeModal();
+        });
+    });
+</script>
 @endpush
