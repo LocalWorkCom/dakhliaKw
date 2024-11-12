@@ -594,7 +594,7 @@ class reportsController extends Controller
                 $attendances = $attendanceRecords->get()->map(function ($attendance) use ($inspectorId) {
                     // Fetch associated InstantMission for each attendance
                     $instantMission = InstantMission::with('group', 'groupTeam')
-                        ->where('inspector_id', $inspectorId)
+                        // ->where('inspector_id', $inspectorId)
                         ->where('id', $attendance->instant_id)
                         ->first();
 
