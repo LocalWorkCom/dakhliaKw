@@ -248,6 +248,10 @@
                                     <input type="time" id="start_time_edit" name="start_time_edit"
                                         class="form-control" required>
                                     <div id="start_time_editError" class="error-message text-danger"
+<<<<<<< HEAD
+=======
+
+>>>>>>> e0b471c8299879f393c76696dcd11d0a13d714fb
                                         style="display: none;"></div>
                                 </div>
 
@@ -257,6 +261,10 @@
                                     <input type="time" id="end_time_edit" name="end_time_edit" class="form-control"
                                         required>
                                     <div id="end_time_editError" class="error-message text-danger"
+<<<<<<< HEAD
+=======
+
+>>>>>>> e0b471c8299879f393c76696dcd11d0a13d714fb
                                         style="display: none;"></div>
                                 </div>
                                 <div class="form-group mb-3">
