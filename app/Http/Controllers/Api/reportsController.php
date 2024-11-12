@@ -380,19 +380,19 @@ class reportsController extends Controller
                     }
 
                     // Handle violations with point_id
-                    // if (!isset($pointViolations[$pointName])) {
-                    //     $pointViolations[$pointName] = [
-                    //         'date' => $violation->created_at->format('Y-m-d'),
-                    //         'is_instansmission' => false,
-                    //         'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
-                    //         'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
-                    //         'point_id' => $violation->point_id,
-                    //         'point_name' => $pointName,
-                    //         'shift' => $shiftDetails,
-                    //         'team_name' => $teamName,
-                    //         'violationsOfPoint' => []
-                    //     ];
-                    // }
+                    if (!isset($pointViolations[$pointName])) {
+                        $pointViolations[$pointName] = [
+                            'date' => $violation->created_at->format('Y-m-d'),
+                            'is_instansmission' => false,
+                            'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
+                            'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
+                            'point_id' => $violation->point_id,
+                            'point_name' => $pointName,
+                            'shift' => $shiftDetails,
+                            'team_name' => $teamName,
+                            'violationsOfPoint' => []
+                        ];
+                    }
 
                     // Add the violation to the point's violations
                     $pointViolations[$pointName]['violationsOfPoint'][] = [
@@ -419,46 +419,46 @@ class reportsController extends Controller
                     ];
                 } else {
                     // Handle violations without point_id with unique keys
-                    // $noPointKey = 'violation_' . $violation->id; // Create a unique key for this violation
-                    // $instans_missions = instantmission::find($violation->mission_id);
-                    // $pointViolations[$noPointKey] = [
-                    //     'date' => $violation->created_at->format('Y-m-d'),
-                    //     'is_instansmission' => true,
-                    //     'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
-                    //     'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
-                    //     'point_id' => null,
-                    //     'point_name' => null,
-                    //     'shift' => [
-                    //         'start_time' => null,
-                    //         'end_time' => null,
-                    //         'time' => date("g:i:s", strtotime($instans_missions->created_at)) . (date("A", strtotime($instans_missions->created_at)) == 'AM' ? ' ص' : ' م')
-                    //     ],
-                    //     'team_name' => $teamName,
-                    //     'violationsOfPoint' => [
-                    //         [
-                    //             'id' => $violation->id,
-                    //             'InspectorName' => $violation->user_id ? $violation->user->name : null,
-                    //             'Inspectorgrade' => $violation->user->grade->name ?? null,
-                    //             'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
-                    //             'name' => $violation->name,
-                    //             'Civil_number' => $violation->Civil_number ?? null,
-                    //             'military_number' => $violation->military_number ?? null,
-                    //             'file_number' => $violation->file_num ?? null,
-                    //             'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
-                    //             'violation_type' => $formattedViolationTypes,
-                    //             'inspector_name' => $violation->user_id ? $violation->user->name : null,
-                    //             'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
-                    //             'image' => $formattedImages ? $formattedImages : null,
-                    //             'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
-                    //             'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
-                    //             'updated_at' => $violation->updated_at,
-                    //             'mission_id' => $violation->mission_id ?? null,
-                    //             'point_id' => $violation->point_id ?? null,
-                    //             'flag_instantmission' => $violation->flag_instantmission,
-                    //             'violation_mode' => $violation->flag,
-                    //         ]
-                    //     ]
-                    // ];
+                    $noPointKey = 'violation_' . $violation->id; // Create a unique key for this violation
+                    $instans_missions = instantmission::find($violation->mission_id);
+                    $pointViolations[$noPointKey] = [
+                        'date' => $violation->created_at->format('Y-m-d'),
+                        'is_instansmission' => true,
+                        'MissionName' => $violation->flag_instantmission == 1 ? $violation->instantMission->label : null,
+                        'description' => $violation->flag_instantmission == 1 ? $violation->instantMission->description : null,
+                        'point_id' => null,
+                        'point_name' => null,
+                        'shift' => [
+                            'start_time' => null,
+                            'end_time' => null,
+                            'time' => date("g:i:s", strtotime($instans_missions->created_at)) . (date("A", strtotime($instans_missions->created_at)) == 'AM' ? ' ص' : ' م')
+                        ],
+                        'team_name' => $teamName,
+                        'violationsOfPoint' => [
+                            [
+                                'id' => $violation->id,
+                                'InspectorName' => $violation->user_id ? $violation->user->name : null,
+                                'Inspectorgrade' => $violation->user->grade->name ?? null,
+                                'time' => 'وقت و تاريخ التفتيش: ' . $violation->created_at->format('Y-m-d H:i:s'),
+                                'name' => $violation->name,
+                                'Civil_number' => $violation->Civil_number ?? null,
+                                'military_number' => $violation->military_number ?? null,
+                                'file_number' => $violation->file_num ?? null,
+                                'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
+                                'violation_type' => $formattedViolationTypes,
+                                'inspector_name' => $violation->user_id ? $violation->user->name : null,
+                                'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
+                                'image' => $formattedImages ? $formattedImages : null,
+                                'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
+                                'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
+                                'updated_at' => $violation->updated_at,
+                                'mission_id' => $violation->mission_id ?? null,
+                                'point_id' => $violation->point_id ?? null,
+                                'flag_instantmission' => $violation->flag_instantmission,
+                                'violation_mode' => $violation->flag,
+                            ]
+                        ]
+                    ];
                 }
             }
         }
@@ -666,7 +666,6 @@ class reportsController extends Controller
                     'instantMissions' => $attendance->instantMissions, // Include the instant mission details
                 ];
             });
-
         }
 
         $success = [
