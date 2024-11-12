@@ -65,6 +65,12 @@ class InspectorMissionController extends Controller
                 'start_time' => $team_time->first()->workingTime->start_time,
                 'end_time' => $team_time->first()->workingTime->end_time
             ];
+        }else{
+            $inspector_shift = [
+                'name' => null,
+                'start_time' => null,
+                'end_time' =>null
+            ];
         }
         // $currentTime = Carbon::now()->format('H:i');
         // $isBetween = Carbon::parse($team_time->first()->workingTime->start_time)->isBefore($currentTime) && Carbon::parse($team_time->first()->workingTime->end_time)->isAfter($currentTime);
