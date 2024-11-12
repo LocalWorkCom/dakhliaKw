@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\departements;
+use App\Models\ViolationTypes;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -450,9 +451,50 @@ class DepartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(departements $department)
+    public function destroy(Request $request)
     {
-        $department->delete();
-        return redirect()->route('departments.index')->with('success', 'Department deleted successfully.');
+        $type = departements::find($request->id);
+        if (!$type) {
+            return redirect()->route('departments.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
+        }
+
+        $group_points = ViolationTypes::get();
+        if($group_points){
+            foreach($group_points as $group_point){
+                if(in_array($request->id, $group_point->points_ids)){
+                    if($group_point->id){
+                        return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد مجموعة نقاط لها');
+                    }
+                }
+            }
+        }
+
+        $absences = $type->absences()->exists();
+        if ($absences) {
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد غياب لها');
+        }
+
+        $paperTransactions = $type->paperTransactions()->exists();
+        if ($paperTransactions) {
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد اوراق لها');
+        }
+
+        $personalMissions = $type->personalMissions()->exists();
+        if ($personalMissions) {
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد مهمة شخصية لها');
+        }
+
+        $pointDays = $type->pointDays()->exists();
+        if ($pointDays) {
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد نقاط يومية لها');
+        }
+
+        $violations = $type->violations()->exists();
+        if ($violations) {
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه النقاط يوجد جزاءات لها');
+        }
+
+        $type->delete();
+        return redirect()->route('departments.index')->with('success', 'تم حذف قطاع');
     }
 }
