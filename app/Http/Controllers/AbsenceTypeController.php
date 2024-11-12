@@ -56,6 +56,7 @@ class AbsenceTypeController extends Controller
     {
         $messages = [
             'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
+            'name.unique'=>'الاسم مأخوذ مسبقا'
         ];
         $validatedData = Validator::make($request->all(), [
             'name' => 'required|unique:absence_types,name',
@@ -131,7 +132,7 @@ class AbsenceTypeController extends Controller
     }
 
     public function delete(Request $request)
-    {        
+    {
         $type = AbsenceType::find($request->id);
         if (!$type) {
             return redirect()->route('absence.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
