@@ -25,10 +25,10 @@ class AbsenceTypeController extends Controller
         return DataTables::of($data)->addColumn('action', function ($row) {
 
             //return '<button class="btn btn-primary btn-sm">Edit</button>';
-            $name = "'$row->name'";
-                        $edit_permission = null;
+
+            $edit_permission = null;
             $delete_permission = null;
-            $edit_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="openEditModal(' . $row->id . ',' . $name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
+            $edit_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="openEditModal(' . $row->id . ',' . $row->name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
 
             if (Auth::user()->rule_id == 2) {
                 $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
@@ -56,7 +56,6 @@ class AbsenceTypeController extends Controller
     {
         $messages = [
             'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
-            'name.unique'=>'يجب ان يكون فترت العمل اسم غير مأخوذ مسبقا'
         ];
         $validatedData = Validator::make($request->all(), [
             'name' => 'required|unique:absence_types,name',
@@ -132,7 +131,7 @@ class AbsenceTypeController extends Controller
     }
 
     public function delete(Request $request)
-    {
+    {        
         $type = AbsenceType::find($request->id);
         if (!$type) {
             return redirect()->route('absence.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');

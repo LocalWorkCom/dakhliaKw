@@ -88,7 +88,7 @@ class jobController extends Controller
     }
     public function deletejob(Request $request )
     {
-        //dd($request->id);
+        dd($request->id);
         $isForeignKeyUsed = DB::table('users')->where('job_id', $request->id)->exists();
         //dd($isForeignKeyUsed);
         if( $isForeignKeyUsed ){
