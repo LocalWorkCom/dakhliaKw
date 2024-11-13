@@ -39,10 +39,11 @@ class RefreshInspectorMission implements ShouldQueue
         $group_team_ids = [];
         $start_day_date = date('Y-m-d');
         $inspectorMissions = InspectorMission::whereBetween('date', [
-                Carbon::now()->startOfMonth()->toDateString(),
-                Carbon::now()->endOfMonth()->toDateString(),
-            ])
+            Carbon::now()->startOfMonth()->toDateString(),
+            Carbon::now()->endOfMonth()->toDateString(),
+        ])
             ->count();
+        $new = false;
         $num_days = date('t', strtotime($start_day_date)); // Get the number of days in the month
         $Inspectors = Inspector::where('flag', 0)->pluck('id')->toArray(); // get inspectors ids
         // to get inspectors ids
@@ -50,7 +51,6 @@ class RefreshInspectorMission implements ShouldQueue
             $vacation_days = 0;
             $date = $start_day_date; // Start from the 1st of the month
             $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$Inspector])->first(); //to get team for inspector
-
             // $temp_group_team = $GroupTeam->id;
             // if team exist
             if ($GroupTeam) {
@@ -69,22 +69,25 @@ class RefreshInspectorMission implements ShouldQueue
                 // for loob by num of day's monthly
 
 
+         
+
                 if (!$inspectorMissions) {
 
                     $day_of_month_val = $GroupTeam->last_day;
                 } else {
+
                     $data = InspectorMission::where('group_id', $GroupTeam->group_id)->where('group_team_id', $GroupTeam->id)
                         ->where('date', $date)->where('inspector_id', $Inspector)->first();
-                        if($data){
-                            $day_of_month_val = $data->day_number;
-
-                        }else{
-                           // dd($date,$Inspector,$GroupTeam->group_id,$GroupTeam->id,$data);
-                            $day_of_month_val = 1;
-
-                        }
+                    if ($data) {
+                        $day_of_month_val = $data->day_number;
+                    } else {
+                        $new = true;
+                        // dd($date,$Inspector,$GroupTeam->group_id,$GroupTeam->id,$data);
+                        $day_of_month_val = 1;
+                    }
                 }
-                if ($WorkingTree->changed || $GroupTeam->changed || !$inspectorMissions) {
+
+                if ($WorkingTree->changed || $GroupTeam->changed || !$inspectorMissions || $new) {
                     if ($WorkingTree->changed && sizeof($group_team_ids) == 0) {
                         $group_team_ids = GroupTeam::where('working_tree_id', $WorkingTree->id)->pluck('id')->toArray();
                     }
