@@ -1318,11 +1318,11 @@ class GroupTeamController extends Controller
                 ->with('showModal', false);
         }
         $check_exists = InspectorMission::where('inspector_id', $request->id_employee)
-            ->where(function ($query) {
-                $query->whereNotNull('ids_group_point')
-                    ->orWhereNotNull('ids_instant_mission');
-            })
-            ->exists();
+        ->where(function ($query) {
+            $query->whereJsonLength('ids_group_point', '>', 0)
+                ->orWhereJsonLength('ids_instant_mission', '>', 0);
+        })
+        ->exists();
 
         if ($check_exists) {
 
