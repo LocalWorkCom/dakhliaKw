@@ -1301,12 +1301,74 @@ class GroupTeamController extends Controller
 
         dispatch(new RefreshInspectorMission());
         $allgroups = Groups::all();
-        $groups=$allgroups->shuffle();
+        $groups = $allgroups->shuffle();
         foreach ($groups as $group) {
             dispatch(new assignPointsFrom($startOfMonth, $endOfMonth, $group->sector_id, $group->id));
         }
         dispatch(new RefreshUpdateVacation());
 
         return redirect()->route('inspector.mission');
+    }
+    public function TransferToEmployee(Request $request)
+    {
+        $inspector = Inspector::find($request->id_employee);
+        if (!$inspector) {
+            return redirect()->back()
+                ->with('error', 'تعذر الحصول على بيانات المفتش ')
+                ->with('showModal', false);
+        }
+        $check_exists = InspectorMission::where('inspector_id', $request->id_employee)
+            ->where(function ($query) {
+                $query->whereNotNull('ids_group_point')
+                    ->orWhereNotNull('ids_instant_mission');
+            })
+            ->exists();
+
+        if ($check_exists) {
+
+            return redirect()->back()
+                ->with('error', 'لا يمكن ازالة المفتش من الجدول العام لانه لديه مخالفات ونقاط')
+                ->with('showModal', false);
+        }
+
+        $group = $inspector->group_id;
+        $inspector->group_id = null;
+        $inspector->flag = 1;
+        $inspector->save();
+
+        $value_remove = $request->id_employee;
+        $groupTeams = GroupTeam::where('group_id', $group)->get();
+
+        foreach ($groupTeams as $currentGroup) {
+            $currentInspectorIds = explode(',', $currentGroup->inspector_ids);
+
+            // Remove the specified inspector ID from the group
+            $updatedInspectorIds = array_filter($currentInspectorIds, function ($id) use ($value_remove) {
+                return $id != $value_remove;
+            });
+
+            if (empty($updatedInspectorIds)) {
+                $currentGroup->inspector_ids = null; // Set to NULL if no inspectors left
+            } else {
+                $currentGroup->inspector_ids = implode(',', $updatedInspectorIds); // Re-implode remaining IDs
+            }
+
+            // Save the updated group
+            $currentGroup->save();
+        }
+
+        // Delete future inspector missions for the removed inspector
+        $inspectorMissions = InspectorMission::where('inspector_id', $request->id_employee)
+            ->where('date', '>=', today())
+            ->get();
+        addInspectorHistory($request->id_employee, $group, $groupTeams[0]->id, 1);
+
+        foreach ($inspectorMissions as $inspectorMission) {
+            $inspectorMission->delete();
+        }
+
+        return redirect()->back()
+            ->with('success', 'تم تحويل المفتش لموظف')
+            ->with('showModal', true);
     }
 }
