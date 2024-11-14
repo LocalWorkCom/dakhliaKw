@@ -10,6 +10,7 @@ use App\Models\InspectorMission;
 use App\Models\PersonalMission;
 use App\Models\Point;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,7 +21,7 @@ class personalMissionController extends Controller
 
         $today = Carbon::today()->toDateString();
         $daysOfWeek = [
-           
+
             "الأحد",  // 0
             "الإثنين",  // 1
             "الثلاثاء",  // 2
@@ -31,10 +32,11 @@ class personalMissionController extends Controller
         ];
         $dayWeek = Carbon::now()->locale('ar')->dayName;
         $index = array_search($dayWeek, $daysOfWeek);
-        
+
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
-        $inspector = GroupTeam::with('group')->whereJsonContains('inspector_ids', $inspectorId)->first();
-        
+        $inspector = DB::table('group_teams')
+        ->whereRaw("JSON_CONTAINS(inspector_ids, json_quote(?))", [$inspectorId])
+        ->first();
         if ($inspector) {
             $inspector_points = InspectorMission::where('inspector_id', $inspectorId)
                 ->where('date', $today)
@@ -45,28 +47,28 @@ class personalMissionController extends Controller
                 ->flatten()
                 ->filter()
                 ->toArray();
-        
+
             // Fetch available group points
             $availablegroup_points = Grouppoint::where('government_id', $inspector->group->government_id)
                 ->whereNotIn('id', $inspector_points)
                 ->get();
-        
-            $All_points = []; 
-        
+
+            $All_points = [];
+
             // Process available group points
             $availablegroup_points->each(function ($grouppoint) use (&$All_points, $daysOfWeek, $index, $dayWeek) {
                 // Fetch points related to the group point
                 $available_points = Point::with(['pointDays'])->whereIn('id', $grouppoint->points_ids)->get();
                 $name= $grouppoint->flag == 0 ? 'لا توجد مجموعه': $grouppoint->name;
-        
+
                 $available_points->each(function ($available_point) use (&$All_points, $daysOfWeek, $index, $dayWeek,$name) {
                     if ($available_point->work_type == 0) {
                         // Check if today's day is in days_work
                         $is_off = in_array($index, $available_point->days_work);
-                        
+
                         if ($is_off) {
                             $All_points[] = [
-                                'point_governate' => $available_point->government->name , 
+                                'point_governate' => $available_point->government->name ,
                                 'point_id' => $available_point->id,
                                 'point_name' => $available_point->name,
                                 'point_GroupName' => $name ?? 'Unknown',
@@ -77,24 +79,24 @@ class personalMissionController extends Controller
                     } else {
                         $pointDay =  $available_point->pointDays->where('name',$index)->first();
                         $All_points[] = [
-                            'point_governate' => $available_point->government->name , 
+                            'point_governate' => $available_point->government->name ,
                             'point_id' => $available_point->id,
                             'point_name' => $available_point->name,
                             'point_GroupName' => $name ?? 'Unknown',
                             'point_time' => "من {$pointDay->from} " . ($pointDay->from > 12 ? 'مساءا' : 'صباحا') . " الى {$pointDay->to} " . ($pointDay->to > 12 ? 'مساءا' : 'صباحا'),
-    
+
                             'point_location' => $available_point->google_map,
                         ];
                     }
                 });
             });
-        
+
             $success['available_points'] = $All_points;
             return $this->respondSuccess($success, 'Get Data successfully.');
         } else {
             return $this->respondError('type not found', ['error' => 'خطأ فى استرجاع البيانات'], 404);
         }
-        
+
     }
     public function addPersonalMission(Request $request)
     {
@@ -138,7 +140,7 @@ class personalMissionController extends Controller
         $update_mission->personal_mission_ids = json_encode($currentArray);
         $update_mission->save();
 
-        //send notification to inspector 
+        //send notification to inspector
 
         if ($new) {
             return $this->respondSuccess('success', 'Data Saved successfully.');
