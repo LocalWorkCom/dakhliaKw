@@ -72,11 +72,13 @@ class reportsController extends Controller
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         // shift
         $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
-        if ($inspector != null) {
-            $working_time = WorkingTime::find($inspector->working_time_id);
-        } else {
-            $working_time = null;
-        }
+        $working_time = $inspector ? WorkingTime::find($inspector->working_time_id) : null;
+
+        // Set shift data to "all day" if working_time is null
+        $shiftData = $working_time
+            ? $working_time->only(['id', 'name', 'start_time', 'end_time'])
+            : ['id' => null, 'name' => 'All Day', 'start_time' => '00:00', 'end_time' => '23:59'];
+
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
         $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
 
@@ -150,7 +152,7 @@ class reportsController extends Controller
             $absence_violations = AbsenceViolation::where('absence_id', $absence->id)->get();
 
             $data = [
-                'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
+                'shift' =>$shiftData,
                 'abcence_day' => $absence->date,
                 'mission_id' => $absence->mission_id,
                 'can_update' => $absence->inspector_id == $inspectorId ? true : false,
