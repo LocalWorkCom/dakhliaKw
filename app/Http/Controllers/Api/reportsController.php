@@ -74,7 +74,6 @@ class reportsController extends Controller
         $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
         $working_time = $inspector ? WorkingTime::find($inspector->working_time_id) : null;
 
-        // Set shift data to "all day" if working_time is null
         $shiftData = $working_time
             ? $working_time->only(['id', 'name', 'start_time', 'end_time'])
             : ['id' => null, 'name' =>'طوال اليوم', 'start_time' => '00:00', 'end_time' => '23:59'];
