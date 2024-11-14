@@ -130,9 +130,9 @@ class InspectorController extends Controller
                 $group_permission = !$inspectorExists
                     ? '<a class="btn btn-sm"  style="background-color: #7e7d7c;"  onclick="openAddModal(' . $row->id . ', ' . $row->group_id . ')">  <i class="fa fa-edit"></i> تعديل مجموعه</a>' : '';
                 //$group_permission = '<a class="btn btn-sm"  style="background-color: #7e7d7c;"  onclick="openAddModal(' . $row->id . ', ' . $row->group_id . ')">  <i class="fa fa-edit"></i> تعديل مجموعه</a>';
-                $remove_permission = !$inspectorExists ? '<a class="btn btn-sm" style="background-color: #E3641E;" onclick="openTransferModal(' . $row->id . ')">
+                $remove_permission =  '<a class="btn btn-sm" style="background-color: #E3641E;" onclick="openTransferModal(' . $row->id . ')">
                 <i class="fa-solid fa-user-tie"></i> تحويل لموظف
-            </a>' : '';
+            </a>';
             } else {
                 $group_permission = '<a class="btn btn-sm"  style="background-color: green;"  onclick="openAddModal(' . $row->id . ',0)">   <i class="fa fa-plus"></i> أضافه</a>';
             }

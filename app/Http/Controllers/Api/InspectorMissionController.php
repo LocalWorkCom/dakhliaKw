@@ -224,7 +224,7 @@ class InspectorMissionController extends Controller
                             'time_name' => $time_arabic ?? null,
                             'latitude' => $instantmission->latitude,
                             'longitude' => $instantmission->longitude,
-                            'attachment' => $mission->attachment,
+                            'attachment' => $instantmission->attachment,
 
                         ];
                     }

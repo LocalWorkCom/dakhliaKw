@@ -49,12 +49,13 @@ class RefreshUpdateVacation implements ShouldQueue
                         $inspectorMission = InspectorMission::where('inspector_id', $inspector->id)
                             ->whereDate('date', '=', $today)
                             ->first();
+                        if ($inspectorMission) {
+                            // Update the InspectorMission record with the vacation ID
+                            $inspectorMission->ids_group_point = null;
 
-                        // Update the InspectorMission record with the vacation ID
-                        $inspectorMission->ids_group_point = null;
-
-                        $inspectorMission->vacation_id = $EmployeeeVacation->id;
-                        $inspectorMission->save();
+                            $inspectorMission->vacation_id = $EmployeeeVacation->id;
+                            $inspectorMission->save();
+                        }
                         // $inspectors = InspectorMission::where('group_team_id', $inspectorMission->group_team_id)->where('vacation_id', null)->whereDate('date', '=', $today)->count();
 
                         // if ($inspectors < 2) {
