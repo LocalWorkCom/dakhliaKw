@@ -74,10 +74,9 @@ class reportsController extends Controller
         $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
         $working_time = $inspector ? WorkingTime::find($inspector->working_time_id) : null;
 
-        // Set shift data to "all day" if working_time is null
         $shiftData = $working_time
             ? $working_time->only(['id', 'name', 'start_time', 'end_time'])
-            : ['id' => null, 'name' => 'All Day', 'start_time' => '00:00', 'end_time' => '23:59'];
+            : ['id' => null, 'name' =>'طوال اليوم', 'start_time' => '00:00', 'end_time' => '23:59'];
 
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
         $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
