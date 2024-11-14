@@ -10,7 +10,7 @@ use App\Models\InspectorMission;
 use App\Models\PersonalMission;
 use App\Models\Point;
 use Carbon\Carbon;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
