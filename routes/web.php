@@ -164,6 +164,8 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/instant_mission/store', [InstantmissionController::class, 'store'])->name('instant_mission.store')->middleware('check.permission:create instantmission');
     Route::any('/getGroups/{id}', [InstantmissionController::class, 'getGroups'])->name('instant_mission.getGroups')->middleware('check.permission:view instantmission');
     Route::any('/getInspector/{team_id}/{group_id}', [InstantmissionController::class, 'getInspector'])->name('instant_mission.getInspector')->middleware('check.permission:view instantmission');
+    Route::any('/instant_mission/{id}/Attendance', [InstantmissionController::class, 'getAttendance'])->name('instant_mission.getAttendance')->middleware('check.permission:view instantmission');
+    Route::any('/instant_mission/{id}/Violations', [InstantmissionController::class, 'getViolations'])->name('instant_mission.getViolations')->middleware('check.permission:view instantmission');
 
     //groups
     // Route::resource('groups', GroupsController::class);

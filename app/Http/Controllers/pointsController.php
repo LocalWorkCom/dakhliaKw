@@ -112,7 +112,9 @@ class pointsController extends Controller
 
     public function create()
     {
-        return view("points.create");
+        $governorates = Government::all();
+        $regions=Region::all();
+        return view("points.create",compact('governorates','regions'));
     }
 
     /**
