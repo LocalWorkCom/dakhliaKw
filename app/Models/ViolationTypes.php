@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ViolationTypes extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'violation_type';
     public $timestamps = false;
 
@@ -35,4 +36,20 @@ class ViolationTypes extends Model
     {
         return $this->hasMany(Violation::class, 'violation_type');
     }
+
+    public function absenceEmployees()
+    {
+        return $this->hasMany(AbsenceEmployee::class, 'type_employee');
+    }
+
+    public function absenceViolations()
+    {
+        return $this->hasMany(AbsenceViolation::class, 'violation_type_id');
+    }
+
+    public function attendanceEmployees()
+    {
+        return $this->hasMany(AttendanceEmployee::class, 'type_id');
+    }
+
 }

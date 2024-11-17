@@ -46,8 +46,8 @@ class regionsController extends Controller
                 $region_permission = '<a class="btn btn-sm"  style="background-color: #b77a48;"  href="'.route('regions.index',['id' => $row->id ]).'"> <i class="fa-solid fa-mountain-sun"></i> مناطق </a>';
             }
             //if(Auth::user()->hasPermission('delete Region')){
-            if(Auth::user()->rule_id == 2){
-                $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
+            if(Auth::user()->hasPermission('delete Government')){
+                    $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;"   onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
             }
             return $edit_permission .' '. $region_permission .' '.$delete_permission;
 
@@ -165,7 +165,7 @@ class regionsController extends Controller
         if(Auth::user()->hasPermission('edit Region')){
         $editPermission = '<a class="btn btn-sm" style="background-color: #F7AF15;" onclick="openedit('.$row->id.','.$name.','.$row->government_id.')"> <i class="fa fa-edit"></i> تعديل </a>';
         }
-        if(Auth::user()->rule_id == 2){
+        if(Auth::user()->hasPermission('delete Region')){
             $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
         }
         // $deletePermission = '<a class="btn btn-sm" style="background-color: #C91D1D;" onclick="opendelete('.$row->id.')"> <i class="fa-solid fa-trash"></i> حذف</a>';
