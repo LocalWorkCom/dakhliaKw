@@ -397,58 +397,58 @@ class GroupTeamController extends Controller
         }
 
         // Fetch all InspectorMissions from today until the end of the month for the current team and working tree ID
-        $data_missions = InspectorMission::where('date', '>=', $startDate)
-            // ->where('date', '<=', $endDate)
-            ->where('working_tree_id', $team->working_tree_id)
-            ->where('group_team_id', $id)
-            ->get();
-        // dd($data_missions);
-        $again = false;
-        $k = 1;
-        // Iterate through each mission
-        foreach ($data_missions as $data) {
-            // Attempt to find a mission with the new working_tree_id for the same date
-            $new_data_mission = InspectorMission::where('date', $data->date)
-                ->where('working_tree_id', $request->working_tree_id)
-                ->first();
+        // $data_missions = InspectorMission::where('date', '>=', $startDate)
+        //     // ->where('date', '<=', $endDate)
+        //     ->where('working_tree_id', $team->working_tree_id)
+        //     ->where('group_team_id', $id)
+        //     ->get();
+        // // dd($data_missions);
+        // $again = false;
+        // $k = 1;
+        // // Iterate through each mission
+        // foreach ($data_missions as $data) {
+        //     // Attempt to find a mission with the new working_tree_id for the same date
+        //     $new_data_mission = InspectorMission::where('date', $data->date)
+        //         ->where('working_tree_id', $request->working_tree_id)
+        //         ->first();
 
 
-            if ($new_data_mission && !$again) {
-                // Update mission with new working_tree_id details if it exists
-                $data->working_tree_id = $new_data_mission->working_tree_id;
-                $data->working_time_id = $new_data_mission->working_time_id;
-                $data->day_off = $new_data_mission->working_time_id ? 0 : 1;
-                $data->day_number = $new_data_mission->day_number;
-            } else {
-                // If no matching new_data_mission, fetch the working_tree_time for the new working_tree_id
+        //     if ($new_data_mission && !$again) {
+        //         // Update mission with new working_tree_id details if it exists
+        //         $data->working_tree_id = $new_data_mission->working_tree_id;
+        //         $data->working_time_id = $new_data_mission->working_time_id;
+        //         $data->day_off = $new_data_mission->working_time_id ? 0 : 1;
+        //         $data->day_number = $new_data_mission->day_number;
+        //     } else {
+        //         // If no matching new_data_mission, fetch the working_tree_time for the new working_tree_id
 
-                $new_work_tree = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
-                    ->where('day_num', $k)
-                    ->first();
+        //         $new_work_tree = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
+        //             ->where('day_num', $k)
+        //             ->first();
 
-                if (!$new_work_tree) {
-                    // Handle the case where no work tree is found for the initial day number
-                    $k = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
-                        ->min('day_num');
-                    $new_work_tree = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
-                        ->where('day_num', $k)
-                        ->first();
-                }
+        //         if (!$new_work_tree) {
+        //             // Handle the case where no work tree is found for the initial day number
+        //             $k = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
+        //                 ->min('day_num');
+        //             $new_work_tree = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
+        //                 ->where('day_num', $k)
+        //                 ->first();
+        //         }
 
-                // Update mission with found working_tree_time details
-                $data->working_tree_id = $new_work_tree->working_tree_id;
-                $data->working_time_id = $new_work_tree->working_time_id ?? null;
-                $data->day_off = $new_work_tree->working_time_id ? 0 : 1;
-                $data->day_number = $new_work_tree->day_num;
-                $k++;
-                // if($k == 2){
-                //     dd(0);
-                // }
-                $again = true;
-            }
+        //         // Update mission with found working_tree_time details
+        //         $data->working_tree_id = $new_work_tree->working_tree_id;
+        //         $data->working_time_id = $new_work_tree->working_time_id ?? null;
+        //         $data->day_off = $new_work_tree->working_time_id ? 0 : 1;
+        //         $data->day_number = $new_work_tree->day_num;
+        //         $k++;
+        //         // if($k == 2){
+        //         //     dd(0);
+        //         // }
+        //         $again = true;
+        //     }
             // Save the updated data
-            $data->save();
-        }
+            // $data->save();
+        // }
 
         $team->name = $newName;
         // if (in_array($inspector_manager, $removedArr)) {

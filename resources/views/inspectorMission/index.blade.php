@@ -447,7 +447,7 @@
 
     function confirmAndRedirect() {
         // Display confirmation dialog
-        if (confirm("Do you want to complete this action?")) {
+        if (confirm("هل تريد بالفعل اعادة توزيع الجدول؟")) {
             // If the user clicks "Yes," redirect to the specific route
             window.location.href = "{{ route('refresh.inspector.mission') }}";
         }
