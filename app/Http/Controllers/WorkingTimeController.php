@@ -38,7 +38,7 @@ class WorkingTimeController extends Controller
             $show_permission = '<a class="btn btn-sm" style="background-color: #274373;" onclick="openViewModal(' . $row->id . ', \'' . $row->name . '\')"><i class="fa fa-eye"></i> عرض</a>';
             $edit_permission = '<a class="btn btn-sm" style="background-color: #274373;" onclick="openedit(' . $row->id . ', \'' . $row->name . '\', \'' . $row->start_time . '\', \'' . $row->end_time . '\', \'' . $row->color . '\')"><i class="fa fa-edit"></i> تعديل</a>';
 
-            if (Auth::user()->rule_id == 2) {
+            if (Auth::user()->hasPermission('delete WorkingTime')) {
                 $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
             }
 

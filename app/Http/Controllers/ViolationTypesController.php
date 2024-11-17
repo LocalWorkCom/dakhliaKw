@@ -62,15 +62,24 @@ class ViolationTypesController extends Controller
         }
 
         // Return the DataTables response
-        return DataTables::of($data)
-        ->addColumn('action', function ($row) {
+        return DataTables::of($data)->addColumn('action', function ($row) {
             $name = addslashes($row->name); // Escape the name for safety
-        $typesJson = json_encode($row->type_id);
-        $edit_permission = "<a class='btn btn-sm' style='background-color: #F7AF15;'
-        onclick='openedit(" . $row->id . ", \"" . $name . "\", " . $typesJson . ")'>
-        <i class='fa fa-edit'></i> تعديل</a>";
+            $typesJson = json_encode($row->type_id);
+            $edit_permission = null;
+            $delete_permission = null;
+            if(Auth::user()->hasPermission('edit ViolationTypes')) {
+                $edit_permission = "<a class='btn btn-sm' style='background-color: #F7AF15;' onclick='openedit(" . $row->id . ", \"" . $name . "\", " . $typesJson . ")'> <i class='fa fa-edit'></i> تعديل</a>";
+            }
 
-            return $edit_permission;
+            if(Auth::user()->hasPermission('delete ViolationTypes')) {
+                $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
+            }
+
+            $uploadButton = $edit_permission . $delete_permission;
+            return $uploadButton;
+
+            // $edit_permission = "<a class='btn btn-sm' style='background-color: #F7AF15;' onclick='openedit(" . $row->id . ", \"" . $name . "\", " . $typesJson . ")'> <i class='fa fa-edit'></i> تعديل</a>";
+            // return $edit_permission;
         })
         ->addColumn('type_name', function ($row) {
             return $row->type_names;
@@ -162,8 +171,24 @@ class ViolationTypesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $type = WorkingTime::find($request->id);
+        if (!$type) {
+            return redirect()->route('working_time.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
+        }
+
+        $workingTreeTimes = $type->workingTreeTimes()->exists();
+        if ($workingTreeTimes) {
+            return redirect()->route('working_time.index')->with('reject','لا يمكن حذف هذه فترة العمل يوجد نظام عمل لها');
+        }
+
+        $inspectorMissions = $type->inspectorMissions()->exists();
+        if ($inspectorMissions) {
+            return redirect()->route('working_time.index')->with('reject','لا يمكن حذف هذه فترة العمل يوجد جدول لها');
+        }
+
+        $type->delete();
+        return redirect()->route('working_time.index')->with('success', 'تم حذف فترة العمل');
     }
 }

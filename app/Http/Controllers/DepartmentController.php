@@ -471,35 +471,35 @@ class DepartmentController extends Controller
 
         $violation_types = ViolationTypes::whereJsonContains('type_id', $request->id)->get();
         if(count($violation_types) != 0){
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد انواع اجازات لها');
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه الادارة يوجد انواع اجازات لها');
         }
 
         $employeeVacations = $type->employeeVacations()->exists();
         if ($employeeVacations) {
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد غياب لها');
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه الادارة يوجد غياب لها');
         }
 
         $iotelegrams = $type->iotelegrams()->exists();
         if ($iotelegrams) {
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد وارد لها');
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه الادارة يوجد وارد لها');
         }
 
         $outgoings = $type->outgoings()->exists();
         if ($outgoings) {
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد outgoings لها');
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه الادارة يوجد outgoings لها');
         }
 
         $employees = $type->employees()->exists();
         if ($employees) {
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد مستخدمين لها');
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه الادارة يوجد مستخدمين لها');
         }
 
         $children = $type->children()->exists();
         if ($children) {
-            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذا القسم يوجد اقسام فرعية لها');
+            return redirect()->route('departments.index')->with('reject','لا يمكن حذف هذه الادارة يوجد اقسام فرعية لها');
         }
 
         $type->delete();
-        return redirect()->route('departments.index')->with('success', 'تم حذف قطاع');
+        return redirect()->route('departments.index')->with('success', 'تم حذف ادارة');
     }
 }
