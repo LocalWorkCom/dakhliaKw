@@ -206,7 +206,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\xampp\\htdocs\\dakhliaKw\\storage\\framework/cache/data',
+        'path' => 'D:\\laragon\\www\\dakhliaKw\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -289,7 +289,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'dakhalia_v2',
+        'database' => 'dakhalia',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
@@ -299,7 +299,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'dakhalia_v2',
+        'database' => 'dakhalia',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -319,7 +319,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'dakhalia_v2',
+        'database' => 'dakhalia',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -334,7 +334,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'dakhalia_v2',
+        'database' => 'dakhalia',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -435,13 +435,13 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\xampp\\htdocs\\dakhliaKw\\storage\\app',
+        'root' => 'D:\\laragon\\www\\dakhliaKw\\storage\\app',
         'throw' => false,
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\xampp\\htdocs\\dakhliaKw\\storage\\app/public',
+        'root' => 'D:\\laragon\\www\\dakhliaKw\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
         'throw' => false,
@@ -461,7 +461,7 @@
     ),
     'links' => 
     array (
-      'C:\\xampp\\htdocs\\dakhliaKw\\public\\storage' => 'C:\\xampp\\htdocs\\dakhliaKw\\storage\\app/public',
+      'D:\\laragon\\www\\dakhliaKw\\public\\storage' => 'D:\\laragon\\www\\dakhliaKw\\storage\\app/public',
     ),
   ),
   'firebase' => 
@@ -544,13 +544,13 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\xampp\\htdocs\\dakhliaKw\\storage\\logs/laravel.log',
+        'path' => 'D:\\laragon\\www\\dakhliaKw\\storage\\logs/laravel.log',
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\xampp\\htdocs\\dakhliaKw\\storage\\logs/laravel.log',
+        'path' => 'D:\\laragon\\www\\dakhliaKw\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
@@ -602,7 +602,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'C:\\xampp\\htdocs\\dakhliaKw\\storage\\logs/laravel.log',
+        'path' => 'D:\\laragon\\www\\dakhliaKw\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -668,7 +668,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\xampp\\htdocs\\dakhliaKw\\resources\\views/vendor/mail',
+        0 => 'D:\\laragon\\www\\dakhliaKw\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -832,7 +832,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\xampp\\htdocs\\dakhliaKw\\storage\\framework/sessions',
+    'files' => 'D:\\laragon\\www\\dakhliaKw\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -852,9 +852,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\xampp\\htdocs\\dakhliaKw\\resources\\views',
+      0 => 'D:\\laragon\\www\\dakhliaKw\\resources\\views',
     ),
-    'compiled' => 'C:\\xampp\\htdocs\\dakhliaKw\\storage\\framework\\views',
+    'compiled' => 'D:\\laragon\\www\\dakhliaKw\\storage\\framework\\views',
   ),
   'image' => 
   array (
@@ -944,7 +944,7 @@
     array (
     ),
     'enable_runnable_solutions' => NULL,
-    'remote_sites_path' => 'C:\\xampp\\htdocs\\dakhliaKw',
+    'remote_sites_path' => 'D:\\laragon\\www\\dakhliaKw',
     'local_sites_path' => '',
     'housekeeping_endpoint_prefix' => '_ignition',
     'settings_file_path' => '',
