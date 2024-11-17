@@ -595,7 +595,7 @@ class InspectorMissionController extends Controller
         $location = str_contains($instantMission->location, 'gis.paci.gov.kw') ? null : $instantMission->location;
         $kwFinder = str_contains($instantMission->location, 'gis.paci.gov.kw') ? $instantMission->location : null;
 
-        $time = Carbon::parse($instantMission->created_at)->format('H:i');
+        $time = Carbon::parse($instantMission->created_at);
         $timeArabic = ($instantMission->created_at->format('A') === 'AM') ? 'صباحا' : 'مساءا';
 
         $attendanceRecords = Attendance::where('instant_id', $request->mission_id)
