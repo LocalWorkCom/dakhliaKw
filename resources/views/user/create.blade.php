@@ -298,7 +298,7 @@
 
                 <div class="form-row  mx-md-3 d-flex justify-content-center flex-row-reverse">
 
-                    <div class="form-group col-md-10 mx-2" style="display: none;" id="military_number_id">
+                    <div class="form-group col-md-10 mx-2" id="military_number_id">
                         <label for="input6"> <i class="fa-solid fa-asterisk"
                                 style="color:red; font-size:10px;"></i> رقم العسكرى</label>
                         <input type="text" id="input6" name="military_number" class="form-control"
@@ -612,16 +612,21 @@
 
         // Function to show/hide the military section based on the selected value
         function toggleMilitarySection(value) {
+            $('#military_number_id').fadeOut('fast');
+
             const militarySection = document.getElementById('type_military_id');
             if (value === "military") {
                 militarySection.style.display = "block";
                 $('#input12Div').fadeIn('fast');
+                $('#military_number_id').fadeIn('fast');
+
 
             } else {
                 militarySection.style.display = "none";
                 $('#input12Div').fadeOut('fast');
             }
-            $('#military_number_id').fadeOut('fast');
+            // debugger;
+            
             $('#police').prop('checked', false);
             $('#police_').prop('checked', true);
         }
@@ -657,9 +662,10 @@
         function toggleMilitarySection(value) {
             const militarySection = document.getElementById('military_number_id');
             if (value === "police") {
-                militarySection.style.display = "block";
-            } else {
                 militarySection.style.display = "none";
+            } else {
+                militarySection.style.display = "block";
+                
             }
         }
 
