@@ -597,8 +597,8 @@ class ViolationController  extends Controller
         $team_time = InspectorMission::whereDate('date', $today)
             ->where('inspector_id', $inspectorId)
             ->with('workingTime')
-            ->get();
-        if (!checkShift() && $request->flag_instantmission == 0 && $team_time->first()->day_off != 1) {
+            ->first();
+        if (!checkShift() && $request->flag_instantmission == 0 && $team_time->day_off != 1) {
             return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
         }
         // 1=> this violation of instant mission
