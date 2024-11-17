@@ -205,7 +205,7 @@ class assignPointsFrom implements ShouldQueue
         $teamStartTimestamp = strtotime($teamStart);
         $teamEndTimestamp = strtotime($teamEnd);
 
-        return $teamStartTimestamp <= $pointStartTimestamp && $teamStartTimestamp >= $pointEndTimestamp && $teamEndTimestamp >= $pointStartTimestamp;
+        return $teamStartTimestamp <= $pointStartTimestamp && $teamStartTimestamp > $pointEndTimestamp && $teamEndTimestamp >= $pointStartTimestamp;
     }
     function countOfPoints($sector, $today)
     {

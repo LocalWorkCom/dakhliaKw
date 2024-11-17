@@ -152,9 +152,9 @@
                         <div class="form-row mx-3 d-flex justify-content-center flex-row-reverse">
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input4"><i class="fa-solid fa-asterisk"
-                                        style="color:red; font-size:10px;"></i> رقم المحمول</label>
+                                        style="color:red; font-size:10px;"></i> رقم الهاتف</label>
                                 <input type="text" id="input4" name="phone" class="form-control"
-                                    placeholder=" رقم المحمول" value="{{ $user->phone }}" dir="rtl">
+                                    placeholder=" رقم الهاتف" value="{{ $user->phone }}" dir="rtl">
                             </div>
                             <div class="form-group col-md-5 mx-2">
                                 <label for="input11"> <i class="fa-solid fa-asterisk"
