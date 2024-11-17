@@ -62,7 +62,7 @@ class sectorsController extends Controller
                 $show_permission = '<a class="btn btn-sm" style="background-color: #274373;"  href=' . route('sectors.show', $row->id) . '> <i class="fa fa-eye"></i>عرض</a>';
                 // }
 
-                if(Auth::user()->rule_id == 2){
+                if (Auth::user()->hasPermission('delete Sector')) {
                     $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
                 }
                 return $show_permission . ' ' . $edit_permission. ' '. $delete_permission;

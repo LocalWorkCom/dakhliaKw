@@ -87,7 +87,8 @@
 
         <div class="">
 
-            <form action="{{ route('instant_mission.store') }}" method="post" class="text-right" enctype="multipart/form-data">
+            <form action="{{ route('instant_mission.store') }}" method="post" class="text-right"
+                enctype="multipart/form-data">
                 @csrf
 
                 <div class="container col-10 mt-4 p-4" style="border:0.5px solid #C7C7CC;">
@@ -95,12 +96,12 @@
                         <div class="form-group col-md-5 mx-2">
                             <label for="input22">التاريخ</label>
                             <input type="date" id="input2"2 name="date" class="form-control"
-                                placeholder="التاريخ" value="{{ old('label') }}">
+                                placeholder="التاريخ"  value="{{ old('date') }}" required>
                         </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="input2">اسم أمر الخدمة</label>
                             <input type="text" id="input2" name="label" class="form-control" placeholder="الاسم"
-                                value="{{ old('label') }}">
+                                value="{{ old('label') }}" required>
                         </div>
 
 
@@ -109,41 +110,46 @@
                     <div class="form-row mx-md-3 d-flex justify-content-center flex-row-reverse">
                         <div class="form-group col-md-5 mx-2">
                             <label for="group_id">المجموعة</label>
-                            <select id="group_id" name="group_id" class="form-control select2" placeholder="المجموعة">
-                                <option selected disabled>اختار من القائمة
-                                </option>
-                                @foreach ($groups as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ old('group_id') == $item->id ? 'selected' : '' }}>
-                                        {{ $item->name }}
+                            <select id="group_id" name="group_id" class="form-control select2">
+                                <option selected disabled>اختار من القائمة</option>
+                                @foreach($groups as $group)
+                                    <option value="{{ $group->id }}" {{ old('group_id') == $group->id ? 'selected' : '' }}>
+                                        {{ $group->name }}
                                     </option>
                                 @endforeach
-
                             </select>
                             <span class="text-danger span-error" id="group_id-error"></span>
 
                         </div>
                         <div class="form-group col-md-5 mx-2">
                             <label for="group_team_id">الفرق</label>
-                            <select id="group_team_id" name="group_team_id" class="form-control select2"
-                                placeholder="الفرق">
-                                <option selected disabled>اختار من القائمة
-                                </option>
+                            <select id="group_team_id" name="group_team_id" class="form-control select2">
+                                <option selected disabled>اختار من القائمة</option>
+                                @foreach($groupTeams as $team)
+                                    <option value="{{ $team->id }}" {{ old('group_team_id') == $team->id ? 'selected' : '' }}>
+                                        {{ $team->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
 
                         <div class="form-group col-md-5 mx-2">
                             <label for="inspectors">المفتش</label>
-                            <select id="inspectors" name="inspectors" class="form-control select2" placeholder="المفتش">
-                                <option selected disabled>اختار من القائمة
-                                </option>
+                            <select id="inspectors" name="inspectors" class="form-control select2">
+                                <option selected >اختار الكل </option>
+                                @foreach($inspectors as $inspector)
+                                    <option value="{{ $inspector->id }}" {{ old('inspectors') == $inspector->id ? 'selected' : '' }}>
+                                        {{ $inspector->name }}
+                                    </option>
+                                @endforeach
                             </select>
+
                         </div>
 
                         <div class="form-group col-md-5 mx-md-2">
                             <label for="input44"> الموقع</label>
                             <input type="text" id="input44" name="location" class="form-control"
-                                placeholder="الموقع" value="{{ old('location') }}">
+                                placeholder="الموقع" value="{{ old('location') }}" required>
 
                         </div>
                         <div class="form-group col-md-10 mx-2">
@@ -303,6 +309,104 @@
             $('#inspectors').empty().append('<option selected disabled>اختار من القائمة</option>').prop(
                 'disabled', true);
         }
+    });
+
+    $(document).ready(function() {
+        // Initialize select2
+        $('.select2').select2();
+
+        // Capture the old selected values from the Blade template
+        var oldGroupId = "{{ old('group_id') }}";
+        var oldGroupTeamId = "{{ old('group_team_id') }}";
+        var oldInspectors = @json(old('inspectors', [])); // Convert old inspectors array to JavaScript array
+        var oldDate = "{{ old('date_field') }}"; // Capture the old date value
+
+        // Handle change in group selection
+        $('#group_id').change(function() {
+            var group_id = $(this).val();
+
+            if (group_id) {
+                // Clear and reset inspectors select box when group is changed
+                $('#inspectors').empty().append('<option selected disabled>اختار من القائمة</option>')
+                    .prop('disabled', false);
+
+                // Fetch and populate group teams
+                $.ajax({
+                    url: '/getGroups/' + group_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#group_team_id').empty().append(
+                            '<option selected disabled>اختار من القائمة</option>');
+                        $.each(data, function(key, team) {
+                            var isSelected = (team.id == oldGroupTeamId) ?
+                                'selected' : '';
+                            $('#group_team_id').append('<option value="' + team.id +
+                                '" ' + isSelected + '>' + team.name +
+                                '</option>');
+                        });
+
+                        // Trigger the change event to fetch inspectors for the old group team
+                        $('#group_team_id').trigger('change');
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error:', error);
+                        console.log('XHR:', xhr.responseText);
+                    }
+                });
+            } else {
+                $('#group_team_id').empty().append(
+                    '<option selected disabled>اختار من القائمة</option>').prop('disabled', true);
+                $('#inspectors').empty().append('<option selected disabled>اختار من القائمة</option>')
+                    .prop('disabled', true);
+            }
+        });
+
+        // Trigger the change on group_id to preselect the old values
+        if (oldGroupId) {
+            $('#group_id').val(oldGroupId).trigger('change');
+        }
+
+        // Handle change in group team selection
+        $('#group_team_id').change(function() {
+            var group_team_id = $(this).val();
+            var group_id = $('#group_id').val();
+
+            if (group_id && group_team_id) {
+                // Fetch and populate inspectors
+                $.ajax({
+                    url: '/getInspector/' + group_team_id + '/' + group_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#inspectors').empty().append(
+                            '<option selected disabled>اختار من القائمة</option>');
+                        $.each(data, function(key, inspector) {
+                            var isSelected = (oldInspectors.includes(inspector.id
+                                .toString())) ? 'selected' : '';
+                            $('#inspectors').append('<option value="' + inspector
+                                .id + '" ' + isSelected + '>' + inspector.name +
+                                '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error:', error);
+                        console.log('XHR:', xhr.responseText);
+                    }
+                });
+            } else {
+                $('#inspectors').empty().append('<option selected disabled>اختار من القائمة</option>')
+                    .prop('disabled', true);
+            }
+        });
+
+        // Trigger the change event to initialize with old group_team_id and inspectors
+        if (oldGroupTeamId) {
+            $('#group_team_id').val(oldGroupTeamId).trigger('change');
+        }
+        if (oldDate) {
+        $('#date').val(oldDate);
+    }
     });
 
 

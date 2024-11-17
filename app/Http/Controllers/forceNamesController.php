@@ -23,12 +23,12 @@ class forceNamesController extends Controller
             $name = "'$row->name'";
             $edit_permission = null;
             $delete_permission = null;
-            // if (Auth::user()->hasPermission('edit job')) {
-            $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit(' . $row->id . ',' . $name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
-            // }
+            if(Auth::user()->hasPermission('edit ForceName')) {
+                $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit(' . $row->id . ',' . $name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
+            }
 
 
-            if (Auth::user()->rule_id == 2) {
+            if(Auth::user()->hasPermission('delete ForceName')) {
                 $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
             }
 
@@ -96,11 +96,11 @@ class forceNamesController extends Controller
 
         $attendanceEmployees = $type->attendanceEmployees()->exists();
         if ($attendanceEmployees) {
-            return redirect()->back()->with(['message' => 'لا يمكن حذف هذه الرتبه يوجد موظفين لها']);
+            return redirect()->back()->with(['message' => 'لا يمكن حذف هذه أدارة الخدمه يوجد موظفين لها']);
         }
 
         $type->delete();
-        return redirect()->back()->with(['message' => 'تم حذف الرتبه']);
+        return redirect()->back()->with(['message' => 'تم حذف أدارة الخدمه']);
 
     }
 }

@@ -101,7 +101,7 @@ class pointsController extends Controller
 
                 $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('points.edit', $row->id) . '"><i class="fa fa-edit"></i> تعديل</a>';
                 $show_permission = '<a class="btn btn-sm" style="background-color: #274373;" href="' . route('points.show', $row->id) . '"><i class="fa fa-eye"></i> عرض</a>';
-                if(Auth::user()->rule_id == 2){
+                if (Auth::user()->hasPermission('delete Point')) {
                     $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
                 }
                 return $show_permission . ' ' . $edit_permission . ' ' . $delete_permission;
@@ -112,7 +112,9 @@ class pointsController extends Controller
 
     public function create()
     {
-        return view("points.create");
+        $governorates = Government::all();
+        $regions=Region::all();
+        return view("points.create",compact('governorates','regions'));
     }
 
     /**

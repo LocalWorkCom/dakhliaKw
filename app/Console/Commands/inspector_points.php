@@ -196,7 +196,7 @@ class inspector_points extends Command
         $teamStartTimestamp = strtotime($teamStart);
         $teamEndTimestamp = strtotime($teamEnd);
 
-        return $teamStartTimestamp <= $pointStartTimestamp && $teamStartTimestamp >= $pointEndTimestamp && $teamEndTimestamp >= $pointStartTimestamp;
+        return $teamStartTimestamp <= $pointStartTimestamp && $teamStartTimestamp > $pointEndTimestamp && $teamEndTimestamp >= $pointStartTimestamp;
     }
 
     function countOfPoints($sector, $today)
@@ -254,8 +254,8 @@ class inspector_points extends Command
 
         // Get the number of valid points available today
         $pointsAvailableToday = count($validPoints);
-//dd($pointsAvailableToday,$teamCount ,floor($pointsAvailableToday/$teamCount) )  ;
-      return $teamCount == 0 ? 0 :floor($pointsAvailableToday/$teamCount);
+        //dd($pointsAvailableToday,$teamCount ,floor($pointsAvailableToday/$teamCount) )  ;
+        return $teamCount == 0 ? 0 : floor($pointsAvailableToday / $teamCount);
     }
 
 
@@ -302,7 +302,7 @@ class inspector_points extends Command
                 foreach ($groupTeams as $groupTeam) {
                     $teamPointsYesterday[$groupTeam->group_team_id] = $groupTeam->ids_group_point ?: [];
                     //$pointPerTeam = $group->points_inspector;
-                    $pointPerTeam = $this->countOfPoints($sector->id,$today);
+                    $pointPerTeam = $this->countOfPoints($sector->id, $today);
                     $teamsWorkingTime = InspectorMission::with('workingTime')
                         ->where('group_id', $group->id)
                         ->where('group_team_id', $groupTeam->group_team_id)

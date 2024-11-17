@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AttendanceEmployee;
 use App\Models\Groups;
 use App\Models\GroupTeam;
 use App\Models\Inspector;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreinstantmissionRequest;
 use App\Http\Requests\UpdateinstantmissionRequest;
+use App\Models\Attendance;
+use App\Models\Violation;
 
 class InstantmissionController extends Controller
 {
@@ -33,27 +36,83 @@ class InstantmissionController extends Controller
 
             return '<button class="btn btn-primary btn-sm">Edit</button>';
         })
-            ->addColumn('group_id', function ($row) { // New column for departments count
+            ->addColumn('group_id', function ($row) {
                 $group_id = Groups::where('id', $row->group_id)->pluck('name')->first();
                 return $group_id;
             })
-            ->addColumn('group_team_id', function ($row) { // New column for departments count
+            ->addColumn('group_team_id', function ($row) {
 
                 $group_team_id = GroupTeam::where('id', $row->group_team_id)->pluck('name')->first();
                 return $group_team_id;
             })
-            ->addColumn('locationLink', function ($row) { // New column for departments count
+            ->addColumn('locationLink', function ($row) {
 
                 return '<a href="' . $row->location . '" target="_blank" style="color:blue !important;">رابط</a>';
             })
+            ->addColumn('attendance', function ($row) {
+                $attendance = Attendance::where('instant_id', $row->id)->where('flag', 1)->count();
+                return '<a href="' . route('instant_mission.getAttendance', ['id' => $row->id]) . '" style="color:blue !important;">' . $attendance . '</a>';
+            })->addColumn('violaions', function ($row) {
+                $violations = Violation::where('mission_id', $row->id)->where('status', 1)->count();
 
-            ->rawColumns(['action', 'locationLink'])
+                return '<a href="' . route('instant_mission.getViolations', ['id' => $row->id]) . '" style="color:blue !important;">' . $violations . '</a>';
+            })
+            ->rawColumns(['action', 'locationLink', 'attendance', 'violaions'])
             ->make(true);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
+    public function getAttendance($id)
+    {
+        $title = "سجل الحضور";
+        $data = Attendance::with([
+            'employees.force',
+            'employees.grade',
+            'employees.type'
+        ])
+        ->where('instant_id', $id)
+        ->where('flag', 1)
+        ->get();
+
+       //dd($data);
+        return view('instantMissions.attendance', compact('data', 'title'));
+    }
+    public function getViolations($id)
+    {
+        $title = "سجل مخالفات";
+        $data = Violation::leftJoin('grades', 'grades.id', '=', 'violations.grade')
+            ->leftJoin('inspector_mission', 'inspector_mission.id', '=', 'violations.mission_id')
+            ->leftJoin('users', 'users.id', '=', 'violations.user_id')
+            ->leftJoin('violation_type', 'violation_type.id', '=', 'violations.civil_type')
+            ->selectRaw("
+                    violations.image,
+                    violations.id,
+                    violations.military_number,
+                    violations.Civil_number,
+                    violations.grade,
+                    users.name as user_name,
+                    violations.mission_id,
+                    violations.file_num,
+                    violations.description,
+                    violations.civil_type,
+                    violation_type.name as civil_type_name,
+                    CONCAT_WS('/', violations.name, grades.name) as name,
+                    (
+                        SELECT GROUP_CONCAT(violation_type.name)
+                        FROM violation_type
+                        WHERE FIND_IN_SET(violation_type.id, violations.violation_type)
+                    ) AS ViolationType,
+                    IF(violations.flag = 1, 'مخالفة سلوك انظباطي', 'مخالفة مباني') as Type,
+                    grades.name as grade_name
+                ")
+            ->where('violations.mission_id', $id)
+            ->where('violations.status', 1)
+            ->get();
+
+
+        // dd($data);
+        return view('instantMissions.violationDetails', compact('data', 'title'));
+    }
     public function create()
     {
 
@@ -126,9 +185,7 @@ class InstantmissionController extends Controller
         return response()->json($inspectors);
         // return view('instantMissions.create',compact('groups','groupTeams'));
     }
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
         $messages = [
@@ -163,30 +220,31 @@ class InstantmissionController extends Controller
             $lat = $coordinates["latitude"];
             $long = $coordinates["longitude"];
         }
-        $new = new instantmission();
-        $new->label = $request->label;
-        $new->location = $request->location;
-        $new->group_id = $request->group_id;
-        $new->group_team_id = $request->group_team_id;
-        $new->inspector_id = $request->inspectors;
-        $new->description = $request->description;
-        $new->latitude = $lat;
-        $new->longitude = $long;
-        $new->date = $request->date;
-        $new->created_departement = auth()->user()->department_id;
+        $new_1 = new instantmission();
+        $new_1->label = $request->label;
+        $new_1->location = $request->location;
+        $new_1->group_id = $request->group_id;
+        $new_1->group_team_id = $request->group_team_id;
+        $new_1->inspector_id = $request->inspectors;
+        $new_1->description = $request->description;
+        $new_1->latitude = $lat;
+        $new_1->longitude = $long;
+        $new_1->date = $request->date;
+        $new_1->created_departement = auth()->user()->department_id;
 
-        $new->save();
+        $new_1->save();
+       //dd($request);
         if ($request->file('images')) {
             $file = $request->images;
             $path = 'instantMission/images';
             // foreach ($file as $image) {
             //     // $this->UploadFilesWithoutReal('images', 'image', new Image, $image);
-            UploadFilesIM($path, 'attachment', $new, $file);
+            UploadFilesIM($path, 'attachment', $new_1, $file);
             // }
 
         }
-        $results = Event::dispatch(new MissionCreated($new));
-        // $results = event(new MissionCreated($new));
+        $results = Event::dispatch(new MissionCreated($new_1));
+        // $results = event(new MissionCreated($new_1));
         if (!empty($results) && in_array(true, $results, true)) {
             return redirect()->route('instant_mission.index')->with('message', "تمت اضافة المهمة بنجاح");
         } else {
@@ -194,10 +252,6 @@ class InstantmissionController extends Controller
             return redirect()->route('instant_mission.index')->with('message', "خطأ ");
         }
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
         $IM = instantmission::find($id);
@@ -228,10 +282,6 @@ class InstantmissionController extends Controller
 
         return view('instantMissions.show', compact('groups', 'groupTeams', 'inspectors', 'IM'));
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $IM = instantmission::find($id);
@@ -262,9 +312,6 @@ class InstantmissionController extends Controller
         return view('instantMissions.edit', compact('groups', 'groupTeams', 'IM'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
 
@@ -330,10 +377,6 @@ class InstantmissionController extends Controller
         return redirect()->route('instant_mission.index')->with('success', 'Mission updated successfully.');
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(instantmission $instantmission)
     {
         //
