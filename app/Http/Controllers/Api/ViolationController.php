@@ -152,7 +152,7 @@ class ViolationController  extends Controller
             ->where('inspector_id', $inspectorId)
             ->with('workingTime')
             ->get();
-        if (!checkShift() && $request->flag_instantmission == 0 && $team_time->first()->day_off != 1 ) {
+        if (!checkShift() && $request->flag_instantmission == 0 && $team_time->first()->day_off != 1) {
             return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
         }
         if ($request->civil_military == 1  || $request->civil_military == 3) {
@@ -466,14 +466,25 @@ class ViolationController  extends Controller
             $kwFinder = null;
         }
         // dd( $instantMission );
+        if ($instantMission->inspector_id) {
+            $violations = Violation::where('mission_id', $request->mission_id)
+                ->where('flag_instantmission', 1)
+                ->where('user_id', auth()->user()->id)
+                ->whereDate('created_at', $today)
+                ->where('status', 1)
+                ->get();
+        } else {
+            $inspectorsIds = GroupTeam::where('id', $instantMission->group_team_id)->value('inspector_ids');
 
-        // Get violations for this instant mission
-        $violations = Violation::where('mission_id', $request->mission_id)
+            $inspectorsIdsArray = explode(',', $inspectorsIds);
+            $usersIds= inspector::whereIn('id',$inspectorsIdsArray)->pluck('user_id')->toArray();
+            $violations = Violation::where('mission_id', $request->mission_id)
             ->where('flag_instantmission', 1)
-            ->where('user_id', auth()->user()->id)
+            ->whereIn('user_id', $usersIds)
             ->whereDate('created_at', $today)
             ->where('status', 1)
             ->get();
+        }
 
         // Map violations and retrieve violation types
         $success['violation'] = $violations->map(function ($violation) {
@@ -587,7 +598,7 @@ class ViolationController  extends Controller
             ->where('inspector_id', $inspectorId)
             ->with('workingTime')
             ->get();
-        if (!checkShift() && $request->flag_instantmission == 0 && $team_time->first()->day_off != 1 ) {
+        if (!checkShift() && $request->flag_instantmission == 0 && $team_time->first()->day_off != 1) {
             return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
         }
         // 1=> this violation of instant mission

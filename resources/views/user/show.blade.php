@@ -73,9 +73,9 @@
                             <td>{{ $user->email ?? 'لا يوجد بريد ألكترونى' }} </td>
                         </tr>
                         <tr>
-                            <th scope="row"> رقم المحمول </th>
+                            <th scope="row"> رقم الهاتف </th>
                             <td>
-                                {{ $user->phone ?? 'لا يوجد رقم المحمول' }}
+                                {{ $user->phone ?? 'لا يوجد رقم الهاتف' }}
                             </td>
                         </tr>
                         <tr>

@@ -213,7 +213,7 @@
                                 </div>
 
 
-                                <div class="form-group mt-4 mb-3">
+                                {{-- <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد الجولات
                                         لكل دورية فى اليوم</label>
                                     <input type="number" id="points_inspector" name="points_inspector" class="form-control"
@@ -222,7 +222,7 @@
                                     @if ($errors->has('points_inspector'))
                                         <span class="text-danger">{{ $errors->first('points_inspector') }}</span>
                                     @endif
-                                </div>
+                                </div> --}}
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 "
                                         style="background-color: #274373; color: #ffffff;">
@@ -315,14 +315,14 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group mb-3">
+                            {{-- <div class="form-group mb-3">
                                 <label class="d-flex justify-content-start pb-2" for="points_inspector_show">
                                     عدد الجولات لكل دورية فى اليوم </label>
 
 
                                 <input type="number" id="points_inspector_show" name="points_inspector_show"
                                     class="form-control" disabled>
-                            </div>
+                            </div> --}}
 
 
                         </div>
