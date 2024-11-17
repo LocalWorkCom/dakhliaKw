@@ -74,14 +74,17 @@
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="sector_id"> اختر القطاع </label>
                         <select name="sector_id" id="sector_id"
-                            class=" form-control custom-select custom-select-lg mb-3 select2 "
-                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;">
-                            <option value="" selected disabled>اختر</option>
-                            @foreach (getsectores() as $sector)
-                                <option value="{{ $sector->id }}" {{ old('sector_id') == $sector->id ? 'selected' : '' }}>{{ $sector->name }} </option>
-                            @endforeach
+                        class="form-control custom-select custom-select-lg mb-3 select2"
+                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;">
+                        <option value="" selected disabled>اختر</option>
+                        @foreach (getsectores() as $sector)
+                            <option value="{{ $sector->id }}"
+                                {{ old('sector_id') == $sector->id ? 'selected' : '' }}>
+                                {{ $sector->name }}
+                            </option>
+                        @endforeach
+                    </select>
 
-                        </select>
                         <span class="text-danger span-error" id="sector_id-error"></span>
 
                     </div>
@@ -90,20 +93,34 @@
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="governorate"> اختر المحافظة </label>
                         <select name="governorate" id="governorate"
-                            class=" form-control custom-select custom-select-lg mb-3 select2 "
-                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
-                            <option value="" disabled selected>اختر المحافظه </option>
-                        </select>
+                        class="form-control custom-select custom-select-lg mb-3 select2"
+                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
+                        <option value="" disabled selected>اختر المحافظه </option>
+                        @foreach ($governorates as $governorate)  <!-- Use your dynamic governorates -->
+                            <option value="{{ $governorate->id }}"
+                                {{ old('governorate') == $governorate->id ? 'selected' : '' }}>
+                                {{ $governorate->name }}
+                            </option>
+                        @endforeach
+                    </select>
+
                     </div>
                 </div>
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="region"> اختر المنطقة </label>
                         <select name="region" id="region"
-                            class=" form-control custom-select custom-select-lg mb-3 select2 "
-                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
-                            <option value="" disabled selected>اختر المنطقه </option>
-                        </select>
+                        class="form-control custom-select custom-select-lg mb-3 select2"
+                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
+                        <option value="" disabled selected>اختر المنطقه </option>
+                        @foreach ($regions as $region)  <!-- Use your dynamic regions -->
+                            <option value="{{ $region->id }}"
+                                {{ old('region') == $region->id ? 'selected' : '' }}>
+                                {{ $region->name }}
+                            </option>
+                        @endforeach
+                    </select>
+
                     </div>
                 </div>
                 {{-- <div id="error-message" class="error"></div> --}}

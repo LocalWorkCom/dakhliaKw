@@ -233,7 +233,7 @@ function UploadFilesWithoutReal($path, $image, $model, $request)
 function UploadFilesIM($path, $image, $model, $request)
 {
 
-    // dd($request);
+    dd($request);
 
     $imagePaths = [];
     $thumbnail = $request;
@@ -574,5 +574,5 @@ function checkShift()
         return $currentTime->between($startTime, $endTime);
     }
 
-    return false; 
+    return false;
 }

@@ -164,6 +164,8 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/instant_mission/store', [InstantmissionController::class, 'store'])->name('instant_mission.store')->middleware('check.permission:create instantmission');
     Route::any('/getGroups/{id}', [InstantmissionController::class, 'getGroups'])->name('instant_mission.getGroups')->middleware('check.permission:view instantmission');
     Route::any('/getInspector/{team_id}/{group_id}', [InstantmissionController::class, 'getInspector'])->name('instant_mission.getInspector')->middleware('check.permission:view instantmission');
+    Route::any('/instant_mission/{id}/Attendance', [InstantmissionController::class, 'getAttendance'])->name('instant_mission.getAttendance')->middleware('check.permission:view instantmission');
+    Route::any('/instant_mission/{id}/Violations', [InstantmissionController::class, 'getViolations'])->name('instant_mission.getViolations')->middleware('check.permission:view instantmission');
 
     //groups
     // Route::resource('groups', GroupsController::class);
@@ -453,7 +455,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/Inspectors/{Inspector}', [InspectorController::class, 'update'])->name('inspectors.update')->middleware('check.permission:edit Inspector');
     Route::post('/Inspectors/addtogroup', [InspectorController::class, 'addToGroup'])->name('inspectors.addToGroup')->middleware('check.permission:edit Inspector');
     Route::post('/Inspectors/TransferToEmployee', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove')->middleware('check.permission:edit Inspector');
+    Route::post('/Inspectors/delete', [GroupTeamController::class, 'TransferToEmployee'])->name('inspectors.delete');
 
+    
     //statistics
     Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');
     Route::get('/statistics/search', [statisticController::class, 'getFilteredData'])->name('statistic.search');

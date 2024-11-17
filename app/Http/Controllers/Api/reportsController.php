@@ -72,11 +72,12 @@ class reportsController extends Controller
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
         // shift
         $inspector = InspectorMission::where('inspector_id', $inspectorId)->where('date', $today)->where('day_off', 0)->first();
-        if ($inspector != null) {
-            $working_time = WorkingTime::find($inspector->working_time_id);
-        } else {
-            $working_time = null;
-        }
+        $working_time = $inspector ? WorkingTime::find($inspector->working_time_id) : null;
+
+        $shiftData = $working_time
+            ? $working_time->only(['id', 'name', 'start_time', 'end_time'])
+            : ['id' => null, 'name' =>'طوال اليوم', 'start_time' => '00:00', 'end_time' => '23:59'];
+
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
         $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
 
@@ -150,7 +151,7 @@ class reportsController extends Controller
             $absence_violations = AbsenceViolation::where('absence_id', $absence->id)->get();
 
             $data = [
-                'shift' => $working_time->only(['id', 'name', 'start_time', 'end_time']),
+                'shift' =>$shiftData,
                 'abcence_day' => $absence->date,
                 'mission_id' => $absence->mission_id,
                 'can_update' => $absence->inspector_id == $inspectorId ? true : false,
@@ -405,7 +406,7 @@ class reportsController extends Controller
                         'name' => $violation->name,
                         'Civil_number' => $violation->Civil_number ?? null,
                         'military_number' => $violation->military_number ?? null,
-                        'file_number' => $violation->file_num ?? null,
+                        'File_number' => $violation->file_num ?? null,
                         'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                         'violation_type' => $formattedViolationTypes,
                         'inspector_name' => $violation->user_id ? $violation->user->name : null,
@@ -445,7 +446,7 @@ class reportsController extends Controller
                                 'name' => $violation->name,
                                 'Civil_number' => $violation->Civil_number ?? null,
                                 'military_number' => $violation->military_number ?? null,
-                                'file_number' => $violation->file_num ?? null,
+                                'File_number' => $violation->file_num ?? null,
                                 'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                                 'violation_type' => $formattedViolationTypes,
                                 'inspector_name' => $violation->user_id ? $violation->user->name : null,

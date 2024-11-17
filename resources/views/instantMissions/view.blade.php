@@ -64,6 +64,8 @@
                                     <th>الاسم</th>
                                     <th>الوصف</th>
                                     <th>الموقع</th>
+                                    <th>الحضور</th>
+                                    <th>المخالفات</th>
                                     <th>الفرقة</th>
                                     <th>المجموعة</th>
                                     <th style="width:150px;">العمليات</th>
@@ -101,6 +103,12 @@
                 {
                     data: 'locationLink',
                     name: 'locationLink',
+                }, {
+                    data: 'attendance',
+                    name: 'attendance',
+                }, {
+                    data: 'violaions',
+                    name: 'violaions',
                 },
                 {
                     data: 'group_id',
@@ -163,16 +171,16 @@
             },
             "pagingType": "full_numbers",
             "fnDrawCallback": function(oSettings) {
-                    var api = this.api();
-                    var pageInfo = api.page.info();
+                var api = this.api();
+                var pageInfo = api.page.info();
 
-                    // Check if the total number of records is less than or equal to the number of entries per page
-                    if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
-                        $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
-                    } else {
-                        $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
-                    }
+                // Check if the total number of records is less than or equal to the number of entries per page
+                if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                    $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+                } else {
+                    $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
                 }
+            }
 
         });
     });

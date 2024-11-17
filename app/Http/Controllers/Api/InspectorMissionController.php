@@ -224,6 +224,8 @@ class InspectorMissionController extends Controller
                             'time_name' => $time_arabic ?? null,
                             'latitude' => $instantmission->latitude,
                             'longitude' => $instantmission->longitude,
+                            'attachment' => $instantmission->attachment,
+
                         ];
                     }
                 }
@@ -657,6 +659,8 @@ class InspectorMissionController extends Controller
                     'time_name' => $timeArabic,
                     'latitude' => $instantMission->latitude,
                     'longitude' => $instantMission->longitude,
+                    'attachment' => $instantMission->attachment,
+
                 ]
             ];
         });

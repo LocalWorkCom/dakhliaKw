@@ -120,26 +120,25 @@
                                 </div>
                                 <div class="modal-body mt-3 mb-3">
                                     <div class="container pt-5 pb-2" style="border: 0.2px solid rgb(166, 165, 165);">
-                                        <form id="transfer-form" action="{{ route('inspectors.remove') }}"
+                                        <form id="transfer-form" action="{{ route('inspectors.delete') }}"
                                             method="POST">
                                             @csrf
                                             <input type="hidden" name="id_employee" id="id_employee" value="">
                                             <div class="mb-3">
-                                                <label style="justify-content: flex-end;"> هل انت متأكد من تحويل المفتش
-                                                    لموظف ؟ </label>
+                                                <label style="justify-content: flex-end;"> هل انت متأكد من ازالته من
+                                                    الجدول العام
+                                                    ؟ </label>
                                             </div>
                                             <div class="text-end pt-3">
                                                 <button type="button" class="btn-all p-2 "
                                                     style="background-color: transparent; border: 0.5px solid rgb(188, 187, 187); color: rgb(218, 5, 5);"
                                                     data-bs-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
-                                                    {{-- <img src="{{ asset('frontend/images/red-close.svg') }}"
-                                                      alt="img"> --}}
+                                                
                                                     لا
                                                 </button>
                                                 <button type="submit" class="btn-all mx-2 p-2"
                                                     style="background-color: #274373; color: #ffffff;">
-                                                    {{-- <img src="{{ asset('frontend/images/white-add.svg') }}"
-                                                      alt="img"> --}}
+                                                    
                                                     نعم
                                                 </button>
 
@@ -240,7 +239,6 @@
 
 @endsection
 @push('scripts')
-
 <script>
     $('#group_id').select2({
         width: '100%',
@@ -329,16 +327,16 @@
             },
             "pagingType": "full_numbers",
             "fnDrawCallback": function(oSettings) {
-                    var api = this.api();
-                    var pageInfo = api.page.info();
+                var api = this.api();
+                var pageInfo = api.page.info();
 
-                    // Check if the total number of records is less than or equal to the number of entries per page
-                    if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
-                        $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
-                    } else {
-                        $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
-                    }
+                // Check if the total number of records is less than or equal to the number of entries per page
+                if (pageInfo.recordsTotal <= 10) { // Adjust this number based on your page length
+                    $('.dataTables_paginate').css('visibility', 'hidden'); // Hide pagination
+                } else {
+                    $('.dataTables_paginate').css('visibility', 'visible'); // Show pagination
                 }
+            }
         });
 
         var defaultFilterButton = $('.btn-filter[data-filter="all"]');
@@ -408,14 +406,14 @@
             if (successAlert) {
                 successAlert.classList.remove('show');
                 successAlert.classList.add('fade');
-                setTimeout(() => successAlert.remove(), 500); // Delay removal for fade effect
+                setTimeout(() => successAlert.remove(), 10000); // Delay removal for fade effect
             }
             if (errorAlert) {
                 errorAlert.classList.remove('show');
                 errorAlert.classList.add('fade');
-                setTimeout(() => errorAlert.remove(), 500); // Delay removal for fade effect
+                setTimeout(() => errorAlert.remove(), 10000); // Delay removal for fade effect
             }
-        }, 300); // 30 seconds
+        }, 100000); // 30 seconds
     });
 </script>
 @endpush
