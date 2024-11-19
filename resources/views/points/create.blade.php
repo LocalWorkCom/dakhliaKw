@@ -34,16 +34,16 @@
 
     <form class="edit-grade-form" id="Points-form" action=" {{ route('points.store') }}" method="POST">
         @csrf
-         <div class="bg-white">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach ($errors->all() as $error)
-                            {{ $error }}
-                        @endforeach
-                    </div>
-                @endif
+        <div class="bg-white">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                        {{ $error }}
+                    @endforeach
+                </div>
+            @endif
 
-            </div>
+        </div>
         <div class="row" dir="rtl">
 
             <div class="container moftsh col-11 mt-3 p-0 pb-3 ">
@@ -51,8 +51,8 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="name"> اسم النقطة </label>
-                        <input type="text" id="name" class="form-control" name="name" value="{{ old('name') }}" placeholder=" اسم النقطه"
-                            required />
+                        <input type="text" id="name" class="form-control" name="name" value="{{ old('name') }}"
+                            placeholder=" اسم النقطه" required />
                         <span class="text-danger span-error" id="name-error"></span>
 
                     </div>
@@ -74,16 +74,15 @@
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="sector_id"> اختر القطاع </label>
                         <select name="sector_id" id="sector_id"
-                        class="form-control custom-select custom-select-lg mb-3 select2"
-                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;">
-                        <option value="" selected disabled>اختر</option>
-                        @foreach (getsectores() as $sector)
-                            <option value="{{ $sector->id }}"
-                                {{ old('sector_id') == $sector->id ? 'selected' : '' }}>
-                                {{ $sector->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                            class="form-control custom-select custom-select-lg mb-3 select2"
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;">
+                            <option value="" selected disabled>اختر</option>
+                            @foreach (getsectores() as $sector)
+                                <option value="{{ $sector->id }}" {{ old('sector_id') == $sector->id ? 'selected' : '' }}>
+                                    {{ $sector->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
                         <span class="text-danger span-error" id="sector_id-error"></span>
 
@@ -93,16 +92,17 @@
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="governorate"> اختر المحافظة </label>
                         <select name="governorate" id="governorate"
-                        class="form-control custom-select custom-select-lg mb-3 select2"
-                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
-                        <option value="" disabled selected>اختر المحافظه </option>
-                        @foreach ($governorates as $governorate)  <!-- Use your dynamic governorates -->
-                            <option value="{{ $governorate->id }}"
-                                {{ old('governorate') == $governorate->id ? 'selected' : '' }}>
-                                {{ $governorate->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                            class="form-control custom-select custom-select-lg mb-3 select2"
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
+                            <option value="" disabled selected>اختر المحافظه </option>
+                            @foreach ($governorates as $governorate)
+                                <!-- Use your dynamic governorates -->
+                                <option value="{{ $governorate->id }}"
+                                    {{ old('governorate') == $governorate->id ? 'selected' : '' }}>
+                                    {{ $governorate->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
                     </div>
                 </div>
@@ -110,16 +110,16 @@
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="region"> اختر المنطقة </label>
                         <select name="region" id="region"
-                        class="form-control custom-select custom-select-lg mb-3 select2"
-                        style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
-                        <option value="" disabled selected>اختر المنطقه </option>
-                        @foreach ($regions as $region)  <!-- Use your dynamic regions -->
-                            <option value="{{ $region->id }}"
-                                {{ old('region') == $region->id ? 'selected' : '' }}>
-                                {{ $region->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                            class="form-control custom-select custom-select-lg mb-3 select2"
+                            style="border: 0.2px solid rgb(199, 196, 196); width:100% !important;" required>
+                            <option value="" disabled selected>اختر المنطقه </option>
+                            @foreach ($regions as $region)
+                                <!-- Use your dynamic regions -->
+                                <option value="{{ $region->id }}" {{ old('region') == $region->id ? 'selected' : '' }}>
+                                    {{ $region->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
                     </div>
                 </div>
@@ -128,20 +128,20 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3">
                         <label class="pb-3" for="map_link"> رابط جوجل ماب </label>
-                        <input type="text" id="map_link" name="map_link" value="{{ old('map_link') }}" class="form-control" placeholder=" ادخل الرابط"
-                            required />
+                        <input type="text" id="map_link" name="map_link" value="{{ old('map_link') }}"
+                            class="form-control" placeholder=" ادخل الرابط" required />
                     </div>
                 </div>
                 <div class="form-row   mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3 col-6">
                         <label class="pb-3" for="long"> خطوط الطول </label>
-                        <input type="text" id="long" name="long" class="form-control"
-                            placeholder="  خطوط الطول " value="{{ old('long') }}" />
+                        <input type="text" id="long" name="long" class="form-control" placeholder="  خطوط الطول "
+                            value="{{ old('long') }}" />
                     </div>
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3 col-6">
                         <label class="pb-3" for="lat"> خطوط العرض </label>
-                        <input type="text" id="lat" name="Lat" class="form-control"
-                            placeholder="  خطوط العرض " value="{{ old('Lat') }}"/>
+                        <input type="text" id="lat" name="Lat" class="form-control" placeholder="  خطوط العرض "
+                            value="{{ old('Lat') }}" />
                     </div>
                 </div>
                 <div class="form-row   mx-2 mb-2 ">
@@ -159,8 +159,8 @@
                     </div>
                     <div class="input-group moftsh2 px-md-4 px-3 pt-3 col-6">
                         <label class="pb-3" for="days_num">عدد أيام العمل</label>
-                        <input type="number" id="days_num" name="days_num" value="{{ old('days_num') }}" class="form-control" max="7"
-                            min="1" required />
+                        <input type="number" id="days_num" name="days_num" value="{{ old('days_num') }}"
+                            class="form-control" max="7" min="1" required />
                     </div>
                 </div>
                 <!-- Container for dynamically added inputs -->
@@ -174,8 +174,8 @@
                 <div class="form-row mx-2 mb-2 ">
                     <div class="input-group moftsh2 px-md-4 px-3 pt-1">
                         <label class="pb-3" for="note"> اضف ملاحظتك </label>
-                        <textarea type="text" id="note" name="note" value="{{ old('note') }}" class="form-control note" placeholder="ملاحظتك"
-                            style="border-radius:20px;"></textarea>
+                        <textarea type="text" id="note" name="note" value="{{ old('note') }}" class="form-control note"
+                            placeholder="ملاحظتك" style="border-radius:20px;"></textarea>
                     </div>
                 </div>
                 <div class="container col-11 ">
@@ -284,11 +284,12 @@
                     fromTimeLabel.textContent = 'موعد البدايه';
 
                     const fromTimeInput = document.createElement('input');
-                    fromTimeInput.type = 'time'; // Changed to 'time' for time picker functionality
+                    fromTimeInput.type = 'time'; // Basic time picker functionality
                     fromTimeInput.id = `fromTime_${i}`;
                     fromTimeInput.name = 'from[]';
                     fromTimeInput.className = 'form-control';
                     fromTimeInput.required = true;
+
 
 
 

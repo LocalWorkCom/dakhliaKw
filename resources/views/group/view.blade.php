@@ -92,7 +92,6 @@
                                                 data: 'num_inspectors',
                                                 name: 'num_inspectors'
                                             },
-                                           
                                             {
                                                 data: 'action',
                                                 name: 'action',
@@ -371,7 +370,7 @@
                                     @endif
                                 </div>
 
-                               
+
 
                                 <span class="text-danger span-error">
                                     @if ($errors->has('nothing_updated'))
