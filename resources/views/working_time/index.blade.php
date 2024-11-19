@@ -267,23 +267,6 @@
                                     </div>
 
                                 </div>
-                                {{-- <div class="form-group mb-3">
-                                    <label class="d-flex justify-content-start pb-2" for="start_time_edit">بداية فترة
-                                        العمل</label>
-                                    <input type="time" id="start_time_edit" name="start_time_edit"
-                                        class="form-control" required>
-                                    <div id="start_time_editError" class="error-message text-danger"
-                                        style="display: none;"></div>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label class="d-flex justify-content-start pb-2" for="end_time_edit">نهاية فترة
-                                        العمل</label>
-                                    <input type="time" id="end_time_edit" name="end_time_edit" class="form-control"
-                                        required>
-                                    <div id="end_time_editError" class="error-message text-danger"
-                                        style="display: none;"></div>
-                                </div> --}}
                                 <div class="form-group mb-3">
                                     <label class="d-flex justify-content-start pb-2" for="color_edit"> لون
                                         فترة العمل</label>

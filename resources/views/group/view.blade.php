@@ -56,7 +56,7 @@
                                         <th>اسم قطاع</th>
                                         <th>عدد الدوريات</th>
                                         <th>عدد المفتشيين</th>
-                                        <th>عدد الجولات لكل دورية فى اليوم</th>
+                                        {{-- <th>عدد الجولات لكل دورية فى اليوم</th> --}}
 
                                         <th style="width:150px !important;">العمليات</th>
                                     </tr>
@@ -92,11 +92,6 @@
                                             {
                                                 data: 'num_inspectors',
                                                 name: 'num_inspectors'
-                                            },
-
-                                            {
-                                                data: 'points_inspector',
-                                                name: 'points_inspector'
                                             },
 
                                             {
@@ -377,7 +372,7 @@
                                     @endif
                                 </div>
 
-                                <div class="form-group mt-4 mb-3">
+                                {{-- <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
                                         الجولات لكل دورية فى اليوم </label>
                                     <input type="number" id="points_inspector_edit" name="points_inspector_edit"
@@ -385,7 +380,7 @@
                                     @if ($errors->has('points_inspector_edit'))
                                         <span class="text-danger">{{ $errors->first('points_inspector_edit') }}</span>
                                     @endif
-                                </div>
+                                </div> --}}
 
                                 <span class="text-danger span-error">
                                     @if ($errors->has('nothing_updated'))
