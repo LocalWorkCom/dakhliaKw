@@ -162,10 +162,14 @@
                         @foreach (getPointOptions() as $item)
                         <div class="col-6 col-md-5 col-lg-4 my-2">
                             <div class="form-check" style="direction: rtl">
-                                <input type="checkbox" id="exampleCheck{{ $item->id }}" value="{{ $item->id }}"
-                                    name="option_ids[]" class="form-check-input selectPermission"
-                                    style="width: 20px; height:20px; margin-left:1px; " {{ in_array($item->id, json_decode($data->options, true)) ? 'checked' : '' }}
-                                    >
+                                <input type="checkbox"
+                                id="exampleCheck{{ $item->id }}"
+                                value="{{ $item->id }}"
+                                name="option_ids[]"
+                                class="form-check-input selectPermission"
+                                style="width: 20px; height:20px; margin-left:1px;"
+                                {{ in_array($item->id, json_decode($data->options ?? '[]', true)) ? 'checked' : '' }}>
+
                                 <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}"
                                     style="font-size:20px;">  {{ $item->name }}</label>
                             </div>
