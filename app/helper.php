@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\InspectorGroupHistory;
 use App\Models\InspectorMission;
 use App\Models\Notification;
+use App\Models\PointOption;
 use App\Models\WorkingTime;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -233,7 +234,7 @@ function UploadFilesWithoutReal($path, $image, $model, $request)
 function UploadFilesIM($path, $image, $model, $request)
 {
 
-    dd($request);
+    //dd($request);
 
     $imagePaths = [];
     $thumbnail = $request;
@@ -575,4 +576,11 @@ function checkShift()
     }
 
     return false;
+}
+
+
+function getPointOptions()
+{
+$options= PointOption::get();
+    return $options;
 }

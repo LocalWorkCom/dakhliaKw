@@ -153,7 +153,8 @@ class ViolationController  extends Controller
             ->with('workingTime')
             ->get();
         if (!checkShift() && $request->flag_instantmission == 0 && $team_time->first()->day_off != 1) {
-            return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
+            $not_allow = ['لا يمكن تسجيل المخالفه خارج مواعيد العمل '];
+            return $this->respondError('Validation Error.', $not_allow, 404);
         }
         if ($request->civil_military == 1  || $request->civil_military == 3) {
             //عسكري
@@ -225,6 +226,8 @@ class ViolationController  extends Controller
             $new->civil_type = $request->civil_military;
             $new->violation_type = $cleanedString;
             $new->flag_instantmission = $request->flag_instantmission;
+            $new->note = $request->note;
+
             $new->description = $request->description ?? null;
             $new->flag = 1;
             $new->user_id = auth()->user()->id;
@@ -269,6 +272,8 @@ class ViolationController  extends Controller
             $new->mission_id = $request->mission_id;
             $new->file_num = $request->file_num;
             $new->description = $request->description ?? null;
+            $new->note = $request->note;
+
             $new->point_id = $point_id;
             $new->flag = 0;
             // // $new->user_id = auth()->user()->id;
@@ -290,7 +295,7 @@ class ViolationController  extends Controller
         if ($new) {
             $model = Violation::find($new->id);
 
-            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag', 'created_at']);
+            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag', 'created_at','note']);
             return $this->respondSuccess($success, 'Data Saved successfully.');
         } else {
             return $this->respondError('failed to save', ['error' => 'خطأ فى حفظ البيانات'], 404);
@@ -403,6 +408,7 @@ class ViolationController  extends Controller
                 'File_number' => $violation->file_num ?? null,
                 'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                 'image' => $violation->image,
+                'note' => $violation->note,
                 'violation_type' => $violationTypes,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
                 'civil_military_id' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('id') : '',
@@ -477,13 +483,13 @@ class ViolationController  extends Controller
             $inspectorsIds = GroupTeam::where('id', $instantMission->group_team_id)->value('inspector_ids');
 
             $inspectorsIdsArray = explode(',', $inspectorsIds);
-            $usersIds= inspector::whereIn('id',$inspectorsIdsArray)->pluck('user_id')->toArray();
+            $usersIds = inspector::whereIn('id', $inspectorsIdsArray)->pluck('user_id')->toArray();
             $violations = Violation::where('mission_id', $request->mission_id)
-            ->where('flag_instantmission', 1)
-            ->whereIn('user_id', $usersIds)
-            ->whereDate('created_at', $today)
-            ->where('status', 1)
-            ->get();
+                ->where('flag_instantmission', 1)
+                ->whereIn('user_id', $usersIds)
+                ->whereDate('created_at', $today)
+                ->where('status', 1)
+                ->get();
         }
 
         // Map violations and retrieve violation types
@@ -512,6 +518,7 @@ class ViolationController  extends Controller
                 'File_number' => $violation->file_num ?? null,
                 'grade' => grade::where('id', $violation->grade)->select('id', 'name')->first() ?? null,
                 'image' => $violation->image,
+                'note' => $violation->note,
                 'violation_type' => $violationTypes,
                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : '',
                 'civil_military_id' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('id') : '',
@@ -587,7 +594,7 @@ class ViolationController  extends Controller
         ], $messages);
 
         if ($validatedData->fails()) {
-            return $this->respondError('Validation Error.', $validatedData->errors(), 400);
+            return $this->respondError('Validation Error.', $validatedData->errors(), 404);
         }
         $today = Carbon::today()->format('Y-m-d');
         // Retrieve the currently authenticated user
@@ -598,9 +605,9 @@ class ViolationController  extends Controller
             ->where('inspector_id', $inspectorId)
             ->with('workingTime')
             ->first();
-        if (!checkShift() && $request->flag_instantmission == 0 && $team_time->day_off != 1) {
-            return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
-        }
+        // if (!checkShift() && $request->flag_instantmission == 0 && $team_time->day_off != 1) {
+        //     return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
+        // }
         // 1=> this violation of instant mission
         if ($request->flag_instantmission == "1") {
             $point_id = Null;
@@ -663,8 +670,9 @@ class ViolationController  extends Controller
                 $cutoffTime = $parent_violate->created_at->addMinutes($time_edit);
 
                 if (now() > $cutoffTime) {
-                    return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
-                } else {
+                    $not_allow = ['لا يمكن تسجيل المخالفه خارج مواعيد العمل '];
+                    return $this->respondError('Validation Error.', $not_allow, 400);
+                        } else {
                     $parent_id = $parent_violate->parent;
                     $images = [];
 
@@ -695,6 +703,7 @@ class ViolationController  extends Controller
                         $new->mission_id = $request->mission_id;
                         $new->point_id = $point_id;
                         $new->civil_type = $request->civil_military;
+                        $new->note = $request->note;
                         $new->violation_type = $cleanedString;
                         $new->flag_instantmission = $request->flag_instantmission;
                         $new->parent = $request->id;
@@ -747,6 +756,8 @@ class ViolationController  extends Controller
                         $new->mission_id = $request->mission_id;
                         $new->point_id = $point_id;
                         $new->civil_type = $request->civil_military;
+                        $new->note = $request->note;
+
                         $new->violation_type = $cleanedString;
                         $new->flag_instantmission = $request->flag_instantmission;
                         $new->parent = $parent_id;
@@ -781,7 +792,7 @@ class ViolationController  extends Controller
                             $model = Violation::find($new->id);
                             $created = Violation::find($parent_id);
 
-                            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag','note']);
                             $success['violation']['created_at'] = $created->created_at;
                             // dd($model->created_at , Violation::find($parent_id)->value('created_at'));
 
@@ -821,7 +832,8 @@ class ViolationController  extends Controller
                 $cutoffTime = $parent_violate->created_at->addMinutes($time_edit);
 
                 if (now() > $cutoffTime) {
-                    return $this->respondError('لا يمكنك تحديث هذا السجل بعد الوقت المحدد', [], 403);
+                    $not_allow = ['لا يمكن تسجيل المخالفه خارج مواعيد العمل '];
+                    return $this->respondError('Validation Error.', $not_allow, 400);
                 } else {
                     $parent_id = $parent_violate->parent;
                     $images = [];
@@ -847,6 +859,8 @@ class ViolationController  extends Controller
                         $new->flag_instantmission = $request->flag_instantmission;
                         $new->mission_id = $request->mission_id;
                         $new->file_num = $request->file_num;
+                        $new->note = $request->note;
+
                         $new->description = $request->description ?? null;
                         $new->point_id = $point_id;
                         $new->flag = 0;
@@ -871,7 +885,7 @@ class ViolationController  extends Controller
                         if ($new) {
                             $model = Violation::find($new->id);
 
-                            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag','note']);
                             $success['violation']['created_at'] = Violation::find($request->id)->value('created_at');
                             return $this->respondSuccess($success, 'Data Saved successfully.');
                         } else {
@@ -895,6 +909,8 @@ class ViolationController  extends Controller
                         $new->flag_instantmission = $request->flag_instantmission;
                         $new->mission_id = $request->mission_id;
                         $new->file_num = $request->file_num;
+                        $new->note = $request->note;
+
                         $new->description = $request->description ?? null;
                         $new->point_id = $point_id;
                         $new->flag = 0;
@@ -919,7 +935,7 @@ class ViolationController  extends Controller
                         if ($new) {
                             $model = Violation::find($new->id);
 
-                            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag']);
+                            $success['violation'] = $model->only(['id', 'name', 'military_number', 'Civil_number', 'file_num', 'grade', 'image', 'violation_type', 'user_id', 'description', 'flag','note']);
                             $success['violation']['created_at'] = Violation::find($parent_id)->value('created_at');
 
                             return $this->respondSuccess($success, 'Data Saved successfully.');

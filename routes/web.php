@@ -457,7 +457,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/Inspectors/TransferToEmployee', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove')->middleware('check.permission:edit Inspector');
     Route::post('/Inspectors/delete', [GroupTeamController::class, 'TransferToEmployee'])->name('inspectors.delete');
 
-    
+
     //statistics
     Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');
     Route::get('/statistics/search', [statisticController::class, 'getFilteredData'])->name('statistic.search');
@@ -472,7 +472,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('forceNames/delete', [forceNamesController::class, 'delete'])->name('forcenames.delete')->middleware('check.permission:delete ForceName');
 
 
-    Route::get('/testpoints', [testController::class, 'index']);
+    //Route::get('/testpoints', [testController::class, 'index']);
 
 });
 

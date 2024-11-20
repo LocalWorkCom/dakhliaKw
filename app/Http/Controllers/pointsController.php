@@ -196,6 +196,7 @@ class pointsController extends Controller
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
             $googleMapsUrl = $request->map_link;
+
             // $googleMapsUrl = '"https://maps.app.goo.gl/HMQTaXarnrLgatHU8"';
             $cleanUrl = trim($googleMapsUrl, '"');
 
@@ -214,6 +215,8 @@ class pointsController extends Controller
             $point->region_id = $request->region;
             $point->sector_id = $request->sector_id;
             $point->google_map = $request->map_link;
+            $point->options = json_encode($request->option_ids);
+
             if ($request->map_link) {
                 $point->lat = $request->Lat ? $request->Lat : $coordinates['latitude'];
                 $point->long = $request->long ? $request->long : $coordinates['longitude'];
@@ -417,6 +420,7 @@ class pointsController extends Controller
             $point->government_id = $request->governorate;
             $point->region_id = $request->region;
             $point->sector_id = $request->sector_id;
+            $point->options = json_encode($request->option_ids);
             $point->google_map = $request->map_link;
             if ($request->map_link) {
                 $point->lat = $request->Lat ? $request->Lat : $coordinates['latitude'];

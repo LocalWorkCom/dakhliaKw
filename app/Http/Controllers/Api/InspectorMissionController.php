@@ -19,9 +19,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Absence;
 use App\Models\AbsenceType;
 use App\Models\AttendanceEmployee;
+use App\Models\departements;
 use App\Models\ForceName;
 use App\Models\grade;
 use App\Models\GroupTeam;
+use App\Models\PointOption;
 use App\Models\User;
 use App\Models\ViolationTypes;
 use Illuminate\Support\Facades\Auth;
@@ -161,6 +163,12 @@ class InspectorMissionController extends Controller
                                 'point_location' => $point->google_map,
                                 'Point_availability' => $avilable,
                                 'latitude' => $point->lat,
+                                'point_options' => $point->options ?  PointOption::whereIn('id', json_decode($point->options, true))
+                                    ->select('id', 'name')
+                                    ->get()
+                                    ->toArray()
+                                    : null,
+
                                 'longitude' => $point->long,
                                 'is_visited' => $is_visited,
                                 'count_violation' => $violationCount,
@@ -365,6 +373,8 @@ class InspectorMissionController extends Controller
         $type = ViolationTypes::where('type_id', '0')->get();
         $grade = grade::where('type', 0)->get();
         $names = ForceName::get();
+        $departments = departements::whereNot('id', 1)->get();
+
         $absenceType = AbsenceType::all();
         $allViolationType = ViolationTypes::whereJsonContains('type_id',  $request->type)->get();
 
@@ -402,6 +412,9 @@ class InspectorMissionController extends Controller
             return $item->only(['id', 'name']);
         });
         $success['names'] = $names->map(function ($item) {
+            return $item->only(['id', 'name']);
+        });
+        $success['departments'] = $departments->map(function ($item) {
             return $item->only(['id', 'name']);
         });
         return $this->respondSuccess($success, 'Get Data successfully.');
