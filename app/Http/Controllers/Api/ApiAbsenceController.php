@@ -142,9 +142,9 @@ class ApiAbsenceController extends Controller
             ->where('inspector_id', $inspectorId)
             ->with('workingTime')
             ->get();
-        if (!checkShift() && $team_time->first()->day_off != 1) {
-            return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
-        }
+        // if (!checkShift() && $team_time->first()->day_off != 1) {
+        //     return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
+        // }
         $inspectorId = Inspector::where('user_id',  auth()->user()->id)->first();
         //  dd(auth()->user()->inspectors);
         $today = Carbon::today()->toDateString();
@@ -315,9 +315,9 @@ class ApiAbsenceController extends Controller
             ->where('inspector_id', $inspectorId)
             ->with('workingTime')
             ->get();
-        if (!checkShift() && $team_time->first()->day_off != 1) {
-            return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
-        }
+        // if (!checkShift() && $team_time->first()->day_off != 1) {
+        //     return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
+        // }
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
         //  dd(auth()->user()->inspectors);
         $today = Carbon::today()->toDateString();

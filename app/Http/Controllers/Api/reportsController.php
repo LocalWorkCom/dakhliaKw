@@ -412,6 +412,7 @@ class reportsController extends Controller
                         'inspector_name' => $violation->user_id ? $violation->user->name : null,
                         'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
                         'image' => $formattedImages ? $formattedImages : null,
+                        'note' => $violation->note,
                         'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
                         'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
                         'updated_at' => $violation->updated_at,
@@ -452,6 +453,8 @@ class reportsController extends Controller
                                 'inspector_name' => $violation->user_id ? $violation->user->name : null,
                                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
                                 'image' => $formattedImages ? $formattedImages : null,
+                                'note' =>$violation->note,
+
                                 'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
                                 'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
                                 'updated_at' => $violation->updated_at,
