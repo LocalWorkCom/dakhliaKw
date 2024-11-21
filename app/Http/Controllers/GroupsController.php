@@ -231,14 +231,14 @@ class GroupsController extends Controller
     {
         $messages = [
             'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
-            'points_inspector.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
+           // 'points_inspector.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
             'sector_id.required' => 'القطاع مطلوب ولا يمكن تركه فارغا'
 
         ];
 
         $validatedData = Validator::make($request->all(), [
             'name' => 'required',
-            'points_inspector' => 'required',
+            //'points_inspector' => 'required',
             'sector_id' => 'required|exists:sectors,id',
 
         ], $messages);
@@ -254,7 +254,7 @@ class GroupsController extends Controller
         try {
             $group = new Groups();
             $group->name = $request->name;
-            $group->points_inspector = $request->points_inspector;
+           // $group->points_inspector = $request->points_inspector;
             $group->sector_id = $request->sector_id;
             $group->created_departement = auth()->user()->department_id;
 
@@ -322,13 +322,13 @@ class GroupsController extends Controller
     {
         $messages = [
             'name_edit.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
-            'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
+           // 'points_inspector_edit.required' => 'نقاط التفتيش مطلوبة ولا يمكن تركها فارغة.',
             'sector_id.required' => 'القطاع مطلوب ولا يمكن تركه فارغا'
         ];
 
         $validatedData = Validator::make($request->all(), [
             'name_edit' => 'required',
-            'points_inspector_edit' => 'required',
+           // 'points_inspector_edit' => 'required',
             'sector_id' => 'required|integer',
         ], $messages);
 
@@ -346,10 +346,10 @@ class GroupsController extends Controller
             $updated = true;
         }
 
-        if ($group->points_inspector != $request->points_inspector_edit) {
-            $group->points_inspector = $request->points_inspector_edit;
-            $updated = true;
-        }
+        // if ($group->points_inspector != $request->points_inspector_edit) {
+        //     $group->points_inspector = $request->points_inspector_edit;
+        //     $updated = true;
+        // }
 
         if ($group->sector_id != $request->sector_id) {
             $group->sector_id = $request->sector_id;
@@ -362,7 +362,7 @@ class GroupsController extends Controller
             return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.'])->withInput()->with('editModal', true);
         }
 
-        
+
         $group->save();
 
         $startOfMonth = Carbon::now();

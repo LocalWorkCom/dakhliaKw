@@ -129,7 +129,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/absence/edit/{id}', [AbsenceTypeController::class, 'edit'])->name('absence_edit')->middleware('check.permission:edit Absence');
     Route::any('/absence_update', [AbsenceTypeController::class, 'update'])->name('absence_update')->middleware('check.permission:edit Absence');
     Route::any('/absence_store', [AbsenceTypeController::class, 'store'])->name('absence.store')->middleware('check.permission:create Absence');
-    Route::any('/absence/delete', [AbsenceTypeController::class, 'delete'])->name('absence.delete');
+    Route::any('/absence/delete', [AbsenceTypeController::class, 'delete'])->name('absence.delete')->middleware('check.permission:delete Absence');;
 
 
 
@@ -151,7 +151,7 @@ Route::middleware(['auth'])->group(function () {
     Route::any('/working_time/edit/{id}', [WorkingTimeController::class, 'edit'])->name('working_time.edit')->middleware('check.permission:edit WorkingTime');
 
     Route::post('/working_time/update', [WorkingTimeController::class, 'update'])->name('working_time.update');
-    Route::any('/working_time/delete', [WorkingTimeController::class, 'delete'])->name('working_time.delete');
+    Route::any('/working_time/delete', [WorkingTimeController::class, 'delete'])->name('working_time.delete')->middleware('check.permission:delete WorkingTime');
     Route::any('/working_time/show/{id}', [WorkingTimeController::class, 'show'])->name('working_time.show');
 
     // instantmission
@@ -300,7 +300,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('setting/government/update', [regionsController::class, 'updategovernment'])->name('government.update')->middleware('check.permission:edit Government');
     Route::get('setting/government/edit/{id}', [regionsController::class, 'editgovernment'])->name('government.edit')->middleware('check.permission:edit Government');
     Route::get('setting/government/show/{id}', [regionsController::class, 'showgovernment'])->name('government.show')->middleware('check.permission:view Government');
-    Route::any('setting/government/delete', [regionsController::class, 'deletegovernment'])->name('setting.government.delete');
+    Route::any('setting/government/delete', [regionsController::class, 'deletegovernment'])->name('setting.government.delete')->middleware('check.permission:delete Government');
     //endgovernment
     //Start Regions
     Route::get('setting/Regions/all/{id}', [regionsController::class, 'index'])->name('regions.index')->middleware('check.permission:view Region');
@@ -308,7 +308,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('setting/RegionBygovernment', [regionsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
     Route::post('setting/Regions/create', [regionsController::class, 'store'])->name('regions.store')->middleware('check.permission:create Region');
     Route::post('setting/Regions/edit', [regionsController::class, 'update'])->name('regions.update')->middleware('check.permission:edit Region');
-    Route::any('setting/Regions/delete', [regionsController::class, 'deleteRegions'])->name('setting.Regions.delete');
+    Route::any('setting/Regions/delete', [regionsController::class, 'deleteRegions'])->name('setting.Regions.delete')->middleware('check.permission:delete Region');
    //End Regions
     //Start sectors
     Route::get('sectors/all', [sectorsController::class, 'index'])->name('sectors.index')->middleware('check.permission:view Sector');
@@ -316,7 +316,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('sectors', [sectorsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
     Route::get('sectors/create', [sectorsController::class, 'create'])->name('sectors.create')->middleware('check.permission:create Sector');
     Route::post('sectors/add', [sectorsController::class, 'store'])->name('sectors.store')->middleware('check.permission:create Sector');
-    Route::post('sectors/delete', [sectorsController::class, 'delete'])->name('sectors.delete');
+    Route::post('sectors/delete', [sectorsController::class, 'delete'])->name('sectors.delete')->middleware('check.permission:delete Sector');
 //End sectors
     //Start points
     Route::get('points/all', [pointsController::class, 'index'])->name('points.index')->middleware('check.permission:view Point');
@@ -324,7 +324,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('points', [pointsController::class, 'getregionBygovernment'])->name('getAllregionsBygovernment')->middleware('check.permission:view Region');
     Route::get('points/create', [pointsController::class, 'create'])->name('points.create')->middleware('check.permission:create Point');
     Route::post('points/add', [pointsController::class, 'store'])->name('points.store')->middleware('check.permission:create Point');
-    Route::post('points/delete', [pointsController::class, 'delete'])->name('points.delete');
+    Route::post('points/delete', [pointsController::class, 'delete'])->name('points.delete')->middleware('check.permission:delete Point');
 
     // Route::post('points/edit', [pointsController::class, 'update'])->name('points.update')->middleware('check.permission:edit Point');
     //End points
@@ -368,6 +368,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('setting/violation/add', [ViolationTypesController::class, 'store'])->name('violations.store')->middleware('check.permission:create ViolationTypes');
     Route::get('setting/violation/show/{id}', [ViolationTypesController::class, 'show'])->name('violations.show')->middleware('check.permission:view ViolationTypes');
     Route::post('setting/violation/update', [ViolationTypesController::class, 'update'])->name('violations.update')->middleware('check.permission:edit ViolationTypes');
+    Route::post('setting/violation/delete', [ViolationTypesController::class, 'destroy'])->name('violations.delete')->middleware('check.permission:delete ViolationTypes');
     //End Violation
     //setting end
 
@@ -456,7 +457,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/Inspectors/TransferToEmployee', [InspectorController::class, 'TransferToEmployee'])->name('inspectors.remove')->middleware('check.permission:edit Inspector');
     Route::post('/Inspectors/delete', [GroupTeamController::class, 'TransferToEmployee'])->name('inspectors.delete');
 
-    
+
     //statistics
     Route::get('/statistics', [statisticController::class, 'index'])->name('statistic.show');
     Route::get('/statistics/search', [statisticController::class, 'getFilteredData'])->name('statistic.search');
@@ -464,14 +465,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/vacation/endDate', [VacationController::class, 'getExpectedEndDate'])->name('vacation.end_date');
 
     //forcenames
-    Route::get('/forceNames', [forceNamesController::class, 'index'])->name('forcenames.index');
-    Route::get('forceNames/all', [forceNamesController::class, 'getAllNames'])->name('forcenames.getAllNames');
-    Route::post('forceNames/add', [forceNamesController::class, 'store'])->name('forcenames.store');
-    Route::post('forceNames/edit', [forceNamesController::class, 'update'])->name('forcenames.update');
-    Route::post('forceNames/delete', [forceNamesController::class, 'delete'])->name('forcenames.delete');
+    Route::get('/forceNames', [forceNamesController::class, 'index'])->name('forcenames.index')->middleware('check.permission:view ForceName');
+    Route::get('forceNames/all', [forceNamesController::class, 'getAllNames'])->name('forcenames.getAllNames')->middleware('check.permission:view ForceName');
+    Route::post('forceNames/add', [forceNamesController::class, 'store'])->name('forcenames.store')->middleware('check.permission:store ForceName');
+    Route::post('forceNames/edit', [forceNamesController::class, 'update'])->name('forcenames.update')->middleware('check.permission:edit ForceName');
+    Route::post('forceNames/delete', [forceNamesController::class, 'delete'])->name('forcenames.delete')->middleware('check.permission:delete ForceName');
 
 
-    Route::get('/testpoints', [testController::class, 'index']);
+    //Route::get('/testpoints', [testController::class, 'index']);
 
 });
 

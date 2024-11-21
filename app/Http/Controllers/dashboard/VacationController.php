@@ -339,6 +339,9 @@ class VacationController extends Controller
                 if ($currentDate <= $request->start_date && $value->start_date <= $request->start_date && $ExpectedEndDate >= $request->start_date) {
                     return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
                 }
+                if ($currentDate <= $request->start_date && $value->start_date <= $request->start_date && $ExpectedEndDate < $request->start_date) {
+                    return redirect()->route('vacation.add', $id)->withErrors(['يوجد اجازة اخرى بنفس تاريخ البداية أو في نطاق التواريخ لنفس الموظف']);
+                }
             }
         }
 

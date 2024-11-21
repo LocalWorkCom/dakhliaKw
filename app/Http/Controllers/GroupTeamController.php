@@ -345,7 +345,6 @@ class GroupTeamController extends Controller
         // Determine which inspectors were added or removed
         $changeArr = array_diff($newInspectors, $oldInspectorIds);
         $removedArr = array_diff($oldInspectorIds, $newInspectors);
-        // Check if there are any changes; if not, return with a message
         if (empty($changeArr) && empty($removedArr) && $team->name === $newName && $team->working_tree_id == $request->working_tree_id && $service_order == $team->service_order) {
             return redirect()->back()->withErrors(['nothing_updated' => 'لم يتم تحديث أي بيانات.']);
         }
@@ -397,58 +396,58 @@ class GroupTeamController extends Controller
         }
 
         // Fetch all InspectorMissions from today until the end of the month for the current team and working tree ID
-        $data_missions = InspectorMission::where('date', '>=', $startDate)
-            // ->where('date', '<=', $endDate)
-            ->where('working_tree_id', $team->working_tree_id)
-            ->where('group_team_id', $id)
-            ->get();
-        // dd($data_missions);
-        $again = false;
-        $k = 1;
-        // Iterate through each mission
-        foreach ($data_missions as $data) {
-            // Attempt to find a mission with the new working_tree_id for the same date
-            $new_data_mission = InspectorMission::where('date', $data->date)
-                ->where('working_tree_id', $request->working_tree_id)
-                ->first();
+        // $data_missions = InspectorMission::where('date', '>=', $startDate)
+        //     // ->where('date', '<=', $endDate)
+        //     ->where('working_tree_id', $team->working_tree_id)
+        //     ->where('group_team_id', $id)
+        //     ->get();
+        // // dd($data_missions);
+        // $again = false;
+        // $k = 1;
+        // // Iterate through each mission
+        // foreach ($data_missions as $data) {
+        //     // Attempt to find a mission with the new working_tree_id for the same date
+        //     $new_data_mission = InspectorMission::where('date', $data->date)
+        //         ->where('working_tree_id', $request->working_tree_id)
+        //         ->first();
 
 
-            if ($new_data_mission && !$again) {
-                // Update mission with new working_tree_id details if it exists
-                $data->working_tree_id = $new_data_mission->working_tree_id;
-                $data->working_time_id = $new_data_mission->working_time_id;
-                $data->day_off = $new_data_mission->working_time_id ? 0 : 1;
-                $data->day_number = $new_data_mission->day_number;
-            } else {
-                // If no matching new_data_mission, fetch the working_tree_time for the new working_tree_id
+        //     if ($new_data_mission && !$again) {
+        //         // Update mission with new working_tree_id details if it exists
+        //         $data->working_tree_id = $new_data_mission->working_tree_id;
+        //         $data->working_time_id = $new_data_mission->working_time_id;
+        //         $data->day_off = $new_data_mission->working_time_id ? 0 : 1;
+        //         $data->day_number = $new_data_mission->day_number;
+        //     } else {
+        //         // If no matching new_data_mission, fetch the working_tree_time for the new working_tree_id
 
-                $new_work_tree = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
-                    ->where('day_num', $k)
-                    ->first();
+        //         $new_work_tree = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
+        //             ->where('day_num', $k)
+        //             ->first();
 
-                if (!$new_work_tree) {
-                    // Handle the case where no work tree is found for the initial day number
-                    $k = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
-                        ->min('day_num');
-                    $new_work_tree = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
-                        ->where('day_num', $k)
-                        ->first();
-                }
+        //         if (!$new_work_tree) {
+        //             // Handle the case where no work tree is found for the initial day number
+        //             $k = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
+        //                 ->min('day_num');
+        //             $new_work_tree = WorkingTreeTime::where('working_tree_id', $request->working_tree_id)
+        //                 ->where('day_num', $k)
+        //                 ->first();
+        //         }
 
-                // Update mission with found working_tree_time details
-                $data->working_tree_id = $new_work_tree->working_tree_id;
-                $data->working_time_id = $new_work_tree->working_time_id ?? null;
-                $data->day_off = $new_work_tree->working_time_id ? 0 : 1;
-                $data->day_number = $new_work_tree->day_num;
-                $k++;
-                // if($k == 2){
-                //     dd(0);
-                // }
-                $again = true;
-            }
-            // Save the updated data
-            $data->save();
-        }
+        //         // Update mission with found working_tree_time details
+        //         $data->working_tree_id = $new_work_tree->working_tree_id;
+        //         $data->working_time_id = $new_work_tree->working_time_id ?? null;
+        //         $data->day_off = $new_work_tree->working_time_id ? 0 : 1;
+        //         $data->day_number = $new_work_tree->day_num;
+        //         $k++;
+        //         // if($k == 2){
+        //         //     dd(0);
+        //         // }
+        //         $again = true;
+        //     }
+        // Save the updated data
+        // $data->save();
+        // }
 
         $team->name = $newName;
         // if (in_array($inspector_manager, $removedArr)) {
@@ -513,6 +512,7 @@ class GroupTeamController extends Controller
 
         // Generate missions for added or changed inspectors
         foreach ($changeArr as $Inspector) {
+
             $vacation_days = 0;
             $date = $start_day_date; // Start from the current date
             $GroupTeam = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$Inspector])->first();
@@ -532,13 +532,12 @@ class GroupTeamController extends Controller
                 for ($day_of_month = 1; $day_of_month <= $num_days + 1; $day_of_month++) {
                     // Determine if the day is a working day or a day off
                     $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
-                    $is_day_off = $day_in_cycle > $WorkingTree->working_days_num;
-                    $WorkingTreeTime = !$is_day_off
-                        ? WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
+                    // $is_day_off = $day_in_cycle > $WorkingTree->working_days_num;
+                    $WorkingTreeTime =
+                       WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
                         ->where('day_num', $day_in_cycle)
-                        ->first()
-                        : null;
-
+                        ->first();
+                
                     // Create a new InspectorMission record
                     $getExistPoints = InspectorMission::where('group_team_id', $GroupTeam->id)->where('group_id', $GroupTeam->group_id)
                         ->where('working_tree_id', $GroupTeam->working_tree_id)
@@ -546,15 +545,20 @@ class GroupTeamController extends Controller
                     // dd($getExistPoints);
                     if ($getExistPoints) {
                         $points = $getExistPoints->ids_group_point;
-                        $day_off = $getExistPoints->day_off;
                         $working_time_id = $getExistPoints->working_time_id;
+                        $day_off = $working_time_id ? 0 : 1;
+
                     } else {
-                        $day_off = $is_day_off ? 1 : 0;
                         $working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
+                        
+                        $day_off = $working_time_id ? 0 : 1;
                     }
 
                     $user_id  = Inspector::find($Inspector)->user_id;
-
+      
+                    // if ($Inspector == 62 && $day_in_cycle == 5){
+                    //     dd($WorkingTreeTime,$day_off,$working_time_id);
+                    // }
                     if ($vacation_days == 0) {
 
                         $EmployeeVacation = EmployeeVacation::where('employee_id', $user_id)->where('start_date', '=',  $date)->first(); //1/9/2024
@@ -1318,11 +1322,11 @@ class GroupTeamController extends Controller
                 ->with('showModal', false);
         }
         $check_exists = InspectorMission::where('inspector_id', $request->id_employee)
-        ->where(function ($query) {
-            $query->whereJsonLength('ids_group_point', '>', 0)
-                ->orWhereJsonLength('ids_instant_mission', '>', 0);
-        })
-        ->exists();
+            ->where(function ($query) {
+                $query->whereJsonLength('ids_group_point', '>', 0)
+                    ->orWhereJsonLength('ids_instant_mission', '>', 0);
+            })
+            ->exists();
 
         if ($check_exists) {
 

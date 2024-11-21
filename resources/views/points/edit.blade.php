@@ -155,8 +155,30 @@
 
                     </div>
                 </div>
-                <!-- Container for dynamically added inputs -->
+                {{-- {{ dd($data->options) }} --}}
+                <div class="form-row   mx-2 mb-2 ">
+                    <div class="input-group moftsh2 px-md-4 px-3 pt-3 col-12">
+                        <label class="pb-3" for="">الخيارات</label>
+                        @foreach (getPointOptions() as $item)
+                        <div class="col-6 col-md-5 col-lg-4 my-2">
+                            <div class="form-check" style="direction: rtl">
+                                <input type="checkbox"
+                                id="exampleCheck{{ $item->id }}"
+                                value="{{ $item->id }}"
+                                name="option_ids[]"
+                                class="form-check-input selectPermission"
+                                style="width: 20px; height:20px; margin-left:1px;"
+                                {{ in_array($item->id, json_decode($data->options ?? '[]', true)) ? 'checked' : '' }}>
 
+                                <label class="form-check-label m-1" for="exampleCheck{{ $item->id }}"
+                                    style="font-size:20px;">  {{ $item->name }}</label>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    </div>
+
+                </div>
                 <div id="dynamic-input-container">
 
                     @if ($data->work_type == 0 && $data->days_work)

@@ -166,7 +166,7 @@
                     var departmentShow = '<a href="{{ route('departments.show', ':id') }}" class="btn btn-sm"  style="background-color: #F7AF15;"> <i class="fa fa-eye"></i>  عرض</a>';
                     departmentShow = departmentShow.replace(':id', row.id);
                     var departmentDelete = '';
-                    @if(auth()->user()->rule_id == 2)
+                    @if(auth()->user()->hasPermission('delete departements'))
                         var departmentDelete = '<a class="btn btn-sm" style="background-color: #C91D1D;"  onclick="opendelete(id)">  <i class="fa fa-trash"></i> حذف </a>';
                         departmentDelete = departmentDelete.replace('id', row.id);
                     @endif

@@ -136,7 +136,8 @@ class paperTransactionController extends Controller
             ->with('workingTime')
             ->get();
         if (!checkShift() && $team_time->first()->day_off != 1) {
-            return $this->respondError('Validation Error.', 'لا يمكن تسجيل المخالفه خارج مواعيد العمل ', 400);
+            $not_allow = ['لا يمكن تسجيل المخالفه خارج مواعيد العمل '];
+            return $this->respondError('Validation Error.', $not_allow, 404);
 
          }
         $today = Carbon::today()->toDateString();

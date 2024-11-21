@@ -421,7 +421,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     flatpickr(
-        "#start_time, #end_time, #fromTime,#toTime, #start_time_edit, #end_time_edit, #start_time_show, #end_time_show, #fromTime, #toTime", {
+        " #fromTime,#toTime, #start_time_show, #end_time_show, #fromTime, #toTime", {
             enableTime: true, // Enable time picker
             noCalendar: true, // Disable calendar view
             dateFormat: "h:i K", // Set format for 12-hour time with AM/PM

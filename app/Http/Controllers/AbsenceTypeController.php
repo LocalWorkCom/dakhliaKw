@@ -31,7 +31,7 @@ class AbsenceTypeController extends Controller
             $delete_permission = null;
             $edit_permission = '<a class="btn btn-sm"  style="background-color: #274373;"  onclick="openEditModal(' . $row->id . ',' . $name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
 
-            if (Auth::user()->rule_id == 2) {
+            if (Auth::user()->hasPermission('delete Absence')) {
                 $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
             }
 

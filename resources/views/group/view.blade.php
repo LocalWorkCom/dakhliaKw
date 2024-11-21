@@ -56,7 +56,6 @@
                                         <th>اسم قطاع</th>
                                         <th>عدد الدوريات</th>
                                         <th>عدد المفتشيين</th>
-                                        <th>عدد الجولات لكل دورية فى اليوم</th>
 
                                         <th style="width:150px !important;">العمليات</th>
                                     </tr>
@@ -93,12 +92,6 @@
                                                 data: 'num_inspectors',
                                                 name: 'num_inspectors'
                                             },
-
-                                            {
-                                                data: 'points_inspector',
-                                                name: 'points_inspector'
-                                            },
-
                                             {
                                                 data: 'action',
                                                 name: 'action',
@@ -213,7 +206,7 @@
                                 </div>
 
 
-                                <div class="form-group mt-4 mb-3">
+                                {{-- <div class="form-group mt-4 mb-3">
                                     <label for="points_inspector" class="d-flex justify-content-start pt-3 pb-2">عدد الجولات
                                         لكل دورية فى اليوم</label>
                                     <input type="number" id="points_inspector" name="points_inspector" class="form-control"
@@ -222,7 +215,7 @@
                                     @if ($errors->has('points_inspector'))
                                         <span class="text-danger">{{ $errors->first('points_inspector') }}</span>
                                     @endif
-                                </div>
+                                </div> --}}
                                 <div class="text-end d-flex justify-content-end mx-2 pb-4 pt-2">
                                     <button type="submit" class="btn-all mx-2 "
                                         style="background-color: #274373; color: #ffffff;">
@@ -315,14 +308,14 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group mb-3">
+                            {{-- <div class="form-group mb-3">
                                 <label class="d-flex justify-content-start pb-2" for="points_inspector_show">
                                     عدد الجولات لكل دورية فى اليوم </label>
 
 
                                 <input type="number" id="points_inspector_show" name="points_inspector_show"
                                     class="form-control" disabled>
-                            </div>
+                            </div> --}}
 
 
                         </div>
@@ -377,15 +370,7 @@
                                     @endif
                                 </div>
 
-                                <div class="form-group mt-4 mb-3">
-                                    <label for="points_inspector_edit" class="d-flex justify-content-start pt-3 pb-2">عدد
-                                        الجولات لكل دورية فى اليوم </label>
-                                    <input type="number" id="points_inspector_edit" name="points_inspector_edit"
-                                        min="1" class="form-control" value="{{ old('points_inspector_edit') }}">
-                                    @if ($errors->has('points_inspector_edit'))
-                                        <span class="text-danger">{{ $errors->first('points_inspector_edit') }}</span>
-                                    @endif
-                                </div>
+
 
                                 <span class="text-danger span-error">
                                     @if ($errors->has('nothing_updated'))
@@ -539,7 +524,7 @@
 
                         // // Populate modal fields with data
                         document.getElementById('nameadd_show').value = data.group.name;
-                        document.getElementById('points_inspector_show').value = data.group.points_inspector;
+                        // document.getElementById('points_inspector_show').value = data.group.points_inspector;
                         document.getElementById('sector_show_id').value = data.group.sector_id;
                         // document.getElementById('id_show').value = data.id;
                         $('#view').modal('show');
@@ -563,7 +548,7 @@
 
                         // Populate modal fields with data
                         document.getElementById('name_edit').value = data.group.name;
-                        document.getElementById('points_inspector_edit').value = data.group.points_inspector;
+                        // document.getElementById('points_inspector_edit').value = data.group.points_inspector;
                         document.getElementById('id_edit').value = data.group.id;
 
                         // Set the selected sector in the dropdown

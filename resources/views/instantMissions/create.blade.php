@@ -136,7 +136,7 @@
                         <div class="form-group col-md-5 mx-2">
                             <label for="inspectors">المفتش</label>
                             <select id="inspectors" name="inspectors" class="form-control select2">
-                                <option selected disabled>اختار من القائمة</option>
+                                <option selected >اختار الكل </option>
                                 @foreach($inspectors as $inspector)
                                     <option value="{{ $inspector->id }}" {{ old('inspectors') == $inspector->id ? 'selected' : '' }}>
                                         {{ $inspector->name }}
