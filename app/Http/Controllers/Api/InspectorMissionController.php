@@ -445,6 +445,7 @@ class InspectorMissionController extends Controller
 
             if ($attendance) {
                 if ($request->has('AtendanceEmployee')) {
+                    $att_total=0;
                     foreach ($request->AtendanceEmployee as $item) {
 
                         $employeeValidator = Validator::make($item, [
@@ -464,9 +465,13 @@ class InspectorMissionController extends Controller
                         $emp->attendance_id = $attendance->id;
                         $emp->force_id = $item['department'] ?? null;
                         $emp->save();
+                        $att_total+=intval($item['name']);
 
                         $attendanceEmployees[] = $emp;
                     }
+                    $attendance->total =  $att_total;
+
+                    $attendance->save();
                 }
             }
         } else {
@@ -491,6 +496,7 @@ class InspectorMissionController extends Controller
 
                 if ($attendance) {
                     if ($request->has('AtendanceEmployee')) {
+                        $att_total=0;
                         foreach ($request->AtendanceEmployee as $item) {
 
                             $employeeValidator = Validator::make($item, [
@@ -510,9 +516,11 @@ class InspectorMissionController extends Controller
                             $emp->attendance_id = $attendance->id;
                             $emp->force_id = $item['department'] ?? null;
                             $emp->save();
-
+                            $att_total+=intval($item['name']);
                             $attendanceEmployees[] = $emp;
                         }
+                        $attendance->total=$att_total;
+                        $attendance->save();
                     }
                 }
             } else {
@@ -538,6 +546,7 @@ class InspectorMissionController extends Controller
 
                 if ($attendance) {
                     if ($request->has('AtendanceEmployee')) {
+                        $att_total=0;
                         foreach ($request->AtendanceEmployee as $item) {
 
                             $employeeValidator = Validator::make($item, [
@@ -557,9 +566,12 @@ class InspectorMissionController extends Controller
                             $emp->attendance_id = $attendance->id;
                             $emp->force_id = $item['department'] ?? null;
                             $emp->save();
-
+                            $att_total+=intval($item['name']);
                             $attendanceEmployees[] = $emp;
                         }
+
+                        $attendance->total=$att_total;
+                        $attendance->save();
                     }
                 }
             }
