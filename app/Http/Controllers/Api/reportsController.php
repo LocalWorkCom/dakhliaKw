@@ -76,7 +76,7 @@ class reportsController extends Controller
 
         $shiftData = $working_time
             ? $working_time->only(['id', 'name', 'start_time', 'end_time'])
-            : ['id' => null, 'name' =>'طوال اليوم', 'start_time' => '00:00', 'end_time' => '23:59'];
+            : ['id' => null, 'name' => 'طوال اليوم', 'start_time' => '00:00', 'end_time' => '23:59'];
 
         $teamName = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->value('name');
         $teamInspectors = GroupTeam::whereRaw('find_in_set(?, inspector_ids)', [$inspectorId])->pluck('inspector_ids')->toArray();
@@ -151,7 +151,7 @@ class reportsController extends Controller
             $absence_violations = AbsenceViolation::where('absence_id', $absence->id)->get();
 
             $data = [
-                'shift' =>$shiftData,
+                'shift' => $shiftData,
                 'abcence_day' => $absence->date,
                 'mission_id' => $absence->mission_id,
                 'can_update' => $absence->inspector_id == $inspectorId ? true : false,
@@ -453,7 +453,7 @@ class reportsController extends Controller
                                 'inspector_name' => $violation->user_id ? $violation->user->name : null,
                                 'civil_military' => $violation->civil_type ? ViolationTypes::where('id', $violation->civil_type)->value('name') : null,
                                 'image' => $formattedImages ? $formattedImages : null,
-                                'note' =>$violation->note,
+                                'note' => $violation->note,
 
                                 'created_at' => $violation->parent == 0 ? $violation->created_at : Violation::find($violation->parent)->created_at,
                                 'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : Violation::find($violation->parent)->created_at->format('H:i:s'),
@@ -514,8 +514,8 @@ class reportsController extends Controller
                         ];
                     } else {
                         $shiftDetails = [
-                            'start_time' => null,
-                            'end_time' => null,
+                            'start_time' => '00:00',
+                            'end_time' => '23:59',
                             'time' => null
                         ];
                     }
