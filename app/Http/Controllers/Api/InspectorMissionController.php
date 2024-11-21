@@ -657,18 +657,16 @@ class InspectorMissionController extends Controller
                 'total_individuals' => $attendanceEmployees->where('type_id', 1)->sum('name'), // Sum of `name` for type_id = 1
                 'total_workers' => $attendanceEmployees->where('type_id', 3)->sum('name'), // Sum of `name` for type_id = 3
                 'total_civilian' => $attendanceEmployees->where('type_id', 4)->sum('name'),
-                // 'force_names' => $attendanceEmployees->map(function ($emp, $index) {
-                //     return [
-                //         'index' => $index + 1,
-                //         'name' => $emp->name,
-                //         'type' => $emp->type->name,
-                //         'type_id' => $emp->type_id,
-                //         'force_id' => $emp->force_id,
-                //         'force_name' => $emp->force ? $emp->force->name : 'Unknown',
-                //         'grade' => $emp->grade_id ? $emp->grade->name : '',
-                //         'grade_id' => $emp->grade_id,
-                //     ];
-                // }),
+                'force_names' => $attendanceEmployees->map(function ($emp, $index) {
+                    return [
+                        'index' => $index + 1,
+                        'name' => $emp->name,
+                        'type' => $emp->type->name,
+                        'type_id' => $emp->type_id,
+                        'force_id' => $emp->force_id,
+                        'force_name' => $emp->force ? $emp->force->name : 'Unknown',
+                    ];
+                }),
                 'created_at' => $createdAt,
                 'created_at_time' => $createdAt->format('H:i:s'),
                 'inspector_name' => $name,
