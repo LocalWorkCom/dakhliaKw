@@ -440,15 +440,17 @@ class InspectorMissionController extends Controller
         //  }
         $inspectorId = Inspector::where('user_id', auth()->user()->id)->first();
         if (!$request->id) {
-            //dd($request->id);
 
-            $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
+            // $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
+            $totalNames = array_sum(array_column($request['AtendanceEmployee'], 'name'));
+
+           // dd($totalNames);
 
             $attendance = new Attendance();
             $attendance->date = Carbon::now()->format('Y-m-d');
             // $attendance->mission_id = $request->mission_id ?? null;
             $attendance->instant_id = $request->instant_mission_id;
-            $attendance->total = $attendanceCount;
+            $attendance->total = $totalNames;
             $attendance->inspector_id = $inspectorId->id;
             $attendance->parent = null;
             $attendance->flag = 1;
@@ -493,13 +495,14 @@ class InspectorMissionController extends Controller
             if ($isParent == null) {
                 $record->flag = 0;
                 $record->save();
-                $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
+                // $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
+                $totalNames = array_sum(array_column($request['AtendanceEmployee'], 'name'));
 
                 $attendance = new Attendance();
                 $attendance->date = Carbon::now()->format('Y-m-d');
                 //$attendance->mission_id = $request->mission_id;
                 $attendance->instant_id = $request->instant_mission_id;
-                $attendance->total = $attendanceCount;
+                $attendance->total = $totalNames;
                 $attendance->inspector_id = $inspectorId->id;
                 $attendance->parent = $request->id;
                 $attendance->flag = 1;
@@ -543,13 +546,13 @@ class InspectorMissionController extends Controller
                     $recs->flag = 0;
                     $recs->save();
                 }
-                $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
+                $totalNames = array_sum(array_column($request['AtendanceEmployee'], 'name'));
 
                 $attendance = new Attendance();
                 $attendance->date = Carbon::now()->format('Y-m-d');
                 //$attendance->mission_id = $request->mission_id;
                 $attendance->instant_id = $request->instant_mission_id;
-                $attendance->total = $attendanceCount;
+                $attendance->total = $totalNames;
                 $attendance->inspector_id = $inspectorId->id;
                 $attendance->parent = $isParent;
                 $attendance->flag = 1;
@@ -648,23 +651,23 @@ class InspectorMissionController extends Controller
             return [
                 'id' => $attendance->id,
                 'force_name' => 'ادارة (' . implode(', ', array_column($forceData, 'force_name')) . ')',
-                'total_force' => $attendanceEmployees->count(),
-                'total_police' => $attendanceEmployees->where('type_id', 2)->count(),
-                'total_individuals' => $attendanceEmployees->where('type_id', 1)->count(),
-                'total_workers' => $attendanceEmployees->where('type_id', 3)->count(),
-                'total_civilian' => $attendanceEmployees->where('type_id', 4)->count(),
-                'force_names' => $attendanceEmployees->map(function ($emp, $index) {
-                    return [
-                        'index' => $index + 1,
-                        'name' => $emp->name,
-                        'type' => $emp->type->name,
-                        'type_id' => $emp->type_id,
-                        'force_id' => $emp->force_id,
-                        'force_name' => $emp->force ? $emp->force->name : 'Unknown',
-                        'grade' => $emp->grade_id ? $emp->grade->name : '',
-                        'grade_id' => $emp->grade_id,
-                    ];
-                }),
+                'total_force' => $attendanceEmployees->sum('name'), // Sum of all `name` values
+                'total_police' => $attendanceEmployees->where('type_id', 2)->sum('name'), // Sum of `name` for type_id = 2
+                'total_individuals' => $attendanceEmployees->where('type_id', 1)->sum('name'), // Sum of `name` for type_id = 1
+                'total_workers' => $attendanceEmployees->where('type_id', 3)->sum('name'), // Sum of `name` for type_id = 3
+                'total_civilian' => $attendanceEmployees->where('type_id', 4)->sum('name'),
+                // 'force_names' => $attendanceEmployees->map(function ($emp, $index) {
+                //     return [
+                //         'index' => $index + 1,
+                //         'name' => $emp->name,
+                //         'type' => $emp->type->name,
+                //         'type_id' => $emp->type_id,
+                //         'force_id' => $emp->force_id,
+                //         'force_name' => $emp->force ? $emp->force->name : 'Unknown',
+                //         'grade' => $emp->grade_id ? $emp->grade->name : '',
+                //         'grade_id' => $emp->grade_id,
+                //     ];
+                // }),
                 'created_at' => $createdAt,
                 'created_at_time' => $createdAt->format('H:i:s'),
                 'inspector_name' => $name,
