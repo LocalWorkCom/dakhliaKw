@@ -374,7 +374,8 @@ class InspectorMissionController extends Controller
         $grade = grade::where('type', 0)->get();
         $names = ForceName::get();
         $departments = departements::whereNot('id', 1)->get();
-
+        $countries = getCountries();
+        $success['countries'] = $countries;
         $absenceType = AbsenceType::all();
         $allViolationType = ViolationTypes::whereJsonContains('type_id',  $request->type)->get();
 
