@@ -654,17 +654,17 @@ class reportsController extends Controller
                     'id' => $attendance->id,
                     'force_name' => 'ادارة (' . implode(', ', $forceNames) . ')',
                     'total_force' => $attendanceEmployees->sum('name'), // Sum of all `name` values
-                'total_police' => $attendanceEmployees->where('type_id', 2)->sum('name'), // Sum of `name` for type_id = 2
-                'total_individuals' => $attendanceEmployees->where('type_id', 1)->sum('name'), // Sum of `name` for type_id = 1
-                'total_workers' => $attendanceEmployees->where('type_id', 3)->sum('name'), // Sum of `name` for type_id = 3
-                'total_civilian' => $attendanceEmployees->where('type_id', 4)->sum('name'),
-                    'force_names' => $attendanceEmployees->map(function ($emp, $index) {
-                        return [
-                            'index' => $index + 1,
-                            'name' => $emp->name,
-                            'grade' => $emp->grade_id ? $emp->grade->name : '',
-                        ];
-                    }),
+                    'total_police' => $attendanceEmployees->where('type_id', 2)->sum('name'), // Sum of `name` for type_id = 2
+                    'total_individuals' => $attendanceEmployees->where('type_id', 1)->sum('name'), // Sum of `name` for type_id = 1
+                    'total_workers' => $attendanceEmployees->where('type_id', 3)->sum('name'), // Sum of `name` for type_id = 3
+                    'total_civilian' => $attendanceEmployees->where('type_id', 4)->sum('name'),
+                    // 'force_names' => $attendanceEmployees->map(function ($emp, $index) {
+                    //     return [
+                    //         'index' => $index + 1,
+                    //         'name' => $emp->name,
+                    //         'grade' => $emp->grade_id ? $emp->grade->name : '',
+                    //     ];
+                    // }),
                     'created_at' => $attendance->parent == 0 ? $attendance->created_at : Attendance::find($attendance->parent)->created_at,
                     'created_at_time' => $attendance->parent == 0 ? $attendance->created_at->format('H:i:s') : Attendance::find($attendance->parent)->created_at->format('H:i:s'),
                     'inspector_name' => $name,
