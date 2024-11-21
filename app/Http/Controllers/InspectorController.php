@@ -188,6 +188,7 @@ class InspectorController extends Controller
             $users = User::where('id', '!=', auth()->user()->id)
                 ->whereNotIn('id', $inspectorUserIds)
                 ->whereNotIn('id', $allmangers)
+                ->whereNot('grade_id',null)
                 ->get();
         } else {
             $users = User::with('department')
@@ -198,6 +199,7 @@ class InspectorController extends Controller
                 })
                 ->where('users.id', '!=', $department->manger)
                 ->where('users.id', '!=', auth()->user()->id)
+                ->whereNot('grade_id',null)
                 ->whereNotIn('users.id', $inspectorUserIds)
                 ->select('users.*') // Ensure only `users` columns are selected
                 ->get();
