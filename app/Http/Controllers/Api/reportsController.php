@@ -653,11 +653,11 @@ class reportsController extends Controller
                 return [
                     'id' => $attendance->id,
                     'force_name' => 'ادارة (' . implode(', ', $forceNames) . ')',
-                    'total_force' => $attendanceEmployees->count(),
-                    'total_police' => $attendanceEmployees->where('type_id', 2)->count(),
-                    'total_individuals' => $attendanceEmployees->where('type_id', 1)->count(),
-                    'total_workers' => $attendanceEmployees->where('type_id', 3)->count(),
-                    'total_civilian' => $attendanceEmployees->where('type_id', 4)->count(),
+                    'total_force' => $attendanceEmployees->sum('name'), // Sum of all `name` values
+                'total_police' => $attendanceEmployees->where('type_id', 2)->sum('name'), // Sum of `name` for type_id = 2
+                'total_individuals' => $attendanceEmployees->where('type_id', 1)->sum('name'), // Sum of `name` for type_id = 1
+                'total_workers' => $attendanceEmployees->where('type_id', 3)->sum('name'), // Sum of `name` for type_id = 3
+                'total_civilian' => $attendanceEmployees->where('type_id', 4)->sum('name'),
                     'force_names' => $attendanceEmployees->map(function ($emp, $index) {
                         return [
                             'index' => $index + 1,
