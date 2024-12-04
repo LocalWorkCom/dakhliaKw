@@ -32,20 +32,13 @@
                                 <th>التاريخ:</th>
                                 <td>{{ $attendance->date }}</td>
                             </tr>
+                            <tr>
+                                <th>الأجمالى :</th>
+                                <td>{{ $attendance->total }}</td>
+                            </tr>
                             <!-- Loop through employees for each attendance -->
                             @foreach ($attendance->employees as $employee)
-                                <tr>
-                                    <th>أسم الموظف :</th>
-                                    <td>{{ $employee->name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>رقم العسكرى:</th>
-                                    <td>{{ $employee->military_number ?? 'لا يوجد رقم عسكرى' }}</td>
-                                </tr>
-                                <tr>
-                                    <th>الرتبه:</th>
-                                    <td>{{ $employee->grade->name ?? 'N/A' }}</td>
-                                </tr>
+                                
                                 <tr>
                                     <th>الفئه:</th>
                                     <td>{{ $employee->type->name ?? 'N/A' }}</td>
