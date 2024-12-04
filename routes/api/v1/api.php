@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Api\InspectorMissionController;
 use App\Http\Controllers\Api\paperTransactionController;
+use App\Http\Controllers\Api\pointsController;
 use App\Http\Controllers\Api\VacationController;
 use App\Http\Controllers\Api\ViolationController;
 
@@ -77,5 +78,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::any('/attendance/types', [InspectorMissionController::class, 'get_Alltypes']);
     Route::any('/attendance/add',  [InspectorMissionController::class, 'addAttendance']);
     Route::any('/attendance/all', [InspectorMissionController::class, 'getAllAttendance']);
+
+    //point contents
+    Route::any('/point/contents', [pointsController::class, 'index']);
+    Route::any('/point/contents/store', [pointsController::class, 'store']);
 
 });

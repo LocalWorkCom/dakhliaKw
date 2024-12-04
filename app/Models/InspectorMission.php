@@ -58,6 +58,11 @@ class InspectorMission extends Model
     {
         return $this->hasMany(PaperTransaction::class);
     }
+    public function pointContents()
+    {
+        return $this->hasMany(PointContent::class, 'mission_id');
+    }
+
     public function workingTree()
     {
         return $this->belongsTo(WorkingTree::class, 'working_tree_id');

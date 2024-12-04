@@ -140,12 +140,12 @@ class paperTransactionController extends Controller
             return $this->respondError('Validation Error.', $not_allow, 404);
 
          }
-        $today = Carbon::today()->toDateString();
-        $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
-        $inspector = InspectorMission::where('inspector_id', $inspectorId)
-            ->where('date', $today)
-            ->where('day_off', 0)
-            ->first();
+        // $today = Carbon::today()->toDateString();
+        // $inspectorId = Inspector::where('user_id', auth()->user()->id)->value('id');
+        // $inspector = InspectorMission::where('inspector_id', $inspectorId)
+        //     ->where('date', $today)
+        //     ->where('day_off', 0)
+        //     ->first();
 
         if ($request->id) {
             $record = paperTransaction::where('id', $request->id)->first();

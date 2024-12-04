@@ -31,7 +31,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use IntlDateFormatter;
 use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
-
 class InspectorMissionController extends Controller
 {
     function isTimeAvailable($pointStart, $pointEnd)
