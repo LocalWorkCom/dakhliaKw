@@ -48,14 +48,15 @@ class pointsController extends Controller
             // Retrieve violation types based on the existing ids
             $dungeon_info = DungeonInfo::where('content_id', $violation->id)
                 ->get();
+                $inspectorId_content = Inspector::where('user_id', $violation->inspector_id)->value('id');
 
             $WeaponInfo = WeaponInfo::where('content_id', $violation->id)->get();
             return [
                 'id' => $violation->id,
-                'can_update' => $violation->inspector_id == auth()->user()->inspectorId ? true : false,
-                'InspectorId' => $violation->inspector_id ?? null,
-                'InspectorName' => $violation->inspector_id->name ?? null,
-                'Inspectorgrade' => $violation->inspector_id->grade->name ?? null,
+                'can_update' => $inspectorId_content == auth()->user()->id ? true : false,
+                'InspectorId' => $inspectorId_content ?? null,
+                'InspectorName' => $violation->inspector->name ?? null,
+                // 'Inspectorgrade' => $violation->inspector_id->grade->name ?? null,
                 'mechanisms_num' => $violation->mechanisms_num,
                 'cams_num' => $violation->cams_num ?? null,
                 'computers_num' => $violation->computers_num ?? null,
