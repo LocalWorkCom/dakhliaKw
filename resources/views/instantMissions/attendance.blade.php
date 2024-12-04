@@ -38,14 +38,17 @@
                             </tr>
                             <!-- Loop through employees for each attendance -->
                             @foreach ($attendance->employees as $employee)
-                                
+                            <tr>
+                                <th>أسم الاداره:</th>
+                                <td>{{ $employee->force->name ?? 'N/A' }}</td>
+                            </tr>
                                 <tr>
                                     <th>الفئه:</th>
                                     <td>{{ $employee->type->name ?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
-                                    <th>أسم الاداره:</th>
-                                    <td>{{ $employee->force->name ?? 'N/A' }}</td>
+                                    <th>الأجمالى:</th>
+                                    <td>{{ $employee->name ?? 'N/A' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
