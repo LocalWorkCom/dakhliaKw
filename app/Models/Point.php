@@ -13,7 +13,17 @@ class Point extends Model
 
 
     protected $fillable = [
-        'name','government_id ','region_id ','sector_id ','google_map','lat','long','note','work_type','days_work','created_by '
+        'name',
+        'government_id ',
+        'region_id ',
+        'sector_id ',
+        'google_map',
+        'lat',
+        'long',
+        'note',
+        'work_type',
+        'days_work',
+        'created_by '
     ];
     protected $casts = [
         'days_work' => 'array',
@@ -22,6 +32,11 @@ class Point extends Model
     {
         return $this->belongsTo(Government::class);
     }
+    public function pointContents()
+    {
+        return $this->hasMany(PointContent::class, 'point_id');
+    }
+
     public function pointDays()
     {
         return $this->hasMany(PointDays::class, 'point_id');

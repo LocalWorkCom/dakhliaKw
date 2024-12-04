@@ -19,6 +19,10 @@ class Inspector extends Model
     {
         return $this->belongsTo(Groups::class);
     }
+    public function pointContents()
+    {
+        return $this->hasMany(PointContent::class, 'inspector_id');
+    }
 
     public function user()
     {
