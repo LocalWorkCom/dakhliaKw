@@ -173,54 +173,57 @@ class GroupPointsController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         // dd($id);
+        // Find the Grouppoint being updated
+        // Get the Grouppoint being updated
         $points = Grouppoint::find($request->id);
-        $oldPointsIDs = $points->points_ids;
+        // Ensure $points->points_ids is an array
+        $oldPointsIDs = is_array($points->points_ids) ? $points->points_ids : json_decode($points->points_ids, true);
+
+        // Ensure $request->pointsIDs is an array
+        $newPointsIDs = is_array($request->pointsIDs) ? $request->pointsIDs : json_decode($request->pointsIDs, true);
+
+        // Update the Grouppoint fields
         $points->name = $request->name;
-        $points->points_ids = $request->pointsIDs;
+        $points->points_ids = $newPointsIDs; // Ensure the points_ids are stored as JSON
         $points->government_id = $request->government_id;
         $points->flag = 1;
+        $points->deleted = 0;
         $points->save();
 
-        // Decode pointsIDs array
-        $pointsIDs = is_array($request->pointsIDs) ? $request->pointsIDs : json_decode($request->pointsIDs, true);
+        // Find removed and newly added IDs
+        $removedPointsIDs = array_diff($oldPointsIDs, $newPointsIDs); // IDs removed from the group
+        $newAddedIDs = array_diff($newPointsIDs, $oldPointsIDs); // IDs newly added to the group
 
-        // Retrieve the old points_ids from the database
-
-
-        // Find removed values
-        $removedPointsIDs = array_diff($oldPointsIDs, $pointsIDs);
-
-        //dd($removedPointsIDs);
-
-        // Handle deletion of records with flag = 0 and matching points_ids
-        $deleted = Grouppoint::where('flag', 0)
-            ->where(function ($query) use ($pointsIDs) {
-                foreach ($pointsIDs as $id) {
+        // Handle newly added IDs: Update `deleted` to 1
+        if (!empty($newAddedIDs)) {
+            Grouppoint::where(function ($query) use ($newAddedIDs) {
+                foreach ($newAddedIDs as $id) {
                     $query->orWhereRaw('JSON_CONTAINS(points_ids, ?) = 1', [json_encode($id)]);
                 }
-            })
-            ->get();
+            })->where('flag', 0)->update(['deleted' => 1]);
+        }
 
-        // foreach ($deleted as $record) {
-        //     // Optional: Perform actions with the retrieved records
-        //     $record->delete();
-        // }
-        // Add removed values to Grouppoint with flag = 0
-        foreach ($removedPointsIDs as $removedID) {
-            $pointNew = Point::find($removedID);
-            if ($pointNew) { // Check if the Point exists
-                // Find the corresponding Grouppoint instance
-                $grouppoint = Grouppoint::where('points_ids', 'like', '%"' . $removedID . '"%')->first(); // Adjust query as needed
-                //dd($pointNew ,$removedID,$grouppoint);
-
-                if ($grouppoint) { // Ensure the Grouppoint exists
-                    $grouppoint->update([
-                        'deleted' => 0,
-                        'flag' => 0,
-                    ]);
-                }
+        // Handle removed IDs: Update `deleted` to 1 and `flag` to 0
+        if (!empty($removedPointsIDs)) {
+            foreach ($removedPointsIDs as $removedID) {
+                // $pointNew = Point::find($removedID);
+                // if ($pointNew) { // Check if the Point exists
+                $grouppoint = Grouppoint::where('points_ids', 'like', '%"' . $removedID . '"%')
+                ->where('flag', 0)->first();
+               // dd($removedPointsIDs ,$removedID,$grouppoint );
+                //dd($grouppoint , $removedID );
+                $grouppoint->deleted = 0;
+                $grouppoint->save();
+                // if ($grouppoint) { // Ensure the Grouppoint exists
+                // $grouppoint->update([
+                //     'deleted' => 0,
+                //     'flag' => 0,
+                // ]);
+                // }
+                // }
             }
         }
+
 
         return redirect()->route('points.index')->with('message', 'تم تعديل مجموعه ');
     }
