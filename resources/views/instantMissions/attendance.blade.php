@@ -40,15 +40,15 @@
                             @foreach ($attendance->employees as $employee)
                             <tr>
                                 <th>أسم الاداره:</th>
-                                <td>{{ $employee->force->name ?? 'N/A' }}</td>
+                                <td>{{ $employee->force->name ?? 'لا يوجد' }}</td>
                             </tr>
                                 <tr>
                                     <th>الفئه:</th>
-                                    <td>{{ $employee->type->name ?? 'N/A' }}</td>
+                                    <td>{{ $employee->type->name ?? 'لا يوجد' }}</td>
                                 </tr>
                                 <tr>
                                     <th>الأجمالى:</th>
-                                    <td>{{ $employee->name ?? 'N/A' }}</td>
+                                    <td>{{ $employee->name ?? 'لا يوجد' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
