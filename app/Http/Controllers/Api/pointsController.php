@@ -156,7 +156,7 @@ class pointsController extends Controller
                         $new_dungeon->men_num = $item["men_num"];
                         $new_dungeon->women_num = $item["women_num"];
                         $new_dungeon->overtake = $item["overtake"];
-                        $new_dungeon->duration = $item["duration"];
+                        $new_dungeon->duration =$item["duration"] ?? 0;
                         $new_dungeon->note = $item["note"];
                         $new_dungeon->content_id = $new->id;
                         $new_dungeon->save();
@@ -207,7 +207,7 @@ class pointsController extends Controller
                         $new_dungeon->men_num = $item["men_num"];
                         $new_dungeon->women_num = $item["women_num"];
                         $new_dungeon->overtake = $item["overtake"];
-                        $new_dungeon->duration = $item["duration"];
+                        $new_dungeon->duration = $item["duration"] ?? 0;
                         $new_dungeon->note = $item["note"];
                         $new_dungeon->content_id = $new->id;
                         $new_dungeon->save();
@@ -257,7 +257,7 @@ class pointsController extends Controller
                     $new_dungeon->men_num = $item["men_num"];
                     $new_dungeon->women_num = $item["women_num"];
                     $new_dungeon->overtake = $item["overtake"];
-                    $new_dungeon->duration = $item["duration"];
+                    $new_dungeon->duration = $item["duration"] ?? 0;
                     $new_dungeon->note = $item["note"];
                     $new_dungeon->content_id = $new->id;
                     $new_dungeon->save();
