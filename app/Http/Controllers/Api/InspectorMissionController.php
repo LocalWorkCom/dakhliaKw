@@ -47,27 +47,24 @@ class InspectorMissionController extends Controller
     public function getMissionsByInspector()
     {
         $today = Carbon::today()->format('Y-m-d');
-
-        // Retrieve the currently authenticated inspector
+        // Retrieve the currently authenticated user
         $inspector = Inspector::where('user_id', Auth::id())->first();
-
-        if (!$inspector) {
-            return $this->respondError('Inspector not found.', 404);
-        }
-
+        // dd($inspectorId);
         $inspectorId = $inspector->id;
-
-        // Get the inspector's shift for today
         $team_time = InspectorMission::whereDate('date', $today)
             ->where('inspector_id', $inspectorId)
             ->with('workingTime')
-            ->first();
+            ->get();
+        // Check if the collection has any items
+        if ($team_time->isNotEmpty() && $team_time->first()->day_off != 1) {
 
-        if ($team_time && $team_time->day_off != 1) {
+            // $startTimeofTeam = $team_time->first()->workingTime->start_time;
+            // $endTimeofTeam = $team_time->first()->workingTime->end_time;
+            // $name = $team_time->first()->workingTime->name;
             $inspector_shift = [
-                'name' => $team_time->workingTime->name ?? 'غير محدد',
-                'start_time' => $team_time->workingTime->start_time ?? '00:00',
-                'end_time' => $team_time->workingTime->end_time ?? '23:59'
+                'name' => $team_time->first()->workingTime->name,
+                'start_time' => $team_time->first()->workingTime->start_time,
+                'end_time' => $team_time->first()->workingTime->end_time
             ];
         } else {
             $inspector_shift = [
@@ -76,47 +73,77 @@ class InspectorMissionController extends Controller
                 'end_time' => '23:59'
             ];
         }
+        // $currentTime = Carbon::now()->format('H:i');
+        // $isBetween = Carbon::parse($team_time->first()->workingTime->start_time)->isBefore($currentTime) && Carbon::parse($team_time->first()->workingTime->end_time)->isAfter($currentTime);
+        // if (!$isBetween) {
+        // }
+        // else{
 
-        // Get missions for the specific inspector
+        // }
+        // Retrieve the missions for the specific inspector
         $missions = InspectorMission::whereDate('date', $today)
             ->where('inspector_id', $inspectorId)
+            // ->with('workingTime', 'groupPoints.government')
             ->get();
+        $instantmissioncount = 0; //$instantmissions->count();
+        $missionCount = 0; //$missions->count();
 
+        $count = 0;
         $missionData = [];
+        $avilable = true;
+        $groupPointCount = 0;
         $instantMissionData = [];
-        $missionCount = 0;
-        $instantMissionCount = 0;
-
         foreach ($missions as $mission) {
-            $idsGroupPoint = is_array($mission->ids_group_point) ? $mission->ids_group_point : explode(',', $mission->ids_group_point ?? '');
-
+            $idsGroupPoint = is_array($mission->ids_group_point) ? $mission->ids_group_point : explode(',', $mission->ids_group_point);
+            if (!is_null($mission->ids_instant_mission)) {
+                // The variable is null
+                $instantMissions = is_array($mission->ids_instant_mission) ? $mission->ids_instant_mission : explode(',', $mission->ids_instant_mission);
+            } else {
+                $instantMissions = $mission->ids_instant_mission;
+            }
+            $groupPointCount = count($idsGroupPoint);
+            $count += $groupPointCount;
             foreach ($idsGroupPoint as $groupId) {
+                $groupPointsData = [];
                 $groupPoint = Grouppoint::with('government', 'sector')->find($groupId);
-
                 if ($groupPoint) {
-                    $idsPoints = is_array($groupPoint->points_ids) ? $groupPoint->points_ids : explode(',', $groupPoint->points_ids ?? '');
+                    $idsPoints = is_array($groupPoint->points_ids) ? $groupPoint->points_ids : explode(',', $groupPoint->points_ids);
                     $groupPointsData = [];
 
                     foreach ($idsPoints as $pointId) {
-                        $point = Point::with('government', 'sector')->find($pointId);
-
+                        $point = Point::with('government')->find($pointId);
                         if ($point) {
-                            $todayName = date('w');
-                            $inspectionTime = 'طوال اليوم';
-                            $available = true;
+                            $today = date('w');
+                            $inspectionTime = '';
+                            $avilable = false;
+                            $pointTime = ['startTime' => '00:00', 'endTime' => '23:59']; // Default to full day
 
                             if ($point->work_type == 1) {
-                                $workTime = PointDays::where('point_id', $pointId)->where('name', $todayName)->first();
+                                $workTime = PointDays::where('point_id', $pointId)->where('name', $today)->first();
 
                                 if ($workTime) {
-                                    $fromTime = $workTime->from;
-                                    $toTime = $workTime->to;
 
-                                    $inspectionTime = "من {$fromTime} " . ($fromTime > 12 ? 'مساءا' : 'صباحا') . " إلى {$toTime} " . ($toTime > 12 ? 'مساءا' : 'صباحا');
-                                    $available = $this->isTimeAvailable($fromTime, $toTime);
+                                    $startTime = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d') . ' ' . $workTime->from);
+
+                                    $endtTime = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d') . ' ' . $workTime->to);
+
+                                    $fromTime = $startTime->format('H:i');
+                                    $toTime = $endtTime->format('H:i');
+
+                                    $inspectionTime = "من {$fromTime} " . ($workTime->from > 12 ? 'مساءا' : 'صباحا') . " الى {$toTime} " . ($workTime->to > 12 ? 'مساءا' : 'صباحا');
+                                    $avilable = $this->isTimeAvailable($fromTime, $toTime);
+
+                                    $pointTime = ['startTime' => $fromTime, 'endTime' => $toTime];
                                 } else {
-                                    $available = false;
+
+                                    // If working time is not found, default to full day
+                                    $inspectionTime = 'طول اليوم';
+                                    $avilable = false;
                                 }
+                            } else {
+
+                                $inspectionTime = 'طول اليوم';
+                                $avilable = true;
                             }
 
                             $date = Carbon::today()->format('Y-m-d');
@@ -124,27 +151,37 @@ class InspectorMissionController extends Controller
                             $absenceCount = Absence::where('point_id', $point->id)->where('flag', 1)->whereDate('date', $date)->count();
                             $paperCount = paperTransaction::where('point_id', $point->id)->where('status', 1)->whereDate('date', $date)->count();
 
+                            $is_visited = ($violationCount > 0 || $absenceCount > 0 || $paperCount > 0);
+                            $sector = $point->sector->name;
                             $groupPointsData[] = [
                                 'point_id' => $point->id,
                                 'point_name' => $point->name,
-                                'point_governate' => $point->government->name ?? 'N/A',
+                                'point_governate' => $point->government->name,
                                 'point_time' => $inspectionTime,
-                                'point_location' => $point->google_map ?? null,
-                                'point_availability' => $available,
+                                'point_shift' => $pointTime,
+                                'point_location' => $point->google_map,
+                                'Point_availability' => $avilable,
                                 'latitude' => $point->lat,
+                                'point_options' => $point->options ?  PointOption::whereIn('id', json_decode($point->options, true))
+                                    ->select('id', 'name')
+                                    ->get()
+                                    ->toArray()
+                                    : null,
+
                                 'longitude' => $point->long,
-                                'is_visited' => ($violationCount > 0 || $absenceCount > 0 || $paperCount > 0),
+                                'is_visited' => $is_visited,
                                 'count_violation' => $violationCount,
                                 'count_absence' => $absenceCount
                             ];
                         }
                     }
 
+
                     $missionData[] = [
                         'mission_id' => $mission->id,
                         'inspector_shift' => $inspector_shift,
-                        'governate' => $groupPoint->government->name ?? 'N/A',
-                        'sector' => $groupPoint->sector->name ?? 'N/A',
+                        'governate' => $groupPoint->government->name,
+                        'sector' => $sector,
                         'name' => $groupPoint->name,
                         'points_count' => count($groupPointsData),
                         'points' => $groupPointsData,
@@ -152,60 +189,115 @@ class InspectorMissionController extends Controller
                     ];
                 }
             }
+            $instantMissionData = [];
+            if (!is_null($mission->ids_instant_mission)) {
+                foreach ($instantMissions as $instant) {
+                    $instantmissioncount++;
+                    $instantmission =  instantmission::find($instant);
+                    // dd( $instantmission);
 
-            // Handle instant missions
-            $instantMissions = is_array($mission->ids_instant_mission) ? $mission->ids_instant_mission : explode(',', $mission->ids_instant_mission ?? '');
+                    if ($instantmission) {
 
-            foreach ($instantMissions as $instantId) {
-                $instantMission = InstantMission::find($instantId);
+                        if (str_contains($instantmission->location, 'gis.paci.gov.kw')) {
+                            // dd("yes");
+                            $location = null;
+                            $kwFinder = $instantmission->location;
+                        } else {
+                            $location = $instantmission->location;
+                            $kwFinder = null;
+                        }
 
-                if ($instantMission) {
-                    $instantMissionCount++;
 
-                    $createdAt = $instantMission->created_at;
-                    $timeArabic = ($createdAt->format('A') === 'AM') ? 'صباحا' : 'مساءا';
+                        $createdAt = $instantmission->created_at;
 
-                    $instantMissionData[] = [
-                        'instant_mission_id' => $instantMission->id,
-                        'name' => $instantMission->label,
-                        'location' => $instantMission->location ?? null,
-                        'description' => $instantMission->description,
-                        'group' => $instantMission->group->name ?? 'N/A',
-                        'team' => $instantMission->groupTeam->name ?? 'N/A',
-                        'date' => $createdAt->format('Y-m-d'),
-                        'time' => $createdAt->format('h:i'),
-                        'time_name' => $timeArabic,
-                        'latitude' => $instantMission->latitude,
-                        'longitude' => $instantMission->longitude
-                    ];
+
+
+                        $time = $createdAt->format('h:i'); // Only time
+
+                        // Determine if it's AM or PM and set the Arabic equivalent
+                        $period = $createdAt->format('A'); // AM or PM
+                        $time_arabic = ($period === 'AM') ? 'صباحا' : 'مساءا';
+
+                        $instantMissionData[] = [
+                            'instant_mission_id' => $instantmission->id,
+                            'name' => $instantmission->label,
+                            'location' => $location,
+                            'KWfinder' => $kwFinder,
+                            'description' => $instantmission->description,
+                            'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
+                            'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name
+                            'date' => $createdAt->format('Y-m-d'),
+                            'time' => $time ?? null,
+                            'time_name' => $time_arabic ?? null,
+                            'latitude' => $instantmission->latitude,
+                            'longitude' => $instantmission->longitude,
+                            'attachment' => $instantmission->attachment,
+
+                        ];
+                    }
                 }
             }
         }
+        $count += $instantmissioncount;
 
-        $missionCount = count($missionData);
+        // Include the instant missions in the response
+        //   $instantMissionData = [];
+
+        /*  foreach ($instantmissions as $instantmission) {
+            $instantMissionData[] = [
+                'instant_mission_id' => $instantmission->id,
+                'name' => $instantmission->label,  // Assuming description field
+                'location' => $instantmission->location,
+                'description' => $instantmission->description,
+                'group' => $instantmission->group ? $instantmission->group->name : 'N/A',  // Include group name
+                'team' => $instantmission->groupTeam ? $instantmission->groupTeam->name : 'N/A',  // Include group team name ,
+                'date' => $instantmission->created_at->format('Y-m-d'),
+            ];
+        }
+        */ //
         $dayNamesArabic = [
-            'Sunday' => 'الأحد',
-            'Monday' => 'الإثنين',
-            'Tuesday' => 'الثلاثاء',
+            'Sunday'    => 'الأحد',
+            'Monday'    => 'الإثنين',
+            'Tuesday'   => 'الثلاثاء',
             'Wednesday' => 'الأربعاء',
-            'Thursday' => 'الخميس',
-            'Friday' => 'الجمعة',
-            'Saturday' => 'السبت'
+            'Thursday'  => 'الخميس',
+            'Friday'    => 'الجمعة',
+            'Saturday'  => 'السبت',
         ];
+        $dayName = date('l');
+        $date = date('Y-m-d');
+        if ($missionData) {
+            $responseData = [
+                'date' => $date,
+                'date_name' => $dayNamesArabic[$dayName],
+                'mission_count' => $count,
+                'inspector_shift' => $inspector_shift,
+                'instant_mission_count' => $instantmissioncount,
+                'groupPointCount' => $groupPointCount,
+                'missions' => $missionData,
+                'instant_missions' => $instantMissionData,
+            ];
+        } else {
+            $responseData = [
+                'date' => $date,
+                'date_name' => $dayNamesArabic[$dayName],
+                // 'date' => $dayNamesArabic[$dayName] . ', ' . $date,
+                'mission_count' => 0,
+                'inspector_shift' => null,
 
-        $responseData = [
-            'date' => $today,
-            'date_name' => $dayNamesArabic[date('l')],
-            'mission_count' => $missionCount,
-            'instant_mission_count' => $instantMissionCount,
-            'inspector_shift' => $inspector_shift,
-            'missions' => $missionData,
-            'instant_missions' => $instantMissionData
-        ];
+                'instant_mission_count' => $instantmissioncount,
+                'groupPointCount' => 0,
+                'missions' => null,
+                'instant_missions' => $instantMissionData,
+            ];
+        }
 
-        return $this->respondSuccess($responseData, 'Data retrieved successfully.');
+        // $success['ViolationType'] = $missionData->map(function ($item) {
+        //     return $item->only(['id', 'name']);
+        // });
+        // return response()->json($missionData);
+        return $this->respondSuccess($responseData, 'Get Data successfully.');
     }
-
 
 
     /**
