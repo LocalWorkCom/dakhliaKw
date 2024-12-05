@@ -164,13 +164,6 @@ class assignPointsFrom implements ShouldQueue
             // Retrieve all points in a single query
             $points = Point::whereIn('id', $points_ids)->get()->shuffle();
 
-            // Dynamically determine the government of this group point
-            $governmentIds = $points->pluck('government_id')->unique();
-
-            // Ensure all points belong to the same government
-            if ($governmentIds->count() > 1) {
-                break; // Skip this Grouppoint if points span multiple governments
-            }
             // Loop through each point in the group point
             foreach ($points as $point) {
                 // Check for the work type and available days
