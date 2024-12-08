@@ -161,12 +161,19 @@ class InspectorMissionController extends Controller
                                 'point_shift' => $pointTime,
                                 'point_location' => $point->google_map,
                                 'Point_availability' => $avilable,
-                                'latitude' => $point->lat,
-                                'point_options' => $point->options ?  PointOption::whereIn('id', json_decode($point->options, true))
-                                    ->select('id', 'name')
+                                'latitude' => $point->lat,// Add this for optimized queries
+                                'point_options' => $point->options ? PointOption::select('id', 'name')
                                     ->get()
-                                    ->toArray()
-                                    : null,
+                                    ->map(function ($option) use ($point) {
+                                        // Check if the option is in the point's options
+                                        $pointOptions = $point->options ? json_decode($point->options, true) : [];
+                                        return [
+                                            'id' => $option->id,
+                                            'name' => $option->name,
+                                            'selected' => in_array($option->id, $pointOptions) // true if the option is in point options
+                                        ];
+                                    })
+                                    ->toArray(): null,
 
                                 'longitude' => $point->long,
                                 'is_visited' => $is_visited,
