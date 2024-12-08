@@ -156,7 +156,7 @@ class InspectorMissionController extends Controller
                                 'point_location' => $point->google_map,
                                 'Point_availability' => $avilable,
                                 'latitude' => $point->lat, // Add this for optimized queries
-                                'point_options' => $point->options != 'null' ? PointOption::select('id', 'name')
+                                'point_options' => (($point->options != 'null') && ($point->options != null )) ? PointOption::select('id', 'name')
                                     ->get()
                                     ->mapWithKeys(function ($option) use ($point) {
                                         $options = [
