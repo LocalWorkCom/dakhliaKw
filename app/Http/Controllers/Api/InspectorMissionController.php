@@ -170,8 +170,8 @@ class InspectorMissionController extends Controller
                                             8 => 'dungeon_info',
                                         ];
 
-                                        // Decode the point options as an array of selected option IDs
-                                        $pointOptions = $point->options ? json_decode($point->options, true) : [];
+                                        // Decode the point options safely as an array
+                                        $pointOptions = json_decode($point->options, true) ?? []; // Ensure $pointOptions is always an array
 
                                         // Check if the current option's ID is in the selected options
                                         $isPresent = in_array($option->id, $pointOptions);
@@ -180,6 +180,7 @@ class InspectorMissionController extends Controller
                                         return [$options[$option->id] => $isPresent];
                                     })
                                     ->toArray() : null,
+
 
 
                                 'longitude' => $point->long,
