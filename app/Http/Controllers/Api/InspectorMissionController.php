@@ -156,34 +156,30 @@ class InspectorMissionController extends Controller
                                 'point_location' => $point->google_map,
                                 'Point_availability' => $avilable,
                                 'latitude' => $point->lat, // Add this for optimized queries
-                               'point_options' => $point->options ? function () use ($point) {
-                            $options = [
-                                1 => 'WeaponInfo',
-                                2 => 'wires_num',
-                                3 => 'mechanisms_num',
-                                4 => 'faxes_num',
-                                5 => 'cams_num',
-                                6 => 'computers_num',
-                                7 => 'cars_num',
-                                8 => 'dungeon_info',
-                            ];
+                                'point_options' => $point->options ? PointOption::select('id', 'name')
+                                    ->get()
+                                    ->mapWithKeys(function ($option) use ($point) {
+                                        $options = [
+                                            1 => 'WeaponInfo',
+                                            2 => 'wires_num',
+                                            3 => 'mechanisms_num',
+                                            4 => 'faxes_num',
+                                            5 => 'cams_num',
+                                            6 => 'computers_num',
+                                            7 => 'cars_num',
+                                            8 => 'dungeon_info',
+                                        ];
 
-                            // Decode the point options as an array
-                            $pointOptions = json_decode($point->options, true) ?? [];
+                                        // Decode the point options as an array
+                                        $pointOptions = json_decode($point->options, true) ?? [];
 
-                            // Map options to their boolean values
-                            $result = PointOption::select('id', 'name')
-                                ->get()
-                                ->mapWithKeys(function ($option) use ($options, $pointOptions) {
-                                    $isPresent = in_array($option->id, $pointOptions);
-                                    return [$options[$option->id] => $isPresent];
-                                })
-                                ->toArray();
+                                        // Check if the current option's ID is in the selected options
+                                        $isPresent = in_array($option->id, $pointOptions);
 
-                            // Check if all values are false
-                            return array_filter($result) ? $result : null;
-                        } : null,
-
+                                        // Return the result as ['name' => boolean]
+                                        return [$options[$option->id] => $isPresent];
+                                    })
+                                    ->toArray() : null, // If $point->options is null, return null directly
 
                                 'longitude' => $point->long,
                                 'is_visited' => $is_visited,
