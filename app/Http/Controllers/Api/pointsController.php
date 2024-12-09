@@ -59,12 +59,12 @@ class pointsController extends Controller
                 'can_update' => $inspectorId_content == auth()->user()->id ? true : false,
                 'InspectorId' => $violation->inspector_id ?? null,
                 'InspectorName' => $violation->inspector->name ?? null,
-                'mechanisms_num' => $violation->mechanisms_num,
-                'cams_num' => $violation->cams_num ?? null,
-                'computers_num' => $violation->computers_num ?? null,
-                'cars_num' => $violation->cars_num ?? null,
-                'faxes_num' => $violation->faxes_num ?? null,
-                'wires_num' => $violation->wires_num,
+                'mechanisms_num' => $violation->mechanisms_num == 0 ? null : $violation->mechanisms_num ,
+                'cams_num' => $violation->cams_num == 0 ? null :  $violation->cams_num,
+                'computers_num' => $violation->computers_num == 0 ? null : $violation->computers_num,
+                'cars_num' => $violation->cars_num == 0 ? null : $violation->cars_num,
+                'faxes_num' => $violation->faxes_num == 0 ? null :$violation->faxes_num ,
+                'wires_num' => $violation->wires_num == 0 ? null : $violation->wires_num,
                 'dungeon_info' => $dungeon_info->map(function ($dungeon) {
                     return (object) [
                         "men_num" => $dungeon->men_num,
