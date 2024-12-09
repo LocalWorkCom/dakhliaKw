@@ -228,7 +228,6 @@ class pointsController extends Controller
             }
         } else {
             $is_exist = PointContent::whereDate('created_at', $today)->where('point_id', $request->point_id)->exists();
-            // dd($is_exist , $today ,$request->point_id);
             if ($is_exist) {
                 $data = [
                     'data' => 'تم أنشاء تفتيش لهذه النقطه اليوم ولا يمكن أضافه جديد'
