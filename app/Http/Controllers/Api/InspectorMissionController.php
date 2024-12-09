@@ -169,7 +169,6 @@ class InspectorMissionController extends Controller
                                             7 => 'cars_num',
                                             8 => 'dungeon_info',
                                         ];
-
                                         // Decode the point options as an array
                                         $pointOptions = json_decode($point->options, true) ?? [];
 
