@@ -8,6 +8,7 @@ use App\Models\Inspector;
 use App\Models\InspectorMission;
 use App\Models\Point;
 use App\Models\PointContent;
+use App\Models\PointOption;
 use App\Models\WeaponInfo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -51,12 +52,13 @@ class pointsController extends Controller
             $inspectorId_content = Inspector::where('id', $violation->inspector_id)->value('user_id');
 
             $WeaponInfo = WeaponInfo::where('content_id', $violation->id)->get();
+            $point = Point::with('government')->find($violation->point_id);
+
             return [
                 'id' => $violation->id,
                 'can_update' => $inspectorId_content == auth()->user()->id ? true : false,
                 'InspectorId' => $violation->inspector_id ?? null,
                 'InspectorName' => $violation->inspector->name ?? null,
-                // 'Inspectorgrade' => $violation->inspector_id->grade->name ?? null,
                 'mechanisms_num' => $violation->mechanisms_num,
                 'cams_num' => $violation->cams_num ?? null,
                 'computers_num' => $violation->computers_num ?? null,
@@ -87,6 +89,29 @@ class pointsController extends Controller
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'point_name' => $violation->point->name,
+                'point_options' => (($point->options != 'null') && ($point->options != null )) ? PointOption::select('id', 'name')
+                                    ->get()
+                                    ->mapWithKeys(function ($option) use ($point) {
+                                        $options = [
+                                            1 => 'WeaponInfo',
+                                            2 => 'wires_num',
+                                            3 => 'mechanisms_num',
+                                            4 => 'faxes_num',
+                                            5 => 'cams_num',
+                                            6 => 'computers_num',
+                                            7 => 'cars_num',
+                                            8 => 'dungeon_info',
+                                        ];
+                                        // Decode the point options as an array
+                                        $pointOptions = json_decode($point->options, true) ?? [];
+
+                                        // Check if the current option's ID is in the selected options
+                                        $isPresent = in_array($option->id, $pointOptions);
+
+                                        // Return the result as ['name' => boolean]
+                                        return [$options[$option->id] => $isPresent];
+                                    })
+                                    ->toArray() : null,
 
             ];
         });
