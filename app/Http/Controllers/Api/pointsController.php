@@ -9,6 +9,7 @@ use App\Models\InspectorMission;
 use App\Models\Point;
 use App\Models\PointContent;
 use App\Models\PointOption;
+use App\Models\User;
 use App\Models\WeaponInfo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -50,7 +51,7 @@ class pointsController extends Controller
             $dungeon_info = DungeonInfo::where('content_id', $violation->id)
                 ->get();
             $inspectorId_content = Inspector::where('id', $violation->inspector_id)->value('user_id');
-
+            $grade = User::find($inspectorId_content)->grade->name;
             $WeaponInfo = WeaponInfo::where('content_id', $violation->id)->get();
             $point = Point::with('government')->find($violation->point_id);
 
@@ -59,6 +60,7 @@ class pointsController extends Controller
                 'can_update' => $inspectorId_content == auth()->user()->id ? true : false,
                 'InspectorId' => $violation->inspector_id ?? null,
                 'InspectorName' => $violation->inspector->name ?? null,
+                'Inspectorgrade' => $grade ?? null,
                 'mechanisms_num' => $violation->mechanisms_num == 0 ? null : $violation->mechanisms_num ,
                 'cams_num' => $violation->cams_num == 0 ? null :  $violation->cams_num,
                 'computers_num' => $violation->computers_num == 0 ? null : $violation->computers_num,
