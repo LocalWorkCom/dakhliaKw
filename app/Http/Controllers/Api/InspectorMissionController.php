@@ -145,7 +145,7 @@ class InspectorMissionController extends Controller
                             $violationCount = Violation::where('point_id', $point->id)->where('status', 1)->whereDate('created_at', $date)->count();
                             $absenceCount = Absence::where('point_id', $point->id)->where('flag', 1)->whereDate('date', $date)->count();
                             $paperCount = paperTransaction::where('point_id', $point->id)->where('status', 1)->whereDate('date', $date)->count();
-                            $pointContent = PointContent::where('point_id', $point->id)->where('flag', 1)->whereDate('date', $date)->count();
+                            $pointContent = PointContent::where('point_id', $point->id)->where('flag', 1)->whereDate('created_at', $date)->count();
                             $is_visited = ($violationCount > 0 || $absenceCount > 0 || $paperCount > 0 || $pointContent > 0);
                             $sector = $point->sector->name;
                             $groupPointsData[] = [
