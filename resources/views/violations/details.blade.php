@@ -82,7 +82,7 @@
                             </tbody>
                         </table>
                     @endforeach
-                    @elseif ($type == 2)
+                @elseif ($type == 2)
                     <table class="table table-bordered" dir="rtl">
                         <tbody>
                             <tr>
@@ -124,6 +124,100 @@
                             @endif
                         </tbody>
                     </table>
+                @elseif ($type == 3)
+                    <table class="table table-bordered" dir="rtl">
+                        <tbody>
+                            <tr>
+                                <th>النقطة :</th>
+                                <td>{{ $data->point->name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">عدد اللاسلكيات </th>
+                                <td>{{ $data->wires_num }}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">عدد الاليات</th>
+                                <td>{{ $data->mechanisms_num }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> عدد الفاكسات </th>
+                                <td>{{ $data->faxes_num }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> عدد الات التصوير</th>
+                                <td>{{ $data->cams_num }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> عدد الكومبيوتر</th>
+                                <td>{{ $data->computers_num }}</td>
+                            </tr>
+                            <tr>
+                                <th> عدد السيارات المحجوزه </th>
+                                <td>{{ $data->cars_num }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    @if ($details)
+                        @foreach ($details as $detail)
+                            <table class="table table-bordered" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">النظاره</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>عدد الرجال</th>
+                                        <td>{{ $detail->men_num }}</td>
+                                    </tr>
+                                    @if ($detail->women_num)
+                                        <tr>
+                                            <th scope="row">عدد النساء</th>
+                                            <td>{{ $detail->women_num }}</td>
+                                        </tr>
+                                    @endif
+                                    @if ($detail->duration)
+                                        <tr>
+                                            <th scope="row"> مده التجاوز </th>
+                                            <td>{{ $detail->duration }}</td>
+                                        </tr>
+                                    @endif
+
+                                </tbody>
+                            </table>
+                        @endforeach
+                    @endif
+                    @if ($details_wepon)
+                        <table class="table table-bordered" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">عدد الاسلحه</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($details_wepon as $detail_wepon)
+                                    <tr>
+                                        <th>اسم السلاح </th>
+                                        <td>{{ $detail_wepon->name }}</td>
+                                    </tr>
+                                    @if ($detail_wepon->weapon_num)
+                                        <tr>
+                                            <th scope="row">عدد الاسلحه</th>
+                                            <td>{{ $detail_wepon->weapon_num }}</td>
+                                        </tr>
+                                    @endif
+                                    @if ($detail_wepon->ammunition_num)
+                                        <tr>
+                                            <th scope="row"> عدد الزخائر </th>
+                                            <td>{{ $detail_wepon->ammunition_num }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                    @endif
                 @else
                     <table class="table table-bordered" dir="rtl">
                         <tbody>
