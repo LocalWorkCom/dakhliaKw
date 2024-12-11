@@ -89,8 +89,8 @@ class ViollationController extends Controller
         $second = paperTransaction::with(['inspector', 'point'])
             ->selectRaw('paper_transactions.id, "معاملات ورقيه" as name, CONCAT_WS("\n\r", CONCAT_WS(":", "رقم القيد", paper_transactions.registration_number), CONCAT_WS(":", "رقم الأحوال", paper_transactions.civil_number)) as ViolationType, "معاملات ورقيه" as Type, "2" as mode')
             ->leftJoin('inspector_mission', 'inspector_mission.id', 'paper_transactions.mission_id');
-        $third = PointContent::with(['inspector', 'point'])
-            ->selectRaw('point_contents.id, "تفتيش النقطه" as name, CONCAT_WS("\n\r", CONCAT_WS(":", "عدد الالات", point_contents.mechanisms_num), CONCAT_WS(":", "عدد الالات التصوير", point_contents.cams_num)) as ViolationType, "تفتيش نقطه" as Type, "3" as mode')
+        $third = PointContent::with(['inspector', 'point'])->leftJoin('points', 'points.id', '=', 'point_contents.point_id')
+            ->selectRaw('point_contents.id,  points.name as name, CONCAT_WS("\n\r", CONCAT_WS(":", "عدد الالات", point_contents.mechanisms_num), CONCAT_WS(":", "عدد الالات التصوير", point_contents.cams_num)) as ViolationType, "تفتيش نقطه" as Type, "3" as mode')
             ->leftJoin('inspector_mission', 'inspector_mission.id', 'point_contents.mission_id');
         // Apply filters for paper transactions
         $second->when($date && $date != '-1', function ($query) use ($date) {
@@ -210,8 +210,8 @@ class ViollationController extends Controller
         } elseif ($type == 3) {
             $title = 'تفتيش';
             $data = PointContent::leftJoin('points', 'points.id', 'point_contents.point_id')->leftJoin('inspector_mission', 'inspector_mission.id', 'point_contents.mission_id')->where('point_contents.id', $id)->first();
-            $details = DungeonInfo::where('id', $id)->get();
-            $details_wepon= WeaponInfo::where('id', $id)->get();
+            $details = DungeonInfo::where('content_id', $id)->get();
+            $details_wepon= WeaponInfo::where('content_id', $id)->get();
         }else { //Violation
             $title = "سجل مخالفات";
             $data = Violation::leftJoin('grades', 'grades.id', 'violations.grade')->SelectRaw("image, violations.id,CONCAT_WS('/',violations.name,grades.name)  as name,(Select GROUP_CONCAT(violation_type.`name`) from violation_type where FIND_IN_SET(violation_type.id,violations.violation_type)) AS ViolationType,IF(violations.flag=1,'مخالفة سلوك انظباطي','مخالفة مباني') as Type")->leftJoin('inspector_mission', 'inspector_mission.id', 'violations.mission_id')->where('violations.id', $id)->first();
