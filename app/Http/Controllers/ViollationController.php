@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DungeonInfo;
+use App\Models\PointContent;
+use App\Models\WeaponInfo;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
@@ -60,19 +63,19 @@ class ViollationController extends Controller
         }
 
         $date = $request->date;
-        $now=date('Y-m-d');
-        $allDate='1';
-        if(isset($request->date))
-       { if($now != $date)
-        {
-            $allDate='0';
-        }}
+        $now = date('Y-m-d');
+        $allDate = '1';
+        if (isset($request->date)) {
+            if ($now != $date) {
+                $allDate = '0';
+            }
+        }
         //dd($now);
         $group = $request->group;
         $team = $request->team;
         $inspector = $request->inspector;
 
-        return view('violations.index', compact('groups', 'groupTeams', 'inspectors', 'date', 'group', 'team', 'inspector','allDate'));
+        return view('violations.index', compact('groups', 'groupTeams', 'inspectors', 'date', 'group', 'team', 'inspector', 'allDate'));
     }
 
     public function getViolations(Request $request)
@@ -81,12 +84,14 @@ class ViollationController extends Controller
         $group = $request->group;
         $team = $request->team;
         $inspector = $request->inspector;
-       // dd($request);
+        // dd($request);
         // Base query for paper transactions
         $second = paperTransaction::with(['inspector', 'point'])
             ->selectRaw('paper_transactions.id, "معاملات ورقيه" as name, CONCAT_WS("\n\r", CONCAT_WS(":", "رقم القيد", paper_transactions.registration_number), CONCAT_WS(":", "رقم الأحوال", paper_transactions.civil_number)) as ViolationType, "معاملات ورقيه" as Type, "2" as mode')
             ->leftJoin('inspector_mission', 'inspector_mission.id', 'paper_transactions.mission_id');
-
+        $third = PointContent::with(['inspector', 'point'])
+            ->selectRaw('point_contents.id, "تفتيش النقطه" as name, CONCAT_WS("\n\r", CONCAT_WS(":", "عدد الالات", point_contents.mechanisms_num), CONCAT_WS(":", "عدد الالات التصوير", point_contents.cams_num)) as ViolationType, "تفتيش نقطه" as Type, "3" as mode')
+            ->leftJoin('inspector_mission', 'inspector_mission.id', 'point_contents.mission_id');
         // Apply filters for paper transactions
         $second->when($date && $date != '-1', function ($query) use ($date) {
             return $query->where('paper_transactions.date', $date); // Specify table
@@ -105,7 +110,24 @@ class ViollationController extends Controller
         $second->when($inspector && $inspector != '-1', function ($query) use ($inspector) {
             return $query->where('paper_transactions.inspector_id', $inspector); // Specify table
         });
+        // Apply filters for paper transactions
+        $third->when($date && $date != '-1', function ($query) use ($date) {
+            return $query->whereDate('point_contents.created_at', $date); // Specify table
+        });
 
+        $third->when($group && $group != '-1', function ($query) use ($group) {
+            $inspectors = GroupTeam::where('group_id', $group)->pluck('inspector_ids')->flatten();
+            return $query->whereIn('point_contents.inspector_id', $inspectors); // Specify table
+        });
+
+        $third->when($team && $team != '-1', function ($query) use ($team) {
+            $inspectors = GroupTeam::where('id', $team)->pluck('inspector_ids')->flatten();
+            return $query->whereIn('point_contents.inspector_id', $inspectors); // Specify table
+        });
+
+        $third->when($inspector && $inspector != '-1', function ($query) use ($inspector) {
+            return $query->where('point_contents.inspector_id', $inspector); // Specify table
+        });
         // Base query for absences
         $first = Absence::leftJoin('points', 'points.id', 'absences.point_id')
             ->selectRaw('absences.id, points.`name` as name, CONCAT_WS("\n\r", CONCAT_WS(":", "اجمالى القوة", absences.total_number), CONCAT_WS(":", "العدد الفعلي", absences.actual_number)) as ViolationType, "غياب" as Type, "0" as mode')
@@ -160,7 +182,7 @@ class ViollationController extends Controller
         });
 
         // Combine queries
-        $data = $data->union($first)->union($second);
+        $data = $data->union($first)->union($second)->union($third);
 
         return DataTables::of($data)
             ->addColumn('action', function ($row) {
@@ -178,16 +200,24 @@ class ViollationController extends Controller
             $title = "سجل غياب";
             $data = Absence::leftJoin('points', 'points.id', 'absences.point_id')->leftJoin('inspector_mission', 'inspector_mission.id', 'absences.mission_id')->where('absences.id', $id)->first();
             $details = AbsenceEmployee::with('absenceType', 'gradeName')->where('absences_id', $id)->get();
-            //dd($details);
+            $details_wepon=  [];
         } elseif ($type == 2) {
             $title = 'معاملات ورقيه';
             $data = paperTransaction::leftJoin('points', 'points.id', 'paper_transactions.point_id')->leftJoin('inspector_mission', 'inspector_mission.id', 'paper_transactions.mission_id')->where('paper_transactions.id', $id)->first();
             $details = [];
-        } else { //Violation
+            $details_wepon=  [];
+
+        } elseif ($type == 3) {
+            $title = 'تفتيش';
+            $data = PointContent::leftJoin('points', 'points.id', 'point_contents.point_id')->leftJoin('inspector_mission', 'inspector_mission.id', 'point_contents.mission_id')->where('point_contents.id', $id)->first();
+            $details = DungeonInfo::where('id', $id)->get();
+            $details_wepon= WeaponInfo::where('id', $id)->get();
+        }else { //Violation
             $title = "سجل مخالفات";
             $data = Violation::leftJoin('grades', 'grades.id', 'violations.grade')->SelectRaw("image, violations.id,CONCAT_WS('/',violations.name,grades.name)  as name,(Select GROUP_CONCAT(violation_type.`name`) from violation_type where FIND_IN_SET(violation_type.id,violations.violation_type)) AS ViolationType,IF(violations.flag=1,'مخالفة سلوك انظباطي','مخالفة مباني') as Type")->leftJoin('inspector_mission', 'inspector_mission.id', 'violations.mission_id')->where('violations.id', $id)->first();
             $details = [];
+            $details_wepon=  [];
         }
-        return view('violations.details', compact('type', 'id', 'title', 'data', 'details'));
+        return view('violations.details', compact('type', 'id', 'title', 'data', 'details','details_wepon'));
     }
 }
