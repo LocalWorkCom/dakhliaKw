@@ -64,50 +64,53 @@ class WorkingTimeController extends Controller
      */
     public function store(Request $request)
     {
-        //
-         //dd($request);
-
         $messages = [
             'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
             'start_time.required' => 'بداية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
             'end_time.required' => 'نهاية فترة العمل   مطلوب ولا يمكن تركه فارغاً.',
+            'start_time.date_format' => 'صيغة وقت البداية غير صحيحة، يجب أن تكون مثل 02:30 .',
+            'end_time.date_format' => 'صيغة وقت النهاية غير صحيحة، يجب أن تكون مثل 02:30 .',
             'color.unique' => 'اللون المحدد موجود بالفعل، يرجى اختيار لون آخر.',
-
         ];
+    
         $validatedData = Validator::make($request->all(), [
             'name' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i',
             'color' => 'required|unique:working_times,color',
         ], $messages);
-
+    
         // Handle validation failure
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
+    
         try {
-            $startTime = DateTime::createFromFormat('h:i A', $request->start_time)->format('H:i');
-            $endTime = DateTime::createFromFormat('h:i A', $request->end_time)->format('H:i');
+            // Parse and convert times
+            // $startTime = DateTime::createFromFormat('h:i A', $request->start_time);
+            // $endTime = DateTime::createFromFormat('h:i A', $request->end_time);
+    
+            // if (!$startTime || !$endTime) {
+            //     return redirect()->back()->withErrors(['time' => 'صيغة الوقت غير صحيحة.'])->withInput();
+            // }
+    
+            // Format to 24-hour time
+            // $startTime = $startTime->format('H:i');
+            // $endTime = $endTime->format('H:i');
+    
             $WorkingTime = new WorkingTime();
             $WorkingTime->name = $request->name;
-            $WorkingTime->start_time = $startTime;
-            $WorkingTime->end_time = $endTime;
-            // dd($WorkingTime);
-            // Generate a random color that is not in the database
-            /*do {
-                $color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-                $existColors = ['#000000ab', '#ffffff', '#d6d6d6', '#fdfdfdc2', '#c9f5f9', '#4edfd0ba'];
-            } while (WorkingTime::where('color', $color)->whereNotIn('color', $existColors)->exists());*/
-
+            $WorkingTime->start_time = $request->start_time;
+            $WorkingTime->end_time = $request->end_time;
             $WorkingTime->color = $request->color;
             $WorkingTime->save();
-            // Dynamically create model instance based on the model class string
-            return view('working_time.index')->with('success', 'تم أنشاء فترت العمل بنجاح');
+    
+            return redirect()->route('working_time.index')->with('success', 'تم إنشاء فترة العمل بنجاح');
         } catch (\Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json(['error' => $e->getMessage()]);
         }
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -173,33 +176,33 @@ class WorkingTimeController extends Controller
             $endTimeInput = $request->end_time_edit;
 
             // Try to parse the start time
-            $startTime = DateTime::createFromFormat('h:i A', $startTimeInput);
-            if ($startTime === false) {
-                // If it fails, try 24-hour format
-                $startTime = DateTime::createFromFormat('H:i', $startTimeInput);
-            }
+            // $startTime = DateTime::createFromFormat('h:i A', $startTimeInput);
+            // if ($startTime === false) {
+            //     // If it fails, try 24-hour format
+            //     $startTime = DateTime::createFromFormat('H:i', $startTimeInput);
+            // }
 
-            // Try to parse the end time
-            $endTime = DateTime::createFromFormat('h:i A', $endTimeInput);
-            if ($endTime === false) {
-                // If it fails, try 24-hour format
-                $endTime = DateTime::createFromFormat('H:i', $endTimeInput);
-            }
+            // // Try to parse the end time
+            // $endTime = DateTime::createFromFormat('h:i A', $endTimeInput);
+            // if ($endTime === false) {
+            //     // If it fails, try 24-hour format
+            //     $endTime = DateTime::createFromFormat('H:i', $endTimeInput);
+            // }
 
-            // Check if parsing was successful
-            if ($startTime === false || $endTime === false) {
-                return redirect()->back()->withErrors('Invalid time format. Please use "h:i A" (e.g., "02:30 PM") or "H:i" (e.g., "14:30").')->withInput();
-            }
+            // // Check if parsing was successful
+            // if ($startTime === false || $endTime === false) {
+            //     return redirect()->back()->withErrors('Invalid time format. Please use "h:i A" (e.g., "02:30 PM") or "H:i" (e.g., "14:30").')->withInput();
+            // }
 
-            // Format times to 24-hour format
-            $startTimeFormatted = $startTime->format('H:i');
-            $endTimeFormatted = $endTime->format('H:i');
+            // // Format times to 24-hour format
+            // $startTimeFormatted = $startTime->format('H:i');
+            // $endTimeFormatted = $endTime->format('H:i');
 
             // Update the WorkingTime item
             $WorkingTimeitem = WorkingTime::findOrFail($request->id_edit);
             $WorkingTimeitem->name = $request->name_edit;
-            $WorkingTimeitem->start_time = $startTimeFormatted;
-            $WorkingTimeitem->end_time = $endTimeFormatted;
+            $WorkingTimeitem->start_time = $startTimeInput;
+            $WorkingTimeitem->end_time = $endTimeInput;
             $WorkingTimeitem->color = $request->color_edit;
             $WorkingTimeitem->save();
 
