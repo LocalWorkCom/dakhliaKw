@@ -98,9 +98,17 @@ class pointsController extends Controller
             })
             ->addColumn('action', function ($row) {
                 $delete_permission = null;
+                $show_permission = null;
+                $edit_permission = null;
+                if (Auth::user()->hasPermission('edit Point')) {
+                    $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('points.edit', $row->id) . '"><i class="fa fa-edit"></i> تعديل</a>';
 
-                $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('points.edit', $row->id) . '"><i class="fa fa-edit"></i> تعديل</a>';
-                $show_permission = '<a class="btn btn-sm" style="background-color: #274373;" href="' . route('points.show', $row->id) . '"><i class="fa fa-eye"></i> عرض</a>';
+                }
+
+                if (Auth::user()->hasPermission('view Point')) {
+                    $show_permission = '<a class="btn btn-sm" style="background-color: #274373;" href="' . route('points.show', $row->id) . '"><i class="fa fa-eye"></i> عرض</a>';
+
+                }
                 if (Auth::user()->hasPermission('delete Point')) {
                     $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
                 }
@@ -113,8 +121,8 @@ class pointsController extends Controller
     public function create()
     {
         $governorates = Government::all();
-        $regions=Region::all();
-        return view("points.create",compact('governorates','regions'));
+        $regions = Region::all();
+        return view("points.create", compact('governorates', 'regions'));
     }
 
     /**
@@ -353,11 +361,11 @@ class pointsController extends Controller
             $googleMapsUrl = $request->map_link;
             $coordinates = getLatLongFromUrl($googleMapsUrl);
             $point = Point::find($pointId);
-            if($point->sector_id != $request->sector_id){
+            if ($point->sector_id != $request->sector_id) {
                 $pointId = '' . $point->id . '';
 
                 $groupPoints = Grouppoint::whereJsonContains('points_ids', $pointId)->get();
-                $government_id=$request->governorate;
+                $government_id = $request->governorate;
                 $sector_id = $request->sector_id;
                 $newName = $request->name;
                 $groupPoints->each(function ($groupPoint) use ($government_id, $sector_id, $newName) {
@@ -373,11 +381,11 @@ class pointsController extends Controller
                     if ($groupPoint->deleted == 0) {
                         // Get the ID as a string
                         $id_Group = (string) $groupPoint->id;
-                        $today=Carbon::now();
+                        $today = Carbon::now();
                         $lastDayOfMonth =  Carbon::now()->endOfMonth();
                         // Find records that contain this ID
                         $records = InspectorMission::whereJsonContains('ids_group_point', $id_Group)->whereBetween('date', [$today, $lastDayOfMonth])
-                        ->get();
+                            ->get();
 
                         // Remove the ID from each record
                         $records->each(function ($record) use ($id_Group) {
@@ -399,12 +407,11 @@ class pointsController extends Controller
                         });
                     }
                 });
-
-            }else{
+            } else {
                 $pointId = '' . $point->id . '';
 
                 $groupPoints = Grouppoint::whereJsonContains('points_ids', $pointId)->get();
-                $government_id=$request->governorate;
+                $government_id = $request->governorate;
                 $sector_id = $request->sector_id;
                 $newName = $request->name;
                 $groupPoints->each(function ($groupPoint) use ($government_id, $sector_id, $newName) {
@@ -463,7 +470,7 @@ class pointsController extends Controller
     {
         $type = Point::find($request->id);
         if (!$type) {
-            return redirect()->route('points.index')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
+            return redirect()->route('points.index')->with('reject', 'يوجد خطا الرجاء المحاولة مرة اخرى');
         }
 
         // $group_points = Grouppoint::get();
@@ -479,27 +486,27 @@ class pointsController extends Controller
 
         $absences = $type->absences()->exists();
         if ($absences) {
-            return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد غياب لها');
+            return redirect()->route('points.index')->with('reject', 'لا يمكن حذف هذه النقاط يوجد غياب لها');
         }
 
         $paperTransactions = $type->paperTransactions()->exists();
         if ($paperTransactions) {
-            return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد اوراق لها');
+            return redirect()->route('points.index')->with('reject', 'لا يمكن حذف هذه النقاط يوجد اوراق لها');
         }
 
         $personalMissions = $type->personalMissions()->exists();
         if ($personalMissions) {
-            return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد مهمة شخصية لها');
+            return redirect()->route('points.index')->with('reject', 'لا يمكن حذف هذه النقاط يوجد مهمة شخصية لها');
         }
 
         $pointDays = $type->pointDays()->exists();
         if ($pointDays) {
-            return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد نقاط يومية لها');
+            return redirect()->route('points.index')->with('reject', 'لا يمكن حذف هذه النقاط يوجد نقاط يومية لها');
         }
 
         $violations = $type->violations()->exists();
         if ($violations) {
-            return redirect()->route('points.index')->with('reject','لا يمكن حذف هذه النقاط يوجد جزاءات لها');
+            return redirect()->route('points.index')->with('reject', 'لا يمكن حذف هذه النقاط يوجد جزاءات لها');
         }
 
         $type->delete();
