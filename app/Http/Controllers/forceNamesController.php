@@ -23,12 +23,12 @@ class forceNamesController extends Controller
             $name = "'$row->name'";
             $edit_permission = null;
             $delete_permission = null;
-            if(Auth::user()->hasPermission('edit ForceName')) {
+            if(Auth::user()->hasPermission('edit forcenames')) {
                 $edit_permission = '<a class="btn btn-sm"  style="background-color: #F7AF15;"  onclick="openedit(' . $row->id . ',' . $name . ')">  <i class="fa fa-edit"></i> تعديل </a>';
             }
 
 
-            if(Auth::user()->hasPermission('delete ForceName')) {
+            if(Auth::user()->hasPermission('delete forcenames')) {
                 $delete_permission = '<a class="btn btn-sm"  style="background-color: #C91D1D;"  onclick="opendelete(' . $row->id . ')">  <i class="fa fa-edit"></i> حذف </a>';
             }
 

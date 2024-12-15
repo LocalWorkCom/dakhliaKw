@@ -16,7 +16,7 @@
                 <div class="d-flex justify-content-between">
                     <p>     أدارات الخدمه
                     </p>
-                    @if (Auth::user()->hasPermission('edit grade'))
+                    @if (Auth::user()->hasPermission('create forcenames'))
                         <button type="button" class="btn-all  " onclick="openadd()" style="    color: #0D992C;">
 
                             اضافة أداره جديده <img src="{{ asset('frontend/images/add-btn.svg') }}" alt="img">
