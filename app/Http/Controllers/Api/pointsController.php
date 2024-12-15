@@ -8,6 +8,8 @@ use App\Models\Inspector;
 use App\Models\InspectorMission;
 use App\Models\Point;
 use App\Models\PointContent;
+use App\Models\PointOption;
+use App\Models\User;
 use App\Models\WeaponInfo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -48,45 +50,71 @@ class pointsController extends Controller
             // Retrieve violation types based on the existing ids
             $dungeon_info = DungeonInfo::where('content_id', $violation->id)
                 ->get();
-                $inspectorId_content = Inspector::where('id', $violation->inspector_id)->value('user_id');
-
+            $inspectorId_content = Inspector::where('id', $violation->inspector_id)->value('user_id');
+            $grade = User::find($inspectorId_content)->grade->name;
             $WeaponInfo = WeaponInfo::where('content_id', $violation->id)->get();
+            $point = Point::with('government')->find($violation->point_id);
+
             return [
                 'id' => $violation->id,
                 'can_update' => $inspectorId_content == auth()->user()->id ? true : false,
-                'InspectorId' => $violation->inspector_id?? null,
+                'InspectorId' => $violation->inspector_id ?? null,
                 'InspectorName' => $violation->inspector->name ?? null,
-                // 'Inspectorgrade' => $violation->inspector_id->grade->name ?? null,
-                'mechanisms_num' => $violation->mechanisms_num,
-                'cams_num' => $violation->cams_num ?? null,
-                'computers_num' => $violation->computers_num ?? null,
-                'cars_num' => $violation->cars_num ?? null,
-                'faxes_num' => $violation->faxes_num ?? null,
-                'wires_num' => $violation->wires_num,
-                'created_at' => $violation->note,
+                'Inspectorgrade' => $grade ?? null,
+                'mechanisms_num' => $violation->mechanisms_num == 0 ? null : $violation->mechanisms_num ,
+                'cams_num' => $violation->cams_num == 0 ? null :  $violation->cams_num,
+                'computers_num' => $violation->computers_num == 0 ? null : $violation->computers_num,
+                'cars_num' => $violation->cars_num == 0 ? null : $violation->cars_num,
+                'faxes_num' => $violation->faxes_num == 0 ? null :$violation->faxes_num ,
+                'wires_num' => $violation->wires_num == 0 ? null : $violation->wires_num,
+                'dungeon_info' => $dungeon_info->map(function ($dungeon) {
+                    return (object) [
+                        "men_num" => $dungeon->men_num,
+                        "women_num" => $dungeon->women_num,
+                        "total" => $dungeon->men_num + $dungeon->women_num,
+                        "overtake" => $dungeon->overtake,
+                        "duration" => $dungeon->duration,
+                    ];
+                })->first(),
+
+                'WeaponInfo' => $WeaponInfo->map(function ($Weapon) {
+                    return [
+                        "name" => $Weapon->name,
+                        "weapon_num" => $Weapon->weapon_num,
+                        "ammunition_num" => $Weapon->ammunition_num,
+                    ];
+                }),
+                'note' => $violation->note,
                 'created_at' => $violation->parent == 0 ? $violation->created_at : PointContent::find($violation->parent)->created_at,
                 'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : PointContent::find($violation->parent)->created_at->format('H:i:s'),
                 'updated_at' => $violation->parent == 0 ? $violation->updated_at->format('H:i:s') : PointContent::find($violation->parent)->updated_at->format('H:i:s'),
                 'mission_id' => $violation->mission_id,
                 'point_id' => $violation->point_id,
                 'point_name' => $violation->point->name,
-                'dungeon_info'=>$dungeon_info->map(function ($dungeon) {
-                    return[
-                        "men_num"=> $dungeon->men_num,
-                        "women_num"=> $dungeon->women_num,
-                        "total"=> $dungeon->men_num +  $dungeon->women_num,
-                        "overtake"=> $dungeon->overtake,
-                        "duration"=> $dungeon->duration,
-                        "note"=> $dungeon->note,
-                    ];
-                }),
-                'WeaponInfo'=>$WeaponInfo->map(function ($Weapon) {
-                    return[
-                    "name"=> $Weapon->name,
-                    "weapon_num"=> $Weapon->weapon_num,
-                    "ammunition_num"=> $Weapon->ammunition_num,
-                    ];
-                }),
+                'point_options' => (($point->options != 'null') && ($point->options != null )) ? PointOption::select('id', 'name')
+                                    ->get()
+                                    ->mapWithKeys(function ($option) use ($point) {
+                                        $options = [
+                                            1 => 'WeaponInfo',
+                                            2 => 'wires_num',
+                                            3 => 'mechanisms_num',
+                                            4 => 'faxes_num',
+                                            5 => 'cams_num',
+                                            6 => 'computers_num',
+                                            7 => 'cars_num',
+                                            8 => 'dungeon_info',
+                                        ];
+                                        // Decode the point options as an array
+                                        $pointOptions = json_decode($point->options, true) ?? [];
+
+                                        // Check if the current option's ID is in the selected options
+                                        $isPresent = in_array($option->id, $pointOptions);
+
+                                        // Return the result as ['name' => boolean]
+                                        return [$options[$option->id] => $isPresent];
+                                    })
+                                    ->toArray() : null,
+
             ];
         });
 
@@ -127,6 +155,7 @@ class pointsController extends Controller
                 $new = new PointContent();
                 $new->mission_id = $request->mission_id;
                 $new->point_id = $request->point_id;
+                $new->note = $request->note;
                 $new->inspector_id = $inspectorId;
                 $new->parent = $parent;
                 $new->flag = 1;
@@ -151,16 +180,15 @@ class pointsController extends Controller
                 }
                 $new->save();
                 if ($request->has('dungeon_info')) {
-                    foreach ($request->dungeon_info as $item) {
-                        $new_dungeon = new DungeonInfo();
-                        $new_dungeon->men_num = $item["men_num"];
-                        $new_dungeon->women_num = $item["women_num"];
-                        $new_dungeon->overtake = $item["overtake"];
-                        $new_dungeon->duration =$item["duration"] ?? 0;
-                        $new_dungeon->note = $item["note"];
-                        $new_dungeon->content_id = $new->id;
-                        $new_dungeon->save();
-                    }
+                    // foreach ($request->dungeon_info as $item) {
+                    $new_dungeon = new DungeonInfo();
+                    $new_dungeon->men_num = $request->dungeon_info["men_num"];
+                    $new_dungeon->women_num = $request->dungeon_info["women_num"];
+                    $new_dungeon->overtake = $request->dungeon_info["overtake"];
+                    $new_dungeon->duration = $request->dungeon_info["duration"] ?? 0;
+                    $new_dungeon->content_id = $new->id;
+                    $new_dungeon->save();
+                    // }
                 }
                 if ($request->has('weapon_info')) {
                     foreach ($request->weapon_info as $item) {
@@ -180,6 +208,8 @@ class pointsController extends Controller
                 $new->point_id = $request->point_id;
                 $new->inspector_id = $inspectorId;
                 $new->parent = $request->id;
+                $new->note = $request->note;
+
                 $new->flag = 1;
 
                 if ($request->has('mechanisms_num')) {
@@ -202,16 +232,15 @@ class pointsController extends Controller
                 }
                 $new->save();
                 if ($request->has('dungeon_info')) {
-                    foreach ($request->dungeon_info as $item) {
-                        $new_dungeon = new DungeonInfo();
-                        $new_dungeon->men_num = $item["men_num"];
-                        $new_dungeon->women_num = $item["women_num"];
-                        $new_dungeon->overtake = $item["overtake"];
-                        $new_dungeon->duration = $item["duration"] ?? 0;
-                        $new_dungeon->note = $item["note"];
-                        $new_dungeon->content_id = $new->id;
-                        $new_dungeon->save();
-                    }
+                    // foreach ($request->dungeon_info as $item) {
+                    $new_dungeon = new DungeonInfo();
+                    $new_dungeon->men_num = $request->dungeon_info["men_num"];
+                    $new_dungeon->women_num = $request->dungeon_info["women_num"];
+                    $new_dungeon->overtake = $request->dungeon_info["overtake"];
+                    $new_dungeon->duration = $request->dungeon_info["duration"] ?? 0;
+                    $new_dungeon->content_id = $new->id;
+                    $new_dungeon->save();
+                    // }
                 }
                 if ($request->has('weapon_info')) {
                     foreach ($request->weapon_info as $item) {
@@ -225,52 +254,62 @@ class pointsController extends Controller
                 }
             }
         } else {
-            $new = new PointContent();
-            $new->mission_id = $request->mission_id;
-            $new->point_id = $request->point_id;
-            $new->inspector_id = $inspectorId;
-            $new->parent = null;
-            $new->flag = 1;
+            $is_exist = PointContent::whereDate('created_at', $today)->where('point_id', $request->point_id)->exists();
+            if ($is_exist) {
+                $data = [
+                    'error' => 'تم أنشاء تفتيش لهذه النقطه اليوم ولا يمكن أضافه جديد'
+                ];
+                return $this->respondError(
+                    'تم أنشاء تفتيش لهذه النقطه اليوم ولا يمكن أضافه جديد',
+                    $data,
+                    400
+                );
+            } else {
+                $new = new PointContent();
+                $new->mission_id = $request->mission_id;
+                $new->point_id = $request->point_id;
+                $new->note = $request->note;
+                $new->inspector_id = $inspectorId;
+                $new->parent = null;
+                $new->flag = 1;
 
-            if ($request->has('mechanisms_num')) {
-                $new->mechanisms_num = $request->mechanisms_num;
-            }
-            if ($request->has('cams_num')) {
-                $new->cams_num = $request->cams_num;
-            }
-            if ($request->has('computers_num')) {
-                $new->computers_num = $request->computers_num;
-            }
-            if ($request->has('cars_num')) {
-                $new->cars_num = $request->cars_num;
-            }
-            if ($request->has('faxes_num')) {
-                $new->faxes_num = $request->faxes_num;
-            }
-            if ($request->has('wires_num')) {
-                $new->wires_num = $request->wires_num;
-            }
-            $new->save();
-            if ($request->has('dungeon_info')) {
-                foreach ($request->dungeon_info as $item) {
+                if ($request->has('mechanisms_num')) {
+                    $new->mechanisms_num = $request->mechanisms_num;
+                }
+                if ($request->has('cams_num')) {
+                    $new->cams_num = $request->cams_num;
+                }
+                if ($request->has('computers_num')) {
+                    $new->computers_num = $request->computers_num;
+                }
+                if ($request->has('cars_num')) {
+                    $new->cars_num = $request->cars_num;
+                }
+                if ($request->has('faxes_num')) {
+                    $new->faxes_num = $request->faxes_num;
+                }
+                if ($request->has('wires_num')) {
+                    $new->wires_num = $request->wires_num;
+                }
+                $new->save();
+                if ($request->has('dungeon_info')) {
                     $new_dungeon = new DungeonInfo();
-                    $new_dungeon->men_num = $item["men_num"];
-                    $new_dungeon->women_num = $item["women_num"];
-                    $new_dungeon->overtake = $item["overtake"];
-                    $new_dungeon->duration = $item["duration"] ?? 0;
-                    $new_dungeon->note = $item["note"];
+                    $new_dungeon->men_num = $request->dungeon_info["men_num"];
+                    $new_dungeon->women_num = $request->dungeon_info["women_num"];
+                    $new_dungeon->overtake = $request->dungeon_info["overtake"];
+                    $new_dungeon->duration = $request->dungeon_info["duration"] ?? 0;
                     $new_dungeon->content_id = $new->id;
                     $new_dungeon->save();
                 }
-            }
-            if ($request->has('weapon_info')) {
-                foreach ($request->weapon_info as $item) {
-                    $new_weapon = new WeaponInfo();
-                    $new_weapon->name = $item["name"];
-                    $new_weapon->weapon_num = $item["weapon_num"];
-                    $new_weapon->ammunition_num = $item["ammunition_num"];
-                    $new_weapon->content_id = $new->id;
-                    $new_weapon->save();
+                if ($request->has('weapon_info')) {
+                    foreach ($request->weapon_info as $item) {
+                        $new_weapon = new WeaponInfo();
+                        $new_weapon->name = $item["name"];
+                        $new_weapon->weapon_num = $item["weapon_num"];
+                        $new_weapon->ammunition_num = $item["ammunition_num"];
+                        $new_weapon->content_id = $new->id;
+                        $new_weapon->save();
+                    }
                 }
             }
         }

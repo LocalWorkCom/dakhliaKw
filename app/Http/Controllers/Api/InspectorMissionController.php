@@ -23,6 +23,7 @@ use App\Models\departements;
 use App\Models\ForceName;
 use App\Models\grade;
 use App\Models\GroupTeam;
+use App\Models\PointContent;
 use App\Models\PointOption;
 use App\Models\User;
 use App\Models\ViolationTypes;
@@ -31,6 +32,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use IntlDateFormatter;
 use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
+
 class InspectorMissionController extends Controller
 {
     function isTimeAvailable($pointStart, $pointEnd)
@@ -73,13 +75,6 @@ class InspectorMissionController extends Controller
                 'end_time' => '23:59'
             ];
         }
-        // $currentTime = Carbon::now()->format('H:i');
-        // $isBetween = Carbon::parse($team_time->first()->workingTime->start_time)->isBefore($currentTime) && Carbon::parse($team_time->first()->workingTime->end_time)->isAfter($currentTime);
-        // if (!$isBetween) {
-        // }
-        // else{
-
-        // }
         // Retrieve the missions for the specific inspector
         $missions = InspectorMission::whereDate('date', $today)
             ->where('inspector_id', $inspectorId)
@@ -150,8 +145,8 @@ class InspectorMissionController extends Controller
                             $violationCount = Violation::where('point_id', $point->id)->where('status', 1)->whereDate('created_at', $date)->count();
                             $absenceCount = Absence::where('point_id', $point->id)->where('flag', 1)->whereDate('date', $date)->count();
                             $paperCount = paperTransaction::where('point_id', $point->id)->where('status', 1)->whereDate('date', $date)->count();
-
-                            $is_visited = ($violationCount > 0 || $absenceCount > 0 || $paperCount > 0);
+                            $pointContent = PointContent::where('point_id', $point->id)->where('flag', 1)->whereDate('created_at', $date)->count();
+                            $is_visited = ($violationCount > 0 || $absenceCount > 0 || $paperCount > 0 || $pointContent > 0);
                             $sector = $point->sector->name;
                             $groupPointsData[] = [
                                 'point_id' => $point->id,
@@ -161,12 +156,30 @@ class InspectorMissionController extends Controller
                                 'point_shift' => $pointTime,
                                 'point_location' => $point->google_map,
                                 'Point_availability' => $avilable,
-                                'latitude' => $point->lat,
-                                'point_options' => $point->options ?  PointOption::whereIn('id', json_decode($point->options, true))
-                                    ->select('id', 'name')
+                                'latitude' => $point->lat, // Add this for optimized queries
+                                'point_options' => (($point->options != 'null') && ($point->options != null )) ? PointOption::select('id', 'name')
                                     ->get()
-                                    ->toArray()
-                                    : null,
+                                    ->mapWithKeys(function ($option) use ($point) {
+                                        $options = [
+                                            1 => 'WeaponInfo',
+                                            2 => 'wires_num',
+                                            3 => 'mechanisms_num',
+                                            4 => 'faxes_num',
+                                            5 => 'cams_num',
+                                            6 => 'computers_num',
+                                            7 => 'cars_num',
+                                            8 => 'dungeon_info',
+                                        ];
+                                        // Decode the point options as an array
+                                        $pointOptions = json_decode($point->options, true) ?? [];
+
+                                        // Check if the current option's ID is in the selected options
+                                        $isPresent = in_array($option->id, $pointOptions);
+
+                                        // Return the result as ['name' => boolean]
+                                        return [$options[$option->id] => $isPresent];
+                                    })
+                                    ->toArray() : null, // If $point->options is null, return null directly
 
                                 'longitude' => $point->long,
                                 'is_visited' => $is_visited,
@@ -444,7 +457,7 @@ class InspectorMissionController extends Controller
             // $attendanceCount = $request->has('AtendanceEmployee') ? count($request->input('AtendanceEmployee')) : 0;
             $totalNames = array_sum(array_column($request['AtendanceEmployee'], 'name'));
 
-           // dd($totalNames);
+            // dd($totalNames);
 
             $attendance = new Attendance();
             $attendance->date = Carbon::now()->format('Y-m-d');
@@ -460,7 +473,7 @@ class InspectorMissionController extends Controller
 
             if ($attendance) {
                 if ($request->has('AtendanceEmployee')) {
-                    $att_total=0;
+                    $att_total = 0;
                     foreach ($request->AtendanceEmployee as $item) {
 
                         $employeeValidator = Validator::make($item, [
@@ -480,7 +493,7 @@ class InspectorMissionController extends Controller
                         $emp->attendance_id = $attendance->id;
                         $emp->force_id = $item['department'] ?? null;
                         $emp->save();
-                        $att_total+=intval($item['name']);
+                        $att_total += intval($item['name']);
 
                         $attendanceEmployees[] = $emp;
                     }
@@ -512,7 +525,7 @@ class InspectorMissionController extends Controller
 
                 if ($attendance) {
                     if ($request->has('AtendanceEmployee')) {
-                        $att_total=0;
+                        $att_total = 0;
                         foreach ($request->AtendanceEmployee as $item) {
 
                             $employeeValidator = Validator::make($item, [
@@ -532,10 +545,10 @@ class InspectorMissionController extends Controller
                             $emp->attendance_id = $attendance->id;
                             $emp->force_id = $item['department'] ?? null;
                             $emp->save();
-                            $att_total+=intval($item['name']);
+                            $att_total += intval($item['name']);
                             $attendanceEmployees[] = $emp;
                         }
-                        $attendance->total=$att_total;
+                        $attendance->total = $att_total;
                         $attendance->save();
                     }
                 }
@@ -562,7 +575,7 @@ class InspectorMissionController extends Controller
 
                 if ($attendance) {
                     if ($request->has('AtendanceEmployee')) {
-                        $att_total=0;
+                        $att_total = 0;
                         foreach ($request->AtendanceEmployee as $item) {
 
                             $employeeValidator = Validator::make($item, [
@@ -582,11 +595,11 @@ class InspectorMissionController extends Controller
                             $emp->attendance_id = $attendance->id;
                             $emp->force_id = $item['department'] ?? null;
                             $emp->save();
-                            $att_total+=intval($item['name']);
+                            $att_total += intval($item['name']);
                             $attendanceEmployees[] = $emp;
                         }
 
-                        $attendance->total=$att_total;
+                        $attendance->total = $att_total;
                         $attendance->save();
                     }
                 }
