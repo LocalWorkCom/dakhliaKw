@@ -320,14 +320,17 @@
                                             </li>
                                         @endif
                                         {{-- @if (Auth::user()->hasPermission('view job')) --}}
-                                        <li class="{{ request()->routeIs('forcenames.index') ? 'active' : '' }}">
+                                        <li
+                                            class="{{ request()->routeIs('forcenames.index') ? 'active' : '' }}">
                                             <img src="{{ asset('frontend/images/jobs.svg') }}"
                                                 alt="logo"
                                                 style="margin-left: 7px;">
-                                            <a href="{{ route('forcenames.index') }}"> أدارات الخدمه
+                                            <a
+                                                href="{{ route('forcenames.index') }}">
+                                                أدارات الخدمه
                                             </a>
                                         </li>
-                                    {{-- @endif --}}
+                                        {{-- @endif --}}
                                         {{-- @if (Auth::user()->hasPermission('view Qualification'))
                                             <li class="{{ request()->routeIs('qualifications.index') ? 'active' : '' }}">
                                     <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
@@ -393,13 +396,13 @@
                                         @endif
 
 
-                                            @if (Auth::user()->hasPermission('view Rule'))
+                                        {{--    @if (Auth::user()->hasPermission('view Rule'))
                                             <li class="{{ request()->routeIs('rule.index') ? 'active' : '' }}">
                                                 <img src="{{ asset('frontend/images/task.svg') }}" alt="logo"
                                                     style="margin-left: 7px;">
                                                 <a href="{{ route('rule.index') }}">المهام</a>
                                             </li>
-                                        @endif 
+                                        @endif --}}
                                         @if (Auth::user()->hasPermission('view WorkingTime'))
                                             <li
                                                 class="{{ request()->routeIs('working_time.index') ? 'active' : '' }}">
