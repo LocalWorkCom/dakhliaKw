@@ -137,11 +137,11 @@ return [
     'create instantmission'=> 'اضافه امر خدمة',
     'edit instantmission'=> 'تعديل امر خدمة',
     'view instantmission'=> 'عرض امر خدمة',
-   'edit ForceName'=>'تعديل أداراه الخدمه',
-   'create ForceName'=>'أضافه أداره خدمه',
-   'delete ForceName'=>'حذف أداراه خدمه',
-   'view ForceName'=>'عرض أدارات الخدمه',
-
+   'edit forcenames'=>'تعديل أداراه الخدمه',
+   'create forcenames'=>'أضافه أداره خدمه',
+   'delete forcenames'=>'حذف أداراه خدمه',
+   'view forcenames'=>'عرض أدارات الخدمه',
+   'delete Point'=>'حذف النقاط',
 
     // Add more permissions as needed
 ];
