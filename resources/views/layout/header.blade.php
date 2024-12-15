@@ -319,7 +319,7 @@
                                                 </a>
                                             </li>
                                         @endif
-                                        {{-- @if (Auth::user()->hasPermission('view job')) --}}
+                                        @if (Auth::user()->hasPermission('view forcenames'))
                                         <li
                                             class="{{ request()->routeIs('forcenames.index') ? 'active' : '' }}">
                                             <img src="{{ asset('frontend/images/jobs.svg') }}"
@@ -330,7 +330,7 @@
                                                 أدارات الخدمه
                                             </a>
                                         </li>
-                                        {{-- @endif --}}
+                                        @endif
                                         {{-- @if (Auth::user()->hasPermission('view Qualification'))
                                             <li class="{{ request()->routeIs('qualifications.index') ? 'active' : '' }}">
                                     <img src="{{ asset('frontend/images/governorates.svg') }}" alt="logo"
