@@ -467,7 +467,7 @@ Route::middleware(['auth'])->group(function () {
     //forcenames
     Route::get('/forceNames', [forceNamesController::class, 'index'])->name('forcenames.index')->middleware('check.permission:view forcenames');
     Route::get('forceNames/all', [forceNamesController::class, 'getAllNames'])->name('forcenames.getAllNames')->middleware('check.permission:view forcenames');
-    Route::post('forceNames/add', [forceNamesController::class, 'store'])->name('forcenames.store')->middleware('check.permission:store forcenames');
+    Route::post('forceNames/add', [forceNamesController::class, 'store'])->name('forcenames.store')->middleware('check.permission:create forcenames');
     Route::post('forceNames/edit', [forceNamesController::class, 'update'])->name('forcenames.update')->middleware('check.permission:edit forcenames');
     Route::post('forceNames/delete', [forceNamesController::class, 'delete'])->name('forcenames.delete')->middleware('check.permission:delete forcenames');
 
