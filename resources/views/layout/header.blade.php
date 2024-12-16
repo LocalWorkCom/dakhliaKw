@@ -142,12 +142,12 @@
                                         href="{{ route('rule.index') }}">المهام</a>
                                 </li>
                             @endif
-                            {{--   @if (Auth::user()->hasPermission('view Permission'))
+                              @if (Auth::user()->hasPermission('view Permission'))
                                 <li class="{{ request()->routeIs('permission.index') ? 'active' : '' }}">
                                     <i class="fa-solid fa-lock" style="margin-left: 7px;"></i>
                                     <a href="{{ route('permission.index') }}">الصلاحيات</a>
                                 </li>
-                            @endif --}}
+                            @endif
                         </ul>
                     </div>
                 </li>

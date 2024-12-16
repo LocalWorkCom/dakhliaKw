@@ -538,7 +538,7 @@ class VacationController extends Controller
                 }
                 $user_id = $vacation->employee_id;
 
-                $token = User::find($user_id)->value('device_token');
+                $token = User::find($user_id)->device_token;
                 DB::table('notifications')->insert([
                     'user_id' => $user_id,
                     'type' => 1,
