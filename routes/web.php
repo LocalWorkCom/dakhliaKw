@@ -124,12 +124,12 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Absence
-    Route::any('/absence', [AbsenceTypeController::class, 'index'])->name('absence.index')->middleware('check.permission:view Absence');
-    Route::get('api/absence', [AbsenceTypeController::class, 'getAbsence'])->name('api.absence')->middleware('check.permission:view Absence');
-    Route::any('/absence/edit/{id}', [AbsenceTypeController::class, 'edit'])->name('absence_edit')->middleware('check.permission:edit Absence');
-    Route::any('/absence_update', [AbsenceTypeController::class, 'update'])->name('absence_update')->middleware('check.permission:edit Absence');
-    Route::any('/absence_store', [AbsenceTypeController::class, 'store'])->name('absence.store')->middleware('check.permission:create Absence');
-    Route::any('/absence/delete', [AbsenceTypeController::class, 'delete'])->name('absence.delete')->middleware('check.permission:delete Absence');;
+    Route::any('/absence', [AbsenceTypeController::class, 'index'])->name('absence.index')->middleware('check.permission:view AbsenceType');
+    Route::get('api/absence', [AbsenceTypeController::class, 'getAbsence'])->name('api.absence')->middleware('check.permission:view AbsenceType');
+    Route::any('/absence/edit/{id}', [AbsenceTypeController::class, 'edit'])->name('absence_edit')->middleware('check.permission:edit AbsenceType');
+    Route::any('/absence_update', [AbsenceTypeController::class, 'update'])->name('absence_update')->middleware('check.permission:edit AbsenceType');
+    Route::any('/absence_store', [AbsenceTypeController::class, 'store'])->name('absence.store')->middleware('check.permission:create AbsenceType');
+    Route::any('/absence/delete', [AbsenceTypeController::class, 'delete'])->name('absence.delete')->middleware('check.permission:delete AbsenceType');
 
 
 
@@ -424,6 +424,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('working_tree/edit/{id}', [WorkingTreeController::class, 'edit'])->name('working_tree.edit')->middleware('check.permission:edit WorkingTree');
     Route::post('working_tree/update/{id}', [WorkingTreeController::class, 'update'])->name('working_tree.update')->middleware('check.permission:edit WorkingTree');
     Route::get('working_tree/show/{id}', [WorkingTreeController::class, 'show'])->name('working_tree.show')->middleware('check.permission:view WorkingTree');
+    Route::any('/working_tree/delete', [WorkingTreeController::class, 'delete'])->name('working_tree.delete')->middleware('check.permission:delete WorkingTree');
 
 
     Route::get('/inspectors-mession', [GroupTeamController::class, 'IspectorMession'])->name('inspector.mission')->middleware('check.permission:view InspectorMission');

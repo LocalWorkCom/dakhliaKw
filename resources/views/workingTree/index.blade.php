@@ -26,6 +26,25 @@
 
                     </div>
                 </div> -->
+
+
+
+            @if (session('reject'))
+                <div class="alert alert-danger">
+                    {{ session('reject') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             @include('inc.flash')
 
             <div class="col-lg-12">
@@ -47,6 +66,47 @@
 
 
 
+
+                {{-- model for delete form --}}
+    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="title d-flex flex-row align-items-center">
+                        <h5 class="modal-title" id="deleteModalLabel"> !تنبــــــيه</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> &times;
+                    </button>
+                </div>
+                <div class="modal-body  mt-3 mb-5">
+                    <div class="container pt-5 pb-3" style="border: 0.2px solid rgb(166, 165, 165);">
+                        <form id="delete-form" action="{{ route('working_tree.delete') }}" method="POST">
+                            @csrf
+                            <div class="form-group d-flex justify-content-center ">
+                                <h5 class="modal-title " id="deleteModalLabel"> هل تريد حذف نظام العمل هذا ؟</h5>
+
+
+                                <input type="text" id="id" value="" hidden name="id"
+                                    class="form-control">
+                            </div>
+
+                            <!-- Save button -->
+                            <div class="text-end">
+                                <div class="modal-footer mx-2 d-flex justify-content-center">
+                                    <div class="text-end">
+                                        <button type="button" class="btn-blue" id="closeButton">لا</button>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn-blue" onclick="confirmDelete()">نعم</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
                 <script>
                     $(document).ready(function() {
@@ -92,11 +152,14 @@
                                     // Using route generation correctly in JavaScript
                                     var editUrl = '{{ route('working_tree.edit', ':id') }}';
                                     var showUrl = '{{ route('working_tree.show', ':id') }}';
+                                    var deleteUrl = '{{ route('working_tree.delete', ':id') }}';
 
                                     editUrl = editUrl.replace(':id', row.id);
                                     showUrl = showUrl.replace(':id', row.id);
+                                    deleteUrl = deleteUrl.replace(':id', row.id);
                                     var editButton = '';
                                     var showButton = '';
+                                    var deleteButton = '';
 
                                     editButton =
                                         `<a href="${editUrl}" class="edit btn  btn-sm" style="background-color: #259240;"><i class="fa fa-edit"></i> تعديل</a>`;
@@ -104,9 +167,11 @@
                                     showButton =
                                         `<a href="${showUrl}" class="edit btn  btn-sm" style="background-color: #375a97;"><i class="fa fa-eye"></i> عرض</a>`;
 
+                                    deleteButton =
+                                        `<a onclick="opendelete('${row.id}')" class="edit btn  btn-sm" style="background-color: #C91D1D;"><i class="fa fa-eye"></i> حذف</a>`;
                                     // Checking if the vacation start date condition is met
 
-                                    return `${editButton}${showButton}`;
+                                    return `${editButton}${showButton}${deleteButton}`;
 
                                 }
 
@@ -150,6 +215,34 @@
                         });
                     });
                 </script>
+
+<script>
+    $(document).ready(function() {
+        function closeModal() {
+            $('#delete').modal('hide');
+
+        }
+
+        $('#closeButton').on('click', function() {
+            closeModal();
+        });
+    });
+
+
+        function opendelete(id) {
+            document.getElementById('id').value = id;
+            $('#delete').modal('show');
+        }
+
+        function confirmDelete() {
+            var id = document.getElementById('id').value;
+            console.log(id);
+            var form = document.getElementById('delete-form');
+
+            form.submit();
+
+        }
+</script>
 
 
             </div>
