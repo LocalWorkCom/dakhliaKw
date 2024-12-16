@@ -788,7 +788,7 @@ class reportsController extends Controller
         $today = now()->toDateString();
         $notifies = Notification::with('mission')
             ->where('user_id', auth()->user()->id)->whereIn('type', [1, 2])
-            ->where('status', 0)
+            ->where('status', 0)->orderBy('created_at', 'desc')
             ->get();
         // Check if there are any notifications
         if ($notifies->isNotEmpty()) {
@@ -826,7 +826,7 @@ class reportsController extends Controller
         $notifies = Notification::with('mission')
             ->where('user_id', auth()->user()->id)
             ->whereIn('type', [1, 2])
-            ->where('status', 0)
+            ->where('status', 0)->orderBy('created_at', 'desc')
             ->get();
 
         // Map the notifications to the required format
