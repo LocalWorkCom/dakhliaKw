@@ -709,9 +709,8 @@ class reportsController extends Controller
             ->value('day_off');
 
         $notifies = Notification::with('mission')
-            ->where('user_id', auth()->user()->id)->where('status',0)
-            ->whereDate('created_at', $today) // Ensure the date comparison is for the correct day
-            ->count();
+            ->where('user_id', auth()->user()->id)->where('status', 0)
+            ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
         // dd($notifies);
         $success = [
             'mission_count' => $mission + $mission_instans ?? 0,
@@ -787,12 +786,12 @@ class reportsController extends Controller
     {
         $today = now()->toDateString();
         $notifies = Notification::with('mission')
-        ->where('user_id', auth()->user()->id)
-        ->whereIn('type', [1, 2])
-        // ->where('status', 0)
-        ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
-        ->orderBy('created_at', 'desc') // Sort from latest to oldest
-        ->get();
+            ->where('user_id', auth()->user()->id)
+            ->whereIn('type', [1, 2])
+            // ->where('status', 0)
+            ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+            ->orderBy('created_at', 'desc') // Sort from latest to oldest
+            ->get();
         // Check if there are any notifications
         if ($notifies->isNotEmpty()) {
             // Extract only the required fields for each notification
