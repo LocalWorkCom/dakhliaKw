@@ -534,11 +534,12 @@ class VacationController extends Controller
                     }
                     //call notification
 
-                    session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
+                   
                 }
                 $user_id = $vacation->employee_id;
 
-                $token = User::find($user_id)->device_token;
+                $usertoken = User::find($user_id)->device_token;
+                
                 DB::table('notifications')->insert([
                     'user_id' => $user_id,
                     'type' => 1,
@@ -547,7 +548,7 @@ class VacationController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-                send_push_notification(null, $token, 'تم القبول', 'تم قبول أجازتك', 'vacation');
+                send_push_notification(null, $usertoken, 'تم القبول', 'تم قبول أجازتك', 'vacation');
 
                 $EndDate = ExpectedEndDate($vacation)[0];
                 $inspectors = InspectorMission::where('group_team_id', $mission->group_team_id)->where('vacation_id', null)->whereBetween('date', [$vacation->start_date, $EndDate])->count();
@@ -571,6 +572,7 @@ class VacationController extends Controller
                         $notify->save();
                     }
                 }
+                session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
             } else {
                 session()->flash('error', 'المفتش غير موجود.');
                 return redirect()->back();
