@@ -48,6 +48,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::any('/accept/abcense/report', [reportsController::class, 'changeStatus']);
 
     Route::any('/notification', [reportsController::class, 'getNotifi']);
+    Route::any('/notification/change', [reportsController::class, 'changeNotifyStatus']);
+
 
     Route::post('/inspector/add/mission', [personalMissionController::class, 'addPersonalMission']);
     Route::get('/getAll/points', [personalMissionController::class, 'getAllPoints']);

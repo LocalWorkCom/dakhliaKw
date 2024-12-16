@@ -788,13 +788,44 @@ class reportsController extends Controller
         $today = now()->toDateString();
         $notifies = Notification::with('mission')
             ->where('user_id', auth()->user()->id)->whereIn('type', [1, 2])
-            ->whereDate('created_at', $today)
+            ->where('status', 0)
             ->get();
         // Check if there are any notifications
         if ($notifies->isNotEmpty()) {
             // Extract only the required fields for each notification
             $success['notifi'] = $notifies->map(function ($notification) {
                 return [
+                    'id' => $notification->id,
+                    'date' => $notification->created_at->format('Y-m-d') ?? null,
+                    'message' => $notification->message,
+                    'user_id' => $notification->user_id,
+                    'mission_id' => $notification->mission_id,
+                    'type' => $notification->type == 2 ? 'mission' : 'vacation',
+                    'status' => $notification->status == 0 ?  false : true,
+                ];
+            });
+
+            return $this->respondSuccess($success, 'Data retrieved successfully.');
+        } else {
+            // Return a response if no notifications are found
+            return $this->apiResponse(true, 'No notifications found.', null, 200);
+        }
+    }
+    public function changeNotifyStatus(Request $request)
+    {
+        $notifie = Notification::where('id', $request->id);
+        // Check if there are any notifications
+        if ($notifie->isNotEmpty()) {
+            $notifie->status = 1 ;
+            $notifie->save();
+            $notifies = Notification::with('mission')
+            ->where('user_id', auth()->user()->id)->whereIn('type', [1, 2])
+            ->where('status', 0)
+            ->get();
+            // Extract only the required fields for each notification
+            $success['notifi'] = $notifies->map(function ($notification): array {
+                return [
+                    'id' => $notification->id,
                     'date' => $notification->created_at->format('Y-m-d') ?? null,
                     'message' => $notification->message,
                     'user_id' => $notification->user_id,
