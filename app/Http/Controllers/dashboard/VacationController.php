@@ -475,7 +475,8 @@ class VacationController extends Controller
     {
         // Find the vacation record
         $vacation = EmployeeVacation::find($id);
-
+        $success = '';
+        $error = '';
         $check_vacation = EmployeeVacation::where('employee_id', $id)->get();
         // pending
         foreach ($check_vacation as $value) {
@@ -515,7 +516,7 @@ class VacationController extends Controller
                     ->get();
 
                 if ($inspectorMissions->isEmpty()) {
-                    session()->flash('info', 'لا توجد مهام للمفتش لتحديثها.');
+                    $error = 'لا توجد مهام للمفتش لتحديثها.';
                 } else {
                     $daysNumber = $vacation->days_number; // Ensure this field exists in your EmployeeVacation model
 
@@ -533,8 +534,7 @@ class VacationController extends Controller
                         }
                     }
                     //call notification
-
-                    session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
+                    $success = 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.';
                 }
                 $user_id = $vacation->employee_id;
 
@@ -572,11 +572,17 @@ class VacationController extends Controller
                     }
                 }
             } else {
-                session()->flash('error', 'المفتش غير موجود.');
-                return redirect()->back();
+                $error = 'المفتش غير موجود.';
+                if (!empty($error)) {
+                    return redirect()->back()->withErrors($error);
+                } else {
+                    return redirect()->back()->with('success', $success);
+                }
             }
         } else {
-            session()->flash('error', 'الإجازة غير موجودة.');
+            $error = 'الإجازة غير موجودة.';
+
+            return redirect()->back()->withErrors($error);
         }
 
         return redirect()->back();
