@@ -346,4 +346,21 @@ class WorkingTreeController extends Controller
 
         return view('workingTree.show', compact('WorkingTree'));
     }
+
+    public function delete(Request $request)
+    {
+        $type = WorkingTree::find($request->id);
+        if (!$type) {
+            return redirect()->route('working_trees.list')->with('reject','يوجد خطا الرجاء المحاولة مرة اخرى');
+        }
+
+        $GroupTeams = $type->GroupTeams()->exists();
+        if ($GroupTeams) {
+            return redirect()->route('working_trees.list')->with('reject','لا يمكن حذف هذه نظلم العمل  يوجد فريق عمل لها');
+        }
+
+        $type->delete();
+        return redirect()->route('working_trees.list')->with('success', 'تم حذف نظلم العمل');
+
+    }
 }
