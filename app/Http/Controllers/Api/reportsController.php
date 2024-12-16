@@ -845,7 +845,6 @@ class reportsController extends Controller
         // Return success response
         return $this->respondSuccess($success, 'Data retrieved successfully.');
     } else {
-        // Return a response if the notification is not found
         return $this->apiResponse(true, 'Notification not found.', null, 404);
     }
 }
