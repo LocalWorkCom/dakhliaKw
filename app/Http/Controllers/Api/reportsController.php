@@ -709,7 +709,7 @@ class reportsController extends Controller
             ->value('day_off');
 
         $notifies = Notification::with('mission')
-            ->where('user_id', auth()->user()->id)
+            ->where('user_id', auth()->user()->id)->where('status',0)
             ->whereDate('created_at', $today) // Ensure the date comparison is for the correct day
             ->count();
         // dd($notifies);
