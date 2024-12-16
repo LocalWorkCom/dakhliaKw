@@ -466,14 +466,14 @@
 
     $().ready(function() {
 
-        var firebaseConfig = {
-            apiKey: "AIzaSyBJE3YuOw1Jl5qDoC_sqyuiPnq3U0qcAdk",
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_ehvb4KumSVCGKVeJ7SBCOMgvBeM9avI",
             authDomain: "taftesh-74633.firebaseapp.com",
             projectId: "taftesh-74633",
-            storageBucket: "taftesh-74633.appspot.com",
+            storageBucket: "taftesh-74633.firebasestorage.app",
             messagingSenderId: "930391301074",
-            appId: "1:930391301074:web:45a7ad03354d8d069dc60b",
-            measurementId: "G-G2FVZL2SQ7"
+            appId: "1:930391301074:web:c3f5607e16d0bfa99dc60b",
+            measurementId: "G-G618HKS2R4"
         };
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
