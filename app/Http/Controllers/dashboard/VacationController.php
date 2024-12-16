@@ -573,7 +573,8 @@ class VacationController extends Controller
                         $notify->save();
                     }
                 }
-                session()->flash('success', 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.');
+                $success = 'تمت الموافقة على الإجازة بنجاح وتم تحديث المهام الخاصة بالمفتش.';
+
             } else {
                 $error = 'المفتش غير موجود.';
                 if (!empty($error)) {
