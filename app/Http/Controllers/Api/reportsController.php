@@ -787,9 +787,12 @@ class reportsController extends Controller
     {
         $today = now()->toDateString();
         $notifies = Notification::with('mission')
-            ->where('user_id', auth()->user()->id)->whereIn('type', [1, 2])
-            ->where('status', 0)->orderBy('created_at', 'desc')
-            ->get();
+        ->where('user_id', auth()->user()->id)
+        ->whereIn('type', [1, 2])
+        // ->where('status', 0)
+        ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+        ->orderBy('created_at', 'desc') // Sort from latest to oldest
+        ->get();
         // Check if there are any notifications
         if ($notifies->isNotEmpty()) {
             // Extract only the required fields for each notification
@@ -812,42 +815,44 @@ class reportsController extends Controller
         }
     }
     public function changeNotifyStatus(Request $request)
-{
-    // Find the notification by ID
-    $notifie = Notification::where('id', $request->id)->first();
+    {
+        // Find the notification by ID
+        $notifie = Notification::where('id', $request->id)->first();
 
-    // Check if the notification exists
-    if ($notifie) {
-        // Update the status
-        $notifie->status = 1;
-        $notifie->save();
+        // Check if the notification exists
+        if ($notifie) {
+            // Update the status
+            $notifie->status = 1;
+            $notifie->save();
 
-        // Fetch unread notifications for the authenticated user
-        $notifies = Notification::with('mission')
-            ->where('user_id', auth()->user()->id)
-            ->whereIn('type', [1, 2])
-            ->where('status', 0)->orderBy('created_at', 'desc')
-            ->get();
+            // Fetch unread notifications for the authenticated user
+            $notifies = Notification::with('mission')
+                ->where('user_id', auth()->user()->id)
+                ->whereIn('type', [1, 2])
+                // ->where('status', 0)
+                ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+                ->orderBy('created_at', 'desc') // Sort from latest to oldest
+                ->get();
 
-        // Map the notifications to the required format
-        $success['notifi'] = $notifies->map(function ($notification): array {
-            return [
-                'id' => $notification->id,
-                'date' => $notification->created_at->format('Y-m-d') ?? null,
-                'message' => $notification->message,
-                'user_id' => $notification->user_id,
-                'mission_id' => $notification->mission_id,
-                'type' => $notification->type == 2 ? 'mission' : 'vacation',
-                'status' => $notification->status == 0 ? false : true,
-            ];
-        });
+            // Map the notifications to the required format
+            $success['notifi'] = $notifies->map(function ($notification): array {
+                return [
+                    'id' => $notification->id,
+                    'date' => $notification->created_at->format('Y-m-d') ?? null,
+                    'message' => $notification->message,
+                    'user_id' => $notification->user_id,
+                    'mission_id' => $notification->mission_id,
+                    'type' => $notification->type == 2 ? 'mission' : 'vacation',
+                    'status' => $notification->status == 0 ? false : true,
+                ];
+            });
 
-        // Return success response
-        return $this->respondSuccess($success, 'Data retrieved successfully.');
-    } else {
-        return $this->apiResponse(true, 'Notification not found.', null, 404);
+            // Return success response
+            return $this->respondSuccess($success, 'Data retrieved successfully.');
+        } else {
+            return $this->apiResponse(true, 'Notification not found.', null, 404);
+        }
     }
-}
 
     protected function apiResponse($status, $message, $data, $code, $errorData = null)
     {
