@@ -497,7 +497,7 @@ if (!function_exists('send_push_notification')) {
     } */
     function send_push_notification($mission_id, $usertoken, $title, $message, $type)
     {
-        $projectId = "1:930391301074:web:c3f5607e16d0bfa99dc60b"; //config('services.fcm.project_id'); # INSERT COPIED PROJECT ID
+        $projectId = "taftesh-74633"; //config('services.fcm.project_id'); # INSERT COPIED PROJECT ID
 
         $credentialsFilePath = Storage::path('json/file.json');
         $client = new GoogleClient();
