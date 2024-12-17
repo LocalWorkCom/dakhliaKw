@@ -268,7 +268,7 @@
                 select.appendChild(option);
 
                 // Add options to select
-                ['السبت', 'الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه'].forEach((day, index) => {
+                ['الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعه','السبت'].forEach((day, index) => {
                     const option = document.createElement('option');
                     option.value = index;
                     option.text = day;
