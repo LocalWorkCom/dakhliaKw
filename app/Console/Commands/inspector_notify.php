@@ -123,6 +123,7 @@ class inspector_notify extends Command
                             DB::table('notifications')->insert([
                                 'user_id' => $inspector->user_id,
                                 'mission_id' => $instantMissionId,
+                                'type' => 1,
                                 'title' => 'أمر خدمة جديد',
                                 'message' => 'لقد تم اسناد أمر خدمة جديد لفريقك.',
                                 'created_at' => now(),

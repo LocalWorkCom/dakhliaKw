@@ -534,10 +534,10 @@ class GroupTeamController extends Controller
                     $day_in_cycle = ($day_of_month - 1) % $total_days_in_cycle + 1;
                     // $is_day_off = $day_in_cycle > $WorkingTree->working_days_num;
                     $WorkingTreeTime =
-                       WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
+                        WorkingTreeTime::where('working_tree_id', $WorkingTree->id)
                         ->where('day_num', $day_in_cycle)
                         ->first();
-                
+
                     // Create a new InspectorMission record
                     $getExistPoints = InspectorMission::where('group_team_id', $GroupTeam->id)->where('group_id', $GroupTeam->group_id)
                         ->where('working_tree_id', $GroupTeam->working_tree_id)
@@ -547,15 +547,14 @@ class GroupTeamController extends Controller
                         $points = $getExistPoints->ids_group_point;
                         $working_time_id = $getExistPoints->working_time_id;
                         $day_off = $working_time_id ? 0 : 1;
-
                     } else {
                         $working_time_id = $WorkingTreeTime ? $WorkingTreeTime->working_time_id : null;
-                        
+
                         $day_off = $working_time_id ? 0 : 1;
                     }
 
                     $user_id  = Inspector::find($Inspector)->user_id;
-      
+
                     // if ($Inspector == 62 && $day_in_cycle == 5){
                     //     dd($WorkingTreeTime,$day_off,$working_time_id);
                     // }
@@ -1177,12 +1176,15 @@ class GroupTeamController extends Controller
                 ->first();
             if ($old_mission) {
                 // Remove the group point ID from the old mission's list of group points
-                $ids_group_point = $old_mission->ids_group_point;
+                // Ensure $old_mission->ids_group_point is an array
+                $ids_group_point = (array) $old_mission->ids_group_point;
+
+                // Search and remove the group point ID
                 if (($key = array_search($group_point_id, $ids_group_point)) !== false) {
-                    //  dd(($ids_group_point[$key])) ;
-                    unset($ids_group_point[$key]);
-                    // dd($ids_group_point);
-                    $ids_group_point = array_values($ids_group_point);
+                    unset($ids_group_point[$key]); // Remove the group point ID
+                    $ids_group_point = array_values($ids_group_point); // Re-index the array
+
+                    // Update the old mission with the modified IDs
                     $old_mission->ids_group_point = $ids_group_point;
                     $old_mission->save();
                 }
@@ -1242,15 +1244,43 @@ class GroupTeamController extends Controller
 
     function isTimeAvailable($pointStart, $pointEnd, $teamStart, $teamEnd)
     {
-        // Convert time strings to timestamps for comparison
-        $pointStartTimestamp = strtotime($pointStart);
-        $pointEndTimestamp = strtotime($pointEnd);
-        $teamStartTimestamp = strtotime($teamStart);
-        $teamEndTimestamp = strtotime($teamEnd);
+        // Convert time strings to standardized 24-hour format using DateTime
+        $pointStartTimestamp = strtotime($this->normalizeTime($pointStart));
+        $pointEndTimestamp = strtotime($this->normalizeTime($pointEnd));
+        $teamStartTimestamp = strtotime($this->normalizeTime($teamStart));
+        $teamEndTimestamp = strtotime($this->normalizeTime($teamEnd));
 
-        // Check if the point's time falls within the team's working time
-        return $teamStartTimestamp <= $pointStartTimestamp && $teamStartTimestamp >= $pointEndTimestamp && $teamEndTimestamp >= $pointStartTimestamp;
+        // Handle overnight cases where the end time is less than or equal to start time
+        if ($teamEndTimestamp <= $teamStartTimestamp) {
+            $teamEndTimestamp += 24 * 60 * 60; // Add 24 hours to team end time
+        }
+        if ($pointEndTimestamp <= $pointStartTimestamp) {
+            $pointEndTimestamp += 24 * 60 * 60; // Add 24 hours to point end time
+        }
+
+        // Check for overlap
+        return ($pointStartTimestamp < $teamEndTimestamp && $pointEndTimestamp > $teamStartTimestamp);
     }
+
+    /**
+     * Helper function to normalize time input to a valid 24-hour format.
+     */
+    private function normalizeTime($time)
+    {
+        // Handle single-digit hour inputs like "7" to "07:00" and validate full times
+        if (preg_match('/^\d{1,2}$/', $time)) {
+            return sprintf('%02d:00', $time); // Convert "7" to "07:00"
+        }
+
+        // Add AM/PM validation if necessary (e.g., "7 AM", "3 PM")
+        if (preg_match('/\d{1,2}(:\d{2})?\s?(AM|PM)/i', $time)) {
+            return date('H:i', strtotime($time)); // Convert "7 AM" to "07:00"
+        }
+
+        // Return time as-is if it’s already in "HH:MM" format
+        return $time;
+    }
+
 
     public function DragDropHelp($index, $GroupPoint_id, $group_id, $group_team_id, $new_date)
     {
@@ -1271,15 +1301,13 @@ class GroupTeamController extends Controller
         // Fetch all points associated with the group point ID
         $availablePoints = Grouppoint::find($GroupPoint_id)->points_ids;
         $allPoints = Point::with('pointDays')->whereIn('id', $availablePoints)->get();
-
         foreach ($allPoints as $available_point) {
+            // dd($allPoints);
             // Check if the point has a fixed working day
             if ($available_point->work_type == 0) {
                 $is_work = in_array($index, $available_point->days_work);
                 if ($is_work) {
-                    return true; // Return true if the point is scheduled to work on that day
-                } else {
-                    return false; // Return false if not scheduled
+                    return true; // Return true immediately if scheduled to work on that day
                 }
             } else {
                 // Retrieve specific working times for variable working days
@@ -1287,15 +1315,22 @@ class GroupTeamController extends Controller
 
                 if ($pointDay) {
                     // Check if the point's working time is available within the team's time
-                    $is_available = $this->isTimeAvailable($pointDay->from, $pointDay->to, $teamTimePeriods[0][0], $teamTimePeriods[0][1]);
+                    $is_available = $this->isTimeAvailable(
+                        $pointDay->from,
+                        $pointDay->to,
+                        $teamTimePeriods[0][0],
+                        $teamTimePeriods[0][1]
+                    );
+
                     if ($is_available) {
-                        return true; // Return true if available
-                    } else {
-                        return false; // Return false if not available
+                        return true; // Return true immediately if time is available
                     }
                 }
             }
         }
+
+        // If no point met the condition, return false
+        return false;
     }
     public function RefreshInspectorMession()
     {
