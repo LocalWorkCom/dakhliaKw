@@ -314,8 +314,8 @@ class pointsController extends Controller
             }
         }
         $success['PointContent'] = $new;
-        $success['PointContent']['dungeon_info'] = $new_dungeon;
-        $success['PointContent']['weapon_info'] = $new_weapon;
+        $success['PointContent']['dungeon_info'] = $new_dungeon ?? null;
+        $success['PointContent']['weapon_info'] = $new_weapon ?? null;
 
         return $this->respondSuccess($success, 'Data Saved successfully.');
     }
