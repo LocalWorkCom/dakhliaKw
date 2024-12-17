@@ -51,7 +51,7 @@ class pointsController extends Controller
             $dungeon_info = DungeonInfo::where('content_id', $violation->id)
                 ->get();
             $inspectorId_content = Inspector::where('id', $violation->inspector_id)->value('user_id');
-            $grade = User::find($inspectorId_content)->grade->name;
+            $grade = User::find($inspectorId_content)->grade_id ? User::find($inspectorId_content)->grade->name : null;
             $WeaponInfo = WeaponInfo::where('content_id', $violation->id)->get();
             $point = Point::with('government')->find($violation->point_id);
 
@@ -67,7 +67,7 @@ class pointsController extends Controller
                 'cars_num' => $violation->cars_num == 0 ? null : $violation->cars_num,
                 'faxes_num' => $violation->faxes_num == 0 ? null :$violation->faxes_num ,
                 'wires_num' => $violation->wires_num == 0 ? null : $violation->wires_num,
-                'dungeon_info' => $dungeon_info->map(function ($dungeon) {
+                'dungeon_info' => $dungeon_info ? $dungeon_info->map(function ($dungeon) {
                     return (object) [
                         "men_num" => $dungeon->men_num,
                         "women_num" => $dungeon->women_num,
@@ -75,15 +75,15 @@ class pointsController extends Controller
                         "overtake" => $dungeon->overtake,
                         "duration" => $dungeon->duration,
                     ];
-                })->first(),
+                })->first() : null,
 
-                'WeaponInfo' => $WeaponInfo->map(function ($Weapon) {
+                'WeaponInfo' => $WeaponInfo ? $WeaponInfo->map(function ($Weapon) {
                     return [
                         "name" => $Weapon->name,
                         "weapon_num" => $Weapon->weapon_num,
                         "ammunition_num" => $Weapon->ammunition_num,
                     ];
-                }),
+                }) : null,
                 'note' => $violation->note,
                 'created_at' => $violation->parent == 0 ? $violation->created_at : PointContent::find($violation->parent)->created_at,
                 'created_at_time' => $violation->parent == 0 ? $violation->created_at->format('H:i:s') : PointContent::find($violation->parent)->created_at->format('H:i:s'),
