@@ -102,12 +102,10 @@ class pointsController extends Controller
                 $edit_permission = null;
                 if (Auth::user()->hasPermission('edit Point')) {
                     $edit_permission = '<a class="btn btn-sm" style="background-color: #F7AF15;" href="' . route('points.edit', $row->id) . '"><i class="fa fa-edit"></i> تعديل</a>';
-
                 }
 
                 if (Auth::user()->hasPermission('view Point')) {
                     $show_permission = '<a class="btn btn-sm" style="background-color: #274373;" href="' . route('points.show', $row->id) . '"><i class="fa fa-eye"></i> عرض</a>';
-
                 }
                 if (Auth::user()->hasPermission('delete Point')) {
                     $delete_permission = '<a class="btn  btn-sm" style="background-color: #C91D1D;" onclick="opendelete(' . $row->id . ')"> <i class="fa-solid fa-trash"></i> حذف</a>';
@@ -204,13 +202,10 @@ class pointsController extends Controller
             $fromTimes = $request->input('from');
             $toTimes = $request->input('to');
             $googleMapsUrl = $request->map_link;
-
-            // $googleMapsUrl = '"https://maps.app.goo.gl/HMQTaXarnrLgatHU8"';
             $cleanUrl = trim($googleMapsUrl, '"');
 
             // Now pass $cleanUrl to your function
             $coordinates = getLatLongFromUrl($cleanUrl);
-            // $coordinates = getLatLongFromUrl($googleMapsUrl);
             // Check if coordinates were found
             if ($coordinates === null) {
                 return redirect()->back()->withErrors(['map_link' => 'Could not retrieve coordinates from the provided URL.'])->withInput();
@@ -261,10 +256,8 @@ class pointsController extends Controller
                 }
             }
         });
-
         return redirect()->route('points.index')->with('message', 'تم أضافه نقطه');
     }
-
     /**
      * Display the specified resource.
      */

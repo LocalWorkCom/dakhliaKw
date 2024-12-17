@@ -111,7 +111,7 @@ class InspectorMissionController extends Controller
                             $today = date('w');
                             $inspectionTime = '';
                             $avilable = false;
-                            $pointTime = ['startTime' => '00:00', 'endTime' => '23:59']; // Default to full day
+                            $pointTime = ['startTime' => '00:00', 'endTime' => '23:59'];
 
                             if ($point->work_type == 1) {
                                 $workTime = PointDays::where('point_id', $pointId)->where('name', $today)->first();
@@ -130,7 +130,6 @@ class InspectorMissionController extends Controller
 
                                     $pointTime = ['startTime' => $fromTime, 'endTime' => $toTime];
                                 } else {
-
                                     // If working time is not found, default to full day
                                     $inspectionTime = 'طول اليوم';
                                     $avilable = false;
@@ -157,7 +156,7 @@ class InspectorMissionController extends Controller
                                 'point_location' => $point->google_map,
                                 'Point_availability' => $avilable,
                                 'latitude' => $point->lat, // Add this for optimized queries
-                                'point_options' => (($point->options != 'null') && ($point->options != null )) ? PointOption::select('id', 'name')
+                                'point_options' => (($point->options != 'null') && ($point->options != null)) ? PointOption::select('id', 'name')
                                     ->get()
                                     ->mapWithKeys(function ($option) use ($point) {
                                         $options = [
